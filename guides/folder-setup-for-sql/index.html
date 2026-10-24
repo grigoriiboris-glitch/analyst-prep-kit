@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
+<script>
+  (function () {
+    var localHost = location.protocol === 'file:' ||
+      /^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])$/.test(location.hostname) ||
+      /^(192\.168\.|10\.)/.test(location.hostname);
+    var optedOut = false;
+    try {
+      var p = new URLSearchParams(location.search).get('ga');
+      if (p === 'off') localStorage.setItem('gaOptOut', '1');
+      else if (p === 'on') localStorage.removeItem('gaOptOut');
+      optedOut = localStorage.getItem('gaOptOut') === '1';
+    } catch (e) {}
+    if (localHost || optedOut) window['ga-disable-G-6C09BL3WH1'] = true;
+  })();
+</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6C09BL3WH1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-6C09BL3WH1');
+</script>
+<!-- Google AdSense (Auto ads). Overlay formats (anchor, side rail, vignette)
+     and Ad intents are switched OFF in the AdSense dashboard on purpose. -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7244244607936879"
+     crossorigin="anonymous"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Setting Up Files and Folders for Data Analysis and SQL Work — Analyst Prep Kit</title>
+<meta name="description" content="A folder structure, naming rules and import routine that turn a messy Excel workbook into clean tables you can query in SQLite, and rebuild in minutes.">
+<link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/folder-setup-for-sql/">
+<meta property="og:title" content="Setting Up Files and Folders for Data Analysis and SQL Work">
+<meta property="og:description" content="A folder structure, naming rules and import routine that turn a messy Excel workbook into clean tables you can query in SQLite, and rebuild in minutes.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/folder-setup-for-sql/">
+<meta name="twitter:card" content="summary">
+<style>
+  :root{--bg:#F5F7F8;--ink:#09090B;--muted:#52525B;--accent:#0E7490;--line:#E4E7EA;--card:#FFFFFF;--warn:#B45309}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+  main{max-width:760px;margin:0 auto;padding:40px 22px 80px}
+  a{color:var(--accent)}
+  h1{font-size:32px;line-height:1.25;margin:10px 0 6px}
+  h2{font-size:21px;margin:40px 0 10px}
+  h3{font-size:17px;margin:26px 0 6px}
+  .meta{color:var(--muted);font-size:14px;margin-bottom:20px}
+  .crumb{font-size:14px}
+  .note{background:#E0F2F7;border:1px solid var(--line);border-radius:12px;padding:14px 18px;font-size:15px;margin:18px 0}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0}
+  .step h2{margin:0 0 8px;font-size:19px}
+  code{background:#F1F3F5;border-radius:5px;padding:1px 6px;font-size:14.5px}
+  pre{background:#18181B;color:#F5F7F8;border-radius:12px;padding:16px 18px;overflow-x:auto;font-size:14.5px;line-height:1.6}
+  pre code{background:none;color:inherit;padding:0}
+  table{border-collapse:collapse;width:100%;font-size:14.5px;margin:12px 0}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  th{background:#E0F2F7}
+  .tw{overflow-x:auto;margin:12px 0}
+  .bad{color:#B3392F}.good{color:#1F7A4D}
+  footer{border-top:1px solid var(--line);margin-top:48px;padding-top:18px;font-size:14px;color:var(--muted)}
+  .toc{font-size:15px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 20px}
+  .toc ol{margin:6px 0 4px;padding-left:22px}
+  .refs{font-size:14.5px;color:var(--muted);padding-left:20px}
+  .refs li{margin:6px 0}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Setting Up Files and Folders for Data Analysis and SQL Work",
+  "description": "A folder structure, naming rules and import routine that turn a messy Excel workbook into clean tables you can query in SQLite, and rebuild in minutes.",
+  "url": "https://michaelnocito.github.io/analyst-prep-kit/guides/folder-setup-for-sql/",
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://michaelnocito.github.io/analyst-prep-kit/guides/folder-setup-for-sql/"},
+  "author": {"@type": "Person", "name": "Michael Nocito", "url": "https://michaelnocito.github.io"},
+  "publisher": {"@type": "Person", "name": "Michael Nocito"},
+  "inLanguage": "en",
+  "datePublished": "2026-10-23",
+  "dateModified": "2026-10-23"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Analyst Prep Kit", "item": "https://michaelnocito.github.io/analyst-prep-kit/"},
+    {"@type": "ListItem", "position": 2, "name": "Guides", "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/"},
+    {"@type": "ListItem", "position": 3, "name": "Setting Up Files and Folders for Data Analysis and SQL Work", "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/folder-setup-for-sql/"}
+  ]
+}
+</script>
+</head>
+<body>
+<main>
+  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../">All guides</a></p>
+  <h1>Setting Up Files and Folders for Data Analysis and SQL Work</h1>
+  <p class="meta">The structure you pick on day one decides how painful day thirty is</p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, Implementation Analyst · Published <time datetime="2026-10-23">October 23, 2026</time></p>
+
+
+<p>By the end of this page you can set up a project folder that keeps original data safe, shape a spreadsheet so it loads into SQL as clean tables, name things so you can find them in six months, and rebuild your database from scratch in a few minutes. It is about twenty minutes, and nothing here needs more than a file explorer, a text editor and a SQL tool such as DB Browser for SQLite.</p>
+
+<p><strong>Here is what to do today, before moving any file.</strong> Make one empty folder for the project and write one sentence in a text file inside it: what question this folder exists to answer. If you cannot write the sentence, you are not ready to organise anything yet, and no folder structure will fix that.</p>
+
+<p><strong>The short version:</strong> keep the original data untouched, make every sheet a clean table, treat the database as something you can delete and rebuild, and save every query as a file. Everything else on this page is detail on those four.</p>
+
+<div class="toc"><strong>What you’ll learn</strong>
+<ol>
+<li>One project, one folder</li>
+<li>The structure</li>
+<li>Raw data is read-only</li>
+<li>One sheet, one table</li>
+<li>Names: files, tabs and columns</li>
+<li>Getting a workbook into SQLite</li>
+<li>Your SQL lives in files</li>
+<li>The README</li>
+<li>The full before and after</li>
+<li>Edge cases worth knowing</li>
+<li>Why this works</li>
+<li>Using this on your own project</li>
+<li>The whole thing on one screen</li>
+</ol></div>
+
+<div class="step"><h2>1. One project, one folder</h2>
+<p>A project is whatever one question needs: the data, the queries, the outputs. Put all of it under a single folder, and use paths that start from that folder, so the whole thing can be moved, zipped or shared without anything breaking.</p>
+<p>Avoid the two common failures. One is a single folder called <code>Data</code> that holds every project you have ever done. The other is files scattered across Downloads, Desktop and a USB stick, which feels fine until you need the version from three weeks ago.</p>
+</div>
+<div class="step"><h2>2. The structure</h2>
+<p>This is a sensible default for SQL practice or small analysis work. Start with this and delete what you do not use.</p>
+<pre><code>personal_tracking/
+├── README.md
+├── data/
+│   ├── raw/          original files, never edited
+│   └── processed/    cleaned CSVs, one per table
+├── db/
+│   └── tracking.db   rebuildable, safe to delete
+├── sql/
+│   ├── schema/       CREATE TABLE statements
+│   └── queries/      your saved analysis queries
+└── outputs/          exports, charts, reports</code></pre>
+<p>Each folder answers one question: <em>where did this come from?</em> <code>raw</code> is the source. <code>processed</code> is what you changed. <code>db</code> is what you built from it. <code>sql</code> is how you built and questioned it. <code>outputs</code> is what you produced. If you can answer that for any file, you know where it belongs.</p>
+<p>If you also write Python, add a <code>scripts/</code> folder next to <code>sql/</code>. Do not add it just in case.</p>
+</div>
+<div class="step"><h2>3. Raw data is read-only</h2>
+<p>The first rule, and the one that saves the most grief: the file in <code>data/raw/</code> is never edited, renamed or re-saved. Not to fix a typo, not to delete a column, not to “just tidy it up”. Copy it out, and work on the copy.</p>
+<p>The reason is simple. Once you edit the original, you can no longer tell what you changed, and you cannot rerun the work if the source updates. A raw file you never touch is also your proof of what you started with.</p>
+<p>If the workbook is one you update every week, as in a tracker, keep the live version wherever you normally edit it and drop a dated copy into <code>raw</code> each time you want to analyse it, for example <code>personal_tracking_2026-10-23.xlsx</code>. The dated name is what tells you which version a result came from.</p>
+</div>
+<div class="step"><h2>4. One sheet, one table</h2>
+<p>A SQL table is a rectangle: one header row, then one row per thing, nothing else. A worksheet that follows that rule loads cleanly. One that does not will fight you at every step.</p>
+<p>Keeping unrelated data on separate tabs is exactly right. A tab for platforms, a tab for applications and a tab for earnings are three tables, and SQL can join them later. The work is making each tab a proper rectangle.</p>
+<div class="tw"><table>
+<tr><th>Rule</th><th>Why SQL cares</th></tr>
+<tr><td>Headers in row 1, nothing above them</td><td>The importer reads row 1 as column names. A title row becomes your column names.</td></tr>
+<tr><td>One row per record, no blank rows</td><td>A blank row becomes a row of NULLs.</td></tr>
+<tr><td>No merged cells</td><td>Only the top-left cell holds a value. The rest load as empty.</td></tr>
+<tr><td>One value per cell</td><td>“Python, SQL” in one cell cannot be filtered, counted or joined.</td></tr>
+<tr><td>One type per column</td><td>A column mixing numbers and “n/a” loads as text.</td></tr>
+<tr><td>No totals or notes inside the data</td><td>A total row gets counted as a record and doubles every sum.</td></tr>
+<tr><td>A key column that identifies each row</td><td>It is what you join on. Without it, tabs cannot be linked reliably.</td></tr>
+<tr><td>Dates as <code>YYYY-MM-DD</code></td><td>It sorts correctly as text, and SQLite’s date functions understand it.</td></tr>
+</table></div>
+<p>Keep summaries, charts and notes on their own tab, and do not import that tab. Then the data tabs stay clean and you still get your dashboard.</p>
+</div>
+<div class="step"><h2>5. Names: files, tabs and columns</h2>
+<p>Pick one convention and use it everywhere. The one that costs you least in SQL is lowercase words joined by underscores: no spaces, no capitals, no punctuation.</p>
+<div class="tw"><table>
+<tr><th>Thing</th><th class="bad">Painful</th><th class="good">Better</th></tr>
+<tr><td>Tab</td><td><code>Earnings Log</code></td><td><code>earnings_log</code></td></tr>
+<tr><td>Column</td><td><code>Time Spent(minutes)</code></td><td><code>time_spent_minutes</code></td></tr>
+<tr><td>Raw file</td><td><code>tracking final v2 (1).xlsx</code></td><td><code>tracking_2026-10-23.xlsx</code></td></tr>
+<tr><td>Query file</td><td><code>query new.sql</code></td><td><code>earnings_by_platform.sql</code></td></tr>
+</table></div>
+<p>The reason is practical. A column named <code>Time Spent(minutes)</code> has to be wrapped in brackets or quotes in every query you ever write about it, and one missed bracket is an error. A column named <code>time_spent_minutes</code> needs nothing. Put the unit in the name when there is one, because a number without a unit is a guess.</p>
+<p>For files, put the date first when order matters (<code>2026-10-23_export.csv</code>) so a folder listing sorts itself. Never use “final”, “new” or “v2” as a name. If you need versions, use dates.</p>
+</div>
+<div class="step"><h2>6. Getting a workbook into SQLite</h2>
+<p>Be clear about one limit first. DB Browser for SQLite does not read an <code>.xlsx</code> file directly. It imports CSV, and a CSV holds one sheet. So a workbook with four tabs means four CSV files, and the database is a <em>copy</em> of the workbook as it was when you exported, not a live view of it.</p>
+<p>That is fine, as long as you treat the database as disposable. The routine for each refresh:</p>
+<ol>
+<li>Copy the current workbook into <code>data/raw/</code> with today’s date.</li>
+<li>Export each data tab as CSV into <code>data/processed/</code>, one file per tab, named after the table: <code>earnings_log.csv</code>.</li>
+<li>Delete <code>db/tracking.db</code> and create a fresh one.</li>
+<li>In DB Browser: File → Import → Table from CSV file. Tick “Column names in first line”, check the delimiter is a comma, and check the table name.</li>
+<li>Open Browse Data on each table and look at the first rows. Then click Write Changes.</li>
+</ol>
+<p>Step five is the one people skip. Look at the row count against the sheet, and look at one date column and one ID column, because those are where imports quietly go wrong (see the edge cases below).</p>
+<p>If this routine is too heavy for data you refresh weekly, that is the moment a small script is worth it. It is a separate decision from learning SQL, and you can make it later. For practice, the manual routine teaches you what the script would hide.</p>
+</div>
+<div class="step"><h2>7. Your SQL lives in files</h2>
+<p>A query typed into the window and closed is a query you have to rewrite. Save every query that mattered as a <code>.sql</code> file in <code>sql/queries/</code>, one purpose per file, named for what it answers.</p>
+<pre><code>-- earnings_by_platform.sql
+-- Question: which platform earns the most per hour?
+-- Tables:   earnings_log
+-- Written:  2026-10-23
+
+SELECT platform,
+       SUM(earnings)                 AS total_earned,
+       SUM(time_spent_minutes) / 60.0 AS total_hours
+FROM earnings_log
+GROUP BY platform
+ORDER BY total_earned DESC;</code></pre>
+<p>The four comment lines are the habit. They answer the question you will have in a month: what was this for, and what does it read from? Use <code>60.0</code> rather than <code>60</code> when you divide, because SQLite divides two whole numbers as whole numbers and drops the decimals.</p>
+<p>Put the <code>CREATE TABLE</code> statements in <code>sql/schema/</code>, numbered in the order they run: <code>01_create_tables.sql</code>. Together with your CSVs, that is enough to rebuild the whole database from nothing, which is the real test of a good setup.</p>
+</div>
+<div class="step"><h2>8. The README</h2>
+<p>One short text file at the top of the project, written for you in six months. It needs five lines, no more.</p>
+<pre><code># personal_tracking
+Question: how much do I earn per hour on each platform?
+Source: data/raw/personal_tracking_2026-10-23.xlsx (copy of live tracker)
+Rebuild: export each tab to data/processed/, import into db/tracking.db
+Tables: platform_info, applications, earnings_log
+Known issues: some earnings blank where payout is pending</code></pre>
+<p>The last line matters most. It is where you write down what you know is wrong with the data, so a number you quote later comes with its limits attached.</p>
+</div>
+<h2>The full before and after</h2>
+<p>Same project, same data, one month apart.</p>
+<p><strong class="bad">Before</strong></p>
+<pre><code>Desktop/
+├── Personal Tracking.xlsx
+├── Personal Tracking (1).xlsx
+├── Personal Tracking FINAL.xlsx
+├── earnings.csv
+├── tracking.db
+└── query new.sql</code></pre>
+<p>Three workbooks and no way to tell which one the database came from. A CSV with no date, a query with no name, and nothing recording what any of it was for.</p>
+<p><strong class="good">After</strong></p>
+<pre><code>personal_tracking/
+├── README.md
+├── data/raw/personal_tracking_2026-10-23.xlsx
+├── data/processed/earnings_log.csv
+├── db/tracking.db
+├── sql/schema/01_create_tables.sql
+└── sql/queries/earnings_by_platform.sql</code></pre>
+<p>One source file with a date on it, one cleaned copy per table, a database you can delete and rebuild, and a query that says what it answers. Nothing about the data changed. What changed is that you can now trust where each file came from.</p>
+
+<div class="step"><h2>Edge cases worth knowing</h2>
+<p>Six that come up.</p>
+<p><strong>IDs lose their leading zeros.</strong> An ID like <code>00417</code> is text that looks like a number, and Excel or an importer can turn it into <code>417</code>. If an ID has leading zeros, make sure the import treats that column as text, and check one row after loading.</p>
+<p><strong>Dates export in the wrong shape.</strong> A cell can display as <code>10/23/26</code> and export in a regional format that SQL cannot sort. Format date columns as <code>YYYY-MM-DD</code> in the sheet before exporting.</p>
+<p><strong>Commas and line breaks inside text.</strong> A note such as “paid late, follow up” sits inside quotes in a CSV, which is normal. If the row count after import is higher than in the sheet, a line break inside a cell is the usual cause.</p>
+<p><strong>The importer guesses types.</strong> It looks at the data and decides each column is a number or text. One stray “n/a” in a numeric column can turn the whole column to text, and then <code>SUM</code> misbehaves. Check the column types after import.</p>
+<p><strong>Blank is not zero.</strong> An empty cell can load as an empty string rather than NULL, and the two behave differently in <code>WHERE</code> and <code>COUNT</code>. Decide which you mean, and fix it once at load time rather than in every query.</p>
+<p><strong>Cloud-synced folders and open files.</strong> Keeping the project in a synced folder is fine for backup, but do not keep the <code>.db</code> file open in two places at once. Two programs writing to the same database file is how it gets corrupted.</p>
+</div>
+<h2>Why this works</h2>
+<p>None of this is personal taste. It is close to what people who study research workflows recommend. A widely cited set of practices for scientific computing tells people to keep raw data separate from derived data, to treat the raw copy as something you never change, and to give each project its own folder with a consistent layout (Wilson et al., 2017, PLOS Computational Biology, 13(6), e1005510). The aim is that someone else, including you later, can tell what each file is and rerun the work.</p>
+<p>The rules for the sheet itself come from the same place. A well-known paper on spreadsheet organisation argues for consistent codes, one value per cell, a single rectangular table per sheet, no empty cells used as formatting, and keeping raw data separate from calculations (Broman &amp; Woo, 2018, The American Statistician, 72(1), 2–10). A table that follows those rules is, nearly by definition, a table SQL can load.</p>
+<p>One note on the cheat sheet below. It is built to be covered and recalled rather than reread, because reviews of study techniques put practice testing and spacing near the top of what works and rereading and highlighting near the bottom, despite rereading feeling much more productive (Dunlosky, Rawson, Marsh, Nathan, &amp; Willingham, 2013, Psychological Science in the Public Interest, 14(1), 4–58).</p>
+
+<h2>Using this on your own project</h2>
+<p>Do this once, in order. It is about fifteen minutes the first time.</p>
+<ol>
+<li><strong>Write the question.</strong> One sentence, at the top of a new README.</li>
+<li><strong>Create the folders.</strong> <code>data/raw</code>, <code>data/processed</code>, <code>db</code>, <code>sql/queries</code>, <code>outputs</code>.</li>
+<li><strong>Copy, do not move, your workbook</strong> into <code>data/raw</code> and add today’s date to the name.</li>
+<li><strong>Check each tab against the table rules.</strong> Header in row 1, no merged cells, one value per cell, dates as <code>YYYY-MM-DD</code>.</li>
+<li><strong>Rename tabs and columns</strong> in your working copy to lowercase with underscores.</li>
+<li><strong>Export one CSV per tab</strong> into <code>data/processed</code>, then import each into a fresh database in <code>db</code>.</li>
+<li><strong>Check the import.</strong> Row count against the sheet, one date column, one ID column.</li>
+<li><strong>Save your first query</strong> as a <code>.sql</code> file with the four comment lines.</li>
+</ol>
+<p>If you have paper nearby, one optional sketch is worth five minutes. Draw your tabs as boxes, write the key column in each, and draw a line between any two boxes that share one. That picture is your table relationships, and the boxes with no line are the tabs that are not related, which you can leave out of the database.</p>
+
+<h2>The whole thing on one screen</h2>
+<p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
+<div class="tw"><table>
+<tr><th>Thing</th><th>What to remember</th></tr>
+<tr><td>One folder</td><td>One project, one folder, paths relative to it.</td></tr>
+<tr><td><code>data/raw</code></td><td>Originals. Never edited, renamed or re-saved.</td></tr>
+<tr><td><code>data/processed</code></td><td>Cleaned CSVs, one per table.</td></tr>
+<tr><td><code>db</code></td><td>Rebuildable. Safe to delete.</td></tr>
+<tr><td><code>sql/schema</code></td><td>Numbered CREATE TABLE files.</td></tr>
+<tr><td><code>sql/queries</code></td><td>One purpose per file, named for the question.</td></tr>
+<tr><td>Sheet = table</td><td>Header in row 1, one row per record, no merges, no totals.</td></tr>
+<tr><td>Cell</td><td>One value, one type per column.</td></tr>
+<tr><td>Key column</td><td>What you join on. Every table needs one.</td></tr>
+<tr><td>Dates</td><td><code>YYYY-MM-DD</code>.</td></tr>
+<tr><td>Names</td><td>lowercase_with_underscores, unit in the name.</td></tr>
+<tr><td>Versions</td><td>Dates in the name, never “final” or “v2”.</td></tr>
+<tr><td>DB Browser</td><td>Imports CSV, one sheet at a time. Not live.</td></tr>
+<tr><td>After import</td><td>Check row count, a date column, an ID column.</td></tr>
+<tr><td>Query header</td><td>Question, tables, date. Four comment lines.</td></tr>
+<tr><td>README</td><td>Question, source, rebuild steps, known issues.</td></tr>
+</table></div>
+<div class="note"><strong>The one habit to keep.</strong> Be able to delete the database and rebuild it from files in a few minutes. If you can, everything upstream of it is in order. If you cannot, something is living only in your head or only in a window you closed, and that is the thing to fix first.</div>
+<p><strong>One last thought, and I would genuinely like other people’s answers.</strong> What is the worst file name you have ever had to work with, and what did it cost you to work out what was inside?</p>
+
+
+  <h2>References</h2>
+  <ul class="refs">
+    <li>Wilson, G., Bryan, J., Cranston, K., Kitzes, J., Nederbragt, L., &amp; Teal, T. K. (2017). Good enough practices in scientific computing. PLOS Computational Biology, 13(6), e1005510.</li>
+    <li>Broman, K. W., &amp; Woo, K. H. (2018). Data organization in spreadsheets. The American Statistician, 72(1), 2–10.</li>
+    <li>Dunlosky, J., Rawson, K. A., Marsh, E. J., Nathan, M. J., &amp; Willingham, D. T. (2013). Improving students’ learning with effective learning techniques. Psychological Science in the Public Interest, 14(1), 4–58.</li>
+  </ul>
+
+  <div data-apk-subscribe></div>
+  <footer>
+    <a href="../../">← Analyst Prep Kit</a> · <a href="../folder-setup-for-sql/">Folders for SQL work</a> · <a href="../folder-setup-for-implementations/">Folders for implementations</a> · <a href="../folder-system-for-everyday-work/">Folders for everyday work</a> · <a href="../excel-clean-messy-data/">Clean Messy Data</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../../projects/">Portfolio Projects</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+  </footer>
+</main>
+  <script src="../../assets/apk-subscribe.js" defer></script>
+</body>
+</html>
