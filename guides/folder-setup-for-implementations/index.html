@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
+<script>
+  (function () {
+    var localHost = location.protocol === 'file:' ||
+      /^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])$/.test(location.hostname) ||
+      /^(192\.168\.|10\.)/.test(location.hostname);
+    var optedOut = false;
+    try {
+      var p = new URLSearchParams(location.search).get('ga');
+      if (p === 'off') localStorage.setItem('gaOptOut', '1');
+      else if (p === 'on') localStorage.removeItem('gaOptOut');
+      optedOut = localStorage.getItem('gaOptOut') === '1';
+    } catch (e) {}
+    if (localHost || optedOut) window['ga-disable-G-6C09BL3WH1'] = true;
+  })();
+</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6C09BL3WH1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-6C09BL3WH1');
+</script>
+<!-- Google AdSense (Auto ads). Overlay formats (anchor, side rail, vignette)
+     and Ad intents are switched OFF in the AdSense dashboard on purpose. -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7244244607936879"
+     crossorigin="anonymous"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Setting Up Files and Folders for a SaaS Implementation — Analyst Prep Kit</title>
+<meta name="description" content="One numbered folder template for every SaaS implementation: configuration, data and document migration, UAT, training and handover, with the proof saved as you go.">
+<link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/folder-setup-for-implementations/">
+<meta property="og:title" content="Setting Up Files and Folders for a SaaS Implementation">
+<meta property="og:description" content="One numbered folder template for every SaaS implementation: configuration, data and document migration, UAT, training and handover, with the proof saved as you go.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/folder-setup-for-implementations/">
+<meta name="twitter:card" content="summary">
+<style>
+  :root{--bg:#F5F7F8;--ink:#09090B;--muted:#52525B;--accent:#0E7490;--line:#E4E7EA;--card:#FFFFFF;--warn:#B45309}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+  main{max-width:760px;margin:0 auto;padding:40px 22px 80px}
+  a{color:var(--accent)}
+  h1{font-size:32px;line-height:1.25;margin:10px 0 6px}
+  h2{font-size:21px;margin:40px 0 10px}
+  h3{font-size:17px;margin:26px 0 6px}
+  .meta{color:var(--muted);font-size:14px;margin-bottom:20px}
+  .crumb{font-size:14px}
+  .note{background:#E0F2F7;border:1px solid var(--line);border-radius:12px;padding:14px 18px;font-size:15px;margin:18px 0}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0}
+  .step h2{margin:0 0 8px;font-size:19px}
+  code{background:#F1F3F5;border-radius:5px;padding:1px 6px;font-size:14.5px}
+  pre{background:#18181B;color:#F5F7F8;border-radius:12px;padding:16px 18px;overflow-x:auto;font-size:14.5px;line-height:1.6}
+  pre code{background:none;color:inherit;padding:0}
+  table{border-collapse:collapse;width:100%;font-size:14.5px;margin:12px 0}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  th{background:#E0F2F7}
+  .tw{overflow-x:auto;margin:12px 0}
+  .bad{color:#B3392F}.good{color:#1F7A4D}
+  footer{border-top:1px solid var(--line);margin-top:48px;padding-top:18px;font-size:14px;color:var(--muted)}
+  .toc{font-size:15px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 20px}
+  .toc ol{margin:6px 0 4px;padding-left:22px}
+  .refs{font-size:14.5px;color:var(--muted);padding-left:20px}
+  .refs li{margin:6px 0}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Setting Up Files and Folders for a SaaS Implementation",
+  "description": "One numbered folder template for every SaaS implementation: configuration, data and document migration, UAT, training and handover, with the proof saved as you go.",
+  "url": "https://michaelnocito.github.io/analyst-prep-kit/guides/folder-setup-for-implementations/",
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://michaelnocito.github.io/analyst-prep-kit/guides/folder-setup-for-implementations/"},
+  "author": {"@type": "Person", "name": "Michael Nocito", "url": "https://michaelnocito.github.io"},
+  "publisher": {"@type": "Person", "name": "Michael Nocito"},
+  "inLanguage": "en",
+  "datePublished": "2026-10-23",
+  "dateModified": "2026-10-23"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Analyst Prep Kit", "item": "https://michaelnocito.github.io/analyst-prep-kit/"},
+    {"@type": "ListItem", "position": 2, "name": "Guides", "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/"},
+    {"@type": "ListItem", "position": 3, "name": "Setting Up Files and Folders for a SaaS Implementation", "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/folder-setup-for-implementations/"}
+  ]
+}
+</script>
+</head>
+<body>
+<main>
+  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../">All guides</a></p>
+  <h1>Setting Up Files and Folders for a SaaS Implementation</h1>
+  <p class="meta">Config, data and document migration, testing, training and handover, in one structure you can copy for every client</p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, Implementation Analyst · Published <time datetime="2026-10-23">October 23, 2026</time></p>
+
+
+<p>By the end of this page you can set up one folder template that fits any software implementation, name files so a colleague can find them without asking you, keep every migration load traceable and reversible, and hand a client a clean package at the end. It is about twenty minutes to read and about fifteen to apply, and it works the same whether you run one project or several at once.</p>
+
+<p><strong>Here is what to do today.</strong> Build the empty template once (section 2), then copy it for your next project instead of starting from a blank folder. That one habit does most of the work on this page, because every project then looks the same and you stop making layout decisions mid-project.</p>
+
+<p><strong>The short version:</strong> number the folders in project order, never edit the client’s original files, log every decision and every load, and keep the proof (counts, sign-offs, test results) in the folder rather than in somebody’s inbox.</p>
+
+<div class="toc"><strong>What you’ll learn</strong>
+<ol>
+<li>One client, one folder, one template</li>
+<li>The structure</li>
+<li>Naming that survives eight projects at once</li>
+<li>Source files are read-only</li>
+<li>Configuration</li>
+<li>Data migration</li>
+<li>Document migration</li>
+<li>Testing and UAT</li>
+<li>Training: admin and end user</li>
+<li>Decisions, changes and sign-offs</li>
+<li>Go-live and handover</li>
+<li>Before and after</li>
+<li>Edge cases worth knowing</li>
+<li>Why this works</li>
+<li>Using this on your own project</li>
+<li>The whole thing on one screen</li>
+</ol></div>
+
+<div class="step"><h2>1. One client, one folder, one template</h2>
+<p>An implementation produces a lot of paper: requirements, a configuration workbook, mapping specs, extracts, load files, test scripts, training decks, sign-offs. Put all of it under one folder per client, built from the same template every time.</p>
+<p>The template matters more than the structure inside it. When every project has the same folders in the same order, you can open any client and know where the mapping spec is, a teammate can cover for you, and the questions you ask yourself at go-live (where is the last load file? where is the sign-off?) have the same answer on every project.</p>
+</div>
+<div class="step"><h2>2. The structure</h2>
+<p>Numbered by project phase, so the folder listing is also the project plan.</p>
+<pre><code>ACME_implementation/
+├── 00_admin/          contract, SOW, contacts, project plan
+├── 01_discovery/      requirements, workflow notes, kickoff
+├── 02_configuration/  config workbook, decisions, screenshots
+├── 03_data_migration/
+│   ├── 01_source/         client extracts, untouched
+│   ├── 02_mapping/        field mapping specs
+│   ├── 03_transformed/    cleaned files, ready to load
+│   ├── 04_loads/          one folder per load, dated
+│   └── 05_reconciliation/ source vs target, signed off
+├── 04_documents/      document migration inventory and results
+├── 05_testing/        test scripts, results, defects, UAT sign-off
+├── 06_training/
+│   ├── admin/
+│   └── end_user/
+├── 07_go_live/        cutover plan, checklist, rollback plan
+├── 08_handover/       as-built record, support contacts
+└── 99_archive/        superseded files, nothing deleted</code></pre>
+<p>The numbers do two jobs. They sort the folders in lifecycle order on every computer, and they give you a shorthand: “it’s in 03” is enough for anyone who has seen the template once. Leave gaps (00, 99) so you can add a phase without renaming everything.</p>
+</div>
+<div class="step"><h2>3. Naming that survives eight projects at once</h2>
+<p>One pattern for every file, with the client first so a search across all your projects sorts by client.</p>
+<pre><code>CLIENT_topic_description_vNN_YYYY-MM-DD.ext
+
+ACME_mapping_contracts_v03_2026-10-23.xlsx
+ACME_load02_contracts_2026-10-27.csv
+ACME_training_admin_deck_v02_2026-11-04.pptx</code></pre>
+<div class="tw"><table>
+<tr><th>Part</th><th>Rule</th></tr>
+<tr><td>Client code</td><td>A short fixed code, the same on every file for that client.</td></tr>
+<tr><td>Topic</td><td>Lowercase. Matches the phase: mapping, load, test, training.</td></tr>
+<tr><td>Version</td><td><code>v01</code>, <code>v02</code>. Two digits so they sort. Increase on every change that someone else may have seen.</td></tr>
+<tr><td>Date</td><td><code>YYYY-MM-DD</code>, so files sort by time.</td></tr>
+<tr><td>Never</td><td>“final”, “new”, “latest”, “copy”, or a person’s initials. <code>final_v2_REAL</code> is how teams lose a week.</td></tr>
+</table></div>
+<p>No spaces in file names, because they break scripts, links and some import tools.</p>
+</div>
+<div class="step"><h2>4. Source files are read-only</h2>
+<p>Whatever the client sends you, whether a database extract, a spreadsheet or a folder of scanned documents, goes into <code>01_source</code> exactly as received and is never opened and re-saved. Work on a copy.</p>
+<p>The reason is evidence. When a record is wrong in the new system, the first question is whether it was wrong in the source or broken by you. If the original is untouched, you can answer in a minute. If you “just tidied” it, you cannot, and you have no standing to say whose fault it is.</p>
+<p>Add the date you received it to the file name, and save the email or message it came with. A source file without a date is a source file you cannot place.</p>
+</div>
+<div class="step"><h2>5. Configuration</h2>
+<p>Configuration is the part most likely to live only in someone’s head, and it is the part the client will ask about in a year.</p>
+<p>Keep three things in <code>02_configuration</code>:</p>
+<div class="tw"><table>
+<tr><th>File</th><th>What it holds</th></tr>
+<tr><td>Configuration workbook</td><td>Every setting you chose, one row each: area, setting, value, who decided, date. This is the source of truth, and the system is built from it, not the other way round.</td></tr>
+<tr><td>Decision log</td><td>Anything where the client chose between options: what the options were, what they picked, who approved it, when.</td></tr>
+<tr><td>Screenshots</td><td>The final state of each configured area, named by area and date. One screenshot is worth a paragraph of description.</td></tr>
+</table></div>
+<p>Record a setting at the moment you make it, not at the end. A configuration workbook written from memory after go-live is a guess, and it will be wrong in exactly the places that matter.</p>
+<p>If you configure a test environment first and then repeat the work in production, the workbook is also your checklist for the second pass. Mark each row as done in each environment, so nothing is configured in one and forgotten in the other.</p>
+</div>
+<div class="step"><h2>6. Data migration</h2>
+<p>Data migration is where an implementation succeeds or fails, and it is the part with the most files. The folders in section 2 are a pipeline: each one is a stage, and files only move forward, never backward.</p>
+<pre><code>01_source  →  02_mapping  →  03_transformed  →  04_loads  →  05_reconciliation
+ as received   how fields     cleaned, ready    what was      proof it matches
+               map across     to load           loaded        the source</code></pre>
+<p><strong>Mapping.</strong> One mapping spec per object (contracts, users, locations): source field, target field, transformation rule, default for blanks, and an owner for every open question. The mapping spec is the contract between you and the client about what moves and how. Version it, and note which version each load used.</p>
+<p><strong>Loads.</strong> Every load gets its own dated folder, even a rerun of a failed one.</p>
+<pre><code>04_loads/
+└── load02_contracts_2026-10-27/
+    ├── ACME_load02_contracts_2026-10-27.csv   exactly what was loaded
+    ├── load_notes.txt                          mapping version, row count, who ran it
+    └── errors_2026-10-27.csv                   rows the system rejected</code></pre>
+<p>Keep the file you actually loaded, not the file you meant to load. If something needs to be reversed or explained later, that file is the only thing that tells you what went in.</p>
+<p><strong>Reconciliation.</strong> After every load, compare the target against the source and save the result in <code>05_reconciliation</code>. At minimum: record counts in and out, and totals on any numeric field that matters (contract value, quantity, balance). A reconciliation that shows source 1,000, loaded 1,000 and rejected 0 is evidence. “It looked fine” is not.</p>
+<p>Do not sign off a load until the numbers match or every difference is explained in writing. A short note such as “12 rejected: duplicate IDs, listed in errors file” is enough, and it is the thing that protects you when someone asks about it later.</p>
+<p>Any load you may need to undo should be loadable in a way you can reverse, for example by tagging loaded records with a batch or load ID. Decide this before the first load, because it cannot be added afterwards.</p>
+</div>
+<div class="step"><h2>7. Document migration</h2>
+<p>Documents are migrated by the thousand, so the folder is not enough on its own. You need a manifest: one spreadsheet with one row per document.</p>
+<div class="tw"><table>
+<tr><th>Column</th><th>Purpose</th></tr>
+<tr><td><code>doc_id</code></td><td>A unique ID you assign. Never reuse one.</td></tr>
+<tr><td><code>original_path</code></td><td>Where the file was. The only way back to the source.</td></tr>
+<tr><td><code>original_name</code></td><td>The name it arrived with.</td></tr>
+<tr><td><code>new_name</code></td><td>The name it has after migration.</td></tr>
+<tr><td><code>doc_type</code></td><td>Category in the new system.</td></tr>
+<tr><td><code>linked_record</code></td><td>The record it attaches to, such as a contract ID.</td></tr>
+<tr><td><code>status</code></td><td>Pending, uploaded, failed, excluded.</td></tr>
+<tr><td><code>notes</code></td><td>Why it failed or was excluded.</td></tr>
+</table></div>
+<p>The manifest is also your reconciliation. Files in the source folder, rows in the manifest, documents in the new system: three numbers that must agree, or the gap must be explained. Check a sample by opening ten documents in the new system and comparing them to the originals, because a count cannot tell you that a file uploaded blank.</p>
+<p>Keep the original names in the manifest even when you rename files. Clients search by the old name for years.</p>
+</div>
+<div class="step"><h2>8. Testing and UAT</h2>
+<p>Four things in <code>05_testing</code>: the test scripts, the results, the defect list, and the sign-off.</p>
+<p>A test script is a numbered list: what to do, what should happen. Write them from the client’s real workflows, not from the system’s menu. Record the result next to each step, with the date and who ran it. A defect list needs one row per problem: what happened, severity, who owns it, status, and the date it was closed.</p>
+<p>The sign-off is the part people leave out. When the client accepts UAT, save that acceptance, whether it is a signed form or an email exported to PDF, in the same folder. It is the record that go-live was agreed, and it is much easier to save at the time than to find later.</p>
+</div>
+<div class="step"><h2>9. Training: admin and end user</h2>
+<p>Keep the two audiences in separate folders, because they need different material and different timing.</p>
+<div class="tw"><table>
+<tr><th></th><th>Admin training</th><th>End-user training</th></tr>
+<tr><td>Goal</td><td>Run and maintain the system</td><td>Do their job in it</td></tr>
+<tr><td>Content</td><td>Configuration, user setup, reports, troubleshooting</td><td>The few tasks they do daily</td></tr>
+<tr><td>Materials</td><td>Agenda, deck, exercises, admin guide</td><td>Quick reference guide, short walkthrough, practice tasks</td></tr>
+<tr><td>Timing</td><td>Before UAT, so admins can help test</td><td>Close to go-live, so it is fresh</td></tr>
+</table></div>
+<p>For each session, keep in the folder: the agenda, the exact deck or guide used (with version and date), the practice exercises, an attendance list, and any recording. Write the materials against the system as configured, with the client’s own field names and screens, not the generic product. Training on a screen that does not match the live system is the fastest way to generate support calls.</p>
+<p>An end-user quick reference guide should fit on one page: the five things they do most, in the order they do them. Anything longer will not be opened.</p>
+</div>
+<div class="step"><h2>10. Decisions, changes and sign-offs</h2>
+<p>Most implementation disputes are about what was agreed. Three small files prevent most of them, all in <code>00_admin</code>:</p>
+<div class="tw"><table>
+<tr><th>File</th><th>One row per</th></tr>
+<tr><td>Decision log</td><td>Decision: what, who decided, date, link to the evidence.</td></tr>
+<tr><td>Change log</td><td>Change to scope: what, why, impact, who approved.</td></tr>
+<tr><td>Risks and issues</td><td>Risk or issue: description, owner, next step, status.</td></tr>
+</table></div>
+<p>Save meeting notes in the same folder, dated, with actions and owners at the top. If a decision was made in a call or an email, write one line in the log the same day. A decision that exists only in an inbox is a decision you will have to prove later.</p>
+</div>
+<div class="step"><h2>11. Go-live and handover</h2>
+<p><code>07_go_live</code> holds a cutover plan (what happens, in what order, who does it, how long it should take), a go-live checklist, and a rollback plan: what you do if it goes wrong and who decides. Write the rollback plan before you need it.</p>
+<p><code>08_handover</code> is what the client keeps. At the close of the project, put together:</p>
+<ul>
+<li>An as-built record: the final configuration workbook and key screenshots.</li>
+<li>Migration summary: what was moved, counts, known exceptions.</li>
+<li>Training materials, final versions.</li>
+<li>Open items and who owns each.</li>
+<li>Support contacts and how to raise a request.</li>
+</ul>
+<p>Then close the project properly: move superseded files to <code>99_archive</code>, and follow whatever the contract says about retaining or deleting client data.</p>
+</div>
+<h2>Before and after</h2>
+<p>Same client, same project, two ways to keep the files.</p>
+<p><strong class="bad">Before</strong></p>
+<pre><code>Desktop/ACME/
+├── contracts export.xlsx
+├── contracts export (edited).xlsx
+├── mapping FINAL.xlsx
+├── mapping FINAL v2.xlsx
+├── load.csv
+├── load2.csv
+└── training.pptx</code></pre>
+<p>Two exports and nobody knows which was loaded. Two “final” mappings. No record of what <code>load.csv</code> contained, no reconciliation, no sign-off. When the client asks why 40 contracts are missing, the answer is a long afternoon.</p>
+<p><strong class="good">After</strong></p>
+<pre><code>ACME_implementation/
+├── 03_data_migration/
+│   ├── 01_source/ACME_source_contracts_2026-10-20.xlsx
+│   ├── 02_mapping/ACME_mapping_contracts_v03_2026-10-23.xlsx
+│   ├── 04_loads/load02_contracts_2026-10-27/
+│   └── 05_reconciliation/ACME_recon_load02_2026-10-27.xlsx
+└── 05_testing/ACME_uat_signoff_2026-11-02.pdf</code></pre>
+<p>The question about the 40 contracts is answered by opening the reconciliation file and the errors file from the load. Nothing about the work changed. What changed is that the evidence exists and you can find it in a minute.</p>
+
+<div class="step"><h2>Edge cases worth knowing</h2>
+<p>Six that come up.</p>
+<p><strong>Client data is sensitive.</strong> Extracts often contain personal or regulated information. Keep it only in the locations the contract allows, not on a personal drive or a USB stick, and do not email it. Check the retention terms and delete or return the data when the project closes.</p>
+<p><strong>No credentials in files.</strong> Never store passwords, API keys or logins in a spreadsheet or document in the project folder. Use a password manager and put only a pointer in the folder.</p>
+<p><strong>Email is not a filing system.</strong> A requirement agreed by email exists only for the person who has the email. Save the message into <code>00_admin</code> or log it the same day.</p>
+<p><strong>Sandbox and production look alike.</strong> Put the environment in the name of anything that touches the system (<code>_sandbox</code>, <code>_prod</code>) so a load file for one cannot be mistaken for the other.</p>
+<p><strong>Shared folders create conflicts.</strong> Two people editing the same workbook in a synced folder produce “conflicted copy” files. Agree who owns each file, and use the version number to hand it over.</p>
+<p><strong>Scope creep arrives as small files.</strong> A new spreadsheet “just to try something” is often a new requirement. If it is new scope, it goes in the change log.</p>
+</div>
+<h2>Why this works</h2>
+<p>The folder principles are the same ones people who study reproducible work recommend: keep raw inputs separate from anything derived, never change the raw copy, give each project one folder with a consistent layout, and name things so someone else can tell what they are (Wilson et al., 2017, PLOS Computational Biology, 13(6), e1005510). A migration is a derived-data pipeline, so the same discipline applies.</p>
+<p>The checklists, logs and sign-offs follow a related idea: in complex work where a missed step is costly, writing the steps down and ticking them off catches errors that experience alone does not (Gawande, 2009, <em>The Checklist Manifesto</em>, Metropolitan Books). The cutover plan, the load notes and the go-live checklist are all that idea applied to implementation.</p>
+<p>The cheat sheet below is built to be covered and recalled rather than reread, because reviews of study techniques put practice testing and spacing near the top of what works and rereading and highlighting near the bottom, despite rereading feeling much more productive (Dunlosky, Rawson, Marsh, Nathan, &amp; Willingham, 2013, Psychological Science in the Public Interest, 14(1), 4–58).</p>
+
+<h2>Using this on your own project</h2>
+<p>Do this once for the template, then once per client. About fifteen minutes the first time.</p>
+<ol>
+<li><strong>Build the template.</strong> Create the folders from section 2 and save the empty tree as <code>_TEMPLATE_implementation</code>.</li>
+<li><strong>Add starter files.</strong> Blank decision log, change log, configuration workbook, mapping spec, manifest and reconciliation sheet, saved in the right folders.</li>
+<li><strong>For each client, copy the template</strong> and rename it with the client code.</li>
+<li><strong>Save the source as received</strong> into <code>01_source</code> with the date, and never edit it.</li>
+<li><strong>Log as you go.</strong> Every decision, every setting, every load, the same day.</li>
+<li><strong>Reconcile every load</strong> and save the proof before moving on.</li>
+<li><strong>Save the sign-offs</strong> for UAT and go-live where you can find them.</li>
+<li><strong>At close, hand over and archive.</strong> Fill <code>08_handover</code>, move old files to <code>99_archive</code>, and apply the data retention terms.</li>
+</ol>
+<p>If you have paper nearby, one optional sketch is worth five minutes. Draw the project as a line from kickoff to go-live, and under each phase write the one file that proves it happened. Any phase where you cannot name that file is a gap in your records.</p>
+
+<h2>The whole thing on one screen</h2>
+<p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
+<div class="tw"><table>
+<tr><th>Thing</th><th>What to remember</th></tr>
+<tr><td>Template</td><td>One folder per client, built from the same template.</td></tr>
+<tr><td>Numbered folders</td><td>Project order. Gaps left for additions.</td></tr>
+<tr><td>File names</td><td><code>CLIENT_topic_description_vNN_YYYY-MM-DD</code></td></tr>
+<tr><td>Banned words</td><td>final, new, latest, copy.</td></tr>
+<tr><td>Source</td><td>As received, dated, never edited.</td></tr>
+<tr><td>Config workbook</td><td>Source of truth. Record each setting when you make it.</td></tr>
+<tr><td>Mapping spec</td><td>One per object, versioned, with owners for open questions.</td></tr>
+<tr><td>Load folder</td><td>Dated, holds the file loaded, notes and errors.</td></tr>
+<tr><td>Reconciliation</td><td>Counts and key totals, source vs target, signed off.</td></tr>
+<tr><td>Reversibility</td><td>Tag loaded records with a load ID before load one.</td></tr>
+<tr><td>Document manifest</td><td>One row per document. Source, manifest, target must agree.</td></tr>
+<tr><td>Sample check</td><td>Open ten documents and compare with the originals.</td></tr>
+<tr><td>UAT</td><td>Scripts, results, defects, saved sign-off.</td></tr>
+<tr><td>Training</td><td>Admin and end user separate. Match the system as configured.</td></tr>
+<tr><td>Logs</td><td>Decisions, changes, risks. Written the same day.</td></tr>
+<tr><td>Go-live</td><td>Cutover plan, checklist, rollback plan written beforehand.</td></tr>
+<tr><td>Handover</td><td>As-built, migration summary, training, open items, support.</td></tr>
+<tr><td>Client data</td><td>Approved locations only. No credentials in files. Apply retention terms.</td></tr>
+</table></div>
+<div class="note"><strong>The one habit to keep.</strong> Save the proof when the thing happens, not when someone asks for it. A reconciliation, a sign-off or a decision recorded on the day takes two minutes; the same thing reconstructed three months later takes an afternoon, and is worth less.</div>
+<p><strong>One last thought, and I would genuinely like other people’s answers.</strong> What was the one file you wished you had saved at the time on a past project, and what did it cost you not to have it?</p>
+
+
+  <h2>References</h2>
+  <ul class="refs">
+    <li>Wilson, G., Bryan, J., Cranston, K., Kitzes, J., Nederbragt, L., &amp; Teal, T. K. (2017). Good enough practices in scientific computing. PLOS Computational Biology, 13(6), e1005510.</li>
+    <li>Gawande, A. (2009). The Checklist Manifesto: How to Get Things Right. Metropolitan Books.</li>
+    <li>Dunlosky, J., Rawson, K. A., Marsh, E. J., Nathan, M. J., &amp; Willingham, D. T. (2013). Improving students’ learning with effective learning techniques. Psychological Science in the Public Interest, 14(1), 4–58.</li>
+  </ul>
+
+  <div data-apk-subscribe></div>
+  <footer>
+    <a href="../../">← Analyst Prep Kit</a> · <a href="../folder-setup-for-sql/">Folders for SQL work</a> · <a href="../folder-setup-for-implementations/">Folders for implementations</a> · <a href="../folder-system-for-everyday-work/">Folders for everyday work</a> · <a href="../excel-clean-messy-data/">Clean Messy Data</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../../projects/">Portfolio Projects</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+  </footer>
+</main>
+  <script src="../../assets/apk-subscribe.js" defer></script>
+</body>
+</html>
