@@ -9,6 +9,7 @@ const htmlFiles = [
   "data-quality/index.html",
   "portfolio-projects/index.html",
   "decision-making/index.html",
+  "business-analysis/index.html",
   "datacraft/index.html"
 ];
 const requiredRoutes = [
@@ -16,6 +17,7 @@ const requiredRoutes = [
   "data-quality/",
   "portfolio-projects/",
   "decision-making/",
+  "business-analysis/",
   "datacraft/"
 ];
 
@@ -76,6 +78,16 @@ assert.ok(fs.existsSync(path.join(root, "decision-making/CHECKLIST_RU.md")), "De
 const decisionChecklist = fs.readFileSync(path.join(root, "decision-making/CHECKLIST_RU.md"), "utf8");
 assert.ok(decisionChecklist.includes("Универсальная цепочка"), "Decision-making checklist is incomplete");
 
+const businessAnalysis = fs.readFileSync(path.join(root, "business-analysis/index.html"), "utf8");
+assert.equal(businessAnalysis.split('<article class="lesson').length - 1, 9, "Business-analysis module must contain exactly 9 lessons");
+for (const feature of ["lessonNav", "progressBar", "resetProgress", "reviewCase", "saveCase", "copySpec", "exportSpec", "caseFeedback"]) {
+  assert.ok(businessAnalysis.includes('id="' + feature + '"'), "Business-analysis feature missing: " + feature);
+}
+for (let i = 1; i <= 9; i++) assert.ok(businessAnalysis.includes('data-quiz="q' + i + '"'), "Business-analysis quiz missing: q" + i);
+for (const topic of ["BPMN", "User Story", "Use Case", "UAT", "AS-IS", "TO-BE"]) assert.ok(businessAnalysis.includes(topic), "Business-analysis topic missing: " + topic);
+assert.ok(businessAnalysis.includes("apk-business-analysis-progress-v1") && businessAnalysis.includes("localStorage"), "Business-analysis progress storage is missing");
+assert.ok(fs.existsSync(path.join(root, "business-analysis/CHECKLIST_RU.md")), "Business-analysis checklist file missing");
+
 const datacraft = fs.readFileSync(path.join(root, "datacraft/index.html"), "utf8");
 for (const feature of [
   'id="world"', 'id="targetList"', 'id="inventory"', 'id="recipes"',
@@ -108,21 +120,21 @@ const coreIds = [
 const optionalIds = [
   "project-studio", "excel-cert", "excel-expert", "powerbi-cert", "tableau-cert",
   "alteryx-cert", "azure-data-cert", "databricks-cert", "ga4-cert",
-  "docusign", "docusign-clm", "docusign-clm-workflow",
+  "business-analysis", "docusign", "docusign-clm", "docusign-clm-workflow",
   "docusign-clm-implementation", "docusign-org"
 ];
 for (const id of coreIds.concat(optionalIds)) {
   assert.ok(curriculum.includes("id:'" + id + "'"), "DataCraft curriculum node missing: " + id);
 }
 for (const key of [
-  "apk-foundations-progress-v1", "apk-quality-score", "sqlkit-v1", "epk", "ppk",
+  "apk-foundations-progress-v1", "apk-business-analysis-progress-v1", "apk-quality-score", "sqlkit-v1", "epk", "ppk",
   "clk-v1", "spk", "fmk-v1", "pbikt-v1", "tpk",
   "apk-decision-thinking-progress-v1", "apk-portfolio-", "sim2", "ipk", "apk-final"
 ]) {
   assert.ok(curriculum.includes(key), "DataCraft learning progress reader missing: " + key);
 }
 for (const route of [
-  "foundations", "data-quality", "sql", "excel", "chart-literacy", "python",
+  "foundations", "business-analysis", "data-quality", "sql", "excel", "chart-literacy", "python",
   "stats", "forecasting", "powerbi", "tableau", "decision-making",
   "portfolio-projects", "simulator", "interview", "final", "projects",
   "excel-cert", "excel-expert-cert", "powerbi-cert", "tableau-cert",
