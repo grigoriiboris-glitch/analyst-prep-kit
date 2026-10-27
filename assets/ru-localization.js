@@ -4,9 +4,11 @@
   "use strict";
   if (window.__apkRuLoaded) return;
   window.__apkRuLoaded = true;
-  var langKey="apk-language-v2", cacheKey="apk-ru-cache-v2", lang="ru", requestQueue=Promise.resolve();
-  var records=new WeakMap(), tracked=new Set(), pending=new WeakSet(), observer, toggle, muting=false, cache={};
-  try { cache=JSON.parse(localStorage.getItem(cacheKey)||"{}"); } catch (_) { cache={}; }
+  var langKey="apk-language-v2", cacheKey="apk-ru-cache-v2", legacyCacheKey="apk-ru-cache-v1", lang="ru";
+  var records=new WeakMap(), tracked=new Set(), pending=new WeakSet(), observer, toggle, muting=false, cache={}, inFlight=Object.create(null), activeRequests=0, requestWaiters=[];
+  try { cache=JSON.parse(localStorage.getItem(cacheKey)||localStorage.getItem(legacyCacheKey)||"{}"); } catch (_) { cache={}; }
+  async function acquireRequest(){if(activeRequests>=6)await new Promise(function(resolve){requestWaiters.push(resolve);});activeRequests++;}
+  function releaseRequest(){activeRequests=Math.max(0,activeRequests-1);var next=requestWaiters.shift();if(next)next();}
   if(!cache||typeof cache!=="object"||Array.isArray(cache))cache={};
   var d={
     "break into data analytics. one skill at a time.":"Освой аналитику данных. По одному навыку за раз.",
@@ -112,51 +114,53 @@
   function preserve(src,out){return(src.match(/^\s*/)||[""])[0]+out+(src.match(/\s*$/)||[""])[0];}
   function saveCache(){try{var k=Object.keys(cache);if(k.length>1600)k.slice(0,k.length-1200).forEach(function(x){delete cache[x];});localStorage.setItem(cacheKey,JSON.stringify(cache));}catch(_){}}
   async function online(text) {
-    if (Object.prototype.hasOwnProperty.call(cache, text)) return cache[text];
+    if (Object.prototype.hasOwnProperty.call(cache,text)) return cache[text];
     if (!navigator.onLine || !text || text.length > 850) return null;
-    var operation = async function () {
-      if (Object.prototype.hasOwnProperty.call(cache, text)) return cache[text];
-      var translated = null;
+    if (inFlight[text]) return inFlight[text];
+    var job=(async function(){
+      await acquireRequest();
       try {
-        var url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ru&dt=t&q=" + encodeURIComponent(text);
-        var response = await fetch(url, { mode: "cors", credentials: "omit" });
-        if (response.ok) {
-          var payload = await response.json();
-          if (Array.isArray(payload) && Array.isArray(payload[0])) {
-            var value = payload[0].map(function (part) {
-              return Array.isArray(part) && typeof part[0] === "string" ? part[0] : "";
-            }).join("");
-            if (value.trim() && value !== text) translated = value;
+        if (Object.prototype.hasOwnProperty.call(cache,text)) return cache[text];
+        var translated=null;
+        try {
+          var url="https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ru&dt=t&q="+encodeURIComponent(text);
+          var options={mode:"cors",credentials:"omit"};
+          if(typeof AbortSignal!=="undefined"&&AbortSignal.timeout)options.signal=AbortSignal.timeout(6000);
+          var response=await fetch(url,options);
+          if(response.ok){
+            var payload=await response.json();
+            if(Array.isArray(payload)&&Array.isArray(payload[0])){
+              var value=payload[0].map(function(part){return Array.isArray(part)&&typeof part[0]==="string"?part[0]:"";}).join("");
+              if(value.trim()&&value!==text)translated=value;
+            }
           }
+        }catch(_){}
+        if(!translated&&text.length<=450){
+          try{
+            var fallbackUrl="https://api.mymemory.translated.net/get?q="+encodeURIComponent(text)+"&langpair=en%7Cru";
+            var fallbackOptions={mode:"cors",credentials:"omit"};
+            if(typeof AbortSignal!=="undefined"&&AbortSignal.timeout)fallbackOptions.signal=AbortSignal.timeout(6000);
+            var fallbackResponse=await fetch(fallbackUrl,fallbackOptions);
+            if(fallbackResponse.ok){
+              var fallbackJson=await fallbackResponse.json();
+              var fallbackText=fallbackJson&&fallbackJson.responseData&&fallbackJson.responseData.translatedText;
+              if(fallbackJson&&fallbackJson.responseStatus===200&&fallbackText&&fallbackText!==text&&!/MYMEMORY WARNING|PLEASE SELECT TWO DISTINCT LANGUAGES/i.test(fallbackText))translated=fallbackText;
+            }
+          }catch(_){}
         }
-      } catch (_) {}
-      // Fallback: keyless MyMemory, limited to short strings and its public quota.
-      if (!translated && text.length <= 450) {
-        try {
-          var fallbackUrl = "https://api.mymemory.translated.net/get?q=" + encodeURIComponent(text) + "&langpair=en%7Cru";
-          var fallbackResponse = await fetch(fallbackUrl, { mode: "cors", credentials: "omit" });
-          if (fallbackResponse.ok) {
-            var fallbackJson = await fallbackResponse.json();
-            var fallbackText = fallbackJson && fallbackJson.responseData && fallbackJson.responseData.translatedText;
-            if (fallbackJson && fallbackJson.responseStatus === 200 && fallbackText && fallbackText !== text &&
-                !/MYMEMORY WARNING|PLEASE SELECT TWO DISTINCT LANGUAGES/i.test(fallbackText)) translated = fallbackText;
-          }
-        } catch (_) {}
-      }
-      if (translated) {
-        cache[text] = translated;
-        try {
-          var keys = Object.keys(cache);
-          if (keys.length > 1600) keys.slice(0, keys.length - 1200).forEach(function (key) { delete cache[key]; });
-          localStorage.setItem(cacheKey, JSON.stringify(cache));
-        } catch (_) {}
-      }
-      return translated;
-    };
-    var job = requestQueue.then(operation, operation);
-    requestQueue = job.catch(function () { return null; }).then(function () {
-      return new Promise(function (resolve) { setTimeout(resolve, 90); });
-    });
+        if(translated){
+          cache[text]=translated;
+          try{
+            var keys=Object.keys(cache);
+            if(keys.length>1600)keys.slice(0,keys.length-1200).forEach(function(key){delete cache[key];});
+            localStorage.setItem(cacheKey,JSON.stringify(cache));
+          }catch(_){}
+        }
+        return translated;
+      }finally{releaseRequest();}
+    })();
+    inFlight[text]=job;
+    job.then(function(){delete inFlight[text];},function(){delete inFlight[text];});
     return job;
   }
   async function translateNode(n){
