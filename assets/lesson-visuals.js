@@ -24,7 +24,7 @@
     return { kind: 'compare', title: title, intro: intro, left: { title: leftTitle, items: leftItems }, right: { title: rightTitle, items: rightItems }, note: note || '' };
   }
   function table(title, intro, headers, rows, note) { return { kind: 'table', title: title, intro: intro, headers: headers, rows: rows, note: note || '' }; }
-  function equation(title, intro, formula, parts, note) { return { kind: 'equation', title: title, intro: intro, formula: formula, parts: parts, note: note || '' }; }
+  function equation(title, intro, formula, parts, note) { return { kind: 'equation', title: title, intro: intro, formula: formula, parts: parts, note: note || '', symbol: '×' }; }
 
   var RULES = [
     /* Foundations: concepts before tools. */
@@ -141,11 +141,11 @@
       visual: flow('GROUP BY превращает строки в группы', 'Выбери, по какому признаку объединять строки, и только затем считай показатель.',
         [['Исходные строки', 'Много заказов по разным регионам.'], ['GROUP BY region', 'Создаёт одну группу на регион.'], ['SUM(revenue)', 'Складывает выручку внутри группы.'], ['Итог', 'Одна строка на регион.']],
         'WHERE отбирает исходные строки до группировки; HAVING отбирает уже готовые группы.') },
-    { course: 'sql', match: /window function|оконн|over\\s*\\(|partition by/i,
+    { course: 'sql', match: /window function|оконн|over\s*\(|partition by/i,
       visual: flow('Оконная функция считает по соседним строкам, не склеивая их', 'В отличие от GROUP BY, оконная функция обычно сохраняет каждую исходную строку.',
         [['Строки продаж', 'Одна строка на заказ.'], ['PARTITION BY', 'Разделить по региону или клиенту.'], ['ORDER BY', 'Определить порядок внутри группы.'], ['OVER (...)', 'Рассчитать сумму, номер или разницу.'], ['Результат', 'Исходные строки + новое значение.']],
         'Полезно для накопительных итогов, ранжирования и сравнения с предыдущей строкой.') },
-    { course: 'sql', match: /\\bcte\\b|common table|with\\s+\\w|with clause|общ.*таблич/i,
+    { course: 'sql', match: /\bcte\b|common table|with\s+\w|with clause|общ.*таблич/i,
       visual: flow('CTE — именованный промежуточный шаг', 'Сложный запрос легче читать как несколько понятных частей.',
         [['WITH cleaned AS', 'Описать подготовленные строки.'], ['Следующий CTE', 'Посчитать нужные показатели.'], ['Основной SELECT', 'Собрать окончательный результат.']],
         'CTE помогает структурировать запрос, но сам по себе не гарантирует ускорение выполнения.') },
@@ -167,7 +167,7 @@
       visual: flow('Поиск по ключу — как найти сведения в справочнике', 'Ключ должен однозначно указывать на нужную запись.',
         [['Таблица продаж', 'В строке есть customer_id.'], ['Справочник клиентов', 'customer_id связан с именем.'], ['Поиск', 'Найти точное совпадение ключа.'], ['Результат', 'Добавить имя к нужной продаже.']],
         'Если ключ повторяется, уточни правило: брать первую запись, последнюю или исправить справочник. Не выбирай случайно.') },
-    { course: 'excel', match: /absolute|relative|cell reference|\\$[a-z]|ссылк.*ячей|ячейк/i,
+    { course: 'excel', match: /absolute|relative|cell reference|\$[a-z]|ссылк.*ячей|ячейк/i,
       visual: compare('Относительная и абсолютная ссылка', 'При копировании формулы Excel может смещать ссылки. Знак $ фиксирует координату.',
         'Относительная: B2', ['В C2: =B2*2', 'При копировании вниз станет =B3*2.', 'Адрес меняется вместе со строкой.'],
         'Абсолютная: $B$2', ['Формула: =A2*$B$2', 'При копировании вниз A2 станет A3.', '$B$2 останется на месте.'],
@@ -242,7 +242,7 @@
         'Числа', ['100, 110, 120, 130, 1 000.', 'Среднее = 292.', 'Медиана = 120.'],
         'Как читать', ['Среднее учитывает величину каждого значения.', 'Медиана — значение посередине упорядоченного списка.', 'При перекосе полезно смотреть оба числа.'],
         'Перед выбором показателя посмотри на распределение и объясни, что именно он описывает.') },
-    { course: 'stats', match: /p.value|p value|значимост|a\\/b|ab test|статистическ.*значим/i,
+    { course: 'stats', match: /p.value|p value|значимост|a\/b|ab test|статистическ.*значим/i,
       visual: flow('A/B-тест проверяет разницу, а не доказывает причину автоматически', 'Сравнение имеет смысл, если группы и метрика заданы заранее, а данные собраны корректно.',
         [['Вопрос и метрика', 'Например, конверсия в покупку.'], ['Группы A и B', 'Одинаковые условия, меняется тестируемый фактор.'], ['Собрать данные', 'Достаточный срок и размер выборки.'], ['Оценить разницу', 'Эффект и неопределённость.'], ['Решение', 'Польза, риск и цена внедрения.']],
         'Малое p-значение само по себе не говорит, насколько велик эффект и полезен ли он для бизнеса.') },
@@ -320,7 +320,7 @@
       if (rule.course !== course && rule.course !== '*') return false;
       if (rule.course === '*' && best) return false;
       try {
-        if (new RegExp(rule.match, 'i').test(haystack)) { best = rule.visual; return true; }
+        if (rule.match.test(haystack)) { best = rule.visual; return true; }
       } catch (_) {}
       return false;
     });
@@ -376,7 +376,7 @@
       section.appendChild(formula);
       var eq = node('div', 'lv-equation');
       (def.parts || []).forEach(function (part, index) {
-        if (index) eq.appendChild(node('span', 'lv-equation__symbol', '+'));
+        if (index) eq.appendChild(node('span', 'lv-equation__symbol', def.symbol || '+'));
         var item = node('div', 'lv-equation__part');
         item.appendChild(node('span', 'lv-equation__name', part[0]));
         item.appendChild(node('span', 'lv-equation__detail', part[1]));
