@@ -42,7 +42,8 @@
     if(!saved||typeof saved!=='object'){
       var fresh=clone(DEFAULT);
       fresh.transactions.push({id:'welcome',delta:10,balance:10,reason:'Стартовый запас монет',time:Date.now()});
-      try{localStorage.setItem(KEY,JSON.stringify(fresh));}catch(e){}
+      // Keep the default wallet in memory only until real progress changes. Persisting
+      // it on page load would stamp a fresh empty wallet as newer than the cloud save.
       return fresh;
     }
     var w=Object.assign(clone(DEFAULT),saved);
