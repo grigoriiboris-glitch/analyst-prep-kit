@@ -43,9 +43,9 @@ footer{max-width:1500px;margin:auto;padding:0 20px 24px;color:#8fa697;font-size:
 <div class="status-wrap">
   <div class="status">
     <div class="stat"><div class="stat-label">Уровень исследователя</div><div class="stat-value" id="levelValue">1</div><div class="muted" id="levelHint" style="font-size:11px">Новичок</div></div>
-    <div class="stat"><div class="stat-label">Опыт · XP</div><div class="stat-value" id="xpValue">0 / 100</div><div class="xpbar"><div id="xpFill" class="xpfill"></div></div></div>
+    <div class="stat"><div class="stat-label">Монетки · можно тратить</div><div class="stat-value" id="xpValue">10 🪙</div><div class="xpbar"><div id="xpFill" class="xpfill"></div></div><div class="muted" id="coinsHint" style="font-size:11px;margin-top:5px">Монеты открывают постройки и действия</div></div>
     <div class="stat"><div class="stat-label">Репутация</div><div class="stat-value" id="repValue">0</div><div class="muted" style="font-size:11px">За выполненные контракты</div></div>
-    <div class="stat"><div class="stat-label">Постройки</div><div class="stat-value" id="buildValue">1 / 4</div><div class="muted" style="font-size:11px">Развивай свой лагерь</div></div>
+    <div class="stat"><div class="stat-label">Постройки</div><div class="stat-value" id="buildValue">1 / 4</div><div class="muted" style="font-size:11px">Учебные здания на карте</div></div>
   </div>
 </div>
 <main class="layout">
@@ -98,6 +98,9 @@ footer{max-width:1500px;margin:auto;padding:0 20px 24px;color:#8fa697;font-size:
     <div class="dialog-body"><div class="question-tag" id="questionTag">Сбор ресурса</div><div class="question" id="questionText"></div><div class="answers" id="answers"></div><div class="feedback" id="feedback" role="status" aria-live="polite"></div><div class="dialog-footer"><button class="btn ghost" id="cancelChallenge">Вернуться на карту</button><button class="btn primary hidden" id="claimReward">Забрать награду</button></div></div>
   </div>
 </div>
+<script src="../assets/ru-localization.js"></script>
+<script src="../assets/datacraft-economy.js"></script>
+<script src="lesson-catalog.js"></script>
 <script>
 (function(){
 'use strict';
@@ -175,10 +178,10 @@ const QUESTIONS={
  ]
 };
 const RECIPES=[
- {id:'workbench',name:'Верстак лагеря',icon:'🪚',desc:'Дополнительное улучшение лагеря. Учебные курсы открываются на карте развития выше.',needs:{wood:4,stone:2},kind:'building',at:{x:8,y:6}},
- {id:'sql_scanner',name:'Походный SQL-сканер',icon:'⚙️',desc:'Разблокирует ресурсную часть SQL-руин. Это не заменяет учебный курс SQL на большой карте.',needs:{data:2,crystal:1,stone:1},kind:'item',requires:'workbench'},
- {id:'lab',name:'Полевая лаборатория',icon:'🔬',desc:'Дополнительное улучшение для ресурсных экспедиций. Учебная лаборатория открывается после уроков.',needs:{wood:3,stone:3,data:2,reagent:2,crystal:1},kind:'building',requires:'workbench',at:{x:10,y:7}},
- {id:'dashboard',name:'Панель исследователя',icon:'📊',desc:'Дополнительное игровое улучшение для торгового контракта. Учебный аналитический центр открывается на карте развития.',needs:{data:3,sql:2,crystal:2},kind:'building',requires:'lab',at:{x:8,y:9}}
+ {id:'workbench',name:'Верстак лагеря',icon:'🪚',desc:'Дополнительное улучшение лагеря. Учебные курсы открываются на карте развития выше.',needs:{wood:4,stone:2},coinCost:4,kind:'building',at:{x:8,y:6}},
+ {id:'sql_scanner',name:'Походный SQL-сканер',icon:'⚙️',desc:'Разблокирует ресурсную часть SQL-руин. Это не заменяет учебный курс SQL на большой карте.',needs:{data:2,crystal:1,stone:1},coinCost:5,kind:'item',requires:'workbench'},
+ {id:'lab',name:'Полевая лаборатория',icon:'🔬',desc:'Дополнительное улучшение для ресурсных экспедиций. Учебная лаборатория открывается после уроков.',needs:{wood:3,stone:3,data:2,reagent:2,crystal:1},coinCost:5,kind:'building',requires:'workbench',at:{x:10,y:7}},
+ {id:'dashboard',name:'Панель исследователя',icon:'📊',desc:'Дополнительное игровое улучшение для торгового контракта. Учебный аналитический центр открывается на карте развития.',needs:{data:3,sql:2,crystal:2},coinCost:7,kind:'building',requires:'lab',at:{x:8,y:9}}
 ];
 let state=loadState();
 let player={x:5,y:7},path=[],targetNode=null,challengeNode=null,challengeContract=false,answerResolved=false;
@@ -210,10 +213,13 @@ function addJournal(entry){if(!state.journal.includes(entry))state.journal.push(
 function showToast(msg){
  const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),3000);
 }
-function level(){return Math.floor(state.xp/100)+1}
-function addXP(amount){
- const before=level();state.xp+=amount;const after=level();
- if(after>before)showToast('Новый уровень! Теперь ты: '+(LEVEL_NAMES[Math.min(after-1,LEVEL_NAMES.length-1)])+'.');
+function getWallet(){return window.DataCraftEconomy?window.DataCraftEconomy.sync():{balance:0,totalEarned:0,totalSpent:0,buildings:{}}}
+function level(){return Math.floor((getWallet().totalEarned||0)/50)+1}
+function addCoins(id,amount,reason){
+ const before=level();
+ if(window.DataCraftEconomy)window.DataCraftEconomy.earn('resource-game:'+id,amount,reason);
+ const after=level();
+ if(after>before)showToast('Новый уровень! Теперь ты: '+(LEVEL_NAMES[Math.min(after-1,LEVEL_NAMES.length-1)]||'Ветеран аналитики')+'.');
 }
 function isUnlocked(node){return node.zone!=='ruins'||state.crafted.sql_scanner}
 function isHarvested(node){return state.harvested.includes(node.id)}
@@ -298,15 +304,15 @@ function claimReward(){
  if(!answerResolved)return;
  if(challengeContract){
   if(!state.contracts.includes('sales-investigation')){
-   state.contracts.push('sales-investigation');state.reputation+=10;addXP(100);
+   state.contracts.push('sales-investigation');state.reputation+=10;addCoins('contract:sales-investigation',15,'Выполнен торговый контракт');
    state.inventory.data+=2;state.inventory.crystal+=1;
    addJournal('Выполнен контракт: расследование падения продаж');
-   showToast('Контракт завершён! +100 XP, +10 репутации и редкие материалы.');
+   showToast('Контракт завершён! +15 🪙, +10 репутации и редкие материалы.');
   }
  }else if(challengeNode&&!isHarvested(challengeNode)){
   state.harvested.push(challengeNode.id);
   state.inventory[challengeNode.kind]=(state.inventory[challengeNode.kind]||0)+challengeNode.amount;
-  addXP(15);addJournal('Исследовано: '+challengeNode.name);
+  addCoins('harvest:'+challengeNode.id,2,'Добыт ресурс: '+challengeNode.name);addJournal('Исследовано: '+challengeNode.name);
   showToast('Получено: '+RESOURCE_INFO[challengeNode.kind].icon+' '+RESOURCE_INFO[challengeNode.kind].name+' ×'+challengeNode.amount);
  }
  saveState();closeChallenge();renderAll();
@@ -320,19 +326,23 @@ function startContract(){
  if(state.contracts.includes('sales-investigation')){showToast('Этот контракт уже закрыт. Отличная работа!');return}
  if(!state.buildings.dashboard){showToast('Сначала создай аналитический терминал.');return}
  challengeContract=true;challengeNode=null;answerResolved=false;
- showQuestion(QUESTIONS.contract[0],'Сквозной кейс · бизнес-анализ','За верный ответ: 100 XP, 10 репутации и материалы');
+ showQuestion(QUESTIONS.contract[0],'Сквозной кейс · бизнес-анализ','За верный ответ: 15 🪙, 10 репутации и материалы');
 }
 function craft(id){
  const r=RECIPES.find(x=>x.id===id);if(!r)return;
  if(r.kind==='building'&&state.buildings[id]){showToast('Эта постройка уже создана.');return}
  if(r.kind==='item'&&state.crafted[id]){showToast('Этот инструмент уже создан.');return}
- if(r.requires&&r.requires==='workbench'&&!state.buildings.workbench){showToast('Сначала построй верстак исследователя.');return}
- if(r.requires&&r.requires==='lab'&&!state.buildings.lab){showToast('Сначала построй лабораторию данных.');return}
+ if(r.requires&&r.requires==='workbench'&&!state.buildings.workbench){showToast('Сначала построй верстак лагеря.');return}
+ if(r.requires&&r.requires==='lab'&&!state.buildings.lab){showToast('Сначала построй полевую лабораторию.');return}
  if(!canAfford(r.needs)){showToast('Не хватает ресурсов: '+costText(r.needs));return}
+ const wallet=getWallet(),coinCost=r.coinCost||0;
+ if(wallet.balance<coinCost){showToast('Не хватает '+(coinCost-wallet.balance)+' 🪙 на крафт. Выполни доступные задания.');return}
+ if(window.DataCraftEconomy&&!window.DataCraftEconomy.spend(coinCost,'Крафт: '+r.name,'resource-craft:'+r.id)){showToast('Не хватает монет на крафт.');return}
  spend(r.needs);
  if(r.kind==='building')state.buildings[id]=true;else state.crafted[id]=true;
- addXP(r.id==='workbench'?25:35);addJournal('Создано: '+r.name);saveState();renderAll();
- showToast('Создано: '+r.name+'!');
+ addCoins('craft-reward:'+r.id,1,'Первое создание: '+r.name);
+ addJournal('Создано: '+r.name);saveState();renderAll();
+ showToast('Создано: '+r.name+' за '+coinCost+' 🪙!');
 }
 function renderInventory(){
  const el=document.getElementById('inventory');el.innerHTML='';
@@ -355,10 +365,11 @@ function renderRecipes(){
   const name=document.createElement('div');name.className='recipe-name';name.textContent=r.name;
   const icon=document.createElement('div');icon.className='recipe-icon';icon.textContent=r.icon;top.append(name,icon);
   const desc=document.createElement('div');desc.className='recipe-desc';desc.textContent=r.desc;
-  const cost=document.createElement('div');cost.className='cost';cost.textContent=made?'✓ Уже создано':'Стоимость: '+costText(r.needs);
+  const cost=document.createElement('div');cost.className='cost';cost.textContent=made?'✓ Уже создано':'Ресурсы: '+costText(r.needs)+' · Монеты: '+(r.coinCost||0)+' 🪙';
+  const wallet=getWallet();
   const btn=document.createElement('button');btn.type='button';btn.className='btn'+(made?' ghost':' primary');
-  btn.textContent=made?'Готово':(unlocked?'Создать':'🔒 Сначала '+(r.requires==='workbench'?'верстак':'лаборатория'));
-  btn.disabled=made||!unlocked||!affordable;btn.addEventListener('click',()=>craft(r.id));
+  btn.textContent=made?'Готово':(unlocked?'Создать за '+(r.coinCost||0)+' 🪙':'🔒 Сначала '+(r.requires==='workbench'?'верстак':'лаборатория'));
+  btn.disabled=made||!unlocked||!affordable||wallet.balance<(r.coinCost||0);btn.addEventListener('click',()=>craft(r.id));
   card.append(top,desc,cost,btn);el.appendChild(card);
  });
 }
@@ -370,24 +381,25 @@ function renderTargets(){
   const emoji=document.createElement('span');emoji.className='target-emoji';emoji.textContent=done?'✓':(!unlocked?'🔒':node.icon);
   const body=document.createElement('span');body.className='target-text';
   const title=document.createElement('span');title.className='target-name';title.textContent=node.name;title.style.display='block';
-  const sub=document.createElement('span');sub.className='target-sub';sub.textContent=done?'Ресурс собран':(!unlocked?'Нужен SQL-сканер':'Награда: '+RESOURCE_INFO[node.kind].icon+' ×'+node.amount);
+  const sub=document.createElement('span');sub.className='target-sub';sub.textContent=done?'Ресурс собран':(!unlocked?'Нужен SQL-сканер':'Награда: '+RESOURCE_INFO[node.kind].icon+' ×'+node.amount+' и 2 🪙');
   body.append(title,sub);b.append(emoji,body);
   b.addEventListener('click',()=>startNode(node));el.appendChild(b);
  });
 }
 function renderStats(){
- const lv=level(),inLevel=state.xp%100;
+ const wallet=getWallet(),earned=wallet.totalEarned||0,lv=level(),inLevel=earned%50;
  document.getElementById('levelValue').textContent=lv;
- document.getElementById('levelHint').textContent=LEVEL_NAMES[Math.min(lv-1,LEVEL_NAMES.length-1)]||'Ветеран аналитики';
- document.getElementById('xpValue').textContent=inLevel+' / 100';
- document.getElementById('xpFill').style.width=inLevel+'%';
+ document.getElementById('levelHint').textContent=(LEVEL_NAMES[Math.min(lv-1,LEVEL_NAMES.length-1)]||'Ветеран аналитики')+' · до уровня: '+(50-inLevel)+' монет';
+ document.getElementById('xpValue').textContent=(wallet.balance||0)+' 🪙';
+ document.getElementById('xpFill').style.width=(inLevel/50*100)+'%';
+ document.getElementById('coinsHint').textContent='Всего заработано: '+earned+' 🪙 · потрачено: '+(wallet.totalSpent||0)+' 🪙';
  document.getElementById('repValue').textContent=state.reputation;
- const built=Object.values(state.buildings).filter(Boolean).length;
- document.getElementById('buildValue').textContent=built+' / 4';
+ const curriculumIds=['foundations','quality','sql','excel','charts','python','stats','forecasting','powerbi','tableau','decision','portfolio','simulator','interview','final'];
+ const built=curriculumIds.filter(id=>wallet.buildings&&wallet.buildings[id]).length;
+ document.getElementById('buildValue').textContent=built+' / '+curriculumIds.length;
  document.getElementById('worldStatus').textContent=state.crafted.sql_scanner?'Регион 2 · SQL-руины открыты':'Регион 1 · Поляна и лес';
  document.getElementById('startContract').disabled=!state.buildings.dashboard||state.contracts.includes('sales-investigation');
  document.getElementById('startContract').textContent=state.contracts.includes('sales-investigation')?'✓ Контракт выполнен':(state.buildings.dashboard?'Начать расследование':'Сначала создай терминал');
- document.getElementById('contractBadge').textContent=state.contracts.includes('sales-investigation')?'Выполнено ✓':'Основная миссия';
  const cs=document.getElementById('contractStatus');
  if(state.contracts.includes('sales-investigation'))cs.textContent='Контракт закрыт. Ты проверил исходное изменение выручки и выбрал последовательный путь исследования. Торговая гильдия доверяет тебе более сложные проекты.';
  else if(state.buildings.dashboard)cs.textContent='Терминал готов. Теперь проведи анализ ситуации с падением выручки и выбери правильный следующий шаг.';
