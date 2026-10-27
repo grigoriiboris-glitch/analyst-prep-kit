@@ -30,7 +30,7 @@
 <meta name="google-site-verification" content="czfO_UVQFJNdbuvFbaaU6XjLZdOiAIjvhZYsgB4O38w" />
 <title>Grain — Analyst Prep Kit · Free SQL, Excel, Python, Tableau, Interview</title>
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/">
-<meta name="description" content="Free browser-based prep for entry-level data analyst roles. Interactive kits for foundations, data quality, portfolio projects, SQL, Excel, Python, Tableau, Statistics, Power BI, and interviews. No install.">
+<meta name="description" content="Free browser-based prep for data analysts and business analysts. Interactive courses for business analysis, foundations, data quality, SQL, Excel, Python, Power BI, Tableau, and interviews. No install.">
 <link rel="stylesheet" href="assets/grain/grain.css">
 <link rel="stylesheet" href="assets/grain/zinc-sky.css"><!-- Zinc & Sky palette rollout -->
 <style>
@@ -406,6 +406,13 @@ footer a:hover{color:var(--accent-d)}
           <span class="skill-body">
             <span class="skill-name">Основы аналитики данных</span>
             <span class="skill-meta">8 уроков · для новичков</span>
+          </span>
+        </a>
+        <a class="skill-item" href="business-analysis/" data-kit="business-analysis">
+          <span class="skill-ic"><i data-lucide="clipboard-list"></i></span>
+          <span class="skill-body">
+            <span class="skill-name">Основы бизнес-анализа</span>
+            <span class="skill-meta" data-progress-slot>9 уроков · требования и процессы</span>
           </span>
         </a>
         <a class="skill-item" href="data-quality/" data-kit="data-quality">
@@ -1033,6 +1040,10 @@ localStorage.removeItem('apk-basics');
 // The hub reads them all through small adapters that return a normalized
 // { done, total, last, label } shape.
 const KITS = [
+  { id:'business-analysis', name:'Основы бизнес-анализа', path:'business-analysis/', unit:'уроков', total:9,
+    read: () => { const s = JSON.parse(localStorage.getItem('apk-business-analysis-progress-v1')||'{}');
+      const done = Object.keys(s).filter(k=>/^\d+$/.test(k)&&s[k]===true).length;
+      return { done, last: done < 9 ? done + 1 : 9 }; } },
   { id:'excel',     name:'Excel Kit',                            path:'excel/',     unit:'lessons', total:12,
     read: () => { const s = JSON.parse(localStorage.getItem('epk')||'{}'); const ids=s.lessonsDone||[];
       return { done:ids.length, doneIds:ids, last:s.currentLesson||null }; } },
