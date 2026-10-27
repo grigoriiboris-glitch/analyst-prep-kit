@@ -3,9 +3,8 @@
   "use strict";
   var language = "ru";
   try { language = localStorage.getItem("apk-language-v2") || "ru"; } catch (_) {}
-  if (language === "en") return;
-
   var root = document.documentElement;
+  if (language === "en" || root.lang === "ru") return;
   root.classList.add("apk-ru-pending");
   var style = document.createElement("style");
   style.setAttribute("data-apk-ru-boot", "true");
