@@ -158,7 +158,8 @@ test('DataCraft does not award the same coin reward twice', () => {
   const storage = makeStorage();
   const window = {
     addEventListener() {},
-    dispatchEvent() {}
+    dispatchEvent() {},
+    setInterval() {}
   };
   class MockCustomEvent { constructor(type, options) { this.type = type; this.detail = options && options.detail; } }
   vm.runInNewContext(
