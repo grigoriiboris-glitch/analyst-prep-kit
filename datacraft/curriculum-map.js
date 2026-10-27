@@ -639,7 +639,7 @@
       if (course.tracker === 'quality' || course.tracker === 'portfolio') amount = 1;
       if (course.tracker === 'simulator' || course.tracker === 'final') amount = 2;
       if (course.tracker === 'projectStudio' || course.tracker === 'cert') amount = 0;
-      return '<div class="curriculum-lesson-row' + (done ? ' passed' : '') + (depth ? ' nested' : '') + '"><span class="curriculum-lesson-check">' + (done ? '✓' : '○') + '</span><span class="curriculum-lesson-copy"><span class="curriculum-lesson-title">' + safeText(item.title) + '</span>' + (item.goal ? '<span class="curriculum-lesson-goal">' + safeText(item.goal) + '</span>' : '') + '</span><span class="curriculum-lesson-reward">' + (done ? 'Зачтено' : (rewardAlreadyClaimed ? 'Монеты получены' : (amount ? '+' + amount + ' 🪙' : 'Этап'))) + '</span></div>';
+      return '<div class="curriculum-lesson-row' + (done ? ' passed' : '') + (depth ? ' nested' : '') + '"><span class="curriculum-lesson-check">' + (done ? '✓' : '○') + '</span><span class="curriculum-lesson-copy"><span class="curriculum-lesson-title">' + safeText(item.title) + '</span>' + (item.goal ? '<span class="curriculum-lesson-goal">' + safeText(item.goal) + '</span>' : '') + '</span><span class="curriculum-lesson-actions"><span class="curriculum-lesson-reward">' + (done ? 'Зачтено' : (rewardAlreadyClaimed ? 'Монеты получены' : (amount ? '+' + amount + ' 🪙' : 'Этап'))) + '</span><button type="button" class="curriculum-copy-context" title="Скопировать контекст этого урока для ИИ-агента" aria-label="Скопировать контекст урока ' + safeText(item.title) + '" data-course-title="' + safeText(course.title) + '" data-course-path="' + safeText(course.path || '') + '" data-course-id="' + safeText(course.id) + '" data-lesson-title="' + safeText(item.title) + '" data-lesson-id="' + safeText(item.id) + '" data-lesson-unit="' + safeText(item.unit || '') + '" data-lesson-goal="' + safeText(item.goal || '') + '" data-lesson-done="' + (done ? 'true' : 'false') + '" data-parent-id="' + safeText(parentId || '') + '">⧉ Скопировать контекст</button></span></div>';
     }
     if (course.tracker === 'portfolio') {
       catalog.forEach(function(project){
@@ -1547,6 +1547,84 @@
     toast.textContent = message; toast.classList.add('show');
     window.setTimeout(function(){ toast.classList.remove('show'); }, 2600);
   }
+
+
+  function buildLessonAgentContext(button) {
+    var courseTitle = button.getAttribute('data-course-title') || 'Курс не указан';
+    var lessonTitle = button.getAttribute('data-lesson-title') || 'Урок не указан';
+    var unit = button.getAttribute('data-lesson-unit') || '';
+    var goal = button.getAttribute('data-lesson-goal') || '';
+    var lessonId = button.getAttribute('data-lesson-id') || '';
+    var parentId = button.getAttribute('data-parent-id') || '';
+    var done = button.getAttribute('data-lesson-done') === 'true';
+    var path = button.getAttribute('data-course-path') || '';
+    var materialUrl = window.location.href;
+    try { if (path) materialUrl = new URL(path, window.location.href).href; } catch (e) {}
+    var lines = [
+      'КОНТЕКСТ ДЛЯ ИИ-АГЕНТА',
+      'Проект: Analyst Prep Kit — DataCraft.',
+      'Курс: ' + courseTitle,
+      unit ? 'Раздел: ' + unit : '',
+      'Урок: ' + lessonTitle,
+      lessonId ? 'Идентификатор урока: ' + lessonId : '',
+      parentId ? 'Родительский кейс/раздел: ' + parentId : '',
+      goal ? 'Цель урока: ' + goal : '',
+      'Статус: ' + (done ? 'отмечен как пройденный в учебном плане' : 'ещё не отмечен как пройденный'),
+      'Страница учебного материала: ' + materialUrl,
+      '',
+      'Задача для агента:',
+      'Помоги мне изучить именно этот урок на русском языке. Сначала кратко объясни основные понятия, затем предложи пошаговый разбор и практическое задание из реальной работы аналитика. Не решай всё за меня: задавай уточняющие вопросы, проверяй мои ответы и указывай на ошибки. Учитывай предыдущие знания, если я их опишу.',
+      'Если ты не можешь открыть страницу учебного материала, не утверждай, что прочитал её: попроси меня вставить нужный фрагмент. Сохраняй названия команд, функций и синтаксис без перевода.'
+    ];
+    return lines.filter(function(line){ return line !== ''; }).join('\\n');
+  }
+
+  function copyTextWithFallback(text, onSuccess, onFailure) {
+    function fallback() {
+      var area = document.createElement('textarea');
+      area.value = text;
+      area.setAttribute('readonly', '');
+      area.style.position = 'fixed';
+      area.style.opacity = '0';
+      area.style.pointerEvents = 'none';
+      document.body.appendChild(area);
+      area.focus();
+      area.select();
+      var copied = false;
+      try { copied = document.execCommand('copy'); } catch (e) {}
+      area.remove();
+      if (copied) { onSuccess(); return; }
+      onFailure();
+      window.prompt('Автоматическое копирование недоступно. Скопируй контекст из этого поля:', text);
+    }
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+      navigator.clipboard.writeText(text).then(onSuccess).catch(fallback);
+    } else {
+      fallback();
+    }
+  }
+
+  document.addEventListener('click', function(e) {
+    var button = e.target && e.target.closest ? e.target.closest('.curriculum-copy-context') : null;
+    if (!button) return;
+    e.preventDefault();
+    var text = buildLessonAgentContext(button);
+    var originalLabel = button.textContent;
+    button.disabled = true;
+    copyTextWithFallback(text, function() {
+      button.textContent = '✓ Скопировано';
+      button.classList.add('copied');
+      showToastIfAvailable('Контекст урока скопирован. Вставь его в окно ИИ-агента.');
+      window.setTimeout(function() {
+        button.textContent = originalLabel;
+        button.classList.remove('copied');
+        button.disabled = false;
+      }, 1800);
+    }, function() {
+      button.disabled = false;
+      button.textContent = originalLabel;
+    });
+  });
 
   /* Main 60 FPS Animation Loop for the Curriculum World Canvas */
   function animateWorldLoop(ts) {
