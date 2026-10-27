@@ -71,10 +71,10 @@ function getSize(id){return id==='pond'?58:(id==='wooden-bridge'?40:(id==='oak-t
 function buy(it){
  if(it.kind==='upgrade'){
   var styles=state.styles[it.slot]||['default'];
-  if(styles.indexOf(it.id)>=0){state.active[it.slot]=it.id;save();draw();render();setStatus('Стиль уже куплен — применил его к дому бесплатно.');return;}
+  if(styles.indexOf(it.id)>=0){var returnedHome=state.current!=='garden';state.active[it.slot]=it.id;state.current='garden';selectedItem=null;selectedObject=null;mode='select';save();draw();render();setStatus('Стиль уже куплен — применил его к дому бесплатно.'+(returnedHome?' Вернул тебя к дому, чтобы сразу увидеть результат.':''));return;}
   if(coins()<it.price){setStatus('Не хватает монет. Пройди уроки, чтобы пополнить кошелёк.','warn');return;}
   if(!window.DataCraftEconomy||!window.DataCraftEconomy.spend(it.price,'Покупка для дома: '+it.name,'quiet-valley:style:'+it.id)){setStatus('Не удалось списать монеты.','error');return;}
-  styles.push(it.id);state.styles[it.slot]=styles;state.active[it.slot]=it.id;save();draw();render();setStatus('Куплено: '+it.name+'. Теперь стиль можно переключать бесплатно.');return;
+  styles.push(it.id);state.styles[it.slot]=styles;state.active[it.slot]=it.id;var returnedHome=state.current!=='garden';state.current='garden';selectedItem=null;selectedObject=null;mode='select';save();draw();render();setStatus('Куплено: '+it.name+'. Стиль применён к дому и теперь его можно переключать бесплатно.'+(returnedHome?' Я вернул тебя в сад, чтобы сразу увидеть изменение.':''));return;
  }
  if(coins()<it.price){setStatus('Не хватает монет. Заработай монеты за учебные задания.','warn');return;}
  var n=Math.max(0,Number(state.counts[it.id])||0),purchaseId='quiet-valley:item:'+it.id+':'+n;
@@ -99,10 +99,10 @@ function cloud(x,y,r){ctx.fillStyle='rgba(247,250,224,.24)';ctx.beginPath();ctx.
 function drawHouse(){
  var wall='#d5bd8e',roof='#8e5540',wi=item(state.active.wall),ri=item(state.active.roof);if(wi&&wi.value)wall=wi.value;if(ri&&ri.value)roof=ri.value;
  ctx.fillStyle='rgba(24,39,25,.3)';ctx.beginPath();ctx.ellipse(174,230,82,14,0,0,Math.PI*2);ctx.fill();
- ctx.fillStyle=wall;ctx.fillRect(124,156,103,75);ctx.strokeStyle='#5a5039';ctx.lineWidth=3;ctx.strokeRect(124,156,103,75);
- ctx.fillStyle=roof;ctx.beginPath();ctx.moveTo(111,163);ctx.lineTo(174,111);ctx.lineTo(240,163);ctx.closePath();ctx.fill();ctx.strokeStyle='#563b30';ctx.stroke();
+ ctx.fillStyle=wall;ctx.fillRect(124,156,103,75);ctx.strokeStyle='#5a5039';ctx.lineWidth=3;ctx.strokeRect(124,156,103,75);\n if(state.active.wall==='wall-cream'||state.active.wall==='wall-sage'){ctx.save();ctx.strokeStyle=state.active.wall==='wall-sage'?'rgba(67,111,65,.34)':'rgba(131,103,65,.25)';ctx.lineWidth=1;for(var sidingY=171;sidingY<229;sidingY+=13){ctx.beginPath();ctx.moveTo(127,sidingY);ctx.lineTo(224,sidingY);ctx.stroke();}ctx.restore();}
+ ctx.fillStyle=roof;ctx.beginPath();ctx.moveTo(111,163);ctx.lineTo(174,111);ctx.lineTo(240,163);ctx.closePath();ctx.fill();ctx.strokeStyle='#563b30';ctx.stroke();\n if(state.active.roof==='roof-terracotta'||state.active.roof==='roof-nightblue'){ctx.save();ctx.strokeStyle=state.active.roof==='roof-nightblue'?'rgba(218,238,255,.48)':'rgba(255,222,183,.58)';ctx.lineWidth=1.5;for(var tileY=124;tileY<160;tileY+=7){var leftX=174-(tileY-111)*63/52,rightX=174+(tileY-111)*66/52;ctx.beginPath();ctx.moveTo(leftX,tileY);ctx.lineTo(rightX,tileY);ctx.stroke();}ctx.restore();}
  ctx.fillStyle='#6a4733';ctx.fillRect(163,188,23,43);ctx.fillStyle='#e9ce8c';ctx.fillRect(182,205,3,3);
- var glow=state.active.window==='window-glow';[[137,172],[194,172]].forEach(function(p){ctx.fillStyle=glow?'#ffdf89':'#b6d9dc';ctx.fillRect(p[0],p[1],19,17);ctx.strokeStyle='#6b6c51';ctx.lineWidth=2;ctx.strokeRect(p[0],p[1],19,17);ctx.beginPath();ctx.moveTo(p[0]+9,p[1]);ctx.lineTo(p[0]+9,p[1]+17);ctx.moveTo(p[0],p[1]+8);ctx.lineTo(p[0]+19,p[1]+8);ctx.stroke();});
+ var glow=state.active.window==='window-glow';[[137,172],[194,172]].forEach(function(p){if(glow){ctx.save();ctx.fillStyle='rgba(255,208,83,.28)';ctx.beginPath();ctx.ellipse(p[0]+9.5,p[1]+8.5,20,18,0,0,Math.PI*2);ctx.fill();ctx.restore();}ctx.fillStyle=glow?'#ffdf89':'#b6d9dc';ctx.fillRect(p[0],p[1],19,17);ctx.strokeStyle='#6b6c51';ctx.lineWidth=2;ctx.strokeRect(p[0],p[1],19,17);ctx.beginPath();ctx.moveTo(p[0]+9,p[1]);ctx.lineTo(p[0]+9,p[1]+17);ctx.moveTo(p[0],p[1]+8);ctx.lineTo(p[0]+19,p[1]+8);ctx.stroke();});
  ctx.fillStyle='#f4f0d5';ctx.font='bold 12px system-ui';ctx.textAlign='center';ctx.fillText('Мой дом',174,99);
 }
 function background(z){
@@ -146,10 +146,10 @@ function moveMode(){if(!selectedObject)return;mode='move';draw();render();setSta
 function store(){var a=objects(),i=a.findIndex(function(o){return o.uid===selectedObject;});if(i<0)return;var o=a.splice(i,1)[0];state.inventory[o.itemId]=(Number(state.inventory[o.itemId])||0)+1;selectedObject=null;selectedItem=null;mode='select';save();draw();render();setStatus('Предмет возвращён в инвентарь и доступен для повторного размещения без новой покупки.');}
 function renderZones(){zonesEl.innerHTML='';ZONES.forEach(function(z){var open=state.unlocked.indexOf(z.id)>=0,b=document.createElement('button');b.type='button';b.className='quiet-valley-zone'+(state.current===z.id?' active':'')+(!open?' locked':'');b.textContent=open?z.name:'🔒 '+z.short+' · '+z.price+' 🪙';b.setAttribute('aria-pressed',state.current===z.id?'true':'false');b.addEventListener('click',function(){selectZone(z);});zonesEl.appendChild(b);});}
 function renderShop(){
- shopEl.innerHTML='';ITEMS.filter(function(it){return category==='all'||it.cat===category;}).forEach(function(it){var up=it.kind==='upgrade',styles=up?(state.styles[it.slot]||[]):[],owned=up&&styles.indexOf(it.id)>=0;
- var b=document.createElement('button');b.type='button';b.className='quiet-valley-item'+(selectedItem===it.id?' selected':'');b.disabled=!owned&&!stock(it.id)&&coins()<it.price;
- var action=owned?'Выбрать стиль':(stock(it.id)?'Выбрать · '+state.inventory[it.id]+' шт.':'Купить · '+it.price+' 🪙');
- b.innerHTML='<span class="quiet-valley-item-top"><span class="quiet-valley-item-icon" aria-hidden="true">'+it.emoji+'</span><span class="quiet-valley-item-name">'+esc(it.name)+'</span></span><span class="quiet-valley-item-desc">'+esc(it.desc)+'</span><span class="quiet-valley-item-action"><span>'+action+'</span><span>'+(owned?'✓':(stock(it.id)?'В наличии':it.price+' 🪙'))+'</span></span>';
+ shopEl.innerHTML='';ITEMS.filter(function(it){return category==='all'||it.cat===category;}).forEach(function(it){var up=it.kind==='upgrade',styles=up?(state.styles[it.slot]||[]):[],owned=up&&styles.indexOf(it.id)>=0,active=up&&state.active[it.slot]===it.id;
+ var b=document.createElement('button');b.type='button';b.className='quiet-valley-item'+(selectedItem===it.id?' selected':'')+(active?' active-style':'');b.disabled=!owned&&!stock(it.id)&&coins()<it.price;
+ var action=active?'Активен · применён':(owned?'Выбрать стиль':(stock(it.id)?'Выбрать · '+state.inventory[it.id]+' шт.':'Купить · '+it.price+' 🪙'));
+ b.innerHTML='<span class="quiet-valley-item-top"><span class="quiet-valley-item-icon" aria-hidden="true">'+it.emoji+'</span><span class="quiet-valley-item-name">'+esc(it.name)+'</span></span><span class="quiet-valley-item-desc">'+esc(it.desc)+'</span><span class="quiet-valley-item-action"><span>'+action+'</span><span>'+(active?'✓ Активен':(owned?'✓ Куплено':(stock(it.id)?'В наличии':it.price+' 🪙')))+'</span></span>';
  b.addEventListener('click',function(){if(up){buy(it);return;}if(stock(it.id)){selectedItem=it.id;selectedObject=null;mode='place';draw();render();setStatus('Выбрано: '+it.name+'. Нажми на свободное место карты.');}else buy(it);});shopEl.appendChild(b);});
  balanceEl.textContent='🪙 '+coins()+' монет';
 }
