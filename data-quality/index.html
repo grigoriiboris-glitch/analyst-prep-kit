@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Практикум по качеству данных — Analyst Prep Kit</title>
+<link rel="stylesheet" href="../assets/grain/grain.css"><link rel="stylesheet" href="../assets/grain/zinc-sky.css">
+<style>
+:root{color-scheme:dark;--bg:#101714;--panel:#19231f;--ink:#edf5f0;--muted:#a6b6ac;--line:#35453c;--accent:#8dd8b1;--red:#f19a9a;--yellow:#f4c979}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}a{color:var(--accent)}.wrap{max-width:1200px;margin:auto;padding:22px}.top,.nav,.actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}.nav{justify-content:flex-start}.nav a{border:1px solid var(--line);border-radius:9px;padding:8px 11px;text-decoration:none}.hero{margin:20px 0;padding:26px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(130deg,#22362b,#18211d)}.eyebrow{font-size:.75rem;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);font-weight:800}.hero h1{font-size:clamp(2rem,4vw,3rem);line-height:1.15;margin:.5rem 0}.muted{color:var(--muted)}.layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(300px,.9fr);gap:16px}.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:18px;margin-bottom:16px}h2{margin-top:0;line-height:1.2}h3{margin-bottom:8px}.dataset{overflow:auto;border:1px solid var(--line);border-radius:10px;max-height:540px}table{border-collapse:collapse;width:100%;font-size:.86rem;white-space:nowrap}th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}th{position:sticky;top:0;background:#26372e;z-index:1}.flag{background:#482727}.clean{background:#193d2b}.tag{display:inline-block;border-radius:999px;padding:3px 8px;background:#2c4034;color:var(--accent);font-size:.75rem}.check{display:flex;gap:10px;align-items:flex-start;padding:10px;border:1px solid var(--line);border-radius:9px;margin:8px 0;cursor:pointer}.check input{margin-top:5px;accent-color:#8dd8b1}.btn{border:0;border-radius:9px;padding:10px 14px;background:var(--accent);color:#102018;font-weight:800;cursor:pointer}.btn.secondary{background:#26372e;color:var(--ink);border:1px solid var(--line)}.feedback{padding:12px;border-radius:9px;background:#202e26;min-height:44px;margin-top:10px}.callout{padding:13px 15px;border-left:4px solid var(--yellow);background:#2f2b20;border-radius:0 9px 9px 0}.solution{display:none}.solution.show{display:block}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{background:#121b16;border:1px solid var(--line);border-radius:10px;padding:12px}.stat b{font-size:1.4rem;display:block;color:var(--accent)}code{background:#101714;padding:2px 5px;border-radius:5px}.footer{font-size:.85rem;color:var(--muted);margin:24px 0}@media(max-width:850px){.layout{grid-template-columns:1fr}.wrap{padding:13px}.card{padding:13px}.stats{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body><div class="wrap">
+<header class="top"><strong>Analyst Prep Kit · Практика</strong><nav class="nav"><a href="../">Главная</a><a href="../foundations/">Основы данных</a><a href="../sql/">SQL</a><a href="../excel/">Excel</a><a href="../powerbi/">Power BI</a><a href="../portfolio-projects/">Проекты</a></nav></header>
+<section class="hero"><div class="eyebrow">Задача из реальной работы</div><h1>Найди проблемы в данных до того, как считать показатели</h1><p>Ты получил файл заказов интернет-магазина. Найди ошибки, определи, что можно исправить автоматически, а что нужно отправить на уточнение. Не изменяй исходные данные молча.</p><p class="muted">Уровень детализации набора: одна строка — одна товарная позиция заказа. Учебная дата выгрузки: 20 января 2026 года.</p></section>
+<div class="stats">
+<div class="stat"><span class="muted">Строк в исходном наборе</span><b id="rowsCount">—</b></div>
+<div class="stat"><span class="muted">Найдено категорий проблем</span><b id="issuesCount">—</b></div>
+<div class="stat"><span class="muted">Проверка</span><b id="score">0/5</b></div>
+</div>
+<div class="layout" style="margin-top:16px">
+<section class="card"><h2>1. Исходные данные</h2><p class="muted">Таблица содержит учебные ошибки. Изучи значения и отметь все типы проблем, которые обнаружишь.</p><div class="dataset"><table id="dataTable"><thead><tr><th>№</th><th>ID заказа</th><th>Дата</th><th>Клиент</th><th>Товар</th><th>Кол-во</th><th>Цена</th><th>Статус</th></tr></thead><tbody></tbody></table></div>
+<div class="actions" style="margin-top:12px;justify-content:flex-start"><button class="btn secondary" id="downloadRaw">Скачать исходный CSV</button><button class="btn secondary" id="showSolution">Показать разбор строк</button></div>
+<div class="solution" id="solution"><h3 style="margin-top:20px">Разбор</h3><p>Подсветка показывает строки, требующие проверки или обработки. Подсветка не означает, что каждую такую строку нужно удалять.</p><div id="solutionText"></div></div></section>
+<aside>
+<section class="card"><h2>2. Отметь найденные проблемы</h2><p class="muted">Выбери все категории, которые действительно присутствуют.</p>
+<label class="check"><input type="checkbox" value="duplicate"><span><strong>Точные дубликаты</strong><br><small class="muted">Полностью повторившаяся товарная строка.</small></span></label>
+<label class="check"><input type="checkbox" value="missing"><span><strong>Пропущенные обязательные поля</strong><br><small class="muted">Нет даты заказа или ID клиента.</small></span></label>
+<label class="check"><input type="checkbox" value="format"><span><strong>Несогласованный формат</strong><br><small class="muted">Формат даты, пробелы или регистр статуса.</small></span></label>
+<label class="check"><input type="checkbox" value="numeric"><span><strong>Некорректные числовые значения</strong><br><small class="muted">Текст вместо цены, нулевая или недопустимая цена.</small></span></label>
+<label class="check"><input type="checkbox" value="date"><span><strong>Подозрительная дата</strong><br><small class="muted">Дата выходит за разумный диапазон для выгрузки.</small></span></label>
+<div class="actions" style="justify-content:flex-start"><button class="btn" id="checkBtn">Проверить ответ</button><button class="btn secondary" id="resetBtn">Сбросить выбор</button></div><div class="feedback" id="feedback" aria-live="polite">Отметь категории и нажми «Проверить ответ».</div>
+</section>
+<section class="card"><h2>3. Обработай данные</h2><p>В работе важно разделять безопасные исправления и решения, которые требуют подтверждения владельца данных.</p><ul><li>Удалить только точный дубликат, сохранив исходный файл.</li><li>Привести корректные даты к одному формату.</li><li>Убрать лишние пробелы и стандартизировать категории.</li><li>Не придумывать пропущенные даты и не превращать текст «unknown» в ноль.</li><li>Строки с невозможными или спорными значениями вынести в список исключений для проверки.</li></ul><div class="actions" style="justify-content:flex-start"><button class="btn" id="downloadClean">Скачать очищенный CSV</button><button class="btn secondary" id="downloadExceptions">Скачать список на проверку</button></div><div class="feedback" id="cleanFeedback">Файл очищенных данных содержит только однозначно пригодные строки. Сомнительные записи попадут в список проверки.</div></section>
+</aside>
+</div>
+<section class="card"><h2>Критерии выполненной работы</h2><ul><li>Исходный CSV сохранён и не перезаписан.</li><li>Ошибки классифицированы, а не удалены без объяснения.</li><li>Дубликат определяется по всем значимым полям с учётом уровня детализации.</li><li>Все преобразования можно повторить и объяснить.</li><li>Количество исходных, очищенных и исключённых строк можно сверить.</li></ul><div class="callout"><strong>Профессиональная привычка:</strong> отрицательное количество не всегда ошибка. В некоторых системах возврат товара записывают отрицательным количеством. Сначала изучи правила бизнеса; в нашем наборе строка со статусом «Returned» может быть корректной операцией возврата.</div></section>
+<p class="footer">Учебные данные вымышлены. Прогресс попыток и предпочтения сохраняются только в этом браузере.</p>
+</div>
+<script>
+(function(){
+  var columns=["order_id","order_date","customer_id","product","quantity","unit_price","status"];
+  var rows=[
+    {order_id:"1001",order_date:"2026-01-03",customer_id:"C101",product:"Keyboard",quantity:"1",unit_price:"2500",status:"Delivered"},
+    {order_id:"1002",order_date:"2026-01-04",customer_id:"C102",product:"Mouse",quantity:"2",unit_price:"900",status:"Delivered"},
+    {order_id:"1002",order_date:"2026-01-04",customer_id:"C102",product:"Mouse",quantity:"2",unit_price:"900",status:"Delivered"},
+    {order_id:"1003",order_date:"2026/01/06",customer_id:"C103",product:"USB Hub",quantity:"1",unit_price:"1200",status:"Shipped"},
+    {order_id:"1004",order_date:"",customer_id:"C104",product:"Webcam",quantity:"1",unit_price:"3200",status:"Shipped"},
+    {order_id:"1005",order_date:"2026-01-09",customer_id:"C105",product:"Cable",quantity:"-1",unit_price:"450",status:"Returned"},
+    {order_id:"1006",order_date:"2026-01-10",customer_id:"C106",product:" Mouse ",quantity:"1",unit_price:"900",status:"delivered"},
+    {order_id:"1007",order_date:"2026-01-11",customer_id:"C107",product:"SSD",quantity:"1",unit_price:"unknown",status:"Delivered"},
+    {order_id:"1008",order_date:"2026-01-12",customer_id:"",product:"Monitor",quantity:"1",unit_price:"12000",status:"Delivered"},
+    {order_id:"1009",order_date:"2026-01-13",customer_id:"C108",product:"Keyboard",quantity:"0",unit_price:"2500",status:"Delivered"},
+    {order_id:"1010",order_date:"2026-01-14",customer_id:"C109",product:"Monitor",quantity:"1",unit_price:"-300",status:"Delivered"},
+    {order_id:"1011",order_date:"2026-01-15",customer_id:"C110",product:"Headset",quantity:"2",unit_price:"1500",status:"Delivered"},
+    {order_id:"1012",order_date:"2036-01-16",customer_id:"C111",product:"Webcam",quantity:"1",unit_price:"3200",status:"Delivered"}
+  ];
+  var issues={
+    duplicate:[2],"missing":[4,8],"format":[3,6],"numeric":[7,9,10],"date":[12]
+  };
+  var issueNames={duplicate:"точный дубликат",missing:"пропущено обязательное поле",format:"несогласованный формат",numeric:"некорректное число",date:"подозрительная дата"};
+  var tbody=document.querySelector("#dataTable tbody");
+  function esc(v){return String(v==null?"":v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+  function rowIssues(i){return Object.keys(issues).filter(function(k){return issues[k].indexOf(i)>=0;});}
+  function render(){
+    tbody.innerHTML="";
+    rows.forEach(function(r,i){var tr=document.createElement("tr");tr.dataset.row=i;tr.innerHTML="<td>"+(i+1)+"</td>"+columns.map(function(k){return "<td>"+esc(r[k])+"</td>";}).join("");tbody.appendChild(tr);});
+    document.getElementById("rowsCount").textContent=rows.length;
+    document.getElementById("issuesCount").textContent=Object.keys(issues).length;
+    var solved=false;try{solved=localStorage.getItem("apk-quality-solution")==="1";}catch(e){}
+    if(solved)renderSolution();
+  }
+  function download(name,content,type){
+    var blob=new Blob(["\ufeff"+content],{type:type||"text/csv;charset=utf-8;"});
+    var url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url);},1000);
+  }
+  function csv(items,keys){
+    function q(v){var s=String(v==null?"":v);return /[",\r\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}
+    return [keys.join("," )].concat(items.map(function(r){return keys.map(function(k){return q(r[k]);}).join(",");})).join("\r\n");
+  }
+  function exactDuplicateIndexes(){
+    var seen={},dups=[];
+    rows.forEach(function(r,i){var key=JSON.stringify(columns.map(function(k){return String(r[k]);}));if(seen[key]!==undefined)dups.push(i);else seen[key]=i;});
+    return dups;
+  }
+  function correctedDate(value){
+    var m=String(value||"").match(/^(\d{4})[-/](\d{2})[-/](\d{2})$/);
+    if(!m)return "";
+    var year=Number(m[1]),month=Number(m[2]),day=Number(m[3]),dt=new Date(Date.UTC(year,month-1,day));
+    if(dt.getUTCFullYear()!==year||dt.getUTCMonth()!==month-1||dt.getUTCDate()!==day)return "";
+    return m[1]+"-"+m[2]+"-"+m[3];
+  }
+  function clean(){
+    var duplicates=exactDuplicateIndexes(),out=[],exceptions=[];
+    rows.forEach(function(source,i){
+      var reasons=[],r={};
+      columns.forEach(function(k){r[k]=String(source[k]||"").trim();});
+      if(duplicates.indexOf(i)>=0)reasons.push("точный дубликат");
+      var date=correctedDate(r.order_date);
+      if(!date)reasons.push("нет или неверная дата");
+      else if(Number(date.slice(0,4))>2026)reasons.push("дата в будущем — подтвердить");
+      else r.order_date=date;
+      if(!r.customer_id)reasons.push("нет ID клиента");
+      var price=Number(r.unit_price);
+      if(!r.unit_price||!Number.isFinite(price)||price<=0)reasons.push("некорректная цена");
+      if(Number(r.quantity)===0)reasons.push("нулевое количество — проверить");
+      if(!r.product)reasons.push("нет товара");
+      r.product=r.product.trim();r.status=r.status.trim().toLowerCase().replace(/\b[a-z]/g,function(m){return m.toUpperCase();});
+      if(reasons.length)exceptions.push(Object.assign({row_number:i+1,exception_reason:reasons.join("; ")},source));
+      else {r.quantity=String(Number(r.quantity));r.unit_price=String(price);out.push(r);}
+    });
+    return {out:out,exceptions:exceptions};
+  }
+  function renderSolution(){
+    document.getElementById("solution").classList.add("show");
+    Array.prototype.forEach.call(tbody.children,function(tr,i){tr.classList.toggle("flag",rowIssues(i).length>0);});
+    var lines=Object.keys(issues).map(function(k){return "<li><strong>"+issueNames[k]+"</strong>: строки "+issues[k].map(function(i){return i+1;}).join(", ")+".</li>";}).join("");
+    document.getElementById("solutionText").innerHTML="<ul>"+lines+"</ul><p>В строке 6 отрицательное количество связано со статусом Returned: его нельзя автоматически удалить без понимания правил возврата. Нулевая величина и отрицательная цена требуют отдельной проверки.</p>";
+  }
+  document.getElementById("checkBtn").addEventListener("click",function(){
+    var selected=Array.prototype.map.call(document.querySelectorAll('input[type="checkbox"]:checked'),function(c){return c.value;}).sort();
+    var expected=Object.keys(issues).sort(),missed=expected.filter(function(k){return selected.indexOf(k)<0;}),extra=selected.filter(function(k){return expected.indexOf(k)<0;});
+    var score=expected.length-missed.length-extra.length;if(score<0)score=0;
+    document.getElementById("score").textContent=score+"/"+expected.length;
+    var fb=document.getElementById("feedback");
+    if(!missed.length&&!extra.length){fb.textContent="Отлично! Все 5 категорий отмечены верно. Теперь разберись, какие записи можно исправить безопасно.";fb.style.border="1px solid #66c995";}
+    else{fb.textContent="Верных категорий: "+score+" из "+expected.length+". "+(missed.length?"Пропущено: "+missed.map(function(k){return issueNames[k];}).join(", ")+". ":"")+(extra.length?"Лишний выбор: "+extra.map(function(k){return issueNames[k]||k;}).join(", ")+".":"");fb.style.border="1px solid #d6a75e";}
+    try{localStorage.setItem("apk-quality-score",document.getElementById("score").textContent);}catch(e){}
+  });
+  document.getElementById("resetBtn").addEventListener("click",function(){document.querySelectorAll('input[type="checkbox"]').forEach(function(c){c.checked=false;});document.getElementById("feedback").textContent="Выбор сброшен. Проверь данные ещё раз.";});
+  document.getElementById("showSolution").addEventListener("click",function(){var s=document.getElementById("solution");var opened=s.classList.toggle("show");if(opened){renderSolution();try{localStorage.setItem("apk-quality-solution","1");}catch(e){}}else{try{localStorage.removeItem("apk-quality-solution");}catch(e){}Array.prototype.forEach.call(tbody.children,function(tr){tr.classList.remove("flag");});}});
+  document.getElementById("downloadRaw").addEventListener("click",function(){download("orders_raw.csv",csv(rows,columns),"text/csv;charset=utf-8;");});
+  document.getElementById("downloadClean").addEventListener("click",function(){var result=clean();download("orders_clean.csv",csv(result.out,columns),"text/csv;charset=utf-8;");document.getElementById("cleanFeedback").textContent="Готово: в очищенном файле "+result.out.length+" строк; "+result.exceptions.length+" строк оставлено для проверки и перечислено в отдельном файле исключений." ;});
+  document.getElementById("downloadExceptions").addEventListener("click",function(){var result=clean();var keys=["row_number","exception_reason"].concat(columns);download("orders_for_review.csv",csv(result.exceptions,keys),"text/csv;charset=utf-8;");document.getElementById("cleanFeedback").textContent="Сформирован список записей для ручной проверки: "+result.exceptions.length+" строк." ;});
+  render();
+  try{var saved=localStorage.getItem("apk-quality-score");if(saved)document.getElementById("score").textContent=saved;}catch(e){}
+})();
+</script></body></html>
