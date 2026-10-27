@@ -937,6 +937,10 @@
       var fs = getStatus(from), ts = getStatus(to);
       return fs.built && (ts.built || ts.unlocked);
     });
+    /* The travellers are ambient characters, not a reward gated behind building
+       courses. Before the first course is built there are no "open" roads in the
+       progression graph, so let them walk along the map's existing road network. */
+    if (!cachedNpcRoads.length) cachedNpcRoads = graph.slice();
     return cachedNpcRoads;
   }
 
@@ -1346,7 +1350,6 @@
     });
 
     /* 4. Shroud inaccessible regions, then render the course sites on top so their locks remain discoverable. */
-    drawRoadNPCs(t);
     drawFogOfWar(t);
 
     /* 5. Dynamically draw each building from datacraft-sprites.png onto its empty terrain pad */
@@ -1462,6 +1465,10 @@
     if (animEnabled) {
       drawSkyAndParticles(t);
     }
+
+    /* Keep walking NPCs in the foreground: building sprites, their labels, and fog
+       previously painted over them, making the characters invisible on the map. */
+    drawRoadNPCs(t);
     drawFloatingTexts();
   }
 

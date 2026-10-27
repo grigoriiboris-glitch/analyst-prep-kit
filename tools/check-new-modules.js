@@ -147,6 +147,9 @@ for (const mechanic of [
   "if (!isRiverWaterPixel(sx, sy)) return;",
   "FOG_REGIONS", "drawFogOfWar", "fogOpacity", "spawnFloatingText",
   "scanWalletTransactions", "ROAD_NPCS", "findNpcAtPoint", "openNpcQuest",
+  "if (!cachedNpcRoads.length) cachedNpcRoads = graph.slice();",
+  "Keep walking NPCs in the foreground",
+  "drawRoadNPCs(t);",
   "setNpcCooldown", "NPC_QUESTS", "60 сек."
 ]) {
   assert.ok(curriculum.includes(mechanic), "DataCraft exploration mechanic missing: " + mechanic);
