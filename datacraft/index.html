@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#172820">
+<title>DataCraft — мир аналитика</title>
+<meta name="description" content="2D-игра про сбор ресурсов, крафт и обучение аналитике данных.">
+<style>
+:root{color-scheme:dark;--bg:#101b18;--panel:#192924;--panel2:#20362d;--line:#355144;--text:#edf6e9;--muted:#afc3b3;--mint:#a8e6a1;--gold:#f5d37e;--red:#ffaaa0;--blue:#a9d9ef}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at top,#1c3428 0,#101b18 60%);color:var(--text);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+a{color:var(--mint)}
+.top{max-width:1500px;margin:auto;padding:18px 20px 10px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}.brand-mark{height:46px;width:46px;border-radius:13px;background:#2d513d;display:grid;place-items:center;font-size:26px;border:1px solid #628668}.brand h1{font-size:clamp(20px,3vw,28px);line-height:1.1;margin:0}.brand p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.top-actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid #52715c;border-radius:10px;background:#2a4735;padding:9px 13px;font-weight:650}.btn:hover{filter:brightness(1.12)}.btn.primary{background:var(--mint);border-color:var(--mint);color:#173321}.btn.ghost{background:#172720}.btn:disabled{opacity:.4;cursor:not-allowed}
+.status-wrap{max-width:1500px;margin:0 auto;padding:4px 20px 16px}.status{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.stat{background:rgba(25,41,36,.85);border:1px solid var(--line);border-radius:12px;padding:11px 14px;min-width:0}.stat-label{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em}.stat-value{font-size:20px;font-weight:800;margin-top:2px}.xpbar{height:6px;background:#0f1915;border-radius:99px;margin-top:8px;overflow:hidden}.xpfill{height:100%;width:0;background:var(--gold);transition:width .2s}
+.layout{max-width:1500px;margin:auto;padding:0 20px 28px;display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:14px;align-items:start}.maincol{display:grid;gap:14px;min-width:0}.panel{background:linear-gradient(160deg,rgba(31,51,43,.97),rgba(22,37,31,.97));border:1px solid var(--line);border-radius:15px;overflow:hidden;min-width:0}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 16px;border-bottom:1px solid var(--line)}.panel-head h2{margin:0;font-size:16px}.panel-head small{color:var(--muted)}.world-instructions{padding:10px 15px 0;color:var(--muted);font-size:12px}.map-scroll{overflow-x:auto;padding:12px 14px 8px;scrollbar-color:#55765d #17231d}#world{display:block;width:100%;min-width:660px;height:auto;aspect-ratio:5/3;border:1px solid #4b6a50;border-radius:9px;background:#456d48;image-rendering:pixelated;cursor:crosshair;touch-action:pan-x pan-y}
+.map-legend{display:flex;gap:12px;flex-wrap:wrap;padding:7px 15px 13px;color:var(--muted);font-size:12px}.map-legend span{white-space:nowrap}.dot{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px}
+.targets{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;padding:0 14px 14px}.target-btn{display:flex;align-items:center;gap:9px;text-align:left;border:1px solid #355345;background:#192b23;border-radius:10px;padding:10px;min-width:0}.target-btn:hover{border-color:#8fc88c;background:#213b2c}.target-btn:disabled{opacity:.58}.target-emoji{font-size:22px}.target-text{min-width:0;flex:1}.target-name{font-weight:700;font-size:13px}.target-sub{font-size:11px;color:var(--muted)}.target-state{font-size:11px;color:var(--gold)}
+.sidecol{display:grid;gap:14px;min-width:0}.panel-content{padding:13px 14px}.callout{border:1px solid #4b6b4d;border-left:4px solid var(--mint);border-radius:10px;padding:11px 12px;background:#1c3025;margin-bottom:10px}.callout strong{display:block;margin-bottom:4px}.callout p{margin:0;color:#c4d5c5;font-size:13px}.muted{color:var(--muted)}.mini-title{margin:15px 0 8px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}.inventory{display:grid;grid-template-columns:1fr 1fr;gap:7px}.inv-item{display:flex;align-items:center;gap:7px;border:1px solid #344f41;background:#172720;border-radius:9px;padding:8px;min-width:0}.inv-item .emoji{font-size:19px}.inv-name{font-size:12px;flex:1;min-width:0}.inv-count{font-weight:800;color:var(--gold);font-variant-numeric:tabular-nums}.recipes{display:grid;gap:9px}.recipe{border:1px solid #385443;border-radius:10px;padding:10px;background:#17271f}.recipe-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.recipe-name{font-weight:750;font-size:13px}.recipe-icon{font-size:21px}.recipe-desc{color:var(--muted);font-size:11px;margin:5px 0 7px}.cost{font-size:11px;color:#d6e4d2;margin-bottom:8px}.recipe .btn{width:100%;padding:8px;font-size:12px}.recipe.done{border-color:#6ca96e;background:#1c3628}.recipe.locked{opacity:.65}.build-note{font-size:12px;color:var(--muted);margin-top:9px;line-height:1.5}.actions-row{display:flex;gap:8px;flex-wrap:wrap}.actions-row .btn{flex:1}
+#toast{position:fixed;left:50%;bottom:18px;transform:translate(-50%,20px);opacity:0;pointer-events:none;z-index:20;max-width:min(560px,calc(100% - 24px));padding:12px 16px;border:1px solid #73936b;border-radius:12px;background:#17291e;box-shadow:0 10px 34px #0007;transition:.22s;text-align:center}#toast.show{opacity:1;transform:translate(-50%,0)}
+.modal{position:fixed;inset:0;background:#07100dda;display:none;align-items:center;justify-content:center;padding:16px;z-index:30;overflow-y:auto}.modal.open{display:flex}.dialog{width:min(620px,100%);background:#1b2d24;border:1px solid #668b69;border-radius:17px;box-shadow:0 24px 80px #0009;overflow:hidden}.dialog-head{padding:17px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;align-items:center}.dialog-head h2{margin:0;font-size:19px}.dialog-body{padding:18px 20px}.question-tag{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);font-weight:800}.question{font-size:19px;font-weight:750;line-height:1.4;margin:10px 0 16px}.answers{display:grid;gap:9px}.answer{padding:12px 13px;border-radius:10px;text-align:left;border:1px solid #496353;background:#17261f}.answer:hover:not(:disabled){border-color:var(--mint);background:#23412e}.answer.correct{border-color:#7dc77e;background:#1d4428}.answer.wrong{border-color:#c9756e;background:#432725}.feedback{display:none;margin-top:14px;padding:12px;border-radius:10px;background:#13251b;border:1px solid #3a6148;font-size:13px}.feedback.show{display:block}.dialog-footer{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:16px}.hidden{display:none!important}
+#contractStatus{line-height:1.55;font-size:13px}.contract-reward{font-size:12px;color:var(--gold);margin-top:7px}
+footer{max-width:1500px;margin:auto;padding:0 20px 24px;color:#8fa697;font-size:12px}footer a{color:#b8e5ae}
+@media(max-width:1000px){.layout{grid-template-columns:minmax(0,1fr)}.sidecol{grid-template-columns:repeat(2,minmax(0,1fr))}.status{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.top{padding:14px 12px 8px}.status-wrap{padding:4px 12px 12px}.layout{padding:0 12px 22px}.sidecol{grid-template-columns:1fr}.stat{padding:9px 11px}.stat-value{font-size:18px}.brand-mark{width:40px;height:40px}.top-actions{width:100%}.top-actions .btn{flex:1}.panel-head{align-items:flex-start;flex-direction:column;gap:3px}.world-instructions{font-size:11px}.targets{grid-template-columns:repeat(2,minmax(0,1fr));padding:0 9px 10px}.target-btn{padding:8px;gap:6px}.target-name{font-size:12px}.map-scroll{padding:9px}.question{font-size:17px}.dialog-body{padding:15px}.dialog-head{padding:14px 15px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><div class="brand-mark" aria-hidden="true">⛏️</div><div><h1>DataCraft <span style="color:var(--mint)">/ Мир аналитика</span></h1><p>Собирай ресурсы. Создавай инструменты. Осваивай аналитику.</p></div></div>
+  <div class="top-actions">
+    <button class="btn ghost" id="exportSave">⇩ Экспорт сохранения</button>
+    <button class="btn ghost" id="resetGame">Начать заново</button>
+    <a class="btn" href="../index.html">← К урокам</a>
+  </div>
+</header>
+<div class="status-wrap">
+  <div class="status">
+    <div class="stat"><div class="stat-label">Уровень исследователя</div><div class="stat-value" id="levelValue">1</div><div class="muted" id="levelHint" style="font-size:11px">Новичок</div></div>
+    <div class="stat"><div class="stat-label">Опыт · XP</div><div class="stat-value" id="xpValue">0 / 100</div><div class="xpbar"><div id="xpFill" class="xpfill"></div></div></div>
+    <div class="stat"><div class="stat-label">Репутация</div><div class="stat-value" id="repValue">0</div><div class="muted" style="font-size:11px">За выполненные контракты</div></div>
+    <div class="stat"><div class="stat-label">Постройки</div><div class="stat-value" id="buildValue">1 / 4</div><div class="muted" style="font-size:11px">Развивай свой лагерь</div></div>
+  </div>
+</div>
+<main class="layout">
+  <section class="maincol">
+    <div class="panel">
+      <div class="panel-head"><h2>🌲 Поляна исследователя</h2><small id="worldStatus">Регион 1 · Доступен</small></div>
+      <div class="world-instructions">Нажми на точку добычи или выбери её ниже. Персонаж подойдёт к объекту, а затем даст тебе аналитическое задание. Клавиша <b>E</b> — взаимодействовать рядом.</div>
+      <div class="map-scroll"><canvas id="world" width="900" height="540" role="img" aria-label="Двухмерная карта DataCraft: лагерь, лес, залежи данных и закрытые SQL-руины"></canvas></div>
+      <div class="map-legend"><span><i class="dot" style="background:#80bd68"></i>Лес и поляна</span><span><i class="dot" style="background:#7b9ee0"></i>Данные</span><span><i class="dot" style="background:#c38af0"></i>Логика</span><span><i class="dot" style="background:#d3b979"></i>Ресурсы</span><span>🔒 SQL-руины откроются после создания сканера</span></div>
+      <div class="panel-head"><h2>🧭 Доступные точки</h2><small>Каждая точка — отдельная задача</small></div>
+      <div class="targets" id="targetList"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h2>📜 Контракт: восстановить торговый терминал</h2><small id="contractBadge">Основная миссия</small></div>
+      <div class="panel-content">
+        <div class="callout"><strong>Задача от торговой гильдии</strong><p>Продажи магазина снизились. Собери данные, подготовь инструменты анализа и объясни, какие показатели нужно проверить прежде, чем делать выводы. Это сквозная мини-миссия, похожая на работу аналитика.</p></div>
+        <div id="contractStatus">Сначала собери материалы и построй верстак исследователя. Затем открой SQL-сканер, лабораторию данных и аналитический терминал.</div>
+        <div class="contract-reward">Награда: 100 XP · 10 репутации · редкие материалы</div>
+        <div class="actions-row" style="margin-top:12px"><button class="btn primary" id="startContract" disabled>Выполнить контракт</button></div>
+      </div>
+    </div>
+  </section>
+  <aside class="sidecol">
+    <div class="panel">
+      <div class="panel-head"><h2>🎒 Инвентарь</h2><small>Твои материалы</small></div>
+      <div class="panel-content"><div class="inventory" id="inventory"></div><p class="muted" style="font-size:11px;margin:10px 0 0">Материалы выдаются за правильные решения. Повторно забрать уже собранный ресурс нельзя.</p></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h2>🛠️ Мастерская</h2><small>Крафт и строительство</small></div>
+      <div class="panel-content"><div class="recipes" id="recipes"></div><p class="build-note">Нажми «Создать», когда соберёшь материалы. Новые постройки откроют следующие рецепты. Прогресс сохраняется в этом браузере.</p></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h2>📍 Ближайшая цель</h2></div>
+      <div class="panel-content">
+        <div class="callout"><strong id="goalTitle">Построй верстак</strong><p id="goalText">Собери древесину и камень в лесу рядом с лагерем.</p></div>
+        <div class="actions-row"><button class="btn" id="focusGoal">Показать ресурсы</button><button class="btn ghost" id="helpBtn">Как играть?</button></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h2>🏅 Исследовательский журнал</h2></div>
+      <div class="panel-content"><div id="journal" class="muted" style="font-size:12px;line-height:1.8">Пока нет достижений. Добывай материалы, создавай инструменты и выполняй контракт.</div></div>
+    </div>
+  </aside>
+</main>
+<footer>DataCraft — учебная игра Analyst Prep Kit. Все игровые сохранения хранятся локально в браузере; аккаунт и сервер не нужны. <a href="../README.md">Документация проекта</a>.</footer>
+<div id="toast" role="status" aria-live="polite"></div>
+<div class="modal" id="challengeModal" role="dialog" aria-modal="true" aria-labelledby="challengeTitle">
+  <div class="dialog">
+    <div class="dialog-head"><h2 id="challengeTitle">Аналитическое испытание</h2><button class="btn ghost" id="closeChallenge" aria-label="Закрыть задание">✕</button></div>
+    <div class="dialog-body"><div class="question-tag" id="questionTag">Сбор ресурса</div><div class="question" id="questionText"></div><div class="answers" id="answers"></div><div class="feedback" id="feedback" role="status" aria-live="polite"></div><div class="dialog-footer"><button class="btn ghost" id="cancelChallenge">Вернуться на карту</button><button class="btn primary hidden" id="claimReward">Забрать награду</button></div></div>
+  </div>
+</div>
+<script>
+(function(){
+'use strict';
+const SAVE_KEY='datacraft-save-v1';
+const TILE=30, COLS=30, ROWS=18;
+const RESOURCE_INFO={
+ wood:{name:'Древесина',icon:'🪵'},stone:{name:'Камень',icon:'🪨'},data:{name:'Сырые данные',icon:'📦'},
+ crystal:{name:'Кристаллы логики',icon:'💎'},reagent:{name:'Реагенты очистки',icon:'🧪'},sql:{name:'Компоненты SQL',icon:'⚙️'}
+};
+const LEVEL_NAMES=['Новичок','Собиратель данных','Исследователь','Мастер инструментов','BI-строитель','Детектив бизнеса','Аналитик гильдии','Архитектор данных'];
+const DEFAULT_STATE={
+ version:1,xp:0,reputation:0,
+ inventory:{wood:1,stone:1,data:0,crystal:0,reagent:0,sql:0},
+ buildings:{camp:true,workbench:false,lab:false,dashboard:false},
+ crafted:{sql_scanner:false},harvested:[],contracts:[],journal:[]
+};
+const NODES=[
+ {id:'tree1',x:2,y:3,kind:'wood',amount:2,icon:'🌲',name:'Сосновая роща',zone:'meadow'},
+ {id:'tree2',x:6,y:2,kind:'wood',amount:2,icon:'🌲',name:'Старая сосна',zone:'meadow'},
+ {id:'tree3',x:11,y:4,kind:'wood',amount:2,icon:'🌲',name:'Лесной участок',zone:'meadow'},
+ {id:'tree4',x:10,y:13,kind:'wood',amount:2,icon:'🌳',name:'Южная роща',zone:'meadow'},
+ {id:'tree5',x:17,y:3,kind:'wood',amount:2,icon:'🌲',name:'Восточная роща',zone:'meadow'},
+ {id:'rock1',x:3,y:11,kind:'stone',amount:2,icon:'🪨',name:'Каменная жила',zone:'meadow'},
+ {id:'rock2',x:12,y:2,kind:'stone',amount:2,icon:'🪨',name:'Серый валун',zone:'meadow'},
+ {id:'rock3',x:16,y:8,kind:'stone',amount:2,icon:'🪨',name:'Скальный уступ',zone:'meadow'},
+ {id:'rock4',x:18,y:14,kind:'stone',amount:2,icon:'🪨',name:'Южная жила',zone:'meadow'},
+ {id:'data1',x:8,y:2,kind:'data',amount:2,icon:'📦',name:'Ящик с записями',zone:'meadow'},
+ {id:'data2',x:13,y:12,kind:'data',amount:2,icon:'📦',name:'Архивный контейнер',zone:'meadow'},
+ {id:'data3',x:19,y:4,kind:'data',amount:2,icon:'📦',name:'Складской архив',zone:'meadow'},
+ {id:'data4',x:22,y:9,kind:'data',amount:2,icon:'📦',name:'Забытый реестр',zone:'meadow'},
+ {id:'crystal1',x:14,y:4,kind:'crystal',amount:1,icon:'💎',name:'Кристалл логики',zone:'meadow'},
+ {id:'crystal2',x:17,y:11,kind:'crystal',amount:1,icon:'💎',name:'Логический осколок',zone:'meadow'},
+ {id:'crystal3',x:20,y:13,kind:'crystal',amount:1,icon:'💎',name:'Кристальный пласт',zone:'meadow'},
+ {id:'reagent1',x:9,y:15,kind:'reagent',amount:1,icon:'🧪',name:'Травы очистки',zone:'meadow'},
+ {id:'reagent2',x:21,y:6,kind:'reagent',amount:1,icon:'🧪',name:'Алхимическая грядка',zone:'meadow'},
+ {id:'reagent3',x:6,y:15,kind:'reagent',amount:1,icon:'🧪',name:'Чистый реагент',zone:'meadow'},
+ {id:'sql1',x:25,y:8,kind:'sql',amount:1,icon:'⚙️',name:'Механизм JOIN',zone:'ruins'},
+ {id:'sql2',x:27,y:12,kind:'sql',amount:1,icon:'⚙️',name:'SQL-шестерня',zone:'ruins'},
+ {id:'sql3',x:25,y:15,kind:'sql',amount:1,icon:'⚙️',name:'Старый запрос',zone:'ruins'}
+];
+const QUESTIONS={
+ wood:[
+  {q:'В таблице заказов обнаружены две полностью одинаковые строки. Какой следующий шаг наиболее корректен?',a:['Сразу удалить одну строку, не проверяя контекст','Проверить ключ заказа и правила источника, затем определить, дубликат ли это','Умножить сумму на два, чтобы компенсировать ошибку'],correct:1,why:'Дубликаты сначала проверяют по ключам и правилам источника. Одинаковые поля не всегда означают ошибочную запись.'},
+  {q:'Нужно понять, почему изменилась выручка. Что лучше сделать сначала?',a:['Сразу построить сложный прогноз','Уточнить период и определение метрики, затем сравнить её составляющие','Выбрать график случайным образом'],correct:1,why:'Сначала фиксируют определение метрики и сопоставимый период, затем раскладывают результат на факторы.'},
+  {q:'Какое действие делает аналитический вывод сильнее?',a:['Скрыть неудобные строки','Проверить альтернативные объяснения и ограничения данных','Выбрать первое правдоподобное объяснение'],correct:1,why:'Хороший анализ учитывает альтернативы, качество данных и неопределённость.'}
+ ],
+ stone:[
+  {q:'После JOIN сумма продаж стала вдвое больше. Что проверить первым?',a:['Цвет визуализации','Кардинальность связи и количество совпадений на ключ','Размер шрифта отчёта'],correct:1,why:'Связь один-ко-многим или многие-ко-многим может размножить строки. Нужно проверить уникальность ключей и гранулярность.'},
+  {q:'Две таблицы описывают разные сущности. Как безопаснее их объединять?',a:['Найти общий ключ и проверить уникальность с обеих сторон','Соединить по первой текстовой колонке','Удалить все строки с NULL'],correct:0,why:'Ключ должен отражать связь сущностей; до JOIN нужно проверить уникальность и ожидаемую кардинальность.'},
+  {q:'Получив необычно высокое значение показателя, ты должен…',a:['Сразу объявить успех','Проверить формулу, фильтры, дубликаты и исходные данные','Удалить значение как выброс без проверки'],correct:1,why:'Необычное значение может быть ошибкой, реальным событием или следствием расчёта. Сначала исследуют источник.'}
+ ],
+ data:[
+  {q:'Какой показатель напрямую отвечает на вопрос «сколько в среднем тратят за один заказ»?',a:['Средний чек: выручка / число заказов','Число пользователей','Количество строк в таблице'],correct:0,why:'Средний чек обычно рассчитывают как выручку, делённую на число заказов за выбранный период.'},
+  {q:'Перед расчётом конверсии нужно прежде всего…',a:['Выбрать самый красивый график','Определить числитель, знаменатель и единицу наблюдения','Убрать все нулевые значения'],correct:1,why:'Без точного определения числителя и знаменателя показатель может быть неверно истолкован.'},
+  {q:'В данных нет значения в поле «город». Это означает, что…',a:['Клиент точно живёт не в городе','Значение неизвестно или не записано; причину нужно выяснить','Можно автоматически подставить Москву'],correct:1,why:'Пропуск сам по себе не объясняет причину. Нельзя без основания заменять его выдуманным значением.'}
+ ],
+ crystal:[
+  {q:'Конверсия снизилась на 12%. Какой путь рассуждений наиболее полезен?',a:['Сразу обвинить рекламную кампанию','Уточнить расчёт и период, сегментировать воронку, проверить гипотезы','Менять сайт без проверки данных'],correct:1,why:'Сначала подтверждают изменение, затем локализуют сегмент или шаг воронки и проверяют конкурирующие объяснения.'},
+  {q:'Какая гипотеза лучше подходит для проверки?',a:['Клиентам просто не понравилось','После изменения формы на мобильных устройствах стало меньше завершённых заказов','Все показатели сломались'],correct:1,why:'Проверяемая гипотеза конкретна, указывает механизм и допускает проверку на данных.'},
+  {q:'Два события происходят одновременно. Можно ли сразу сказать, что одно вызвало другое?',a:['Да, совпадения достаточно','Нет, нужно проверить альтернативы, временную связь и дизайн анализа','Да, если график выглядит убедительно'],correct:1,why:'Корреляция и совпадение во времени сами по себе не доказывают причинность.'}
+ ],
+ reagent:[
+  {q:'В столбце количества встречаются NULL. Что правильно сделать?',a:['Всегда заменить NULL на ноль','Выяснить смысл пропуска и правило источника до преобразования','Удалить всю таблицу'],correct:1,why:'NULL может означать неизвестное, неприменимое или не переданное значение; замену выбирают по смыслу.'},
+  {q:'Заказ имеет отрицательное количество и статус Returned. Как поступить?',a:['Автоматически удалить строку','Считать её ошибкой без проверки','Проверить бизнес-правила: отрицательное значение может отражать возврат'],correct:2,why:'Контекст важнее механического правила. Отрицательное количество может быть допустимой записью возврата.'},
+  {q:'В датах смешаны форматы 03/04/2026 и 2026-04-03. Что нужно сделать?',a:['Уточнить исходную локаль и формат, затем нормализовать и проверить результат','Сортировать как текст и надеяться на лучшее','Заменить все даты текущим числом'],correct:0,why:'03/04 неоднозначно без локали. Нужны правила интерпретации, нормализация и проверки.'}
+ ],
+ sql:[
+  {q:'JOIN удвоил выручку, хотя запрос выполняется без ошибки. Какой вероятный источник проблемы?',a:['JOIN всегда удваивает деньги','Несколько строк справа совпали с одной строкой слева; нужно проверить кардинальность','SQL не подходит для сумм'],correct:1,why:'Множественные совпадения могут размножить факты. Проверяют ключи, уровень детализации и количество строк до/после JOIN.'},
+  {q:'Что делает GROUP BY в SQL?',a:['Группирует строки по выбранным полям для агрегирования','Автоматически исправляет пропуски','Удаляет таблицу после запроса'],correct:0,why:'GROUP BY создаёт группы по значениям полей, а агрегаты рассчитываются внутри этих групп.'},
+  {q:'Как безопасно убедиться, что JOIN не потерял или не размножил записи?',a:['Сравнить количество строк, проверить ключи и контрольные суммы до и после','Посмотреть только на первую строку','Убрать WHERE'],correct:0,why:'Проверяют ожидаемую кардинальность связи, число строк и контрольные агрегаты.'}
+ ],
+ contract:[
+  {q:'Выручка интернет-магазина снизилась на 18%. Что нужно сделать прежде, чем рекомендовать изменения?',a:['Сразу увеличить бюджет рекламы','Проверить сопоставимость периодов и данных, затем разложить выручку на число заказов и средний чек','Сказать, что причина — плохой сайт'],correct:1,why:'Сначала подтверждают падение и качество данных, затем сравнивают число заказов, средний чек, сегменты, каналы и продуктовый состав. Только после этого делают обоснованные рекомендации.'}
+ ]
+};
+const RECIPES=[
+ {id:'workbench',name:'Верстак исследователя',icon:'🪚',desc:'Открывает крафт инструментов и лаборатории.',needs:{wood:4,stone:2},kind:'building',at:{x:8,y:6}},
+ {id:'sql_scanner',name:'SQL-сканер',icon:'⚙️',desc:'Разблокирует SQL-руины и редкие компоненты.',needs:{data:2,crystal:1,stone:1},kind:'item',requires:'workbench'},
+ {id:'lab',name:'Лаборатория данных',icon:'🔬',desc:'Открывает сложные задания по очистке данных.',needs:{wood:3,stone:3,data:2,reagent:2,crystal:1},kind:'building',requires:'workbench',at:{x:10,y:7}},
+ {id:'dashboard',name:'Аналитический терминал',icon:'📊',desc:'Позволяет выполнить главный торговый контракт.',needs:{data:3,sql:2,crystal:2},kind:'building',requires:'lab',at:{x:8,y:9}}
+];
+let state=loadState();
+let player={x:5,y:7},path=[],targetNode=null,challengeNode=null,challengeContract=false,answerResolved=false;
+let toastTimer=0,lastFrame=0;
+const canvas=document.getElementById('world');
+const ctx=canvas.getContext('2d');
+function clone(obj){return JSON.parse(JSON.stringify(obj))}
+function loadState(){
+ try{
+  const saved=JSON.parse(localStorage.getItem(SAVE_KEY)||'null');
+  if(!saved||saved.version!==1)return clone(DEFAULT_STATE);
+  const merged=clone(DEFAULT_STATE);
+  merged.xp=Number.isFinite(saved.xp)?Math.max(0,saved.xp):0;
+  merged.reputation=Number.isFinite(saved.reputation)?Math.max(0,saved.reputation):0;
+  merged.inventory=Object.assign(merged.inventory,saved.inventory||{});
+  merged.buildings=Object.assign(merged.buildings,saved.buildings||{});
+  merged.crafted=Object.assign(merged.crafted,saved.crafted||{});
+  merged.harvested=Array.isArray(saved.harvested)?saved.harvested.filter(x=>typeof x==='string'):[];
+  merged.contracts=Array.isArray(saved.contracts)?saved.contracts.filter(x=>typeof x==='string'):[];
+  merged.journal=Array.isArray(saved.journal)?saved.journal.filter(x=>typeof x==='string').slice(-30):[];
+  Object.keys(merged.inventory).forEach(k=>{if(!Number.isFinite(merged.inventory[k])||merged.inventory[k]<0)merged.inventory[k]=0});
+  return merged;
+ }catch(e){return clone(DEFAULT_STATE)}
+}
+function saveState(){
+ try{localStorage.setItem(SAVE_KEY,JSON.stringify(state))}catch(e){showToast('Не удалось сохранить прогресс: проверь доступное место в браузере.')}
+}
+function addJournal(entry){if(!state.journal.includes(entry))state.journal.push(entry);state.journal=state.journal.slice(-30)}
+function showToast(msg){
+ const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),3000);
+}
+function level(){return Math.floor(state.xp/100)+1}
+function addXP(amount){
+ const before=level();state.xp+=amount;const after=level();
+ if(after>before)showToast('Новый уровень! Теперь ты: '+(LEVEL_NAMES[Math.min(after-1,LEVEL_NAMES.length-1)])+'.');
+}
+function isUnlocked(node){return node.zone!=='ruins'||state.crafted.sql_scanner}
+function isHarvested(node){return state.harvested.includes(node.id)}
+function canAfford(needs){return Object.keys(needs).every(k=>(state.inventory[k]||0)>=needs[k])}
+function costText(needs){return Object.keys(needs).map(k=>RESOURCE_INFO[k].icon+' '+needs[k]).join(' · ')}
+function spend(needs){Object.keys(needs).forEach(k=>state.inventory[k]-=needs[k])}
+function adjacent(a,b){return Math.abs(a.x-b.x)+Math.abs(a.y-b.y)<=1}
+function blocked(x,y){
+ if(x<0||y<0||x>=COLS||y>=ROWS)return true;
+ if(x>=23&&y<=3)return true;
+ if((x===23&&y===4)||(x===24&&y===4)||(x===24&&y===5))return true;
+ return false;
+}
+function walkable(x,y){return !blocked(x,y)}
+function findPath(sx,sy,goals){
+ const start={x:Math.max(0,Math.min(COLS-1,Math.round(sx))),y:Math.max(0,Math.min(ROWS-1,Math.round(sy)))};
+ const q=[start],seen=new Map(),key=(x,y)=>x+','+y;
+ seen.set(key(start.x,start.y),null);
+ let found=null;
+ for(let i=0;i<q.length;i++){
+  const cur=q[i];
+  if(goals.some(g=>g.x===cur.x&&g.y===cur.y)){found=cur;break}
+  for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){
+   const x=cur.x+dx,y=cur.y+dy,k=key(x,y);
+   if(walkable(x,y)&&!seen.has(k)){seen.set(k,cur);q.push({x,y})}
+  }
+ }
+ if(!found)return null;
+ const out=[];let cur=found;
+ while(cur){out.push(cur);cur=seen.get(key(cur.x,cur.y))}
+ out.reverse();return out.slice(1);
+}
+function startNode(node){
+ if(!node)return;
+ if(!isUnlocked(node)){showToast('Нужен SQL-сканер. Создай его в мастерской, чтобы войти в руины.');return}
+ if(isHarvested(node)){showToast('Здесь уже всё собрано. Выбери другую точку или займись контрактом.');return}
+ if(targetNode&&targetNode.id===node.id&&path.length)return;
+ const goals=[[node.x+1,node.y],[node.x-1,node.y],[node.x,node.y+1],[node.x,node.y-1]]
+  .filter(([x,y])=>walkable(x,y)).map(([x,y])=>({x,y}));
+ const route=findPath(player.x,player.y,goals);
+ if(route===null){showToast('До точки сейчас нет доступного пути.');return}
+ targetNode=node;path=route;
+ if(path.length===0){openNodeChallenge(node);return}
+ showToast('Идём к объекту: '+node.name);
+}
+function openNodeChallenge(node){
+ if(!node||isHarvested(node))return;
+ challengeNode=node;challengeContract=false;answerResolved=false;
+ const list=QUESTIONS[node.kind]||QUESTIONS.data;
+ const n=NODES.filter(x=>x.kind===node.kind).findIndex(x=>x.id===node.id);
+ showQuestion(list[Math.max(0,n)%list.length],node.name+' · '+RESOURCE_INFO[node.kind].name,
+  'За правильное решение: '+RESOURCE_INFO[node.kind].icon+' ×'+node.amount+' и 15 XP');
+}
+function showQuestion(question,tag,reward){
+ document.getElementById('questionTag').textContent=tag;
+ document.getElementById('questionText').textContent=question.q;
+ const answers=document.getElementById('answers');answers.innerHTML='';
+ document.getElementById('feedback').className='feedback';document.getElementById('feedback').textContent='';
+ document.getElementById('claimReward').classList.add('hidden');
+ question.a.forEach((label,index)=>{
+  const b=document.createElement('button');b.type='button';b.className='answer';b.textContent=String.fromCharCode(65+index)+'. '+label;
+  b.addEventListener('click',()=>answerQuestion(index,question,b,reward));answers.appendChild(b);
+ });
+ document.getElementById('challengeTitle').textContent=challengeContract?'Контракт торговой гильдии':'Аналитическое испытание';
+ document.getElementById('challengeModal').classList.add('open');
+}
+function answerQuestion(index,q,button,reward){
+ if(answerResolved)return;
+ const feedback=document.getElementById('feedback');
+ if(index!==q.correct){
+  button.classList.add('wrong');
+  feedback.textContent='Пока неверно. Подсказка: '+q.why+' Попробуй ещё раз.';
+  feedback.classList.add('show');return;
+ }
+ answerResolved=true;button.classList.add('correct');
+ document.querySelectorAll('.answer').forEach(b=>b.disabled=true);
+ feedback.textContent='Верно! '+q.why+' Награда: '+reward;feedback.classList.add('show');
+ document.getElementById('claimReward').classList.remove('hidden');
+ document.getElementById('cancelChallenge').classList.add('hidden');
+}
+function claimReward(){
+ if(!answerResolved)return;
+ if(challengeContract){
+  if(!state.contracts.includes('sales-investigation')){
+   state.contracts.push('sales-investigation');state.reputation+=10;addXP(100);
+   state.inventory.data+=2;state.inventory.crystal+=1;
+   addJournal('Выполнен контракт: расследование падения продаж');
+   showToast('Контракт завершён! +100 XP, +10 репутации и редкие материалы.');
+  }
+ }else if(challengeNode&&!isHarvested(challengeNode)){
+  state.harvested.push(challengeNode.id);
+  state.inventory[challengeNode.kind]=(state.inventory[challengeNode.kind]||0)+challengeNode.amount;
+  addXP(15);addJournal('Исследовано: '+challengeNode.name);
+  showToast('Получено: '+RESOURCE_INFO[challengeNode.kind].icon+' '+RESOURCE_INFO[challengeNode.kind].name+' ×'+challengeNode.amount);
+ }
+ saveState();closeChallenge();renderAll();
+}
+function closeChallenge(){
+ document.getElementById('challengeModal').classList.remove('open');
+ document.getElementById('cancelChallenge').classList.remove('hidden');
+ challengeNode=null;challengeContract=false;answerResolved=false;
+}
+function startContract(){
+ if(state.contracts.includes('sales-investigation')){showToast('Этот контракт уже закрыт. Отличная работа!');return}
+ if(!state.buildings.dashboard){showToast('Сначала создай аналитический терминал.');return}
+ challengeContract=true;challengeNode=null;answerResolved=false;
+ showQuestion(QUESTIONS.contract[0],'Сквозной кейс · бизнес-анализ','За верный ответ: 100 XP, 10 репутации и материалы');
+}
+function craft(id){
+ const r=RECIPES.find(x=>x.id===id);if(!r)return;
+ if(r.kind==='building'&&state.buildings[id]){showToast('Эта постройка уже создана.');return}
+ if(r.kind==='item'&&state.crafted[id]){showToast('Этот инструмент уже создан.');return}
+ if(r.requires&&r.requires==='workbench'&&!state.buildings.workbench){showToast('Сначала построй верстак исследователя.');return}
+ if(r.requires&&r.requires==='lab'&&!state.buildings.lab){showToast('Сначала построй лабораторию данных.');return}
+ if(!canAfford(r.needs)){showToast('Не хватает ресурсов: '+costText(r.needs));return}
+ spend(r.needs);
+ if(r.kind==='building')state.buildings[id]=true;else state.crafted[id]=true;
+ addXP(r.id==='workbench'?25:35);addJournal('Создано: '+r.name);saveState();renderAll();
+ showToast('Создано: '+r.name+'!');
+}
+function renderInventory(){
+ const el=document.getElementById('inventory');el.innerHTML='';
+ Object.keys(RESOURCE_INFO).forEach(k=>{
+  const d=document.createElement('div');d.className='inv-item';
+  const n=document.createElement('span');n.className='emoji';n.textContent=RESOURCE_INFO[k].icon;
+  const label=document.createElement('span');label.className='inv-name';label.textContent=RESOURCE_INFO[k].name;
+  const count=document.createElement('span');count.className='inv-count';count.textContent=state.inventory[k]||0;
+  d.append(n,label,count);el.appendChild(d);
+ });
+}
+function renderRecipes(){
+ const el=document.getElementById('recipes');el.innerHTML='';
+ RECIPES.forEach(r=>{
+  const made=r.kind==='building'?!!state.buildings[r.id]:!!state.crafted[r.id];
+  const unlocked=!r.requires||(r.requires==='workbench'&&state.buildings.workbench)||(r.requires==='lab'&&state.buildings.lab);
+  const affordable=canAfford(r.needs);
+  const card=document.createElement('div');card.className='recipe'+(made?' done':'')+(!unlocked?' locked':'');
+  const top=document.createElement('div');top.className='recipe-top';
+  const name=document.createElement('div');name.className='recipe-name';name.textContent=r.name;
+  const icon=document.createElement('div');icon.className='recipe-icon';icon.textContent=r.icon;top.append(name,icon);
+  const desc=document.createElement('div');desc.className='recipe-desc';desc.textContent=r.desc;
+  const cost=document.createElement('div');cost.className='cost';cost.textContent=made?'✓ Уже создано':'Стоимость: '+costText(r.needs);
+  const btn=document.createElement('button');btn.type='button';btn.className='btn'+(made?' ghost':' primary');
+  btn.textContent=made?'Готово':(unlocked?'Создать':'🔒 Сначала '+(r.requires==='workbench'?'верстак':'лаборатория'));
+  btn.disabled=made||!unlocked||!affordable;btn.addEventListener('click',()=>craft(r.id));
+  card.append(top,desc,cost,btn);el.appendChild(card);
+ });
+}
+function renderTargets(){
+ const el=document.getElementById('targetList');el.innerHTML='';
+ NODES.forEach(node=>{
+  const done=isHarvested(node),unlocked=isUnlocked(node);
+  const b=document.createElement('button');b.type='button';b.className='target-btn';b.disabled=done;
+  const emoji=document.createElement('span');emoji.className='target-emoji';emoji.textContent=done?'✓':(!unlocked?'🔒':node.icon);
+  const body=document.createElement('span');body.className='target-text';
+  const title=document.createElement('span');title.className='target-name';title.textContent=node.name;title.style.display='block';
+  const sub=document.createElement('span');sub.className='target-sub';sub.textContent=done?'Ресурс собран':(!unlocked?'Нужен SQL-сканер':'Награда: '+RESOURCE_INFO[node.kind].icon+' ×'+node.amount);
+  body.append(title,sub);b.append(emoji,body);
+  b.addEventListener('click',()=>startNode(node));el.appendChild(b);
+ });
+}
+function renderStats(){
+ const lv=level(),inLevel=state.xp%100;
+ document.getElementById('levelValue').textContent=lv;
+ document.getElementById('levelHint').textContent=LEVEL_NAMES[Math.min(lv-1,LEVEL_NAMES.length-1)]||'Ветеран аналитики';
+ document.getElementById('xpValue').textContent=inLevel+' / 100';
+ document.getElementById('xpFill').style.width=inLevel+'%';
+ document.getElementById('repValue').textContent=state.reputation;
+ const built=Object.values(state.buildings).filter(Boolean).length;
+ document.getElementById('buildValue').textContent=built+' / 4';
+ document.getElementById('worldStatus').textContent=state.crafted.sql_scanner?'Регион 2 · SQL-руины открыты':'Регион 1 · Поляна и лес';
+ document.getElementById('startContract').disabled=!state.buildings.dashboard||state.contracts.includes('sales-investigation');
+ document.getElementById('startContract').textContent=state.contracts.includes('sales-investigation')?'✓ Контракт выполнен':(state.buildings.dashboard?'Начать расследование':'Сначала создай терминал');
+ document.getElementById('contractBadge').textContent=state.contracts.includes('sales-investigation')?'Выполнено ✓':'Основная миссия';
+ const cs=document.getElementById('contractStatus');
+ if(state.contracts.includes('sales-investigation'))cs.textContent='Контракт закрыт. Ты проверил исходное изменение выручки и выбрал последовательный путь исследования. Торговая гильдия доверяет тебе более сложные проекты.';
+ else if(state.buildings.dashboard)cs.textContent='Терминал готов. Теперь проведи анализ ситуации с падением выручки и выбери правильный следующий шаг.';
+ else cs.textContent='Сначала собери материалы и построй верстак исследователя. Затем открой SQL-сканер, лабораторию данных и аналитический терминал.';
+ const j=document.getElementById('journal');
+ j.innerHTML=state.journal.length?state.journal.slice().reverse().map(x=>'✓ '+escapeHTML(x)).join('<br>'):'Пока нет достижений. Добывай материалы, создавай инструменты и выполняй контракт.';
+ if(state.contracts.includes('sales-investigation')){document.getElementById('goalTitle').textContent='Контракт выполнен!';document.getElementById('goalText').textContent='Ты освоил цепочку от добычи данных до бизнес-вывода. Исследуй оставшиеся ресурсы и развивай инструменты.'}
+ else if(state.buildings.dashboard){document.getElementById('goalTitle').textContent='Закрой торговый контракт';document.getElementById('goalText').textContent='Нажми «Начать расследование» и выбери обоснованный следующий шаг.'}
+ else if(state.crafted.sql_scanner){document.getElementById('goalTitle').textContent='Построй лабораторию';document.getElementById('goalText').textContent='Собери древесину, камень, данные, реагенты и кристалл логики.'}
+ else if(state.buildings.workbench){document.getElementById('goalTitle').textContent='Создай SQL-сканер';document.getElementById('goalText').textContent='Собери архивные данные и кристалл логики. Сканер откроет SQL-руины.'}
+ else{document.getElementById('goalTitle').textContent='Построй верстак';document.getElementById('goalText').textContent='Собери 4 древесины и 2 камня, ответив на задания в точках добычи.'}
+}
+function escapeHTML(s){return String(s).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
+function renderAll(){renderStats();renderInventory();renderRecipes();renderTargets();drawWorld()}
+function drawTile(x,y){
+ const px=x*TILE,py=y*TILE;
+ let color=((x*7+y*11)%5===0)?'#4e824f':(((x+y)%3===0)?'#5b8c50':'#56834b');
+ if((x>=23&&y<=3)){color=((x+y)%2===0)?'#3e7190':'#437b98'}
+ if((y===8&&x>=3&&x<=10)||(x===8&&y>=4&&y<=8)||(x===7&&y>=5&&y<=8)||(y===9&&x>=7&&x<=11)){color=((x+y)%2===0)?'#a18a5d':'#b39a69'}
+ if(x>=23&&y>=4){color=((x+y)%2===0)?'#665b47':'#74674d'}
+ ctx.fillStyle=color;ctx.fillRect(px,py,TILE,TILE);
+ ctx.strokeStyle='rgba(17,37,24,.13)';ctx.strokeRect(px,py,TILE,TILE);
+ if(color==='#4e824f'||color==='#56834b'){
+  const seed=(x*31+y*17)%9;
+  ctx.fillStyle='rgba(194,224,143,.23)';ctx.fillRect(px+4+seed,py+6,3,3);ctx.fillRect(px+20,py+18+(seed%4),2,2);
+ }
+ if(x>=23&&y<=3){ctx.strokeStyle='#6fa5b2';ctx.beginPath();ctx.moveTo(px+4,py+9+(x%4));ctx.lineTo(px+23,py+9+(x%4));ctx.stroke()}
+ if(x>=23&&y>=4&&((x+y)%3===0)){ctx.fillStyle='#84785c';ctx.fillRect(px+4,py+6,10,5)}
+}
+function drawObject(node){
+ const x=node.x*TILE+TILE/2,y=node.y*TILE+TILE/2,done=isHarvested(node),locked=!isUnlocked(node);
+ if(targetNode&&targetNode.id===node.id&&!done){ctx.strokeStyle='#ffe18f';ctx.lineWidth=3;ctx.beginPath();ctx.arc(x,y,14,0,Math.PI*2);ctx.stroke();ctx.lineWidth=1}
+ if(done){
+  ctx.globalAlpha=.45;
+  if(node.kind==='wood'){ctx.fillStyle='#6f4b31';ctx.fillRect(x-8,y+1,16,6)}
+  else{ctx.fillStyle='#bdc9bb';ctx.beginPath();ctx.arc(x,y+3,7,0,Math.PI*2);ctx.fill()}
+  ctx.globalAlpha=1;return;
+ }
+ if(node.kind==='wood'){
+  ctx.fillStyle='#67452d';ctx.fillRect(x-4,y-1,8,13);
+  ctx.fillStyle='#2c633d';ctx.beginPath();ctx.arc(x,y-6,12,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#3e814b';ctx.beginPath();ctx.arc(x-5,y-9,8,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#589555';ctx.beginPath();ctx.arc(x+5,y-6,7,0,Math.PI*2);ctx.fill();
+ }else if(node.kind==='stone'){
+  ctx.fillStyle='#8d9e95';ctx.beginPath();ctx.moveTo(x-12,y+8);ctx.lineTo(x-8,y-5);ctx.lineTo(x+1,y-12);ctx.lineTo(x+12,y-5);ctx.lineTo(x+11,y+8);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#bac5b8';ctx.beginPath();ctx.moveTo(x-6,y-3);ctx.lineTo(x+1,y-9);ctx.lineTo(x+4,y-2);ctx.closePath();ctx.fill();
+ }else if(node.kind==='data'){
+  ctx.fillStyle='#304d73';ctx.fillRect(x-11,y-10,22,20);ctx.fillStyle='#7da8e5';ctx.fillRect(x-8,y-7,16,14);
+  ctx.fillStyle='#d4e5ff';ctx.fillRect(x-5,y-4,10,2);ctx.fillRect(x-5,y,7,2);ctx.fillRect(x-5,y+4,10,2);
+ }else if(node.kind==='crystal'){
+  ctx.fillStyle='#ac7bea';ctx.beginPath();ctx.moveTo(x,y-14);ctx.lineTo(x+10,y-3);ctx.lineTo(x+5,y+10);ctx.lineTo(x-5,y+10);ctx.lineTo(x-10,y-3);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#e0c9ff';ctx.beginPath();ctx.moveTo(x,y-10);ctx.lineTo(x+2,y);ctx.lineTo(x-4,y+7);ctx.lineTo(x-7,y-3);ctx.closePath();ctx.fill();
+ }else if(node.kind==='reagent'){
+  ctx.fillStyle='#8ac78b';ctx.beginPath();ctx.ellipse(x-5,y-1,5,10,-.6,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.ellipse(x+5,y-4,5,10,.6,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='#d8f4b7';ctx.beginPath();ctx.moveTo(x,y+8);ctx.lineTo(x,y-8);ctx.stroke();
+ }else{
+  ctx.fillStyle='#c2a56b';ctx.fillRect(x-11,y-10,22,20);ctx.strokeStyle='#f7e4aa';ctx.strokeRect(x-8,y-7,16,14);
+  ctx.fillStyle='#745c35';ctx.fillRect(x-4,y-5,8,10);
+ }
+ if(locked){ctx.fillStyle='#111b17bb';ctx.fillRect(x-14,y-15,28,30);ctx.font='bold 18px system-ui';ctx.textAlign='center';ctx.fillStyle='#f8df9a';ctx.fillText('🔒',x,y+6)}
+}
+function drawBuildings(){
+ const b=[
+  {id:'camp',x:5,y:5,icon:'⛺',label:'Лагерь'},
+  {id:'workbench',x:8,y:6,icon:'🪚',label:'Верстак'},
+  {id:'lab',x:10,y:7,icon:'🔬',label:'Лаборатория'},
+  {id:'dashboard',x:8,y:10,icon:'📊',label:'Терминал'}
+ ];
+ b.forEach(o=>{if(!state.buildings[o.id])return;const x=o.x*TILE+TILE/2,y=o.y*TILE+TILE/2;
+  ctx.fillStyle='#26402e';ctx.fillRect(x-14,y-11,28,23);
+  ctx.strokeStyle='#b7d39d';ctx.strokeRect(x-14,y-11,28,23);
+  ctx.font='18px system-ui';ctx.textAlign='center';ctx.fillText(o.icon,x,y+5);
+  ctx.font='bold 9px system-ui';ctx.fillStyle='#f0f6df';ctx.fillText(o.label,x,y+23);
+ });
+}
+function drawPlayer(){
+ const x=player.x*TILE+TILE/2,y=player.y*TILE+TILE/2;
+ ctx.fillStyle='#18241c66';ctx.beginPath();ctx.ellipse(x,y+9,10,4,0,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#304e7b';ctx.fillRect(x-7,y-1,14,14);
+ ctx.fillStyle='#f0c79a';ctx.fillRect(x-6,y-10,12,10);
+ ctx.fillStyle='#694832';ctx.fillRect(x-7,y-12,14,5);
+ ctx.fillStyle='#17251d';ctx.fillRect(x-3,y-6,2,2);ctx.fillRect(x+3,y-6,2,2);
+ ctx.fillStyle='#27392b';ctx.fillRect(x-6,y+12,4,5);ctx.fillRect(x+2,y+12,4,5);
+}
+function drawWorld(){
+ if(!ctx)return;
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++)drawTile(x,y);
+ // Forest edge and ruins border.
+ ctx.strokeStyle='#c7da9a';ctx.setLineDash([6,5]);ctx.lineWidth=2;ctx.strokeRect(23*TILE,4*TILE,7*TILE,14*TILE);ctx.setLineDash([]);
+ ctx.fillStyle='#f7e0a1';ctx.font='bold 13px system-ui';ctx.textAlign='center';ctx.fillText('SQL-РУИНЫ',26.5*TILE,5.2*TILE);
+ ctx.fillStyle='#f1efc9';ctx.font='bold 13px system-ui';ctx.fillText('ЛАГЕРЬ',6*TILE,4.2*TILE);
+ NODES.forEach(drawObject);drawBuildings();drawPlayer();
+}
+function movePlayer(dt){
+ if(!path.length)return;
+ const next=path[0],dx=next.x-player.x,dy=next.y-player.y,dist=Math.hypot(dx,dy),step=dt*3.1;
+ if(dist<=step){player.x=next.x;player.y=next.y;path.shift()}
+ else{player.x+=dx/dist*step;player.y+=dy/dist*step}
+ if(!path.length&&targetNode){
+  const n=targetNode;targetNode=null;
+  if(adjacent({x:Math.round(player.x),y:Math.round(player.y)},n))openNodeChallenge(n);
+  else showToast('Подойди ближе к объекту и нажми E.');
+ }
+}
+function frame(t){const dt=Math.min(.05,(t-lastFrame)/1000||0);lastFrame=t;movePlayer(dt);drawWorld();requestAnimationFrame(frame)}
+function interactNearest(){
+ if(challengeNode||challengeContract)return;
+ const px=Math.round(player.x),py=Math.round(player.y);
+ const nearest=NODES.filter(n=>!isHarvested(n)&&isUnlocked(n)&&adjacent({x:px,y:py},n)).sort((a,b)=>(Math.abs(a.x-px)+Math.abs(a.y-py))-(Math.abs(b.x-px)+Math.abs(b.y-py)))[0];
+ if(nearest)openNodeChallenge(nearest);else showToast('Рядом нет доступного ресурса. Нажми на точку на карте или выбери её в списке.');
+}
+canvas.addEventListener('click',e=>{
+ const rect=canvas.getBoundingClientRect();
+ const x=Math.floor((e.clientX-rect.left)/rect.width*canvas.width/TILE);
+ const y=Math.floor((e.clientY-rect.top)/rect.height*canvas.height/TILE);
+ const node=NODES.find(n=>Math.abs(n.x-x)<=1&&Math.abs(n.y-y)<=1);
+ if(node)startNode(node);
+});
+window.addEventListener('keydown',e=>{
+ if(e.key==='e'||e.key==='E'||e.key==='Enter'){
+  if(!document.getElementById('challengeModal').classList.contains('open'))interactNearest();
+ }
+ if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)&&e.target===document.body)e.preventDefault();
+});
+document.getElementById('claimReward').addEventListener('click',claimReward);
+document.getElementById('closeChallenge').addEventListener('click',closeChallenge);
+document.getElementById('cancelChallenge').addEventListener('click',closeChallenge);
+document.getElementById('challengeModal').addEventListener('click',e=>{if(e.target.id==='challengeModal'&&!answerResolved)closeChallenge()});
+document.getElementById('startContract').addEventListener('click',startContract);
+document.getElementById('focusGoal').addEventListener('click',()=>{
+ const available=NODES.find(n=>!isHarvested(n)&&isUnlocked(n));
+ document.getElementById('targetList').scrollIntoView({behavior:'smooth',block:'center'});
+ if(available)showToast('Следующая точка: '+available.name);
+});
+document.getElementById('helpBtn').addEventListener('click',()=>showToast('Выбери точку → реши задачу → получи материал → создай постройку. Для карты нажимай на объекты; E взаимодействует с ресурсом рядом. Прогресс сохраняется автоматически.'));
+document.getElementById('exportSave').addEventListener('click',()=>{
+ const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+ const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='datacraft-save.json';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+});
+document.getElementById('resetGame').addEventListener('click',()=>{
+ if(!confirm('Сбросить игровой прогресс DataCraft в этом браузере? Экспортируй сохранение заранее, если хочешь его оставить.'))return;
+ state=clone(DEFAULT_STATE);player={x:5,y:7};path=[];targetNode=null;closeChallenge();saveState();renderAll();showToast('Новый лагерь создан.');
+});
+renderAll();
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
