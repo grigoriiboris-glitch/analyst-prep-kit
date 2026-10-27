@@ -40,6 +40,7 @@
   ];
 
   var SPECIALIZATIONS = [
+    {id:'project-studio',title:'Проектная мастерская',icon:'🗂️',path:'../projects/',tracker:'projectStudio',total:1,unit:'готовый проект',requires:['portfolio'],desc:'Спланируй собственный проект: сформулируй бизнес-вопрос, критерии, этапы анализа и презентацию.'},
     {id:'excel-cert',title:'Сертификат Excel MO-210',icon:'📗',path:'../excel-cert/',storage:'apk-excelcert',requires:['excel'],desc:'Отдельная подготовка к сертификационному экзамену Excel.'},
     {id:'excel-expert',title:'Excel Expert MO-211',icon:'🏅',path:'../excel-expert-cert/',storage:'apk-excelexpertcert',requires:['excel-cert'],desc:'Продвинутый уровень Excel после базовой сертификационной ветки.'},
     {id:'powerbi-cert',title:'Power BI PL-300',icon:'📊',path:'../powerbi-cert/',storage:'apk-pbicert',requires:['powerbi'],desc:'Дополнительная подготовка к сертификации Power BI.'},
@@ -66,7 +67,7 @@
     ['portfolio','simulator'],['portfolio','interview'],['decision','interview'],['interview','final']
   ];
   COURSES.forEach(function(c){BY_ID[c.id]=c;ALL.push(c);});
-  SPECIALIZATIONS.forEach(function(c){BY_ID[c.id]=c;ALL.push(c);});
+  SPECIALIZATIONS.forEach(function(c){if(!c.tracker){c.tracker='cert';c.total=1;c.unit='экзамен';}BY_ID[c.id]=c;ALL.push(c);});
 
   var root = document.createElement('section');
   root.id = 'curriculumPanel';
@@ -83,7 +84,7 @@
         '<section class="curriculum-detail" id="curriculumDetail" aria-live="polite"></section>' +
         '<section class="curriculum-list-wrap"><div class="curriculum-list-head"><h3>Все основные учебные здания</h3><span>15 курсов · от первого шага до выпускного экзамена</span></div><div class="curriculum-course-list" id="curriculumCourseList"></div></section>' +
       '</div>' +
-      '<details class="curriculum-section"><summary>Дополнительные специализации и сертификаты <span>13 отдельных веток · необязательны для основного выпуска</span></summary><div class="curriculum-specializations" id="curriculumSpecializations"></div></details>' +
+      '<details class="curriculum-section"><summary>Дополнительные учебные модули, специализации и сертификаты <span>14 веток · необязательны для основного выпуска</span></summary><div class="curriculum-specializations" id="curriculumSpecializations"></div></details>' +
       '<div class="curriculum-library"><p><strong>📚 Полевая библиотека.</strong> Справочники помогают между заданиями, но не заменяют прохождение курса и не открывают здание сами по себе.</p><a href="../guides/">Открыть все справочники →</a></div>' +
     '</div>';
 
@@ -182,6 +183,11 @@
         s = readJSON(STORE.final) || {};
         count = s.submitted ? 1 : 0;
         total = 1; label = 'экзамен';
+        break;
+      case 'projectStudio':
+        s = readJSON('apk-projects-v1') || {};
+        count = Array.isArray(s.projects) && s.projects.some(function(p){return p && p.phase === 'present';}) ? 1 : 0;
+        total = 1; label = 'готовый проект';
         break;
       case 'cert':
         s = readJSON(course.storage) || {};
