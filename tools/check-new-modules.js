@@ -143,6 +143,8 @@ for (const dependency of [
 console.log("OK: DataCraft 2D gameplay, all course routes, lesson-progress readers, and prerequisite graph");
 
 for (const mechanic of [
+  "RIVER_WAYPOINTS", "function isRiverWaterPixel(", "bgWaterPixels = waterCtx.getImageData(0, 0, MAP_W, MAP_H).data",
+  "if (!isRiverWaterPixel(sx, sy)) return;",
   "FOG_REGIONS", "drawFogOfWar", "fogOpacity", "spawnFloatingText",
   "scanWalletTransactions", "ROAD_NPCS", "findNpcAtPoint", "openNpcQuest",
   "setNpcCooldown", "NPC_QUESTS", "60 сек."
