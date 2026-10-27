@@ -1,0 +1,156 @@
+/* Shared visual explanations for lessons. Works with Grain and legacy course themes. */
+.lesson-visual {
+  --lv-accent: var(--accent, var(--clay-500, #0e7490));
+  --lv-text: var(--text, var(--ink, var(--stone-900, #18181b)));
+  --lv-muted: var(--dim, var(--muted, var(--stone-600, #52525b)));
+  --lv-line: var(--border, var(--line, var(--stone-200, #e4e7ea)));
+  --lv-surface: var(--surf, var(--panel, var(--color-surface, #fff)));
+  box-sizing: border-box;
+  color: var(--lv-text);
+  background: var(--lv-surface);
+  border: 1px solid var(--lv-line);
+  border-left: 4px solid var(--lv-accent);
+  border-radius: 14px;
+  padding: clamp(14px, 2.5vw, 22px);
+  margin: 18px 0 22px;
+  overflow: hidden;
+  width: 100%;
+}
+.lesson-visual *, .lesson-visual *::before, .lesson-visual *::after { box-sizing: border-box; }
+.lesson-visual__eyebrow {
+  margin: 0 0 6px;
+  color: var(--lv-accent);
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .09em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+.lesson-visual__title {
+  margin: 0;
+  color: var(--lv-text);
+  font-size: clamp(1.08rem, 2.4vw, 1.34rem);
+  line-height: 1.3;
+  font-weight: 800;
+}
+.lesson-visual__intro {
+  margin: 8px 0 16px;
+  max-width: 78ch;
+  color: var(--lv-muted);
+  line-height: 1.6;
+  font-size: .94rem;
+}
+.lv-flow {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 145px), 1fr));
+  gap: 10px;
+  counter-reset: lv-step;
+}
+.lv-flow__step {
+  min-width: 0;
+  min-height: 94px;
+  position: relative;
+  counter-increment: lv-step;
+  padding: 13px 12px 12px 42px;
+  border: 1px solid var(--lv-line);
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--lv-accent) 5%, var(--lv-surface));
+}
+.lv-flow__step::before {
+  content: counter(lv-step);
+  position: absolute;
+  left: 11px;
+  top: 13px;
+  width: 23px;
+  height: 23px;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  color: var(--lv-accent);
+  background: color-mix(in srgb, var(--lv-accent) 13%, transparent);
+  font-size: .76rem;
+  font-weight: 800;
+}
+.lv-flow__step:not(:last-child)::after {
+  content: "→";
+  position: absolute;
+  z-index: 2;
+  right: -10px;
+  top: 35px;
+  width: 18px;
+  text-align: center;
+  color: var(--lv-accent);
+  font-weight: 900;
+  font-size: 18px;
+}
+.lv-flow__step--decision {
+  border-style: dashed;
+  border-color: var(--lv-accent);
+}
+.lv-flow__label { display: block; font-weight: 800; font-size: .9rem; line-height: 1.35; }
+.lv-flow__detail { display: block; margin-top: 5px; color: var(--lv-muted); font-size: .82rem; line-height: 1.45; }
+.lv-flow__step--decision .lv-flow__label::after { content: " ◇"; color: var(--lv-accent); }
+.lv-compare {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.lv-compare__side {
+  min-width: 0;
+  border: 1px solid var(--lv-line);
+  border-radius: 11px;
+  padding: 14px;
+  background: color-mix(in srgb, var(--lv-accent) 4%, var(--lv-surface));
+}
+.lv-compare__side h4 { margin: 0 0 9px; font-size: .95rem; line-height: 1.35; }
+.lv-compare__side ul { margin: 0; padding-left: 19px; }
+.lv-compare__side li { margin: 6px 0; color: var(--lv-muted); line-height: 1.5; font-size: .88rem; }
+.lv-compare__side strong { color: var(--lv-text); }
+.lv-equation {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0 14px;
+}
+.lv-equation__part {
+  flex: 1 1 115px;
+  min-width: 0;
+  border: 1px solid var(--lv-line);
+  border-radius: 10px;
+  padding: 13px 10px;
+  text-align: center;
+  background: color-mix(in srgb, var(--lv-accent) 6%, var(--lv-surface));
+}
+.lv-equation__symbol { align-self: center; color: var(--lv-accent); font-size: 1.35rem; font-weight: 900; }
+.lv-equation__name { display: block; font-size: .9rem; font-weight: 800; }
+.lv-equation__detail { display: block; margin-top: 5px; color: var(--lv-muted); font-size: .8rem; line-height: 1.4; }
+.lv-table-wrap { max-width: 100%; overflow-x: auto; border: 1px solid var(--lv-line); border-radius: 10px; }
+.lv-table { width: 100%; border-collapse: collapse; min-width: 420px; font-size: .85rem; }
+.lv-table th, .lv-table td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--lv-line); }
+.lv-table th { background: color-mix(in srgb, var(--lv-accent) 10%, var(--lv-surface)); color: var(--lv-text); font-weight: 800; }
+.lv-table td { color: var(--lv-muted); }
+.lv-table tr:last-child td { border-bottom: 0; }
+.lesson-visual__note {
+  margin: 13px 0 0;
+  padding: 10px 12px;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--lv-accent) 8%, var(--lv-surface));
+  color: var(--lv-text);
+  font-size: .86rem;
+  line-height: 1.55;
+}
+.lesson-visual__note strong { color: var(--lv-accent); }
+@media (max-width: 580px) {
+  .lesson-visual { padding: 13px; }
+  .lv-flow { grid-template-columns: 1fr; gap: 8px; }
+  .lv-flow__step { min-height: 0; padding: 12px 12px 12px 42px; }
+  .lv-flow__step:not(:last-child)::after { content: "↓"; top: auto; bottom: -12px; right: 14px; z-index: 3; }
+  .lv-compare { grid-template-columns: 1fr; }
+  .lv-table { min-width: 360px; }
+}
+@media (prefers-reduced-motion: reduce) { .lesson-visual * { scroll-behavior: auto !important; } }
