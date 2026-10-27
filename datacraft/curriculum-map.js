@@ -47,7 +47,7 @@
     {id:'excel-cert',cost:12,title:'Сертификат Excel MO-210',icon:'📗',path:'../excel-cert/',storage:'apk-excelcert',requires:['excel'],desc:'Отдельная подготовка к сертификационному экзамену Excel.'},
     {id:'excel-expert',walletId:'excel-expert-cert',cost:15,catalogId:'excel-expert-cert',title:'Эксперт Excel MO-211',icon:'🏅',path:'../excel-expert-cert/',storage:'apk-excelexpertcert',requires:['excel-cert'],desc:'Продвинутый уровень Excel после базовой сертификационной ветки.'},
     {id:'powerbi-cert',cost:15,title:'Power BI PL-300',icon:'📊',path:'../powerbi-cert/',storage:'apk-pbicert',requires:['powerbi'],desc:'Дополнительная подготовка к сертификации Power BI.'},
-    {id:'tableau-cert',cost:15,title:'Tableau Desktop',icon:'🟦',path:'../tableau-cert/',storage:'apk-tabcert',requires:['tableau'],desc:'Дополнительная подготовка к сертификации Tableau.'},
+    {id:'tableau-cert',cost:15,title:'Настольная версия Tableau',icon:'🟦',path:'../tableau-cert/',storage:'apk-tabcert',requires:['tableau'],desc:'Дополнительная подготовка к сертификации Tableau.'},
     {id:'alteryx-cert',cost:12,title:'Основы Alteryx',icon:'🔄',path:'../alteryx-cert/',storage:'apk-alteryxcert',requires:['excel','quality'],desc:'Автоматизация подготовки и преобразования данных.'},
     {id:'azure-data-cert',cost:12,title:'Основы данных Azure DP-900',icon:'☁️',path:'../azure-data-cert/',storage:'apk-dp900cert',requires:['foundations','sql'],desc:'Базовые понятия данных и облачных сервисов Azure.'},
     {id:'databricks-cert',cost:15,title:'Архитектура озера данных и хранилища в Databricks',icon:'🧱',path:'../databricks-cert/',storage:'apk-dbxcert',requires:['sql','python'],desc:'Дополнительный маршрут по архитектуре озера данных и хранилища, а также аналитической платформе.'},
