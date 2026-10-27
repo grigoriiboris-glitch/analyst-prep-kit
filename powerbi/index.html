@@ -1738,6 +1738,7 @@ const DEFAULT_STATE = {
   badgeMarks: {},
   lessonStage: {},   // lessonId -> stage index (0-5)
   misses: {},        // lessonId -> the things that come back
+  currentLesson: null,
   theme: 'light'
 };
 // Preferences are NOT progress and survive a reset.
@@ -1812,6 +1813,10 @@ function renderFlagged(){
 let currentView = 'home';
 function navigate(view, ...args){
   guided = null; // any normal navigation exits the guided practice flow
+  if(view==='lesson'){
+    const _lessonId=Number(args[0]);
+    if(DATA.LESSONS.some(l=>l.id===_lessonId)&&state.currentLesson!==_lessonId){state.currentLesson=_lessonId;saveState();}
+  }
   // ...but a hand-off to the Workspace or the DAX Lab is PART of the path, so
   // the return pointer survives exactly one hop, to its own target view. Any
   // other destination means the learner really has left.
@@ -4387,7 +4392,12 @@ function showToast(msg){
 loadState();
 _migrateConfidence();
 bumpStreak(); // Batch 5 return loop: opening the kit counts toward today's streak
-navigate('home');
+const _hasLessonDeepLink=/^#lesson-\d+(?:-restart)?$/.test(location.hash||'');
+const _staged=Object.keys(state.lessonStage||{}).filter(id=>DATA.LESSONS.some(l=>l.id===Number(id)));
+const _fallback=_staged.length?Number(_staged[_staged.length-1]):(state.doneLessons.length?Number(state.doneLessons[state.doneLessons.length-1]):null);
+const _resumeId=DATA.LESSONS.some(l=>l.id===Number(state.currentLesson))?Number(state.currentLesson):_fallback;
+const _resume=DATA.LESSONS.find(l=>l.id===_resumeId);
+if(!_hasLessonDeepLink&&_resume)navigate('lesson',_resume.id);else navigate('home');
 /* Cert-kit deep link: /powerbi/#lesson-<id> opens that lesson directly. */
 window.addEventListener('load', function(){
   /* #lesson-<id>-restart (PrepLoop sittings) resets the saved stage so it opens at the beginning */
