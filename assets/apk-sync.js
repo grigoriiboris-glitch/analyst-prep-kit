@@ -30,6 +30,7 @@
       if (!parsed.ok) return parsed;
       var restored = 0;
       var skipped = 0;
+      var failed = 0;
       var meta = {};
       try {
         meta = JSON.parse(localStorage.getItem('apk-sync-meta-v1') || '{}') || {};
@@ -53,11 +54,11 @@
         } catch (_) {
           // Storage quota failures do not invalidate the source code, but are
           // surfaced as a partial restore rather than claiming full success.
-          skipped++;
+          failed++;
         }
       });
       try { localStorage.setItem('apk-sync-meta-v1', JSON.stringify(meta)); } catch (_) {}
-      if (!restored && skipped) return fail('Данные проверены, но браузер не разрешил восстановление. Освободи место и попробуй снова.');
+      if (!restored && failed) return fail('Браузер не разрешил восстановление. Освободи место и попробуй снова.');
       return { ok: true, count: restored, skipped: skipped };
     }
   };
