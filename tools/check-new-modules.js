@@ -142,6 +142,20 @@ for (const dependency of [
 }
 console.log("OK: DataCraft 2D gameplay, all course routes, lesson-progress readers, and prerequisite graph");
 
+for (const mechanic of [
+  "FOG_REGIONS", "drawFogOfWar", "fogOpacity", "spawnFloatingText",
+  "scanWalletTransactions", "ROAD_NPCS", "findNpcAtPoint", "openNpcQuest",
+  "setNpcCooldown", "NPC_QUESTS", "60 сек."
+]) {
+  assert.ok(curriculum.includes(mechanic), "DataCraft exploration mechanic missing: " + mechanic);
+}
+for (const style of [".road-npc-overlay", ".road-npc-answer", ".road-npc-feedback.success"]) {
+  assert.ok(curriculumCss.includes(style), "DataCraft NPC quest style missing: " + style);
+}
+assert.ok(fs.existsSync(path.join(root, "datacraft/FOG_NPC_FLOATING_QA.md")),
+  "DataCraft fog/NPC/floating reward QA checklist missing");
+console.log("OK: Fog of War, floating wallet rewards, and timed road NPC quests");
+
 const lessonCatalog = fs.readFileSync(path.join(root, "datacraft/lesson-catalog.js"), "utf8");
 new Function(lessonCatalog);
 const catalogMatches = [
