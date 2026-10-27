@@ -10,6 +10,18 @@
   if(!cache||typeof cache!=="object"||Array.isArray(cache))cache={};
   var d={
     "break into data analytics. one skill at a time.":"Освой аналитику данных. По одному навыку за раз.",
+    "grain — analyst prep kit · free sql, excel, python, tableau, interview":"Grain — тренажёр аналитика данных",
+    "sql queries and joins · free interview practice in browser":"SQL: запросы и объединение таблиц — тренажёр",
+    "excel formulas and charts · free data analysis practice":"Excel: формулы и диаграммы — практика анализа данных",
+    "python data analysis · free practice exercises in browser":"Анализ данных на Python — практические задания",
+    "tableau dashboards · free certification practice":"Дашборды Tableau — подготовка и практика",
+    "chart literacy · free data visualization practice":"Работа с диаграммами — визуализация данных",
+    "forecasting & trend modeling · free practice for analysts":"Прогнозирование и моделирование трендов",
+    "statistics for data · free interactive practice":"Статистика для анализа данных — интерактивная практика",
+    "power bi dashboards · free practice, no install":"Дашборды Power BI — практика без установки",
+    "data analyst interview prep · timed q&a practice":"Подготовка к собеседованию аналитика данных",
+    "final exam kit · analyst prep kit":"Итоговый экзамен — тренажёр аналитика",
+    "project studio · analyst prep kit":"Мастерская проектов — тренажёр аналитика",
     "lessons":"Уроки","learn":"Изучение","learning":"Обучение","practice":"Практика","review":"Повторение",
     "your review list":"Список для повторения","next up":"Далее","other kits":"Другие разделы","your path":"Твой учебный маршрут",
     "learn by playing":"Учись в игровом формате","learn by writing queries":"Учись, составляя запросы",
