@@ -142,6 +142,37 @@ for (const dependency of [
 }
 console.log("OK: DataCraft 2D gameplay, all course routes, lesson-progress readers, and prerequisite graph");
 
+for (const mechanic of [
+  "FOG_REGIONS", "drawFogOfWar", "fogOpacity", "spawnFloatingText",
+  "scanWalletTransactions", "ROAD_NPCS", "findNpcAtPoint", "openNpcQuest",
+  "setNpcCooldown", "NPC_QUESTS", "60 сек."
+]) {
+  assert.ok(curriculum.includes(mechanic), "DataCraft exploration mechanic missing: " + mechanic);
+}
+for (const style of [".road-npc-overlay", ".road-npc-answer", ".road-npc-feedback.success"]) {
+  assert.ok(curriculumCss.includes(style), "DataCraft NPC quest style missing: " + style);
+}
+assert.ok(fs.existsSync(path.join(root, "datacraft/FOG_NPC_FLOATING_QA.md")),
+  "DataCraft fog/NPC/floating reward QA checklist missing");
+console.log("OK: Fog of War, floating wallet rewards, and timed road NPC quests");
+
+const quietValley = fs.readFileSync(path.join(root, "datacraft/quiet-valley.js"), "utf8");
+new Function(quietValley);
+const quietValleyCss = fs.readFileSync(path.join(root, "datacraft/quiet-valley.css"), "utf8");
+const quietValleyPage = fs.readFileSync(path.join(root, "datacraft/index.html"), "utf8");
+for (const feature of ["quietValleyCanvas","quietValleyShop","quietValleyInventory","quietValleyZones","quiet-valley.js","quiet-valley.css"]) {
+  assert.ok(quietValleyPage.includes(feature), "Quiet Valley page integration missing: " + feature);
+}
+for (const feature of ["datacraft-quiet-valley-v1","quiet-valley:item:","quiet-valley:style:","quiet-valley:zone:","DataCraftEconomy.spend","function place(","function move(","function rotate(","function store(","state.unlocked","state.active","state.objects"]) {
+  assert.ok(quietValley.includes(feature), "Quiet Valley feature missing: " + feature);
+}
+for (const id of ["roof-terracotta","wall-sage","oak-tree","flower-tulips","pond","wooden-bridge","bench","garden-lantern","cat","dog","rabbit","bird","garland","garden-gnome","fountain"]) {
+  assert.ok(quietValley.includes("id:'" + id + "'"), "Quiet Valley catalogue item missing: " + id);
+}
+assert.ok(quietValley.includes("datacraft-wallet-v1"), "Quiet Valley must use the study coin wallet");
+assert.ok(quietValleyCss.includes("#quietValleyCanvas") && quietValleyCss.includes(".quiet-valley-shop"), "Quiet Valley canvas/shop styles missing");
+console.log("OK: Quiet Valley builder, study-coin purchases, place/move/rotate/store controls, and separate save");
+
 const lessonCatalog = fs.readFileSync(path.join(root, "datacraft/lesson-catalog.js"), "utf8");
 new Function(lessonCatalog);
 const catalogMatches = [

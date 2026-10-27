@@ -71,6 +71,36 @@
     ['quality','portfolio'],['sql','portfolio'],['excel','portfolio'],['powerbi','portfolio'],['tableau','portfolio'],['decision','portfolio'],
     ['portfolio','simulator'],['portfolio','interview'],['decision','interview'],['interview','final']
   ];
+
+  /* Fog fades only when a region's real prerequisite state becomes available. */
+  var FOG_REGIONS = [
+    {id:'sql-ridge',courseId:'sql',x:878,y:126,rx:184,ry:139,phase:0.3},
+    {id:'citadel-peak',courseId:'final',x:1192,y:118,rx:157,ry:122,phase:2.1}
+  ];
+
+  /* NPCs move along roads that are actually open from a built course to a built/unlocked course. */
+  var ROAD_NPCS = [
+    {id:'merchant',name:'Торговец данными',icon:'🧙',offset:0,phase:0.12,speed:0.014},
+    {id:'alchemist',name:'Странствующий алхимик',icon:'🧪',offset:1,phase:0.56,speed:-0.011},
+    {id:'sql-master',name:'Старый мастер SQL',icon:'🧓',offset:2,phase:0.82,speed:0.009}
+  ];
+
+  var NPC_QUESTS = [
+    {question:'После JOIN сумма продаж неожиданно выросла почти вдвое. Что проверить первым?',answers:['Сразу удалить половину строк','Проверить, не размножились ли строки заказа при связи один-ко-многим','Поменять цвет графика'],correct:1,explanation:'JOIN может размножить строки. Сначала проверь ключи связи и количество строк до и после соединения.',reward:3},
+    {question:'В отчёте продажи упали на 12%. Какой первый шаг аналитика?',answers:['Сразу назвать виноватый канал','Проверить полноту данных, сравнимость периодов и разрезы','Скрыть отрицательную динамику'],correct:1,explanation:'Сначала убедись, что данные полны, периоды сопоставимы, а изменение не объясняется одним сегментом.',reward:4},
+    {question:'В таблице клиентов подозрительно много повторов. Как надёжнее их проверить?',answers:['Удалить все похожие имена','Сверить бизнес-ключ и выяснить, что считается одной записью','Оставить только первую строку без проверки'],correct:1,explanation:'Дубликат определяется бизнес-правилом и ключом, а не только похожим текстом.',reward:2},
+    {question:'На графике конверсия выросла с 4% до 8%. Что важно уточнить?',answers:['Изменилось ли число наблюдений и одинаковы ли определения/периоды метрики','Какой шрифт у заголовка','Можно ли убрать подписи оси'],correct:0,explanation:'Проверь числитель, знаменатель, объём данных и сравнимость периодов прежде, чем делать вывод.',reward:3},
+    {question:'Запрос выполняется медленно. Что стоит проверить до переписывания всей системы?',answers:['Размер данных, фильтры, план запроса и индексы','Только название таблицы','Сразу удалить JOIN'],correct:0,explanation:'Начни с измерений: плана выполнения, объёма данных, фильтров и доступных индексов.',reward:4}
+  ];
+
+  var SEEN_WALLET_TX_KEY = 'datacraft-map-seen-wallet-transactions-v1';
+  var NPC_COOLDOWN_KEY = 'datacraft-road-npc-cooldowns-v1';
+  var hoveredNpcId = null;
+  var cachedNpcRoads = null;
+  var activeNpcQuest = null;
+  var npcQuestTimer = null;
+  var walletRefreshScheduled = false;
+
   COURSES.forEach(function(c){BY_ID[c.id]=c;ALL.push(c);});
   SPECIALIZATIONS.forEach(function(c){if(!c.tracker){c.tracker='cert';c.total=1;c.unit='экзамен';}BY_ID[c.id]=c;ALL.push(c);});
 
@@ -155,6 +185,8 @@
     ],
     riverSparkles: [],
     waterfallDrops: [],
+    floatingTexts: [],
+    fogOpacity: {},
     buildPopScale: {} /* courseId -> current spring scale after construction */
   };
 
@@ -296,6 +328,25 @@
         animState.buildPopScale[id] = Math.min(1, val + dt * 2.8);
       }
     });
+
+    /* 6. Ease fog away after requirements unlock and advance floating rewards. */
+    FOG_REGIONS.forEach(function(region) {
+      var course = BY_ID[region.courseId];
+      var target = course && getStatus(course).unlocked ? 0 : 1;
+      if (animState.fogOpacity[region.id] === undefined) animState.fogOpacity[region.id] = target;
+      var current = animState.fogOpacity[region.id];
+      animState.fogOpacity[region.id] = current + (target - current) * Math.min(1, dt * 1.45);
+      if (Math.abs(animState.fogOpacity[region.id] - target) < 0.008) animState.fogOpacity[region.id] = target;
+    });
+
+    for (var fi = animState.floatingTexts.length - 1; fi >= 0; fi--) {
+      var float = animState.floatingTexts[fi];
+      float.life += dt;
+      float.x += float.vx * dt;
+      float.y += float.vy * dt;
+      float.vy -= 5 * dt;
+      if (float.life >= float.maxLife) animState.floatingTexts.splice(fi, 1);
+    }
   }
 
   /* =========================================================================
@@ -415,6 +466,59 @@
     if (window.DataCraftEconomy) return window.DataCraftEconomy.sync();
     return {balance: 0, totalEarned: 0, totalSpent: 0, buildings: {}};
   }
+
+  function localDayStamp(date) {
+    var d = date || new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+
+  function spawnFloatingAt(x, y, text, color) {
+    if (!animEnabled) { showToastIfAvailable(text); return; }
+    animState.floatingTexts.push({
+      x:x, y:y, text:String(text), color:color || '#ffe484',
+      vx:(Math.random() - 0.5) * 10, vy:-34, life:0, maxLife:1.65
+    });
+    if (animState.floatingTexts.length > 24) animState.floatingTexts.shift();
+  }
+
+  function spawnFloatingText(courseId, text, color) {
+    var course = BY_ID[courseId] || BY_ID[({projectStudio:'project-studio','excel-cert':'excel','excel-expert-cert':'excel','powerbi-cert':'powerbi','tableau-cert':'tableau','ga4-cert':'charts','azure-data-cert':'sql','databricks-cert':'python','alteryx-cert':'quality','docusign-cert':'foundations','docusign-clm-cert':'foundations','docusign-clm-workflow-cert':'foundations','docusign-clm-implementation-cert':'foundations','docusign-org-cert':'foundations'})[courseId]] || BY_ID[selectedId] || COURSES[0];
+    if (!course || typeof course.wx !== 'number') return;
+    spawnFloatingAt(course.wx + (Math.random() - 0.5) * 22, course.wy - (course.r || 56) * 0.86, text, color);
+  }
+
+  function courseIdForWalletTransaction(tx) {
+    var parts = String(tx && tx.id || '').split(':');
+    var id = parts[0];
+    if (id === 'course-bonus' || id === 'building') id = parts[1] || '';
+    else if (id === 'cert') id = parts[1] || '';
+    if (id === 'projectStudio') id = 'project-studio';
+    if (id === 'npc') return null;
+    return id;
+  }
+
+  function scanWalletTransactions(wallet) {
+    var txs = wallet && Array.isArray(wallet.transactions) ? wallet.transactions : [];
+    var currentIds = txs.map(function(tx){ return String(tx.id || ''); }).filter(Boolean);
+    var saved = readJSON(SEEN_WALLET_TX_KEY);
+    if (!Array.isArray(saved)) {
+      try { localStorage.setItem(SEEN_WALLET_TX_KEY, JSON.stringify(currentIds)); } catch(e) {}
+      return;
+    }
+    var seen = Object.create(null);
+    saved.forEach(function(id){ seen[String(id)] = true; });
+    var fresh = txs.slice().reverse().filter(function(tx){ return tx && tx.id && !seen[String(tx.id)]; });
+    if (fresh.length > 8) fresh = fresh.slice(0, 8);
+    fresh.forEach(function(tx) {
+      var delta = Number(tx.delta) || 0;
+      var courseId = courseIdForWalletTransaction(tx);
+      if (!delta || !courseId || !BY_ID[courseId]) return;
+      var amount = Math.abs(delta);
+      spawnFloatingText(courseId, (delta > 0 ? '+' : '−') + amount + ' 🪙', delta > 0 ? '#ffe484' : '#ffaaa0');
+    });
+    try { localStorage.setItem(SEEN_WALLET_TX_KEY, JSON.stringify(currentIds.slice(-120))); } catch(e) {}
+  }
+
   function isBuilt(id) {
     var w = walletState();
     return !!(w.buildings && w.buildings[id]);
@@ -785,6 +889,248 @@
     }
   }
 
+  function activeNpcRoads() {
+    if (cachedNpcRoads) return cachedNpcRoads;
+    cachedNpcRoads = graph.filter(function(edge) {
+      var from = BY_ID[edge[0]], to = BY_ID[edge[1]];
+      if (!from || !to) return false;
+      var fs = getStatus(from), ts = getStatus(to);
+      return fs.built && (ts.built || ts.unlocked);
+    });
+    return cachedNpcRoads;
+  }
+
+  function npcPosition(npc) {
+    var roads = activeNpcRoads();
+    if (!roads.length) return null;
+    var edge = roads[(npc.offset || 0) % roads.length];
+    var from = BY_ID[edge[0]], to = BY_ID[edge[1]];
+    var u = (animState.time * npc.speed + npc.phase) % 1;
+    if (u < 0) u += 1;
+    var mx = (from.wx + to.wx) / 2, my = (from.wy + to.wy) / 2 - 18;
+    return {
+      x:(1-u)*(1-u)*from.wx + 2*(1-u)*u*mx + u*u*to.wx,
+      y:(1-u)*(1-u)*from.wy + 2*(1-u)*u*my + u*u*to.wy
+    };
+  }
+
+  function findNpcAtPoint(point) {
+    for (var i = ROAD_NPCS.length - 1; i >= 0; i--) {
+      var pos = npcPosition(ROAD_NPCS[i]);
+      if (pos && Math.hypot(point.x - pos.x, point.y - pos.y) <= 23) return ROAD_NPCS[i];
+    }
+    return null;
+  }
+
+  function drawRoadNPCs(t) {
+    ROAD_NPCS.forEach(function(npc) {
+      var pos = npcPosition(npc);
+      if (!pos) return;
+      var pulse = animEnabled ? 1 + 0.12 * Math.sin(t * 4 + npc.offset) : 1;
+      ctx.save();
+      ctx.shadowColor = '#ffe59a';
+      ctx.shadowBlur = animEnabled ? 11 : 3;
+      ctx.fillStyle = 'rgba(25, 42, 30, 0.94)';
+      ctx.beginPath();
+      ctx.arc(pos.x, pos.y, 15 * pulse, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+      ctx.strokeStyle = hoveredNpcId === npc.id ? '#fff0aa' : '#c5e6a3';
+      ctx.lineWidth = hoveredNpcId === npc.id ? 2.6 : 1.5;
+      ctx.stroke();
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.font = '21px "Apple Color Emoji","Segoe UI Emoji",sans-serif';
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText(npc.icon, pos.x, pos.y + 1);
+      if (hoveredNpcId === npc.id) {
+        var label = npc.name + ' · квест';
+        ctx.font = '700 11px system-ui,sans-serif';
+        var labelW = ctx.measureText(label).width + 16;
+        ctx.fillStyle = 'rgba(16, 29, 21, 0.94)';
+        roundRect(ctx, pos.x - labelW / 2, pos.y - 33, labelW, 19, 7);
+        ctx.fill();
+        ctx.fillStyle = '#fff0aa';
+        ctx.fillText(label, pos.x, pos.y - 23);
+      }
+      ctx.restore();
+    });
+  }
+
+  function drawFogOfWar(t) {
+    FOG_REGIONS.forEach(function(region) {
+      var course = BY_ID[region.courseId];
+      var locked = !course || !getStatus(course).unlocked;
+      var opacity = animState.fogOpacity[region.id];
+      if (opacity === undefined) {
+        opacity = locked ? 1 : 0;
+        animState.fogOpacity[region.id] = opacity;
+      }
+      if (!animEnabled) {
+        opacity = locked ? 1 : 0;
+        animState.fogOpacity[region.id] = opacity;
+      }
+      if (opacity <= 0.01) return;
+
+      var driftX = animEnabled ? Math.sin(t * 0.33 + region.phase) * 12 : 0;
+      var driftY = animEnabled ? Math.cos(t * 0.27 + region.phase) * 5 : 0;
+      ctx.save();
+      ctx.globalAlpha = Math.min(1, opacity);
+      var mist = ctx.createRadialGradient(region.x + driftX, region.y + driftY, 10, region.x + driftX, region.y + driftY, region.rx);
+      mist.addColorStop(0, 'rgba(222, 234, 226, 0.64)');
+      mist.addColorStop(0.52, 'rgba(190, 207, 197, 0.40)');
+      mist.addColorStop(1, 'rgba(177, 197, 187, 0)');
+      ctx.fillStyle = mist;
+      ctx.beginPath();
+      ctx.ellipse(region.x + driftX, region.y + driftY, region.rx, region.ry, -0.08, 0, Math.PI * 2);
+      ctx.fill();
+      for (var puff = 0; puff < 7; puff++) {
+        var angle = puff * 0.91 + region.phase;
+        var wobble = animEnabled ? Math.sin(t * 0.48 + puff + region.phase) * 8 : 0;
+        var px = region.x + Math.cos(angle) * region.rx * 0.58 + driftX + wobble;
+        var py = region.y + Math.sin(angle) * region.ry * 0.58 + driftY;
+        var prx = region.rx * (0.18 + (puff % 3) * 0.035);
+        var pry = region.ry * (0.19 + (puff % 2) * 0.04);
+        var cloud = ctx.createRadialGradient(px, py, 2, px, py, prx);
+        cloud.addColorStop(0, 'rgba(235, 242, 237, 0.48)');
+        cloud.addColorStop(1, 'rgba(214, 226, 218, 0)');
+        ctx.fillStyle = cloud;
+        ctx.beginPath();
+        ctx.ellipse(px, py, prx, pry, angle * 0.2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      if (locked && opacity > 0.62) {
+        ctx.font = '800 10px system-ui,sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = 'rgba(239, 248, 241, 0.82)';
+        ctx.fillText('НЕИЗВЕДАННАЯ ОБЛАСТЬ', region.x, region.y + region.ry * 0.72);
+      }
+      ctx.restore();
+    });
+  }
+
+  function drawFloatingTexts() {
+    if (!animState.floatingTexts.length) return;
+    ctx.save();
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = '900 17px system-ui,"Apple Color Emoji","Segoe UI Emoji",sans-serif';
+    ctx.lineWidth = 3.4;
+    ctx.lineJoin = 'round';
+    animState.floatingTexts.forEach(function(item) {
+      var alpha = Math.max(0, 1 - item.life / item.maxLife);
+      ctx.globalAlpha = alpha;
+      ctx.strokeStyle = 'rgba(16, 27, 20, 0.94)';
+      ctx.strokeText(item.text, item.x, item.y);
+      ctx.fillStyle = item.color;
+      ctx.fillText(item.text, item.x, item.y);
+    });
+    ctx.restore();
+  }
+
+  function setNpcCooldown(npcId, durationMs) {
+    var cooldowns = readJSON(NPC_COOLDOWN_KEY) || {};
+    cooldowns[npcId] = Date.now() + durationMs;
+    try { localStorage.setItem(NPC_COOLDOWN_KEY, JSON.stringify(cooldowns)); } catch(e) {}
+  }
+
+  function closeNpcQuest() {
+    if (npcQuestTimer) { window.clearInterval(npcQuestTimer); npcQuestTimer = null; }
+    if (activeNpcQuest && !activeNpcQuest.resolved) setNpcCooldown(activeNpcQuest.npc.id, 60 * 1000);
+    var modal = document.getElementById('roadNpcQuestModal');
+    if (modal) { modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true'); }
+    activeNpcQuest = null;
+  }
+
+  function openNpcQuest(npc) {
+    var cooldowns = readJSON(NPC_COOLDOWN_KEY) || {};
+    var remaining = Number(cooldowns[npc.id] || 0) - Date.now();
+    if (remaining > 0) {
+      showToastIfAvailable(npc.name + ' отдыхает ещё ' + Math.ceil(remaining / 60000) + ' мин.');
+      return;
+    }
+
+    var modal = document.getElementById('roadNpcQuestModal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'roadNpcQuestModal';
+      modal.className = 'road-npc-overlay';
+      modal.setAttribute('role', 'dialog');
+      modal.setAttribute('aria-modal', 'true');
+      modal.setAttribute('aria-labelledby', 'roadNpcQuestTitle');
+      modal.setAttribute('aria-hidden', 'true');
+      modal.innerHTML = '<div class="road-npc-dialog"><header class="road-npc-head"><div><div class="road-npc-kicker">СЛУЧАЙНАЯ ВСТРЕЧА</div><h2 id="roadNpcQuestTitle"></h2></div><button type="button" class="road-npc-close" aria-label="Закрыть задание">×</button></header><div class="road-npc-body"><div class="road-npc-timer" id="roadNpcTimer">⏱ 60 сек.</div><p id="roadNpcQuestion" class="road-npc-question"></p><div id="roadNpcAnswers" class="road-npc-answers"></div><div id="roadNpcFeedback" class="road-npc-feedback" role="status" aria-live="polite"></div><div class="road-npc-footer"><span>Правильный ответ принесёт монеты.</span><button type="button" class="curriculum-action primary" id="roadNpcDone">Закрыть</button></div></div></div>';
+      document.body.appendChild(modal);
+      modal.querySelector('.road-npc-close').addEventListener('click', closeNpcQuest);
+      modal.querySelector('#roadNpcDone').addEventListener('click', closeNpcQuest);
+      modal.addEventListener('click', function(e){ if (e.target === modal) closeNpcQuest(); });
+    }
+
+    var question = NPC_QUESTS[Math.floor(Math.random() * NPC_QUESTS.length)];
+    var pos = npcPosition(npc) || {x:(BY_ID[selectedId] || COURSES[0]).wx,y:(BY_ID[selectedId] || COURSES[0]).wy};
+    activeNpcQuest = {npc:npc,question:question,x:pos.x,y:pos.y,deadline:Date.now()+60000,resolved:false};
+    modal.querySelector('#roadNpcQuestTitle').textContent = npc.icon + ' ' + npc.name;
+    modal.querySelector('#roadNpcQuestion').textContent = question.question;
+    modal.querySelector('#roadNpcFeedback').textContent = '';
+    modal.querySelector('#roadNpcFeedback').className = 'road-npc-feedback';
+    modal.querySelector('#roadNpcTimer').textContent = '⏱ 60 сек.';
+    var answerBox = modal.querySelector('#roadNpcAnswers');
+    answerBox.innerHTML = '';
+    question.answers.forEach(function(answer, index) {
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'road-npc-answer';
+      button.textContent = answer;
+      button.addEventListener('click', function() {
+        if (!activeNpcQuest || activeNpcQuest.resolved) return;
+        var state = activeNpcQuest;
+        state.resolved = true;
+        if (npcQuestTimer) { window.clearInterval(npcQuestTimer); npcQuestTimer = null; }
+        var feedback = modal.querySelector('#roadNpcFeedback');
+        Array.prototype.forEach.call(answerBox.querySelectorAll('button'), function(b){ b.disabled = true; });
+        if (index === state.question.correct) {
+          setNpcCooldown(state.npc.id, 10 * 60 * 1000);
+          var rewardId = 'npc:' + state.npc.id + ':' + localDayStamp();
+          var paid = window.DataCraftEconomy && window.DataCraftEconomy.earn(rewardId, state.question.reward, 'Мини-квест: ' + state.npc.name);
+          if (paid) {
+            feedback.textContent = 'Верно! ' + state.question.explanation + ' Награда: +' + state.question.reward + ' 🪙.';
+            feedback.classList.add('success');
+            spawnFloatingAt(state.x, state.y - 18, '+' + state.question.reward + ' 🪙', '#ffe484');
+          } else {
+            feedback.textContent = 'Верно! Дневная награда за эту встречу уже получена. ' + state.question.explanation;
+            feedback.classList.add('success');
+          }
+        } else {
+          setNpcCooldown(state.npc.id, 2 * 60 * 1000);
+          feedback.textContent = 'Не совсем. ' + state.question.explanation;
+          feedback.classList.add('error');
+        }
+        modal.querySelector('#roadNpcTimer').textContent = '✓ Испытание завершено';
+      });
+      answerBox.appendChild(button);
+    });
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    var firstAnswer = answerBox.querySelector('button');
+    if (firstAnswer) firstAnswer.focus();
+
+    npcQuestTimer = window.setInterval(function() {
+      if (!activeNpcQuest || activeNpcQuest.resolved) return;
+      var seconds = Math.max(0, Math.ceil((activeNpcQuest.deadline - Date.now()) / 1000));
+      modal.querySelector('#roadNpcTimer').textContent = '⏱ ' + seconds + ' сек.';
+      if (seconds <= 0) {
+        activeNpcQuest.resolved = true;
+        setNpcCooldown(activeNpcQuest.npc.id, 2 * 60 * 1000);
+        Array.prototype.forEach.call(answerBox.querySelectorAll('button'), function(b){ b.disabled = true; });
+        var feedback = modal.querySelector('#roadNpcFeedback');
+        feedback.textContent = 'Время вышло. ' + activeNpcQuest.question.explanation;
+        feedback.classList.add('error');
+        modal.querySelector('#roadNpcTimer').textContent = '⌛ Время вышло';
+        if (npcQuestTimer) { window.clearInterval(npcQuestTimer); npcQuestTimer = null; }
+      }
+    }, 250);
+  }
+
   /* Draw ambient map animations (waterfall, river current, harbor boats bobbing, campfires, clouds, birds) */
   function drawAmbientWorldFX(t) {
     ctx.save();
@@ -956,7 +1302,11 @@
       ctx.restore();
     });
 
-    /* 4. Dynamically draw each building from datacraft-sprites.png onto its empty terrain pad */
+    /* 4. Shroud inaccessible regions, then render the course sites on top so their locks remain discoverable. */
+    drawRoadNPCs(t);
+    drawFogOfWar(t);
+
+    /* 5. Dynamically draw each building from datacraft-sprites.png onto its empty terrain pad */
     COURSES.forEach(function(c) {
       var st = getStatus(c), p = st.progress;
       var isSelected = selectedId === c.id, isHovered = hoveredId === c.id;
@@ -1069,6 +1419,7 @@
     if (animEnabled) {
       drawSkyAndParticles(t);
     }
+    drawFloatingTexts();
   }
 
   function roundRect(c, x, y, w, h, r) {
@@ -1083,8 +1434,10 @@
   }
 
   function renderAll() {
+    cachedNpcRoads = null;
     if (window.DataCraftEconomy) window.DataCraftEconomy.sync();
     var w = walletState(), coinLabel = document.getElementById('curriculumCoins');
+    scanWalletTransactions(w);
     if (coinLabel) coinLabel.textContent = '🪙 ' + (w.balance || 0) + ' монет';
     drawMap();
     renderCourseList();
@@ -1108,23 +1461,31 @@
   }
 
   canvas.addEventListener('click', function(e) {
-    var hit = findCourseAtPoint(pointFromEvent(e));
+    var point = pointFromEvent(e);
+    var npc = findNpcAtPoint(point);
+    if (npc) { openNpcQuest(npc); return; }
+    var hit = findCourseAtPoint(point);
     if (hit) selectCourse(hit.id, false);
   });
 
   canvas.addEventListener('mousemove', function(e) {
-    var hit = findCourseAtPoint(pointFromEvent(e));
+    var point = pointFromEvent(e);
+    var npc = findNpcAtPoint(point);
+    var hit = npc ? null : findCourseAtPoint(point);
+    var newNpcHover = npc ? npc.id : null;
     var newHover = hit ? hit.id : null;
-    if (newHover !== hoveredId) {
+    if (newNpcHover !== hoveredNpcId || newHover !== hoveredId) {
+      hoveredNpcId = newNpcHover;
       hoveredId = newHover;
-      canvas.style.cursor = hoveredId ? 'pointer' : 'grab';
+      canvas.style.cursor = (hoveredNpcId || hoveredId) ? 'pointer' : 'grab';
       if (!animEnabled) drawMap();
     }
   });
 
   canvas.addEventListener('mouseleave', function() {
-    if (hoveredId !== null) {
+    if (hoveredId !== null || hoveredNpcId !== null) {
       hoveredId = null;
+      hoveredNpcId = null;
       if (!animEnabled) drawMap();
     }
   });
@@ -1163,6 +1524,18 @@
   });
   window.addEventListener('focus', renderAll);
   window.addEventListener('pageshow', renderAll);
+  /* Wallet sync may emit one event per reward; coalesce them to avoid recursive renderAll() calls. */
+  window.addEventListener('datacraft:wallet-updated', function() {
+    if (walletRefreshScheduled) return;
+    walletRefreshScheduled = true;
+    window.setTimeout(function() {
+      walletRefreshScheduled = false;
+      renderAll();
+    }, 0);
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && document.getElementById('roadNpcQuestModal') && document.getElementById('roadNpcQuestModal').classList.contains('open')) closeNpcQuest();
+  });
   window.addEventListener('storage', function(e){
     if (!e.key || e.key.indexOf('apk-') === 0 || ['sqlkit-v1','epk','ppk','pbikt-v1','spk','tpk','clk-v1','fmk-v1','sim2','ipk','datacraft-wallet-v1'].indexOf(e.key) >= 0) renderAll();
   });
