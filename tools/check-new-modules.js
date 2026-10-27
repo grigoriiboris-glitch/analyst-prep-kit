@@ -99,6 +99,17 @@ for (const page of [
   assert.ok(lastStyleAt >= 0 && lastStyleAt < linkAt, "Shared theme must load after legacy inline CSS: " + page);
 }
 
+assert.ok(sharedThemeCss.includes('html[data-course-theme="tool"]'), "Shared theme token bridge for practice tools is missing");
+for (const page of [
+  "plan/index.html", "path/index.html", "drill/index.html", "viz/index.html",
+  "excel/plan/index.html", "tableau/plan/index.html"
+]) {
+  const html = fs.readFileSync(path.join(root, page), "utf8");
+  assert.ok(html.includes('data-course-theme="tool"'), "Shared theme is not enabled for practice tool " + page);
+  assert.ok(html.includes("assets/grain/grain.css"), "Grain tokens are not loaded by " + page);
+  assert.ok(html.includes("legacy-course-theme.css"), "Shared theme bridge is not loaded by " + page);
+}
+
 const businessAnalysis = fs.readFileSync(path.join(root, "business-analysis/index.html"), "utf8");
 assert.equal(businessAnalysis.split('<article class="lesson').length - 1, 9, "Business-analysis module must contain exactly 9 lessons");
 for (const feature of ["lessonNav", "progressBar", "resetProgress", "reviewCase", "saveCase", "copySpec", "exportSpec", "caseFeedback"]) {
