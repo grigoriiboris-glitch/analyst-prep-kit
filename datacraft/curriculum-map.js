@@ -306,6 +306,27 @@
         return false;
     }
   }
+  function lessonRewardClaimId(course,lesson,parentId) {
+    switch(course.tracker) {
+      case 'foundations': return 'foundations:lesson:'+lesson.id;
+      case 'quality': return 'quality:category:'+lesson.id;
+      case 'sql': return 'sql:lesson:'+lesson.id;
+      case 'excel': return 'excel:lesson:'+lesson.id;
+      case 'python': return 'python:lesson:'+lesson.id;
+      case 'powerbi': return 'powerbi:lesson:'+lesson.id;
+      case 'charts':
+      case 'stats':
+      case 'forecasting':
+      case 'tableau': return course.tracker+':lesson'+lesson.id;
+      case 'decision': return 'decision:lesson:'+lesson.id;
+      case 'portfolio': return 'portfolio:'+parentId+':criterion:'+lesson.id;
+      case 'simulator': return 'simulator:review:'+lesson.id;
+      case 'interview': return 'interview:lesson:'+lesson.id;
+      case 'final': return lesson.id==='exam-submit'?'final:submitted':'final:section:'+lesson.id;
+      case 'cert': return lesson.id==='exam-submit'?'cert:'+(course.catalogId||course.id)+':submitted':null;
+      default: return null;
+    }
+  }
   function lessonListHTML(course) {
     var catalog=courseCatalog(course),tracker=course.tracker||course.id;
     if(!catalog.length)return '<div class="curriculum-empty">Для этого раздела ещё нет списка уроков.</div>';
@@ -313,6 +334,8 @@
     function row(item,parentId,depth) {
       var done=isLessonComplete(course,item,parentId);
       if(done)doneCount++;
+      var claimId=lessonRewardClaimId(course,item,parentId);
+      var walletNow=walletState(),rewardAlreadyClaimed=!!(claimId&&walletNow.claimed&&walletNow.claimed[claimId]);
       var amount=course.tracker==='foundations'?2:(course.tracker==='decision'||course.tracker==='charts'||course.tracker==='stats'||course.tracker==='forecasting'?2:1);
       if(course.tracker==='quality')amount=1;
       if(course.tracker==='portfolio')amount=1;
@@ -320,7 +343,7 @@
       if(course.tracker==='final')amount=2;
       if(course.tracker==='projectStudio')amount=0;
       if(course.tracker==='cert')amount=0;
-      return '<div class="curriculum-lesson-row'+(done?' passed':'')+(depth?' nested':'')+'"><span class="curriculum-lesson-check">'+(done?'✓':'○')+'</span><span class="curriculum-lesson-copy"><span class="curriculum-lesson-title">'+safeText(item.title)+'</span>'+(item.goal?'<span class="curriculum-lesson-goal">'+safeText(item.goal)+'</span>':'')+'</span><span class="curriculum-lesson-reward">'+(done?'Зачтено':(amount?'+'+amount+' 🪙':'Этап'))+'</span></div>';
+      return '<div class="curriculum-lesson-row'+(done?' passed':'')+(depth?' nested':'')+'"><span class="curriculum-lesson-check">'+(done?'✓':'○')+'</span><span class="curriculum-lesson-copy"><span class="curriculum-lesson-title">'+safeText(item.title)+'</span>'+(item.goal?'<span class="curriculum-lesson-goal">'+safeText(item.goal)+'</span>':'')+'</span><span class="curriculum-lesson-reward">'+(done?'Зачтено':(rewardAlreadyClaimed?'Монеты уже получены':(amount?'+'+amount+' 🪙':'Этап')))+'</span></div>';
     }
     if(course.tracker==='portfolio') {
       catalog.forEach(function(project){
