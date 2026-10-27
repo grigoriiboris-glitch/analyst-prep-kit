@@ -599,9 +599,9 @@
       ctx.fillStyle=border;ctx.beginPath();ctx.arc(c.x+18,c.y+18,4,0,Math.PI*2);ctx.fill();
       ctx.textAlign='left';ctx.fillStyle='#eaf4e7';ctx.font='800 11px system-ui';
       wrapText(ctx,c.short,c.x+12,c.y+34,NODE_W-24,14,2);
-      ctx.fillStyle=st.done?'#a8eeae':(st.unlocked?'#f4d987':'#a7b4a7');
+      ctx.fillStyle=st.built?'#a8eeae':(st.unlocked&&st.courseComplete?'#f4d987':(st.unlocked?'#d4d7a4':'#a7b4a7'));
       ctx.font='700 9px system-ui';
-      ctx.fillText(st.done?(c.id==='final'?'✓ ЭКЗАМЕН ЗАВЕРШЁН':'✓ ПОСТРОЕНО'):(st.unlocked?'◆ МОЖНО СТРОИТЬ':'🔒 ЗАКРЫТО'),c.x+12,c.y+62);
+      ctx.fillText(st.built?(c.id==='final'?'✓ ЭКЗАМЕН ЗАВЕРШЁН':'✓ ПОСТРОЕНО'):(!st.unlocked?'🔒 ЗАКРЫТО':(st.courseComplete?'◆ ГОТОВО К СТРОЙКЕ':'● МОЖНО ИЗУЧАТЬ')),c.x+12,c.y+62);
       ctx.fillStyle='#0e1b13';roundRect(ctx,c.x+12,c.y+70,NODE_W-24,5,3);ctx.fill();
       if(p.percent>0){ctx.fillStyle=st.built?'#83d990':(st.unlocked&&st.courseComplete?'#e5c56e':(st.unlocked?'#c4bd72':'#7b9280'));roundRect(ctx,c.x+12,c.y+70,(NODE_W-24)*p.percent/100,5,3);ctx.fill();}
       ctx.fillStyle='#b6c8b7';ctx.font='9px system-ui';ctx.fillText(p.done+'/'+p.total+' '+p.label,c.x+12,c.y+84);
