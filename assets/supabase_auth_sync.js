@@ -235,20 +235,17 @@ class SyncQueue {
 
   addSnapshot(userId, kitId, state) {
     if (!userId || !kitId || !state) return;
-    this.queue = this.queue.filter(item => !(item.kind === 'snapshot' && item.userId === userId && item.kitId === kitId));
-    this.queue.push({ kind: 'snapshot', userId, kitId, state, queuedAt: Date.now() });
+    this.queue = apkProgressApi().mergeSyncQueue(this.queue, {
+      kind: 'snapshot', userId, kitId, state, queuedAt: Date.now()
+    });
     this.save();
   }
 
   addRow(row) {
     if (!row || !row.user_id) return;
-    this.queue = this.queue.filter(item => {
-      const previous = item.row || item;
-      return !(item.kind === 'row' && previous.user_id === row.user_id &&
-        previous.kit_id === row.kit_id && previous.lesson_id === row.lesson_id &&
-        previous.drill_id === row.drill_id);
+    this.queue = apkProgressApi().mergeSyncQueue(this.queue, {
+      kind: 'row', userId: row.user_id, row, queuedAt: Date.now()
     });
-    this.queue.push({ kind: 'row', userId: row.user_id, row, queuedAt: Date.now() });
     this.save();
   }
 
@@ -420,37 +417,21 @@ async function restoreAllProgress(options) {
           if (!api.isAllowedKey(key) || api.getKitIdForKey(key) !== kitId) return;
           const cloudEntry = entries[key];
           if (!cloudEntry || (cloudEntry.deleted !== true && typeof cloudEntry.value !== 'string')) return;
-          const localStamp = Number((meta[key] || {}).updatedAt) || 0;
-          const cloudStamp = Number(cloudEntry.updatedAt) || 0;
-          const localDeleted = !!(meta[key] && meta[key].deleted);
-          if (localDeleted && localStamp >= cloudStamp) return;
-
-          if (cloudEntry.deleted) {
-            if (cloudStamp > localStamp && localStorage.getItem(key) !== null) {
-              Storage.prototype.removeItem.call(localStorage, key);
-              meta[key] = { updatedAt: cloudStamp, deleted: true };
-              restoredKeys.push(key);
-              changed = true;
-            }
-            return;
-          }
-
           const localRaw = localStorage.getItem(key);
-          let nextRaw;
-          if (key === 'datacraft-wallet-v1' || /(?:-last-visit|apk-quality-score)$/.test(key)) {
-            nextRaw = localRaw === null || cloudStamp > localStamp ? cloudEntry.value : localRaw;
-          } else {
-            nextRaw = api.mergeRaw(localRaw, cloudEntry.value, key);
-          }
-          if (nextRaw !== localRaw) {
-            Storage.prototype.setItem.call(localStorage, key, nextRaw);
+          const resolution = api.resolveSnapshotEntry(localRaw, meta[key], cloudEntry, key);
+          if (resolution.action === 'delete') {
+            Storage.prototype.removeItem.call(localStorage, key);
+            restoredKeys.push(key);
+            changed = true;
+          } else if (resolution.action === 'set') {
+            Storage.prototype.setItem.call(localStorage, key, resolution.value);
             restoredKeys.push(key);
             changed = true;
           }
-          meta[key] = {
-            updatedAt: Math.max(localStamp, cloudStamp),
-            deleted: false,
-          };
+          if (resolution.updatedAt !== (Number((meta[key] || {}).updatedAt) || 0) ||
+              resolution.deleted !== !!(meta[key] && meta[key].deleted)) {
+            meta[key] = { updatedAt: resolution.updatedAt, deleted: resolution.deleted };
+          }
         });
       });
 
