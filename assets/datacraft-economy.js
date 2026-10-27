@@ -60,6 +60,7 @@
     if(wallet.transactions.length>120)wallet.transactions=wallet.transactions.slice(-120);
   }
   function earn(id,amount,reason){
+    wallet=load();
     amount=Math.max(0,Math.floor(Number(amount)||0));
     if(!id||amount<=0||wallet.claimed[id])return false;
     wallet.claimed[id]=true;
@@ -68,6 +69,7 @@
     persist();return true;
   }
   function spend(amount,reason,id){
+    wallet=load();
     amount=Math.max(0,Math.floor(Number(amount)||0));
     if(amount<=0)return true;
     if(id&&wallet.purchases[id])return true;
@@ -166,6 +168,7 @@
     return false;
   }
   function sync(){
+    wallet=load();
     var before=wallet.balance,items=completedItems();
     items.forEach(function(item){earn(item.id,item.amount,item.title);});
     Object.keys(CATALOG).forEach(function(course){
