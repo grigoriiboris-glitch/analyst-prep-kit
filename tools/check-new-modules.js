@@ -78,6 +78,27 @@ assert.ok(fs.existsSync(path.join(root, "decision-making/CHECKLIST_RU.md")), "De
 const decisionChecklist = fs.readFileSync(path.join(root, "decision-making/CHECKLIST_RU.md"), "utf8");
 assert.ok(decisionChecklist.includes("Универсальная цепочка"), "Decision-making checklist is incomplete");
 
+const sharedThemeCssPath = path.join(root, "assets/grain/legacy-course-theme.css");
+assert.ok(fs.existsSync(sharedThemeCssPath), "Shared legacy course theme stylesheet is missing");
+const sharedThemeCss = fs.readFileSync(sharedThemeCssPath, "utf8");
+for (const token of ["--color-bg", "--font-sans", "--font-display", ".hero", ".card", ".quiz", ".progressbar"]) {
+  assert.ok(sharedThemeCss.includes(token), "Shared legacy course theme rule/token missing: " + token);
+}
+for (const page of [
+  "foundations/index.html",
+  "data-quality/index.html",
+  "decision-making/index.html",
+  "business-analysis/index.html",
+  "portfolio-projects/index.html"
+]) {
+  const html = fs.readFileSync(path.join(root, page), "utf8");
+  const linkAt = html.indexOf('href="../assets/grain/legacy-course-theme.css"');
+  assert.ok(linkAt >= 0, "Shared Grain theme is not linked from " + page);
+  assert.ok(html.includes('data-course-theme="grain"'), "Shared Grain theme scope is missing from " + page);
+  const lastStyleAt = html.lastIndexOf("</style>", linkAt);
+  assert.ok(lastStyleAt >= 0 && lastStyleAt < linkAt, "Shared theme must load after legacy inline CSS: " + page);
+}
+
 const businessAnalysis = fs.readFileSync(path.join(root, "business-analysis/index.html"), "utf8");
 assert.equal(businessAnalysis.split('<article class="lesson').length - 1, 9, "Business-analysis module must contain exactly 9 lessons");
 for (const feature of ["lessonNav", "progressBar", "resetProgress", "reviewCase", "saveCase", "copySpec", "exportSpec", "caseFeedback"]) {
