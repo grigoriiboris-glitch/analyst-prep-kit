@@ -96,6 +96,7 @@
   var SEEN_WALLET_TX_KEY = 'datacraft-map-seen-wallet-transactions-v1';
   var NPC_COOLDOWN_KEY = 'datacraft-road-npc-cooldowns-v1';
   var hoveredNpcId = null;
+  var cachedNpcRoads = null;
   var activeNpcQuest = null;
   var npcQuestTimer = null;
   var walletRefreshScheduled = false;
@@ -889,12 +890,14 @@
   }
 
   function activeNpcRoads() {
-    return graph.filter(function(edge) {
+    if (cachedNpcRoads) return cachedNpcRoads;
+    cachedNpcRoads = graph.filter(function(edge) {
       var from = BY_ID[edge[0]], to = BY_ID[edge[1]];
       if (!from || !to) return false;
       var fs = getStatus(from), ts = getStatus(to);
       return fs.built && (ts.built || ts.unlocked);
     });
+    return cachedNpcRoads;
   }
 
   function npcPosition(npc) {
@@ -1431,6 +1434,7 @@
   }
 
   function renderAll() {
+    cachedNpcRoads = null;
     if (window.DataCraftEconomy) window.DataCraftEconomy.sync();
     var w = walletState(), coinLabel = document.getElementById('curriculumCoins');
     scanWalletTransactions(w);
