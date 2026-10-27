@@ -65,6 +65,27 @@ test('cloud restore loads a remote save when the local browser is empty', () => 
   assert.deepEqual(JSON.parse(resolution.value), { doneLessons: [10], doneBugs: [2] });
 });
 
+test('cloud wallet restores over a fresh local starter wallet when the cloud copy is newer', () => {
+  const local = JSON.stringify({ version: 1, balance: 10, totalEarned: 0, totalSpent: 0 });
+  const cloud = JSON.stringify({ version: 1, balance: 84, totalEarned: 120, totalSpent: 36 });
+  const resolution = progress.resolveSnapshotEntry(
+    local,
+    { updatedAt: 0, deleted: false },
+    { value: cloud, updatedAt: 500, deleted: false },
+    'datacraft-wallet-v1'
+  );
+  assert.equal(resolution.action, 'set');
+  assert.deepEqual(JSON.parse(resolution.value), JSON.parse(cloud));
+});
+
+test('cloud writes wait until the signed-in account has restored its snapshot', () => {
+  assert.equal(progress.canSyncCloud('user-a', null, false), false);
+  assert.equal(progress.canSyncCloud('user-a', 'user-b', false), false);
+  assert.equal(progress.canSyncCloud('user-a', 'user-a', false), true);
+  assert.equal(progress.canSyncCloud('user-a', null, true), true);
+  assert.equal(progress.canSyncCloud(null, null, true), false);
+});
+
 test('a newer local deletion is not undone by an older cloud snapshot', () => {
   const resolution = progress.resolveSnapshotEntry(
     null,
@@ -169,6 +190,8 @@ test('DataCraft does not award the same coin reward twice', () => {
   );
 
   const wallet = window.DataCraftEconomy;
+  // A fresh default must not be timestamped as user progress before cloud restore.
+  assert.equal(storage.getItem('datacraft-wallet-v1'), null);
   const before = wallet.getBalance();
   assert.equal(wallet.earn('test:one-time-reward', 3, 'test reward'), true);
   assert.equal(wallet.earn('test:one-time-reward', 3, 'test reward'), false);
