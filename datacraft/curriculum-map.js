@@ -17,6 +17,7 @@
     powerbi: 'pbikt-v1',
     tableau: 'tpk',
     decision: 'apk-decision-thinking-progress-v1',
+    businessAnalysis: 'apk-business-analysis-progress-v1',
     portfolio: 'apk-portfolio-',
     simulator: 'sim2',
     interview: 'ipk',
@@ -44,6 +45,7 @@
 
   var SPECIALIZATIONS = [
     {id:'project-studio',title:'Проектная мастерская',icon:'🗂️',path:'../projects/',tracker:'projectStudio',catalogId:'projectStudio',total:4,unit:'этапов',cost:18,requires:['portfolio'],desc:'Спланируй собственный проект: сформулируй бизнес-вопрос, критерии, этапы анализа и презентацию.'},
+    {id:'business-analysis',cost:12,title:'Основы бизнес-анализа',icon:'🧭',path:'../business-analysis/',tracker:'businessAnalysis',total:9,unit:'уроков',requires:['foundations'],desc:'Постановка бизнес-проблемы, сбор требований, User Stories, BPMN, критерии приёмки и итоговый кейс.'},
     {id:'excel-cert',cost:12,title:'Сертификат Excel MO-210',icon:'📗',path:'../excel-cert/',storage:'apk-excelcert',requires:['excel'],desc:'Отдельная подготовка к сертификационному экзамену Excel.'},
     {id:'excel-expert',walletId:'excel-expert-cert',cost:15,catalogId:'excel-expert-cert',title:'Эксперт Excel MO-211',icon:'🏅',path:'../excel-expert-cert/',storage:'apk-excelexpertcert',requires:['excel-cert'],desc:'Продвинутый уровень Excel после базовой сертификационной ветки.'},
     {id:'powerbi-cert',cost:15,title:'Power BI PL-300',icon:'📊',path:'../powerbi-cert/',storage:'apk-pbicert',requires:['powerbi'],desc:'Дополнительная подготовка к сертификации Power BI.'},
@@ -445,6 +447,11 @@
       case 'forecasting':
       case 'tableau':
         s = readJSON(STORE[course.tracker]) || {}; count = countTrueLessonKeys(s.done || {}); break;
+      case 'businessAnalysis':
+        s = readJSON(STORE.businessAnalysis) || {};
+        count = countTrueMap(s, function(k){return /^\d+$/.test(k);});
+        total = 9; label = 'уроков';
+        break;
       case 'decision':
         s = readJSON(STORE.decision) || [];
         count = Array.isArray(s) ? new Set(s.filter(function(id){return /^[1-6]$/.test(String(id));}).map(String)).size : 0;
