@@ -440,7 +440,7 @@
       var desc=document.createElement('p');desc.textContent=formatProgress(p)+' · '+(st.built?'построено':(!st.unlocked?'закрыто':'постройка '+(c.cost||0)+' 🪙'));
       text.append(h,desc);top.append(icon,text);card.append(top);
       var btn=document.createElement('button');btn.type='button';btn.className='curriculum-action'+(st.unlocked?' primary':'');
-      btn.textContent=st.built?'Открыть / повторить':(!st.unlocked?'Посмотреть требования':(st.courseComplete?'Построить за '+(c.cost||0)+' 🪙':'Выбрать здание'));
+      btn.textContent=st.built?'Открыть / повторить':(!st.unlocked?'Посмотреть требования':(st.courseComplete?'Построить за '+(c.cost||0)+' 🪙':'Подробнее о курсе'));
       btn.addEventListener('click',function(){selectCourse(c.id,true);});card.appendChild(btn);specializationList.appendChild(card);
     });
   }
@@ -622,6 +622,9 @@
     lines.forEach(function(v,i){c.fillText(v,x,y+i*lineHeight);});
   }
   function renderAll() {
+    if(window.DataCraftEconomy)window.DataCraftEconomy.sync();
+    var w=walletState(),coinLabel=document.getElementById('curriculumCoins');
+    if(coinLabel)coinLabel.textContent='🪙 '+(w.balance||0)+' монет';
     drawMap();renderCourseList();renderSpecializations();renderDetail();
   }
   function pointFromEvent(e) {
