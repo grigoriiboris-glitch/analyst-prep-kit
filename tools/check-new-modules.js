@@ -155,7 +155,7 @@ for (const [name, count] of catalogMatches) {
   assert.ok(match, "DataCraft lesson catalog missing: " + name);
   const nextArray = lessonCatalog.slice(match.index);
   const opening = nextArray.indexOf("[");
-  let depth = 0, quote = null, escape = false, found = 0;
+  let depth = 0, curly = 0, quote = null, escape = false, found = 0;
   for (let i = opening; i < nextArray.length; i++) {
     const ch = nextArray[i];
     if (quote) {
@@ -167,7 +167,11 @@ for (const [name, count] of catalogMatches) {
     if (ch === '"' || ch === "'") { quote = ch; continue; }
     if (ch === "[") { depth++; continue; }
     if (ch === "]") { depth--; if (depth === 0) break; continue; }
-    if (depth === 1 && ch === "{" && /\bid\s*:/.test(nextArray.slice(i, i + 80))) found++;
+    if (ch === "{") {
+      if (depth === 1 && curly === 0 && /\bid\s*:/.test(nextArray.slice(i, i + 80))) found++;
+      curly++; continue;
+    }
+    if (ch === "}") { curly--; continue; }
   }
   assert.equal(found, count, "DataCraft lesson count mismatch for " + name);
 }
