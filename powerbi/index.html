@@ -4392,17 +4392,19 @@ function showToast(msg){
 loadState();
 _migrateConfidence();
 bumpStreak(); // Batch 5 return loop: opening the kit counts toward today's streak
-const _hasLessonDeepLink=/^#lesson-\d+(?:-restart)?$/.test(location.hash||'');
-const _staged=Object.keys(state.lessonStage||{}).filter(id=>DATA.LESSONS.some(l=>l.id===Number(id)));
-const _fallback=_staged.length?Number(_staged[_staged.length-1]):(state.doneLessons.length?Number(state.doneLessons[state.doneLessons.length-1]):null);
-const _resumeId=DATA.LESSONS.some(l=>l.id===Number(state.currentLesson))?Number(state.currentLesson):_fallback;
-const _resume=DATA.LESSONS.find(l=>l.id===_resumeId);
-if(!_hasLessonDeepLink&&_resume)navigate('lesson',_resume.id);else navigate('home');
+navigate('home');
 /* Cert-kit deep link: /powerbi/#lesson-<id> opens that lesson directly. */
 window.addEventListener('load', function(){
   /* #lesson-<id>-restart (PrepLoop sittings) resets the saved stage so it opens at the beginning */
   var m = location.hash.match(/^#lesson-(\d+)(-restart)?$/);
   if(m){ try{ if(m[2]) resetLesson(+m[1]); else navigate('lesson', +m[1]); }catch(e){} }
+  else {
+    const _staged=Object.keys(state.lessonStage||{}).filter(id=>DATA.LESSONS.some(l=>l.id===Number(id)));
+    const _fallback=_staged.length?Number(_staged[_staged.length-1]):(state.doneLessons.length?Number(state.doneLessons[state.doneLessons.length-1]):null);
+    const _resumeId=DATA.LESSONS.some(l=>l.id===Number(state.currentLesson))?Number(state.currentLesson):_fallback;
+    const _resume=DATA.LESSONS.find(l=>l.id===_resumeId);
+    if(_resume)navigate('lesson',_resume.id);
+  }
 });
 // Medium #5: one-time "you've unlocked" moment + async account-entitlement hydrate.
 
