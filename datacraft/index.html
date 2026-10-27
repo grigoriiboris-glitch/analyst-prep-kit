@@ -63,7 +63,7 @@ footer{max-width:1500px;margin:auto;padding:0 20px 24px;color:#8fa697;font-size:
       <div class="panel-content">
         <div class="callout"><strong>Задача от торговой гильдии</strong><p>Продажи магазина снизились. Собери данные, подготовь инструменты анализа и объясни, какие показатели нужно проверить прежде, чем делать выводы. Это сквозная мини-миссия, похожая на работу аналитика.</p></div>
         <div id="contractStatus">Сначала собери материалы и построй верстак исследователя. Затем открой SQL-сканер, лабораторию данных и аналитический терминал.</div>
-        <div class="contract-reward">Награда: 100 XP · 10 репутации · редкие материалы</div>
+        <div class="contract-reward">Награда: 15 🪙 · 10 репутации · редкие материалы</div>
         <div class="actions-row" style="margin-top:12px"><button class="btn primary" id="startContract" disabled>Выполнить контракт</button></div>
       </div>
     </div>
@@ -271,7 +271,7 @@ function openNodeChallenge(node){
  const list=QUESTIONS[node.kind]||QUESTIONS.data;
  const n=NODES.filter(x=>x.kind===node.kind).findIndex(x=>x.id===node.id);
  showQuestion(list[Math.max(0,n)%list.length],node.name+' · '+RESOURCE_INFO[node.kind].name,
-  'За правильное решение: '+RESOURCE_INFO[node.kind].icon+' ×'+node.amount+' и 15 XP');
+  'За правильное решение: '+RESOURCE_INFO[node.kind].icon+' ×'+node.amount+' и 2 🪙');
 }
 function showQuestion(question,tag,reward){
  document.getElementById('questionTag').textContent=tag;
@@ -337,7 +337,7 @@ function craft(id){
  if(!canAfford(r.needs)){showToast('Не хватает ресурсов: '+costText(r.needs));return}
  const wallet=getWallet(),coinCost=r.coinCost||0;
  if(wallet.balance<coinCost){showToast('Не хватает '+(coinCost-wallet.balance)+' 🪙 на крафт. Выполни доступные задания.');return}
- if(window.DataCraftEconomy&&!window.DataCraftEconomy.spend(coinCost,'Крафт: '+r.name,'resource-craft:'+r.id)){showToast('Не хватает монет на крафт.');return}
+ if(window.DataCraftEconomy&&!window.DataCraftEconomy.spend(coinCost,'Крафт: '+r.name)){showToast('Не хватает монет на крафт.');return}
  spend(r.needs);
  if(r.kind==='building')state.buildings[id]=true;else state.crafted[id]=true;
  addCoins('craft-reward:'+r.id,1,'Первое создание: '+r.name);
