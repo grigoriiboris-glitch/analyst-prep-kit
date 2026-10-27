@@ -4,7 +4,7 @@
   "use strict";
   if (window.__apkRuLoaded) return;
   window.__apkRuLoaded = true;
-  var langKey="apk-language", cacheKey="apk-ru-cache-v1", lang="ru", requestQueue=Promise.resolve();
+  var langKey="apk-language-v2", cacheKey="apk-ru-cache-v2", lang="ru", requestQueue=Promise.resolve();
   var records=new WeakMap(), tracked=new Set(), pending=new WeakSet(), observer, toggle, muting=false, cache={};
   try { cache=JSON.parse(localStorage.getItem(cacheKey)||"{}"); } catch (_) { cache={}; }
   if(!cache||typeof cache!=="object"||Array.isArray(cache))cache={};
@@ -166,7 +166,7 @@
     if(skip(n)){records.set(n,{source:source,applied:current});return;}
     var text=source.trim(),known=d[norm(text)];
     if(known){var ko=preserve(source,known);muting=true;n.nodeValue=ko;records.set(n,{source:source,applied:ko});muting=false;return;}
-    if(text.length<13||!/\s/.test(text)||/[А-Яа-яЁё]/.test(text)){records.set(n,{source:source,applied:current});return;}
+    if(!/\s/.test(text)||/[А-Яа-яЁё]/.test(text)){records.set(n,{source:source,applied:current});return;}
     pending.add(n);var translated=await online(text);pending.delete(n);
     if(lang!=="ru"||!n.isConnected||n.nodeValue!==source)return;
     if(translated&&translated!==text){var out=preserve(source,translated);muting=true;n.nodeValue=out;records.set(n,{source:source,applied:out});muting=false;}
