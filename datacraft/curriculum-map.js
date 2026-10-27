@@ -22,38 +22,38 @@
   };
 
   var COURSES = [
-    {id:'foundations',title:'Основы аналитики данных',short:'Школа исследователя',icon:'🏕️',path:'../foundations/',tracker:'foundations',total:8,unit:'уроков',stage:0,x:28,y:310,desc:'Базовая грамотность: строки и столбцы, типы данных, ключи, метрики, качество и постановка бизнес-вопроса.',requires:[]},
-    {id:'quality',title:'Качество данных',short:'Лаборатория очистки',icon:'🧪',path:'../data-quality/',tracker:'quality',total:5,unit:'категорий',stage:1,x:280,y:310,desc:'Научись обнаруживать пропуски, дубликаты, ошибки форматов и подозрительные значения, не удаляя данные без проверки.',requires:['foundations']},
-    {id:'sql',title:'SQL',short:'Кузница SQL',icon:'⚙️',path:'../sql/',tracker:'sql',total:48,unit:'уроков',stage:2,x:532,y:80,desc:'От SELECT и фильтрации к JOIN, агрегациям, CTE, оконным функциям и проверке качества результата.',requires:['foundations','quality']},
-    {id:'excel',title:'Excel',short:'Мастерская таблиц',icon:'📗',path:'../excel/',tracker:'excel',total:51,unit:'уроков',stage:2,x:532,y:220,desc:'Формулы, поиск, очистка, сводные таблицы, проверка вычислений и аналитические отчёты.',requires:['foundations','quality']},
-    {id:'charts',title:'Грамотность графиков',short:'Башня визуализации',icon:'📈',path:'../chart-literacy/',tracker:'charts',total:13,unit:'уроков',stage:2,x:532,y:360,desc:'Выбор подходящего графика, правильное чтение визуализаций и поиск вводящих в заблуждение представлений.',requires:['foundations','quality']},
-    {id:'python',title:'Python и pandas',short:'Лес автоматизации',icon:'🐍',path:'../python/',tracker:'python',total:42,unit:'уроков',stage:3,x:782,y:60,desc:'Код для повторяемой обработки данных: базовый Python, pandas, преобразования, объединение и проверка результатов.',requires:['sql','excel']},
-    {id:'stats',title:'Статистика',short:'Обсерватория данных',icon:'🔭',path:'../stats/',tracker:'stats',total:16,unit:'уроков',stage:3,x:782,y:180,desc:'Распределения, выборки, интервалы, A/B-тесты, p-значения и осторожная интерпретация доказательств.',requires:['sql','excel']},
-    {id:'forecasting',title:'Прогнозирование',short:'Башня прогнозов',icon:'🌦️',path:'../forecasting/',tracker:'forecasting',total:13,unit:'уроков',stage:3,x:782,y:300,desc:'Тренд, сезонность, простые прогнозы, проверка точности и объяснение неопределённости.',requires:['stats','charts']},
-    {id:'powerbi',title:'Power BI',short:'Центр BI',icon:'📊',path:'../powerbi/',tracker:'powerbi',total:39,unit:'уроков',stage:3,x:782,y:420,desc:'Модель данных, связи, меры DAX, визуализация и интерактивные отчёты для бизнес-пользователей.',requires:['sql','excel','charts']},
-    {id:'tableau',title:'Tableau',short:'Студия дашбордов',icon:'🟦',path:'../tableau/',tracker:'tableau',total:32,unit:'уроков',stage:3,x:782,y:540,desc:'Работа с измерениями и мерами, визуальные исследования, фильтры, наборы, иерархии и дашборды.',requires:['sql','excel','charts']},
-    {id:'decision',title:'Логика и решения',short:'Зал гипотез',icon:'🧠',path:'../decision-making/',tracker:'decision',total:6,unit:'уроков',stage:4,x:1030,y:60,desc:'Постановка задачи, поиск причин, альтернативные гипотезы, оценка рисков и выбор следующего действия.',requires:['quality','stats','charts']},
-    {id:'portfolio',title:'Проекты для портфолио',short:'Гильдия проектов',icon:'🧰',path:'../portfolio-projects/',tracker:'portfolio',total:3,unit:'кейса',stage:4,x:1030,y:190,desc:'Три практических кейса: продажи, служба поддержки и маркетинг. Каждый должен включать проверку данных, метрики и обоснованный вывод.',requires:['quality','sql','excel','decision'],anyOf:['powerbi','tableau']},
-    {id:'simulator',title:'Симулятор аналитика',short:'Рабочее место',icon:'🧑‍💻',path:'../simulator/',tracker:'simulator',total:10,unit:'задач на проверке',stage:4,x:1030,y:320,desc:'Сценарии из работы младшего аналитика: понять запрос, проверить данные, подготовить решение и получить обратную связь.',requires:['portfolio']},
-    {id:'interview',title:'Подготовка к собеседованию',short:'Арена интервью',icon:'🎤',path:'../interview/',tracker:'interview',total:16,unit:'уроков',stage:4,x:1030,y:450,desc:'Объяснение решений, поведенческие вопросы, работа с неоднозначностью и коммуникация с нетехнической аудиторией.',requires:['sql','excel','decision','portfolio']},
-    {id:'final',title:'Итоговый экзамен',short:'Цитадель аналитика',icon:'🏰',path:'../final/',tracker:'final',total:1,unit:'экзамен',stage:4,x:1030,y:580,desc:'Финальная проверка знаний по Excel, SQL, Python, Tableau, статистике, Power BI и собеседованиям. До неё должны быть завершены все основные ветки.',requires:['foundations','quality','sql','excel','python','charts','stats','forecasting','powerbi','tableau','decision','portfolio','simulator','interview']}
+    {id:'foundations'cost:5,,title:'Основы аналитики данных',short:'Школа исследователя',icon:'🏕️',path:'../foundations/',tracker:'foundations',total:8,unit:'уроков',stage:0,x:28,y:310,desc:'Базовая грамотность: строки и столбцы, типы данных, ключи, метрики, качество и постановка бизнес-вопроса.',requires:[]},
+    {id:'quality'cost:8,,title:'Качество данных',short:'Лаборатория очистки',icon:'🧪',path:'../data-quality/',tracker:'quality',total:5,unit:'категорий',stage:1,x:280,y:310,desc:'Научись обнаруживать пропуски, дубликаты, ошибки форматов и подозрительные значения, не удаляя данные без проверки.',requires:['foundations']},
+    {id:'sql'cost:40,,title:'SQL',short:'Кузница SQL',icon:'⚙️',path:'../sql/',tracker:'sql',total:48,unit:'уроков',stage:2,x:532,y:80,desc:'От SELECT и фильтрации к JOIN, агрегациям, CTE, оконным функциям и проверке качества результата.',requires:['foundations','quality']},
+    {id:'excel'cost:40,,title:'Excel',short:'Мастерская таблиц',icon:'📗',path:'../excel/',tracker:'excel',total:51,unit:'уроков',stage:2,x:532,y:220,desc:'Формулы, поиск, очистка, сводные таблицы, проверка вычислений и аналитические отчёты.',requires:['foundations','quality']},
+    {id:'charts'cost:12,,title:'Грамотность графиков',short:'Башня визуализации',icon:'📈',path:'../chart-literacy/',tracker:'charts',total:13,unit:'уроков',stage:2,x:532,y:360,desc:'Выбор подходящего графика, правильное чтение визуализаций и поиск вводящих в заблуждение представлений.',requires:['foundations','quality']},
+    {id:'python'cost:30,,title:'Python и pandas',short:'Лес автоматизации',icon:'🐍',path:'../python/',tracker:'python',total:42,unit:'уроков',stage:3,x:782,y:60,desc:'Код для повторяемой обработки данных: базовый Python, pandas, преобразования, объединение и проверка результатов.',requires:['sql','excel']},
+    {id:'stats'cost:20,,title:'Статистика',short:'Обсерватория данных',icon:'🔭',path:'../stats/',tracker:'stats',total:16,unit:'уроков',stage:3,x:782,y:180,desc:'Распределения, выборки, интервалы, A/B-тесты, p-значения и осторожная интерпретация доказательств.',requires:['sql','excel']},
+    {id:'forecasting'cost:18,,title:'Прогнозирование',short:'Башня прогнозов',icon:'🌦️',path:'../forecasting/',tracker:'forecasting',total:13,unit:'уроков',stage:3,x:782,y:300,desc:'Тренд, сезонность, простые прогнозы, проверка точности и объяснение неопределённости.',requires:['stats','charts']},
+    {id:'powerbi'cost:25,,title:'Power BI',short:'Центр BI',icon:'📊',path:'../powerbi/',tracker:'powerbi',total:39,unit:'уроков',stage:3,x:782,y:420,desc:'Модель данных, связи, меры DAX, визуализация и интерактивные отчёты для бизнес-пользователей.',requires:['sql','excel','charts']},
+    {id:'tableau'cost:25,,title:'Tableau',short:'Студия дашбордов',icon:'🟦',path:'../tableau/',tracker:'tableau',total:32,unit:'уроков',stage:3,x:782,y:540,desc:'Работа с измерениями и мерами, визуальные исследования, фильтры, наборы, иерархии и дашборды.',requires:['sql','excel','charts']},
+    {id:'decision'cost:18,,title:'Логика и решения',short:'Зал гипотез',icon:'🧠',path:'../decision-making/',tracker:'decision',total:6,unit:'уроков',stage:4,x:1030,y:60,desc:'Постановка задачи, поиск причин, альтернативные гипотезы, оценка рисков и выбор следующего действия.',requires:['quality','stats','charts']},
+    {id:'portfolio'cost:30,,title:'Проекты для портфолио',short:'Гильдия проектов',icon:'🧰',path:'../portfolio-projects/',tracker:'portfolio',total:3,unit:'кейса',stage:4,x:1030,y:190,desc:'Три практических кейса: продажи, служба поддержки и маркетинг. Каждый должен включать проверку данных, метрики и обоснованный вывод.',requires:['quality','sql','excel','decision'],anyOf:['powerbi','tableau']},
+    {id:'simulator'cost:20,,title:'Симулятор аналитика',short:'Рабочее место',icon:'🧑‍💻',path:'../simulator/',tracker:'simulator',total:10,unit:'задач на проверке',stage:4,x:1030,y:320,desc:'Сценарии из работы младшего аналитика: понять запрос, проверить данные, подготовить решение и получить обратную связь.',requires:['portfolio']},
+    {id:'interview'cost:20,,title:'Подготовка к собеседованию',short:'Арена интервью',icon:'🎤',path:'../interview/',tracker:'interview',total:16,unit:'уроков',stage:4,x:1030,y:450,desc:'Объяснение решений, поведенческие вопросы, работа с неоднозначностью и коммуникация с нетехнической аудиторией.',requires:['sql','excel','decision','portfolio']},
+    {id:'final'cost:40,,title:'Итоговый экзамен',short:'Цитадель аналитика',icon:'🏰',path:'../final/',tracker:'final',total:1,unit:'экзамен',stage:4,x:1030,y:580,desc:'Финальная проверка знаний по Excel, SQL, Python, Tableau, статистике, Power BI и собеседованиям. До неё должны быть завершены все основные ветки.',requires:['foundations','quality','sql','excel','python','charts','stats','forecasting','powerbi','tableau','decision','portfolio','simulator','interview']}
   ];
 
   var SPECIALIZATIONS = [
-    {id:'project-studio',title:'Проектная мастерская',icon:'🗂️',path:'../projects/',tracker:'projectStudio',total:1,unit:'готовый проект',requires:['portfolio'],desc:'Спланируй собственный проект: сформулируй бизнес-вопрос, критерии, этапы анализа и презентацию.'},
-    {id:'excel-cert',title:'Сертификат Excel MO-210',icon:'📗',path:'../excel-cert/',storage:'apk-excelcert',requires:['excel'],desc:'Отдельная подготовка к сертификационному экзамену Excel.'},
-    {id:'excel-expert',title:'Excel Expert MO-211',icon:'🏅',path:'../excel-expert-cert/',storage:'apk-excelexpertcert',requires:['excel-cert'],desc:'Продвинутый уровень Excel после базовой сертификационной ветки.'},
-    {id:'powerbi-cert',title:'Power BI PL-300',icon:'📊',path:'../powerbi-cert/',storage:'apk-pbicert',requires:['powerbi'],desc:'Дополнительная подготовка к сертификации Power BI.'},
-    {id:'tableau-cert',title:'Tableau Desktop',icon:'🟦',path:'../tableau-cert/',storage:'apk-tabcert',requires:['tableau'],desc:'Дополнительная подготовка к сертификации Tableau.'},
-    {id:'alteryx-cert',title:'Alteryx Foundation',icon:'🔄',path:'../alteryx-cert/',storage:'apk-alteryxcert',requires:['excel','quality'],desc:'Автоматизация подготовки и преобразования данных.'},
-    {id:'azure-data-cert',title:'Azure Data Fundamentals DP-900',icon:'☁️',path:'../azure-data-cert/',storage:'apk-dp900cert',requires:['foundations','sql'],desc:'Базовые понятия данных и облачных сервисов Azure.'},
-    {id:'databricks-cert',title:'Databricks Lakehouse',icon:'🧱',path:'../databricks-cert/',storage:'apk-dbxcert',requires:['sql','python'],desc:'Дополнительный маршрут по lakehouse и аналитической платформе.'},
-    {id:'ga4-cert',title:'Google Analytics 4',icon:'📣',path:'../ga4-cert/',storage:'apk-ga4cert',requires:['stats','charts'],desc:'Веб-аналитика, события, конверсии и интерпретация поведения пользователей.'},
-    {id:'docusign',title:'DocuSign eSignature Admin',icon:'✍️',path:'../docusign-cert/',storage:'apk-dscert',requires:['foundations'],desc:'Отдельная профессиональная ветка администрирования eSignature.'},
-    {id:'docusign-clm',title:'DocuSign CLM Admin',icon:'📄',path:'../docusign-clm-cert/',storage:'apk-dsclmcert',requires:['docusign'],desc:'Управление жизненным циклом договоров.'},
-    {id:'docusign-clm-workflow',title:'DocuSign CLM Workflow',icon:'🔗',path:'../docusign-clm-workflow-cert/',storage:'apk-dsclmwfcert',requires:['docusign-clm'],desc:'Продвинутая специализация по рабочим процессам CLM.'},
-    {id:'docusign-clm-implementation',title:'DocuSign CLM Implementation',icon:'🛠️',path:'../docusign-clm-implementation-cert/',storage:'apk-dsclmimplcert',requires:['docusign-clm'],desc:'Внедрение и настройка процессов CLM.'},
-    {id:'docusign-org',title:'DocuSign Organization Management',icon:'🏢',path:'../docusign-org-cert/',storage:'apk-dsorgcert',requires:['docusign'],desc:'Отдельная специализация по управлению организацией DocuSign.'}
+    {id:'project-studio',title:'Проектная мастерская',icon:'🗂️',path:'../projects/',tracker:'projectStudio',catalogId:'projectStudio',total:4,unit:'этапов',cost:18,requires:['portfolio'],desc:'Спланируй собственный проект: сформулируй бизнес-вопрос, критерии, этапы анализа и презентацию.'},
+    {id:'excel-cert'cost:12,,title:'Сертификат Excel MO-210',icon:'📗',path:'../excel-cert/',storage:'apk-excelcert',requires:['excel'],desc:'Отдельная подготовка к сертификационному экзамену Excel.'},
+    {id:'excel-expert'cost:15, catalogId:'excel-expert-cert',,title:'Excel Expert MO-211',icon:'🏅',path:'../excel-expert-cert/',storage:'apk-excelexpertcert',requires:['excel-cert'],desc:'Продвинутый уровень Excel после базовой сертификационной ветки.'},
+    {id:'powerbi-cert'cost:15,,title:'Power BI PL-300',icon:'📊',path:'../powerbi-cert/',storage:'apk-pbicert',requires:['powerbi'],desc:'Дополнительная подготовка к сертификации Power BI.'},
+    {id:'tableau-cert'cost:15,,title:'Tableau Desktop',icon:'🟦',path:'../tableau-cert/',storage:'apk-tabcert',requires:['tableau'],desc:'Дополнительная подготовка к сертификации Tableau.'},
+    {id:'alteryx-cert'cost:12,,title:'Alteryx Foundation',icon:'🔄',path:'../alteryx-cert/',storage:'apk-alteryxcert',requires:['excel','quality'],desc:'Автоматизация подготовки и преобразования данных.'},
+    {id:'azure-data-cert'cost:12,,title:'Azure Data Fundamentals DP-900',icon:'☁️',path:'../azure-data-cert/',storage:'apk-dp900cert',requires:['foundations','sql'],desc:'Базовые понятия данных и облачных сервисов Azure.'},
+    {id:'databricks-cert'cost:15,,title:'Databricks Lakehouse',icon:'🧱',path:'../databricks-cert/',storage:'apk-dbxcert',requires:['sql','python'],desc:'Дополнительный маршрут по lakehouse и аналитической платформе.'},
+    {id:'ga4-cert'cost:12,,title:'Google Analytics 4',icon:'📣',path:'../ga4-cert/',storage:'apk-ga4cert',requires:['stats','charts'],desc:'Веб-аналитика, события, конверсии и интерпретация поведения пользователей.'},
+    {id:'docusign'cost:12, catalogId:'docusign-cert',,title:'DocuSign eSignature Admin',icon:'✍️',path:'../docusign-cert/',storage:'apk-dscert',requires:['foundations'],desc:'Отдельная профессиональная ветка администрирования eSignature.'},
+    {id:'docusign-clm'cost:14, catalogId:'docusign-clm-cert',,title:'DocuSign CLM Admin',icon:'📄',path:'../docusign-clm-cert/',storage:'apk-dsclmcert',requires:['docusign'],desc:'Управление жизненным циклом договоров.'},
+    {id:'docusign-clm-workflow'cost:15, catalogId:'docusign-clm-workflow-cert',,title:'DocuSign CLM Workflow',icon:'🔗',path:'../docusign-clm-workflow-cert/',storage:'apk-dsclmwfcert',requires:['docusign-clm'],desc:'Продвинутая специализация по рабочим процессам CLM.'},
+    {id:'docusign-clm-implementation'cost:15, catalogId:'docusign-clm-implementation-cert',,title:'DocuSign CLM Implementation',icon:'🛠️',path:'../docusign-clm-implementation-cert/',storage:'apk-dsclmimplcert',requires:['docusign-clm'],desc:'Внедрение и настройка процессов CLM.'},
+    {id:'docusign-org'cost:14, catalogId:'docusign-org-cert',,title:'DocuSign Organization Management',icon:'🏢',path:'../docusign-org-cert/',storage:'apk-dsorgcert',requires:['docusign'],desc:'Отдельная специализация по управлению организацией DocuSign.'}
   ];
 
   var BY_ID = {}, ALL = [], selectedId = 'foundations', graph = [
@@ -115,103 +115,121 @@
   function uniqueArrayCount(value) {
     return Array.isArray(value) ? new Set(value).size : 0;
   }
+  function courseCatalog(course) {
+    var all=window.DataCraftLessonCatalog||{};
+    var key=course.catalogId||course.tracker||course.id;
+    if(course.id==='portfolio')return all.portfolio||[];
+    if(course.id==='project-studio')return all.projectStudio||[];
+    return all[key]||all[course.id]||[];
+  }
+  function readScore(key) {
+    try { return localStorage.getItem(key)||''; } catch(e) { return ''; }
+  }
   function getProgress(course) {
-    var s, count = 0, total = course.total || 1, label = course.unit || 'уроков', complete = false;
-    switch (course.tracker) {
+    var s,count=0,total=courseCatalog(course).length||course.total||1,label=course.unit||'уроков',complete=false;
+    switch(course.tracker) {
       case 'foundations':
-        s = readJSON(STORE.foundations) || {};
-        count = countTrueMap(s, function(k){return /^\d+$/.test(k);});
+        s=readJSON(STORE.foundations)||{};
+        count=countTrueMap(s,function(k){return /^\d+$/.test(k);});
         break;
       case 'quality': {
-        var raw = '';
-        try { raw = localStorage.getItem(STORE.quality) || ''; } catch(e) {}
-        var match = /^(\d+)\s*\/\s*(\d+)$/.exec(raw);
-        count = match ? Math.min(5, Number(match[1])) : 0;
-        total = 5; label = 'категорий';
+        var passed=readJSON('apk-quality-passed-v1');
+        var raw=readScore(STORE.quality);
+        var match=/^(\d+)\s*\/\s*(\d+)$/.exec(raw);
+        count=Array.isArray(passed)?new Set(passed).size:(match?Math.min(5,Number(match[1])):0);
+        total=5;label='практических задач';
+        complete=raw==='5/5';
         break;
       }
       case 'sql':
-        s = readJSON(STORE.sql) || {};
-        count = uniqueArrayCount(s.doneLessons);
-        break;
+        s=readJSON(STORE.sql)||{};count=uniqueArrayCount(s.doneLessons);break;
       case 'excel':
-        s = readJSON(STORE.excel) || {};
-        count = uniqueArrayCount(s.lessonsDone);
-        break;
+        s=readJSON(STORE.excel)||{};count=uniqueArrayCount(s.lessonsDone);break;
       case 'python':
-        s = readJSON(STORE.python) || {};
-        count = uniqueArrayCount(s.lessonsDone);
-        break;
+        s=readJSON(STORE.python)||{};count=uniqueArrayCount(s.lessonsDone);break;
       case 'powerbi':
-        s = readJSON(STORE.powerbi) || {};
-        count = uniqueArrayCount(s.doneLessons);
-        break;
+        s=readJSON(STORE.powerbi)||{};count=uniqueArrayCount(s.doneLessons);break;
       case 'charts':
       case 'stats':
       case 'forecasting':
       case 'tableau':
-        s = readJSON(STORE[course.tracker]) || {};
-        count = countTrueLessonKeys(s.done || {});
+        s=readJSON(STORE[course.tracker])||{};count=countTrueLessonKeys(s.done||{});break;
+      case 'decision':
+        s=readJSON(STORE.decision)||[];
+        count=Array.isArray(s)?new Set(s.filter(function(id){return /^[1-6]$/.test(String(id));}).map(String)).size:0;
         break;
-      case 'decision': {
-        s = readJSON(STORE.decision) || [];
-        count = Array.isArray(s) ? new Set(s.filter(function(id){return /^[1-6]$/.test(String(id));}).map(String)).size : 0;
-        break;
-      }
       case 'portfolio': {
-        var cases = ['sales','support','marketing'];
-        count = cases.filter(function(id) {
-          var checks = [];
-          try { checks = JSON.parse(localStorage.getItem(STORE.portfolio + id + '-checks') || '[]'); } catch(e) {}
-          return Array.isArray(checks) && new Set(checks.filter(function(n){return Number.isInteger(n)&&n>=0&&n<6;})).size >= 6;
+        var cases=['sales','support','marketing'];
+        count=cases.filter(function(id){
+          var checks=readJSON(STORE.portfolio+id+'-checks');
+          return Array.isArray(checks)&&new Set(checks.filter(function(n){return Number.isInteger(n)&&n>=0&&n<6;})).size>=6;
         }).length;
-        total = 3; label = 'готовых кейса';
-        break;
+        total=3;label='кейса';break;
       }
       case 'simulator':
-        s = readJSON(STORE.simulator) || {};
-        count = s.reviews && typeof s.reviews === 'object' ? Object.keys(s.reviews).filter(function(k){return !!s.reviews[k];}).length : 0;
-        count = Math.min(10, count);
-        total = 10; label = 'проверенных задач';
-        break;
+        s=readJSON(STORE.simulator)||{};
+        count=s.reviews&&typeof s.reviews==='object'?Object.keys(s.reviews).filter(function(k){return !!s.reviews[k];}).length:0;
+        total=10;label='проверенных задач';break;
       case 'interview':
-        s = readJSON(STORE.interview) || {};
-        count = countTrueMap(s.lessonsComplete);
-        total = 16; label = 'уроков';
-        break;
+        s=readJSON(STORE.interview)||{};
+        count=countTrueMap(s.lessonsComplete);
+        total=courseCatalog(course).length||16;label='уроков';break;
       case 'final':
-        s = readJSON(STORE.final) || {};
-        count = s.submitted ? 1 : 0;
-        total = 1; label = 'экзамен';
+        s=readJSON(STORE.final)||{};
+        count=s.submittedSections&&typeof s.submittedSections==='object'?countTrueMap(s.submittedSections):0;
+        total=courseCatalog(course).length||7;label='разделов экзамена';
+        complete=!!s.submitted;
         break;
-      case 'projectStudio':
-        s = readJSON('apk-projects-v1') || {};
-        count = Array.isArray(s.projects) && s.projects.some(function(p){return p && p.phase === 'present';}) ? 1 : 0;
-        total = 1; label = 'готовый проект';
-        break;
-      case 'cert':
-        s = readJSON(course.storage) || {};
-        count = s.submitted ? 1 : 0;
-        total = 1; label = 'попытка экзамена';
-        break;
-      default:
-        count = 0;
+      case 'projectStudio': {
+        s=readJSON('apk-projects-v1')||{};
+        var projects=Array.isArray(s.projects)?s.projects:[];
+        count=0;
+        projects.forEach(function(p){
+          if(!p)return;
+          var order=['scope','plan','build','present'],idx=order.indexOf(p.phase);
+          var done=Math.max(0,idx);
+          var cl=p.present&&Array.isArray(p.present.checklist)?p.present.checklist:[];
+          if(p.phase==='present'&&cl.length&&cl.every(function(item){return item&&item.done;}))done=4;
+          count=Math.max(count,done);
+        });
+        total=4;label='этапов';
+        complete=count>=4;break;
+      }
+      case 'cert': {
+        s=readJSON(course.storage)||{};
+        count=s.submitted?2:(s.openSections&&Object.keys(s.openSections).length?1:0);
+        total=2;label='этапа подготовки';
+        complete=!!s.submitted;break;
+      }
+      default: count=0;
     }
-    count = Math.max(0, Math.min(Number(total) || 1, Number(count) || 0));
-    complete = count >= total;
+    total=Math.max(1,Number(total)||1);
+    count=Math.max(0,Math.min(total,Number(count)||0));
+    if(course.tracker!=='quality'&&course.tracker!=='final'&&course.tracker!=='projectStudio'&&course.tracker!=='cert')complete=count>=total;
+    if(course.tracker==='portfolio')complete=count>=3;
+    if(course.tracker==='simulator')complete=count>=10;
     return {done:count,total:total,label:label,complete:complete,percent:Math.round(count/total*100)};
   }
   function getDependencies(course) {
-    var requires = course.requires || [];
-    var anyOf = course.anyOf || [];
-    var missing = requires.filter(function(id) { return !getProgress(BY_ID[id]).complete; });
-    var anyComplete = !anyOf.length || anyOf.some(function(id){return getProgress(BY_ID[id]).complete;});
+    var requires=course.requires||[],anyOf=course.anyOf||[];
+    var missing=requires.filter(function(id){return !isBuilt(id);});
+    var anyComplete=!anyOf.length||anyOf.some(function(id){return isBuilt(id);});
     return {requires:requires,anyOf:anyOf,missing:missing,anyComplete:anyComplete,unlocked:missing.length===0&&anyComplete};
   }
+  function walletState() {
+    if(window.DataCraftEconomy)return window.DataCraftEconomy.sync();
+    return {balance:0,totalEarned:0,totalSpent:0,buildings:{}};
+  }
+  function isBuilt(id) {
+    var w=walletState();
+    return !!(w.buildings&&w.buildings[id]);
+  }
   function getStatus(course) {
-    var progress = getProgress(course);
-    var deps = getDependencies(course);
-    return {progress:progress,dependencies:deps,done:progress.complete,unlocked:progress.complete||deps.unlocked,state:progress.complete?'done':(deps.unlocked?'available':'locked')};
+    var progress=getProgress(course),deps=getDependencies(course),built=isBuilt(course.id);
+    var unlocked=built||deps.unlocked;
+    var ready=progress.complete;
+    var state=built?'done':(!unlocked?'locked':(ready?'ready':'available'));
+    return {progress:progress,dependencies:deps,done:built,built:built,courseComplete:ready,unlocked:unlocked,state:state,cost:course.cost||0,balance:walletState().balance||0};
   }
   function courseName(id) { return BY_ID[id] ? BY_ID[id].short || BY_ID[id].title : id; }
   function safeText(s) { return String(s == null ? '' : s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
