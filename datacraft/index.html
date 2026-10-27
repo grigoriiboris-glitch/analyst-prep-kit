@@ -98,6 +98,8 @@ footer{max-width:1500px;margin:auto;padding:0 20px 24px;color:#8fa697;font-size:
     <div class="dialog-body"><div class="question-tag" id="questionTag">Сбор ресурса</div><div class="question" id="questionText"></div><div class="answers" id="answers"></div><div class="feedback" id="feedback" role="status" aria-live="polite"></div><div class="dialog-footer"><button class="btn ghost" id="cancelChallenge">Вернуться на карту</button><button class="btn primary hidden" id="claimReward">Забрать награду</button></div></div>
   </div>
 </div>
+<script src="../assets/progress-state.js"></script>
+<script src="../assets/supabase_auth_sync.js?v=3"></script>
 <script src="../assets/ru-localization.js"></script>
 <script src="../assets/datacraft-economy.js"></script>
 <script src="lesson-catalog.js"></script>
@@ -184,7 +186,7 @@ const RECIPES=[
  {id:'dashboard',name:'Панель исследователя',icon:'📊',desc:'Дополнительное игровое улучшение для торгового контракта. Учебный аналитический центр открывается на карте развития.',needs:{data:3,sql:2,crystal:2},coinCost:7,kind:'building',requires:'lab',at:{x:8,y:9}}
 ];
 let state=loadState();
-let player={x:5,y:7},path=[],targetNode=null,challengeNode=null,challengeContract=false,answerResolved=false;
+let player=window.APKProgress?window.APKProgress.normalizePosition(state.playerPosition,COLS,ROWS,{x:5,y:7}):{x:5,y:7},path=[],targetNode=null,challengeNode=null,challengeContract=false,answerResolved=false;
 let toastTimer=0,lastFrame=0;
 const canvas=document.getElementById('world');
 const ctx=canvas.getContext('2d');
@@ -202,12 +204,26 @@ function loadState(){
   merged.harvested=Array.isArray(saved.harvested)?saved.harvested.filter(x=>typeof x==='string'):[];
   merged.contracts=Array.isArray(saved.contracts)?saved.contracts.filter(x=>typeof x==='string'):[];
   merged.journal=Array.isArray(saved.journal)?saved.journal.filter(x=>typeof x==='string').slice(-30):[];
+  merged.playerPosition=window.APKProgress?window.APKProgress.normalizePosition(saved.playerPosition,COLS,ROWS,{x:5,y:7}):{x:5,y:7};
   Object.keys(merged.inventory).forEach(k=>{if(!Number.isFinite(merged.inventory[k])||merged.inventory[k]<0)merged.inventory[k]=0});
   return merged;
  }catch(e){return clone(DEFAULT_STATE)}
 }
 function saveState(){
- try{localStorage.setItem(SAVE_KEY,JSON.stringify(state))}catch(e){showToast('Не удалось сохранить прогресс: проверь доступное место в браузере.')}
+ try{
+  if(typeof player!=='undefined'&&player)state.playerPosition=window.APKProgress?window.APKProgress.normalizePosition({x:Math.round(player.x),y:Math.round(player.y)},COLS,ROWS,{x:5,y:7}):{x:Math.round(player.x),y:Math.round(player.y)};
+  localStorage.setItem(SAVE_KEY,JSON.stringify(state));
+ }catch(e){showToast('Не удалось сохранить прогресс: проверь доступное место в браузере.')}
+}
+let lastPositionSave=0;
+function persistPlayerPosition(force){
+ if(!player||!state)return;
+ const now=Date.now();
+ if(!force&&now-lastPositionSave<1000)return;
+ const position=window.APKProgress?window.APKProgress.normalizePosition({x:Math.round(player.x),y:Math.round(player.y)},COLS,ROWS,{x:5,y:7}):{x:Math.max(0,Math.min(COLS-1,Math.round(player.x))),y:Math.max(0,Math.min(ROWS-1,Math.round(player.y)))};
+ const old=state.playerPosition;
+ if(old&&old.x===position.x&&old.y===position.y){lastPositionSave=now;return;}
+ state.playerPosition=position;lastPositionSave=now;saveState();
 }
 function addJournal(entry){if(!state.journal.includes(entry))state.journal.push(entry);state.journal=state.journal.slice(-30)}
 function showToast(msg){
@@ -505,7 +521,9 @@ function movePlayer(dt){
   else showToast('Подойди ближе к объекту и нажми E.');
  }
 }
-function frame(t){const dt=Math.min(.05,(t-lastFrame)/1000||0);lastFrame=t;movePlayer(dt);drawWorld();requestAnimationFrame(frame)}
+function frame(t){const dt=Math.min(.05,(t-lastFrame)/1000||0);lastFrame=t;movePlayer(dt);persistPlayerPosition(false);drawWorld();requestAnimationFrame(frame)}
+window.addEventListener('pagehide',()=>persistPlayerPosition(true));
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')persistPlayerPosition(true)});
 function interactNearest(){
  if(challengeNode||challengeContract)return;
  const px=Math.round(player.x),py=Math.round(player.y);
