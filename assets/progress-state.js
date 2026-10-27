@@ -8,7 +8,7 @@
   'use strict';
 
   var KITS = {
-    foundations: { id: 'foundations-v1', keys: ['apk-foundations-progress-v1'] },
+    foundations: { id: 'foundations-v1', keys: ['apk-foundations-progress-v1', 'apk-foundations-state-v1'] },
     businessAnalysis: { id: 'business-analysis-v1', keys: ['apk-business-analysis-progress-v1', 'apk-business-analysis-answers-v1', 'apk-business-analysis-case-v1', 'apk-business-analysis-state-v1'] },
     quality: { id: 'quality-v1', keys: ['apk-quality-solution', 'apk-quality-score', 'apk-quality-passed-v1'] },
     sql: { id: 'sqlkit-v1', keys: ['sqlkit-v1', 'sqlkit-recalls', 'sqlkit-recall-wins', 'sqlkit-last-visit', 'sqlkit-streak'], prefixes: ['sqlkit-'] },
