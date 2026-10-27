@@ -98,6 +98,7 @@
   var hoveredNpcId = null;
   var activeNpcQuest = null;
   var npcQuestTimer = null;
+  var walletRefreshScheduled = false;
 
   COURSES.forEach(function(c){BY_ID[c.id]=c;ALL.push(c);});
   SPECIALIZATIONS.forEach(function(c){if(!c.tracker){c.tracker='cert';c.total=1;c.unit='экзамен';}BY_ID[c.id]=c;ALL.push(c);});
@@ -506,7 +507,7 @@
     var seen = Object.create(null);
     saved.forEach(function(id){ seen[String(id)] = true; });
     var fresh = txs.slice().reverse().filter(function(tx){ return tx && tx.id && !seen[String(tx.id)]; });
-    if (fresh.length > 8) fresh = fresh.slice(-8);
+    if (fresh.length > 8) fresh = fresh.slice(0, 8);
     fresh.forEach(function(tx) {
       var delta = Number(tx.delta) || 0;
       var courseId = courseIdForWalletTransaction(tx);
@@ -1519,7 +1520,15 @@
   });
   window.addEventListener('focus', renderAll);
   window.addEventListener('pageshow', renderAll);
-  window.addEventListener('datacraft:wallet-updated', renderAll);
+  /* Wallet sync may emit one event per reward; coalesce them to avoid recursive renderAll() calls. */
+  window.addEventListener('datacraft:wallet-updated', function() {
+    if (walletRefreshScheduled) return;
+    walletRefreshScheduled = true;
+    window.setTimeout(function() {
+      walletRefreshScheduled = false;
+      renderAll();
+    }, 0);
+  });
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && document.getElementById('roadNpcQuestModal') && document.getElementById('roadNpcQuestModal').classList.contains('open')) closeNpcQuest();
   });
