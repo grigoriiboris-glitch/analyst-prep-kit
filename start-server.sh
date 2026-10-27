@@ -100,6 +100,7 @@ time.sleep(0.15)
 # Не завершаем посторонние приложения: сообщаем, если они заняли выбранный порт.
 try:
     probe = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    probe.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     try:
         probe.bind((host, int(port)))
     finally:
