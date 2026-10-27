@@ -1,0 +1,323 @@
+/* DataCraft — Grain design-system skin. Game canvases keep their original pixel-art palette. */
+:root{
+ color-scheme:light;
+ --bg:var(--color-bg);--panel:var(--color-surface);--panel2:var(--color-surface-raised);
+ --line:var(--color-border);--text:var(--color-text);--muted:var(--color-text-muted);
+ --mint:var(--color-primary);--gold:var(--color-accent);--red:var(--color-danger);--blue:var(--color-info);
+ --dc-shadow:0 2px 8px rgba(28,23,18,.06),0 10px 26px rgba(28,23,18,.035)
+}
+html{scroll-behavior:smooth}
+body{background:var(--color-bg);color:var(--color-text);font:var(--weight-regular) 15px/1.55 var(--font-sans);-webkit-font-smoothing:antialiased}
+a{color:var(--color-primary)}
+button{font-family:var(--font-sans)}
+button:focus-visible,a:focus-visible,canvas:focus-visible{outline:3px solid var(--color-border-focus);outline-offset:3px}
+
+/* Hub-like sticky header, brand and buttons */
+.top{position:sticky;top:0;z-index:25;max-width:none;margin:0;padding:10px max(18px,calc((100vw - 1460px)/2));background:var(--color-surface);border-bottom:1px solid var(--color-border);box-shadow:0 2px 8px rgba(28,23,18,.04);backdrop-filter:blur(12px)}
+.brand{gap:12px}
+.brand-mark{width:38px;height:38px;border-radius:9px;background:var(--color-primary-soft);border:1px solid var(--color-primary-border);color:var(--color-primary);font-size:21px}
+.brand h1{font-family:var(--font-display);font-size:clamp(18px,2.2vw,23px);font-weight:700;letter-spacing:var(--tracking-tight);color:var(--color-text)}
+.brand h1 span{color:var(--color-primary)!important}
+.brand p{color:var(--color-text-muted);font-size:12px;line-height:1.4}
+.top-actions{gap:8px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:36px;border:1px solid var(--color-border);border-radius:8px;background:var(--color-surface);color:var(--color-text);padding:8px 13px;font:600 13px/1.35 var(--font-sans);text-decoration:none;box-shadow:none;transition:background .16s,color .16s,border-color .16s,transform .16s}
+.btn:hover:not(:disabled){filter:none;border-color:var(--color-primary-border);background:var(--color-primary-soft);color:var(--color-primary-hover)}
+.btn.primary,.top-actions>a.btn{background:var(--color-primary);border-color:var(--color-primary);color:var(--color-text-on-primary)}
+.btn.primary:hover:not(:disabled),.top-actions>a.btn:hover{background:var(--color-primary-hover);border-color:var(--color-primary-hover);color:var(--color-text-on-primary)}
+.btn.ghost{background:transparent;color:var(--color-text-muted)}
+.btn.ghost:hover:not(:disabled){background:var(--color-surface-sunken);color:var(--color-text)}
+.btn:disabled{opacity:.48;cursor:not-allowed}
+
+/* Progress stats */
+.status-wrap{padding-top:14px;padding-bottom:16px}
+.status{gap:12px}
+.stat{background:var(--color-surface);border:1px solid var(--color-border);border-radius:12px;padding:12px 15px;box-shadow:var(--dc-shadow)}
+.stat-label{color:var(--color-text-muted);font:600 10px/1.4 var(--font-mono);letter-spacing:.075em}
+.stat-value{color:var(--color-text);font:700 23px/1.25 var(--font-display);margin-top:5px;font-variant-numeric:tabular-nums}
+.muted{color:var(--color-text-muted)}
+.xpbar{background:var(--color-surface-sunken)}
+.xpfill{background:var(--color-accent)}
+
+/* Shared card and panel system */
+.layout,.maincol,.sidecol{gap:14px}
+.panel{background:var(--color-surface);border:1px solid var(--color-border);border-radius:14px;box-shadow:var(--dc-shadow)}
+.panel-head{background:var(--color-surface);border-bottom:1px solid var(--color-border);padding:14px 17px}
+.panel-head h2{color:var(--color-text);font:600 17px/1.35 var(--font-display);letter-spacing:var(--tracking-tight)}
+.panel-head small{color:var(--color-text-muted)}
+.world-instructions{color:var(--color-text-muted);line-height:1.65;padding:12px 16px 0}
+.map-scroll{scrollbar-color:var(--stone-300) var(--stone-100)}
+#world{border-color:var(--color-border-strong);border-radius:10px}
+.map-legend{color:var(--color-text-muted)}
+.dot{box-shadow:0 0 0 1px rgba(28,23,18,.08)}
+.target-btn{color:var(--color-text);border-color:var(--color-border);background:var(--color-surface);border-radius:10px;transition:border-color .16s,background .16s,transform .16s}
+.target-btn:hover:not(:disabled){border-color:var(--color-primary-border);background:var(--color-primary-soft)}
+.target-btn:disabled{opacity:.55}
+.target-sub{color:var(--color-text-muted)}
+.target-state{color:var(--color-warning)}
+.callout{border:1px solid var(--color-primary-border);border-left:4px solid var(--color-primary);background:var(--color-primary-soft);border-radius:10px}
+.callout p{color:var(--color-text-muted);line-height:1.6}
+.mini-title{color:var(--color-text-muted);font:700 10px/1.4 var(--font-mono);letter-spacing:.09em}
+.inv-item{border-color:var(--color-border);background:var(--color-surface-sunken);border-radius:9px}
+.inv-count{color:var(--color-warning)}
+.recipe{border-color:var(--color-border);background:var(--color-surface);border-radius:10px}
+.recipe.done{border-color:#b6cba0;background:var(--color-success-soft)}
+.recipe.locked{opacity:.68}
+.recipe-desc,.build-note{color:var(--color-text-muted);line-height:1.5}
+.cost{color:var(--color-text-muted)}
+#toast{color:var(--color-text);background:var(--color-surface);border:1px solid var(--color-border-strong);border-radius:12px;box-shadow:0 16px 48px rgba(28,23,18,.18)}
+
+/* Lesson-gated map: neutral application chrome around the existing game map */
+#curriculumPanel{padding-left:20px;padding-right:20px}
+.curriculum-shell{background:var(--color-surface);border-color:var(--color-border);border-radius:14px;box-shadow:var(--dc-shadow)}
+.curriculum-head{border-bottom-color:var(--color-border)}
+.curriculum-title{color:var(--color-text);font:600 clamp(19px,2.5vw,25px)/1.25 var(--font-display);letter-spacing:var(--tracking-tight)}
+.curriculum-lead,.curriculum-detail p{color:var(--color-text-muted)}
+.curriculum-map-scroll{scrollbar-color:var(--stone-300) var(--stone-100)}
+#curriculumWorld{border-color:var(--color-border-strong)}
+.curriculum-legend{color:var(--color-text-muted)}
+.curriculum-detail,.curriculum-list-wrap{border-color:var(--color-border);background:var(--color-surface-sunken);border-radius:12px}
+.curriculum-detail-eyebrow{color:var(--color-primary)}
+.curriculum-detail h3,.curriculum-list-head h3{color:var(--color-text);font-family:var(--font-display)}
+.curriculum-status{border-color:var(--color-border);background:var(--color-surface);color:var(--color-text-muted)}
+.curriculum-status.done{border-color:#b8cda4;background:var(--color-success-soft);color:var(--color-success)}
+.curriculum-status.available{border-color:var(--color-accent);background:var(--color-accent-soft);color:var(--color-warning)}
+.curriculum-status.locked{border-color:var(--color-border);background:var(--color-surface-sunken);color:var(--color-text-muted)}
+.curriculum-progress{background:var(--color-border)}
+.curriculum-progress i,.curriculum-course-card .cc-bar i{background:var(--color-primary)}
+.curriculum-progress-text{color:var(--color-text-muted)!important}
+.curriculum-requirements li{color:var(--color-text)}
+.curriculum-requirements li .req-mark{color:var(--color-success)}
+.curriculum-requirements li .req-mark.missing{color:var(--color-warning)}
+.curriculum-action{border-color:var(--color-border);background:var(--color-surface);color:var(--color-text);border-radius:8px}
+.curriculum-action.primary{border-color:var(--color-primary);background:var(--color-primary);color:var(--color-text-on-primary)}
+.curriculum-action:hover:not(:disabled){filter:none;border-color:var(--color-primary-border);background:var(--color-primary-soft);color:var(--color-primary-hover)}
+.curriculum-action.primary:hover:not(:disabled){background:var(--color-primary-hover);border-color:var(--color-primary-hover);color:var(--color-text-on-primary)}
+.curriculum-list-head span,.curriculum-course-card .cc-meta{color:var(--color-text-muted)}
+.curriculum-course-card{border-color:var(--color-border);background:var(--color-surface);color:var(--color-text);border-radius:9px}
+.curriculum-course-card:hover,.curriculum-course-card.selected{border-color:var(--color-primary-border);background:var(--color-primary-soft)}
+.curriculum-course-card .cc-bar{background:var(--color-border)}
+.curriculum-section{border-color:var(--color-border);background:var(--color-surface-sunken);border-radius:12px}
+.curriculum-section summary{color:var(--color-text)}
+.curriculum-section summary:hover{background:var(--color-primary-soft)}
+
+/* Quiet Valley, catalog and inventory */
+#quietValleyPanel .quiet-valley-intro{color:var(--color-text-muted);line-height:1.65}
+.quiet-valley-wallet{border-color:var(--color-accent);background:var(--color-accent-soft);color:var(--color-text)}
+#quietValleyCanvas{border-color:var(--color-border-strong)}
+.quiet-valley-help{color:var(--color-text-muted);line-height:1.6}
+.quiet-valley-zone{border-color:var(--color-border);background:var(--color-surface);color:var(--color-text);border-radius:8px}
+.quiet-valley-zone.active{border-color:var(--color-primary);background:var(--color-primary);color:var(--color-text-on-primary)}
+.quiet-valley-zone.locked{color:var(--color-warning)}
+.quiet-valley-box{border-color:var(--color-border);background:var(--color-surface-sunken);border-radius:12px}
+.quiet-valley-box-head{border-bottom-color:var(--color-border)}
+.quiet-valley-box-head h3{color:var(--color-text);font:600 14px/1.35 var(--font-display)}
+.quiet-valley-box-head small{color:var(--color-text-muted)}
+.quiet-valley-category{border-color:var(--color-border);background:var(--color-surface);color:var(--color-text-muted)}
+.quiet-valley-category.active{border-color:var(--color-primary-border);background:var(--color-primary-soft);color:var(--color-primary-hover)}
+.quiet-valley-item{border-color:var(--color-border);background:var(--color-surface);color:var(--color-text);border-radius:10px}
+.quiet-valley-item:hover{border-color:var(--color-primary-border);background:var(--color-primary-soft)}
+.quiet-valley-item.selected{border-color:var(--color-primary);box-shadow:inset 0 0 0 1px var(--color-primary)}
+.quiet-valley-item:disabled{opacity:.52}
+.quiet-valley-item-icon{background:var(--color-primary-soft)}
+.quiet-valley-item-desc{color:var(--color-text-muted)}
+.quiet-valley-item-action,.quiet-valley-inventory-count{color:var(--color-warning)}
+.quiet-valley-inventory-row{border-color:var(--color-border);background:var(--color-surface)}
+.quiet-valley-small-btn{border-color:var(--color-border);background:var(--color-surface);color:var(--color-text);border-radius:8px}
+.quiet-valley-small-btn:hover:not(:disabled){border-color:var(--color-primary-border);background:var(--color-primary-soft)}
+.quiet-valley-selection{border-top-color:var(--color-border);background:var(--color-surface)}
+.quiet-valley-selection-empty{color:var(--color-text-muted)}
+.quiet-valley-status{border-color:var(--color-border);background:var(--color-surface-sunken);color:var(--color-text);border-radius:9px}
+.quiet-valley-topline{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#contractStatus{color:var(--color-text)}
+.contract-reward{color:var(--color-warning)}
+
+/* Lessons and question dialogs */
+.modal{background:rgba(28,23,18,.48);backdrop-filter:blur(4px)}
+.dialog{background:var(--color-surface);border:1px solid var(--color-border);border-radius:15px;box-shadow:0 24px 80px rgba(28,23,18,.22)}
+.dialog-head{background:var(--color-surface);border-bottom-color:var(--color-border)}
+.dialog-head h2{color:var(--color-text);font:600 19px/1.3 var(--font-display)}
+.dialog-body{color:var(--color-text)}
+.question-tag{color:var(--color-primary)}
+.question{font-family:var(--font-display)}
+.answer{background:var(--color-surface);border-color:var(--color-border);color:var(--color-text);border-radius:9px}
+.answer:hover:not(:disabled){border-color:var(--color-primary-border);background:var(--color-primary-soft)}
+.answer.correct{border-color:#b8cda4;background:var(--color-success-soft);color:var(--color-text)}
+.answer.wrong{border-color:#e4b2a5;background:var(--color-danger-soft);color:var(--color-text)}
+.feedback{background:var(--color-surface-sunken);border-color:var(--color-border);color:var(--color-text)}
+footer{color:var(--color-text-muted)}
+footer a{color:var(--color-primary)}
+@media(max-width:1000px){.top{padding-left:20px;padding-right:20px}}
+@media(max-width:620px){
+ .top{position:relative;padding:12px 12px 10px}
+ .brand{align-items:flex-start}
+ .brand-mark{width:38px;height:38px;flex:0 0 38px}
+ .top-actions .btn{min-width:0;padding:8px 9px;font-size:12px}
+ .status-wrap{padding-top:10px}
+ .stat{padding:10px 11px}
+ .stat-label{font-size:9px;letter-spacing:.045em}
+ .stat-value{font-size:20px}
+ .layout{gap:12px}
+ #curriculumPanel{padding-left:12px;padding-right:12px}
+ .curriculum-head{padding:15px 14px 12px}
+ .curriculum-lower{grid-template-columns:minmax(0,1fr)}
+ .curriculum-course-list{grid-template-columns:minmax(0,1fr)}
+ .quiet-valley-workbench{grid-template-columns:minmax(0,1fr)}
+ .quiet-valley-box-head{align-items:flex-start;flex-direction:column}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+
+
+/* Copy-to-agent action in each lesson row */
+.curriculum-lesson-row{flex-wrap:wrap}
+.curriculum-lesson-actions{display:flex;align-items:center;justify-content:flex-end;gap:7px;flex:0 1 auto;min-width:0}
+.curriculum-copy-context{
+ display:inline-flex;align-items:center;justify-content:center;gap:4px;
+ flex:0 0 auto;max-width:100%;border:1px solid var(--color-primary-border);
+ border-radius:7px;background:var(--color-primary-soft);color:var(--color-primary-hover);
+ padding:5px 8px;font:600 10px/1.35 var(--font-sans);cursor:pointer;white-space:nowrap;
+ transition:background .16s,border-color .16s,color .16s;
+}
+.curriculum-copy-context:hover:not(:disabled){border-color:var(--color-primary);background:var(--color-primary);color:var(--color-text-on-primary)}
+.curriculum-copy-context:disabled{opacity:.6;cursor:wait}
+.curriculum-copy-context.copied{border-color:#b8cda4;background:var(--color-success-soft);color:var(--color-success)}
+.curriculum-lesson-actions .curriculum-lesson-reward{margin-left:0}
+@media(max-width:600px){
+ .curriculum-lesson-actions{margin-left:23px;flex:1 1 calc(100% - 23px);justify-content:flex-start;flex-wrap:wrap}
+ .curriculum-copy-context{white-space:normal;text-align:left}
+}
+
+
+/* -------------------------------------------------------------------------
+   Shared DataCraft shell — match the main Grain + Zinc & Sky homepage.
+   Keep only the game-world artwork pixelated; all application chrome uses
+   the same cool zinc surfaces, cyan primary, and amber secondary tokens.
+   ------------------------------------------------------------------------- */
+:root{color-scheme:light}
+html,body{background:var(--color-bg);color:var(--color-text)}
+body{background:var(--color-bg);color:var(--color-text)}
+.brand-mark{background:var(--color-primary-soft);border-color:var(--color-primary-border);color:var(--color-primary)}
+.brand h1 span{color:var(--color-primary)!important}
+.brand p{color:var(--color-text-muted)}
+.top{background:var(--color-surface);border-bottom:1px solid var(--color-border);box-shadow:0 2px 8px rgba(9,9,11,.05)}
+.btn.primary,.top-actions>a.btn{background:var(--color-primary);border-color:var(--color-primary);color:var(--color-text-on-primary)}
+.btn.primary:hover:not(:disabled),.top-actions>a.btn:hover{background:var(--color-primary-hover);border-color:var(--color-primary-hover);color:var(--color-text-on-primary)}
+.btn:hover:not(:disabled){border-color:var(--color-primary-border);background:var(--color-primary-soft);color:var(--color-primary-hover)}
+.btn.ghost{background:transparent;color:var(--color-text-muted)}
+.btn.ghost:hover:not(:disabled){background:var(--color-surface-sunken);color:var(--color-text)}
+.stat{background:var(--color-surface);border-color:var(--color-border)}
+.stat-label,.muted{color:var(--color-text-muted)}
+.xpbar{background:var(--color-surface-sunken)}
+.xpfill{background:var(--color-accent)}
+.panel{background:var(--color-surface);border-color:var(--color-border);box-shadow:var(--dc-shadow)}
+.panel-head{background:var(--color-surface);border-bottom-color:var(--color-border)}
+.panel-head h2{color:var(--color-text)}
+.panel-head small,.world-instructions,.map-legend{color:var(--color-text-muted)}
+.targets .target-btn{background:var(--color-surface);border-color:var(--color-border);color:var(--color-text)}
+.targets .target-btn:hover:not(:disabled){background:var(--color-primary-soft);border-color:var(--color-primary-border)}
+.target-sub{color:var(--color-text-muted)}
+.callout{background:var(--color-primary-soft);border-color:var(--color-primary-border);border-left-color:var(--color-primary)}
+.callout p{color:var(--color-text-muted)}
+.inv-item{background:var(--color-surface-sunken);border-color:var(--color-border)}
+.inv-count,.contract-reward{color:var(--color-warning)}
+.recipe{background:var(--color-surface);border-color:var(--color-border)}
+.recipe.done{background:var(--color-success-soft);border-color:var(--color-success)}
+.recipe-desc,.build-note,.cost{color:var(--color-text-muted)}
+#toast{color:var(--color-text);background:var(--color-surface);border-color:var(--color-border-strong);box-shadow:0 16px 48px rgba(9,9,11,.18)}
+.modal{background:var(--color-overlay)}
+.dialog{background:var(--color-surface);border-color:var(--color-border);box-shadow:0 24px 80px rgba(9,9,11,.22)}
+.dialog-head{background:var(--color-surface);border-bottom-color:var(--color-border)}
+.dialog-head h2,.dialog-body{color:var(--color-text)}
+.question-tag{color:var(--color-primary)}
+.answer{background:var(--color-surface);border-color:var(--color-border);color:var(--color-text)}
+.answer:hover:not(:disabled){border-color:var(--color-primary-border);background:var(--color-primary-soft)}
+.answer.correct{border-color:var(--color-success);background:var(--color-success-soft);color:var(--color-text)}
+.answer.wrong{border-color:var(--color-danger);background:var(--color-danger-soft);color:var(--color-text)}
+.feedback{background:var(--color-surface-sunken);border-color:var(--color-border);color:var(--color-text)}
+footer,footer a{color:var(--color-text-muted)}
+footer a:hover{color:var(--color-primary)}
+
+/* Remaining curriculum panels and nested lesson controls */
+.curriculum-specializations{border-top-color:var(--color-border)}
+.curriculum-special-card{background:var(--color-surface);border-color:var(--color-border);color:var(--color-text)}
+.curriculum-special-card p{color:var(--color-text-muted)}
+.curriculum-special-card.done{border-color:var(--color-success);background:var(--color-success-soft)}
+.curriculum-library{border-color:var(--color-border-strong);background:var(--color-surface);color:var(--color-text-muted)}
+.curriculum-coins{border-color:var(--color-accent);background:var(--color-accent-soft);color:var(--color-text)}
+.curriculum-status.ready{border-color:var(--color-accent);background:var(--color-accent-soft);color:var(--color-warning)}
+.curriculum-wallet-line{border-color:var(--color-accent);background:var(--color-accent-soft);color:var(--color-text)}
+.curriculum-wallet-line strong{color:var(--color-warning)}
+.curriculum-lessons{border-color:var(--color-border);background:var(--color-surface)}
+.curriculum-lessons>summary{background:var(--color-surface);color:var(--color-text)}
+.curriculum-lessons>summary:hover{background:var(--color-surface-sunken)}
+.curriculum-lessons>summary:after{color:var(--color-primary)}
+.curriculum-lessons>summary span{color:var(--color-text-muted)}
+.curriculum-lesson-list{border-top-color:var(--color-border);background:var(--color-surface)}
+.curriculum-unit-heading{background:var(--color-surface-sunken);border-bottom-color:var(--color-border);color:var(--color-primary-hover)}
+.curriculum-unit-heading small{color:var(--color-text-muted)}
+.curriculum-lesson-row{border-bottom-color:var(--color-border);color:var(--color-text)}
+.curriculum-lesson-row.passed{background:var(--color-success-soft)}
+.curriculum-lesson-row.nested{background:var(--color-surface-sunken)}
+.curriculum-lesson-check{border-color:var(--color-border-strong);background:var(--color-surface);color:var(--color-text-muted)}
+.curriculum-lesson-row.passed .curriculum-lesson-check{background:var(--color-success-soft);border-color:var(--color-success);color:var(--color-success)}
+.curriculum-lesson-copy{color:var(--color-text)}
+.curriculum-lesson-row.passed .curriculum-lesson-title{color:var(--color-success)}
+.curriculum-lesson-goal,.curriculum-lesson-footer{color:var(--color-text-muted)}
+.curriculum-lesson-reward,.curriculum-course-card .cc-cost{color:var(--color-warning)}
+.curriculum-lesson-row.passed .curriculum-lesson-reward{color:var(--color-success)}
+.curriculum-legacy-note{color:var(--color-warning)}
+.curriculum-filter-group{background:var(--color-surface-sunken);border-color:var(--color-border)}
+.curriculum-action.filter-btn{color:var(--color-text-muted)}
+.curriculum-action.filter-btn:hover{background:var(--color-primary-soft);color:var(--color-primary-hover)}
+.curriculum-action.filter-btn.active{background:var(--color-primary);border-color:var(--color-primary);color:var(--color-text-on-primary)}
+.curriculum-status.done{border-color:var(--color-success);background:var(--color-success-soft);color:var(--color-success)}
+.curriculum-status.available{border-color:var(--color-accent);background:var(--color-accent-soft);color:var(--color-warning)}
+.curriculum-requirements li .req-mark{color:var(--color-success)}
+.curriculum-requirements li .req-mark.missing{color:var(--color-warning)}
+
+/* NPC dialogue follows the same application card, button, and feedback system */
+.road-npc-overlay{background:var(--color-overlay)}
+.road-npc-dialog{background:var(--color-surface);border-color:var(--color-border);box-shadow:0 24px 90px rgba(9,9,11,.25);color:var(--color-text)}
+.road-npc-head{border-bottom-color:var(--color-border)}
+.road-npc-kicker{color:var(--color-primary)}
+.road-npc-close{border-color:var(--color-border);background:var(--color-surface);color:var(--color-text)}
+.road-npc-timer{border-color:var(--color-accent);background:var(--color-accent-soft);color:var(--color-warning)}
+.road-npc-answer{border-color:var(--color-border);background:var(--color-surface);color:var(--color-text)}
+.road-npc-answer:hover:not(:disabled){border-color:var(--color-primary-border);background:var(--color-primary-soft)}
+.road-npc-feedback{border-color:var(--color-border);background:var(--color-surface-sunken);color:var(--color-text)}
+.road-npc-feedback.success{border-color:var(--color-success);background:var(--color-success-soft);color:var(--color-success)}
+.road-npc-feedback.error{border-color:var(--color-danger);background:var(--color-danger-soft);color:var(--color-danger)}
+.road-npc-footer{color:var(--color-text-muted)}
+
+/* Quiet Valley: neutral shop/workbench; teal primary and amber costs */
+.quiet-valley-wallet{border-color:var(--color-accent);background:var(--color-accent-soft);color:var(--color-text)}
+.quiet-valley-canvas-scroll{scrollbar-color:var(--stone-300) var(--stone-100)}
+.quiet-valley-help{color:var(--color-text-muted)}
+.quiet-valley-zone{border-color:var(--color-border);background:var(--color-surface);color:var(--color-text)}
+.quiet-valley-zone.active{background:var(--color-primary);border-color:var(--color-primary);color:var(--color-text-on-primary)}
+.quiet-valley-zone.locked{color:var(--color-warning)}
+.quiet-valley-box{border-color:var(--color-border);background:var(--color-surface)}
+.quiet-valley-box-head{border-bottom-color:var(--color-border)}
+.quiet-valley-box-head small{color:var(--color-text-muted)}
+.quiet-valley-category{border-color:var(--color-border);background:var(--color-surface);color:var(--color-text-muted)}
+.quiet-valley-category.active{border-color:var(--color-primary-border);background:var(--color-primary-soft);color:var(--color-primary-hover)}
+.quiet-valley-item{border-color:var(--color-border);background:var(--color-surface);color:var(--color-text)}
+.quiet-valley-item:hover{border-color:var(--color-primary-border);background:var(--color-primary-soft)}
+.quiet-valley-item.selected{border-color:var(--color-primary);box-shadow:inset 0 0 0 1px var(--color-primary)}
+.quiet-valley-item-icon{background:var(--color-primary-soft)}
+.quiet-valley-item-desc{color:var(--color-text-muted)}
+.quiet-valley-item-action,.quiet-valley-inventory-count{color:var(--color-warning)}
+.quiet-valley-inventory-row{border-color:var(--color-border);background:var(--color-surface)}
+.quiet-valley-small-btn{border-color:var(--color-border);background:var(--color-surface);color:var(--color-text)}
+.quiet-valley-small-btn:hover:not(:disabled){border-color:var(--color-primary-border);background:var(--color-primary-soft)}
+.quiet-valley-selection{border-top-color:var(--color-border);background:var(--color-surface)}
+.quiet-valley-selection-empty{color:var(--color-text-muted)}
+.quiet-valley-status{border-color:var(--color-border);background:var(--color-surface-sunken);color:var(--color-text)}
+.quiet-valley-status.warn{border-color:var(--color-accent);background:var(--color-accent-soft);color:var(--color-warning)}
+.quiet-valley-status.error{border-color:var(--color-danger);background:var(--color-danger-soft);color:var(--color-danger)}
+.quiet-valley-empty{color:var(--color-text-muted)}
+
+/* Restrict the old palette to the actual illustrated game map/canvas only. */
+#world,#curriculumWorld,#quietValleyCanvas{border-color:var(--color-border-strong)}
+button:focus-visible,a:focus-visible,canvas:focus-visible{outline-color:var(--color-border-focus)}
+
+.curriculum-empty{color:var(--color-text-muted)}

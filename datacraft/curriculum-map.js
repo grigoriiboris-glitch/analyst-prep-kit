@@ -45,18 +45,18 @@
   var SPECIALIZATIONS = [
     {id:'project-studio',title:'Проектная мастерская',icon:'🗂️',path:'../projects/',tracker:'projectStudio',catalogId:'projectStudio',total:4,unit:'этапов',cost:18,requires:['portfolio'],desc:'Спланируй собственный проект: сформулируй бизнес-вопрос, критерии, этапы анализа и презентацию.'},
     {id:'excel-cert',cost:12,title:'Сертификат Excel MO-210',icon:'📗',path:'../excel-cert/',storage:'apk-excelcert',requires:['excel'],desc:'Отдельная подготовка к сертификационному экзамену Excel.'},
-    {id:'excel-expert',walletId:'excel-expert-cert',cost:15,catalogId:'excel-expert-cert',title:'Excel Expert MO-211',icon:'🏅',path:'../excel-expert-cert/',storage:'apk-excelexpertcert',requires:['excel-cert'],desc:'Продвинутый уровень Excel после базовой сертификационной ветки.'},
+    {id:'excel-expert',walletId:'excel-expert-cert',cost:15,catalogId:'excel-expert-cert',title:'Эксперт Excel MO-211',icon:'🏅',path:'../excel-expert-cert/',storage:'apk-excelexpertcert',requires:['excel-cert'],desc:'Продвинутый уровень Excel после базовой сертификационной ветки.'},
     {id:'powerbi-cert',cost:15,title:'Power BI PL-300',icon:'📊',path:'../powerbi-cert/',storage:'apk-pbicert',requires:['powerbi'],desc:'Дополнительная подготовка к сертификации Power BI.'},
-    {id:'tableau-cert',cost:15,title:'Tableau Desktop',icon:'🟦',path:'../tableau-cert/',storage:'apk-tabcert',requires:['tableau'],desc:'Дополнительная подготовка к сертификации Tableau.'},
-    {id:'alteryx-cert',cost:12,title:'Alteryx Foundation',icon:'🔄',path:'../alteryx-cert/',storage:'apk-alteryxcert',requires:['excel','quality'],desc:'Автоматизация подготовки и преобразования данных.'},
-    {id:'azure-data-cert',cost:12,title:'Azure Data Fundamentals DP-900',icon:'☁️',path:'../azure-data-cert/',storage:'apk-dp900cert',requires:['foundations','sql'],desc:'Базовые понятия данных и облачных сервисов Azure.'},
-    {id:'databricks-cert',cost:15,title:'Databricks Lakehouse',icon:'🧱',path:'../databricks-cert/',storage:'apk-dbxcert',requires:['sql','python'],desc:'Дополнительный маршрут по lakehouse и аналитической платформе.'},
+    {id:'tableau-cert',cost:15,title:'Настольная версия Tableau',icon:'🟦',path:'../tableau-cert/',storage:'apk-tabcert',requires:['tableau'],desc:'Дополнительная подготовка к сертификации Tableau.'},
+    {id:'alteryx-cert',cost:12,title:'Основы Alteryx',icon:'🔄',path:'../alteryx-cert/',storage:'apk-alteryxcert',requires:['excel','quality'],desc:'Автоматизация подготовки и преобразования данных.'},
+    {id:'azure-data-cert',cost:12,title:'Основы данных Azure DP-900',icon:'☁️',path:'../azure-data-cert/',storage:'apk-dp900cert',requires:['foundations','sql'],desc:'Базовые понятия данных и облачных сервисов Azure.'},
+    {id:'databricks-cert',cost:15,title:'Архитектура озера данных и хранилища в Databricks',icon:'🧱',path:'../databricks-cert/',storage:'apk-dbxcert',requires:['sql','python'],desc:'Дополнительный маршрут по архитектуре озера данных и хранилища, а также аналитической платформе.'},
     {id:'ga4-cert',cost:12,title:'Google Analytics 4',icon:'📣',path:'../ga4-cert/',storage:'apk-ga4cert',requires:['stats','charts'],desc:'Веб-аналитика, события, конверсии и интерпретация поведения пользователей.'},
-    {id:'docusign',walletId:'docusign-cert',cost:12,catalogId:'docusign-cert',title:'DocuSign eSignature Admin',icon:'✍️',path:'../docusign-cert/',storage:'apk-dscert',requires:['foundations'],desc:'Отдельная профессиональная ветка администрирования eSignature.'},
-    {id:'docusign-clm',walletId:'docusign-clm-cert',cost:14,catalogId:'docusign-clm-cert',title:'DocuSign CLM Admin',icon:'📄',path:'../docusign-clm-cert/',storage:'apk-dsclmcert',requires:['docusign'],desc:'Управление жизненным циклом договоров.'},
-    {id:'docusign-clm-workflow',walletId:'docusign-clm-workflow-cert',cost:15,catalogId:'docusign-clm-workflow-cert',title:'DocuSign CLM Workflow',icon:'🔗',path:'../docusign-clm-workflow-cert/',storage:'apk-dsclmwfcert',requires:['docusign-clm'],desc:'Продвинутая специализация по рабочим процессам CLM.'},
-    {id:'docusign-clm-implementation',walletId:'docusign-clm-implementation-cert',cost:15,catalogId:'docusign-clm-implementation-cert',title:'DocuSign CLM Implementation',icon:'🛠️',path:'../docusign-clm-implementation-cert/',storage:'apk-dsclmimplcert',requires:['docusign-clm'],desc:'Внедрение и настройка процессов CLM.'},
-    {id:'docusign-org',walletId:'docusign-org-cert',cost:14,catalogId:'docusign-org-cert',title:'DocuSign Organization Management',icon:'🏢',path:'../docusign-org-cert/',storage:'apk-dsorgcert',requires:['docusign'],desc:'Отдельная специализация по управлению организацией DocuSign.'}
+    {id:'docusign',walletId:'docusign-cert',cost:12,catalogId:'docusign-cert',title:'Администратор электронной подписи DocuSign',icon:'✍️',path:'../docusign-cert/',storage:'apk-dscert',requires:['foundations'],desc:'Отдельный профессиональный маршрут по администрированию электронной подписи.'},
+    {id:'docusign-clm',walletId:'docusign-clm-cert',cost:14,catalogId:'docusign-clm-cert',title:'Администратор управления договорами DocuSign (CLM)',icon:'📄',path:'../docusign-clm-cert/',storage:'apk-dsclmcert',requires:['docusign'],desc:'Управление жизненным циклом договоров.'},
+    {id:'docusign-clm-workflow',walletId:'docusign-clm-workflow-cert',cost:15,catalogId:'docusign-clm-workflow-cert',title:'Рабочие процессы управления договорами DocuSign (CLM)',icon:'🔗',path:'../docusign-clm-workflow-cert/',storage:'apk-dsclmwfcert',requires:['docusign-clm'],desc:'Продвинутая специализация по рабочим процессам управления жизненным циклом договоров (CLM).'},
+    {id:'docusign-clm-implementation',walletId:'docusign-clm-implementation-cert',cost:15,catalogId:'docusign-clm-implementation-cert',title:'Внедрение управления договорами DocuSign (CLM)',icon:'🛠️',path:'../docusign-clm-implementation-cert/',storage:'apk-dsclmimplcert',requires:['docusign-clm'],desc:'Внедрение и настройка процессов управления жизненным циклом договоров (CLM).'},
+    {id:'docusign-org',walletId:'docusign-org-cert',cost:14,catalogId:'docusign-org-cert',title:'Управление организацией в DocuSign',icon:'🏢',path:'../docusign-org-cert/',storage:'apk-dsorgcert',requires:['docusign'],desc:'Отдельная специализация по управлению организацией DocuSign.'}
   ];
 
   var BY_ID = {}, ALL = [], selectedId = 'foundations', hoveredId = null, currentFilter = 'all';
@@ -679,7 +679,7 @@
       if (course.tracker === 'quality' || course.tracker === 'portfolio') amount = 1;
       if (course.tracker === 'simulator' || course.tracker === 'final') amount = 2;
       if (course.tracker === 'projectStudio' || course.tracker === 'cert') amount = 0;
-      return '<div class="curriculum-lesson-row' + (done ? ' passed' : '') + (depth ? ' nested' : '') + '"><span class="curriculum-lesson-check">' + (done ? '✓' : '○') + '</span><span class="curriculum-lesson-copy"><span class="curriculum-lesson-title">' + safeText(item.title) + '</span>' + (item.goal ? '<span class="curriculum-lesson-goal">' + safeText(item.goal) + '</span>' : '') + '</span><span class="curriculum-lesson-reward">' + (done ? 'Зачтено' : (rewardAlreadyClaimed ? 'Монеты получены' : (amount ? '+' + amount + ' 🪙' : 'Этап'))) + '</span></div>';
+      return '<div class="curriculum-lesson-row' + (done ? ' passed' : '') + (depth ? ' nested' : '') + '"><span class="curriculum-lesson-check">' + (done ? '✓' : '○') + '</span><span class="curriculum-lesson-copy"><span class="curriculum-lesson-title">' + safeText(item.title) + '</span>' + (item.goal ? '<span class="curriculum-lesson-goal">' + safeText(item.goal) + '</span>' : '') + '</span><span class="curriculum-lesson-actions"><span class="curriculum-lesson-reward">' + (done ? 'Зачтено' : (rewardAlreadyClaimed ? 'Монеты получены' : (amount ? '+' + amount + ' 🪙' : 'Этап'))) + '</span><button type="button" class="curriculum-copy-context" title="Скопировать контекст этого урока для ИИ-агента" aria-label="Скопировать контекст урока ' + safeText(item.title) + '" data-course-title="' + safeText(course.title) + '" data-course-path="' + safeText(course.path || '') + '" data-course-id="' + safeText(course.id) + '" data-lesson-title="' + safeText(item.title) + '" data-lesson-id="' + safeText(item.id) + '" data-lesson-unit="' + safeText(item.unit || '') + '" data-lesson-goal="' + safeText(item.goal || '') + '" data-lesson-done="' + (done ? 'true' : 'false') + '" data-parent-id="' + safeText(parentId || '') + '">⧉ Скопировать контекст</button></span></div>';
     }
     if (course.tracker === 'portfolio') {
       catalog.forEach(function(project){
@@ -1590,6 +1590,86 @@
     toast.textContent = message; toast.classList.add('show');
     window.setTimeout(function(){ toast.classList.remove('show'); }, 2600);
   }
+
+
+  function buildLessonAgentContext(button) {
+    var courseTitle = button.getAttribute('data-course-title') || 'Курс не указан';
+    var courseId = button.getAttribute('data-course-id') || '';
+    var lessonTitle = button.getAttribute('data-lesson-title') || 'Урок не указан';
+    var unit = button.getAttribute('data-lesson-unit') || '';
+    var goal = button.getAttribute('data-lesson-goal') || '';
+    var lessonId = button.getAttribute('data-lesson-id') || '';
+    var parentId = button.getAttribute('data-parent-id') || '';
+    var done = button.getAttribute('data-lesson-done') === 'true';
+    var path = button.getAttribute('data-course-path') || '';
+    var materialUrl = window.location.href;
+    try { if (path) materialUrl = new URL(path, window.location.href).href; } catch (e) {}
+    var lines = [
+      'КОНТЕКСТ ДЛЯ ИИ-АГЕНТА',
+      'Проект: Analyst Prep Kit — DataCraft.',
+      'Курс: ' + courseTitle,
+      courseId ? 'Идентификатор курса: ' + courseId : '',
+      unit ? 'Раздел: ' + unit : '',
+      'Урок: ' + lessonTitle,
+      lessonId ? 'Идентификатор урока: ' + lessonId : '',
+      parentId ? 'Родительский кейс/раздел: ' + parentId : '',
+      goal ? 'Цель урока: ' + goal : '',
+      'Статус: ' + (done ? 'отмечен как пройденный в учебном плане' : 'ещё не отмечен как пройденный'),
+      'Страница учебного материала: ' + materialUrl,
+      '',
+      'Задача для агента:',
+      'Помоги мне изучить именно этот урок на русском языке. Сначала кратко объясни основные понятия, затем предложи пошаговый разбор и практическое задание из реальной работы аналитика. Не решай всё за меня: задавай уточняющие вопросы, проверяй мои ответы и указывай на ошибки. Учитывай предыдущие знания, если я их опишу.',
+      'Если ты не можешь открыть страницу учебного материала, не утверждай, что прочитал её: попроси меня вставить нужный фрагмент. Сохраняй названия команд, функций и синтаксис без перевода.'
+    ];
+    return lines.filter(function(line){ return line !== ''; }).join('\n');
+  }
+
+  function copyTextWithFallback(text, onSuccess, onFailure) {
+    function fallback() {
+      var area = document.createElement('textarea');
+      area.value = text;
+      area.setAttribute('readonly', '');
+      area.style.position = 'fixed';
+      area.style.opacity = '0';
+      area.style.pointerEvents = 'none';
+      document.body.appendChild(area);
+      area.focus();
+      area.select();
+      var copied = false;
+      try { copied = document.execCommand('copy'); } catch (e) {}
+      area.remove();
+      if (copied) { onSuccess(); return; }
+      onFailure();
+      window.prompt('Автоматическое копирование недоступно. Скопируй контекст из этого поля:', text);
+    }
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+      navigator.clipboard.writeText(text).then(onSuccess).catch(fallback);
+    } else {
+      fallback();
+    }
+  }
+
+  document.addEventListener('click', function(e) {
+    var button = e.target && e.target.closest ? e.target.closest('.curriculum-copy-context') : null;
+    if (!button) return;
+    e.preventDefault();
+    var text = buildLessonAgentContext(button);
+    var originalLabel = button.textContent;
+    button.disabled = true;
+    copyTextWithFallback(text, function() {
+      button.textContent = '✓ Скопировано';
+      button.classList.add('copied');
+      showToastIfAvailable('Контекст урока скопирован. Вставь его в окно ИИ-агента.');
+      window.setTimeout(function() {
+        button.textContent = originalLabel;
+        button.classList.remove('copied');
+        button.disabled = false;
+      }, 1800);
+    }, function() {
+      button.disabled = false;
+      button.textContent = originalLabel;
+    });
+  });
 
   /* Main 60 FPS Animation Loop for the Curriculum World Canvas */
   function animateWorldLoop(ts) {

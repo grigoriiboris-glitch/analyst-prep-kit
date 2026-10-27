@@ -3,1369 +3,1369 @@ window.DataCraftLessonCatalog = {
   "sql": [
     {
       "id": "100",
-      "title": "What SQL Is, and Why It Is Worth Your Time",
-      "unit": "Unit 0: Orientation"
+      "title": "Что такое SQL и зачем его изучать",
+      "unit": "Раздел 0: Введение"
     },
     {
       "id": "101",
-      "title": "What a Database Is",
-      "unit": "Unit 0: Orientation"
+      "title": "Что такое база данных",
+      "unit": "Раздел 0: Введение"
     },
     {
       "id": "1",
       "title": "SELECT & FROM",
-      "unit": "Unit 1: First Queries"
+      "unit": "Раздел 1: Первые запросы"
     },
     {
       "id": "2",
       "title": "WHERE",
-      "unit": "Unit 1: First Queries"
+      "unit": "Раздел 1: Первые запросы"
     },
     {
       "id": "104",
-      "title": "A Query Returns a Table; NULL = Unknown",
-      "unit": "Unit 1: First Queries"
+      "title": "Запрос возвращает таблицу; NULL означает неизвестное значение",
+      "unit": "Раздел 1: Первые запросы"
     },
     {
       "id": "3",
       "title": "ORDER BY & LIMIT",
-      "unit": "Unit 1: First Queries"
+      "unit": "Раздел 1: Первые запросы"
     },
     {
       "id": "102",
-      "title": "The Grain of a Table",
-      "unit": "Unit 2: Aggregation & Shaping"
+      "title": "Уровень детализации таблицы",
+      "unit": "Раздел 2: Агрегация и преобразование данных"
     },
     {
       "id": "5",
       "title": "COUNT, SUM & GROUP BY",
-      "unit": "Unit 2: Aggregation & Shaping"
+      "unit": "Раздел 2: Агрегация и преобразование данных"
     },
     {
       "id": "7",
-      "title": "HAVING & Duplicates",
-      "unit": "Unit 2: Aggregation & Shaping"
+      "title": "HAVING и дубликаты",
+      "unit": "Раздел 2: Агрегация и преобразование данных"
     },
     {
       "id": "8",
       "title": "CASE & COALESCE",
-      "unit": "Unit 2: Aggregation & Shaping"
+      "unit": "Раздел 2: Агрегация и преобразование данных"
     },
     {
       "id": "103",
-      "title": "Keys & Why Tables Relate",
-      "unit": "Unit 3: Joins"
+      "title": "Ключи и связи между таблицами",
+      "unit": "Раздел 3: Соединение таблиц"
     },
     {
       "id": "4",
       "title": "INNER JOIN",
-      "unit": "Unit 3: Joins"
+      "unit": "Раздел 3: Соединение таблиц"
     },
     {
       "id": "6",
-      "title": "LEFT JOIN & NULLs",
-      "unit": "Unit 3: Joins"
+      "title": "LEFT JOIN и значения NULL",
+      "unit": "Раздел 3: Соединение таблиц"
     },
     {
       "id": "13",
       "title": "RIGHT JOIN & FULL OUTER JOIN",
-      "unit": "Unit 3: Joins"
+      "unit": "Раздел 3: Соединение таблиц"
     },
     {
       "id": "14",
-      "title": "Date Functions",
-      "unit": "Unit 4: Advanced SQL"
+      "title": "Функции для работы с датами",
+      "unit": "Раздел 4: Продвинутый SQL"
     },
     {
       "id": "9",
-      "title": "Subqueries",
-      "unit": "Unit 4: Advanced SQL"
+      "title": "Подзапросы",
+      "unit": "Раздел 4: Продвинутый SQL"
     },
     {
       "id": "11",
-      "title": "CTEs",
-      "unit": "Unit 4: Advanced SQL"
+      "title": "Общие табличные выражения (CTE)",
+      "unit": "Раздел 4: Продвинутый SQL"
     },
     {
       "id": "10",
-      "title": "Window Functions",
-      "unit": "Unit 4: Advanced SQL"
+      "title": "Оконные функции",
+      "unit": "Раздел 4: Продвинутый SQL"
     },
     {
       "id": "12",
-      "title": "Reconciliation Queries",
-      "unit": "Unit 4: Advanced SQL"
+      "title": "Сверочные запросы",
+      "unit": "Раздел 4: Продвинутый SQL"
     },
     {
       "id": "15",
-      "title": "SQL Indexing",
-      "unit": "Unit 4: Advanced SQL"
+      "title": "Индексы в SQL",
+      "unit": "Раздел 4: Продвинутый SQL"
     },
     {
       "id": "16",
-      "title": "Temp Tables vs Views",
-      "unit": "Unit 4: Advanced SQL"
+      "title": "Временные таблицы и представления",
+      "unit": "Раздел 4: Продвинутый SQL"
     },
     {
       "id": "501",
-      "title": "Profiling: Counts & Uniqueness",
-      "unit": "Unit 5: Data Migration"
+      "title": "Профилирование: количество строк и уникальность",
+      "unit": "Раздел 5: Перенос данных"
     },
     {
       "id": "502",
-      "title": "Profiling: Finding Duplicates",
-      "unit": "Unit 5: Data Migration"
+      "title": "Профилирование: поиск дубликатов",
+      "unit": "Раздел 5: Перенос данных"
     },
     {
       "id": "503",
-      "title": "Profiling: Nulls & Format Chaos",
-      "unit": "Unit 5: Data Migration"
+      "title": "Профилирование: NULL и несогласованные форматы",
+      "unit": "Раздел 5: Перенос данных"
     },
     {
       "id": "504",
-      "title": "Cleansing: Standardize Text",
-      "unit": "Unit 5: Data Migration"
+      "title": "Очистка: стандартизация текста",
+      "unit": "Раздел 5: Перенос данных"
     },
     {
       "id": "505",
-      "title": "Mapping: CASE WHEN (source → target)",
-      "unit": "Unit 5: Data Migration"
+      "title": "Сопоставление: CASE WHEN (источник → целевое значение)",
+      "unit": "Раздел 5: Перенос данных"
     },
     {
       "id": "506",
-      "title": "Type Coercion & Defaults: CAST + COALESCE",
-      "unit": "Unit 5: Data Migration"
+      "title": "Преобразование типов и значения по умолчанию: CAST + COALESCE",
+      "unit": "Раздел 5: Перенос данных"
     },
     {
       "id": "507",
-      "title": "Validation: Row Counts & Control Totals",
-      "unit": "Unit 5: Data Migration"
+      "title": "Проверка: количество строк и контрольные суммы",
+      "unit": "Раздел 5: Перенос данных"
     },
     {
       "id": "508",
-      "title": "Reconciliation: What Didn’t Make It",
-      "unit": "Unit 5: Data Migration"
+      "title": "Сверка: что потерялось при переносе",
+      "unit": "Раздел 5: Перенос данных"
     },
     {
       "id": "601",
-      "title": "Define the Metric Before You Compute It",
-      "unit": "Unit 6: From Question to Metric"
+      "title": "Определи метрику до расчёта",
+      "unit": "Раздел 6: От вопроса к метрике"
     },
     {
       "id": "602",
-      "title": "Segment Customers with CASE",
-      "unit": "Unit 6: From Question to Metric"
+      "title": "Сегментация клиентов с помощью CASE",
+      "unit": "Раздел 6: От вопроса к метрике"
     },
     {
       "id": "603",
-      "title": "Month-over-Month Growth with LAG",
-      "unit": "Unit 6: From Question to Metric"
+      "title": "Месячный рост с помощью LAG",
+      "unit": "Раздел 6: От вопроса к метрике"
     },
     {
       "id": "604",
-      "title": "Running Totals with a Window Frame",
-      "unit": "Unit 6: From Question to Metric"
+      "title": "Нарастающий итог с оконным фреймом",
+      "unit": "Раздел 6: От вопроса к метрике"
     },
     {
       "id": "605",
-      "title": "Funnel Conversion with Conditional Counts",
-      "unit": "Unit 6: From Question to Metric"
+      "title": "Конверсия воронки с условным подсчётом",
+      "unit": "Раздел 6: От вопроса к метрике"
     },
     {
       "id": "606",
-      "title": "Cohort Retention",
-      "unit": "Unit 6: From Question to Metric"
+      "title": "Удержание когорт",
+      "unit": "Раздел 6: От вопроса к метрике"
     },
     {
       "id": "701",
-      "title": "Build the P&L from the Ledger",
-      "unit": "Unit 7: Financial Analysis"
+      "title": "Составить отчёт о прибылях и убытках по главной книге",
+      "unit": "Раздел 7: Финансовый анализ"
     },
     {
       "id": "702",
-      "title": "Margins: Gross, Operating, Net",
-      "unit": "Unit 7: Financial Analysis"
+      "title": "Маржинальность: валовая, операционная и чистая",
+      "unit": "Раздел 7: Финансовый анализ"
     },
     {
       "id": "703",
-      "title": "Liquidity & Leverage Ratios",
-      "unit": "Unit 7: Financial Analysis"
+      "title": "Коэффициенты ликвидности и долговой нагрузки",
+      "unit": "Раздел 7: Финансовый анализ"
     },
     {
       "id": "704",
-      "title": "Time Value of Money: NPV",
-      "unit": "Unit 7: Financial Analysis"
+      "title": "Временная стоимость денег: NPV",
+      "unit": "Раздел 7: Финансовый анализ"
     },
     {
       "id": "705",
-      "title": "Budget vs Actual: Variance Analysis",
-      "unit": "Unit 7: Financial Analysis"
+      "title": "План и факт: анализ отклонений",
+      "unit": "Раздел 7: Финансовый анализ"
     },
     {
       "id": "706",
-      "title": "Unit Economics: Contribution Margin & Break-Even",
-      "unit": "Unit 7: Financial Analysis"
+      "title": "Юнит-экономика: маржинальный доход и точка безубыточности",
+      "unit": "Раздел 7: Финансовый анализ"
     },
     {
       "id": "801",
-      "title": "Profile the Data First",
-      "unit": "Unit 8: Advanced Analyst Toolkit"
+      "title": "Сначала изучи структуру данных",
+      "unit": "Раздел 8: Продвинутые инструменты аналитика"
     },
     {
       "id": "802",
-      "title": "Validate the Grain",
-      "unit": "Unit 8: Advanced Analyst Toolkit"
+      "title": "Проверь уровень детализации",
+      "unit": "Раздел 8: Продвинутые инструменты аналитика"
     },
     {
       "id": "803",
-      "title": "Distribution & Outliers",
-      "unit": "Unit 8: Advanced Analyst Toolkit"
+      "title": "Распределение и выбросы",
+      "unit": "Раздел 8: Продвинутые инструменты аналитика"
     },
     {
       "id": "804",
-      "title": "Pareto: Find the Vital Few",
-      "unit": "Unit 8: Advanced Analyst Toolkit"
+      "title": "Парето: найди главное меньшинство",
+      "unit": "Раздел 8: Продвинутые инструменты аналитика"
     },
     {
       "id": "805",
-      "title": "Correlation ≠ Causation",
-      "unit": "Unit 8: Advanced Analyst Toolkit"
+      "title": "Корреляция не означает причинность",
+      "unit": "Раздел 8: Продвинутые инструменты аналитика"
     },
     {
       "id": "806",
-      "title": "Sanity-Check & Reconcile",
-      "unit": "Unit 8: Advanced Analyst Toolkit"
+      "title": "Проверь здравый смысл и сведи результаты",
+      "unit": "Раздел 8: Продвинутые инструменты аналитика"
     },
     {
       "id": "105",
-      "title": "Set Up a SQL Database",
-      "unit": "Unit 9: Put It On Your Own Data"
+      "title": "Настроить базу данных SQL",
+      "unit": "Раздел 9: Работа на собственных данных"
     }
   ],
   "excel": [
     {
       "id": "101",
-      "title": "How a Spreadsheet Is Built (the Grid)",
-      "unit": "Unit 0: Before You Type a Formula"
+      "title": "Как устроена электронная таблица: сетка",
+      "unit": "Раздел 0: Перед вводом формулы"
     },
     {
       "id": "102",
-      "title": "Cell References & the A1 Grid",
-      "unit": "Unit 0: Before You Type a Formula"
+      "title": "Ссылки на ячейки и система A1",
+      "unit": "Раздел 0: Перед вводом формулы"
     },
     {
       "id": "103",
-      "title": "Text vs Number (& Dates)",
-      "unit": "Unit 0: Before You Type a Formula"
+      "title": "Текст, числа и даты",
+      "unit": "Раздел 0: Перед вводом формулы"
     },
     {
       "id": "104",
-      "title": "What a Formula Actually Is",
-      "unit": "Unit 0: Before You Type a Formula"
+      "title": "Что такое формула на самом деле",
+      "unit": "Раздел 0: Перед вводом формулы"
     },
     {
       "id": "1",
-      "title": "Your First Formula",
-      "unit": "Unit 1: Formulas"
+      "title": "Твоя первая формула",
+      "unit": "Раздел 1: Формулы"
     },
     {
       "id": "2",
-      "title": "Make Decisions with IF",
-      "unit": "Unit 1: Formulas"
+      "title": "Принимай решения с помощью IF",
+      "unit": "Раздел 1: Формулы"
     },
     {
       "id": "3",
-      "title": "Lookup Magic: VLOOKUP",
-      "unit": "Unit 1: Formulas"
+      "title": "Поиск данных с помощью VLOOKUP",
+      "unit": "Раздел 1: Формулы"
     },
     {
       "id": "4",
-      "title": "Lookup Evolved: XLOOKUP",
-      "unit": "Unit 1: Formulas"
+      "title": "Продвинутый поиск с помощью XLOOKUP",
+      "unit": "Раздел 1: Формулы"
     },
     {
       "id": "5",
-      "title": "Count and Sum with Conditions",
-      "unit": "Unit 1: Formulas"
+      "title": "Подсчёт и суммирование по условиям",
+      "unit": "Раздел 1: Формулы"
     },
     {
       "id": "6",
-      "title": "What Is a PivotTable?",
-      "unit": "Unit 2: PivotTables"
+      "title": "Что такое сводная таблица",
+      "unit": "Раздел 2: Сводные таблицы"
     },
     {
       "id": "7",
-      "title": "Build Your First Pivot",
-      "unit": "Unit 2: PivotTables"
+      "title": "Создай первую сводную таблицу",
+      "unit": "Раздел 2: Сводные таблицы"
     },
     {
       "id": "8",
-      "title": "Slicers, Sorting & Grouping",
-      "unit": "Unit 2: PivotTables"
+      "title": "Срезы, сортировка и группировка",
+      "unit": "Раздел 2: Сводные таблицы"
     },
     {
       "id": "9",
-      "title": "Spot and Fix Dirty Data",
-      "unit": "Unit 3: Data Cleaning"
+      "title": "Найди и исправь грязные данные",
+      "unit": "Раздел 3: Очистка данных"
     },
     {
       "id": "10",
-      "title": "Text Functions",
-      "unit": "Unit 3: Data Cleaning"
+      "title": "Текстовые функции",
+      "unit": "Раздел 3: Очистка данных"
     },
     {
       "id": "11",
-      "title": "Dates and Numbers",
-      "unit": "Unit 3: Data Cleaning"
+      "title": "Даты и числа",
+      "unit": "Раздел 3: Очистка данных"
     },
     {
       "id": "12",
-      "title": "Defensive Formulas: IFERROR",
-      "unit": "Unit 3: Data Cleaning"
+      "title": "Защитные формулы: IFERROR",
+      "unit": "Раздел 3: Очистка данных"
     },
     {
       "id": "13",
-      "title": "Excel Tables (Ctrl+T)",
-      "unit": "Unit 4: Deeper Formulas"
+      "title": "Таблицы Excel (Ctrl+T)",
+      "unit": "Раздел 4: Продвинутые формулы"
     },
     {
       "id": "14",
-      "title": "Nested IF and IFS",
-      "unit": "Unit 4: Deeper Formulas"
+      "title": "Вложенные IF и IFS",
+      "unit": "Раздел 4: Продвинутые формулы"
     },
     {
       "id": "15",
       "title": "INDEX + MATCH",
-      "unit": "Unit 4: Deeper Formulas"
+      "unit": "Раздел 4: Продвинутые формулы"
     },
     {
       "id": "16",
       "title": "SUMPRODUCT",
-      "unit": "Unit 4: Deeper Formulas"
+      "unit": "Раздел 4: Продвинутые формулы"
     },
     {
       "id": "17",
-      "title": "Your First Chart",
-      "unit": "Unit 5: Charts & Formatting"
+      "title": "Твоя первая диаграмма",
+      "unit": "Раздел 5: Диаграммы и форматирование"
     },
     {
       "id": "18",
-      "title": "Conditional Formatting",
-      "unit": "Unit 5: Charts & Formatting"
+      "title": "Условное форматирование",
+      "unit": "Раздел 5: Диаграммы и форматирование"
     },
     {
       "id": "19",
-      "title": "Data Validation",
-      "unit": "Unit 5: Charts & Formatting"
+      "title": "Проверка данных",
+      "unit": "Раздел 5: Диаграммы и форматирование"
     },
     {
       "id": "20",
-      "title": "Named Ranges",
-      "unit": "Unit 5: Charts & Formatting"
+      "title": "Именованные диапазоны",
+      "unit": "Раздел 5: Диаграммы и форматирование"
     },
     {
       "id": "21",
-      "title": "Power Query Basics",
-      "unit": "Unit 6: Power Tools"
+      "title": "Основы Power Query",
+      "unit": "Раздел 6: Расширенные инструменты"
     },
     {
       "id": "22",
-      "title": "Dynamic Arrays",
-      "unit": "Unit 6: Power Tools"
+      "title": "Динамические массивы",
+      "unit": "Раздел 6: Расширенные инструменты"
     },
     {
       "id": "23",
-      "title": "Keyboard Shortcuts & Speed",
-      "unit": "Unit 6: Power Tools"
+      "title": "Горячие клавиши и скорость работы",
+      "unit": "Раздел 6: Расширенные инструменты"
     },
     {
       "id": "24",
-      "title": "Protecting Your Work",
-      "unit": "Unit 6: Power Tools"
+      "title": "Защита результатов работы",
+      "unit": "Раздел 6: Расширенные инструменты"
     },
     {
       "id": "521",
-      "title": "Profiling a Source Sheet",
-      "unit": "Unit 7: Data Migration"
+      "title": "Профилирование исходного листа",
+      "unit": "Раздел 7: Перенос данных"
     },
     {
       "id": "522",
-      "title": "Finding & Removing Duplicates",
-      "unit": "Unit 7: Data Migration"
+      "title": "Поиск и удаление дубликатов",
+      "unit": "Раздел 7: Перенос данных"
     },
     {
       "id": "523",
-      "title": "Standardizing Text",
-      "unit": "Unit 7: Data Migration"
+      "title": "Стандартизация текста",
+      "unit": "Раздел 7: Перенос данных"
     },
     {
       "id": "524",
-      "title": "Type Coercion",
-      "unit": "Unit 7: Data Migration"
+      "title": "Преобразование типов",
+      "unit": "Раздел 7: Перенос данных"
     },
     {
       "id": "525",
-      "title": "Mapping & Reconciliation",
-      "unit": "Unit 7: Data Migration"
+      "title": "Сопоставление и сверка данных",
+      "unit": "Раздел 7: Перенос данных"
     },
     {
       "id": "601",
-      "title": "Define the Metric Before You Compute It",
-      "unit": "Unit 8: From Question to Metric"
+      "title": "Определи метрику до расчёта",
+      "unit": "Раздел 8: От вопроса к метрике"
     },
     {
       "id": "602",
-      "title": "Segment with IFS",
-      "unit": "Unit 8: From Question to Metric"
+      "title": "Сегментация с помощью IFS",
+      "unit": "Раздел 8: От вопроса к метрике"
     },
     {
       "id": "603",
-      "title": "Month-over-Month Growth",
-      "unit": "Unit 8: From Question to Metric"
+      "title": "Месячный рост",
+      "unit": "Раздел 8: От вопроса к метрике"
     },
     {
       "id": "604",
-      "title": "Running Totals with an Expanding Range",
-      "unit": "Unit 8: From Question to Metric"
+      "title": "Нарастающий итог с расширяющимся диапазоном",
+      "unit": "Раздел 8: От вопроса к метрике"
     },
     {
       "id": "605",
-      "title": "Funnel Conversion with COUNTIFS",
-      "unit": "Unit 8: From Question to Metric"
+      "title": "Конверсия воронки с COUNTIFS",
+      "unit": "Раздел 8: От вопроса к метрике"
     },
     {
       "id": "606",
-      "title": "Cohort Retention",
-      "unit": "Unit 8: From Question to Metric"
+      "title": "Удержание когорт",
+      "unit": "Раздел 8: От вопроса к метрике"
     },
     {
       "id": "701",
-      "title": "Build the P&L with SUMIFS",
-      "unit": "Unit 9: Financial Analysis"
+      "title": "Составь отчёт о прибылях и убытках с помощью SUMIFS",
+      "unit": "Раздел 9: Финансовый анализ"
     },
     {
       "id": "702",
-      "title": "Margins: Gross, Operating, Net",
-      "unit": "Unit 9: Financial Analysis"
+      "title": "Маржинальность: валовая, операционная и чистая",
+      "unit": "Раздел 9: Финансовый анализ"
     },
     {
       "id": "703",
-      "title": "Liquidity & Leverage Ratios",
-      "unit": "Unit 9: Financial Analysis"
+      "title": "Коэффициенты ликвидности и долговой нагрузки",
+      "unit": "Раздел 9: Финансовый анализ"
     },
     {
       "id": "704",
-      "title": "Time Value of Money: NPV & IRR",
-      "unit": "Unit 9: Financial Analysis"
+      "title": "Временная стоимость денег: NPV и IRR",
+      "unit": "Раздел 9: Финансовый анализ"
     },
     {
       "id": "705",
-      "title": "Budget vs Actual: Variance Analysis",
-      "unit": "Unit 9: Financial Analysis"
+      "title": "План и факт: анализ отклонений",
+      "unit": "Раздел 9: Финансовый анализ"
     },
     {
       "id": "706",
-      "title": "Unit Economics: Contribution Margin & Break-Even",
-      "unit": "Unit 9: Financial Analysis"
+      "title": "Юнит-экономика: маржинальный доход и точка безубыточности",
+      "unit": "Раздел 9: Финансовый анализ"
     },
     {
       "id": "801",
-      "title": "Profile the Data First",
-      "unit": "Unit 10: Advanced Analyst Toolkit"
+      "title": "Сначала изучи структуру данных",
+      "unit": "Раздел 10: Продвинутые инструменты аналитика"
     },
     {
       "id": "802",
-      "title": "Validate the Grain",
-      "unit": "Unit 10: Advanced Analyst Toolkit"
+      "title": "Проверь уровень детализации",
+      "unit": "Раздел 10: Продвинутые инструменты аналитика"
     },
     {
       "id": "803",
-      "title": "Distribution & Outliers",
-      "unit": "Unit 10: Advanced Analyst Toolkit"
+      "title": "Распределение и выбросы",
+      "unit": "Раздел 10: Продвинутые инструменты аналитика"
     },
     {
       "id": "804",
-      "title": "Pareto: Find the Vital Few",
-      "unit": "Unit 10: Advanced Analyst Toolkit"
+      "title": "Парето: найди главное меньшинство",
+      "unit": "Раздел 10: Продвинутые инструменты аналитика"
     },
     {
       "id": "805",
-      "title": "Correlation ≠ Causation",
-      "unit": "Unit 10: Advanced Analyst Toolkit"
+      "title": "Корреляция не означает причинность",
+      "unit": "Раздел 10: Продвинутые инструменты аналитика"
     },
     {
       "id": "806",
-      "title": "Sanity-Check & Reconcile",
-      "unit": "Unit 10: Advanced Analyst Toolkit"
+      "title": "Проверь здравый смысл и сведи результаты",
+      "unit": "Раздел 10: Продвинутые инструменты аналитика"
     }
   ],
   "python": [
     {
       "id": "101",
-      "title": "What Code Is (Values, Variables, Top-to-Bottom)",
-      "unit": "Unit 0: Before You Code"
+      "title": "Что такое код: значения, переменные и выполнение сверху вниз",
+      "unit": "Раздел 0: Перед написанием кода"
     },
     {
       "id": "102",
-      "title": "Data Types & the Text-vs-Number Trap",
-      "unit": "Unit 0: Before You Code"
+      "title": "Типы данных и ловушка «текст вместо числа»",
+      "unit": "Раздел 0: Перед написанием кода"
     },
     {
       "id": "103",
-      "title": "What a Library Is & Why pandas (import)",
-      "unit": "Unit 0: Before You Code"
+      "title": "Что такое библиотека и зачем нужен pandas (import)",
+      "unit": "Раздел 0: Перед написанием кода"
     },
     {
       "id": "104",
-      "title": "What a DataFrame Really Is (Rows, Cols, Index, Grain)",
-      "unit": "Unit 0: Before You Code"
+      "title": "Что такое DataFrame: строки, столбцы, индекс и уровень детализации",
+      "unit": "Раздел 0: Перед написанием кода"
     },
     {
       "id": "1",
-      "title": "Variables & Data Types",
-      "unit": "Unit 1: Python Foundations"
+      "title": "Переменные и типы данных",
+      "unit": "Раздел 1: Основы Python"
     },
     {
       "id": "2",
-      "title": "Lists & Dictionaries",
-      "unit": "Unit 1: Python Foundations"
+      "title": "Списки и словари",
+      "unit": "Раздел 1: Основы Python"
     },
     {
       "id": "3",
-      "title": "Functions & Loops",
-      "unit": "Unit 1: Python Foundations"
+      "title": "Функции и циклы",
+      "unit": "Раздел 1: Основы Python"
     },
     {
       "id": "4",
-      "title": "Your First DataFrame",
-      "unit": "Unit 2: pandas"
+      "title": "Твой первый DataFrame",
+      "unit": "Раздел 2: pandas"
     },
     {
       "id": "5",
-      "title": "Exploring Data",
-      "unit": "Unit 2: pandas"
+      "title": "Исследование данных",
+      "unit": "Раздел 2: pandas"
     },
     {
       "id": "6",
-      "title": "Filtering Rows",
-      "unit": "Unit 2: pandas"
+      "title": "Фильтрация строк",
+      "unit": "Раздел 2: pandas"
     },
     {
       "id": "7",
-      "title": "Sorting & Selecting",
-      "unit": "Unit 2: pandas"
+      "title": "Сортировка и выбор данных",
+      "unit": "Раздел 2: pandas"
     },
     {
       "id": "8",
-      "title": "GroupBy & Aggregation",
-      "unit": "Unit 2: pandas"
+      "title": "Группировка (GroupBy) и агрегация",
+      "unit": "Раздел 2: pandas"
     },
     {
       "id": "9",
-      "title": "Merging DataFrames",
-      "unit": "Unit 2: pandas"
+      "title": "Объединение DataFrame",
+      "unit": "Раздел 2: pandas"
     },
     {
       "id": "10",
-      "title": "Finding & Fixing Nulls",
-      "unit": "Unit 3: Data Cleaning"
+      "title": "Поиск и обработка пропусков",
+      "unit": "Раздел 3: Очистка данных"
     },
     {
       "id": "11",
-      "title": "String Cleaning",
-      "unit": "Unit 3: Data Cleaning"
+      "title": "Очистка строк",
+      "unit": "Раздел 3: Очистка данных"
     },
     {
       "id": "12",
-      "title": "Types, Duplicates & Export",
-      "unit": "Unit 3: Data Cleaning"
+      "title": "Типы данных, дубликаты и экспорт",
+      "unit": "Раздел 3: Очистка данных"
     },
     {
       "id": "13",
-      "title": "Deep Copy vs Shallow Copy",
-      "unit": "Unit 3: Data Cleaning"
+      "title": "Глубокое и поверхностное копирование",
+      "unit": "Раздел 3: Очистка данных"
     },
     {
       "id": "14",
-      "title": "Decorators",
-      "unit": "Unit 3: Data Cleaning"
+      "title": "Декораторы",
+      "unit": "Раздел 3: Очистка данных"
     },
     {
       "id": "401",
-      "title": "Profiling: Shape, Nulls & Uniqueness",
-      "unit": "Unit 4: Data Migration"
+      "title": "Профилирование: размер, пропуски и уникальность",
+      "unit": "Раздел 4: Перенос данных"
     },
     {
       "id": "402",
-      "title": "Profiling: Finding Duplicates",
-      "unit": "Unit 4: Data Migration"
+      "title": "Профилирование: поиск дубликатов",
+      "unit": "Раздел 4: Перенос данных"
     },
     {
       "id": "403",
-      "title": "Cleansing: Standardize Text",
-      "unit": "Unit 4: Data Migration"
+      "title": "Очистка: стандартизация текста",
+      "unit": "Раздел 4: Перенос данных"
     },
     {
       "id": "404",
-      "title": "Type Coercion & Defaults",
-      "unit": "Unit 4: Data Migration"
+      "title": "Преобразование типов и значения по умолчанию",
+      "unit": "Раздел 4: Перенос данных"
     },
     {
       "id": "405",
-      "title": "Mapping: source → target values",
-      "unit": "Unit 4: Data Migration"
+      "title": "Сопоставление значений: источник → назначение",
+      "unit": "Раздел 4: Перенос данных"
     },
     {
       "id": "406",
-      "title": "Validation & Reconciliation",
-      "unit": "Unit 4: Data Migration"
+      "title": "Проверка и сверка данных",
+      "unit": "Раздел 4: Перенос данных"
     },
     {
       "id": "601",
-      "title": "Define the Metric Before You Compute It",
-      "unit": "Unit 5: From Question to Metric"
+      "title": "Определи метрику до расчёта",
+      "unit": "Раздел 5: От вопроса к метрике"
     },
     {
       "id": "602",
-      "title": "Segment with pd.cut",
-      "unit": "Unit 5: From Question to Metric"
+      "title": "Сегментация с помощью pd.cut",
+      "unit": "Раздел 5: От вопроса к метрике"
     },
     {
       "id": "603",
-      "title": "Month-over-Month Growth with pct_change",
-      "unit": "Unit 5: From Question to Metric"
+      "title": "Месячный рост с помощью pct_change",
+      "unit": "Раздел 5: От вопроса к метрике"
     },
     {
       "id": "604",
-      "title": "Running Totals with cumsum",
-      "unit": "Unit 5: From Question to Metric"
+      "title": "Нарастающий итог с помощью cumsum",
+      "unit": "Раздел 5: От вопроса к метрике"
     },
     {
       "id": "605",
-      "title": "Funnel Conversion with nunique",
-      "unit": "Unit 5: From Question to Metric"
+      "title": "Конверсия воронки с nunique",
+      "unit": "Раздел 5: От вопроса к метрике"
     },
     {
       "id": "606",
-      "title": "Cohort Retention",
-      "unit": "Unit 5: From Question to Metric"
+      "title": "Удержание когорт",
+      "unit": "Раздел 5: От вопроса к метрике"
     },
     {
       "id": "701",
-      "title": "Build the P&L from a Ledger",
-      "unit": "Unit 6: Financial Analysis"
+      "title": "Составить отчёт о прибылях и убытках по бухгалтерскому регистру",
+      "unit": "Раздел 6: Финансовый анализ"
     },
     {
       "id": "702",
-      "title": "Margins: Gross, Operating, Net",
-      "unit": "Unit 6: Financial Analysis"
+      "title": "Маржинальность: валовая, операционная и чистая",
+      "unit": "Раздел 6: Финансовый анализ"
     },
     {
       "id": "703",
-      "title": "Liquidity & Leverage Ratios",
-      "unit": "Unit 6: Financial Analysis"
+      "title": "Коэффициенты ликвидности и долговой нагрузки",
+      "unit": "Раздел 6: Финансовый анализ"
     },
     {
       "id": "704",
-      "title": "Time Value of Money: NPV & IRR",
-      "unit": "Unit 6: Financial Analysis"
+      "title": "Временная стоимость денег: NPV и IRR",
+      "unit": "Раздел 6: Финансовый анализ"
     },
     {
       "id": "705",
-      "title": "Budget vs Actual: Variance Analysis",
-      "unit": "Unit 6: Financial Analysis"
+      "title": "План и факт: анализ отклонений",
+      "unit": "Раздел 6: Финансовый анализ"
     },
     {
       "id": "706",
-      "title": "Unit Economics: Contribution Margin & Break-Even",
-      "unit": "Unit 6: Financial Analysis"
+      "title": "Юнит-экономика: маржинальный доход и точка безубыточности",
+      "unit": "Раздел 6: Финансовый анализ"
     },
     {
       "id": "801",
-      "title": "Profile the Data First",
-      "unit": "Unit 7: Advanced Analyst Toolkit"
+      "title": "Сначала изучи структуру данных",
+      "unit": "Раздел 7: Продвинутые инструменты аналитика"
     },
     {
       "id": "802",
-      "title": "Validate the Grain",
-      "unit": "Unit 7: Advanced Analyst Toolkit"
+      "title": "Проверь уровень детализации",
+      "unit": "Раздел 7: Продвинутые инструменты аналитика"
     },
     {
       "id": "803",
-      "title": "Distribution & Outliers",
-      "unit": "Unit 7: Advanced Analyst Toolkit"
+      "title": "Распределение и выбросы",
+      "unit": "Раздел 7: Продвинутые инструменты аналитика"
     },
     {
       "id": "804",
-      "title": "Pareto: Find the Vital Few",
-      "unit": "Unit 7: Advanced Analyst Toolkit"
+      "title": "Парето: найди главное меньшинство",
+      "unit": "Раздел 7: Продвинутые инструменты аналитика"
     },
     {
       "id": "805",
-      "title": "Correlation ≠ Causation",
-      "unit": "Unit 7: Advanced Analyst Toolkit"
+      "title": "Корреляция не означает причинность",
+      "unit": "Раздел 7: Продвинутые инструменты аналитика"
     },
     {
       "id": "806",
-      "title": "Sanity-Check & Reconcile",
-      "unit": "Unit 7: Advanced Analyst Toolkit"
+      "title": "Проверь здравый смысл и сведи результаты",
+      "unit": "Раздел 7: Продвинутые инструменты аналитика"
     }
   ],
   "powerbi": [
     {
       "id": "101",
-      "title": "How Power BI Sees Data (Table & Grain)",
-      "unit": "Unit 0: Before You Build"
+      "title": "Как Power BI представляет данные: таблицы и уровень детализации",
+      "unit": "Раздел 0: Перед созданием отчёта"
     },
     {
       "id": "102",
-      "title": "Data Types & Why They Matter in Power BI",
-      "unit": "Unit 0: Before You Build"
+      "title": "Типы данных и почему они важны в Power BI",
+      "unit": "Раздел 0: Перед созданием отчёта"
     },
     {
       "id": "103",
-      "title": "What 'Aggregate' Means in Power BI",
-      "unit": "Unit 0: Before You Build"
+      "title": "Что означает «агрегация» в Power BI",
+      "unit": "Раздел 0: Перед созданием отчёта"
     },
     {
       "id": "104",
-      "title": "Load vs Shape vs Analyze (The Power BI Loop)",
-      "unit": "Unit 0: Before You Build"
+      "title": "Загрузка, преобразование и анализ: цикл работы в Power BI",
+      "unit": "Раздел 0: Перед созданием отчёта"
     },
     {
       "id": "1",
-      "title": "The Power BI Interface",
-      "unit": "Unit 1: The Interface & Data"
+      "title": "Интерфейс Power BI",
+      "unit": "Раздел 1: Интерфейс и данные"
     },
     {
       "id": "2",
-      "title": "Connecting to Data",
-      "unit": "Unit 1: The Interface & Data"
+      "title": "Подключение к данным",
+      "unit": "Раздел 1: Интерфейс и данные"
     },
     {
       "id": "3",
-      "title": "Building Your First Visual",
-      "unit": "Unit 1: The Interface & Data"
+      "title": "Создание первой визуализации",
+      "unit": "Раздел 1: Интерфейс и данные"
     },
     {
       "id": "4",
-      "title": "Relationships & the Data Model",
-      "unit": "Unit 1: The Interface & Data"
+      "title": "Связи и модель данных",
+      "unit": "Раздел 1: Интерфейс и данные"
     },
     {
       "id": "5",
-      "title": "Calculated Columns vs Measures",
-      "unit": "Unit 2: DAX & Measures"
+      "title": "Вычисляемые столбцы и меры",
+      "unit": "Раздел 2: DAX и меры"
     },
     {
       "id": "6",
-      "title": "Basic DAX Aggregations",
-      "unit": "Unit 2: DAX & Measures"
+      "title": "Основные агрегаты DAX",
+      "unit": "Раздел 2: DAX и меры"
     },
     {
       "id": "7",
-      "title": "CALCULATE & Filter Context",
-      "unit": "Unit 2: DAX & Measures"
+      "title": "CALCULATE и контекст фильтра",
+      "unit": "Раздел 2: DAX и меры"
     },
     {
       "id": "8",
-      "title": "Time Intelligence",
-      "unit": "Unit 2: DAX & Measures"
+      "title": "Анализ времени",
+      "unit": "Раздел 2: DAX и меры"
     },
     {
       "id": "9",
-      "title": "Slicers & Filters",
-      "unit": "Unit 3: Reports & Insights"
+      "title": "Срезы и фильтры",
+      "unit": "Раздел 3: Отчёты и выводы"
     },
     {
       "id": "10",
-      "title": "Drill-Through & Cross-Filtering",
-      "unit": "Unit 3: Reports & Insights"
+      "title": "Детализация и перекрёстная фильтрация",
+      "unit": "Раздел 3: Отчёты и выводы"
     },
     {
       "id": "11",
-      "title": "Dashboard Design Principles",
-      "unit": "Unit 3: Reports & Insights"
+      "title": "Принципы проектирования дашбордов",
+      "unit": "Раздел 3: Отчёты и выводы"
     },
     {
       "id": "12",
-      "title": "Publishing & Sharing",
-      "unit": "Unit 3: Reports & Insights"
+      "title": "Публикация и совместный доступ",
+      "unit": "Раздел 3: Отчёты и выводы"
     },
     {
       "id": "401",
-      "title": "Profiling Source Data",
-      "unit": "Unit 4: Data Migration"
+      "title": "Профилирование исходных данных",
+      "unit": "Раздел 4: Перенос данных"
     },
     {
       "id": "402",
-      "title": "Removing Duplicates",
-      "unit": "Unit 4: Data Migration"
+      "title": "Удаление дубликатов",
+      "unit": "Раздел 4: Перенос данных"
     },
     {
       "id": "403",
-      "title": "Cleansing Text",
-      "unit": "Unit 4: Data Migration"
+      "title": "Очистка текста",
+      "unit": "Раздел 4: Перенос данных"
     },
     {
       "id": "404",
-      "title": "Type Coercion & Replacing Nulls",
-      "unit": "Unit 4: Data Migration"
+      "title": "Преобразование типов и замена пропусков",
+      "unit": "Раздел 4: Перенос данных"
     },
     {
       "id": "405",
-      "title": "Validation & Reconciliation",
-      "unit": "Unit 4: Data Migration"
+      "title": "Проверка и сверка данных",
+      "unit": "Раздел 4: Перенос данных"
     },
     {
       "id": "601",
-      "title": "Define the Measure Before You Compute It",
-      "unit": "Unit 5: From Question to Metric"
+      "title": "Определи показатель до расчёта",
+      "unit": "Раздел 5: От вопроса к метрике"
     },
     {
       "id": "602",
-      "title": "Segment with SWITCH(TRUE())",
-      "unit": "Unit 5: From Question to Metric"
+      "title": "Сегментация с помощью SWITCH(TRUE())",
+      "unit": "Раздел 5: От вопроса к метрике"
     },
     {
       "id": "603",
-      "title": "Month-over-Month Growth with DATEADD",
-      "unit": "Unit 5: From Question to Metric"
+      "title": "Месячный рост с помощью DATEADD",
+      "unit": "Раздел 5: От вопроса к метрике"
     },
     {
       "id": "604",
-      "title": "Running Totals with TOTALYTD",
-      "unit": "Unit 5: From Question to Metric"
+      "title": "Нарастающий итог с помощью TOTALYTD",
+      "unit": "Раздел 5: От вопроса к метрике"
     },
     {
       "id": "605",
-      "title": "Funnel Conversion with CALCULATE",
-      "unit": "Unit 5: From Question to Metric"
+      "title": "Конверсия воронки с помощью CALCULATE",
+      "unit": "Раздел 5: От вопроса к метрике"
     },
     {
       "id": "606",
-      "title": "Cohort Retention",
-      "unit": "Unit 5: From Question to Metric"
+      "title": "Удержание когорт",
+      "unit": "Раздел 5: От вопроса к метрике"
     },
     {
       "id": "701",
-      "title": "Build the P&L with CALCULATE",
-      "unit": "Unit 6: Financial Analysis"
+      "title": "Составь отчёт о прибылях и убытках с помощью CALCULATE",
+      "unit": "Раздел 6: Финансовый анализ"
     },
     {
       "id": "702",
-      "title": "Margins with DIVIDE",
-      "unit": "Unit 6: Financial Analysis"
+      "title": "Расчёт маржинальности с помощью DIVIDE",
+      "unit": "Раздел 6: Финансовый анализ"
     },
     {
       "id": "703",
-      "title": "Liquidity & Leverage Ratios",
-      "unit": "Unit 6: Financial Analysis"
+      "title": "Коэффициенты ликвидности и долговой нагрузки",
+      "unit": "Раздел 6: Финансовый анализ"
     },
     {
       "id": "704",
-      "title": "Time Value of Money: NPV in DAX",
-      "unit": "Unit 6: Financial Analysis"
+      "title": "Временная стоимость денег: NPV в DAX",
+      "unit": "Раздел 6: Финансовый анализ"
     },
     {
       "id": "705",
-      "title": "Budget vs Actual: Variance Analysis",
-      "unit": "Unit 6: Financial Analysis"
+      "title": "План и факт: анализ отклонений",
+      "unit": "Раздел 6: Финансовый анализ"
     },
     {
       "id": "706",
-      "title": "Unit Economics: Contribution Margin & Break-Even",
-      "unit": "Unit 6: Financial Analysis"
+      "title": "Юнит-экономика: маржинальный доход и точка безубыточности",
+      "unit": "Раздел 6: Финансовый анализ"
     },
     {
       "id": "801",
-      "title": "Profile the Data First",
-      "unit": "Unit 7: Advanced Analyst Toolkit"
+      "title": "Сначала изучи структуру данных",
+      "unit": "Раздел 7: Продвинутые инструменты аналитика"
     },
     {
       "id": "802",
-      "title": "Validate the Grain",
-      "unit": "Unit 7: Advanced Analyst Toolkit"
+      "title": "Проверь уровень детализации",
+      "unit": "Раздел 7: Продвинутые инструменты аналитика"
     },
     {
       "id": "803",
-      "title": "Distribution & Outliers",
-      "unit": "Unit 7: Advanced Analyst Toolkit"
+      "title": "Распределение и выбросы",
+      "unit": "Раздел 7: Продвинутые инструменты аналитика"
     },
     {
       "id": "804",
-      "title": "Pareto / ABC Analysis",
-      "unit": "Unit 7: Advanced Analyst Toolkit"
+      "title": "Анализ Парето и ABC",
+      "unit": "Раздел 7: Продвинутые инструменты аналитика"
     },
     {
       "id": "805",
-      "title": "Correlation ≠ Causation",
-      "unit": "Unit 7: Advanced Analyst Toolkit"
+      "title": "Корреляция не означает причинность",
+      "unit": "Раздел 7: Продвинутые инструменты аналитика"
     },
     {
       "id": "806",
-      "title": "Sanity-Check & Reconcile",
-      "unit": "Unit 7: Advanced Analyst Toolkit"
+      "title": "Проверь здравый смысл и сведи результаты",
+      "unit": "Раздел 7: Продвинутые инструменты аналитика"
     }
   ],
   "stats": [
     {
       "id": "101",
-      "title": "What Stats Is For",
+      "title": "Для чего нужна статистика",
       "unit": ""
     },
     {
       "id": "102",
-      "title": "Variables, Observations & Datasets",
+      "title": "Переменные, наблюдения и наборы данных",
       "unit": ""
     },
     {
       "id": "103",
-      "title": "Population vs Sample",
+      "title": "Генеральная совокупность и выборка",
       "unit": ""
     },
     {
       "id": "104",
-      "title": "Describe vs Infer (the Map of the Whole Kit)",
+      "title": "Описательная и выводная статистика: обзор курса",
       "unit": ""
     },
     {
       "id": "1",
-      "title": "Mean, Median & Mode",
+      "title": "Среднее, медиана и мода",
       "unit": 1
     },
     {
       "id": "2",
-      "title": "Variance & Standard Deviation",
+      "title": "Дисперсия и стандартное отклонение",
       "unit": 1
     },
     {
       "id": "3",
-      "title": "Percentiles, Quartiles & IQR",
+      "title": "Процентили, квартили и межквартильный размах",
       "unit": 1
     },
     {
       "id": "4",
-      "title": "Shape of Data — Skew & Outliers",
+      "title": "Форма распределения: асимметрия и выбросы",
       "unit": 1
     },
     {
       "id": "5",
-      "title": "Probability Basics",
+      "title": "Основы теории вероятностей",
       "unit": 2
     },
     {
       "id": "6",
-      "title": "Normal Distribution & Z-Scores",
+      "title": "Нормальное распределение и Z-оценки",
       "unit": 2
     },
     {
       "id": "7",
-      "title": "Sampling & Bias",
+      "title": "Выборка и смещение",
       "unit": 2
     },
     {
       "id": "8",
-      "title": "Correlation vs Causation",
+      "title": "Корреляция и причинно-следственная связь",
       "unit": 2
     },
     {
       "id": "9",
-      "title": "Hypothesis Testing Concepts",
+      "title": "Основы проверки гипотез",
       "unit": 3
     },
     {
       "id": "10",
-      "title": "P-Values, in Plain Language",
+      "title": "P-значения простыми словами",
       "unit": 3
     },
     {
       "id": "11",
-      "title": "A/B Testing for Analysts",
+      "title": "A/B-тестирование для аналитиков",
       "unit": 3
     },
     {
       "id": "12",
-      "title": "Confidence Intervals & Margin of Error",
+      "title": "Доверительные интервалы и погрешность",
       "unit": 3
     }
   ],
   "tableau": [
     {
       "id": "21",
-      "title": "How Tableau Sees Your Data",
-      "unit": "Unit 0: Before You Build (Foundations)"
+      "title": "Как Tableau видит ваши данные",
+      "unit": "Раздел 0: Перед началом работы — основы"
     },
     {
       "id": "22",
-      "title": "Field Types & Why Tableau Colors Them",
-      "unit": "Unit 0: Before You Build (Foundations)"
+      "title": "Типы полей и почему Tableau окрашивает их по-разному",
+      "unit": "Раздел 0: Перед началом работы — основы"
     },
     {
       "id": "23",
-      "title": "What \"Aggregate\" Means",
-      "unit": "Unit 0: Before You Build (Foundations)"
+      "title": "Что означает «агрегация»",
+      "unit": "Раздел 0: Перед началом работы — основы"
     },
     {
       "id": "24",
-      "title": "The Analyst's Loop in Tableau",
-      "unit": "Unit 0: Before You Build (Foundations)"
+      "title": "Цикл работы аналитика в Tableau",
+      "unit": "Раздел 0: Перед началом работы — основы"
     },
     {
       "id": "1",
-      "title": "The Tableau Interface",
-      "unit": "Unit 1: Tableau Fundamentals"
+      "title": "Интерфейс Tableau",
+      "unit": "Раздел 1: Основы Tableau"
     },
     {
       "id": "25",
-      "title": "Your First Drag",
-      "unit": "Unit 1: Tableau Fundamentals"
+      "title": "Первое действие перетаскиванием",
+      "unit": "Раздел 1: Основы Tableau"
     },
     {
       "id": "2",
-      "title": "Dimensions vs. Measures",
-      "unit": "Unit 1: Tableau Fundamentals"
+      "title": "Измерения и меры",
+      "unit": "Раздел 1: Основы Tableau"
     },
     {
       "id": "3",
-      "title": "Your First Bar Chart",
-      "unit": "Unit 1: Tableau Fundamentals"
+      "title": "Первая столбчатая диаграмма",
+      "unit": "Раздел 1: Основы Tableau"
     },
     {
       "id": "4",
-      "title": "Line Charts & Time",
-      "unit": "Unit 1: Tableau Fundamentals"
+      "title": "Линейные диаграммы и время",
+      "unit": "Раздел 1: Основы Tableau"
     },
     {
       "id": "28",
-      "title": "Sorting Your View",
-      "unit": "Unit 2: Building Better Vizzes"
+      "title": "Сортировка представления",
+      "unit": "Раздел 2: Улучшение визуализаций"
     },
     {
       "id": "5",
-      "title": "Filtering Your Data",
-      "unit": "Unit 2: Building Better Vizzes"
+      "title": "Фильтрация данных",
+      "unit": "Раздел 2: Улучшение визуализаций"
     },
     {
       "id": "6",
-      "title": "Color, Size & Labels",
-      "unit": "Unit 2: Building Better Vizzes"
+      "title": "Цвет, размер и подписи",
+      "unit": "Раздел 2: Улучшение визуализаций"
     },
     {
       "id": "26",
-      "title": "Your First Calculation",
-      "unit": "Unit 2: Building Better Vizzes"
+      "title": "Первый расчёт",
+      "unit": "Раздел 2: Улучшение визуализаций"
     },
     {
       "id": "7",
-      "title": "Calculated Fields",
-      "unit": "Unit 2: Building Better Vizzes"
+      "title": "Вычисляемые поля",
+      "unit": "Раздел 2: Улучшение визуализаций"
     },
     {
       "id": "8",
-      "title": "Aggregation in Tableau",
-      "unit": "Unit 2: Building Better Vizzes"
+      "title": "Агрегация в Tableau",
+      "unit": "Раздел 2: Улучшение визуализаций"
     },
     {
       "id": "9",
-      "title": "Grouping",
-      "unit": "Unit 2: Building Better Vizzes"
+      "title": "Группировка",
+      "unit": "Раздел 2: Улучшение визуализаций"
     },
     {
       "id": "30",
-      "title": "Build a Scatter Plot",
-      "unit": "Unit 2: Building Better Vizzes"
+      "title": "Создание диаграммы рассеяния",
+      "unit": "Раздел 2: Улучшение визуализаций"
     },
     {
       "id": "31",
-      "title": "Build a Treemap",
-      "unit": "Unit 2: Building Better Vizzes"
+      "title": "Создание древовидной карты",
+      "unit": "Раздел 2: Улучшение визуализаций"
     },
     {
       "id": "32",
-      "title": "Build a Map",
-      "unit": "Unit 2: Building Better Vizzes"
+      "title": "Создание карты",
+      "unit": "Раздел 2: Улучшение визуализаций"
     },
     {
       "id": "27",
-      "title": "From One Sheet to a Workbook",
-      "unit": "Unit 3: Dashboards & Best Practices"
+      "title": "От одного листа к книге",
+      "unit": "Раздел 3: Дашборды и лучшие практики"
     },
     {
       "id": "10",
-      "title": "Building a Dashboard",
-      "unit": "Unit 3: Dashboards & Best Practices"
+      "title": "Создание дашборда",
+      "unit": "Раздел 3: Дашборды и лучшие практики"
     },
     {
       "id": "11",
-      "title": "Tooltips & Annotations",
-      "unit": "Unit 3: Dashboards & Best Practices"
+      "title": "Всплывающие подсказки и аннотации",
+      "unit": "Раздел 3: Дашборды и лучшие практики"
     },
     {
       "id": "29",
-      "title": "Trend Lines & Reference Lines",
-      "unit": "Unit 3: Dashboards & Best Practices"
+      "title": "Линии тренда и опорные линии",
+      "unit": "Раздел 3: Дашборды и лучшие практики"
     },
     {
       "id": "12",
-      "title": "Chart Choice",
-      "unit": "Unit 3: Dashboards & Best Practices"
+      "title": "Выбор диаграммы",
+      "unit": "Раздел 3: Дашборды и лучшие практики"
     },
     {
       "id": "13",
-      "title": "Telling a Story",
-      "unit": "Unit 3: Dashboards & Best Practices"
+      "title": "Как рассказывать историю с помощью данных",
+      "unit": "Раздел 3: Дашборды и лучшие практики"
     },
     {
       "id": "14",
-      "title": "Live vs. Extract Connections",
-      "unit": "Unit 4: Connecting & Preparing Data (Cert Domain 1)"
+      "title": "Подключение в реальном времени и извлечение данных",
+      "unit": "Раздел 4: Подключение и подготовка данных (область сертификации 1)"
     },
     {
       "id": "15",
-      "title": "Joins, Unions & Relationships",
-      "unit": "Unit 4: Connecting & Preparing Data (Cert Domain 1)"
+      "title": "Соединения, объединения и связи",
+      "unit": "Раздел 4: Подключение и подготовка данных (область сертификации 1)"
     },
     {
       "id": "16",
-      "title": "Managing Data Properties",
-      "unit": "Unit 4: Connecting & Preparing Data (Cert Domain 1)"
+      "title": "Управление свойствами данных",
+      "unit": "Раздел 4: Подключение и подготовка данных (область сертификации 1)"
     },
     {
       "id": "17",
-      "title": "Sets",
-      "unit": "Unit 5: Sets, Hierarchies, Parameters & Dual-Axis (Cert Domain 2)"
+      "title": "Наборы",
+      "unit": "Раздел 5: Наборы, иерархии, параметры и две оси (область сертификации 2)"
     },
     {
       "id": "18",
-      "title": "Hierarchies",
-      "unit": "Unit 5: Sets, Hierarchies, Parameters & Dual-Axis (Cert Domain 2)"
+      "title": "Иерархии",
+      "unit": "Раздел 5: Наборы, иерархии, параметры и две оси (область сертификации 2)"
     },
     {
       "id": "19",
-      "title": "Parameters",
-      "unit": "Unit 5: Sets, Hierarchies, Parameters & Dual-Axis (Cert Domain 2)"
+      "title": "Параметры",
+      "unit": "Раздел 5: Наборы, иерархии, параметры и две оси (область сертификации 2)"
     },
     {
       "id": "20",
-      "title": "Dual-Axis & Combined-Axis Charts",
-      "unit": "Unit 5: Sets, Hierarchies, Parameters & Dual-Axis (Cert Domain 2)"
+      "title": "Диаграммы с двумя и совмещёнными осями",
+      "unit": "Раздел 5: Наборы, иерархии, параметры и две оси (область сертификации 2)"
     }
   ],
   "charts": [
     {
       "id": "101",
-      "title": "What a Chart Is Really Doing",
-      "unit": "Unit 0: How Charts Work"
+      "title": "Что на самом деле показывает диаграмма",
+      "unit": "Раздел 0: Как работают диаграммы"
     },
     {
       "id": "102",
-      "title": "The Visual Encodings (and Which the Eye Reads Best)",
-      "unit": "Unit 0: How Charts Work"
+      "title": "Визуальные кодировки и то, что глаз воспринимает лучше всего",
+      "unit": "Раздел 0: Как работают диаграммы"
     },
     {
       "id": "103",
-      "title": "Reading Any Axis",
-      "unit": "Unit 0: How Charts Work"
+      "title": "Как читать любую ось",
+      "unit": "Раздел 0: Как работают диаграммы"
     },
     {
       "id": "1",
-      "title": "The Bar Chart",
-      "unit": "Unit 1: The Charts You'll Use Most"
+      "title": "Столбчатая диаграмма",
+      "unit": "Раздел 1: Самые востребованные диаграммы"
     },
     {
       "id": "2",
-      "title": "The Line Chart",
-      "unit": "Unit 1: The Charts You'll Use Most"
+      "title": "Линейная диаграмма",
+      "unit": "Раздел 1: Самые востребованные диаграммы"
     },
     {
       "id": "3",
-      "title": "The Scatter Plot",
-      "unit": "Unit 1: The Charts You'll Use Most"
+      "title": "Диаграмма рассеяния",
+      "unit": "Раздел 1: Самые востребованные диаграммы"
     },
     {
       "id": "4",
-      "title": "Pie & Donut Charts",
-      "unit": "Unit 1: The Charts You'll Use Most"
+      "title": "Круговые диаграммы и диаграммы-кольца",
+      "unit": "Раздел 1: Самые востребованные диаграммы"
     },
     {
       "id": "5",
-      "title": "Treemaps & Heatmaps",
-      "unit": "Unit 1: The Charts You'll Use Most"
+      "title": "Древовидные карты и тепловые карты",
+      "unit": "Раздел 1: Самые востребованные диаграммы"
     },
     {
       "id": "6",
-      "title": "The Waterfall Chart",
-      "unit": "Unit 1: The Charts You'll Use Most"
+      "title": "Каскадная диаграмма",
+      "unit": "Раздел 1: Самые востребованные диаграммы"
     },
     {
       "id": "7",
-      "title": "How Charts Lie",
-      "unit": "Unit 2: How Charts Mislead"
+      "title": "Как диаграммы вводят в заблуждение",
+      "unit": "Раздел 2: Как диаграммы вводят в заблуждение"
     },
     {
       "id": "8",
-      "title": "Misleading Comparisons",
-      "unit": "Unit 2: How Charts Mislead"
+      "title": "Вводящие в заблуждение сравнения",
+      "unit": "Раздел 2: Как диаграммы вводят в заблуждение"
     },
     {
       "id": "9",
-      "title": "Choosing the Right Chart",
-      "unit": "Unit 3: Choosing & Communicating"
+      "title": "Как выбрать подходящую диаграмму",
+      "unit": "Раздел 3: Выбор диаграмм и представление выводов"
     },
     {
       "id": "10",
-      "title": "Explaining a Chart to Stakeholders",
-      "unit": "Unit 3: Choosing & Communicating"
+      "title": "Как объяснить диаграмму заинтересованным сторонам",
+      "unit": "Раздел 3: Выбор диаграмм и представление выводов"
     }
   ],
   "forecasting": [
     {
       "id": "101",
-      "title": "What Forecasting Is (and Isn't)",
-      "unit": "Unit 0: Foundations"
+      "title": "Что такое прогнозирование и чем оно не является",
+      "unit": "Раздел 0: Основы"
     },
     {
       "id": "102",
-      "title": "The Anatomy of a Time Series",
-      "unit": "Unit 0: Foundations"
+      "title": "Анатомия временного ряда",
+      "unit": "Раздел 0: Основы"
     },
     {
       "id": "103",
-      "title": "Signal vs. Noise",
-      "unit": "Unit 0: Foundations"
+      "title": "Сигнал и шум",
+      "unit": "Раздел 0: Основы"
     },
     {
       "id": "1",
-      "title": "Moving Averages",
-      "unit": "Unit 1: Trend & Smoothing"
+      "title": "Скользящие средние",
+      "unit": "Раздел 1: Тренд и сглаживание"
     },
     {
       "id": "2",
-      "title": "Exponential Smoothing",
-      "unit": "Unit 1: Trend & Smoothing"
+      "title": "Экспоненциальное сглаживание",
+      "unit": "Раздел 1: Тренд и сглаживание"
     },
     {
       "id": "3",
-      "title": "Fitting a Linear Trend",
-      "unit": "Unit 1: Trend & Smoothing"
+      "title": "Построение линейного тренда",
+      "unit": "Раздел 1: Тренд и сглаживание"
     },
     {
       "id": "4",
-      "title": "Seasonality & Seasonal Indices",
-      "unit": "Unit 1: Trend & Smoothing"
+      "title": "Сезонность и сезонные индексы",
+      "unit": "Раздел 1: Тренд и сглаживание"
     },
     {
       "id": "5",
-      "title": "Regression for Forecasting",
-      "unit": "Unit 2: Forecasting Models"
+      "title": "Регрессия для прогнозирования",
+      "unit": "Раздел 2: Модели прогнозирования"
     },
     {
       "id": "6",
-      "title": "Holt-Winters (Trend + Seasonality)",
-      "unit": "Unit 2: Forecasting Models"
+      "title": "Метод Хольта — Винтерса: тренд и сезонность",
+      "unit": "Раздел 2: Модели прогнозирования"
     },
     {
       "id": "7",
-      "title": "ARIMA in Everyday Words",
-      "unit": "Unit 2: Forecasting Models"
+      "title": "ARIMA простыми словами",
+      "unit": "Раздел 2: Модели прогнозирования"
     },
     {
       "id": "8",
-      "title": "Measuring Forecast Accuracy",
-      "unit": "Unit 3: Evaluating & Communicating"
+      "title": "Оценка точности прогноза",
+      "unit": "Раздел 3: Оценка и представление прогнозов"
     },
     {
       "id": "9",
-      "title": "Prediction Intervals",
-      "unit": "Unit 3: Evaluating & Communicating"
+      "title": "Интервалы прогнозирования",
+      "unit": "Раздел 3: Оценка и представление прогнозов"
     },
     {
       "id": "10",
-      "title": "Common Mistakes & Communicating Forecasts",
-      "unit": "Unit 3: Evaluating & Communicating"
+      "title": "Частые ошибки и представление прогнозов",
+      "unit": "Раздел 3: Оценка и представление прогнозов"
     }
   ],
   "interview": [
     {
       "id": "0",
-      "title": "How Interviews Actually Work",
-      "unit": "Unit 1 — The Playbook"
+      "title": "Как на самом деле проходят собеседования",
+      "unit": "Раздел 1 — План действий"
     },
     {
       "id": "1",
-      "title": "Your Story",
-      "unit": "Unit 1 — The Playbook"
+      "title": "Твоя профессиональная история",
+      "unit": "Раздел 1 — План действий"
     },
     {
       "id": "2",
-      "title": "Anxiety Is Energy",
-      "unit": "Unit 1 — The Playbook"
+      "title": "Волнение — это энергия",
+      "unit": "Раздел 1 — План действий"
     },
     {
       "id": "3",
-      "title": "The STAR Method",
-      "unit": "Unit 1 — The Playbook"
+      "title": "Метод STAR",
+      "unit": "Раздел 1 — План действий"
     },
     {
       "id": "4",
-      "title": "Translating Business Problems",
-      "unit": "Unit 2 — The Questions"
+      "title": "Перевод бизнес-задач в аналитические вопросы",
+      "unit": "Раздел 2 — Вопросы"
     },
     {
       "id": "5",
-      "title": "Behavioral Questions",
-      "unit": "Unit 2 — The Questions"
+      "title": "Вопросы о поведении и опыте",
+      "unit": "Раздел 2 — Вопросы"
     },
     {
       "id": "6",
-      "title": "Data Experience Without a Job Title",
-      "unit": "Unit 2 — The Questions"
+      "title": "Опыт работы с данными без должности аналитика",
+      "unit": "Раздел 2 — Вопросы"
     },
     {
       "id": "7",
-      "title": "Why This Role",
-      "unit": "Unit 2 — The Questions"
+      "title": "Почему именно эта роль",
+      "unit": "Раздел 2 — Вопросы"
     },
     {
       "id": "8",
-      "title": "Thinking Out Loud",
-      "unit": "Unit 3 — Hard Moments"
+      "title": "Проговаривание хода мыслей",
+      "unit": "Раздел 3 — Сложные ситуации"
     },
     {
       "id": "9",
-      "title": "Owning Gaps Honestly",
-      "unit": "Unit 3 — Hard Moments"
+      "title": "Честный разговор о пробелах в знаниях",
+      "unit": "Раздел 3 — Сложные ситуации"
     },
     {
       "id": "10",
-      "title": "Questions You Ask",
-      "unit": "Unit 3 — Hard Moments"
+      "title": "Вопросы, которые стоит задать",
+      "unit": "Раздел 3 — Сложные ситуации"
     },
     {
       "id": "11",
-      "title": "After the Interview",
-      "unit": "Unit 3 — Hard Moments"
+      "title": "После собеседования",
+      "unit": "Раздел 3 — Сложные ситуации"
     },
     {
       "id": "12",
-      "title": "What Estimation Questions Are",
-      "unit": "Unit 4 — Case Studies"
+      "title": "Что такое оценочные задачи",
+      "unit": "Раздел 4 — Разбор кейсов"
     },
     {
       "id": "13",
-      "title": "The BA Estimation Framework",
-      "unit": "Unit 4 — Case Studies"
+      "title": "Методика оценки для бизнес-аналитика",
+      "unit": "Раздел 4 — Разбор кейсов"
     },
     {
       "id": "14",
-      "title": "Worked Example: Tea Stall Revenue",
-      "unit": "Unit 4 — Case Studies"
+      "title": "Разбор примера: выручка чайной лавки",
+      "unit": "Раздел 4 — Разбор кейсов"
     },
     {
       "id": "15",
-      "title": "Business Implications & The Finishing Move",
-      "unit": "Unit 4 — Case Studies"
+      "title": "Бизнес-выводы и решающий финальный шаг",
+      "unit": "Раздел 4 — Разбор кейсов"
     }
   ],
   "foundations": [
@@ -1562,52 +1562,52 @@ window.DataCraftLessonCatalog = {
   "simulator": [
     {
       "id": "d1t1",
-      "title": "Explore the Database Schema",
+      "title": "Исследование схемы базы данных",
       "unit": ""
     },
     {
       "id": "d1t2",
-      "title": "Data Audit: Client Export",
+      "title": "Аудит данных: выгрузка клиента",
       "unit": ""
     },
     {
       "id": "d2t1",
-      "title": "Monthly Sales Summary",
+      "title": "Сводка продаж за месяц",
       "unit": ""
     },
     {
       "id": "d2t2",
-      "title": "Automate a File Validation Check",
+      "title": "Автоматизация проверки файла",
       "unit": ""
     },
     {
       "id": "d3t1",
-      "title": "Design a Client Health Dashboard",
+      "title": "Разработка дашборда состояния клиентов",
       "unit": ""
     },
     {
       "id": "d3t2",
-      "title": "Investigate a Revenue Drop",
+      "title": "Исследование падения выручки",
       "unit": ""
     },
     {
       "id": "d4t1",
-      "title": "Write a Data Quality Report",
+      "title": "Подготовка отчёта о качестве данных",
       "unit": ""
     },
     {
       "id": "d4t2",
-      "title": "Data Cleaning Script: Standardize Regions",
+      "title": "Скрипт очистки данных: стандартизация регионов",
       "unit": ""
     },
     {
       "id": "d5t1",
-      "title": "Dashboard Specification: Sales Overview",
+      "title": "Техническое задание на дашборд: обзор продаж",
       "unit": ""
     },
     {
       "id": "d5t2",
-      "title": "Week 1 Retrospective",
+      "title": "Итоги первой недели",
       "unit": ""
     }
   ],
@@ -1634,7 +1634,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "stats",
-      "title": "Statistics",
+      "title": "Статистика",
       "unit": ""
     },
     {
@@ -1644,7 +1644,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "interview",
-      "title": "Interview",
+      "title": "Собеседование",
       "unit": ""
     }
   ],
