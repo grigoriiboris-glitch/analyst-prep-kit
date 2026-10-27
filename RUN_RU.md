@@ -4,7 +4,7 @@
 
 ## Онлайн
 
-Откройте https://michaelnocito.github.io/analyst-prep-kit/ — установка не требуется. Автоматический перевод незнакомых фрагментов требует интернета.
+Откройте русифицированный форк: https://grigoriiboris-glitch.github.io/analyst-prep-kit/ (если GitHub Pages включён). Если страница пока не опубликована, используйте локальный запуск ниже. Оригинал на английском: https://michaelnocito.github.io/analyst-prep-kit/. Автоматический перевод незнакомых фрагментов требует интернета.
 
 ## Windows 10/11
 
