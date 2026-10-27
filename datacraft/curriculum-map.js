@@ -152,7 +152,23 @@
   /* Load Bitmap Background (automatically tries datacraft-map-bg.jpg, falls back to .png) */
   var bgImg = new Image();
   var bgLoaded = false;
-  bgImg.onload = function () { bgLoaded = true; };
+  var bgWaterPixels = null;
+  bgImg.onload = function () {
+    bgLoaded = true;
+    /* Cache the bitmap's water colours once. A sparkle is drawn only when its
+       destination is actually over blue water in the source artwork. */
+    try {
+      var waterCanvas = document.createElement('canvas');
+      waterCanvas.width = MAP_W;
+      waterCanvas.height = MAP_H;
+      var waterCtx = waterCanvas.getContext('2d', {willReadFrequently:true});
+      waterCtx.drawImage(bgImg, 0, 0, MAP_W, MAP_H);
+      bgWaterPixels = waterCtx.getImageData(0, 0, MAP_W, MAP_H).data;
+    } catch (e) {
+      /* Same-origin images normally allow sampling. The corrected path is a safe fallback. */
+      bgWaterPixels = null;
+    }
+  };
   bgImg.onerror = function () {
     if (bgImg.src.indexOf('datacraft-map-bg.jpg') !== -1) {
       bgImg.src = 'datacraft-map-bg.png';
@@ -192,9 +208,16 @@
 
   /* Pre-seed river sparkles along the river curve from waterfall (550, 95) to sea (1150, 620) */
   var RIVER_WAYPOINTS = [
-    {x: 565, y: 30}, {x: 555, y: 95}, {x: 535, y: 155},
-    {x: 655, y: 222}, {x: 825, y: 295}, {x: 925, y: 345},
-    {x: 970, y: 475}, {x: 1035, y: 555}, {x: 1155, y: 625}
+    /* Hand-traced centerline of the river in datacraft-map-bg.jpg (1320x700).
+       Keep points over the blue channel rather than drawing a straight diagonal across the banks. */
+    {x: 550, y: 14}, {x: 554, y: 52}, {x: 557, y: 80}, {x: 548, y: 103},
+    {x: 562, y: 123}, {x: 592, y: 142}, {x: 626, y: 158}, {x: 657, y: 174},
+    {x: 688, y: 195}, {x: 725, y: 214}, {x: 765, y: 226}, {x: 795, y: 233},
+    {x: 818, y: 252}, {x: 835, y: 281}, {x: 855, y: 310}, {x: 882, y: 331},
+    {x: 910, y: 351}, {x: 936, y: 374}, {x: 957, y: 398}, {x: 974, y: 426},
+    {x: 988, y: 456}, {x: 1004, y: 486}, {x: 1025, y: 520}, {x: 1050, y: 548},
+    {x: 1082, y: 571}, {x: 1117, y: 594}, {x: 1150, y: 616}, {x: 1182, y: 636},
+    {x: 1210, y: 651}
   ];
   for (var ri = 0; ri < 28; ri++) {
     animState.riverSparkles.push({
@@ -250,6 +273,23 @@
     var frac = scaled - idx;
     var a = pts[idx], b = pts[idx + 1];
     return {x: a.x + (b.x - a.x) * frac, y: a.y + (b.y - a.y) * frac};
+  }
+
+  function isRiverWaterPixel(x, y) {
+    /* The bitmap is 1320x700, matching the map's internal canvas coordinates. */
+    if (!bgWaterPixels) return true; // corrected centerline fallback if pixel sampling is unavailable
+    var cx = Math.round(x), cy = Math.round(y);
+    for (var oy = -2; oy <= 2; oy++) {
+      for (var ox = -2; ox <= 2; ox++) {
+        var px = cx + ox, py = cy + oy;
+        if (px < 0 || py < 0 || px >= MAP_W || py >= MAP_H) continue;
+        var i = (py * MAP_W + px) * 4;
+        var red = bgWaterPixels[i], green = bgWaterPixels[i + 1], blue = bgWaterPixels[i + 2];
+        /* River pixels are blue/cyan; grassy banks are green/yellow. */
+        if (blue > 90 && blue > red + 15 && blue > green + 3) return true;
+      }
+    }
+    return false;
   }
 
   function updateAnimations(dt) {
@@ -1155,10 +1195,13 @@
     /* B. Flowing river sparkles */
     animState.riverSparkles.forEach(function(s) {
       var pt = pointAlongPolyline(RIVER_WAYPOINTS, s.progress);
+      var sx = pt.x + s.offset, sy = pt.y + s.offset * 0.4;
+      /* Never let a highlight drift onto grass, road, a building pad, or a bank. */
+      if (!isRiverWaterPixel(sx, sy)) return;
       var shimmer = 0.25 + 0.55 * Math.abs(Math.sin(t * 3.5 + s.progress * 15));
       ctx.fillStyle = 'rgba(225, 248, 255, ' + shimmer.toFixed(2) + ')';
       ctx.beginPath();
-      ctx.ellipse(pt.x + s.offset, pt.y + s.offset * 0.4, s.size * 1.6, s.size * 0.7, -0.4, 0, Math.PI * 2);
+      ctx.ellipse(sx, sy, s.size * 1.6, s.size * 0.7, -0.4, 0, Math.PI * 2);
       ctx.fill();
     });
 
