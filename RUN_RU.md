@@ -1,0 +1,77 @@
+# Запуск Analyst Prep Kit на Windows и Ubuntu
+
+Приложение состоит из статических HTML-страниц. Сборка, Node.js, Docker и Python-библиотеки не нужны. Открывайте страницы через локальный HTTP-сервер, а не двойным щелчком по index.html.
+
+## Онлайн
+
+Откройте https://michaelnocito.github.io/analyst-prep-kit/ — установка не требуется. Автоматический перевод незнакомых фрагментов требует интернета.
+
+## Windows 10/11
+
+### 1. Установите Git и Python
+
+Откройте PowerShell и выполните:
+
+~~~powershell
+winget install --id Git.Git -e
+winget install --id Python.Python.3.12 -e
+~~~
+
+Закройте и снова откройте PowerShell. Если winget недоступен, скачайте установщики: https://git-scm.com/download/win и https://www.python.org/downloads/windows/.
+
+### 2. Скачайте проект
+
+~~~powershell
+git clone https://github.com/grigoriiboris-glitch/analyst-prep-kit.git
+cd analyst-prep-kit
+~~~
+
+Без Git можно нажать **Code → Download ZIP** на странице репозитория, распаковать архив и открыть PowerShell в этой папке.
+
+### 3. Запустите сайт
+
+~~~powershell
+py -m http.server 8000 --bind 127.0.0.1
+~~~
+
+Оставьте PowerShell открытым. В браузере откройте http://127.0.0.1:8000/ . Чтобы остановить сервер, нажмите **Ctrl+C**.
+
+## Ubuntu Linux
+
+### 1. Установите Git и Python
+
+~~~bash
+sudo apt update
+sudo apt install -y git python3
+~~~
+
+### 2. Скачайте проект
+
+~~~bash
+git clone https://github.com/grigoriiboris-glitch/analyst-prep-kit.git
+cd analyst-prep-kit
+~~~
+
+### 3. Запустите сайт
+
+~~~bash
+python3 -m http.server 8000 --bind 127.0.0.1
+~~~
+
+Не закрывайте терминал, пока используете сайт. В браузере откройте http://127.0.0.1:8000/ . Для остановки нажмите **Ctrl+C**.
+
+## Если порт 8000 занят
+
+Windows: py -m http.server 8080 --bind 127.0.0.1  
+Ubuntu: python3 -m http.server 8080 --bind 127.0.0.1  
+Откройте http://127.0.0.1:8080/.
+
+## Переключение языка и заметки
+
+Переключатель «Русский · EN» находится вверху справа. Выбор сохраняется в браузере. Перевод незнакомых видимых фрагментов выполняется онлайн и кешируется. SQL, Python, блоки кода, редакторы и ответы пользователя не переводятся.
+
+- Не публикуйте локальный сервер в интернет: он слушает только 127.0.0.1.
+- Не закрывайте PowerShell или терминал до завершения работы.
+- Прогресс хранится в localStorage. Очистка данных сайта может его удалить.
+- Для стандартных уроков ключи API не нужны. Проверка ответов через Claude в симуляторе необязательна и может быть платной.
+- Если GitHub Pages ещё не включён, откройте **Settings → Pages**, выберите ветку main и папку /(root).
