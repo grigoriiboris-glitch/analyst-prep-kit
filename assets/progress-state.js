@@ -163,7 +163,7 @@
       if (typeof value !== 'string' || value.length > 2 * 1024 * 1024) {
         return { ok: false, error: 'Сохранение содержит некорректные данные. Ничего не изменено.' };
       }
-      if (safeParse(value) === null) {
+      if (!/(?:-last-visit|apk-quality-score)$/.test(key) && safeParse(value) === null) {
         return { ok: false, error: 'Одно из сохранений повреждено. Ничего не изменено.' };
       }
       result[key] = value;
