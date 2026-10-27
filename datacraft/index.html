@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#172820">
 <title>DataCraft — мир аналитика</title>
-<meta name="description" content="2D-игра про сбор ресурсов, крафт и обучение аналитике данных.">
+<meta name="description" content="2D-игровая карта обучения аналитике: здания открываются после прохождения уроков; дополнительно доступны сбор ресурсов и крафт.">
+<link rel="stylesheet" href="curriculum-map.css">
 <style>
 :root{color-scheme:dark;--bg:#101b18;--panel:#192924;--panel2:#20362d;--line:#355144;--text:#edf6e9;--muted:#afc3b3;--mint:#a8e6a1;--gold:#f5d37e;--red:#ffaaa0;--blue:#a9d9ef}
 *{box-sizing:border-box}
@@ -50,8 +51,8 @@ footer{max-width:1500px;margin:auto;padding:0 20px 24px;color:#8fa697;font-size:
 <main class="layout">
   <section class="maincol">
     <div class="panel">
-      <div class="panel-head"><h2>🌲 Поляна исследователя</h2><small id="worldStatus">Регион 1 · Доступен</small></div>
-      <div class="world-instructions">Нажми на точку добычи или выбери её ниже. Персонаж подойдёт к объекту, а затем даст тебе аналитическое задание. Клавиша <b>E</b> — взаимодействовать рядом.</div>
+      <div class="panel-head"><h2>🪵 Ресурсная экспедиция</h2><small id="worldStatus">Дополнительный игровой режим</small></div>
+      <div class="world-instructions">Это дополнительная ветка сбора материалов и крафта. Главная учебная карта расположена выше: настоящие учебные здания открываются только после прохождения соответствующих курсов. Нажми на ресурс, чтобы получить аналитическую задачу; клавиша <b>E</b> взаимодействует рядом.</div>
       <div class="map-scroll"><canvas id="world" width="900" height="540" role="img" aria-label="Двухмерная карта DataCraft: лагерь, лес, залежи данных и закрытые SQL-руины"></canvas></div>
       <div class="map-legend"><span><i class="dot" style="background:#80bd68"></i>Лес и поляна</span><span><i class="dot" style="background:#7b9ee0"></i>Данные</span><span><i class="dot" style="background:#c38af0"></i>Логика</span><span><i class="dot" style="background:#d3b979"></i>Ресурсы</span><span>🔒 SQL-руины откроются после создания сканера</span></div>
       <div class="panel-head"><h2>🧭 Доступные точки</h2><small>Каждая точка — отдельная задача</small></div>
@@ -73,7 +74,7 @@ footer{max-width:1500px;margin:auto;padding:0 20px 24px;color:#8fa697;font-size:
       <div class="panel-content"><div class="inventory" id="inventory"></div><p class="muted" style="font-size:11px;margin:10px 0 0">Материалы выдаются за правильные решения. Повторно забрать уже собранный ресурс нельзя.</p></div>
     </div>
     <div class="panel">
-      <div class="panel-head"><h2>🛠️ Мастерская</h2><small>Крафт и строительство</small></div>
+      <div class="panel-head"><h2>🛠️ Лагерная мастерская</h2><small>Дополнительный крафт</small></div>
       <div class="panel-content"><div class="recipes" id="recipes"></div><p class="build-note">Нажми «Создать», когда соберёшь материалы. Новые постройки откроют следующие рецепты. Прогресс сохраняется в этом браузере.</p></div>
     </div>
     <div class="panel">
@@ -174,10 +175,10 @@ const QUESTIONS={
  ]
 };
 const RECIPES=[
- {id:'workbench',name:'Верстак исследователя',icon:'🪚',desc:'Открывает крафт инструментов и лаборатории.',needs:{wood:4,stone:2},kind:'building',at:{x:8,y:6}},
- {id:'sql_scanner',name:'SQL-сканер',icon:'⚙️',desc:'Разблокирует SQL-руины и редкие компоненты.',needs:{data:2,crystal:1,stone:1},kind:'item',requires:'workbench'},
- {id:'lab',name:'Лаборатория данных',icon:'🔬',desc:'Открывает сложные задания по очистке данных.',needs:{wood:3,stone:3,data:2,reagent:2,crystal:1},kind:'building',requires:'workbench',at:{x:10,y:7}},
- {id:'dashboard',name:'Аналитический терминал',icon:'📊',desc:'Позволяет выполнить главный торговый контракт.',needs:{data:3,sql:2,crystal:2},kind:'building',requires:'lab',at:{x:8,y:9}}
+ {id:'workbench',name:'Верстак лагеря',icon:'🪚',desc:'Дополнительное улучшение лагеря. Учебные курсы открываются на карте развития выше.',needs:{wood:4,stone:2},kind:'building',at:{x:8,y:6}},
+ {id:'sql_scanner',name:'Походный SQL-сканер',icon:'⚙️',desc:'Разблокирует ресурсную часть SQL-руин. Это не заменяет учебный курс SQL на большой карте.',needs:{data:2,crystal:1,stone:1},kind:'item',requires:'workbench'},
+ {id:'lab',name:'Полевая лаборатория',icon:'🔬',desc:'Дополнительное улучшение для ресурсных экспедиций. Учебная лаборатория открывается после уроков.',needs:{wood:3,stone:3,data:2,reagent:2,crystal:1},kind:'building',requires:'workbench',at:{x:10,y:7}},
+ {id:'dashboard',name:'Панель исследователя',icon:'📊',desc:'Дополнительное игровое улучшение для торгового контракта. Учебный аналитический центр открывается на карте развития.',needs:{data:3,sql:2,crystal:2},kind:'building',requires:'lab',at:{x:8,y:9}}
 ];
 let state=loadState();
 let player={x:5,y:7},path=[],targetNode=null,challengeNode=null,challengeContract=false,answerResolved=false;
@@ -535,5 +536,6 @@ renderAll();
 requestAnimationFrame(frame);
 })();
 </script>
+<script src="curriculum-map.js"></script>
 </body>
 </html>
