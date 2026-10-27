@@ -115,7 +115,7 @@
       var oldScore='';
       try{oldScore=localStorage.getItem('apk-quality-score')||'';}catch(e){}
       var sm=/^(\d+)\s*\/\s*5$/.exec(oldScore);
-      if(sm&&Number(sm[1])===5)['duplicate','missing','format','numeric','date'].forEach(function(id){add('quality:legacy-perfect:'+id,'Задача качества данных',1,'quality');});
+      if(sm&&Number(sm[1])===5)['duplicate','missing','format','numeric','date'].forEach(function(id){add('quality:category:'+id,'Категория качества данных: '+id,1,'quality');});
     }
 
     ['sales','support','marketing'].forEach(function(project){
