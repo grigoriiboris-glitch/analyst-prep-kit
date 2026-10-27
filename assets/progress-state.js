@@ -115,6 +115,51 @@
     return JSON.stringify(mergeValues(localValue, cloudValue));
   }
 
+  function resolveSnapshotEntry(localRaw, localMeta, cloudEntry, key) {
+    localMeta = localMeta || {};
+    if (!cloudEntry || typeof cloudEntry !== 'object' ||
+        (cloudEntry.deleted !== true && typeof cloudEntry.value !== 'string')) {
+      return { action: 'keep', value: localRaw, updatedAt: Number(localMeta.updatedAt) || 0, deleted: !!localMeta.deleted };
+    }
+    var localStamp = Number(localMeta.updatedAt) || 0;
+    var cloudStamp = Number(cloudEntry.updatedAt) || 0;
+    if (localMeta.deleted && localStamp >= cloudStamp) {
+      return { action: 'keep', value: localRaw, updatedAt: localStamp, deleted: true };
+    }
+    if (cloudEntry.deleted) {
+      return {
+        action: cloudStamp > localStamp && localRaw !== null ? 'delete' : 'keep',
+        value: null,
+        updatedAt: cloudStamp > localStamp ? cloudStamp : localStamp,
+        deleted: cloudStamp > localStamp ? true : !!localMeta.deleted
+      };
+    }
+    var nextRaw;
+    if (key === 'datacraft-wallet-v1' || /(?:-last-visit|apk-quality-score)$/.test(key)) {
+      nextRaw = localRaw === null || cloudStamp > localStamp ? cloudEntry.value : localRaw;
+    } else {
+      nextRaw = mergeRaw(localRaw, cloudEntry.value, key);
+    }
+    return {
+      action: nextRaw === localRaw ? 'keep' : 'set',
+      value: nextRaw,
+      updatedAt: Math.max(localStamp, cloudStamp),
+      deleted: false
+    };
+  }
+
+  function mergeSyncQueue(queue, item) {
+    var items = Array.isArray(queue) ? queue : [];
+    function same(a, b) {
+      if (a.kind !== b.kind || a.userId !== b.userId) return false;
+      if (a.kind === 'snapshot') return a.kitId === b.kitId;
+      var ar = a.row || a, br = b.row || b;
+      return ar.user_id === br.user_id && ar.kit_id === br.kit_id &&
+        ar.lesson_id === br.lesson_id && ar.drill_id === br.drill_id;
+    }
+    return items.filter(function (candidate) { return !same(candidate, item); }).concat([item]);
+  }
+
   function normalizePosition(position, cols, rows, fallback) {
     var maxX = Math.max(1, Number(cols) || 30) - 1;
     var maxY = Math.max(1, Number(rows) || 18) - 1;
@@ -182,6 +227,8 @@
     isAllowedKey: isAllowedKey,
     mergeValues: mergeValues,
     mergeRaw: mergeRaw,
+    resolveSnapshotEntry: resolveSnapshotEntry,
+    mergeSyncQueue: mergeSyncQueue,
     normalizePosition: normalizePosition,
     encodeExport: encodeExport,
     parseImport: parseImport
