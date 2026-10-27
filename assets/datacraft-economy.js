@@ -4,6 +4,7 @@
   var KEY = 'datacraft-wallet-v1';
   var CATALOG = {
     foundations: {key:'apk-foundations-progress-v1',prop:'map',rate:2,total:8,bonus:5},
+    'business-analysis': {key:'apk-business-analysis-progress-v1',prop:'map',rate:2,total:9,bonus:5},
     quality: {key:'apk-quality-score',prop:'quality',rate:1,total:5,bonus:5},
     sql: {key:'sqlkit-v1',prop:'doneLessons',rate:1,total:48,bonus:8},
     excel: {key:'epk',prop:'lessonsDone',rate:1,total:51,bonus:8},
@@ -28,6 +29,7 @@
     foundations:'Основы аналитики',quality:'Качество данных',sql:'SQL',excel:'Excel',
     python:'Python',powerbi:'Power BI',stats:'Статистика',tableau:'Tableau',
     charts:'Грамотность графиков',forecasting:'Прогнозирование',decision:'Логика и решения',
+    'business-analysis':'Основы бизнес-анализа',
     portfolio:'Портфолио',simulator:'Рабочий симулятор',interview:'Подготовка к интервью',
     final:'Итоговый экзамен',projectStudio:'Проектная мастерская'
   };
