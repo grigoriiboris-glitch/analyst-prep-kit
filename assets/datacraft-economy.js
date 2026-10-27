@@ -142,7 +142,7 @@
     var projectDB=read('apk-projects-v1')||{};
     if(Array.isArray(projectDB.projects)){
       projectDB.projects.forEach(function(p){
-        if(p&&p.phase==='present')add('projectStudio:complete:'+p.id,'Проект завершён: '+(p.scope&&p.scope.question||'проект'),10,'projectStudio');
+        if(p&&p.phase==='present'&&p.present&&Array.isArray(p.present.checklist)&&p.present.checklist.length>0&&p.present.checklist.every(function(item){return item&&item.done;}))add('projectStudio:complete:'+p.id,'Проект завершён: '+(p.scope&&p.scope.question||'проект'),10,'projectStudio');
       });
     }
     Object.keys(OPTIONAL).forEach(function(id){
@@ -161,7 +161,7 @@
     if(course==='portfolio')return ['sales','support','marketing'].every(function(p){return !!wallet.claimed['portfolio:'+p+':complete']||items.some(function(x){return x.id==='portfolio:'+p+':complete';});});
     if(course==='simulator')return count>=10;
     if(course==='final'){var fs=read('apk-final')||{};return !!fs.submitted;}
-    if(course==='projectStudio'){var db=read('apk-projects-v1')||{};return Array.isArray(db.projects)&&db.projects.some(function(p){return p&&p.phase==='present';});}
+    if(course==='projectStudio'){var db=read('apk-projects-v1')||{};return Array.isArray(db.projects)&&db.projects.some(function(p){return p&&p.phase==='present'&&p.present&&Array.isArray(p.present.checklist)&&p.present.checklist.length>0&&p.present.checklist.every(function(item){return item&&item.done;});});}
     if(def)return count>=def.total;
     return false;
   }
