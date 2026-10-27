@@ -83,7 +83,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "11",
-      "title": "CTEs",
+      "title": "Общие табличные выражения (CTE)",
       "unit": "Раздел 4: Продвинутый SQL"
     },
     {
