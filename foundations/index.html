@@ -76,8 +76,11 @@ a{color:var(--accent)}.wrap{max-width:1160px;margin:auto;padding:24px}.top{displ
 <script>
 (function(){
   var articles=Array.prototype.slice.call(document.querySelectorAll(".lesson"));
-  var nav=document.getElementById("lessonNav"), active=0, storage="apk-foundations-progress-v1", done={};
+  var nav=document.getElementById("lessonNav"), positionKey="apk-foundations-state-v1", active=0, storage="apk-foundations-progress-v1", done={}, position={};
   try{done=JSON.parse(localStorage.getItem(storage)||"{}")||{};}catch(e){done={};}
+  try{position=JSON.parse(localStorage.getItem(positionKey)||"{}")||{};}catch(e){position={};}
+  if(Number.isInteger(position.active)&&position.active>=0&&position.active<articles.length) active=position.active;
+  else {var firstIncomplete=articles.findIndex(function(a,i){return !done[i];});if(firstIncomplete>=0)active=firstIncomplete;else if(articles.length)active=articles.length-1;}
   function save(){try{localStorage.setItem(storage,JSON.stringify(done));}catch(e){} renderProgress();}
   function renderProgress(){
     var count=Object.keys(done).filter(function(k){return done[k];}).length;
@@ -90,6 +93,7 @@ a{color:var(--accent)}.wrap{max-width:1160px;margin:auto;padding:24px}.top{displ
   }
   function show(i){
     active=Math.max(0,Math.min(i,articles.length-1));
+    try{localStorage.setItem(positionKey,JSON.stringify({active:active}));}catch(e){}
     articles.forEach(function(a,j){a.classList.toggle("active",j===active);});
     renderProgress();document.getElementById("prev").disabled=active===0;document.getElementById("next").textContent=active===articles.length-1?"К первому уроку ↻":"Следующий урок →";
     document.getElementById("markDone").textContent=done[active]?"✓ Урок пройден":"Отметить урок пройденным";
