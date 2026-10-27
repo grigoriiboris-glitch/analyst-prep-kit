@@ -108,7 +108,7 @@
   }
   function visible(el){
     if(!el||!el.isConnected||el.closest("[hidden],[aria-hidden='true']"))return false;
-    try{var s=getComputedStyle(el);if(s.display==="none"||s.visibility==="hidden"||s.opacity==="0")return false;}catch(_){}
+    try{var s=getComputedStyle(el);if(s.display==="none"||s.visibility==="hidden"||(s.opacity==="0"&&!document.documentElement.classList.contains("apk-ru-pending")))return false;}catch(_){}
     return !!(el.getClientRects&&el.getClientRects().length);
   }
   function preserve(src,out){return(src.match(/^\s*/)||[""])[0]+out+(src.match(/\s*$/)||[""])[0];}
@@ -177,28 +177,40 @@
     else records.set(n,{source:source,applied:n.nodeValue});
   }
   function scan(root){
-    if(lang!=="ru"||!root)return;var base=root.nodeType===9?root.body:root;if(!base)return;
-    if(base.nodeType===3){if(visible(base.parentElement))translateNode(base);return;}
-    var w;try{w=document.createTreeWalker(base,NodeFilter.SHOW_TEXT,{acceptNode:function(n){return skip(n)||!visible(n.parentElement)?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT;}});}catch(_){return;}
-    var list=[],n;while((n=w.nextNode()))list.push(n);list.forEach(function(x){translateNode(x);});
+    if(lang!=="ru"||!root)return Promise.resolve();
+    var base=root.nodeType===9?root.body:root;if(!base)return Promise.resolve();
+    if(base.nodeType===3)return visible(base.parentElement)?translateNode(base):Promise.resolve();
+    var w;try{w=document.createTreeWalker(base,NodeFilter.SHOW_TEXT,{acceptNode:function(n){return skip(n)||!visible(n.parentElement)?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT;}});}catch(_){return Promise.resolve();}
+    var list=[],n;while((n=w.nextNode()))list.push(n);
+    return Promise.all(list.map(function(x){return translateNode(x);}));
   }
   function restore(){muting=true;tracked.forEach(function(n){var r=records.get(n);if(n.isConnected&&r)n.nodeValue=r.source;});muting=false;records=new WeakMap();tracked=new Set();}
   function updateToggle(){if(toggle){toggle.textContent=lang==="ru"?"🇷🇺 Русский · EN":"EN · Русский";toggle.title="Переключить язык. Автоперевод видимого текста требует интернета.";}}
-  function setLang(value){
+  async function setLang(value){
     var before=lang;lang=value==="en"?"en":"ru";try{localStorage.setItem(langKey,lang);}catch(_){}
     document.documentElement.lang=lang;
-    if(lang==="en"){restore();if(window.__apkOrigTitle)document.title=window.__apkOrigTitle;}
-    else{if(!window.__apkOrigTitle)window.__apkOrigTitle=document.title;document.title=d[norm(window.__apkOrigTitle)]||window.__apkOrigTitle;if(before!=="ru"){records=new WeakMap();tracked=new Set();}scan(document.body);}
+    if(lang==="en"){
+      restore();document.documentElement.classList.remove("apk-ru-pending");
+      if(window.__apkOrigTitle)document.title=window.__apkOrigTitle;
+    }else{
+      if(!window.__apkOrigTitle)window.__apkOrigTitle=document.title;
+      document.title=d[norm(window.__apkOrigTitle)]||window.__apkOrigTitle;
+      if(before!=="ru"){records=new WeakMap();tracked=new Set();}
+      await scan(document.body);
+      document.documentElement.classList.remove("apk-ru-pending");
+    }
     updateToggle();
   }
-  function start(){
+  async function start(){
     try{lang=localStorage.getItem(langKey)||"ru";}catch(_){lang="ru";}lang=lang==="en"?"en":"ru";
     if(!window.__apkOrigTitle)window.__apkOrigTitle=document.title;
     toggle=document.createElement("button");toggle.type="button";toggle.className="apk-language-toggle";toggle.setAttribute("data-no-translate","true");
     toggle.style.cssText="position:fixed;right:16px;top:12px;z-index:2147483647;padding:9px 13px;border:1px solid rgba(127,127,127,.4);border-radius:999px;background:#14201d;color:#fff;font:600 13px/1.2 system-ui,sans-serif;box-shadow:0 3px 14px #0003;cursor:pointer";
-    toggle.addEventListener("click",function(){setLang(lang==="ru"?"en":"ru");});document.body.appendChild(toggle);setLang(lang);
+    toggle.addEventListener("click",function(){setLang(lang==="ru"?"en":"ru");});document.body.appendChild(toggle);
+    if(lang==="ru")document.documentElement.classList.add("apk-ru-pending");
     observer=new MutationObserver(function(rs){if(muting||lang!=="ru")return;rs.forEach(function(r){if(r.type==="characterData"){var x=records.get(r.target);if(!x||x.applied!==r.target.nodeValue)translateNode(r.target);}else if(r.type==="childList")r.addedNodes.forEach(function(n){if(n.nodeType===1)scan(n);else if(n.nodeType===3&&visible(n.parentElement))translateNode(n);});else if(r.type==="attributes")scan(r.target);});});
     observer.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:["class","style","hidden"]});
+    await setLang(lang);
   }
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start,{once:true});else start();
 })();
