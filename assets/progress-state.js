@@ -24,6 +24,8 @@
     final: { id: 'final-v1', keys: ['apk-final'] },
     projects: { id: 'projects-v1', keys: ['apk-project-studio-v1', 'apk-projects-v1'] },
     portfolio: { id: 'portfolio-v1', keys: ['apk-portfolio-v1', 'apk-portfolio-projects-v1'] },
+    plan: { id: 'plan-v1', keys: ['apk-plan-v1'] },
+    learningPath: { id: 'learning-path-v1', keys: ['apk-path-trial-u1', 'apk-path-scores-u1', 'apk-path-intro-u1'] },
     datacraft: { id: 'datacraft-v1', keys: ['datacraft-save-v1'] },
     wallet: { id: 'shared-wallet-v1', keys: ['datacraft-wallet-v1'] },
     certificates: { id: 'certificates-v1', keys: [
