@@ -148,6 +148,12 @@
     };
   }
 
+  // Cloud writes are blocked until this account's snapshot restore has succeeded.
+  // The post-restore bootstrap is the only intentional bypass.
+  function canSyncCloud(userId, readyUserId, afterRestore) {
+    return !!userId && (afterRestore === true || userId === readyUserId);
+  }
+
   function mergeSyncQueue(queue, item) {
     var items = Array.isArray(queue) ? queue : [];
     function same(a, b) {
@@ -229,6 +235,7 @@
     mergeRaw: mergeRaw,
     resolveSnapshotEntry: resolveSnapshotEntry,
     mergeSyncQueue: mergeSyncQueue,
+    canSyncCloud: canSyncCloud,
     normalizePosition: normalizePosition,
     encodeExport: encodeExport,
     parseImport: parseImport

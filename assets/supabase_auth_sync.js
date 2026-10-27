@@ -16,6 +16,8 @@ const APK_LEGACY_QUEUE_KEY = 'apk-sync-queue';
 const APK_SNAPSHOT_DRILL = '__snapshot__';
 let apkSuppressSyncTracking = false;
 let apkRestorePromise = null;
+// A signed-in account cannot receive local snapshots until its cloud snapshot has been restored.
+let apkCloudReadyUserId = null;
 const apkPendingSyncTimers = Object.create(null);
 
 function apkProgressApi() {
@@ -249,10 +251,20 @@ class SyncQueue {
     this.save();
   }
 
+  refreshSnapshots(userId) {
+    let changed = false;
+    this.queue = this.queue.map(item => {
+      if (item.kind !== 'snapshot' || item.userId !== userId || !item.kitId) return item;
+      changed = true;
+      return { ...item, state: apkCollectKitSnapshot(item.kitId), queuedAt: Date.now() };
+    });
+    if (changed) this.save();
+  }
+
   async flush(userOverride) {
     if (typeof navigator !== 'undefined' && navigator.onLine === false) return false;
     const user = userOverride || await getCurrentUser();
-    if (!user || !this.queue.length) return false;
+    if (!user || !this.queue.length || apkCloudReadyUserId !== user.id) return false;
     const sb = await initSupabase();
     let changed = false;
     for (const item of this.queue.slice()) {
@@ -286,7 +298,7 @@ const syncQueue = new SyncQueue();
 // ============================================================================
 // CLOUD WRITE / READ
 // ============================================================================
-async function syncKitSnapshot(kitId) {
+async function syncKitSnapshot(kitId, options) {
   if (typeof navigator !== 'undefined' && navigator.onLine === false) {
     const user = await getCurrentUser();
     if (user) syncQueue.addSnapshot(user.id, kitId, apkCollectKitSnapshot(kitId));
@@ -294,6 +306,10 @@ async function syncKitSnapshot(kitId) {
   }
   const user = await getCurrentUser();
   if (!user) return false; // local-first; do not attach anonymous work to an account later
+  if (!apkProgressApi().canSyncCloud(user.id, apkCloudReadyUserId, options && options.afterRestore)) {
+    // A starter/default state must never overwrite the account's remote progress before restore.
+    return false;
+  }
   const snapshot = apkCollectKitSnapshot(kitId);
   if (!Object.keys(snapshot.entries).length) return false;
   // Existing local saves acquire a timestamp on their first authenticated sync.
@@ -383,8 +399,8 @@ async function restoreAllProgress(options) {
   if (apkRestorePromise) return apkRestorePromise;
   apkRestorePromise = (async () => {
     const user = options && options.user ? options.user : await getCurrentUser();
-    if (!user) return { changed: false, restoredKeys: [] };
-    if (typeof navigator !== 'undefined' && navigator.onLine === false) return { changed: false, restoredKeys: [] };
+    if (!user) return { ok: false, changed: false, restoredKeys: [] };
+    if (typeof navigator !== 'undefined' && navigator.onLine === false) return { ok: false, changed: false, restoredKeys: [] };
 
     let data;
     try {
@@ -396,7 +412,7 @@ async function restoreAllProgress(options) {
       data = result.data || [];
     } catch (error) {
       console.warn('Cloud restore postponed:', error.message || error);
-      return { changed: false, restoredKeys: [] };
+      return { ok: false, changed: false, restoredKeys: [] };
     }
 
     const api = apkProgressApi();
@@ -462,7 +478,7 @@ async function restoreAllProgress(options) {
     } finally {
       apkSuppressSyncTracking = false;
     }
-    return { changed, restoredKeys };
+    return { ok: true, changed, restoredKeys };
   })().finally(() => { apkRestorePromise = null; });
   return apkRestorePromise;
 }
@@ -476,7 +492,7 @@ async function syncAllLocalProgress(user) {
   for (const kitId of ids) {
     const snapshot = apkCollectKitSnapshot(kitId);
     if (Object.keys(snapshot.entries).length) {
-      const ok = await syncKitSnapshot(kitId);
+      const ok = await syncKitSnapshot(kitId, { afterRestore: true });
       any = any || ok;
     }
   }
@@ -487,17 +503,22 @@ async function bootstrapProgressSync(options) {
   try {
     const user = options && options.user ? options.user : await getCurrentUser();
     if (!user) return false;
+    // Freeze writes while checking cloud state; on a failed restore we must not upload local snapshots.
+    apkCloudReadyUserId = null;
     const result = await restoreAllProgress({ user });
+    if (!result || result.ok !== true) return false;
     if (result.changed) {
-      // App pages keep progress in memory. Reload once after restoring localStorage
-      // so the currently open course renders the merged state, not its stale copy.
+      // Keep uploads gated until the reload renders the restored localStorage.
       setTimeout(() => {
         try { window.location.reload(); } catch (_) {}
       }, 50);
       return true;
     }
-    await syncQueue.flush(user);
+    apkCloudReadyUserId = user.id;
     await syncAllLocalProgress(user);
+    // Offline snapshots may predate restore. Refresh payloads before retrying, or
+    // a queued old snapshot could undo the restored state.
+    syncQueue.refreshSnapshots(user.id);
     await syncQueue.flush(user);
     return true;
   } catch (error) {
@@ -549,9 +570,12 @@ async function onAuthStateChange(callback) {
   const sb = await initSupabase();
   return sb.auth.onAuthStateChange((event, session) => {
     if (event === 'SIGNED_IN') {
+      const incomingUserId = session && session.user && session.user.id;
+      if (apkCloudReadyUserId !== incomingUserId) apkCloudReadyUserId = null;
       callback('SIGNED_IN', session && session.user);
       setTimeout(() => bootstrapProgressSync({ user: session && session.user }), 0);
     } else if (event === 'SIGNED_OUT') {
+      apkCloudReadyUserId = null;
       callback('SIGNED_OUT', null);
     }
   });
@@ -562,14 +586,23 @@ if (typeof window !== 'undefined') {
   window.addEventListener('online', async () => {
     const user = await getCurrentUser();
     if (user) {
-      await syncQueue.flush(user);
       await bootstrapProgressSync({ user });
+      await syncQueue.flush(user);
     }
   });
   document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible') syncQueue.flush().catch(() => {});
+    if (document.visibilityState !== 'visible') return;
+    getCurrentUser().then(user => {
+      if (!user) return;
+      return bootstrapProgressSync({ user });
+    }).catch(() => {});
   });
-  setInterval(() => syncQueue.flush().catch(() => {}), 30000);
+  setInterval(async () => {
+    const user = await getCurrentUser();
+    if (!user) return;
+    if (apkCloudReadyUserId !== user.id) await bootstrapProgressSync({ user });
+    else await syncQueue.flush(user);
+  }, 30000);
   setTimeout(() => bootstrapProgressSync().catch(() => {}), 1200);
 }
 
