@@ -170,6 +170,14 @@ for (const id of ["roof-terracotta","wall-sage","oak-tree","flower-tulips","pond
   assert.ok(quietValley.includes("id:'" + id + "'"), "Quiet Valley catalogue item missing: " + id);
 }
 assert.ok(quietValley.includes("datacraft-wallet-v1"), "Quiet Valley must use the study coin wallet");
+assert.ok(quietValley.includes("state.current='garden';selectedItem=null;selectedObject=null;mode='select';save();draw();render();"),
+  "Buying or reapplying a house upgrade must return to the home view and render the result immediately");
+assert.ok(quietValley.includes("active=up&&state.active[it.slot]===it.id") && quietValley.includes("Активен · применён"),
+  "Quiet Valley catalogue must clearly mark the currently applied house style");
+assert.ok(quietValley.includes("for(var tileY=124;tileY<160;tileY+=7)") &&
+  quietValley.includes("for(var sidingY=171;sidingY<229;sidingY+=13)") &&
+  quietValley.includes("rgba(255,208,83,.28)"),
+  "House roof, wall, and window upgrades must have visible render effects");
 assert.ok(quietValleyCss.includes("#quietValleyCanvas") && quietValleyCss.includes(".quiet-valley-shop"), "Quiet Valley canvas/shop styles missing");
 console.log("OK: Quiet Valley builder, study-coin purchases, place/move/rotate/store controls, and separate save");
 
