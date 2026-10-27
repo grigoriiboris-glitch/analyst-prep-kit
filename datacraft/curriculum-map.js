@@ -217,7 +217,7 @@
   function safeText(s) { return String(s == null ? '' : s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
   function formatProgress(p) { return p.done + ' / ' + p.total + ' ' + p.label; }
   function statusText(st, course) {
-    if (st.done) return course.tracker === 'cert' ? 'Экзамен отправлен' : 'Здание построено';
+    if (st.done) return course.tracker === 'cert' ? 'Попытка экзамена завершена' : (course.id === 'final' ? 'Итоговый экзамен завершён' : 'Здание построено');
     if (st.unlocked) return st.progress.done ? 'Можно продолжить' : 'Можно строить';
     return 'Не хватает предыдущих уроков';
   }
@@ -326,7 +326,7 @@
       var icon=document.createElement('span');icon.className='curriculum-special-icon';icon.textContent=c.icon;
       var text=document.createElement('div');text.style.minWidth='0';
       var h=document.createElement('h4');h.textContent=c.title;
-      var desc=document.createElement('p');desc.textContent=formatProgress(p)+' · '+(st.done?'экзамен отправлен':st.unlocked?'доступно':'требуется предыдущий курс');
+      var desc=document.createElement('p');desc.textContent=formatProgress(p)+' · '+(st.done?'попытка экзамена завершена':st.unlocked?'доступно':'требуется предыдущий курс');
       text.append(h,desc);top.append(icon,text);card.append(top);
       var btn=document.createElement('button');btn.type='button';btn.className='curriculum-action'+(st.unlocked?' primary':'');
       btn.textContent=st.done?'Повторить':st.unlocked?'Открыть специализацию':'Посмотреть требования';
@@ -378,7 +378,7 @@
       wrapText(ctx,c.short,c.x+12,c.y+34,NODE_W-24,14,2);
       ctx.fillStyle=st.done?'#a8eeae':(st.unlocked?'#f4d987':'#a7b4a7');
       ctx.font='700 9px system-ui';
-      ctx.fillText(st.done?'✓ ПОСТРОЕНО':(st.unlocked?'◆ МОЖНО СТРОИТЬ':'🔒 ЗАКРЫТО'),c.x+12,c.y+62);
+      ctx.fillText(st.done?(c.id==='final'?'✓ ЭКЗАМЕН ЗАВЕРШЁН':'✓ ПОСТРОЕНО'):(st.unlocked?'◆ МОЖНО СТРОИТЬ':'🔒 ЗАКРЫТО'),c.x+12,c.y+62);
       ctx.fillStyle='#0e1b13';roundRect(ctx,c.x+12,c.y+70,NODE_W-24,5,3);ctx.fill();
       if(p.percent>0){ctx.fillStyle=st.done?'#83d990':(st.unlocked?'#d8bd68':'#7b9280');roundRect(ctx,c.x+12,c.y+70,(NODE_W-24)*p.percent/100,5,3);ctx.fill();}
       ctx.fillStyle='#b6c8b7';ctx.font='9px system-ui';ctx.fillText(p.done+'/'+p.total+' '+p.label,c.x+12,c.y+84);
