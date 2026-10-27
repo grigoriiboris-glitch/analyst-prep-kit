@@ -47,6 +47,12 @@ for (const route of requiredRoutes) {
   assert.ok(fs.existsSync(path.join(root, route, "index.html")), "Missing route: " + route);
   const homepage = fs.readFileSync(path.join(root, "index.html"), "utf8");
   assert.ok(homepage.includes('href="' + route + '"'), "Homepage link missing: " + route);
+  if (route === "datacraft/") {
+    assert.ok(homepage.includes('class="lesson-plan-cta" href="datacraft/"'),
+      "Homepage lesson-plan CTA must open the DataCraft game");
+    assert.ok(homepage.includes("Перейти к плану уроков"),
+      "Homepage lesson-plan CTA label missing");
+  }
 }
 console.log("OK: all new routes exist and are linked from the homepage");
 
