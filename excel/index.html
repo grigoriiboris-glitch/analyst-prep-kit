@@ -2342,7 +2342,7 @@ const DEFAULT_STATE = {
   lessonStage:{},        // lessonId -> stage index (0-5). Was the string 'intro'.
   misses:{},             // lessonId -> the things that come back
   confidence:{},         // legacy self-rating, migrated on load
-  streak:0, lastChallenge:'', currentLesson:1, doneLesson:null,
+  streak:0, lastChallenge:'', currentLesson:1, lastLessonOpened:null, doneLesson:null,
   theme:'light'
 };
 // Preferences and one-time migration flags are NOT progress and survive a reset.
@@ -2961,6 +2961,7 @@ function openLesson(id){
   _pendingRecalls = [];
   _recallAnchor = id; // "Got it now" re-queues relative to the open lesson
   S.currentLesson = id;
+  S.lastLessonOpened = id;
   save();
   show('lesson');
   renderLesson();
@@ -4894,6 +4895,11 @@ window.addEventListener('load', function(){
     if(m[2]){ var _i=S.lessonsDone.indexOf(_id); if(_i>-1) S.lessonsDone.splice(_i,1); if(S.misses) delete S.misses[_id]; }
     openLesson(_id);
   }catch(e){} }
+  else {
+    const _resumeId=Number(S.currentLesson);
+    const _hasSavedPosition=S.lastLessonOpened!=null || _resumeId!==1 || S.lessonsDone.length>0 || Object.keys(S.lessonStage||{}).length>0;
+    if(_hasSavedPosition && DATA.LESSONS.some(l=>l.id===_resumeId)) openLesson(_resumeId);
+  }
 });
 // Medium #5: fire the one-time "you've unlocked" moment (no-op unless a genuine
 // member who hasn't seen it), then async-hydrate the account entitlement.
