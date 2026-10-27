@@ -1551,6 +1551,7 @@
 
   function buildLessonAgentContext(button) {
     var courseTitle = button.getAttribute('data-course-title') || 'Курс не указан';
+    var courseId = button.getAttribute('data-course-id') || '';
     var lessonTitle = button.getAttribute('data-lesson-title') || 'Урок не указан';
     var unit = button.getAttribute('data-lesson-unit') || '';
     var goal = button.getAttribute('data-lesson-goal') || '';
@@ -1564,6 +1565,7 @@
       'КОНТЕКСТ ДЛЯ ИИ-АГЕНТА',
       'Проект: Analyst Prep Kit — DataCraft.',
       'Курс: ' + courseTitle,
+      courseId ? 'Идентификатор курса: ' + courseId : '',
       unit ? 'Раздел: ' + unit : '',
       'Урок: ' + lessonTitle,
       lessonId ? 'Идентификатор урока: ' + lessonId : '',
