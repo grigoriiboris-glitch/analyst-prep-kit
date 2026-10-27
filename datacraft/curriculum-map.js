@@ -4,6 +4,7 @@
 
   var MAP_W = 1320, MAP_H = 700, NODE_W = 205, NODE_H = 88;
   var STORE = {
+    wallet: 'datacraft-wallet-v1',
     foundations: 'apk-foundations-progress-v1',
     quality: 'apk-quality-score',
     sql: 'sqlkit-v1',
@@ -76,7 +77,7 @@
       '<header class="curriculum-head">' +
         '<div><h2 class="curriculum-title">🗺️ Карта развития: здания открываются за знания</h2>' +
         '<p class="curriculum-lead">Каждая постройка — это реальный учебный курс. Закрытые здания показывают обязательные предыдущие курсы, доступные ведут к урокам, а после прохождения всей программы здание становится построенным. Карта проверяет сохранённый прогресс уроков в браузере.</p></div>' +
-        '<div class="curriculum-top-actions"><button type="button" class="curriculum-action" id="curriculumRefresh">↻ Обновить прогресс</button><button type="button" class="curriculum-action" id="curriculumNext">▶ Следующий доступный курс</button></div>' +
+        '<div class="curriculum-top-actions"><span class="curriculum-coins" id="curriculumCoins">🪙 — монет</span><button type="button" class="curriculum-action" id="curriculumRefresh">↻ Обновить прогресс</button><button type="button" class="curriculum-action" id="curriculumNext">▶ Следующий доступный курс</button></div>' +
       '</header>' +
       '<div class="curriculum-map-scroll"><canvas id="curriculumWorld" width="' + MAP_W + '" height="' + MAP_H + '" tabindex="0" role="img" aria-label="Карта учебного мира DataCraft. Нажми на здание, чтобы посмотреть требования и открыть курс."></canvas></div>' +
       '<div class="curriculum-legend"><span><b class="curriculum-symbol" style="color:#a7e39c">✓</b>Построено: курс пройден</span><span><b class="curriculum-symbol" style="color:#f4d47d">◆</b>Можно строить: доступен курс</span><span><b class="curriculum-symbol" style="color:#9aa99d">🔒</b>Закрыто: не хватает предыдущих уроков</span><span>Полоска внутри здания показывает прохождение курса</span></div>' +
@@ -235,9 +236,213 @@
   function safeText(s) { return String(s == null ? '' : s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
   function formatProgress(p) { return p.done + ' / ' + p.total + ' ' + p.label; }
   function statusText(st, course) {
-    if (st.done) return course.tracker === 'cert' ? 'Попытка экзамена завершена' : (course.id === 'final' ? 'Итоговый экзамен завершён' : 'Здание построено');
-    if (st.unlocked) return st.progress.done ? 'Можно продолжить' : 'Можно строить';
-    return 'Не хватает предыдущих уроков';
+    if(st.built)return 'Здание построено — доступ к следующему этапу открыт';
+    if(st.courseComplete)return 'Курс пройден — осталось оплатить строительство';
+    if(st.unlocked)return 'Учебный маршрут доступен';
+    return 'Закрыто: сначала построй предыдущие здания';
+  }
+  function getCourseState(course) {
+    var w=readJSON(course.storage)||(course.tracker==='cert'?{}:{});
+    return w||{};
+  }
+  function isLessonComplete(course,lesson,parentId) {
+    var s,arr;
+    switch(course.tracker) {
+      case 'foundations':
+        s=readJSON(STORE.foundations)||{};return s[String(lesson.id)]===true;
+      case 'quality': {
+        arr=readJSON('apk-quality-passed-v1');
+        if(Array.isArray(arr))return arr.indexOf(String(lesson.id))!==-1;
+        return readScore(STORE.quality)==='5/5';
+      }
+      case 'sql':
+        s=readJSON(STORE.sql)||{};return Array.isArray(s.doneLessons)&&s.doneLessons.map(String).indexOf(String(lesson.id))!==-1;
+      case 'excel':
+        s=readJSON(STORE.excel)||{};return Array.isArray(s.lessonsDone)&&s.lessonsDone.map(String).indexOf(String(lesson.id))!==-1;
+      case 'python':
+        s=readJSON(STORE.python)||{};return Array.isArray(s.lessonsDone)&&s.lessonsDone.map(String).indexOf(String(lesson.id))!==-1;
+      case 'powerbi':
+        s=readJSON(STORE.powerbi)||{};return Array.isArray(s.doneLessons)&&s.doneLessons.map(String).indexOf(String(lesson.id))!==-1;
+      case 'charts':
+      case 'stats':
+      case 'forecasting':
+      case 'tableau':
+        s=readJSON(STORE[course.tracker])||{};return !!(s.done&&s.done['lesson'+lesson.id]);
+      case 'decision':
+        s=readJSON(STORE.decision)||[];return Array.isArray(s)&&s.map(String).indexOf(String(lesson.id))!==-1;
+      case 'portfolio':
+        arr=readJSON(STORE.portfolio+parentId+'-checks')||[];
+        return Array.isArray(arr)&&arr.map(String).indexOf(String(lesson.id))!==-1;
+      case 'simulator':
+        s=readJSON(STORE.simulator)||{};
+        return !!(s.reviews&&s.reviews[lesson.id]);
+      case 'interview':
+        s=readJSON(STORE.interview)||{};
+        return !!(s.lessonsComplete&&s.lessonsComplete[String(lesson.id)]);
+      case 'final':
+        s=readJSON(STORE.final)||{};
+        return !!(s.submittedSections&&s.submittedSections[lesson.id]);
+      case 'projectStudio': {
+        s=readJSON('apk-projects-v1')||{};
+        var projects=Array.isArray(s.projects)?s.projects:[];
+        var phaseOrder=['scope','plan','build','present'],target=phaseOrder.indexOf(String(lesson.id));
+        return projects.some(function(p){
+          if(!p)return false;
+          var current=phaseOrder.indexOf(p.phase);
+          if(target<current)return true;
+          if(lesson.id==='present'&&p.phase==='present'){
+            var cl=p.present&&Array.isArray(p.present.checklist)?p.present.checklist:[];
+            return cl.length>0&&cl.every(function(item){return item&&item.done;});
+          }
+          return false;
+        });
+      }
+      case 'cert':
+        s=readJSON(course.storage)||{};
+        if(lesson.id==='guide')return !!(s.openSections&&Object.keys(s.openSections).length);
+        if(lesson.id==='exam-submit')return !!s.submitted;
+        return false;
+      default:
+        return false;
+    }
+  }
+  function lessonListHTML(course) {
+    var catalog=courseCatalog(course),tracker=course.tracker||course.id;
+    if(!catalog.length)return '<div class="curriculum-empty">Для этого раздела ещё нет списка уроков.</div>';
+    var html='',lastUnit=null,doneCount=0;
+    function row(item,parentId,depth) {
+      var done=isLessonComplete(course,item,parentId);
+      if(done)doneCount++;
+      var amount=course.tracker==='foundations'?2:(course.tracker==='decision'||course.tracker==='charts'||course.tracker==='stats'||course.tracker==='forecasting'?2:1);
+      if(course.tracker==='quality')amount=1;
+      if(course.tracker==='portfolio')amount=1;
+      if(course.tracker==='simulator')amount=2;
+      if(course.tracker==='final')amount=2;
+      if(course.tracker==='projectStudio')amount=0;
+      if(course.tracker==='cert')amount=0;
+      return '<div class="curriculum-lesson-row'+(done?' passed':'')+(depth?' nested':'')+'"><span class="curriculum-lesson-check">'+(done?'✓':'○')+'</span><span class="curriculum-lesson-copy"><span class="curriculum-lesson-title">'+safeText(item.title)+'</span>'+(item.goal?'<span class="curriculum-lesson-goal">'+safeText(item.goal)+'</span>':'')+'</span><span class="curriculum-lesson-reward">'+(done?'Зачтено':(amount?'+'+amount+' 🪙':'Этап'))+'</span></div>';
+    }
+    if(course.tracker==='portfolio') {
+      catalog.forEach(function(project){
+        var items=project.items||[];
+        var done=items.filter(function(it){return isLessonComplete(course,it,project.id);}).length;
+        html+='<div class="curriculum-unit-heading"><span>'+safeText(project.title)+'</span><small>'+done+'/'+items.length+' критериев</small></div>';
+        items.forEach(function(it){html+=row(it,project.id,1);});
+      });
+    } else {
+      catalog.forEach(function(item){
+        var unit=String(item.unit||'');
+        if(unit&&unit!==lastUnit){
+          html+='<div class="curriculum-unit-heading"><span>'+safeText(unit)+'</span></div>';
+          lastUnit=unit;
+        }
+        html+=row(item,null,0);
+      });
+    }
+    var legacyNote='';
+    if(course.tracker==='quality'&&!Array.isArray(readJSON('apk-quality-passed-v1'))&&readScore(STORE.quality)&&readScore(STORE.quality)!=='5/5') {
+      legacyNote='<p class="curriculum-legacy-note">Ранее сохранялся только общий результат ('+safeText(readScore(STORE.quality))+'); детали ответов ещё не сохранялись. Пройди практику повторно, чтобы видеть отметки по каждой категории.</p>';
+    }
+    var wallet=walletState();
+    return '<details class="curriculum-lessons" open><summary>📚 Уроки и испытания <span>'+safeText(formatProgress(course.tracker==='portfolio'?getProgress(course):getProgress(course)))+'</span></summary><div class="curriculum-lesson-list">'+html+'</div><div class="curriculum-lesson-footer">Награды выдаются один раз за каждое впервые завершённое задание. Монеты за уже пройденные ранее уроки начисляются при первом обнаружении сохранённого результата. Баланс: <strong>🪙 '+wallet.balance+'</strong>.</div>'+legacyNote+'</details>';
+  }
+  function addPathButton(parent,label,path,primary,disabled) {
+    var button=document.createElement('button');
+    button.type='button';button.className='curriculum-action'+(primary?' primary':'');
+    button.textContent=label;button.disabled=!!disabled;
+    button.addEventListener('click',function(){if(!path)return;window.open(path,'_blank','noopener');});
+    parent.appendChild(button);return button;
+  }
+  function addActionButton(parent,label,action,primary,disabled) {
+    var button=document.createElement('button');
+    button.type='button';button.className='curriculum-action'+(primary?' primary':'');
+    button.textContent=label;button.disabled=!!disabled;
+    button.addEventListener('click',action);parent.appendChild(button);return button;
+  }
+  function buildCourse(course) {
+    if(!window.DataCraftEconomy){showToastIfAvailable('Экономика игры не загрузилась. Обнови страницу.');return;}
+    var st=getStatus(course);
+    if(st.built){showToastIfAvailable('Здание уже построено.');return;}
+    if(!st.unlocked){showToastIfAvailable('Сначала построй предыдущие здания.');return;}
+    if(!st.courseComplete){showToastIfAvailable('Сначала заверши все уроки этого здания.');return;}
+    var wallet=window.DataCraftEconomy.sync(),cost=course.cost||0;
+    if((wallet.balance||0)<cost){showToastIfAvailable('Не хватает '+(cost-wallet.balance)+' монет. Пройди доступные уроки и вернись.');return;}
+    var result=window.DataCraftEconomy.build(course.id,cost);
+    if(result&&result.ok){showToastIfAvailable('Построено: '+course.title+'! Следующая ветка открыта.');renderAll();}
+    else showToastIfAvailable('Не хватает монет для строительства.');
+  }
+  function renderDetail() {
+    var course=BY_ID[selectedId]||COURSES[0],st=getStatus(course),p=st.progress,deps=st.dependencies;
+    var wallet=walletState(),stageLabel=course.stage!==undefined?stageLabels[course.stage]:'ДОПОЛНИТЕЛЬНАЯ СПЕЦИАЛИЗАЦИЯ';
+    var req='';
+    if(deps.requires.length){
+      req+='<li><span class="req-mark">Требуется</span><span>Построить все предыдущие здания:</span></li>';
+      deps.requires.forEach(function(id){
+        var c=BY_ID[id],cp=getProgress(c),built=isBuilt(id);
+        req+='<li><span class="req-mark '+(built?'':'missing')+'">'+(built?'✓':'○')+'</span><span>'+safeText(courseName(id))+' — '+safeText(formatProgress(cp))+(built?' · здание построено':(cp.complete?' · курс пройден, строй за '+(c.cost||0)+' 🪙':' · осталось '+Math.max(0,cp.total-cp.done)+' уроков и строительство за '+(c.cost||0)+' 🪙'))+'</span></li>';
+      });
+    }else req+='<li><span class="req-mark">✓</span><span>Стартовый учебный маршрут: предварительные здания не нужны.</span></li>';
+    if(deps.anyOf.length){
+      var anyDone=deps.anyOf.some(function(id){return isBuilt(id);});
+      req+='<li><span class="req-mark '+(anyDone?'':'missing')+'">'+(anyDone?'✓':'○')+'</span><span>Дополнительно: построй один из вариантов — '+deps.anyOf.map(function(id){return safeText(courseName(id));}).join(' или ')+'.</span></li>';
+    }
+    var action=document.createElement('div');action.className='curriculum-detail-actions';
+    if(st.built){
+      addPathButton(action,'Открыть / повторить уроки →',course.path,true);
+      addActionButton(action,'✓ Здание построено',function(){},false,true);
+    }else if(!st.unlocked){
+      var next=findNextCourse(course);
+      if(next)addPathButton(action,'Сначала: '+(next.short||next.title),next.path,true);
+      addActionButton(action,'🔒 Недоступно до выполнения требований',function(){},false,true);
+    }else if(st.courseComplete){
+      addActionButton(action,'🏗️ Построить за '+(course.cost||0)+' 🪙',function(){buildCourse(course);},true, wallet.balance<(course.cost||0));
+      addPathButton(action,'Повторить уроки',course.path,false);
+    }else{
+      addPathButton(action,'Изучать уроки →',course.path,true);
+      addActionButton(action,'Постройка после курса: '+(course.cost||0)+' 🪙',function(){},false,true);
+    }
+    var catalog=courseCatalog(course);
+    var currencyNote='<div class="curriculum-wallet-line"><span>🪙 В кошельке: <strong>'+wallet.balance+'</strong></span><span>Стоимость постройки: <strong>'+(st.built?'оплачено':(course.cost||0)+' 🪙')+'</strong></span><span>Всего заработано: '+wallet.totalEarned+'</span></div>';
+    detail.innerHTML=
+      '<div class="curriculum-detail-eyebrow">'+safeText(stageLabel)+'</div>'+
+      '<h3>'+safeText(course.icon||'🏗️')+' '+safeText(course.title)+'</h3>'+
+      '<span class="curriculum-status '+st.state+'">'+(st.built?'✓ ':st.courseComplete?'◆ ':st.unlocked?'● ':'🔒 ')+safeText(statusText(st,course))+'</span>'+
+      '<p>'+safeText(course.desc||'Дополнительный учебный маршрут.')+'</p>'+
+      '<div class="curriculum-progress"><i style="width:'+p.percent+'%"></i></div>'+
+      '<p class="curriculum-progress-text">'+safeText(formatProgress(p))+' · '+p.percent+'%</p>'+
+      currencyNote+
+      '<ul class="curriculum-requirements">'+req+'</ul>'+
+      lessonListHTML(course);
+    detail.appendChild(action);
+    if(!catalog.length)detail.insertAdjacentHTML('beforeend','<p class="curriculum-empty">Каталог уроков для этого модуля пока не подключён.</p>');
+  }
+  function renderCourseList() {
+    courseList.innerHTML='';
+    COURSES.forEach(function(c) {
+      var st=getStatus(c),p=st.progress;
+      var b=document.createElement('button');b.type='button';
+      b.className='curriculum-course-card'+(selectedId===c.id?' selected':'');
+      b.setAttribute('aria-pressed',selectedId===c.id?'true':'false');
+      var label=st.built?'✓ ПОСТРОЕНО':(!st.unlocked?'🔒 ЗАКРЫТО':(st.courseComplete?'ГОТОВО К СТРОЙКЕ':'ДОСТУПНО'));
+      b.innerHTML='<span class="cc-icon">'+safeText(c.icon)+'</span><span class="cc-copy"><span class="cc-title">'+safeText(c.title)+'</span><span class="cc-meta"><span>'+safeText(formatProgress(p))+'</span><span class="cc-state">'+label+'</span></span><span class="cc-bar"><i style="width:'+p.percent+'%"></i></span><span class="cc-cost">'+(st.built?'Стоимость оплачена':(c.cost||0)+' 🪙 на постройку')+'</span></span>';
+      b.addEventListener('click',function(){selectCourse(c.id,false);});courseList.appendChild(b);
+    });
+  }
+  function renderSpecializations() {
+    specializationList.innerHTML='';
+    SPECIALIZATIONS.forEach(function(c) {
+      var st=getStatus(c),p=st.progress;
+      var card=document.createElement('div');card.className='curriculum-special-card'+(st.built?' done':'');
+      var top=document.createElement('div');top.className='curriculum-special-top';
+      var icon=document.createElement('span');icon.className='curriculum-special-icon';icon.textContent=c.icon;
+      var text=document.createElement('div');text.style.minWidth='0';
+      var h=document.createElement('h4');h.textContent=c.title;
+      var desc=document.createElement('p');desc.textContent=formatProgress(p)+' · '+(st.built?'построено':(!st.unlocked?'закрыто':'постройка '+(c.cost||0)+' 🪙'));
+      text.append(h,desc);top.append(icon,text);card.append(top);
+      var btn=document.createElement('button');btn.type='button';btn.className='curriculum-action'+(st.unlocked?' primary':'');
+      btn.textContent=st.built?'Открыть / повторить':(!st.unlocked?'Посмотреть требования':(st.courseComplete?'Построить за '+(c.cost||0)+' 🪙':'Выбрать здание'));
+      btn.addEventListener('click',function(){selectCourse(c.id,true);});card.appendChild(btn);specializationList.appendChild(card);
+    });
   }
   function selectCourse(id, shouldScroll) {
     if (!BY_ID[id]) return;
