@@ -142,6 +142,56 @@ for (const dependency of [
 }
 console.log("OK: DataCraft 2D gameplay, all course routes, lesson-progress readers, and prerequisite graph");
 
+const lessonCatalog = fs.readFileSync(path.join(root, "datacraft/lesson-catalog.js"), "utf8");
+new Function(lessonCatalog);
+const catalogMatches = [
+  ["foundations", 8], ["quality", 5], ["sql", 48], ["excel", 51],
+  ["python", 42], ["powerbi", 39], ["stats", 16], ["tableau", 32],
+  ["charts", 13], ["forecasting", 13], ["decision", 6], ["interview", 16],
+  ["portfolio", 3], ["simulator", 10], ["final", 7], ["projectStudio", 4]
+];
+for (const [name, count] of catalogMatches) {
+  const match = new RegExp('"' + name + '"\\\\s*:\\\\s*\\\\[').exec(lessonCatalog);
+  assert.ok(match, "DataCraft lesson catalog missing: " + name);
+  const nextArray = lessonCatalog.slice(match.index);
+  const opening = nextArray.indexOf("[");
+  let depth = 0, quote = null, escape = false, found = 0;
+  for (let i = opening; i < nextArray.length; i++) {
+    const ch = nextArray[i];
+    if (quote) {
+      if (escape) escape = false;
+      else if (ch === "\\\\") escape = true;
+      else if (ch === quote) quote = null;
+      continue;
+    }
+    if (ch === '"' || ch === "'") { quote = ch; continue; }
+    if (ch === "[") { depth++; continue; }
+    if (ch === "]") { depth--; if (depth === 0) break; continue; }
+    if (depth === 1 && ch === "{" && /\\bid\\s*:/.test(nextArray.slice(i, i + 80))) found++;
+  }
+  assert.equal(found, count, "DataCraft lesson count mismatch for " + name);
+}
+console.log("OK: DataCraft catalog has the expected lesson counts for each core course");
+
+const economy = fs.readFileSync(path.join(root, "assets/datacraft-economy.js"), "utf8");
+new Function(economy);
+for (const key of [
+  "datacraft-wallet-v1", "sqlkit-v1", "epk", "ppk", "pbikt-v1",
+  "spk", "tpk", "clk-v1", "fmk-v1", "apk-foundations-progress-v1",
+  "apk-quality-passed-v1", "apk-portfolio-", "sim2", "ipk", "apk-final"
+]) {
+  assert.ok(economy.includes(key), "DataCraft wallet integration missing progress source: " + key);
+}
+for (const feature of ["function earn(", "function spend(", "function markBuilding(", "course-bonus:", "totalSpent", "totalEarned"]) {
+  assert.ok(economy.includes(feature), "DataCraft coin economy feature missing: " + feature);
+}
+assert.ok(economy.includes("p.present.checklist.every"), "Project Studio should reward fully packaged projects only");
+assert.ok(datacraft.includes("coinCost:4") && datacraft.includes("coinCost:5") && datacraft.includes("coinCost:7"),
+  "Resource-crafting recipes must have coin costs");
+assert.ok(datacraft.includes("Монетки · можно тратить") && datacraft.includes("addCoins('contract:sales-investigation'"),
+  "DataCraft must display and award spendable coins");
+console.log("OK: spendable coins, lesson rewards, crafting costs, and wallet integration");
+
 const localization = fs.readFileSync(path.join(root, "assets/ru-localization.js"), "utf8");
 new Function(localization);
 assert.ok(localization.includes("translate.googleapis.com"), "Online fallback translation endpoint missing");
