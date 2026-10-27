@@ -99,16 +99,53 @@
   }
   function preserve(src,out){return(src.match(/^\s*/)||[""])[0]+out+(src.match(/\s*$/)||[""])[0];}
   function saveCache(){try{var k=Object.keys(cache);if(k.length>1600)k.slice(0,k.length-1200).forEach(function(x){delete cache[x];});localStorage.setItem(cacheKey,JSON.stringify(cache));}catch(_){}}
-  async function online(text){
-    if(Object.prototype.hasOwnProperty.call(cache,text))return cache[text];
-    if(!navigator.onLine||!text||text.length>850)return null;
-    try{
-      var u="https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ru&dt=t&q="+encodeURIComponent(text);
-      var r=await fetch(u,{mode:"cors",credentials:"omit"});if(!r.ok)return null;
-      var j=await r.json();if(!Array.isArray(j)||!Array.isArray(j[0]))return null;
-      var t=j[0].map(function(x){return Array.isArray(x)&&typeof x[0]==="string"?x[0]:"";}).join("");
-      if(!t.trim())return null;cache[text]=t;saveCache();return t;
-    }catch(_){return null;}
+  async function online(text) {
+    if (Object.prototype.hasOwnProperty.call(cache, text)) return cache[text];
+    if (!navigator.onLine || !text || text.length > 850) return null;
+    var operation = async function () {
+      if (Object.prototype.hasOwnProperty.call(cache, text)) return cache[text];
+      var translated = null;
+      try {
+        var url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ru&dt=t&q=" + encodeURIComponent(text);
+        var response = await fetch(url, { mode: "cors", credentials: "omit" });
+        if (response.ok) {
+          var payload = await response.json();
+          if (Array.isArray(payload) && Array.isArray(payload[0])) {
+            var value = payload[0].map(function (part) {
+              return Array.isArray(part) && typeof part[0] === "string" ? part[0] : "";
+            }).join("");
+            if (value.trim() && value !== text) translated = value;
+          }
+        }
+      } catch (_) {}
+      // Fallback: keyless MyMemory, limited to short strings and its public quota.
+      if (!translated && text.length <= 450) {
+        try {
+          var fallbackUrl = "https://api.mymemory.translated.net/get?q=" + encodeURIComponent(text) + "&langpair=en%7Cru";
+          var fallbackResponse = await fetch(fallbackUrl, { mode: "cors", credentials: "omit" });
+          if (fallbackResponse.ok) {
+            var fallbackJson = await fallbackResponse.json();
+            var fallbackText = fallbackJson && fallbackJson.responseData && fallbackJson.responseData.translatedText;
+            if (fallbackJson && fallbackJson.responseStatus === 200 && fallbackText && fallbackText !== text &&
+                !/MYMEMORY WARNING|PLEASE SELECT TWO DISTINCT LANGUAGES/i.test(fallbackText)) translated = fallbackText;
+          }
+        } catch (_) {}
+      }
+      if (translated) {
+        cache[text] = translated;
+        try {
+          var keys = Object.keys(cache);
+          if (keys.length > 1600) keys.slice(0, keys.length - 1200).forEach(function (key) { delete cache[key]; });
+          localStorage.setItem(cacheKey, JSON.stringify(cache));
+        } catch (_) {}
+      }
+      return translated;
+    };
+    var job = requestQueue.then(operation, operation);
+    requestQueue = job.catch(function () { return null; }).then(function () {
+      return new Promise(function (resolve) { setTimeout(resolve, 90); });
+    });
+    return job;
   }
   async function translateNode(n){
     if(lang!=="ru"||!n||!n.isConnected||pending.has(n))return;
