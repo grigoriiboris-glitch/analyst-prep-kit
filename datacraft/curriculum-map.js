@@ -1,0 +1,434 @@
+/* DataCraft curriculum map: buildings are earned by completing real courses. */
+(function () {
+  'use strict';
+
+  var MAP_W = 1320, MAP_H = 700, NODE_W = 205, NODE_H = 88;
+  var STORE = {
+    foundations: 'apk-foundations-progress-v1',
+    quality: 'apk-quality-score',
+    sql: 'sqlkit-v1',
+    excel: 'epk',
+    python: 'ppk',
+    charts: 'clk-v1',
+    stats: 'spk',
+    forecasting: 'fmk-v1',
+    powerbi: 'pbikt-v1',
+    tableau: 'tpk',
+    decision: 'apk-decision-thinking-progress-v1',
+    portfolio: 'apk-portfolio-',
+    simulator: 'sim2',
+    interview: 'ipk',
+    final: 'apk-final'
+  };
+
+  var COURSES = [
+    {id:'foundations',title:'Основы аналитики данных',short:'Школа исследователя',icon:'🏕️',path:'../foundations/',tracker:'foundations',total:8,unit:'уроков',stage:0,x:28,y:310,desc:'Базовая грамотность: строки и столбцы, типы данных, ключи, метрики, качество и постановка бизнес-вопроса.',requires:[]},
+    {id:'quality',title:'Качество данных',short:'Лаборатория очистки',icon:'🧪',path:'../data-quality/',tracker:'quality',total:5,unit:'категорий',stage:1,x:280,y:310,desc:'Научись обнаруживать пропуски, дубликаты, ошибки форматов и подозрительные значения, не удаляя данные без проверки.',requires:['foundations']},
+    {id:'sql',title:'SQL',short:'Кузница SQL',icon:'⚙️',path:'../sql/',tracker:'sql',total:48,unit:'уроков',stage:2,x:532,y:80,desc:'От SELECT и фильтрации к JOIN, агрегациям, CTE, оконным функциям и проверке качества результата.',requires:['foundations','quality']},
+    {id:'excel',title:'Excel',short:'Мастерская таблиц',icon:'📗',path:'../excel/',tracker:'excel',total:51,unit:'уроков',stage:2,x:532,y:220,desc:'Формулы, поиск, очистка, сводные таблицы, проверка вычислений и аналитические отчёты.',requires:['foundations','quality']},
+    {id:'charts',title:'Грамотность графиков',short:'Башня визуализации',icon:'📈',path:'../chart-literacy/',tracker:'charts',total:13,unit:'уроков',stage:2,x:532,y:360,desc:'Выбор подходящего графика, правильное чтение визуализаций и поиск вводящих в заблуждение представлений.',requires:['foundations','quality']},
+    {id:'python',title:'Python и pandas',short:'Лес автоматизации',icon:'🐍',path:'../python/',tracker:'python',total:42,unit:'уроков',stage:3,x:782,y:60,desc:'Код для повторяемой обработки данных: базовый Python, pandas, преобразования, объединение и проверка результатов.',requires:['sql','excel']},
+    {id:'stats',title:'Статистика',short:'Обсерватория данных',icon:'🔭',path:'../stats/',tracker:'stats',total:16,unit:'уроков',stage:3,x:782,y:180,desc:'Распределения, выборки, интервалы, A/B-тесты, p-значения и осторожная интерпретация доказательств.',requires:['sql','excel']},
+    {id:'forecasting',title:'Прогнозирование',short:'Башня прогнозов',icon:'🌦️',path:'../forecasting/',tracker:'forecasting',total:13,unit:'уроков',stage:3,x:782,y:300,desc:'Тренд, сезонность, простые прогнозы, проверка точности и объяснение неопределённости.',requires:['stats','charts']},
+    {id:'powerbi',title:'Power BI',short:'Центр BI',icon:'📊',path:'../powerbi/',tracker:'powerbi',total:39,unit:'уроков',stage:3,x:782,y:420,desc:'Модель данных, связи, меры DAX, визуализация и интерактивные отчёты для бизнес-пользователей.',requires:['sql','excel','charts']},
+    {id:'tableau',title:'Tableau',short:'Студия дашбордов',icon:'🟦',path:'../tableau/',tracker:'tableau',total:32,unit:'уроков',stage:3,x:782,y:540,desc:'Работа с измерениями и мерами, визуальные исследования, фильтры, наборы, иерархии и дашборды.',requires:['sql','excel','charts']},
+    {id:'decision',title:'Логика и решения',short:'Зал гипотез',icon:'🧠',path:'../decision-making/',tracker:'decision',total:6,unit:'уроков',stage:4,x:1030,y:60,desc:'Постановка задачи, поиск причин, альтернативные гипотезы, оценка рисков и выбор следующего действия.',requires:['quality','stats','charts']},
+    {id:'portfolio',title:'Проекты для портфолио',short:'Гильдия проектов',icon:'🧰',path:'../portfolio-projects/',tracker:'portfolio',total:3,unit:'кейса',stage:4,x:1030,y:190,desc:'Три практических кейса: продажи, служба поддержки и маркетинг. Каждый должен включать проверку данных, метрики и обоснованный вывод.',requires:['quality','sql','excel','decision'],anyOf:['powerbi','tableau']},
+    {id:'simulator',title:'Симулятор аналитика',short:'Рабочее место',icon:'🧑‍💻',path:'../simulator/',tracker:'simulator',total:10,unit:'задач на проверке',stage:4,x:1030,y:320,desc:'Сценарии из работы младшего аналитика: понять запрос, проверить данные, подготовить решение и получить обратную связь.',requires:['portfolio']},
+    {id:'interview',title:'Подготовка к собеседованию',short:'Арена интервью',icon:'🎤',path:'../interview/',tracker:'interview',total:16,unit:'уроков',stage:4,x:1030,y:450,desc:'Объяснение решений, поведенческие вопросы, работа с неоднозначностью и коммуникация с нетехнической аудиторией.',requires:['sql','excel','decision','portfolio']},
+    {id:'final',title:'Итоговый экзамен',short:'Цитадель аналитика',icon:'🏰',path:'../final/',tracker:'final',total:1,unit:'экзамен',stage:4,x:1030,y:580,desc:'Финальная проверка знаний по Excel, SQL, Python, Tableau, статистике, Power BI и собеседованиям. До неё должны быть завершены все основные ветки.',requires:['foundations','quality','sql','excel','python','charts','stats','forecasting','powerbi','tableau','decision','portfolio','simulator','interview']}
+  ];
+
+  var SPECIALIZATIONS = [
+    {id:'excel-cert',title:'Сертификат Excel MO-210',icon:'📗',path:'../excel-cert/',storage:'apk-excelcert',requires:['excel'],desc:'Отдельная подготовка к сертификационному экзамену Excel.'},
+    {id:'excel-expert',title:'Excel Expert MO-211',icon:'🏅',path:'../excel-expert-cert/',storage:'apk-excelexpertcert',requires:['excel-cert'],desc:'Продвинутый уровень Excel после базовой сертификационной ветки.'},
+    {id:'powerbi-cert',title:'Power BI PL-300',icon:'📊',path:'../powerbi-cert/',storage:'apk-pbicert',requires:['powerbi'],desc:'Дополнительная подготовка к сертификации Power BI.'},
+    {id:'tableau-cert',title:'Tableau Desktop',icon:'🟦',path:'../tableau-cert/',storage:'apk-tabcert',requires:['tableau'],desc:'Дополнительная подготовка к сертификации Tableau.'},
+    {id:'alteryx-cert',title:'Alteryx Foundation',icon:'🔄',path:'../alteryx-cert/',storage:'apk-alteryxcert',requires:['excel','quality'],desc:'Автоматизация подготовки и преобразования данных.'},
+    {id:'azure-data-cert',title:'Azure Data Fundamentals DP-900',icon:'☁️',path:'../azure-data-cert/',storage:'apk-dp900cert',requires:['foundations','sql'],desc:'Базовые понятия данных и облачных сервисов Azure.'},
+    {id:'databricks-cert',title:'Databricks Lakehouse',icon:'🧱',path:'../databricks-cert/',storage:'apk-dbxcert',requires:['sql','python'],desc:'Дополнительный маршрут по lakehouse и аналитической платформе.'},
+    {id:'ga4-cert',title:'Google Analytics 4',icon:'📣',path:'../ga4-cert/',storage:'apk-ga4cert',requires:['stats','charts'],desc:'Веб-аналитика, события, конверсии и интерпретация поведения пользователей.'},
+    {id:'docusign',title:'DocuSign eSignature Admin',icon:'✍️',path:'../docusign-cert/',storage:'apk-dscert',requires:['foundations'],desc:'Отдельная профессиональная ветка администрирования eSignature.'},
+    {id:'docusign-clm',title:'DocuSign CLM Admin',icon:'📄',path:'../docusign-clm-cert/',storage:'apk-dsclmcert',requires:['docusign'],desc:'Управление жизненным циклом договоров.'},
+    {id:'docusign-clm-workflow',title:'DocuSign CLM Workflow',icon:'🔗',path:'../docusign-clm-workflow-cert/',storage:'apk-dsclmwfcert',requires:['docusign-clm'],desc:'Продвинутая специализация по рабочим процессам CLM.'},
+    {id:'docusign-clm-implementation',title:'DocuSign CLM Implementation',icon:'🛠️',path:'../docusign-clm-implementation-cert/',storage:'apk-dsclmimplcert',requires:['docusign-clm'],desc:'Внедрение и настройка процессов CLM.'},
+    {id:'docusign-org',title:'DocuSign Organization Management',icon:'🏢',path:'../docusign-org-cert/',storage:'apk-dsorgcert',requires:['docusign'],desc:'Отдельная специализация по управлению организацией DocuSign.'}
+  ];
+
+  var BY_ID = {}, ALL = [], selectedId = 'foundations', graph = [
+    ['foundations','quality'],['quality','sql'],['quality','excel'],['quality','charts'],
+    ['sql','python'],['excel','python'],['sql','stats'],['excel','stats'],
+    ['charts','forecasting'],['stats','forecasting'],
+    ['sql','powerbi'],['excel','powerbi'],['charts','powerbi'],
+    ['sql','tableau'],['excel','tableau'],['charts','tableau'],
+    ['quality','decision'],['stats','decision'],['charts','decision'],
+    ['quality','portfolio'],['sql','portfolio'],['excel','portfolio'],['powerbi','portfolio'],['tableau','portfolio'],['decision','portfolio'],
+    ['portfolio','simulator'],['portfolio','interview'],['decision','interview'],['interview','final']
+  ];
+  COURSES.forEach(function(c){BY_ID[c.id]=c;ALL.push(c);});
+  SPECIALIZATIONS.forEach(function(c){BY_ID[c.id]=c;ALL.push(c);});
+
+  var root = document.createElement('section');
+  root.id = 'curriculumPanel';
+  root.innerHTML =
+    '<div class="curriculum-shell">' +
+      '<header class="curriculum-head">' +
+        '<div><h2 class="curriculum-title">🗺️ Карта развития: здания открываются за знания</h2>' +
+        '<p class="curriculum-lead">Каждая постройка — это реальный учебный курс. Закрытые здания показывают обязательные предыдущие курсы, доступные ведут к урокам, а после прохождения всей программы здание становится построенным. Карта проверяет сохранённый прогресс уроков в браузере.</p></div>' +
+        '<div class="curriculum-top-actions"><button type="button" class="curriculum-action" id="curriculumRefresh">↻ Обновить прогресс</button><button type="button" class="curriculum-action" id="curriculumNext">▶ Следующий доступный курс</button></div>' +
+      '</header>' +
+      '<div class="curriculum-map-scroll"><canvas id="curriculumWorld" width="' + MAP_W + '" height="' + MAP_H + '" tabindex="0" role="img" aria-label="Карта учебного мира DataCraft. Нажми на здание, чтобы посмотреть требования и открыть курс."></canvas></div>' +
+      '<div class="curriculum-legend"><span><b class="curriculum-symbol" style="color:#a7e39c">✓</b>Построено: курс пройден</span><span><b class="curriculum-symbol" style="color:#f4d47d">◆</b>Можно строить: доступен курс</span><span><b class="curriculum-symbol" style="color:#9aa99d">🔒</b>Закрыто: не хватает предыдущих уроков</span><span>Полоска внутри здания показывает прохождение курса</span></div>' +
+      '<div class="curriculum-lower">' +
+        '<section class="curriculum-detail" id="curriculumDetail" aria-live="polite"></section>' +
+        '<section class="curriculum-list-wrap"><div class="curriculum-list-head"><h3>Все основные учебные здания</h3><span>15 курсов · от первого шага до выпускного экзамена</span></div><div class="curriculum-course-list" id="curriculumCourseList"></div></section>' +
+      '</div>' +
+      '<details class="curriculum-section"><summary>Дополнительные специализации и сертификаты <span>13 отдельных веток · необязательны для основного выпуска</span></summary><div class="curriculum-specializations" id="curriculumSpecializations"></div></details>' +
+      '<div class="curriculum-library"><p><strong>📚 Полевая библиотека.</strong> Справочники помогают между заданиями, но не заменяют прохождение курса и не открывают здание сами по себе.</p><a href="../guides/">Открыть все справочники →</a></div>' +
+    '</div>';
+
+  var layout = document.querySelector('.layout');
+  if (layout && layout.parentNode) layout.parentNode.insertBefore(root, layout);
+  else document.body.insertBefore(root, document.body.firstChild);
+
+  var canvas = document.getElementById('curriculumWorld');
+  var ctx = canvas.getContext('2d');
+  var detail = document.getElementById('curriculumDetail');
+  var courseList = document.getElementById('curriculumCourseList');
+  var specializationList = document.getElementById('curriculumSpecializations');
+  var stageLabels = ['1 · ОСНОВЫ','2 · КАЧЕСТВО','3 · ИНСТРУМЕНТЫ','4 · АНАЛИЗ','5 · КАРЬЕРА'];
+  var nodeById = {};
+  COURSES.forEach(function(c){nodeById[c.id]=c;});
+
+  function readJSON(key) {
+    try { var raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : null; }
+    catch (e) { return null; }
+  }
+  function countTrueMap(obj, filter) {
+    if (!obj || typeof obj !== 'object') return 0;
+    return Object.keys(obj).filter(function(k){return (!filter || filter(k)) && obj[k] === true;}).length;
+  }
+  function countTrueLessonKeys(obj) {
+    return countTrueMap(obj, function(k){return /^lesson\d+$/.test(k);});
+  }
+  function uniqueArrayCount(value) {
+    return Array.isArray(value) ? new Set(value).size : 0;
+  }
+  function getProgress(course) {
+    var s, count = 0, total = course.total || 1, label = course.unit || 'уроков', complete = false;
+    switch (course.tracker) {
+      case 'foundations':
+        s = readJSON(STORE.foundations) || {};
+        count = countTrueMap(s, function(k){return /^\d+$/.test(k);});
+        break;
+      case 'quality': {
+        var raw = '';
+        try { raw = localStorage.getItem(STORE.quality) || ''; } catch(e) {}
+        var match = /^(\d+)\s*\/\s*(\d+)$/.exec(raw);
+        count = match ? Math.min(5, Number(match[1])) : 0;
+        total = 5; label = 'категорий';
+        break;
+      }
+      case 'sql':
+        s = readJSON(STORE.sql) || {};
+        count = uniqueArrayCount(s.doneLessons);
+        break;
+      case 'excel':
+        s = readJSON(STORE.excel) || {};
+        count = uniqueArrayCount(s.lessonsDone);
+        break;
+      case 'python':
+        s = readJSON(STORE.python) || {};
+        count = uniqueArrayCount(s.lessonsDone);
+        break;
+      case 'powerbi':
+        s = readJSON(STORE.powerbi) || {};
+        count = uniqueArrayCount(s.doneLessons);
+        break;
+      case 'charts':
+      case 'stats':
+      case 'forecasting':
+      case 'tableau':
+        s = readJSON(STORE[course.tracker]) || {};
+        count = countTrueLessonKeys(s.done || {});
+        break;
+      case 'decision': {
+        s = readJSON(STORE.decision) || [];
+        count = Array.isArray(s) ? new Set(s.filter(function(id){return /^[1-6]$/.test(String(id));}).map(String)).size : 0;
+        break;
+      }
+      case 'portfolio': {
+        var cases = ['sales','support','marketing'];
+        count = cases.filter(function(id) {
+          var checks = [];
+          try { checks = JSON.parse(localStorage.getItem(STORE.portfolio + id + '-checks') || '[]'); } catch(e) {}
+          return Array.isArray(checks) && new Set(checks.filter(function(n){return Number.isInteger(n)&&n>=0&&n<6;})).size >= 6;
+        }).length;
+        total = 3; label = 'готовых кейса';
+        break;
+      }
+      case 'simulator':
+        s = readJSON(STORE.simulator) || {};
+        count = s.reviews && typeof s.reviews === 'object' ? Object.keys(s.reviews).filter(function(k){return !!s.reviews[k];}).length : 0;
+        count = Math.min(10, count);
+        total = 10; label = 'проверенных задач';
+        break;
+      case 'interview':
+        s = readJSON(STORE.interview) || {};
+        count = countTrueMap(s.lessonsComplete);
+        total = 16; label = 'уроков';
+        break;
+      case 'final':
+        s = readJSON(STORE.final) || {};
+        count = s.submitted ? 1 : 0;
+        total = 1; label = 'экзамен';
+        break;
+      case 'cert':
+        s = readJSON(course.storage) || {};
+        count = s.submitted ? 1 : 0;
+        total = 1; label = 'попытка экзамена';
+        break;
+      default:
+        count = 0;
+    }
+    count = Math.max(0, Math.min(Number(total) || 1, Number(count) || 0));
+    complete = count >= total;
+    return {done:count,total:total,label:label,complete:complete,percent:Math.round(count/total*100)};
+  }
+  function getDependencies(course) {
+    var requires = course.requires || [];
+    var anyOf = course.anyOf || [];
+    var missing = requires.filter(function(id) { return !getProgress(BY_ID[id]).complete; });
+    var anyComplete = !anyOf.length || anyOf.some(function(id){return getProgress(BY_ID[id]).complete;});
+    return {requires:requires,anyOf:anyOf,missing:missing,anyComplete:anyComplete,unlocked:missing.length===0&&anyComplete};
+  }
+  function getStatus(course) {
+    var progress = getProgress(course);
+    var deps = getDependencies(course);
+    return {progress:progress,dependencies:deps,done:progress.complete,unlocked:progress.complete||deps.unlocked,state:progress.complete?'done':(deps.unlocked?'available':'locked')};
+  }
+  function courseName(id) { return BY_ID[id] ? BY_ID[id].short || BY_ID[id].title : id; }
+  function safeText(s) { return String(s == null ? '' : s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+  function formatProgress(p) { return p.done + ' / ' + p.total + ' ' + p.label; }
+  function statusText(st, course) {
+    if (st.done) return course.tracker === 'cert' ? 'Экзамен отправлен' : 'Здание построено';
+    if (st.unlocked) return st.progress.done ? 'Можно продолжить' : 'Можно строить';
+    return 'Не хватает предыдущих уроков';
+  }
+  function selectCourse(id, shouldScroll) {
+    if (!BY_ID[id]) return;
+    selectedId = id;
+    renderAll();
+    if (shouldScroll && detail) detail.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+  function addPathButton(parent, label, path, primary) {
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'curriculum-action' + (primary ? ' primary' : '');
+    button.textContent = label;
+    button.addEventListener('click',function(){
+      if (!path) return;
+      window.open(path,'_blank','noopener');
+    });
+    parent.appendChild(button);
+  }
+  function findNextCourse(course, seen) {
+    seen = seen || {};
+    if (!course || seen[course.id]) return null;
+    seen[course.id] = true;
+    var st = getStatus(course);
+    if (st.done) return null;
+    if (st.unlocked) return course;
+    var dep = getDependencies(course);
+    var missing = dep.missing.slice();
+    if (!dep.anyComplete && dep.anyOf.length) {
+      dep.anyOf.forEach(function(id){ if (missing.indexOf(id) < 0) missing.push(id); });
+    }
+    for (var i=0;i<missing.length;i++) {
+      var nested = findNextCourse(BY_ID[missing[i]],seen);
+      if (nested) return nested;
+    }
+    return null;
+  }
+  function nextAvailable() {
+    for (var i=0;i<COURSES.length;i++) {
+      var st=getStatus(COURSES[i]);
+      if (st.unlocked&&!st.done) return COURSES[i];
+    }
+    for (var j=0;j<SPECIALIZATIONS.length;j++) {
+      var ss=getStatus(SPECIALIZATIONS[j]);
+      if (ss.unlocked&&!ss.done) return SPECIALIZATIONS[j];
+    }
+    return COURSES[0];
+  }
+  function renderDetail() {
+    var course = BY_ID[selectedId] || COURSES[0];
+    var st = getStatus(course), p = st.progress, deps = st.dependencies;
+    var stageLabel = course.stage !== undefined ? stageLabels[course.stage] : 'ДОПОЛНИТЕЛЬНАЯ СПЕЦИАЛИЗАЦИЯ';
+    var req = '';
+    if (deps.requires.length) {
+      req += '<li><span class="req-mark">Требуется</span><span>Пройди все пункты:</span></li>';
+      deps.requires.forEach(function(id) {
+        var c=BY_ID[id], cp=getProgress(c), done=cp.complete;
+        req += '<li><span class="req-mark ' + (done?'':'missing') + '">' + (done?'✓':'○') + '</span><span>' + safeText(courseName(id)) + ' — ' + safeText(formatProgress(cp)) + (done?' · готово':' · не завершено') + '</span></li>';
+      });
+    } else {
+      req += '<li><span class="req-mark">✓</span><span>Это стартовая область: предварительные курсы не нужны.</span></li>';
+    }
+    if (deps.anyOf.length) {
+      var anyDone=deps.anyOf.some(function(id){return getProgress(BY_ID[id]).complete;});
+      req += '<li><span class="req-mark ' + (anyDone?'':'missing') + '">' + (anyDone?'✓':'○') + '</span><span>Дополнительно: заверши любой один курс — ' + deps.anyOf.map(function(id){return safeText(courseName(id));}).join(' или ') + '.</span></li>';
+    }
+    var action = document.createElement('div');
+    action.className = 'curriculum-detail-actions';
+    if (st.unlocked) {
+      addPathButton(action,st.done?(course.tracker==='cert'?'Открыть попытку экзамена':'Повторить / открыть уроки'):'Открыть уроки →',course.path,true);
+    } else {
+      var next=findNextCourse(course);
+      if (next) addPathButton(action,'Начать: ' + (next.short||next.title),next.path,true);
+      addPathButton(action,'Открыть курс и посмотреть требования',course.path,false);
+    }
+    detail.innerHTML =
+      '<div class="curriculum-detail-eyebrow">' + safeText(stageLabel) + '</div>' +
+      '<h3>' + safeText(course.icon || '🏗️') + ' ' + safeText(course.title) + '</h3>' +
+      '<span class="curriculum-status ' + st.state + '">' + (st.done?'✓ ':st.unlocked?'◆ ':'🔒 ') + safeText(statusText(st,course)) + '</span>' +
+      '<p>' + safeText(course.desc || 'Дополнительный учебный маршрут.') + '</p>' +
+      '<div class="curriculum-progress"><i style="width:' + p.percent + '%"></i></div>' +
+      '<p class="curriculum-progress-text">' + safeText(formatProgress(p)) + ' · ' + p.percent + '%</p>' +
+      '<p><strong>Что нужно для постройки:</strong> завершить программу здания. Отметки об уроках берутся из самого учебного модуля.</p>' +
+      '<ul class="curriculum-requirements">' + req + '</ul>';
+    detail.appendChild(action);
+  }
+  function renderCourseList() {
+    courseList.innerHTML='';
+    COURSES.forEach(function(c) {
+      var st=getStatus(c), p=st.progress;
+      var b=document.createElement('button');
+      b.type='button';b.className='curriculum-course-card'+(selectedId===c.id?' selected':'');
+      b.setAttribute('aria-pressed',selectedId===c.id?'true':'false');
+      b.innerHTML='<span class="cc-icon">'+safeText(c.icon)+'</span><span class="cc-copy"><span class="cc-title">'+safeText(c.title)+'</span><span class="cc-meta"><span>'+safeText(formatProgress(p))+'</span><span class="cc-state">'+(st.done?'✓ ГОТОВО':st.unlocked?'ДОСТУПНО':'🔒')+'</span></span><span class="cc-bar"><i style="width:'+p.percent+'%"></i></span></span>';
+      b.addEventListener('click',function(){selectCourse(c.id,false);});
+      courseList.appendChild(b);
+    });
+  }
+  function renderSpecializations() {
+    specializationList.innerHTML='';
+    SPECIALIZATIONS.forEach(function(c) {
+      var st=getStatus(c),p=st.progress;
+      var card=document.createElement('div');card.className='curriculum-special-card'+(st.done?' done':'');
+      var top=document.createElement('div');top.className='curriculum-special-top';
+      var icon=document.createElement('span');icon.className='curriculum-special-icon';icon.textContent=c.icon;
+      var text=document.createElement('div');text.style.minWidth='0';
+      var h=document.createElement('h4');h.textContent=c.title;
+      var desc=document.createElement('p');desc.textContent=formatProgress(p)+' · '+(st.done?'экзамен отправлен':st.unlocked?'доступно':'требуется предыдущий курс');
+      text.append(h,desc);top.append(icon,text);card.append(top);
+      var btn=document.createElement('button');btn.type='button';btn.className='curriculum-action'+(st.unlocked?' primary':'');
+      btn.textContent=st.done?'Повторить':st.unlocked?'Открыть специализацию':'Посмотреть требования';
+      btn.addEventListener('click',function(){selectCourse(c.id,true);});
+      card.appendChild(btn);specializationList.appendChild(card);
+    });
+  }
+  function drawMap() {
+    if (!ctx) return;
+    ctx.clearRect(0,0,MAP_W,MAP_H);
+    ctx.fillStyle='#13231b';ctx.fillRect(0,0,MAP_W,MAP_H);
+    var bandW=250;
+    var colors=['#1b3324','#1a3026','#1b2f2d','#1b2b30','#292a2a'];
+    for(var i=0;i<5;i++){
+      ctx.fillStyle=colors[i];ctx.fillRect(i*252,0,250,MAP_H);
+      ctx.strokeStyle='rgba(177,214,169,.09)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(i*252,0);ctx.lineTo(i*252,MAP_H);ctx.stroke();
+      ctx.fillStyle='#9bb69e';ctx.font='800 11px system-ui';ctx.textAlign='left';ctx.fillText(stageLabels[i],i*252+14,24);
+      ctx.fillStyle='rgba(205,231,194,.07)';
+      for(var j=0;j<3;j++){ctx.beginPath();ctx.arc(i*252+27+j*75,MAP_H-25-((i+j)%2)*11,10+j*2,0,Math.PI*2);ctx.fill();}
+    }
+    ctx.strokeStyle='rgba(184,218,165,.20)';ctx.lineWidth=2;ctx.setLineDash([5,7]);
+    graph.forEach(function(edge){
+      var from=BY_ID[edge[0]],to=BY_ID[edge[1]];
+      if(!from||!to)return;
+      var fs=getStatus(from),ts=getStatus(to);
+      ctx.strokeStyle=ts.done?'#5baf73':(ts.unlocked?'#d1b463':'#607365');
+      ctx.globalAlpha=ts.done?.75:.56;
+      var sx,sy,ex,ey;
+      if(to.x>from.x){
+        sx=from.x+NODE_W;sy=from.y+NODE_H/2;ex=to.x;ey=to.y+NODE_H/2;
+        ctx.beginPath();ctx.moveTo(sx,sy);ctx.bezierCurveTo(sx+26,sy,ex-26,ey,ex,ey);ctx.stroke();
+      }else{
+        sx=from.x+NODE_W;sy=from.y+NODE_H/2;ex=to.x+NODE_W;ey=to.y+NODE_H/2;
+        var mx=Math.max(sx,ex)+14;
+        ctx.beginPath();ctx.moveTo(sx,sy);ctx.bezierCurveTo(mx,sy,mx,ey,ex,ey);ctx.stroke();
+      }
+      ctx.globalAlpha=1;
+    });
+    ctx.setLineDash([]);
+    COURSES.forEach(function(c){
+      var st=getStatus(c),p=st.progress,selected=selectedId===c.id;
+      var border=st.done?'#7ed68a':(st.unlocked?'#f0cd70':'#64776a');
+      var fill=st.done?'#1b432b':(st.unlocked?'#39351f':'#202e26');
+      ctx.fillStyle='rgba(0,0,0,.22)';roundRect(ctx,c.x+3,c.y+5,NODE_W,NODE_H,12);ctx.fill();
+      ctx.fillStyle=fill;ctx.strokeStyle=border;ctx.lineWidth=selected?3:1.5;
+      roundRect(ctx,c.x,c.y,NODE_W,NODE_H,12);ctx.fill();ctx.stroke();ctx.lineWidth=1;
+      ctx.fillStyle=border;ctx.beginPath();ctx.arc(c.x+18,c.y+18,4,0,Math.PI*2);ctx.fill();
+      ctx.textAlign='left';ctx.fillStyle='#eaf4e7';ctx.font='800 11px system-ui';
+      wrapText(ctx,c.short,c.x+12,c.y+34,NODE_W-24,14,2);
+      ctx.fillStyle=st.done?'#a8eeae':(st.unlocked?'#f4d987':'#a7b4a7');
+      ctx.font='700 9px system-ui';
+      ctx.fillText(st.done?'✓ ПОСТРОЕНО':(st.unlocked?'◆ МОЖНО СТРОИТЬ':'🔒 ЗАКРЫТО'),c.x+12,c.y+62);
+      ctx.fillStyle='#0e1b13';roundRect(ctx,c.x+12,c.y+70,NODE_W-24,5,3);ctx.fill();
+      if(p.percent>0){ctx.fillStyle=st.done?'#83d990':(st.unlocked?'#d8bd68':'#7b9280');roundRect(ctx,c.x+12,c.y+70,(NODE_W-24)*p.percent/100,5,3);ctx.fill();}
+      ctx.fillStyle='#b6c8b7';ctx.font='9px system-ui';ctx.fillText(p.done+'/'+p.total+' '+p.label,c.x+12,c.y+84);
+    });
+    ctx.fillStyle='#9fb8a2';ctx.font='11px system-ui';ctx.textAlign='right';ctx.fillText('Выпуск: все основные ветки →',MAP_W-15,MAP_H-12);
+  }
+  function roundRect(c,x,y,w,h,r) {
+    c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();
+  }
+  function wrapText(c,text,x,y,maxWidth,lineHeight,maxLines) {
+    var words=String(text).split(/\s+/),line='',lines=[];
+    words.forEach(function(word){
+      var candidate=line?line+' '+word:word;
+      if(c.measureText(candidate).width>maxWidth&&line){lines.push(line);line=word;}else line=candidate;
+    });
+    if(line)lines.push(line);
+    if(lines.length>maxLines){lines=lines.slice(0,maxLines);while(c.measureText(lines[maxLines-1]+'…').width>maxWidth&&lines[maxLines-1].length>4)lines[maxLines-1]=lines[maxLines-1].slice(0,-1);lines[maxLines-1]+='…';}
+    lines.forEach(function(v,i){c.fillText(v,x,y+i*lineHeight);});
+  }
+  function renderAll() {
+    drawMap();renderCourseList();renderSpecializations();renderDetail();
+  }
+  function pointFromEvent(e) {
+    var rect=canvas.getBoundingClientRect();
+    return {x:(e.clientX-rect.left)*MAP_W/rect.width,y:(e.clientY-rect.top)*MAP_H/rect.height};
+  }
+  function selectAtPoint(p) {
+    for(var i=COURSES.length-1;i>=0;i--) {
+      var c=COURSES[i];
+      if(p.x>=c.x&&p.x<=c.x+NODE_W&&p.y>=c.y&&p.y<=c.y+NODE_H){selectCourse(c.id,false);return;}
+    }
+  }
+  canvas.addEventListener('click',function(e){selectAtPoint(pointFromEvent(e));});
+  canvas.addEventListener('keydown',function(e){
+    if(e.key==='Enter'||e.key===' '){e.preventDefault();selectCourse(selectedId,true);}
+    if(e.key==='ArrowRight'||e.key==='ArrowDown'){
+      e.preventDefault();var i=COURSES.findIndex(function(c){return c.id===selectedId;});selectCourse(COURSES[(i+1)%COURSES.length].id,false);
+    }
+    if(e.key==='ArrowLeft'||e.key==='ArrowUp'){
+      e.preventDefault();var j=COURSES.findIndex(function(c){return c.id===selectedId;});selectCourse(COURSES[(j-1+COURSES.length)%COURSES.length].id,false);
+    }
+  });
+  document.getElementById('curriculumRefresh').addEventListener('click',function(){renderAll();});
+  document.getElementById('curriculumNext').addEventListener('click',function(){
+    var next=nextAvailable();selectCourse(next.id,true);showToastIfAvailable('Следующий доступный этап: '+next.title);
+  });
+  window.addEventListener('focus',renderAll);
+  window.addEventListener('pageshow',renderAll);
+  window.addEventListener('storage',function(e){if(!e.key||e.key.indexOf('apk-')===0||['sqlkit-v1','epk','ppk','pbikt-v1','spk','tpk','clk-v1','fmk-v1','sim2','ipk'].indexOf(e.key)>=0)renderAll();});
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)renderAll();});
+
+  function showToastIfAvailable(message) {
+    var toast=document.getElementById('toast');
+    if(!toast)return;
+    toast.textContent=message;toast.classList.add('show');
+    window.setTimeout(function(){toast.classList.remove('show');},2600);
+  }
+  renderAll();
+})();
