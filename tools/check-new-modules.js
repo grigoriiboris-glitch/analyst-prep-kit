@@ -88,10 +88,59 @@ for (const feature of [
 for (const resource of ["wood", "stone", "data", "crystal", "reagent", "sql"]) {
   assert.ok(datacraft.includes(resource), "DataCraft resource missing: " + resource);
 }
-assert.ok(datacraft.includes("SQL-сканер") && datacraft.includes("Аналитический терминал"),
-  "DataCraft progression recipes missing");
+assert.ok(datacraft.includes("SQL-сканер") && datacraft.includes("Панель исследователя"),
+  "DataCraft resource-crafting recipes missing");
 assert.ok(datacraft.includes("datacraft-save.json"), "DataCraft save export missing");
-console.log("OK: DataCraft 2D game structure and gameplay acceptance checks");
+assert.ok(datacraft.includes('href="curriculum-map.css"') &&
+  datacraft.includes('src="curriculum-map.js"'),
+  "DataCraft curriculum map assets are not attached");
+
+const curriculum = fs.readFileSync(path.join(root, "datacraft/curriculum-map.js"), "utf8");
+new Function(curriculum);
+const curriculumCss = fs.readFileSync(path.join(root, "datacraft/curriculum-map.css"), "utf8");
+assert.ok(curriculumCss.includes("#curriculumWorld") && curriculumCss.includes(".curriculum-course-card"),
+  "Curriculum map styles missing");
+const coreIds = [
+  "foundations", "quality", "sql", "excel", "charts", "python", "stats",
+  "forecasting", "powerbi", "tableau", "decision", "portfolio",
+  "simulator", "interview", "final"
+];
+const optionalIds = [
+  "project-studio", "excel-cert", "excel-expert", "powerbi-cert", "tableau-cert",
+  "alteryx-cert", "azure-data-cert", "databricks-cert", "ga4-cert",
+  "docusign", "docusign-clm", "docusign-clm-workflow",
+  "docusign-clm-implementation", "docusign-org"
+];
+for (const id of coreIds.concat(optionalIds)) {
+  assert.ok(curriculum.includes("id:'" + id + "'"), "DataCraft curriculum node missing: " + id);
+}
+for (const key of [
+  "apk-foundations-progress-v1", "apk-quality-score", "sqlkit-v1", "epk", "ppk",
+  "clk-v1", "spk", "fmk-v1", "pbikt-v1", "tpk",
+  "apk-decision-thinking-progress-v1", "apk-portfolio-", "sim2", "ipk", "apk-final"
+]) {
+  assert.ok(curriculum.includes(key), "DataCraft learning progress reader missing: " + key);
+}
+for (const route of [
+  "foundations", "data-quality", "sql", "excel", "chart-literacy", "python",
+  "stats", "forecasting", "powerbi", "tableau", "decision-making",
+  "portfolio-projects", "simulator", "interview", "final", "projects",
+  "excel-cert", "excel-expert-cert", "powerbi-cert", "tableau-cert",
+  "alteryx-cert", "azure-data-cert", "databricks-cert", "ga4-cert",
+  "docusign-cert", "docusign-clm-cert", "docusign-clm-workflow-cert",
+  "docusign-clm-implementation-cert", "docusign-org-cert"
+]) {
+  assert.ok(fs.existsSync(path.join(root, route, "index.html")),
+    "Curriculum route is missing: " + route);
+}
+for (const dependency of [
+  "requires:['foundations','quality']", "requires:['sql','excel']",
+  "requires:['stats','charts']", "anyOf:['powerbi','tableau']",
+  "requires:['foundations','quality','sql','excel','python','charts','stats','forecasting','powerbi','tableau','decision','portfolio','simulator','interview']"
+]) {
+  assert.ok(curriculum.includes(dependency), "Curriculum progression dependency missing: " + dependency);
+}
+console.log("OK: DataCraft 2D gameplay, all course routes, lesson-progress readers, and prerequisite graph");
 
 const localization = fs.readFileSync(path.join(root, "assets/ru-localization.js"), "utf8");
 new Function(localization);
