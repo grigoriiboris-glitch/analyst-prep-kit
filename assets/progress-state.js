@@ -18,7 +18,7 @@
     statistics: { id: 'stats-v1', keys: ['spk', 'spk-recalls', 'spk-recall-wins', 'spk-last-visit', 'spk-streak'], prefixes: ['spk-'] },
     charts: { id: 'charts-v1', keys: ['clk-v1'] },
     forecasting: { id: 'forecasting-v1', keys: ['fmk-v1'] },
-    decision: { id: 'decision-v1', keys: ['apk-decision-thinking-progress-v1', 'apk-decision-thinking-checklist-v1'] },
+    decision: { id: 'decision-v1', keys: ['apk-decision-thinking-progress-v1', 'apk-decision-thinking-answer-v1', 'apk-decision-thinking-checklist-v1'] },
     interview: { id: 'interview-v1', keys: ['ipk', 'ipk-recalls', 'ipk-recall-wins', 'ipk-last-visit', 'ipk-streak'], prefixes: ['ipk-'] },
     simulator: { id: 'simulator-v1', keys: ['sim2'], prefixes: ['sim2-'] },
     final: { id: 'final-v1', keys: ['apk-final'] },
