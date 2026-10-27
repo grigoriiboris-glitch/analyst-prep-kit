@@ -7,12 +7,14 @@ const htmlFiles = [
   "index.html",
   "foundations/index.html",
   "data-quality/index.html",
-  "portfolio-projects/index.html"
+  "portfolio-projects/index.html",
+  "decision-making/index.html"
 ];
 const requiredRoutes = [
   "foundations/",
   "data-quality/",
-  "portfolio-projects/"
+  "portfolio-projects/",
+  "decision-making/"
 ];
 
 for (const file of htmlFiles) {
@@ -58,6 +60,19 @@ for (const key of ["sales:", "support:", "marketing:"]) {
   assert.ok(projects.includes(key), "Portfolio case missing: " + key);
 }
 assert.ok(projects.includes("downloadCsv") && projects.includes("downloadReadme"), "Portfolio exports missing");
+
+const decisions = fs.readFileSync(path.join(root, "decision-making/index.html"), "utf8");
+assert.equal((decisions.match(/class="lesson(?:\\s|")/g) || []).length, 6, "Decision-making course must contain exactly 6 lessons");
+for (const feature of ["progressBar", "downloadChecklist", "reviewCase", "saveCase", "caseAnswer"]) {
+  assert.ok(decisions.includes('id="' + feature + '"'), "Decision-making feature missing: " + feature);
+}
+for (let i = 1; i <= 6; i++) {
+  assert.ok(decisions.includes('data-quiz="q' + i + '"'), "Decision-making quiz missing: q" + i);
+}
+assert.ok(decisions.includes("localStorage"), "Decision-making progress should persist locally");
+assert.ok(fs.existsSync(path.join(root, "decision-making/CHECKLIST_RU.md")), "Decision-making checklist file missing");
+const decisionChecklist = fs.readFileSync(path.join(root, "decision-making/CHECKLIST_RU.md"), "utf8");
+assert.ok(decisionChecklist.includes("Универсальная цепочка"), "Decision-making checklist is incomplete");
 
 const localization = fs.readFileSync(path.join(root, "assets/ru-localization.js"), "utf8");
 new Function(localization);
