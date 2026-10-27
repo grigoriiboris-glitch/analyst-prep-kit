@@ -1,66 +1,93 @@
-/* ============================================================
-   Analyst Prep Kit — progress backup / restore (no backend).
-   All kits live on one origin, so their localStorage is shared —
-   this hub-side tool exports every kit's progress as one code the
-   user can copy to another device and import. Stopgap until real
-   accounts (Supabase) land for the recurring phase.
-
-   Exposes window.apkSync.{exportData, importData}; auto-wires the
-   hub UI elements (#apk-sync-export / #apk-sync-import / #apk-sync-box
-   / #apk-sync-msg) if present.
-   ============================================================ */
+/* Analyst Prep Kit — validated backup/restore for all progress modules. */
 (function () {
-  // Prep-kit localStorage key prefixes (origin is shared with other
-  // github.io projects, so we only ever touch our own keys).
-  var PREFIXES = ['apk', 'epk', 'sqlkit', 'ppk', 'tpk', 'spk', 'pbikt', 'ipk', 'sim2'];
-  function isOurs(k) { return PREFIXES.some(function (p) { return k === p || k.indexOf(p) === 0; }); }
+  'use strict';
+  var api = window.APKProgress;
+  var MAX_VALUE = 2 * 1024 * 1024;
+
+  function fail(message) { return { ok: false, error: message }; }
 
   function collect() {
-    var o = {};
+    var result = {};
+    if (!api) return result;
     for (var i = 0; i < localStorage.length; i++) {
-      var k = localStorage.key(i);
-      if (isOurs(k)) o[k] = localStorage.getItem(k);
+      var key = localStorage.key(i);
+      if (!key || !api.isAllowedKey(key)) continue;
+      var value = localStorage.getItem(key);
+      if (typeof value === 'string' && value.length <= MAX_VALUE) result[key] = value;
     }
-    return o;
+    return result;
   }
-  function enc(s) { return btoa(unescape(encodeURIComponent(s))); }
-  function dec(s) { return decodeURIComponent(escape(atob(s))); }
 
-  var api = {
-    exportData: function () { return 'APK1:' + enc(JSON.stringify(collect())); },
-    importData: function (str) {
-      str = String(str || '').trim();
-      if (str.indexOf('APK1:') === 0) str = str.slice(5);
-      var obj;
-      try { obj = JSON.parse(dec(str)); } catch (e) { return { ok: false, error: "That code didn't look right — copy the whole thing." }; }
-      if (!obj || typeof obj !== 'object') return { ok: false, error: "That code didn't look right — copy the whole thing." };
-      var n = 0;
-      Object.keys(obj).forEach(function (k) {
-        if (isOurs(k)) { try { localStorage.setItem(k, obj[k]); n++; } catch (e) {} }
+  var syncApi = {
+    exportData: function () {
+      if (!api) throw new Error('Модуль проверки сохранений не загружен.');
+      return api.encodeExport(collect());
+    },
+    importData: function (code) {
+      if (!api) return fail('Модуль проверки сохранений не загружен. Обнови страницу и попробуй снова.');
+      // Parse and validate the ENTIRE file before touching localStorage.
+      var parsed = api.parseImport(code);
+      if (!parsed.ok) return parsed;
+      var restored = 0;
+      var skipped = 0;
+      var meta = {};
+      try {
+        meta = JSON.parse(localStorage.getItem('apk-sync-meta-v1') || '{}') || {};
+      } catch (_) { meta = {}; }
+
+      Object.keys(parsed.data).forEach(function (key) {
+        try {
+          var incoming = parsed.data[key];
+          var current = localStorage.getItem(key);
+          // Never let an old/offline wallet import increase an existing balance.
+          if (key === 'datacraft-wallet-v1' && current !== null) {
+            skipped++;
+            return;
+          }
+          var next = current === null ? incoming : api.mergeRaw(current, incoming, key);
+          if (next !== current) {
+            localStorage.setItem(key, next);
+            restored++;
+          }
+          meta[key] = { updatedAt: Date.now(), deleted: false };
+        } catch (_) {
+          // Storage quota failures do not invalidate the source code, but are
+          // surfaced as a partial restore rather than claiming full success.
+          skipped++;
+        }
       });
-      return { ok: true, count: n };
+      try { localStorage.setItem('apk-sync-meta-v1', JSON.stringify(meta)); } catch (_) {}
+      if (!restored && skipped) return fail('Данные проверены, но браузер не разрешил восстановление. Освободи место и попробуй снова.');
+      return { ok: true, count: restored, skipped: skipped };
     }
   };
-  window.apkSync = api;
+  window.apkSync = syncApi;
 
   function wire() {
-    var ex = document.getElementById('apk-sync-export'),
-        im = document.getElementById('apk-sync-import'),
-        box = document.getElementById('apk-sync-box'),
-        msg = document.getElementById('apk-sync-msg');
+    var ex = document.getElementById('apk-sync-export');
+    var im = document.getElementById('apk-sync-import');
+    var box = document.getElementById('apk-sync-box');
+    var msg = document.getElementById('apk-sync-msg');
     if (ex && box && msg) ex.addEventListener('click', function () {
-      box.value = api.exportData();
-      box.select();
-      try { document.execCommand('copy'); } catch (e) {}
-      msg.textContent = 'Copied. Paste this code into Import on your other device.';
+      try {
+        box.value = syncApi.exportData();
+        box.select();
+        try { document.execCommand('copy'); } catch (_) {}
+        msg.textContent = 'Код сохранения готов. Скопируй его и импортируй на другом устройстве.';
+      } catch (error) {
+        msg.textContent = error.message || 'Не удалось экспортировать сохранение.';
+      }
     });
     if (im && box && msg) im.addEventListener('click', function () {
-      if (!box.value.trim()) { msg.textContent = 'Paste a progress code into the box first.'; return; }
-      var r = api.importData(box.value);
-      msg.textContent = r.ok ? ('Restored ' + r.count + ' items. Reloading…') : r.error;
-      if (r.ok) setTimeout(function () { location.reload(); }, 900);
+      if (!box.value.trim()) { msg.textContent = 'Сначала вставь код сохранения.'; return; }
+      var result = syncApi.importData(box.value);
+      if (!result.ok) { msg.textContent = result.error; return; }
+      msg.textContent = 'Восстановлено записей: ' + result.count +
+        (result.skipped ? ' · пропущено: ' + result.skipped : '') + '. Перезагрузка…';
+      setTimeout(function () { location.reload(); }, 900);
     });
   }
+
   if (document.readyState !== 'loading') wire();
   else document.addEventListener('DOMContentLoaded', wire);
 })();
