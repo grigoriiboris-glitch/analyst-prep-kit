@@ -4,7 +4,7 @@
   "use strict";
   if (window.__apkRuLoaded) return;
   window.__apkRuLoaded = true;
-  var langKey="apk-language", cacheKey="apk-ru-cache-v1", lang="ru";
+  var langKey="apk-language", cacheKey="apk-ru-cache-v1", lang="ru", requestQueue=Promise.resolve();
   var records=new WeakMap(), tracked=new Set(), pending=new WeakSet(), observer, toggle, muting=false, cache={};
   try { cache=JSON.parse(localStorage.getItem(cacheKey)||"{}"); } catch (_) { cache={}; }
   if(!cache||typeof cache!=="object"||Array.isArray(cache))cache={};
