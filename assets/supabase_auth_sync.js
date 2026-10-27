@@ -503,6 +503,8 @@ async function bootstrapProgressSync(options) {
   try {
     const user = options && options.user ? options.user : await getCurrentUser();
     if (!user) return false;
+    // Freeze writes while checking cloud state; on a failed restore we must not upload local snapshots.
+    apkCloudReadyUserId = null;
     const result = await restoreAllProgress({ user });
     if (!result || result.ok !== true) return false;
     if (result.changed) {
@@ -592,8 +594,7 @@ if (typeof window !== 'undefined') {
     if (document.visibilityState !== 'visible') return;
     getCurrentUser().then(user => {
       if (!user) return;
-      if (apkCloudReadyUserId !== user.id) return bootstrapProgressSync({ user });
-      return syncQueue.flush(user);
+      return bootstrapProgressSync({ user });
     }).catch(() => {});
   });
   setInterval(async () => {
