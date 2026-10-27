@@ -36,7 +36,7 @@ footer{max-width:1500px;margin:auto;padding:0 20px 24px;color:#8fa697;font-size:
   <div class="brand"><div class="brand-mark" aria-hidden="true">⛏️</div><div><h1>DataCraft <span style="color:var(--mint)">/ Мир аналитика</span></h1><p>Собирай ресурсы. Создавай инструменты. Осваивай аналитику.</p></div></div>
   <div class="top-actions">
     <button class="btn ghost" id="exportSave">⇩ Экспорт сохранения</button>
-    <button class="btn ghost" id="resetGame">Начать заново</button>
+    <button class="btn ghost" id="resetGame">Сбросить экспедицию</button>
     <a class="btn" href="../index.html">← К урокам</a>
   </div>
 </header>
@@ -541,8 +541,8 @@ document.getElementById('exportSave').addEventListener('click',()=>{
  const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='datacraft-save.json';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
 });
 document.getElementById('resetGame').addEventListener('click',()=>{
- if(!confirm('Сбросить игровой прогресс DataCraft в этом браузере? Экспортируй сохранение заранее, если хочешь его оставить.'))return;
- state=clone(DEFAULT_STATE);player={x:5,y:7};path=[];targetNode=null;closeChallenge();saveState();renderAll();showToast('Новый лагерь создан.');
+ if(!confirm('Сбросить только ресурсную экспедицию: собранные материалы, экспедиционные постройки и контракт? Монеты, учебные отметки и построенные учебные здания сохранятся. Экспортируй сохранение экспедиции заранее, если хочешь его оставить.'))return;
+ state=clone(DEFAULT_STATE);player={x:5,y:7};path=[];targetNode=null;closeChallenge();saveState();renderAll();showToast('Экспедиция сброшена. Монеты и учебный прогресс сохранены.');
 });
 renderAll();
 requestAnimationFrame(frame);
