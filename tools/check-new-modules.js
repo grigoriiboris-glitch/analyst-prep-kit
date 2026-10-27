@@ -168,7 +168,7 @@ for (const [name, count] of catalogMatches) {
     if (ch === "[") { depth++; continue; }
     if (ch === "]") { depth--; if (depth === 0) break; continue; }
     if (ch === "{") {
-      if (depth === 1 && curly === 0 && /\bid\s*:/.test(nextArray.slice(i, i + 80))) found++;
+      if (depth === 1 && curly === 0 && /"?id"?\s*:/.test(nextArray.slice(i, i + 80))) found++;
       curly++; continue;
     }
     if (ch === "}") { curly--; continue; }
