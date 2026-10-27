@@ -4744,9 +4744,7 @@ loadState();
 _migrateConfidence();
 applyTheme();
 bumpStreak(); // count today's visit before Home renders its streak chip
-const _hasLessonDeepLink=/^#lesson-\d+(?:-restart)?$/.test(location.hash||'');
-const _savedLesson=DATA.LESSONS.find(l=>l.id===S.lastLesson);
-if(!_hasLessonDeepLink&&_savedLesson)openLesson(_savedLesson.id);else show('home');
+show('home');
 
 /* Cert-kit deep link: /tableau/#lesson-<id> opens that lesson directly. Runs on
    window load so deferred Chart.js is ready for the lesson viz. */
@@ -4758,6 +4756,7 @@ window.addEventListener('load', function(){
     if(m[2]){ delete S.done['lesson'+_id]; if(S.lessonStage) delete S.lessonStage[_id]; delete _v2ParsAttempt[_id]; delete _v2ParsWasWrong[_id]; save(); }
     openLesson(_id);
   }catch(e){} }
+  else { var _savedLesson=DATA.LESSONS.find(function(l){return l.id===S.lastLesson;}); if(_savedLesson)openLesson(_savedLesson.id); }
 });
 
 // ─── Lucide icons: render now + re-render after any view change ─────────────
