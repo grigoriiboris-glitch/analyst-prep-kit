@@ -591,8 +591,8 @@
     ctx.setLineDash([]);
     COURSES.forEach(function(c){
       var st=getStatus(c),p=st.progress,selected=selectedId===c.id;
-      var border=st.done?'#7ed68a':(st.unlocked?'#f0cd70':'#64776a');
-      var fill=st.done?'#1b432b':(st.unlocked?'#39351f':'#202e26');
+      var border=st.built?'#7ed68a':(st.unlocked&&st.courseComplete?'#f0cd70':(st.unlocked?'#c5b267':'#64776a'));
+      var fill=st.built?'#1b432b':(st.unlocked&&st.courseComplete?'#4a3d20':(st.unlocked?'#303326':'#202e26'));
       ctx.fillStyle='rgba(0,0,0,.22)';roundRect(ctx,c.x+3,c.y+5,NODE_W,NODE_H,12);ctx.fill();
       ctx.fillStyle=fill;ctx.strokeStyle=border;ctx.lineWidth=selected?3:1.5;
       roundRect(ctx,c.x,c.y,NODE_W,NODE_H,12);ctx.fill();ctx.stroke();ctx.lineWidth=1;
@@ -603,7 +603,7 @@
       ctx.font='700 9px system-ui';
       ctx.fillText(st.done?(c.id==='final'?'✓ ЭКЗАМЕН ЗАВЕРШЁН':'✓ ПОСТРОЕНО'):(st.unlocked?'◆ МОЖНО СТРОИТЬ':'🔒 ЗАКРЫТО'),c.x+12,c.y+62);
       ctx.fillStyle='#0e1b13';roundRect(ctx,c.x+12,c.y+70,NODE_W-24,5,3);ctx.fill();
-      if(p.percent>0){ctx.fillStyle=st.done?'#83d990':(st.unlocked?'#d8bd68':'#7b9280');roundRect(ctx,c.x+12,c.y+70,(NODE_W-24)*p.percent/100,5,3);ctx.fill();}
+      if(p.percent>0){ctx.fillStyle=st.built?'#83d990':(st.unlocked&&st.courseComplete?'#e5c56e':(st.unlocked?'#c4bd72':'#7b9280'));roundRect(ctx,c.x+12,c.y+70,(NODE_W-24)*p.percent/100,5,3);ctx.fill();}
       ctx.fillStyle='#b6c8b7';ctx.font='9px system-ui';ctx.fillText(p.done+'/'+p.total+' '+p.label,c.x+12,c.y+84);
     });
     ctx.fillStyle='#9fb8a2';ctx.font='11px system-ui';ctx.textAlign='right';ctx.fillText('Выпуск: все основные ветки →',MAP_W-15,MAP_H-12);
