@@ -313,18 +313,27 @@
   }
   function textOf(el) { return el ? String(el.innerText || el.textContent || '').replace(/\s+/g, ' ').trim() : ''; }
   function cleanTitle(value) { return String(value || '').replace(/^\s*(урок|lesson)\s*\d+\s*[·.:-]?\s*/i, '').trim(); }
-  function matchingVisual(course, title, body) {
-    var haystack = String(title || '') + ' ' + String(body || '').slice(0, 900);
-    var best = null;
+  function findRuleVisual(course, haystack, includeGlobal) {
+    var found = null;
     RULES.some(function (rule) {
-      if (rule.course !== course && rule.course !== '*') return false;
-      if (rule.course === '*' && best) return false;
+      if (rule.course !== course && !(includeGlobal && rule.course === '*')) return false;
       try {
-        if (rule.match.test(haystack)) { best = rule.visual; return true; }
+        if (rule.match.test(haystack)) { found = rule.visual; return true; }
       } catch (_) {}
       return false;
     });
-    return best || GENERIC;
+    return found;
+  }
+  function matchingVisual(course, title, body) {
+    var headline = String(title || '');
+    var context = headline + ' ' + String(body || '').slice(0, 900);
+    /* Match the title first: a lesson may mention a JOIN while teaching SELECT.
+       Only consult the body when its heading does not identify a specific topic. */
+    return findRuleVisual(course, headline, false) ||
+      findRuleVisual(course, headline, true) ||
+      findRuleVisual(course, context, false) ||
+      findRuleVisual(course, context, true) ||
+      GENERIC;
   }
   function node(tag, className, value) {
     var el = document.createElement(tag);
