@@ -8,13 +8,15 @@ const htmlFiles = [
   "foundations/index.html",
   "data-quality/index.html",
   "portfolio-projects/index.html",
-  "decision-making/index.html"
+  "decision-making/index.html",
+  "datacraft/index.html"
 ];
 const requiredRoutes = [
   "foundations/",
   "data-quality/",
   "portfolio-projects/",
-  "decision-making/"
+  "decision-making/",
+  "datacraft/"
 ];
 
 for (const file of htmlFiles) {
@@ -73,6 +75,23 @@ assert.ok(decisions.includes("localStorage"), "Decision-making progress should p
 assert.ok(fs.existsSync(path.join(root, "decision-making/CHECKLIST_RU.md")), "Decision-making checklist file missing");
 const decisionChecklist = fs.readFileSync(path.join(root, "decision-making/CHECKLIST_RU.md"), "utf8");
 assert.ok(decisionChecklist.includes("Универсальная цепочка"), "Decision-making checklist is incomplete");
+
+const datacraft = fs.readFileSync(path.join(root, "datacraft/index.html"), "utf8");
+for (const feature of [
+  'id="world"', 'id="targetList"', 'id="inventory"', 'id="recipes"',
+  'id="challengeModal"', 'id="startContract"', 'id="exportSave"', 'id="resetGame"',
+  "function startNode(node)", "function craft(id)", "function claimReward()",
+  "localStorage", "findPath(", "function drawWorld()", "QUESTIONS"
+]) {
+  assert.ok(datacraft.includes(feature), "DataCraft gameplay feature missing: " + feature);
+}
+for (const resource of ["wood", "stone", "data", "crystal", "reagent", "sql"]) {
+  assert.ok(datacraft.includes(resource), "DataCraft resource missing: " + resource);
+}
+assert.ok(datacraft.includes("SQL-сканер") && datacraft.includes("Аналитический терминал"),
+  "DataCraft progression recipes missing");
+assert.ok(datacraft.includes("datacraft-save.json"), "DataCraft save export missing");
+console.log("OK: DataCraft 2D game structure and gameplay acceptance checks");
 
 const localization = fs.readFileSync(path.join(root, "assets/ru-localization.js"), "utf8");
 new Function(localization);
