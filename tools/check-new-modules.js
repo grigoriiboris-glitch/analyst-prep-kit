@@ -284,9 +284,13 @@ assert.ok(datacraft.includes("Монетки · можно тратить") && d
   "DataCraft must display and award spendable coins");
 console.log("OK: spendable coins, lesson rewards, crafting costs, and wallet integration");
 
-const localization = fs.readFileSync(path.join(root, "assets/ru-localization.js"), "utf8");
-new Function(localization);
-assert.ok(localization.includes("translate.googleapis.com"), "Online fallback translation endpoint missing");
+for (const runtimeTranslator of ["assets/ru-localization.js", "assets/ru-localization-boot.js"]) {
+  assert.ok(!fs.existsSync(path.join(root, runtimeTranslator)),
+    "Static Russian mode must not ship a runtime language translator: " + runtimeTranslator);
+}
+const staticRussianAudit = fs.readFileSync(path.join(root, "tools/check-static-russian.js"), "utf8");
+assert.ok(staticRussianAudit.includes('data-static-ru') && staticRussianAudit.includes('lang'),
+  "Static Russian HTML audit must verify document language and static marker");
 assert.ok(fs.readFileSync(path.join(root, "README.md"), "utf8").includes("RUN_RU.md"), "README must link to setup guide");
 assert.ok(fs.readFileSync(path.join(root, "RUN_RU.md"), "utf8").includes("Ubuntu Linux"), "Setup guide must cover Ubuntu");
-console.log("OK: course content, exports, localization, and Windows/Ubuntu instructions");
+console.log("OK: course content, exports, static Russian-only pages, and Windows/Ubuntu instructions");
