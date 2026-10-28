@@ -91,7 +91,7 @@ function isCodeLike(text) {
 }
 function candidate(text, context = null, htmlText = false) {
   const value = String(text ?? "").trim();
-  if (!value || !/[A-Za-z]/.test(value) || /[А-Яа-яЁё]/.test(value)) return false;
+  if (!value || !/[A-Za-z]/.test(value)) return false;
   if (isTechnicalOnly(value)) return false;
   if (/^(?:javascript:|data:|mailto:|tel:|https?:\/\/)/i.test(value)) return false;
   if (/^[\w-]+\/[\w./-]+$/.test(value)) return false;
@@ -198,7 +198,7 @@ function translateRaw(text) {
 
 async function translateText(text) {
   const source = String(text);
-  if (!/[A-Za-z]/.test(source) || /[А-Яа-яЁё]/.test(source)) return source;
+  if (!/[A-Za-z]/.test(source)) return source;
   if (source.length <= 600) return translateRaw(source);
   const chunks = [];
   let remainder = source;
