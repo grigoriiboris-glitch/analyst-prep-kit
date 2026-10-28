@@ -17,10 +17,10 @@ const { containsHtmlMarkup, shouldPreserveHtmlAttributeFragment } = markupGuard;
 const ROOT = process.cwd();
 const CACHE_PATH = path.join(ROOT, "tools", "static-ru-cache.json");
 const OMIT_DIRS = new Set([".git", ".github", "node_modules", "tools", "tests"]);
-// The DataCraft map renderer builds HTML from concatenated JS string fragments.
-// Its visible UI copy is already Russian; keep the authored markup untouched so
-// static translation cannot rename attributes such as height/tabindex/aria-label.
-const OMIT_FILES = new Set(["assets/ru-localization.js", "assets/ru-localization-boot.js", "assets/sql-mermaid.js", "datacraft/curriculum-map.js"]);
+// DataCraft canvas renderers and course pages are authored in Russian, but contain CSS and executable script literals.
+// Static translation corrupts alpha decimals, canvas fonts, CSS filters, and game interactions.
+// Keep native game sources and the PostgreSQL lesson page out of machine translation.
+const OMIT_FILES = new Set(["assets/ru-localization.js", "assets/ru-localization-boot.js", "assets/sql-mermaid.js", "datacraft/curriculum-map.js", "datacraft/index.html", "datacraft/quiet-valley.js", "datacraft/lesson-catalog.js", "postgresql/index.html"]);
 const SKIP_TAGS = new Set(["script", "style", "pre", "code", "kbd", "samp", "svg", "canvas", "iframe"]);
 const SKIP_CLASSES = new Set(["code-block", "code-sample", "code-snippet", "code-example", "formula-code", "ral-code", "ral-note-chunk", "terminal-editor"]);
 const HUMAN_KEYS = new Set([
