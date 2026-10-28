@@ -7,6 +7,7 @@
     'business-analysis': {key:'apk-business-analysis-progress-v1',prop:'map',rate:2,total:9,bonus:5},
     quality: {key:'apk-quality-score',prop:'quality',rate:1,total:5,bonus:5},
     sql: {key:'sqlkit-v1',prop:'doneLessons',rate:1,total:48,bonus:8},
+    postgresql: {key:'apk-postgresql-progress-v1',prop:'doneLessons',rate:1,total:30,bonus:8},
     excel: {key:'epk',prop:'lessonsDone',rate:1,total:51,bonus:8},
     python: {key:'ppk',prop:'lessonsDone',rate:1,total:42,bonus:7},
     powerbi: {key:'pbikt-v1',prop:'doneLessons',rate:1,total:39,bonus:7},
@@ -26,7 +27,7 @@
     'powerbi-cert':'apk-pbicert','tableau-cert':'apk-tabcert'
   };
   var COURSE_NAMES = {
-    foundations:'Основы аналитики',quality:'Качество данных',sql:'SQL',excel:'Excel',
+    foundations:'Основы аналитики',quality:'Качество данных',sql:'SQL',postgresql:'PostgreSQL',excel:'Excel',
     python:'Python',powerbi:'Power BI',stats:'Статистика',tableau:'Tableau',
     charts:'Грамотность графиков',forecasting:'Прогнозирование',decision:'Логика и решения',
     'business-analysis':'Основы бизнес-анализа',
