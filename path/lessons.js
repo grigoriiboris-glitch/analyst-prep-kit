@@ -23,7 +23,7 @@ const LESSON_TEXT = [
     title: 'SELECT & FROM',
     sub: "Извлечение столбцов из таблицы",
     story: "You know the mental model: databases are tables, rows have a grain, keys connect tables, queries return tables. Now write your first actual question. SELECT names the columns you want; FROM names the table to get them from. That's the whole skeleton. Every query you'll ever write starts with these two words.",
-    intro: 'A SELECT query is like ordering at a deli counter: you name what you want (the columns) and which counter to get it from (the table). Every SQL query starts with <code>SELECT</code> to choose columns and <code>FROM</code> to name the table. Think of it as: &ldquo;Give me <em>these columns</em> from <em>this table</em>.&rdquo;',
+    intro: "Запрос SELECT похож на заказ в гастрономе: вы называете то, что хотите (столбцы), и из какого прилавка это получить (таблица). Каждый SQL-запрос начинается с <code>SELECT</code> выбирать столбцы и <code>FROM</code> назвать таблицу. Думайте об этом так: «Дай мне <em>эти столбцы</em> from <em>этот стол</em>».",
     ral: {
       sql: 'SELECT name, email\nFROM customers;',
       say: "Дайте мне столбцы имени и электронной почты из таблицы клиентов.",

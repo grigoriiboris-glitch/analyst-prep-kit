@@ -2405,7 +2405,7 @@ function renderLessonList(){
   const units={};
   DATA.LESSONS.forEach(l=>{(units[l.unit]=units[l.unit]||[]).push(l);});
   let html=`<h1>Твой учебный маршрут</h1>
-    <p style="margin:-6px 0 14px;font-size:.85rem;color:var(--txt2)">Шаг за шагом, сверху вниз. Ничего впереди не заблокировано — затемнение означает, что оно приближается. Выделенный узел — ваш следующий шаг.<span class="mono" style="color:var(--accent)">${doneCount}/${total} done</span></p>
+    <p style="margin:-6px 0 14px;font-size:.85rem;color:var(--txt2)">Шаг за шагом, сверху вниз. Ничего впереди не заблокировано — затемнение означает, что оно приближается. Выделенный узел — ваш следующий шаг.<span class="mono" style="color:var(--accent)">${doneCount}/${total} Готово</span></p>
     <div class="pmap">`;
   Object.keys(units).forEach(u=>{
     const ls=units[u];
@@ -2949,12 +2949,12 @@ function setTabStage(lid, s){
 // drawn as rings so you can still see where the reading stops and the doing
 // starts. Guided mode only — a drill opened cold from the Practice tab is
 // unchanged, because there is no lesson frame to be continuous with.
-const STAGE_LABELS = ['Orient','Example','Try','Build','Check','Close'];
+const STAGE_LABELS = ['Orient',"Пример","Попробовать","Собрать","Проверить","Закрыть"];
 const STAGE_ASK = ["посмотреть, для чего это нужно","прочитайте рабочий пример","расставь шаги по порядку",
                    "построить ответ","ответить на чек","посмотри, что ты можешь теперь сделать"];
 const STEP_ASK = {fills:"Заполните пробел", parsons:"Наведите порядок",
                   lab:"найди это в реальном рабочем пространстве"};
-const STEP_DOT_LABEL = {fills:'Fill', parsons:'Order', lab:'Workspace'};
+const STEP_DOT_LABEL = {fills:"Заполнение", parsons:"Порядок", lab:'Workspace'};
 // One forward label everywhere, and it names what is coming. Naming the next
 // task measurably reduces switch cost, though it never removes it (Monsell 2003,
 // Trends in Cognitive Sciences 7(3):134-140).
@@ -3176,7 +3176,7 @@ function v2ParsCheck(lid){
     celebrate(true,"Правильный! 🎉");
     // The result says whether you were right, and carries a glyph so it never
     // depends on seeing colour.
-    if(fb) fb.innerHTML='<span style="color:var(--success);font-size:13px;font-weight:600">&#10003; Correct</span> <span style="color:var(--dim);font-size:12px">&mdash; that\'s the right order.</span>';
+    if(fb) fb.innerHTML="<span style=\"color:var(--success);font-size:13px;font-weight:600\">✓ Правильно</span> <span style=\"color:var(--dim);font-size:12px\">— это правильный порядок.</span>";
     // Check and Skip are moot once it is solved, so the row swaps in place and
     // the forward press is the only obvious next tap.
     const actions = document.getElementById('v2tab-pars-actions-'+lid);
@@ -3186,7 +3186,7 @@ function v2ParsCheck(lid){
     recordMiss(lid, l.parsons.prompt);
     // The pieces STAY where the learner put them. A wrong ordering is only good
     // for looking at, so wiping it throws away the one thing it bought.
-    if(fb) fb.innerHTML='<span style="color:var(--err);font-size:13px;font-weight:600">&#10007; Not quite &mdash; try reordering the pieces.</span>';
+    if(fb) fb.innerHTML="<span style=\"color:var(--err);font-size:13px;font-weight:600\">✗ Не совсем — попробуйте изменить порядок частей.</span>";
     ladderBump('l'+lid);
     const btn = document.getElementById('v2tab-stuck-try-'+lid);
     if(btn) btn.style.display='';
@@ -3540,8 +3540,8 @@ function v2TabBody(l, done){
       <div id="v2tab-pars-fb-${l.id}" style="min-height:18px;margin-bottom:4px"></div>
       <div style="display:flex;gap:10px;flex-wrap:wrap" id="v2tab-pars-actions-${l.id}">
         <button class="btn btn-ghost btn-sm" onclick="setTabStage(${l.id},1)">← Назад</button>
-        <button class="btn btn-primary" onclick="v2ParsCheck(${l.id})">Check</button>
-        <button class="btn btn-ghost btn-sm" onclick="v2ParsReset(${l.id})">Clear</button>
+        <button class="btn btn-primary" onclick="v2ParsCheck(${l.id})">Проверить</button>
+        <button class="btn btn-ghost btn-sm" onclick="v2ParsReset(${l.id})">Очистить</button>
         <button class="btn btn-ghost btn-sm" onclick="setTabStage(${l.id},3)">${fwdLabel(STAGE_ASK[3])}</button>
       </div>
       <button class="v2-coach-btn" id="v2tab-stuck-try-${l.id}" style="display:none" onclick="stuckHint(${l.id},'try')"><i data-lucide="lightbulb"></i> Застрявший? Получить подсказку →</button>
@@ -3577,7 +3577,7 @@ function v2TabBody(l, done){
     const nextBtn=isLastLesson?`<a href="../final/" class="btn btn-primary" style="text-decoration:none">Сдайте итоговый экзамен →</a>`:'';
     const _wins=parseInt(localStorage.getItem('tpk-recall-wins')||'0');
     body=`<div class="v2-stage-card">
-      <h3><i data-lucide="badge-check"></i> Done</h3>
+      <h3><i data-lucide="badge-check"></i> Готово</h3>
       ${_wins>0?`<p style="font-size:12px;color:var(--txt2);margin:0 0 10px"><i data-lucide="repeat-2" style="width:13px;height:13px;vertical-align:-2px"></i> ${_wins} concept${_wins===1?'':'s'} вспомнил по памяти пока</p>`:''}
       <p style="font-size:15px;line-height:1.7;margin-bottom:18px">${l.close||''}</p>
       <div style="display:flex;gap:10px;flex-wrap:wrap">${contBtn}${nextBtn}${againBtn}<button class="btn btn-ghost btn-sm" onclick="renderLessonList()">Все уроки</button><button class="btn btn-ghost btn-sm" onclick="setTabStage(${l.id},0)" title="Walk back through this lesson, your &#10003; stays">↺ Обзор урока</button></div>
@@ -4311,8 +4311,8 @@ function renderParsons(item,done){
     ${Ord.html('d'+drillState.idx, item.ans, _shuf(item.ans.map((_,i)=>i)))}
     <div id="parsFb" style="min-height:18px;margin:8px 0 0"></div>
     <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap" id="parsActions">
-      <button class="btn btn-primary pars-check" onclick="checkParsons()">Check</button>
-      <button class="btn btn-ghost btn-sm" onclick="resetParsons()">Clear</button>
+      <button class="btn btn-primary pars-check" onclick="checkParsons()">Проверить</button>
+      <button class="btn btn-ghost btn-sm" onclick="resetParsons()">Очистить</button>
       <button class="btn btn-ghost btn-sm" id="parsHintBtn" onclick="parsHint()"><i data-lucide="lightbulb" style="width:13px;height:13px;vertical-align:-2px"></i>Показать подсказку</button>
     </div>
     <div class="hint-panel" id="parsHint"></div>
@@ -4507,7 +4507,7 @@ function renderVizBuilder(){
           <button class="mark-btn${vizState.markType==='scatter'?' active':''}" onclick="setMarkType('scatter')">Scatter</button>
           <div style="margin-left:auto;display:flex;gap:6px">
             <button class="btn" style="font-size:.78rem;padding:4px 10px" onclick="loadSampleViz()">Загрузить образец</button>
-            <button class="btn" style="font-size:.78rem;padding:4px 10px;opacity:.6" onclick="clearViz()">Clear</button>
+            <button class="btn" style="font-size:.78rem;padding:4px 10px;opacity:.6" onclick="clearViz()">Очистить</button>
           </div>
         </div>
         <!-- Chart -->
