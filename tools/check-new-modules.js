@@ -141,6 +141,16 @@ assert.ok(datacraft.includes('href="curriculum-map.css"') &&
 
 const curriculum = fs.readFileSync(path.join(root, "datacraft/curriculum-map.js"), "utf8");
 new Function(curriculum);
+assert.ok(curriculum.includes(`width="' + MAP_W + '" height="' + MAP_H + '" tabindex="0" role="img" aria-label="`),
+  "DataCraft curriculum canvas must retain its full width and height attributes");
+assert.ok(curriculum.includes(`return '<div class="curriculum-lesson-row`) && curriculum.includes('class="curriculum-copy-context"'),
+  "DataCraft lesson rows and AI-context buttons must render as valid HTML elements");
+assert.ok(curriculum.includes(`'<span class="curriculum-status '`) &&
+  curriculum.includes(`'<div class="curriculum-progress"><i style="width:'`) &&
+  curriculum.includes(`'<span class="cc-bar"><i style="width:'`),
+  "DataCraft status badges and progress bars must keep their HTML tags and attributes");
+assert.ok(!/\\\\"(?:высота|табиндекс|роль|ария-метка|ширина|заголовок|сорт)=|<класс|<тип кнопки=|<я стиль=|<диапазона=/i.test(curriculum),
+  "DataCraft markup must not contain translated HTML tags or attributes");
 const curriculumCss = fs.readFileSync(path.join(root, "datacraft/curriculum-map.css"), "utf8");
 assert.ok(curriculumCss.includes("#curriculumWorld") && curriculumCss.includes(".curriculum-course-card"),
   "Curriculum map styles missing");
