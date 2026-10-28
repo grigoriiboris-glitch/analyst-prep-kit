@@ -57,9 +57,9 @@ const inflight = new Map();
 const translationQueue = [];
 let queueTimer = null;
 let activeBatches = 0;
-const MAX_BATCH_ITEMS = 1;
-const MAX_BATCH_CHARS = 600;
-const MAX_PARALLEL_BATCHES = 5;
+const MAX_BATCH_ITEMS = 10;
+const MAX_BATCH_CHARS = 3500;
+const MAX_PARALLEL_BATCHES = 4;
 const failures = [];
 let apiCalls = 0;
 let translatedStrings = 0;
@@ -170,6 +170,29 @@ async function translateOne(item) {
   return null;
 }
 async function translateBatch(batch) {
+  // Translate several short interface strings in one request. A distinctive
+  // separator is checked after translation; if the service changes it, each
+  // item safely falls back to the single-string endpoint.
+  if (batch.length > 1) {
+    const separator = "\nZXQZAPKSEPARATOR9471QXZ\n";
+    const merged = batch.map(item => item.src).join(separator);
+    const mergedItem = { src: merged };
+    const combined = await translateOne(mergedItem);
+    if (combined) {
+      const pieces = combined.split(separator);
+      if (pieces.length === batch.length && pieces.every(piece => piece.trim())) {
+        for (let i = 0; i < batch.length; i++) {
+          const item = batch[i];
+          const result = preserveWhitespace(item.src, pieces[i].trim());
+          cache.set(item.key, result);
+          translatedStrings++;
+          item.resolve(result);
+          inflight.delete(item.key);
+        }
+        return;
+      }
+    }
+  }
   await Promise.all(batch.map(async item => {
     const value = await translateOne(item);
     if (value && value.trim()) {
