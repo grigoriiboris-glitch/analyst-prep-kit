@@ -45,7 +45,7 @@ jobs:
           NODE_OPTIONS: --max-old-space-size=4096
         run: node tools/static-russian-translation.mjs
 
-      - name: Commit generated Russian pages and recover from concurrent pushes
+      - name: Commit generated Russian pages with concurrent-push recovery
         shell: bash
         run: |
           set -euo pipefail
@@ -65,25 +65,25 @@ jobs:
             exit 0
           fi
 
-          if git push origin HEAD:main; then
-            exit 0
-          fi
+          for attempt in 1 2 3; do
+            if git push origin HEAD:main; then
+              echo "Static Russian pages pushed to main."
+              exit 0
+            fi
+            if [ "$attempt" -eq 3 ]; then
+              echo "Could not push after 3 attempts because main kept changing." >&2
+              exit 1
+            fi
 
-          echo "Main changed during translation; replaying the generated localization cache on latest main."
-          if [ -f tools/static-ru-cache.json ]; then
+            echo "Push race (attempt $attempt); retrying against current main with the translation cache."
             cp tools/static-ru-cache.json /tmp/static-ru-cache.json
-          fi
-          git fetch origin main
-          git reset --hard origin/main
-          if [ -f /tmp/static-ru-cache.json ]; then
+            git fetch origin main
+            git reset --hard origin/main
             cp /tmp/static-ru-cache.json tools/static-ru-cache.json
-          fi
 
-          node tools/static-russian-translation.mjs
-          git add -A
-          if git diff --cached --quiet; then
-            echo "Latest main already contains all generated translations."
-            exit 0
-          fi
-          git commit -m "chore: generate static Russian translations [static-ru]"
-          git push origin HEAD:main
+            node tools/static-russian-translation.mjs
+            if ! commit_output; then
+              echo "Latest main already contains all generated translations."
+              exit 0
+            fi
+          done
