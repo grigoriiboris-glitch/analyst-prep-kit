@@ -1,5 +1,5 @@
 (function exposeSqlMermaid(global) {
-  "используйте строгий";
+  "use strict";
 
   var SQL_KEYWORDS = new Set((
     'SELECT FROM WHERE JOIN INNER LEFT RIGHT FULL OUTER CROSS NATURAL ON USING AS DISTINCT ALL UNION INTERSECT EXCEPT MINUS WITH RECURSIVE ' +
@@ -162,10 +162,10 @@
     }
 
     var lines = [
-      "блок-схема LR",
+      "flowchart LR",
       '  classDef sqlTable fill:#ecfeff,stroke:#0891b2,stroke-width:1.5px,color:#164e63;',
-      "  classDef sqlStep fill: # fff7ed, обводка: # d97706, ширина обводки: 1,4 пикселя, цвет: # 7c2d12;",
-      "  classDef sqlOutput fill:#ecfdf5,stroke:#059669,ширина штриха:1,5 пикселей,цвет:#065f46;"
+      "  classDef sqlStep fill:#fff7ed,stroke:#d97706,stroke-width:1.4px,color:#7c2d12;",
+      "  classDef sqlOutput fill:#ecfdf5,stroke:#059669,stroke-width:1.5px,color:#065f46;"
     ];
     sources.forEach(function (source) {
       var fields = Array.from(source.columns).filter(Boolean).slice(0, 6);
@@ -193,7 +193,7 @@
     var safeId = String(lesson && lesson.id || 'sql').replace(/[^A-Za-z0-9_-]/g, '');
     var title = lesson && lesson.title || 'SQL';
     return '<section class="card sql-mermaid-panel" aria-labelledby="sql-mermaid-title-' + safeId + '">' +
-      "<div class=\"lesson-eyebrow\"><i data-lucide=\"git-merge\" aria-hidden=\"true\"></i> Схема данных · Русалка.js</div>" +
+      "<div class=\"lesson-eyebrow\"><i data-lucide=\"git-merge\" aria-hidden=\"true\"></i> Схема данных · Mermaid.js</div>" +
       '<h3 class="sql-mermaid-title" id="sql-mermaid-title-' + safeId + '">Как запрос работает с таблицами</h3>' +
       '<p class="sql-mermaid-intro">Блоки показывают таблицы и поля, которые можно определить по примеру SQL. Ниже приведена таблица с результатом запроса.</p>' +
       '<div class="sql-mermaid-canvas"><pre class="mermaid sql-mermaid-source" role="img" aria-label="' + escapeHtml('Схема таблиц для урока «' + title + '»') + '">' + escapeHtml(source).replace(/&lt;br\/&gt;/g, '<br/>') + '</pre></div>' +
@@ -238,9 +238,9 @@
       script.setAttribute('data-sql-mermaid-loader', 'true');
       script.onload = function () {
         if (global.mermaid && typeof global.mermaid.run === 'function') resolve(global.mermaid);
-        else reject(new Error("Русалка загружена без API браузера"));
+        else reject(new Error("Библиотека Mermaid загрузилась, но её API недоступен."));
       };
-      script.onerror = function () { reject(new Error("Запрос Mermaid CDN не выполнен")); };
+      script.onerror = function () { reject(new Error("Не удалось загрузить Mermaid с CDN.")); };
       global.document.head.appendChild(script);
     });
   }
@@ -271,7 +271,7 @@
             return render(global.document);
           })
           .catch(function () {
-            showFallback(global.document, 'Не удалось загрузить схему. Пример SQL и таблица результата остаются доступными ниже.');
+            showFallback(global.document, 'Не удалось загрузить схему Mermaid. Пример SQL и таблица результата остаются доступны ниже.');
           })
           .finally(function () { mermaidLoadPromise = null; });
       }
@@ -291,7 +291,7 @@
           lineColor: '#64748b',
           secondaryColor: '#fff7ed',
           tertiaryColor: '#ecfdf5',
-          fontFamily: "Интер, системный интерфейс, без засечек",
+          fontFamily: "Inter, system-ui, sans-serif",
           fontSize: '14px'
         },
         flowchart: { htmlLabels: true, curve: 'linear', nodeSpacing: 26, rankSpacing: 36, useMaxWidth: true }
@@ -299,7 +299,7 @@
       initialized = true;
     }
     return global.mermaid.run({ nodes: nodes }).catch(function () {
-      showFallback(root, 'Эту схему не удалось отобразить. Посмотри текст схемы ниже и таблицу результата.');
+      showFallback(root, 'Не удалось отобразить схему. Текстовое представление и таблица результата доступны ниже.');
     });
   }
 
