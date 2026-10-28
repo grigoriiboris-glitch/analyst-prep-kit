@@ -254,3 +254,12 @@ test("Answer choices and step-by-step instructions are localized", () => {
   assert.ok(tableau.includes("Создать вычисляемое поле"));
   assert.ok(stats.includes("Разделить на n: std_dev / len(data)"));
 });
+
+
+test("DAX explanations do not translate functions or identifiers into broken code", () => {
+  const powerbi = read("powerbi/index.html");
+  assert.ok(!powerbi.includes("DIVIDE(Дядя"));
+  assert.ok(!powerbi.includes("СУММА суммирует"));
+  assert.ok(powerbi.includes("DIVIDE([Sales] - [Previous Month Sales], [Previous Month Sales])"));
+  assert.ok(powerbi.includes("DATEADD"));
+});
