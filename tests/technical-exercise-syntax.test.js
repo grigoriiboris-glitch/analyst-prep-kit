@@ -122,3 +122,18 @@ test("Tableau learning modules keep English field calculations", () => {
   assert.doesNotMatch(tableau, /СУММ\s*\(\s*(?:Доход|Единицы|Единицы измерения)|\[Доход\]\s*[–-]\s*\[Стоимость\]/);
   assert.doesNotMatch(certificate, /СУММ\s*\(\s*(?:Доход|Единицы|Единицы измерения)|\[Доход\]\s*[–-]\s*\[Стоимость\]|ЕСЛИ \[Единицы\].*ТО/);
 });
+
+
+test("Excel nested IF examples use valid English formula syntax", () => {
+  const excel = read("excel/index.html");
+  assert.match(excel, /IF\(A2<100, \"Низкий\", IF\(A2<200, \"Средний\", \"Высокий\"\)\)/);
+  assert.doesNotMatch(excel, /IF\(A2<100, «Низкий», IF\(A2<200, «Средний», «Высокий»\)\)/);
+});
+
+test("Tableau and DAX field expressions use English identifiers", () => {
+  const tableau = read("tableau-cert/index.html");
+  const powerbi = read("powerbi/index.html");
+  assert.match(tableau, /\[Revenue\] - \[Cost\]/);
+  assert.match(powerbi, /SUM\(Sales\[Profit\]\)/);
+  assert.doesNotMatch(powerbi, /РАССЧИТАТЬ|РАСЧЕТ|SUM\(Продажи\[Прибыль\]\)/);
+});
