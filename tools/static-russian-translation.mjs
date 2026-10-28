@@ -378,26 +378,28 @@ async function translateJavaScript(source, filename) {
     if (!node || typeof node !== "object") return;
     if (node.type === "Literal" && typeof node.value === "string") {
       const isHuman = (context && HUMAN_KEYS.has(context.toLowerCase())) || directVisibleLiteral(node, parent);
-      if (isHuman) {
+      // Also translate standalone sentence literals: many lessons render these
+      // through variables before assigning textContent/innerHTML.
+      const isSentence = candidate(node.value, null, false);
+      if (isHuman || isSentence) {
         const original = node.value;
-        const translated = await translateVisibleString(original, context || "visible");
+        const translated = await translateVisibleString(original, isHuman ? (context || "visible") : null, isHuman);
         if (translated !== original) replacements.push({ start: node.start, end: node.end, value: JSON.stringify(translated) });
       }
       return;
     }
     if (node.type === "TemplateLiteral") {
       const isHuman = (context && HUMAN_KEYS.has(context.toLowerCase())) || directVisibleLiteral(node, parent);
-      if (isHuman) {
-        for (const quasi of node.quasis) {
-          const original = quasi.value.cooked ?? quasi.value.raw;
-          if (!candidate(original, context || "visible", true)) continue;
-          const translated = await translateVisibleString(original, context || "visible", true);
-          if (translated !== original) {
-            // TemplateElement ranges cover only the literal text, not ${...}.
-            // Escape syntax characters so translated UI text cannot break the JS template.
-            const raw = translated.replace(/\\/g, "\\\\").replace(/`/g, "\\`").replace(/\$\{/g, "\\$\{");
-            replacements.push({ start: quasi.start, end: quasi.end, value: raw });
-          }
+      for (const quasi of node.quasis) {
+        const original = quasi.value.cooked ?? quasi.value.raw;
+        const visibleSentence = candidate(original, null, false);
+        if (!isHuman && !visibleSentence) continue;
+        const translated = await translateVisibleString(original, isHuman ? (context || "visible") : null, isHuman);
+        if (translated !== original) {
+          // TemplateElement ranges cover only the literal text, not ${...}.
+          // Escape syntax characters so translated UI text cannot break the JS template.
+          const raw = translated.replace(/\\/g, "\\\\").replace(/`/g, "\\`").replace(/\$\{/g, "\\$\{");
+          replacements.push({ start: quasi.start, end: quasi.end, value: raw });
         }
       }
       if (node.expressions.length) await Promise.all(node.expressions.map(expression => visit(expression, node, null)));
@@ -451,7 +453,16 @@ function htmlEntitiesToText(value) {
 
 async function processHtml(file, original) {
   // The browser must never be offered a language toggle or a live translation script.
-  let source = original.replace(/<script\b(?=[^>]*\bsrc\s*=\s*["'][^"']*ru-localization(?:-boot)?\.js["'])[^>]*>\s*<\/script\s*>/gi, "");
+  // Remove versioned and unversioned runtime localization scripts, then enforce
+  // Russian at the source tag itself (parse5 can omit the root's source location on BOM files).
+  let source = original.replace(/<script\b(?=[^>]*\bsrc\s*=\s*["'][^"']*ru-localization(?:-boot)?\.js(?:\?[^"']*)?["'])[^>]*>\s*<\/script\s*>/gi, "");
+  source = source.replace(/<html\b[^>]*>/i, opening => {
+    let root = opening;
+    if (/\blang\s*=\s*(["'])[^"']*\1/i.test(root)) root = root.replace(/\blang\s*=\s*(["'])[^"']*\1/i, 'lang="ru"');
+    else root = root.replace(/^<html\b/i, '<html lang="ru"');
+    if (!/\bdata-static-ru\s*=/i.test(root)) root = root.replace(/>$/, ' data-static-ru="true">');
+    return root;
+  });
   const document = parse(source, { sourceCodeLocationInfo: true });
   const replacements = [];
 
