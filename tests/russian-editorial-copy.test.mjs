@@ -38,5 +38,5 @@ test("editorial corrections are stable when localization is rebuilt", () => {
 
 test("keeps Mermaid syntax and styling source out of automatic translation", () => {
   const translator = fs.readFileSync(new URL("../tools/static-russian-translation.mjs", import.meta.url), "utf8");
-  assert.match(translator, /assets\\/sql-mermaid\\.js/);
+  assert.ok(translator.includes('"assets/sql-mermaid.js"'));
 });
