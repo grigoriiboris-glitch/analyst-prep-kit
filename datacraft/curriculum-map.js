@@ -125,7 +125,7 @@
           '<button type="button" class="curriculum-action primary" id="curriculumNext">▶ Следующий курс</button>' +
         '</div>' +
       '</header>' +
-      '<div class="curriculum-map-scroll"><canvas id="curriculumWorld" width="' + MAP_W + "\"высота=\"" + MAP_H + "\" табиндекс=\"0\" роль=\"изображение\" ария-метка=\"Интерактивная живая 2D-карта мира ДатаКрафт со спрайтами зданий поверх битмапа.\"></canvas></div>" +
+      '<div class="curriculum-map-scroll"><canvas id="curriculumWorld" width="' + MAP_W + '" height="' + MAP_H + '" tabindex="0" role="img" aria-label="Интерактивная живая 2D-карта мира DataCraft со спрайтами зданий поверх битмапа."></canvas></div>' +
       '<div class="curriculum-legend">' +
         '<span><b class="curriculum-symbol" style="color:#7ed68a">✓</b>Построено (живой спрайт + караваны)</span>' +
         '<span><b class="curriculum-symbol" style="color:#f4d47d">🔨</b>Курс пройден — ждёт постройки за 🪙</span>' +
@@ -686,7 +686,7 @@
       if (course.tracker === 'quality' || course.tracker === 'portfolio') amount = 1;
       if (course.tracker === 'simulator' || course.tracker === 'final') amount = 2;
       if (course.tracker === 'projectStudio' || course.tracker === 'cert') amount = 0;
-      return "<класс div=\"учебный план-урока-строка\"" + (done ? ' passed' : '') + (depth ? ' nested' : '') + '"><span class="curriculum-lesson-check">' + (done ? '✓' : '○') + '</span><span class="curriculum-lesson-copy"><span class="curriculum-lesson-title">' + safeText(item.title) + '</span>' + (item.goal ? '<span class="curriculum-lesson-goal">' + safeText(item.goal) + '</span>' : '') + '</span><span class="curriculum-lesson-actions"><span class="curriculum-lesson-reward">' + (done ? 'Зачтено' : (rewardAlreadyClaimed ? 'Монеты получены' : (amount ? '+' + amount + ' 🪙' : 'Этап'))) + "</span><тип кнопки=\"кнопка\" сорт=\"контекст-копии учебной программы\" заголовок=\"Скопировать контекст этого урока для ИИ-агента\" ария-метка=\"Скопировать контекст урока " + safeText(item.title) + "\"название-курса-данных=\"" + safeText(course.title) + "\"путь-курса-данных=\"" + safeText(course.path || '') + "\"id-курса-данных=\"" + safeText(course.id) + '" data-lesson-title="' + safeText(item.title) + '" data-lesson-id="' + safeText(item.id) + '" data-lesson-unit="' + safeText(item.unit || '') + "\"цель-урока-данных=\"" + safeText(item.goal || '') + "\"данные-уроки-готовы=\"" + (done ? 'true' : 'false') + '" data-parent-id="' + safeText(parentId || '') + '">⧉ Скопировать контекст</button></span></div>';
+      return '<div class="curriculum-lesson-row' + (done ? ' passed' : '') + (depth ? ' nested' : '') + '"><span class="curriculum-lesson-check">' + (done ? '✓' : '○') + '</span><span class="curriculum-lesson-copy"><span class="curriculum-lesson-title">' + safeText(item.title) + '</span>' + (item.goal ? '<span class="curriculum-lesson-goal">' + safeText(item.goal) + '</span>' : '') + '</span><span class="curriculum-lesson-actions"><span class="curriculum-lesson-reward">' + (done ? 'Зачтено' : (rewardAlreadyClaimed ? 'Монеты получены' : (amount ? '+' + amount + ' 🪙' : 'Этап'))) + '</span><button type="button" class="curriculum-copy-context" title="Скопировать контекст этого урока для ИИ-агента" aria-label="Скопировать контекст урока ' + safeText(item.title) + '" data-course-title="' + safeText(course.title) + '" data-course-path="' + safeText(course.path || '') + '" data-course-id="' + safeText(course.id) + '" data-lesson-title="' + safeText(item.title) + '" data-lesson-id="' + safeText(item.id) + '" data-lesson-unit="' + safeText(item.unit || '') + '" data-lesson-goal="' + safeText(item.goal || '') + '" data-lesson-done="' + (done ? 'true' : 'false') + '" data-parent-id="' + safeText(parentId || '') + '">⧉ Скопировать контекст</button></span></div>';
     }
     if (course.tracker === 'portfolio') {
       catalog.forEach(function(project){
@@ -810,9 +810,9 @@
     detail.innerHTML =
       '<div class="curriculum-detail-eyebrow">' + safeText(stageLabel) + '</div>' +
       '<h3>' + safeText(course.icon || '🏗️') + ' ' + safeText(course.title) + '</h3>' +
-      "<класс диапазона=\"статус учебного плана " + st.state + '">' + (st.built ? '✓ ' : st.courseComplete ? '🔨 ' : st.unlocked ? '🏗️ ' : '🔒 ') + safeText(statusText(st)) + '</span>' +
+      '<span class="curriculum-status ' + st.state + '">' + (st.built ? '✓ ' : st.courseComplete ? '🔨 ' : st.unlocked ? '🏗️ ' : '🔒 ') + safeText(statusText(st)) + '</span>' +
       '<p>' + safeText(course.desc || 'Дополнительный учебный маршрут.') + '</p>' +
-      "<div class=\"curriculum-progress\"><я стиль=\"ширина:" + p.percent + '%"></i></div>' +
+      '<div class="curriculum-progress"><i style="width:' + p.percent + '%"></i></div>' +
       '<p class="curriculum-progress-text">' + safeText(formatProgress(p)) + ' · ' + p.percent + '%</p>' +
       currencyNote +
       '<ul class="curriculum-requirements">' + req + '</ul>' +
@@ -828,7 +828,7 @@
       b.className = 'curriculum-course-card' + (selectedId === c.id ? ' selected' : '');
       b.setAttribute('aria-pressed', selectedId === c.id ? 'true' : 'false');
       var label = st.built ? '✓ ПОСТРОЕНО' : (!st.unlocked ? '🔒 ПУСТОЙ УЧАСТОК' : (st.courseComplete ? '🔨 ГОТОВО К СТРОЙКЕ' : '🏗️ СТРОИТСЯ'));
-      b.innerHTML = '<span class="cc-icon">' + safeText(c.icon) + '</span><span class="cc-copy"><span class="cc-title">' + safeText(c.short) + ' <small style="color:#9ab39f;font-weight:600">(' + safeText(c.title) + ')</small></span><span class="cc-meta"><span>' + safeText(formatProgress(p)) + '</span><span class="cc-state">' + label + "</span></span><span class=\"cc-bar\"><я стиль=\"ширина:" + p.percent + '%"></i></span><span class="cc-cost">' + (st.built ? 'Спрайт здания возведён на карте' : 'Постройка здания: ' + (c.cost || 0) + ' 🪙') + '</span></span>';
+      b.innerHTML = '<span class="cc-icon">' + safeText(c.icon) + '</span><span class="cc-copy"><span class="cc-title">' + safeText(c.short) + ' <small style="color:#9ab39f;font-weight:600">(' + safeText(c.title) + ')</small></span><span class="cc-meta"><span>' + safeText(formatProgress(p)) + '</span><span class="cc-state">' + label + '</span></span><span class="cc-bar"><i style="width:' + p.percent + '%"></i></span><span class="cc-cost">' + (st.built ? 'Спрайт здания возведён на карте' : 'Постройка здания: ' + (c.cost || 0) + ' 🪙') + '</span></span>';
       b.addEventListener('click', function(){ selectCourse(c.id, false); });
       courseList.appendChild(b);
     });
