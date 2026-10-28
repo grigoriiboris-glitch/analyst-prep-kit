@@ -19,11 +19,25 @@ test("AI context-copy component parses and includes a safe clipboard fallback", 
     "MutationObserver",
     "root.contains(other)",
     ".study-section",
+    "section.lesson",
+    "[data-lesson-root]",
     "#lessonContent",
     "#lessonView",
     "#app"
   ]) assert.ok(source.includes(token), "AI context-copy feature missing: " + token);
   assert.ok(!source.includes("localStorage.setItem('apk-sync-queue"), "Context copy must not transmit or queue private lesson text");
+});
+
+test("custom lesson pages expose focused context roots without changing lesson copy", () => {
+  const dataQuality = read("data-quality/index.html");
+  const decision = read("decision-making/index.html");
+  const portfolio = read("portfolio-projects/index.html");
+  assert.ok(dataQuality.includes('data-lesson-root data-course-title="Качество данных"'));
+  assert.ok(dataQuality.includes("Найди проблемы в данных до того, как считать показатели"));
+  assert.equal((decision.match(/data-lesson-root data-course-title="Логика и решения"/g) || []).length, 6);
+  assert.ok(decision.includes("Не просто найти ответ — понять, какое решение стоит принять"));
+  assert.ok(portfolio.includes('data-lesson-root data-course-title="Проекты для портфолио"'));
+  assert.ok(portfolio.includes("Три проекта для портфолио"));
 });
 
 test("AI context copy is loaded by shared course shells and the new PostgreSQL module", () => {
