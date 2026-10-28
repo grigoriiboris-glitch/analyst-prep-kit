@@ -54,8 +54,12 @@ const PRESERVED_TERMS = new Set([
 const CODE_START = /^\s*(?:SELECT\b[\s\S]*\bFROM\b|INSERT\s+INTO\b|UPDATE\s+\w+\s+SET\b|DELETE\s+FROM\b|CREATE\s+(?:TABLE|VIEW|INDEX)\b|WITH\s+\w+\s+AS\s*\(|function\s*[\w$]*\s*\(|(?:const|let|var)\s+[\w$]+\s*=|return\s+[\w$.(\[{]|if\s*\([^)]*\)\s*\{|for\s*\([^)]*\)\s*\{|import\s+.+\s+from\s+|export\s+(?:default|const|function)\b)/i;
 const cache = new Map();
 const inflight = new Map();
-let active = 0;
-const waiters = [];
+const translationQueue = [];
+let queueTimer = null;
+let activeBatches = 0;
+const MAX_BATCH_ITEMS = 10;
+const MAX_BATCH_CHARS = 1700;
+const MAX_PARALLEL_BATCHES = 3;
 const failures = [];
 let apiCalls = 0;
 let translatedStrings = 0;
@@ -98,79 +102,114 @@ function candidate(text, context = null, htmlText = false) {
   return /\s/.test(value) && value.length > 8;
 }
 
-async function acquire() {
-  if (active >= 4) await new Promise(resolve => waiters.push(resolve));
-  active++;
+function scheduleTranslationQueue() {
+  if (queueTimer !== null) return;
+  queueTimer = setTimeout(() => {
+    queueTimer = null;
+    pumpTranslationQueue();
+  }, 12);
 }
-function release() {
-  active = Math.max(0, active - 1);
-  const next = waiters.shift();
-  if (next) next();
+function takeTranslationBatch() {
+  const batch = [];
+  let chars = 0;
+  while (translationQueue.length && batch.length < MAX_BATCH_ITEMS) {
+    const next = translationQueue[0];
+    const sourceLength = next.src.length;
+    if (batch.length && (chars + sourceLength > MAX_BATCH_CHARS || sourceLength > 600)) break;
+    if (!batch.length && sourceLength > 600) {
+      batch.push(translationQueue.shift());
+      break;
+    }
+    batch.push(translationQueue.shift());
+    chars += sourceLength;
+    if (chars >= MAX_BATCH_CHARS) break;
+  }
+  return batch;
 }
-
-async function translateRaw(text) {
+function pumpTranslationQueue() {
+  while (activeBatches < MAX_PARALLEL_BATCHES && translationQueue.length) {
+    const batch = takeTranslationBatch();
+    if (!batch.length) break;
+    activeBatches++;
+    translateBatch(batch).finally(() => {
+      activeBatches--;
+      if (translationQueue.length) pumpTranslationQueue();
+    });
+  }
+}
+function decodeBatchResponse(payload, expected) {
+  if (!Array.isArray(payload) || payload.length !== expected) return null;
+  const values = payload.map(item => Array.isArray(item) && typeof item[0] === "string" ? item[0] : null);
+  return values.every(value => value !== null && value.trim()) ? values : null;
+}
+async function translateBatch(batch) {
+  let translated = null;
+  let lastError = "Ответ переводчика не распознан";
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const url = new URL("https://translate.googleapis.com/translate_a/t");
+      url.searchParams.set("client", "dict-chrome-ex");
+      url.searchParams.set("sl", "auto");
+      url.searchParams.set("tl", "ru");
+      for (const item of batch) url.searchParams.append("q", item.src);
+      const response = await fetch(url, {
+        headers: { "Accept": "application/json", "User-Agent": "Mozilla/5.0" },
+        signal: AbortSignal.timeout(15000)
+      });
+      if (!response.ok) throw new Error("HTTP " + response.status);
+      const payload = await response.json();
+      translated = decodeBatchResponse(payload, batch.length);
+      if (!translated) throw new Error("Неожиданный формат ответа");
+      apiCalls++;
+      break;
+    } catch (error) {
+      lastError = String(error);
+      if (attempt < 2) await sleep(300 * (2 ** attempt));
+    }
+  }
+  for (let i = 0; i < batch.length; i++) {
+    const item = batch[i];
+    const value = translated?.[i];
+    if (value && value.trim()) {
+      const result = preserveWhitespace(item.src, value);
+      cache.set(item.key, result);
+      translatedStrings++;
+      item.resolve(result);
+    } else {
+      failures.push({ text: item.src.slice(0, 120), error: lastError });
+      unchangedStrings++;
+      item.resolve(item.src);
+    }
+    inflight.delete(item.key);
+  }
+}
+function translateRaw(text) {
   const src = String(text);
   const key = normalize(src);
-  if (!key) return src;
-  if (cache.has(key)) return cache.get(key);
+  if (!key) return Promise.resolve(src);
+  if (cache.has(key)) return Promise.resolve(cache.get(key));
   if (inflight.has(key)) return inflight.get(key);
-  const job = (async () => {
-    await acquire();
-    try {
-      let translated = null;
-      for (let attempt = 0; attempt < 5; attempt++) {
-        try {
-          const url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ru&dt=t&q=" + encodeURIComponent(src);
-          const response = await fetch(url, { headers: { "User-Agent": "AnalystPrepKit-static-localizer/1.0" }, signal: AbortSignal.timeout(15000) });
-          if (response.status === 429 || response.status >= 500) throw new Error("HTTP " + response.status);
-          if (!response.ok) throw new Error("HTTP " + response.status);
-          const payload = await response.json();
-          if (Array.isArray(payload) && Array.isArray(payload[0])) {
-            const value = payload[0].map(part => Array.isArray(part) && typeof part[0] === "string" ? part[0] : "").join("");
-            if (value.trim()) translated = value;
-          }
-          if (translated) break;
-        } catch (error) {
-          if (attempt === 4) {
-            failures.push({ text: src.slice(0, 120), error: String(error) });
-          } else {
-            await sleep(500 * (2 ** attempt) + Math.floor(Math.random() * 250));
-          }
-        }
-      }
-      apiCalls++;
-      if (translated && translated.trim()) {
-        cache.set(key, translated);
-        translatedStrings++;
-        return translated;
-      }
-      unchangedStrings++;
-      return src;
-    } finally {
-      release();
-    }
-  })();
+  const job = new Promise(resolve => translationQueue.push({ src, key, resolve }));
   inflight.set(key, job);
-  try { return await job; }
-  finally { inflight.delete(key); }
+  scheduleTranslationQueue();
+  return job;
 }
 
 async function translateText(text) {
   const source = String(text);
   if (!/[A-Za-z]/.test(source) || /[А-Яа-яЁё]/.test(source)) return source;
-  if (source.length <= 3800) return translateRaw(source);
+  if (source.length <= 600) return translateRaw(source);
   const chunks = [];
   let remainder = source;
-  while (remainder.length > 3800) {
-    let cut = remainder.lastIndexOf(" ", 3800);
-    if (cut < 1800) cut = remainder.lastIndexOf(". ", 3800);
-    if (cut < 1800) cut = 3800;
-    chunks.push(remainder.slice(0, cut));
-    remainder = remainder.slice(cut);
+  while (remainder.length > 600) {
+    let cut = remainder.lastIndexOf(" ", 600);
+    if (cut < 300) cut = remainder.lastIndexOf(". ", 600);
+    if (cut < 300) cut = 600;
+    chunks.push(remainder.slice(0, cut + (remainder[cut] === " " ? 1 : 0)));
+    remainder = remainder.slice(cut + (remainder[cut] === " " ? 1 : 0));
   }
   if (remainder) chunks.push(remainder);
-  const parts = [];
-  for (const chunk of chunks) parts.push(await translateRaw(chunk));
+  const parts = await Promise.all(chunks.map(chunk => translateRaw(chunk)));
   return parts.join("");
 }
 
