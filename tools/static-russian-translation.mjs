@@ -52,7 +52,9 @@ const PRESERVED_TERMS = new Set([
   "DuckDB", "Pandas", "NumPy", "Matplotlib", "KPI", "KPI", "ROI", "ROAS",
   "CPA", "CTR", "A/B", "ARIMA", "BPMN", "UML", "URL", "HTTP", "HTTPS",
   "ID", "UUID", "JSONL", "DOM", "SVG", "PDF", "PowerPoint", "GitHub Pages",
-  "DataCraft", "Analyst Prep Kit", "AnalystPrepKit"
+  "Grain", "DataCraft", "Analyst Prep Kit", "AnalystPrepKit",
+  ".yxdb", "Exception", "Exceptions", "ValueError", "TypeError", "KeyError",
+  "IndexError", "AssertionError", "FileNotFoundError", "SQLException"
 ]);
 const PRESERVED_TERMS_NORMALIZED = new Set([...PRESERVED_TERMS].map(term => term.toLowerCase()));
 const CODE_START = /^\s*(?:SELECT\b[\s\S]*\bFROM\b|INSERT\s+INTO\b|UPDATE\s+\w+\s+SET\b|DELETE\s+FROM\b|CREATE\s+(?:TABLE|VIEW|INDEX)\b|WITH\s+\w+\s+AS\s*\(|function\s*[\w$]*\s*\(|(?:const|let|var)\s+[\w$]+\s*=|return\s+[\w$.(\[{]|if\s*\([^)]*\)\s*\{|for\s*\([^)]*\)\s*\{|import\s+.+\s+from\s+|export\s+(?:default|const|function)\b)/i;
