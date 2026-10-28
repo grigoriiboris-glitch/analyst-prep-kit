@@ -222,3 +222,35 @@ test("Residual exercise questions, answers, and explanations are Russian while s
   ]) assert.ok(!stats.includes(phrase), "Statistics still contains English learner-facing text: " + phrase);
   assert.ok(stats.includes("Дисперсия — это среднее квадратов отклонений"));
 });
+
+
+test("Answer choices and step-by-step instructions are localized", () => {
+  const sql = read("sql/index.html");
+  const excel = read("excel/index.html");
+  const python = read("python/index.html");
+  const powerbi = read("powerbi/index.html");
+  const tableau = read("tableau/index.html");
+  const stats = read("stats/index.html");
+
+  for (const phrase of ["WHERE filters rows, HAVING filters groups", "Swap LIMIT for TOP 5"]) {
+    assert.ok(!sql.includes(phrase), "SQL answer choice remains English: " + phrase);
+  }
+  for (const phrase of ["SUM doesn't work on that range", "Insert → Charts → choose type", "Select column B → uncheck Locked"]) {
+    assert.ok(!excel.includes(phrase), "Excel answer or instruction remains English: " + phrase);
+  }
+  for (const phrase of ["It returns a new Series — assign it back", "Sort both frames by state first", "When the function is called repeatedly with the same args"]) {
+    assert.ok(!python.includes(phrase), "Python answer choice remains English: " + phrase);
+  }
+  for (const phrase of ["DIVIDE works with text columns", "Use DIVIDE() instead of /", "Create it as a Measure, not a calculated column"]) {
+    assert.ok(!powerbi.includes(phrase), "Power BI answer choice remains English: " + phrase);
+  }
+  for (const phrase of ["Filter out the small regions", "Right-click the 2nd pill → Dual Axis", "Create Calculated Field"]) {
+    assert.ok(!tableau.includes(phrase), "Tableau answer or instruction remains English: " + phrase);
+  }
+  for (const phrase of ["Count for Revenue; count for Region", "r = 0.88 is too weak to be meaningful", "Divide by n: std_dev / len(data)"]) {
+    assert.ok(!stats.includes(phrase), "Statistics answer choice remains English: " + phrase);
+  }
+  assert.ok(excel.includes("Вставка → Диаграммы → выберите тип"));
+  assert.ok(tableau.includes("Создать вычисляемое поле"));
+  assert.ok(stats.includes("Разделить на n: std_dev / len(data)"));
+});
