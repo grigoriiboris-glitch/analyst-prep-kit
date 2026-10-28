@@ -9,6 +9,7 @@
     foundations: 'apk-foundations-progress-v1',
     quality: 'apk-quality-score',
     sql: 'sqlkit-v1',
+    postgresql: 'apk-postgresql-progress-v1',
     excel: 'epk',
     python: 'ppk',
     charts: 'clk-v1',
@@ -29,6 +30,7 @@
     {id:'foundations',spriteIdx:0,wx:185,wy:595,r:56,biome:'Лагерь у леса',cost:5,title:'Основы аналитики данных',short:'Школа исследователя',icon:'🏕️',path:'../foundations/',tracker:'foundations',total:8,unit:'уроков',stage:0,x:117,y:539,desc:'Базовая грамотность: строки и столбцы, типы данных, ключи, метрики, качество и постановка бизнес-вопроса.',requires:[]},
     {id:'quality',spriteIdx:1,wx:555,wy:555,r:58,biome:'Фермерские угодья',cost:8,title:'Качество данных',short:'Мельница очистки',icon:'🧪',path:'../data-quality/',tracker:'quality',total:5,unit:'категорий',stage:1,x:487,y:499,desc:'Научись обнаруживать пропуски, дубликаты, ошибки форматов и подозрительные значения, не удаляя данные без проверки.',requires:['foundations']},
     {id:'sql',spriteIdx:2,wx:885,wy:135,r:64,biome:'Горный хребет',cost:40,title:'SQL',short:'Шахта и кузница SQL',icon:'⚙️',path:'../sql/',tracker:'sql',total:48,unit:'уроков',stage:2,x:817,y:79,desc:'От SELECT и фильтрации к JOIN, агрегациям, CTE, оконным функциям и проверке качества результата.',requires:['foundations','quality']},
+    {id:'postgresql',spriteIdx:2,wx:1035,wy:455,r:56,biome:'Северное нагорье',cost:22,title:'PostgreSQL',short:'Лаборатория PostgreSQL',icon:'🐘',path:'../postgresql/',tracker:'postgresql',total:30,unit:'уроков',stage:3,x:967,y:399,desc:'PostgreSQL с нуля: типы, JOIN, CTE, оконные функции, JSONB, индексы, планы выполнения и итоговый аналитический кейс.',requires:['sql']},
     {id:'excel',spriteIdx:3,wx:725,wy:595,r:60,biome:'Фермерские угодья',cost:40,title:'Excel',short:'Поля таблиц Excel',icon:'📗',path:'../excel/',tracker:'excel',total:51,unit:'уроков',stage:2,x:657,y:539,desc:'Формулы, поиск, очистка, сводные таблицы, проверка вычислений и аналитические отчёты.',requires:['foundations','quality']},
     {id:'charts',spriteIdx:4,wx:435,wy:215,r:54,biome:'Предгорье',cost:12,title:'Грамотность графиков',short:'Башня визуализации',icon:'📈',path:'../chart-literacy/',tracker:'charts',total:13,unit:'уроков',stage:2,x:367,y:159,desc:'Выбор подходящего графика, правильное чтение визуализаций и поиск вводящих в заблуждение представлений.',requires:['foundations','quality']},
     {id:'python',spriteIdx:5,wx:495,wy:318,r:58,biome:'Мастерские',cost:30,title:'Python и pandas',short:'Кузница Python',icon:'🐍',path:'../python/',tracker:'python',total:42,unit:'уроков',stage:3,x:427,y:269,desc:'Код для повторяемой обработки данных: базовый Python, pandas, преобразования, объединение и проверка результатов.',requires:['sql','excel']},
@@ -64,7 +66,7 @@
   var BY_ID = {}, ALL = [], selectedId = 'foundations', hoveredId = null, currentFilter = 'all';
   var animEnabled = !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   var graph = [
-    ['foundations','quality'],['quality','sql'],['quality','excel'],['quality','charts'],
+    ['foundations','quality'],['quality','sql'],['sql','postgresql'],['quality','excel'],['quality','charts'],
     ['sql','python'],['excel','python'],['sql','stats'],['excel','stats'],
     ['charts','forecasting'],['stats','forecasting'],
     ['sql','powerbi'],['excel','powerbi'],['charts','powerbi'],
@@ -436,6 +438,8 @@
       }
       case 'sql':
         s = readJSON(STORE.sql) || {}; count = uniqueArrayCount(s.doneLessons); break;
+      case 'postgresql':
+        s = readJSON(STORE.postgresql) || {}; count = uniqueArrayCount(s.doneLessons); total = 30; label = 'уроков'; break;
       case 'excel':
         s = readJSON(STORE.excel) || {}; count = uniqueArrayCount(s.lessonsDone); break;
       case 'python':
