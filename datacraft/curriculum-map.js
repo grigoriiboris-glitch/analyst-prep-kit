@@ -1,6 +1,6 @@
 /* DataCraft curriculum map: animated 2D bitmap world with dynamic building sprites, living environmentFX, and road couriers. */
 (function () {
-  "используйте строгий";
+  'use strict';
 
   var MAP_W = 1320, MAP_H = 700, NODE_W = 136, NODE_H = 112;
   var SPRITE_CELL = 256;
@@ -73,7 +73,7 @@
   ];
 
   var BY_ID = {}, ALL = [], selectedId = 'foundations', hoveredId = null, currentFilter = 'all';
-  var animEnabled = !(window.matchMedia && window.matchMedia("(предпочитает уменьшенное движение: уменьшить)").matches);
+  var animEnabled = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   var graph = [
     ['foundations','quality'],['quality','sql'],['sql','postgresql'],['quality','excel'],['quality','charts'],
     ['sql','python'],['excel','python'],['sql','stats'],['excel','stats'],
@@ -885,7 +885,7 @@ var h = document.createElement('h4'); h.textContent = (recommendedStep(c) ? form
       ctx.translate(wx - 4, wy - 14);
       ctx.rotate(t * 1.15);
       ctx.strokeStyle = '#3b2816';
-      ctx.fillStyle = "rgba(246, 232, 198, 0,88)";
+      ctx.fillStyle = "rgba(246, 232, 198, 0.88)";
       ctx.lineWidth = 2;
       for (var arm = 0; arm < 4; arm++) {
         ctx.rotate(Math.PI / 2);
@@ -997,7 +997,7 @@ var h = document.createElement('h4'); h.textContent = (recommendedStep(c) ? form
       ctx.save();
       ctx.shadowColor = '#ffe59a';
       ctx.shadowBlur = animEnabled ? 11 : 3;
-      ctx.fillStyle = "rgba(25, 42, 30, 0,94)";
+      ctx.fillStyle = "rgba(25, 42, 30, 0.94)";
       ctx.beginPath();
       ctx.arc(pos.x, pos.y, 15 * pulse, 0, Math.PI * 2);
       ctx.fill();
@@ -1007,14 +1007,14 @@ var h = document.createElement('h4'); h.textContent = (recommendedStep(c) ? form
       ctx.stroke();
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.font = "21пикселей «Эмодзи цвета яблока», «Сегоэ UI Эмодзи», без засечек";
+      ctx.font = "21px \"Apple Color Emoji\", \"Segoe UI Emoji\", sans-serif";
       ctx.fillStyle = '#ffffff';
       ctx.fillText(npc.icon, pos.x, pos.y + 1);
       if (hoveredNpcId === npc.id) {
         var label = npc.name + ' · квест';
-        ctx.font = "700 11пикселей системный интерфейс, без засечек";
+        ctx.font = "700 11px system-ui, sans-serif";
         var labelW = ctx.measureText(label).width + 16;
-        ctx.fillStyle = "rgba(16, 29, 21, 0,94)";
+        ctx.fillStyle = "rgba(16, 29, 21, 0.94)";
         roundRect(ctx, pos.x - labelW / 2, pos.y - 33, labelW, 19, 7);
         ctx.fill();
         ctx.fillStyle = '#fff0aa';
@@ -1044,8 +1044,8 @@ var h = document.createElement('h4'); h.textContent = (recommendedStep(c) ? form
       ctx.save();
       ctx.globalAlpha = Math.min(1, opacity);
       var mist = ctx.createRadialGradient(region.x + driftX, region.y + driftY, 10, region.x + driftX, region.y + driftY, region.rx);
-      mist.addColorStop(0, "rgba(222, 234, 226, 0,64)");
-      mist.addColorStop(0.52, "rgba(190, 207, 197, 0,40)");
+      mist.addColorStop(0, "rgba(222, 234, 226, 0.64)");
+      mist.addColorStop(0.52, "rgba(190, 207, 197, 0.40)");
       mist.addColorStop(1, 'rgba(177, 197, 187, 0)');
       ctx.fillStyle = mist;
       ctx.beginPath();
@@ -1059,7 +1059,7 @@ var h = document.createElement('h4'); h.textContent = (recommendedStep(c) ? form
         var prx = region.rx * (0.18 + (puff % 3) * 0.035);
         var pry = region.ry * (0.19 + (puff % 2) * 0.04);
         var cloud = ctx.createRadialGradient(px, py, 2, px, py, prx);
-        cloud.addColorStop(0, "rgba(235, 242, 237, 0,48)");
+        cloud.addColorStop(0, "rgba(235, 242, 237, 0.48)");
         cloud.addColorStop(1, 'rgba(214, 226, 218, 0)');
         ctx.fillStyle = cloud;
         ctx.beginPath();
@@ -1067,9 +1067,9 @@ var h = document.createElement('h4'); h.textContent = (recommendedStep(c) ? form
         ctx.fill();
       }
       if (locked && opacity > 0.62) {
-        ctx.font = "800 10пикселей системный интерфейс, без засечек";
+        ctx.font = "800 10px system-ui, -apple-system, sans-serif";
         ctx.textAlign = 'center';
-        ctx.fillStyle = "rgba(239, 248, 241, 0,82)";
+        ctx.fillStyle = "rgba(239, 248, 241, 0.82)";
         ctx.fillText('НЕИЗВЕДАННАЯ ОБЛАСТЬ', region.x, region.y + region.ry * 0.72);
       }
       ctx.restore();
@@ -1081,13 +1081,13 @@ var h = document.createElement('h4'); h.textContent = (recommendedStep(c) ? form
     ctx.save();
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.font = "900 17пикселей системный интерфейс, «Эмодзи цвета яблока», «Сегоэ UI Эмодзи», без засечек";
+    ctx.font = "900 17px system-ui, \"Apple Color Emoji\", \"Segoe UI Emoji\", sans-serif";
     ctx.lineWidth = 3.4;
     ctx.lineJoin = 'round';
     animState.floatingTexts.forEach(function(item) {
       var alpha = Math.max(0, 1 - item.life / item.maxLife);
       ctx.globalAlpha = alpha;
-      ctx.strokeStyle = "rgba(16, 27, 20, 0,94)";
+      ctx.strokeStyle = "rgba(16, 27, 20, 0.94)";
       ctx.strokeText(item.text, item.x, item.y);
       ctx.fillStyle = item.color;
       ctx.fillText(item.text, item.x, item.y);
@@ -1203,7 +1203,7 @@ var h = document.createElement('h4'); h.textContent = (recommendedStep(c) ? form
     ctx.save();
 
     /* A. Waterfall cascading droplets & mist at (560, 0..95) */
-    ctx.fillStyle = "rgba(230, 248, 255, 0,78)";
+    ctx.fillStyle = "rgba(230, 248, 255, 0.78)";
     animState.waterfallDrops.forEach(function(d) {
       ctx.beginPath();
       ctx.ellipse(d.x, d.y, d.r * 0.8, d.r * 2.2, 0.12, 0, Math.PI * 2);
@@ -1213,7 +1213,7 @@ var h = document.createElement('h4'); h.textContent = (recommendedStep(c) ? form
     for (var fi = 0; fi < 4; fi++) {
       var fx = 540 + fi * 11 + Math.sin(t * 3 + fi) * 2;
       var fr = 6 + Math.sin(t * 4.5 + fi * 1.3) * 2.2;
-      ctx.fillStyle = "rgba(245, 252, 255, 0,55)";
+      ctx.fillStyle = "rgba(245, 252, 255, 0.55)";
       ctx.beginPath();
       ctx.arc(fx, 89, fr, 0, Math.PI * 2);
       ctx.fill();
@@ -1248,8 +1248,8 @@ var h = document.createElement('h4'); h.textContent = (recommendedStep(c) ? form
     fires.forEach(function(f, idx) {
       var flick = 1 + 0.22 * Math.sin(t * 9 + idx * 2.1);
       var grad = ctx.createRadialGradient(f.x, f.y, 2, f.x, f.y, 26 * flick);
-      grad.addColorStop(0, "rgba(255, 230, 110, 0,65)");
-      grad.addColorStop(0.5, "rgba(255, 140, 40, 0,28)");
+      grad.addColorStop(0, "rgba(255, 230, 110, 0.65)");
+      grad.addColorStop(0.5, "rgba(255, 140, 40, 0.28)");
       grad.addColorStop(1, 'rgba(255, 90, 20, 0)');
       ctx.fillStyle = grad;
       ctx.beginPath();
@@ -1284,7 +1284,7 @@ var h = document.createElement('h4'); h.textContent = (recommendedStep(c) ? form
     ctx.globalAlpha = 1;
 
     /* 3. Flying Birds (V-shaped wings flapping) */
-    ctx.strokeStyle = "rgba(35, 45, 38, 0,65)";
+    ctx.strokeStyle = "rgba(35, 45, 38, 0.65)";
     ctx.lineWidth = 1.8;
     animState.birds.forEach(function(b) {
       var flap = Math.sin(t * 7.5 + b.phase) * 4.5;
@@ -1298,7 +1298,7 @@ var h = document.createElement('h4'); h.textContent = (recommendedStep(c) ? form
     /* 4. Soft drifting cloud shadows across terrain */
     animState.clouds.forEach(function(c) {
       var grad = ctx.createRadialGradient(c.x, c.y, c.rx * 0.1, c.x, c.y, c.rx);
-      grad.addColorStop(0, "rgba(12, 24, 18, 0,10)");
+      grad.addColorStop(0, "rgba(12, 24, 18, 0.10)");
       grad.addColorStop(1, 'rgba(12, 24, 18, 0)');
       ctx.fillStyle = grad;
       ctx.beginPath();
@@ -1340,7 +1340,7 @@ var h = document.createElement('h4'); h.textContent = (recommendedStep(c) ? form
       ctx.quadraticCurveTo(mx, my, to.wx, to.wy);
 
       if (fs.built && ts.built) {
-        ctx.strokeStyle = "rgba(134, 238, 142, 0,85)";
+        ctx.strokeStyle = "rgba(134, 238, 142, 0.85)";
         ctx.lineWidth = 4;
         ctx.setLineDash([]);
         ctx.stroke();
@@ -1358,13 +1358,13 @@ var h = document.createElement('h4'); h.textContent = (recommendedStep(c) ? form
           ctx.fill();
         }
       } else if (fs.built && ts.unlocked) {
-        ctx.strokeStyle = "rgba(255, 222, 112, 0,88)";
+        ctx.strokeStyle = "rgba(255, 222, 112, 0.88)";
         ctx.lineWidth = 3.5;
         ctx.setLineDash([9, 6]);
         if (animEnabled) ctx.lineDashOffset = -t * 24;
         ctx.stroke();
       } else {
-        ctx.strokeStyle = "rgba(42, 54, 44, 0,42)";
+        ctx.strokeStyle = "rgba(42, 54, 44, 0.42)";
         ctx.lineWidth = 2;
         ctx.setLineDash([5, 7]);
         ctx.stroke();
@@ -1403,7 +1403,7 @@ var h = document.createElement('h4'); h.textContent = (recommendedStep(c) ? form
         ctx.save();
         ctx.beginPath();
         ctx.ellipse(wx, wy + 6, rad * 0.92 * pulse, rad * 0.54 * pulse, 0, 0, Math.PI * 2);
-        ctx.fillStyle = isSelected ? "rgba(168, 230, 161, 0,36)" : (st.courseComplete && !st.built ? "rgba(245, 211, 126, 0,42)" : "rgba(255, 255, 255, 0,24)");
+        ctx.fillStyle = isSelected ? "rgba(168, 230, 161, 0.36)" : (st.courseComplete && !st.built ? "rgba(245, 211, 126, 0.42)" : "rgba(255, 255, 255, 0.24)");
         ctx.fill();
         ctx.lineWidth = isSelected ? 3.5 : 2.5;
         ctx.strokeStyle = isSelected ? '#a8e6a1' : (st.courseComplete && !st.built ? '#f5d37e' : '#ffffff');
@@ -1421,7 +1421,7 @@ var h = document.createElement('h4'); h.textContent = (recommendedStep(c) ? form
         } else if (st.unlocked && st.courseComplete) {
           /* Course finished -> ready to pay & construct */
           ctx.save();
-          ctx.filter = "сепия(35%) насыщенность(155%) яркость(1,08)";
+          ctx.filter = 'sepia(35%) saturate(155%) brightness(1.08)';
           ctx.globalAlpha = matchesFilter ? 0.94 : 0.25;
           ctx.drawImage(spriteImg, sx, sy, SPRITE_CELL, SPRITE_CELL, wx - drawSize / 2, wy - drawSize * 0.58, drawSize, drawSize);
           ctx.restore();
@@ -1432,7 +1432,7 @@ var h = document.createElement('h4'); h.textContent = (recommendedStep(c) ? form
           ctx.save();
           var breath = animEnabled ? (0.05 * Math.sin(t * 2.6 + c.spriteIdx)) : 0;
           ctx.globalAlpha = (0.38 + (p.percent / 100) * 0.45 + breath) * (matchesFilter ? 1 : 0.3);
-          ctx.filter = "насыщенность(65%) контрастность(95%)";
+          ctx.filter = 'saturate(65%) contrast(95%)';
           ctx.drawImage(spriteImg, sx, sy, SPRITE_CELL, SPRITE_CELL, wx - drawSize / 2, wy - drawSize * 0.58, drawSize, drawSize);
           ctx.restore();
         } else {
@@ -1449,7 +1449,7 @@ var h = document.createElement('h4'); h.textContent = (recommendedStep(c) ? form
       var plateW = 128, plateH = 36;
       var px = wx - plateW / 2, py = wy + rad * 0.36;
       var borderCol = st.built ? '#7ed68a' : (st.unlocked && st.courseComplete ? '#f5d37e' : (st.unlocked ? '#8ecae6' : '#5c6e60'));
-      var bgCol = st.built ? "rgba(20, 48, 29, 0,92)" : (st.unlocked && st.courseComplete ? "rgba(58, 45, 18, 0,94)" : (st.unlocked ? "rgba(22, 39, 34, 0,92)" : "rgba(20, 28, 23, 0,86)"));
+      var bgCol = st.built ? "rgba(20, 48, 29, 0.92)" : (st.unlocked && st.courseComplete ? "rgba(58, 45, 18, 0.94)" : (st.unlocked ? "rgba(22, 39, 34, 0.92)" : "rgba(20, 28, 23, 0.86)"));
 
       ctx.fillStyle = bgCol;
       ctx.strokeStyle = borderCol;
@@ -1460,12 +1460,12 @@ var h = document.createElement('h4'); h.textContent = (recommendedStep(c) ? form
 
       ctx.textAlign = 'center';
       ctx.fillStyle = '#eff8ec';
-      ctx.font = "800 10пикселей системный интерфейс, -Яблоко-система, без засечек";
+      ctx.font = "800 10px system-ui, -apple-system, sans-serif";
       ctx.fillText(c.short, wx, py + 13);
 
       /* Mini progress bar inside nameplate */
       var barW = plateW - 16, barX = px + 8, barY = py + 18;
-      ctx.fillStyle = "rgba(10, 18, 13, 0,85)";
+      ctx.fillStyle = "rgba(10, 18, 13, 0.85)";
       roundRect(ctx, barX, barY, barW, 5, 2.5);
       ctx.fill();
       if (p.percent > 0 || st.built) {
@@ -1476,7 +1476,7 @@ var h = document.createElement('h4'); h.textContent = (recommendedStep(c) ? form
       }
 
       /* Bottom status / coin cost line */
-      ctx.font = "700 9пикселей системный интерфейс, -Яблоко-система, без засечек";
+      ctx.font = "700 9px system-ui, -apple-system, sans-serif";
       ctx.fillStyle = st.built ? '#a8eeae' : (st.unlocked && st.courseComplete ? '#ffe39c' : '#b8cbb9');
       var metaLabel = st.built ? '✓ Построено' : (st.unlocked && st.courseComplete ? '🔨 Строить: ' + c.cost + ' 🪙' : p.done + '/' + p.total + ' · ' + c.cost + ' 🪙');
       ctx.fillText(metaLabel, wx, py + 31);
