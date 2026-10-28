@@ -80,7 +80,7 @@ const preserveWhitespace = (source, translated) => {
 function isTechnicalOnly(text) {
   const value = text.trim();
   if (!value) return true;
-  if (/^(?:&nbsp;|&amp;|&lt;|&gt;|&quot;|&apos;|&#(?:\\d+|x[0-9a-f]+);)+$/i.test(value.replace(/\\s+/g, "")) return true;
+  if (/^(?:&nbsp;|&amp;|&lt;|&gt;|&quot;|&apos;|&#(?:\\d+|x[0-9a-f]+);)+$/i.test(value.replace(/\\s+/g, ""))) return true;
   if (PRESERVED_TERMS_NORMALIZED.has(value.toLowerCase())) return true;
   if (/^(?:[A-Z][A-Z0-9_+#.-]*)(?:\s+[A-Z][A-Z0-9_+#.-]*)*$/.test(value)) return true;
   if (/^(?:[A-Z][A-Z0-9_+#.-]*)(?:\s*(?:\/|&|\+|,)\s*[A-Z][A-Z0-9_+#.-]*)*$/.test(value)) return true;
