@@ -263,3 +263,54 @@ test("DAX explanations do not translate functions or identifiers into broken cod
   assert.ok(powerbi.includes("DIVIDE([Sales] - [Previous Month Sales], [Previous Month Sales])"));
   assert.ok(powerbi.includes("DATEADD"));
 });
+
+
+test("Lesson introductions, scenario stories, glossary definitions, and flashcards are Russian", () => {
+  const sql = read("sql/index.html");
+  const excel = read("excel/index.html");
+  const python = read("python/index.html");
+  const powerbi = read("powerbi/index.html");
+  const tableau = read("tableau/index.html");
+
+  for (const phrase of [
+    "Your counts showed 60 duplicate emails",
+    "A stakeholder asks for \"our revenue this quarter.\"",
+    "Someone asks what's driving revenue."
+  ]) assert.ok(!sql.includes(phrase), "SQL lesson copy remains English: " + phrase);
+  assert.ok(sql.includes("GROUP BY группирует строки по email"));
+  assert.ok(sql.includes("SUM() с ORDER BY суммирует строки"));
+
+  for (const phrase of [
+    "INDEX + MATCH is the classic power-lookup pair",
+    "A chart turns numbers into a visual argument",
+    "Return only rows that match a condition.",
+    "=COUNTBLANK(range) — counts empty cells."
+  ]) assert.ok(!excel.includes(phrase), "Excel lesson copy remains English: " + phrase);
+  assert.ok(excel.includes("INDEX + MATCH — классическая пара функций"));
+  assert.ok(excel.includes("=FILTER(data, condition)"));
+
+  for (const phrase of [
+    "A list is like a numbered grocery list",
+    "A function is like a coffee machine",
+    "You know your DataFrame's shape and types.",
+    "The split-apply-combine pattern."
+  ]) assert.ok(!python.includes(phrase), "Python lesson copy remains English: " + phrase);
+  assert.ok(python.includes("df[df['Region'] == 'West']"));
+  assert.ok(python.includes("Шаблон «разделить — применить — объединить»"));
+
+  for (const phrase of [
+    "Loading data is like unpacking groceries",
+    "A cluttered report is a road sign with twenty messages",
+    "A monthly bar shows each month alone",
+    "Return a subset of a table where a condition is true."
+  ]) assert.ok(!powerbi.includes(phrase), "Power BI lesson copy remains English: " + phrase);
+  assert.ok(powerbi.includes("DAX для этого есть TOTALYTD"));
+
+  for (const phrase of [
+    "Tableau color-codes your fields",
+    "Sorting is the cheapest way to make a chart readable.",
+    "Your charts are sharp and you know which type fits which question."
+  ]) assert.ok(!tableau.includes(phrase), "Tableau lesson copy remains English: " + phrase);
+  assert.ok(tableau.includes("СИНИМ"));
+  assert.ok(tableau.includes("Story (историю)"));
+});
