@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="ru" data-static-ru="true" data-course-theme="grain" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101714">
+  <meta name="description" content="Практический курс PostgreSQL на русском: 30 уроков, настоящий SQL в браузере, учебная база и итоговый аналитический проект.">
+  <title>PostgreSQL — практический курс для аналитика | Analyst Prep Kit</title>
+  <link rel="stylesheet" href="../assets/grain/grain.css">
+  <link rel="stylesheet" href="../assets/grain/zinc-sky.css">
+  <link rel="stylesheet" href="../assets/grain/legacy-course-theme.css">
+  <style>
+    :root{color-scheme:dark;--bg:#101714;--panel:#19231f;--ink:#edf5f0;--muted:#a6b6ac;--line:#35453c;--accent:#8dd8b1;--warn:#f4c979;--danger:#ff9b9b;--good:#7cdda8}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}
+    a{color:var(--accent)}
+    button,input,textarea{font:inherit}
+    button{cursor:pointer}
+    code,pre,textarea,.mono{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
+    .pg-wrap{max-width:1440px;margin:auto;padding:20px clamp(12px,2.2vw,28px) 40px}
+    .pg-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+    .pg-brand{display:flex;gap:10px;align-items:center;text-decoration:none;color:var(--ink);font-weight:850}
+    .pg-elephant{width:40px;height:40px;display:grid;place-items:center;border-radius:12px;background:#24382e;border:1px solid #486652;font-size:23px}
+    .pg-top-links{display:flex;gap:8px;flex-wrap:wrap}
+    .pg-top-links a,.pg-button{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--line);border-radius:9px;padding:8px 12px;text-decoration:none;background:#1d2922;color:var(--ink);font-size:13px;font-weight:700}
+    .pg-top-links a:hover,.pg-button:hover{border-color:var(--accent)}
+    .pg-button.primary{background:var(--accent);border-color:var(--accent);color:#102018}
+    .pg-button:disabled{opacity:.45;cursor:not-allowed}
+    .pg-hero{padding:clamp(20px,4vw,34px);border:1px solid #3d5747;border-radius:20px;background:radial-gradient(ellipse at top right,#284c39 0%,#20352a 32%,#17211d 75%);margin-bottom:16px;position:relative;overflow:hidden}
+    .pg-eyebrow{font-size:11px;font-weight:850;letter-spacing:.13em;text-transform:uppercase;color:var(--accent);margin-bottom:7px}
+    .pg-hero h1{font-size:clamp(2rem,4.5vw,3.4rem);line-height:1.08;letter-spacing:-.04em;margin:0 0 14px;max-width:900px}
+    .pg-hero p{margin:0;color:#d6e5db;max-width:870px}
+    .pg-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+    .pg-chip{font-size:12px;font-weight:750;color:#d3f5df;border:1px solid #4b755b;background:#254333;border-radius:999px;padding:5px 10px}
+    .pg-summary{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center;border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:14px 17px;margin-bottom:16px}
+    .pg-summary strong{font-size:14px}
+    .pg-progressbar{height:8px;background:#2a352e;border-radius:99px;overflow:hidden;margin:8px 0 4px;max-width:700px}
+    .pg-progressbar span{height:100%;display:block;width:0;background:linear-gradient(90deg,#66bc91,#b8edcb);transition:width .2s}
+    .pg-muted{color:var(--muted);font-size:12px}
+    .pg-layout{display:grid;grid-template-columns:300px minmax(0,1fr);gap:16px;align-items:start}
+    .pg-sidebar,.pg-main-card,.pg-schema{min-width:0;background:var(--panel);border:1px solid var(--line);border-radius:16px}
+    .pg-sidebar{position:sticky;top:12px;max-height:calc(100vh - 24px);display:flex;flex-direction:column;overflow:hidden}
+    .pg-sidebar-head{padding:15px;border-bottom:1px solid var(--line)}
+    .pg-sidebar-head h2{font-size:15px;margin:0 0 7px}
+    .pg-search{width:100%;border:1px solid var(--line);border-radius:9px;padding:9px 11px;background:#111a15;color:var(--ink);outline:none}
+    .pg-search:focus,.pg-editor:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(141,216,177,.1)}
+    .pg-lesson-nav{overflow-y:auto;padding:10px;overscroll-behavior:contain}
+    .pg-unit-label{padding:11px 8px 5px;color:var(--muted);font-size:10px;font-weight:850;text-transform:uppercase;letter-spacing:.1em}
+    .pg-lesson-link{display:flex;align-items:flex-start;gap:9px;width:100%;text-align:left;border:1px solid transparent;border-radius:9px;background:transparent;color:var(--ink);padding:8px;margin-bottom:3px}
+    .pg-lesson-link:hover{background:#213128}
+    .pg-lesson-link.active{background:#243b2e;border-color:#547360}
+    .pg-lesson-link.done .pg-num{background:#2e704b;color:#e6ffee}
+    .pg-num{flex:0 0 25px;width:25px;height:25px;display:grid;place-items:center;border-radius:7px;background:#2b3930;color:var(--accent);font-size:11px;font-weight:800}
+    .pg-link-title{font-size:12px;line-height:1.4;font-weight:700}
+    .pg-link-sub{font-size:10px;color:var(--muted);margin-top:3px}
+    .pg-sidebar-foot{border-top:1px solid var(--line);padding:12px;display:grid;gap:8px}
+    .pg-main-card{padding:clamp(16px,2.5vw,28px)}
+    .pg-lesson-top{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:10px}
+    .pg-badge{display:inline-flex;align-items:center;gap:6px;border-radius:999px;border:1px solid #4b755b;background:#254333;color:#c5f2d4;font-size:11px;font-weight:800;padding:4px 9px}
+    .pg-lesson-title{font-size:clamp(1.6rem,3.2vw,2.5rem);line-height:1.15;letter-spacing:-.035em;margin:0 0 9px}
+    .pg-goal{font-size:15px;color:#d1e2d6;margin:0 0 18px;max-width:80ch}
+    .pg-block{border:1px solid var(--line);background:#151e19;border-radius:13px;padding:15px 16px;margin:14px 0}
+    .pg-block h3{font-size:14px;margin:0 0 7px}
+    .pg-block p{margin:0;color:#d4e1d8}
+    .pg-block p+p{margin-top:8px}
+    .pg-block.gotcha{border-left:4px solid var(--warn);background:#24221a}
+    .pg-block.gotcha h3{color:var(--warn)}
+    .pg-block.gotcha p{color:#eee3c9}
+    .pg-visual{margin:15px 0 20px}
+    .pg-visual h3{font-size:13px;margin:0 0 10px;color:var(--muted)}
+    .pg-flow{display:flex;align-items:stretch;gap:8px;flex-wrap:wrap}
+    .pg-flow-step{flex:1 1 130px;min-width:0;border:1px solid #405a49;background:#203329;border-radius:10px;padding:11px 12px;font-size:12px;font-weight:800;line-height:1.45}
+    .pg-flow-step:not(:last-child)::after{content:" →";color:var(--accent)}
+    .pg-code-card{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:15px 0}
+    .pg-code-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 12px;background:#202c24;border-bottom:1px solid var(--line);font-size:12px;font-weight:800}
+    .pg-code{margin:0;padding:14px;overflow:auto;background:#111813;color:#d4f4e2;white-space:pre;font-size:12px;line-height:1.65;tab-size:2}
+    .pg-task{margin:15px 0;padding:16px;border:1px solid #42614d;background:#1c2b22;border-radius:13px}
+    .pg-task h3{margin:0 0 5px;font-size:15px}
+    .pg-task p{margin:0;color:#d3e4d9;font-size:13px}
+    .pg-workbench{margin-top:20px;border:1px solid #405b49;border-radius:15px;overflow:hidden;background:#121a15}
+    .pg-workbench-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:13px 15px;background:#203329;border-bottom:1px solid var(--line)}
+    .pg-workbench-head h3{margin:0;font-size:15px}
+    .pg-engine-state{font-size:11px;color:var(--muted)}
+    .pg-editor{display:block;width:100%;min-height:195px;resize:vertical;tab-size:2;border:1px solid transparent;border-bottom:1px solid var(--line);border-radius:0;background:#0d130f;color:#ddf7e6;padding:15px;outline:none;font-size:12.5px;line-height:1.65;white-space:pre;overflow:auto}
+    .pg-run-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:12px 14px;border-bottom:1px solid var(--line)}
+    .pg-run-actions .pg-muted{margin-left:auto}
+    .pg-output{padding:14px;min-height:84px}
+    .pg-output-placeholder{font-size:12px;color:var(--muted);padding:10px 0}
+    .pg-result-wrap{max-width:100%;overflow:auto;border:1px solid var(--line);border-radius:9px;margin:8px 0 14px}
+    .pg-result{border-collapse:collapse;width:100%;font-size:12px;white-space:nowrap}
+    .pg-result th,.pg-result td{padding:8px 10px;border-bottom:1px solid #2d3a31;text-align:left;max-width:320px;overflow:hidden;text-overflow:ellipsis}
+    .pg-result th{background:#213127;color:var(--accent);position:sticky;top:0}
+    .pg-result tr:last-child td{border-bottom:0}
+    .pg-result td.null{color:#d0b17a;font-style:italic}
+    .pg-output-msg{padding:11px 12px;border:1px solid var(--line);border-radius:9px;margin:8px 0;font-size:12px;line-height:1.55;color:#d9e9df;white-space:pre-wrap;overflow-wrap:anywhere}
+    .pg-output-msg.success{border-color:#397e53;background:#172b1e;color:#c9f7d8}
+    .pg-output-msg.error{border-color:#8c4b4b;background:#321d1d;color:#ffdada}
+    .pg-output-msg.warn{border-color:#7c6539;background:#302818;color:#ffebc0}
+    .pg-quiz{margin-top:22px;padding:16px;border:1px solid var(--line);border-radius:13px;background:#17211b}
+    .pg-quiz h3{margin:0 0 7px;font-size:15px}
+    .pg-quiz-q{margin:0 0 11px;color:#dbe8df}
+    .pg-answers{display:grid;gap:7px}
+    .pg-answer{padding:10px 12px;border-radius:9px;border:1px solid var(--line);background:#202c24;color:var(--ink);text-align:left;font-size:13px}
+    .pg-answer:hover:not(:disabled){border-color:var(--accent)}
+    .pg-answer.correct{border-color:#4ea56f;background:#1c3d29}
+    .pg-answer.wrong{border-color:#a55e5e;background:#3b2424}
+    .pg-answer:disabled{cursor:default;opacity:.95}
+    .pg-quiz-feedback{min-height:26px;margin:10px 0 0;font-size:12px;color:var(--muted)}
+    .pg-lesson-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:20px;padding-top:17px;border-top:1px solid var(--line)}
+    .pg-lesson-actions .spacer{flex:1}
+    .pg-schema{margin:0 0 16px}
+    .pg-schema summary{cursor:pointer;padding:14px 16px;font-size:13px;font-weight:800}
+    .pg-schema-body{padding:0 14px 14px}
+    .pg-mermaid-wrap{max-width:100%;overflow:auto;border:1px solid var(--line);border-radius:10px;background:#111813;padding:10px}
+    .pg-mermaid{min-width:560px;max-width:100%;margin:0;text-align:center;background:transparent;color:var(--ink)}
+    .pg-schema-note{font-size:12px;line-height:1.6;color:var(--muted);margin:10px 2px 0}
+    .pg-footer{margin-top:20px;color:var(--muted);font-size:12px;line-height:1.7}
+    .pg-footer a{color:var(--accent)}
+    code{color:#c5eed5;background:#25352b;border-radius:4px;padding:1px 4px}
+    @media(max-width:960px){.pg-layout{grid-template-columns:250px minmax(0,1fr)}}
+    @media(max-width:760px){
+      .pg-layout{grid-template-columns:1fr}
+      .pg-sidebar{position:static;max-height:none}
+      .pg-lesson-nav{max-height:310px}
+      .pg-summary{grid-template-columns:1fr}
+      .pg-main-card{padding:15px}
+      .pg-editor{min-height:170px}
+      .pg-run-actions .pg-muted{margin-left:0;width:100%}
+    }
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+  </style>
+</head>
+<body>
+<div class="pg-wrap">
+  <header class="pg-top">
+    <a class="pg-brand" href="../"><span class="pg-elephant" aria-hidden="true">🐘</span><span>Analyst Prep Kit<br><span class="pg-muted">Практическое обучение аналитике</span></span></a>
+    <nav class="pg-top-links" aria-label="Основная навигация">
+      <a href="../">← Главная</a>
+      <a href="../sql/">Основы SQL</a>
+      <a href="../datacraft/">Карта обучения</a>
+    </nav>
+  </header>
+
+  <section class="pg-hero">
+    <div class="pg-eyebrow">Практический модуль · 30 уроков · PostgreSQL</div>
+    <h1>PostgreSQL: от первого запроса до аналитического проекта</h1>
+    <p>Учись на одной учебной базе: фильтруй данные, соединяй таблицы, разбирай CTE и оконные функции, работай с JSONB, индексами и планами выполнения. SQL-запросы можно запускать прямо в браузере — без установки сервера.</p>
+    <div class="pg-chips">
+      <span class="pg-chip">Настоящий PostgreSQL в браузере</span>
+      <span class="pg-chip">Прогресс сохраняется</span>
+      <span class="pg-chip">Единый учебный магазин</span>
+      <span class="pg-chip">Практика + проверка знаний</span>
+    </div>
+  </section>
+
+  <section class="pg-summary" aria-label="Прогресс курса">
+    <div>
+      <strong id="progressTitle">Пройдено 0 из 30 уроков</strong>
+      <div class="pg-progressbar" role="progressbar" aria-label="Прогресс курса" aria-valuemin="0" aria-valuemax="30" aria-valuenow="0" id="progressBar"><span id="progressFill"></span></div>
+      <div class="pg-muted" id="progressHint">Чтобы завершить урок, выполни практику и ответь на контрольный вопрос.</div>
+    </div>
+    <div class="pg-badge" id="courseBadge">Курс в процессе</div>
+  </section>
+
+  <details class="pg-schema" id="schemaPanel">
+    <summary>🗺️ Посмотреть связи учебной базы данных (Mermaid.js)</summary>
+    <div class="pg-schema-body">
+      <div class="pg-mermaid-wrap"><pre class="mermaid pg-mermaid" id="schemaDiagram">erDiagram
+  CUSTOMERS ||--o{ ORDERS : places
+  ORDERS ||--|{ ORDER_ITEMS : contains
+  PRODUCTS ||--o{ ORDER_ITEMS : appears_in
+  ORDERS ||--o{ PAYMENTS : has
+  CUSTOMERS ||--o{ SUPPORT_TICKETS : opens
+  CUSTOMERS ||--o{ PAGE_EVENTS : generates
+</pre></div>
+      <p class="pg-schema-note">Заказ соединяется с клиентом по <code>customer_id</code>. Одна строка заказа может соответствовать нескольким строкам <code>order_items</code>. Поэтому перед суммированием после JOIN проверь уровень детализации. Если Mermaid не загрузится, таблицы и SQL-примеры курса останутся доступными.</p>
+    </div>
+  </details>
+
+  <div class="pg-layout">
+    <aside class="pg-sidebar" aria-label="Программа курса">
+      <div class="pg-sidebar-head">
+        <h2>Программа · 30 уроков</h2>
+        <input class="pg-search" id="lessonSearch" type="search" placeholder="Найти урок…" autocomplete="off" aria-label="Поиск по урокам">
+      </div>
+      <nav class="pg-lesson-nav" id="lessonNav" aria-label="Уроки"></nav>
+      <div class="pg-sidebar-foot">
+        <button class="pg-button" id="resetProgressBtn" type="button">Сбросить прогресс курса</button>
+        <button class="pg-button" id="resetDatabaseBtn" type="button">Восстановить учебную базу</button>
+      </div>
+    </aside>
+
+    <main class="pg-main-card" id="lessonView" aria-live="polite">
+      <div class="pg-muted">Подготавливаем программу…</div>
+    </main>
+  </div>
+
+  <footer class="pg-footer">
+    <strong>Важно об учебной среде.</strong> PostgreSQL запускается в браузере через PGlite (WebAssembly); первая загрузка движка требует интернет-соединения. Учебная база изолирована от реальных серверов, заново создаётся при перезагрузке страницы, а прогресс и черновики запросов сохраняются отдельно. Возможности серверного администрирования, пользователей, резервного копирования, репликации и конкурентных соединений нужно отрабатывать на настоящем сервере.
+    <br>Справка: <a href="https://www.postgresql.org/docs/current/" target="_blank" rel="noopener noreferrer">официальная документация PostgreSQL</a> · <a href="https://pglite.dev/docs/" target="_blank" rel="noopener noreferrer">документация PGlite</a>
+  </footer>
+</div>
+<script src="../assets/progress-state.js"></script>
+<script src="../assets/supabase_auth_sync.js?v=3"></script>
+<script src="../assets/datacraft-economy.js"></script>
+<script src="../assets/ai-context-copy.js" defer></script>
+<script src="course-data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
