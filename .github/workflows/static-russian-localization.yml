@@ -7,13 +7,14 @@ on:
       - '**.html'
       - '**.js'
       - '**.json'
+      - '.gitignore'
       - 'tools/static-russian-translation.mjs'
       - '.github/workflows/static-russian-localization.yml'
 
 permissions:
   contents: write
 
-# Keep only one full-site translation run alive at a time. Each push supersedes the old build.
+# Only one current full-site build; newer pushes supersede earlier runs.
 concurrency:
   group: static-russian-${{ github.ref }}
   cancel-in-progress: true
@@ -24,11 +25,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
-      - name: Checkout repository
+      - name: Checkout current main
         uses: actions/checkout@v4
         with:
           ref: main
-          fetch-depth: 2
+          fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Node.js
@@ -44,13 +45,44 @@ jobs:
           NODE_OPTIONS: --max-old-space-size=4096
         run: node tools/static-russian-translation.mjs
 
-      - name: Commit generated Russian pages
+      - name: Commit generated Russian pages and recover from concurrent pushes
+        shell: bash
         run: |
+          set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          commit_output() {
+            git add -A
+            if git diff --cached --quiet; then
+              echo "No new static Russian text to commit."
+              return 1
+            fi
+            git commit -m "chore: generate static Russian translations [static-ru]"
+          }
+
+          if ! commit_output; then
+            exit 0
+          fi
+
+          if git push origin HEAD:main; then
+            exit 0
+          fi
+
+          echo "Main changed during translation; replaying the generated localization cache on latest main."
+          if [ -f tools/static-ru-cache.json ]; then
+            cp tools/static-ru-cache.json /tmp/static-ru-cache.json
+          fi
+          git fetch origin main
+          git reset --hard origin/main
+          if [ -f /tmp/static-ru-cache.json ]; then
+            cp /tmp/static-ru-cache.json tools/static-ru-cache.json
+          fi
+
+          node tools/static-russian-translation.mjs
           git add -A
           if git diff --cached --quiet; then
-            echo "No new localization output."
+            echo "Latest main already contains all generated translations."
             exit 0
           fi
           git commit -m "chore: generate static Russian translations [static-ru]"
