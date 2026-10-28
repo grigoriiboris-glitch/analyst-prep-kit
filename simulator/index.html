@@ -254,7 +254,7 @@ footer{text-align:center;padding:32px 20px;color:var(--dim);font-size:12px;borde
 <script src="../assets/progress-state.js"></script>
 <script src="../assets/supabase_auth_sync.js?v=3"></script>
 <nav>
-  <a class="back-link" href="../">← Все комплекты</a>
+  <a class="back-link" href="../">← Все курсы</a>
   <span class="nav-title"><span class="logo-mark"><i data-lucide="briefcase"></i></span>Симулятор работы младшего аналитика данных</span>
   <span class="user-email" id="userEmail" style="display:none"></span>
   <button class="signin-btn" id="loginBtn" onclick="openAuthModal()" style="display:none">Войти</button>
@@ -295,7 +295,7 @@ footer{text-align:center;padding:32px 20px;color:var(--dim);font-size:12px;borde
     <a href="../interview/">Интервью</a>
     <a href="../powerbi/">Power BI</a>
     <a href="../final/">Заключительный экзамен</a>
-    <a href="../">← Все комплекты</a>
+    <a href="../">← Все курсы</a>
   </div>
   
     Часть  <a href="../">Analyst Prep Kit</a>    · Аналитика DataBridge является вымышленным
@@ -348,7 +348,7 @@ const DAYS = [
 4. В 2–3 предложениях описать, что отслеживает эта база данных с точки зрения бизнеса`,
         hints:[
           "SELECT COUNT(*) ОТ имя_таблицы — один запрос на таблицу",
-          "ВЫБЕРИТЕ ОТЛИЧНЫЙ план_тип ОТ клиентов для уникальных значений",
+          "SELECT ОТЛИЧНЫЙ план_тип FROM customers для уникальных значений",
           "Столбец, который отображается в двух таблицах, является вашим ключом JOIN — найдите customer_id и Product_id.",
           "Подумайте: какие решения принял бы бизнес, используя эти данные?"
         ],
@@ -504,7 +504,7 @@ think about.`
         objective:"Используйте pandas для загрузки и проверки CSV-файла с помощью автоматических проверок и чистого вывода.",
         assignment:`Напишите скрипт Python, который:
 
-1. Загружает daily_orders.csv с помощью Панды.
+1. Загружает daily_orders.csv с помощью pandas.
 2. Подтверждает существование этих столбцов: идентификатор заказа, customer_id, сумма, дата_заказа.
 3. Подсчитывает строки с любым нулевым значением.
 4. Проверяет наличие отрицательных значений в столбце суммы.
@@ -534,7 +534,7 @@ daily_orders_validation.py
 Ожидается: столбцы идентификатор заказа, customer_id, сумма, дата_заказа. Числовая сумма.
 Автор: [вы]
 """
-импортировать панд как ПД
+импортировать pandas как ПД
 
 ФАЙЛ = "daily_orders.csv"
 ОБЯЗАТЕЛЬНО = {"идентификатор заказа", "customer_id", "сумма", "дата_заказа"}
@@ -657,7 +657,7 @@ Q5 — Количество заказов со статусом = «отмен�
 Написав все 5, напишите в Слабый ответ из 3–5 предложений своему менеджеру со своими выводами.
 Составьте правдоподобные цифры для ваши «результаты» — практика в структуре и коммуникации.`,
         hints:[
-          "ГДЕ order_date IN ('2024-10-08', '2024-10-15'), затем ГРУППИРОВАТЬ ПО дате заказа",
+          "ГДЕ order_date IN ('2024-10-08', '2024-10-15'), затем GROUP BY дате заказа",
           "GROUP BY регион, дата_заказа для региональной разбивки",
           "COUNT(идентификатор заказа) против СУММ(количество) сообщает вам, является ли это объемом или стоимостью.",
           "Слабый ответ: начните с ответа, затем с доказательствами. Не хороните находку."
@@ -817,7 +817,7 @@ Recommended Next Steps
 Ввод: DataFrame со столбцами [customer_id, регион]
 Вывод: customer_cleaned.csv с добавленным столбцом Регион_чистый.
 """
-импортировать панд как ПД
+импортировать pandas как ПД
 
 данные = {
     'customer_id': [1,2,3,4,5,6,7,8,9,10],
@@ -1231,7 +1231,8 @@ function renderTaskScreen(){
     panel = `
       <p class="hints-note">Это все равно, что попросить старшего коллегу подтолкнуть его — дать указание, не раскрывая ответа.</p>
       <div style="background:var(--surf2);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:var(--r-md);padding:12px 14px;margin-bottom:18px;font-size:13px;line-height:1.6;color:var(--text)">
-        <strong style="color:var(--accent)">🗣️ Попробуйте это:</strong> Прежде чем что-то написать, прочитайте задание простым языком — на том языке, на котором вы думаете. Если вы можете сказать, что должен делать ответ, синтаксис будет следующим. Это тот же метод «Скажи это вслух», которому обучают другие наборы.
+        <strong style="color:var(--accent)">🗣️ Попробуйте это:</strong>  Прежде чем что-то написать, прочитайте задание простым языком — на том языке, на котором вы думаете. Если вы можете сказать, что должен делать ответ, синтаксис будет следующим. Это тот же метод «Прочитайте запрос вслух», которому обучают другие наборы.
+      
       </div>
       ${t.hints.map(h=>`<div class="hint-row"><span class="hint-bulb">💡</span><div class="hint-text">${escapeHtml(h)}</div></div>`).join('')}
       <div class="rubric-box">
@@ -1254,7 +1255,7 @@ function renderTaskScreen(){
     <div class="tabs">
       <button class="tab ${state.tab==='brief'?'active':''}" onclick="setTab('brief')">Почему это важно</button>
       <button class="tab ${state.tab==='task'?'active':''}" onclick="setTab('task')">Назначение</button>
-      <button class="tab ${state.tab==='hints'?'active':''}" onclick="setTab('hints')">намеки</button>
+      <button class="tab ${state.tab==='hints'?'active':''}" onclick="setTab('hints')">Подсказки</button>
     </div>
     <div class="tab-panel active">${panel}</div>
   `;
@@ -1577,7 +1578,7 @@ setTimeout(initAuthUI,600);
     <li><a href="../guides/technical-tenacity/">Техническая стойкость</a></li>
     <li><a href="../guides/verify-ai-agent-work/">Проверка работы AI-агента</a></li>
   </ul>
-  <p><a href="../guides/">Просмотреть все руководства</a> · <a href="../">Все комплекты</a></p>
+  <p><a href="../guides/">Просмотреть все руководства</a> · <a href="../">Все курсы</a></p>
 </section>
 <!-- APK:KIT-SEO:END -->
 

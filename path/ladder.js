@@ -7,7 +7,7 @@
 
 const LAP = {
   unit: "Модуль 1: Первые запросы",
-  lesson: "ВЫБРАТЬ, ГДЕ, ЗАКАЗАТЬ ПО, ОГРАНИЧИТЬ",
+  lesson: "SELECT, ГДЕ, ORDER BY, ОГРАНИЧИТЬ",
 
   // ── STEP 1: the primer ────────────────────────────────────────────────────
   // Six lines. Only what someone needs to type rung 1 without guessing.
@@ -38,7 +38,7 @@ const LAP = {
       q: "Какие исполнители, треки и размер аудитории есть в сборнике?",
       given: ["Таблица <code>gem_page</code>",
               "Все песни в таблице, ничего не отфильтровано"],
-      why: "Скелет каждого запроса, который вы когда-либо напишете: ВЫБЕРИТЕ столбцы ИЗ таблицы.",
+      why: "Скелет каждого запроса, который вы когда-либо напишете: SELECT столбцы ИЗ таблицы.",
       // `did` and `matters` are what the celebration popup carries. What you just did, in
       // words, and why a working analyst cares. Not a restatement of the syntax.
       did: "Вы извлекли три именованных столбца из таблицы из 500 песен.",
@@ -114,7 +114,7 @@ WHERE genre = 'country';`,
   // working person actually meets it, across industries and roles rather than in the
   // abstract. This replaced a four-read lesson step that sat between the two typing passes.
   concepts: [
-    { name: "ВЫБРАТЬ и ОТ",
+    { name: "SELECT и ОТ",
       does: 'SELECT names the columns you want back. FROM names the table to read them from. Every query you write starts with these two.',
       worked: "Вы запросили три столбца из таблицы из 500 песен и получили три столбца обратно. Больше ничего с ними не пришло, потому что вы ни о чем больше не просили.",
       where: [
@@ -132,7 +132,7 @@ WHERE genre = 'country';`,
         ['Recruiter', "вытягиваем только те роли, которые еще открыты"]
       ] },
 
-    { name: "ЗАКАЗАТЬ ПО и ОГРАНИЧИТЬ",
+    { name: "ORDER BY и ОГРАНИЧИТЬ",
       does: "ORDER BY сортирует уже имеющиеся строки. LIMIT ограничивает количество вернувшихся. Порядок этих двух строк фиксирован: сначала сортировка, затем ограничение, или вы ограничиваете кучу неотсортированных строк.",
       worked: "Сортировка помещала самую большую аудиторию на первое место, не добавляя и не удаляя ни одной строки, а затем LIMIT сохранял первые десять из них.",
       where: [
@@ -159,7 +159,7 @@ WHERE genre = 'country';`,
     { id: 1,   title: 'SELECT & FROM',                    sub: "Извлечение столбцов из таблицы" },
     { id: 2,   title: 'WHERE',                            sub: "Фильтровать строки по условию" },
     { id: 104, title: "Запрос возвращает таблицу; NULL = Неизвестно", sub: "Возвращаемая форма и что на самом деле означает пустая ячейка" },
-    { id: 3,   title: "СОРТИРОВАТЬ ПО И ОГРАНИЧИТЬ",                 sub: "Сортируйте и ограничивайте результаты" },
+    { id: 3,   title: "Сортировка и ограничение результата",                 sub: "Сортируйте и ограничивайте результаты" },
   ],
 
   // ── STEP 4: the mini quiz ─────────────────────────────────────────────────
@@ -167,7 +167,7 @@ WHERE genre = 'country';`,
   // trial is not inventing a second set of answers to keep in sync.
   quiz: [
     { q: "Какое предложение сообщает SQL, из какой таблицы следует читать?",
-      opts: ['SELECT', 'FROM', 'WHERE', 'ORDER BY'], ans: 1,
+      opts: ["Выбрать", 'FROM', 'WHERE', 'ORDER BY'], ans: 1,
       exp: "FROM называет таблицу. SELECT называет столбцы, которые вы хотите вернуть." },
 
     { q: "Вам нужны кантри-песни, которые слушают более 20 000 человек. Какая линия это делает?",

@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>КОММЕНТАРИЙ К ТАБЛИЦЕ: Синтаксис для всех четырех баз данных — комплект подготовки аналитика</title>
-<meta name="description" content="COMMENT ON TABLE хранит описание внутри самой базы данных. Точный синтаксис для PostgreSQL, Оракул, MySQL и SQL-сервер, как читать комментарии и что в них писать.">
+<title>КОММЕНТАРИЙ К ТАБЛИЦЕ: Синтаксис для всех четырех баз данных — платформа для подготовки аналитиков</title>
+<meta name="description" content="COMMENT ON TABLE хранит описание внутри самой базы данных. Точный синтаксис для PostgreSQL, Оракул, MySQL и SQL Server, как читать комментарии и что в них писать.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-comment-on-table/">
 <meta property="og:title" content="КОММЕНТАРИЙ К ТАБЛИЦЕ в SQL">
-<meta property="og:description" content="Как прикрепить описание к таблице или столбцу внутри самой базы данных, в PostgreSQL, Оракул, MySQL и SQL-сервер.">
+<meta property="og:description" content="Как прикрепить описание к таблице или столбцу внутри самой базы данных, в PostgreSQL, Оракул, MySQL и SQL Server.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-comment-on-table/">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/sql-comment-on-table.png">
@@ -76,7 +76,7 @@
   "@context": "https://schema.org",
   "@type": "Article",
   "headline": "КОММЕНТАРИЙ К ТАБЛИЦЕ: Как сохранить описание таблицы в самой базе данных",
-  "description": "КОММЕНТАРИЙ К ТАБЛИЦЕ и КОММЕНТАРИЙ К КОЛОННЕ хранят описание внутри базы данных. Точный синтаксис в PostgreSQL и Оракул, разные синтаксисы, необходимые MySQL и SQL-сервер, и способы их обратного чтения.",
+  "description": "КОММЕНТАРИЙ К ТАБЛИЦЕ и КОММЕНТАРИЙ К КОЛОННЕ хранят описание внутри базы данных. Точный синтаксис в PostgreSQL и Оракул, разные синтаксисы, необходимые MySQL и SQL Server, и способы их обратного чтения.",
   "url": "https://michaelnocito.github.io/analyst-prep-kit/guides/sql-comment-on-table/",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -130,7 +130,7 @@
       "name": "Как добавить комментарий к таблице в SQL?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "В PostgreSQL и Оракул оператор КОММЕНТАРИЙ К ТАБЛИЦЕ имя_таблицы IS «ваше описание»; а версия столбца — КОММЕНТАРИЙ К СТОЛБЦУ имя_таблицы.имя_столбца IS «ваше описание»;. В MySQL нет COMMENT ON: вместо этого он использует предложение COMMENT внутри CREATE TABLE или ИЗМЕНИТЬ ТАБЛИЦУ. SQL-сервер вообще не имеет оператора COMMENT и использует расширенные свойства через sp_addextendedproperty."
+        "text": "В PostgreSQL и Оракул оператор КОММЕНТАРИЙ К ТАБЛИЦЕ имя_таблицы IS «ваше описание»; а версия столбца — КОММЕНТАРИЙ К СТОЛБЦУ имя_таблицы.имя_столбца IS «ваше описание»;. В MySQL нет COMMENT ON: вместо этого он использует предложение COMMENT внутри CREATE TABLE или ИЗМЕНИТЬ ТАБЛИЦУ. SQL Server вообще не имеет оператора COMMENT и использует расширенные свойства через sp_addextendedproperty."
       }
     },
     {
@@ -164,7 +164,7 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../">Все руководства</a></p>
+  <p class="crumb"><a href="../../">← Все курсы</a> · <a href="../../sql/">Курс SQL</a> · <a href="../">Все руководства</a></p>
   <h1>COMMENT ON TABLE</h1>
   <p class="meta">Как хранить описание в базе данных, где его сможет найти следующий аналитик · Часть  <a href="../../">Analyst Prep Kit</a></p>
   <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">К <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-11">11 августа 2026 г.</time></p>
@@ -173,7 +173,7 @@
   <p>Большинство людей имеют в виду  <code>--</code>, что останавливает выполнение строки вашего запроса. Если вы пришли именно за этим, это описано в  <a href="../sql-comments/">Как комментировать в SQL</a>.</p>
   <p>Эта страница о другом.  <code>COMMENT ON TABLE</code>  — это оператор, который вы запускаете, и он записывает описание в базу данных, прикрепленное к таблице. В следующем году он все еще будет там для коллеги, который никогда не видел ваш файл запроса.</p>
 
-  <div class="note"><strong>Краткая версия.</strong> <code>COMMENT ON TABLE orders IS 'One row per order line, not per order.';</code>    в PostgreSQL и Оракул. MySQL и SQL-сервер требуют разных операторов, как показано ниже.</div>
+  <div class="note"><strong>Краткая версия.</strong> <code>COMMENT ON TABLE orders IS 'One row per order line, not per order.';</code>        в PostgreSQL и Оракул. MySQL и SQL Server требуют разных операторов, как показано ниже.</div>
 
   <div class="toc">
     <strong>Что здесь</strong>
@@ -181,7 +181,7 @@
       <li>Почему это вообще стоит делать</li>
       <li>PostgreSQL и Оракул</li>
       <li>MySQL</li>
-      <li>SQL-сервер</li>
+      <li>SQL Server</li>
       <li>SQLite, который не может этого сделать</li>
       <li>Читаю комментарии назад</li>
       <li>Что собственно написать в одном</li>
@@ -219,8 +219,8 @@ COMMENT ON COLUMN orders.status IS 'Values: new, paid, shipped, refunded. Set by
   <p>Ограничения документированы, и их стоит знать, прежде чем писать эссе: комментарий к таблице может содержать 2048 символов, комментарий к столбцу — 1024.</p>
   <div class="note"><strong>Одна ловушка в колонном варианте.</strong>  Изменение комментария столбца в MySQL означает перезапись полного определения столбца, потому что  <code>ALTER TABLE ... MODIFY COLUMN</code>  заменяет его. Пропустить  <code>NOT NULL</code>  или значение по умолчанию, и вы незаметно изменили столбец, а не только его описание. Скопируйте определение из  <code>SHOW CREATE TABLE</code>  первый.</div>
 
-  <h2>SQL-сервер</h2>
-  <p>SQL-сервер не имеет  <code>COMMENT</code>  заявление любого рода. Он хранит подобные вещи как расширенное свойство, которое представляет собой имя и значение, прикрепленные к объекту. Соглашение заключается в том, чтобы назвать свойство  <code>MS_Description</code>, потому что это то, что ищет SSMS и большинство инструментов.</p>
+  <h2>SQL Server</h2>
+  <p>SQL Server не имеет    <code>COMMENT</code>  заявление любого рода. Он хранит подобные вещи как расширенное свойство, которое представляет собой имя и значение, прикрепленные к объекту. Соглашение заключается в том, чтобы назвать свойство  <code>MS_Description</code>, потому что это то, что ищет SSMS и большинство инструментов.</p>
   <pre><code>EXEC sp_addextendedproperty
   @name = N'MS_Description',
   @value = N'One row per order line, not per order.',
@@ -241,7 +241,7 @@ COMMENT ON COLUMN orders.status IS 'Values: new, paid, shipped, refunded. Set by
     <tr><td>PostgreSQL</td><td><code>\d+ tablename</code>  в psql или  <code>obj_description()</code>  и  <code>col_description()</code>  функции в запросе</td></tr>
     <tr><td>Оракул</td><td>Запрос <code>USER_TAB_COMMENTS</code>  и  <code>USER_COL_COMMENTS</code></td></tr>
     <tr><td>MySQL</td><td><code>SHOW CREATE TABLE</code>, <code>SHOW FULL COLUMNS</code>, или  <code>information_schema.TABLES.TABLE_COMMENT</code>  и  <code>information_schema.COLUMNS.COLUMN_COMMENT</code></td></tr>
-    <tr><td>SQL-сервер</td><td><code>fn_listextendedproperty</code>или  <code>sys.extended_properties</code> Вид</td></tr>
+    <tr><td>SQL Server</td><td><code>fn_listextendedproperty</code>или  <code>sys.extended_properties</code> Вид</td></tr>
     <tr><td>SQLite</td><td>Не поддерживается. Читать  <code>sqlite_master.sql</code>  и надеюсь, что кто-нибудь оставил записку</td></tr>
   </table>
   <p>Маршруты MySQL и PostgreSQL полезны, поскольку это обычные запросы. Это означает, что вы можете объединить их со списком столбцов и создать словарь данных для всей схемы за один раз, что очень полезно иметь в портфолио проекта.</p>
@@ -264,7 +264,7 @@ COMMENT ON COLUMN orders.status IS 'Values: new, paid, shipped, refunded. Set by
     <tr><td>PostgreSQL</td><td><code>COMMENT ON TABLE t IS 'text';</code></td><td><code>COMMENT ON TABLE t IS NULL;</code></td></tr>
     <tr><td>Оракул</td><td><code>COMMENT ON TABLE t IS 'text';</code></td><td><code>COMMENT ON TABLE t IS '';</code></td></tr>
     <tr><td>MySQL</td><td><code>ALTER TABLE t COMMENT = 'text';</code></td><td><code>ALTER TABLE t COMMENT = '';</code></td></tr>
-    <tr><td>SQL-сервер</td><td><code>sp_addextendedproperty</code> с <code>MS_Description</code></td><td><code>sp_dropextendedproperty</code></td></tr>
+    <tr><td>SQL Server</td><td><code>sp_addextendedproperty</code> с <code>MS_Description</code></td><td><code>sp_dropextendedproperty</code></td></tr>
     <tr><td>SQLite</td><td>Не поддерживается</td><td>Непригодный</td></tr>
   </table>
 
@@ -283,14 +283,14 @@ COMMENT ON COLUMN orders.status IS 'Values: new, paid, shipped, refunded. Set by
 
   <div class="cta">
     <strong>Пишите запросы, а не просто читайте их.</strong>
-    <p style="margin:6px 0 0">тот <a href="../../sql/">SQL-комплект</a>  охватывает SELECT, WHERE, JOIN и GROUP BY с отработанными примерами, практикой и пробным экзаменом, и все это в браузере. Если у вас еще нет базы данных для практики, начните с  <a href="../set-up-a-sql-database/">установка за пятнадцать минут</a>.</p>
+    <p style="margin:6px 0 0">тот <a href="../../sql/">Курс SQL</a>  охватывает SELECT, WHERE, JOIN и GROUP BY с отработанными примерами, практикой и пробным экзаменом, и все это в браузере. Если у вас еще нет базы данных для практики, начните с  <a href="../set-up-a-sql-database/">установка за пятнадцать минут</a>.</p>
     <a class="btn" href="../../sql/">Откройте набор SQL →</a>
-    <p style="margin:10px 0 0;font-size:15px">Или введите их самостоятельно по одному:  <a href="../../drill/">открыть SQL-детализация</a>, тринадцать запросов, каждый из которых добавляет что-то одно к последнему.</p>
+    <p style="margin:10px 0 0;font-size:15px">Или введите их самостоятельно по одному:  <a href="../../drill/">открыть SQL-практикум</a>, тринадцать запросов, каждый из которых добавляет что-то одно к последнему.</p>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql-comments/">Как комментировать в SQL</a> · <a href="../sql-comment-syntax-by-database/">Синтаксис комментариев по базе данных</a> · <a href="../sql-teaching-comments/">Комментирование SQL для обучения</a> · <a href="../sql-foundations/">Основы SQL</a> · <a href="../sql-null/">NULL в SQL</a> · <a href="../documenting-data-limitations/">Документирование ограничений данных</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../which-sql-database-to-install/">какую базу данных установить</a> · <a href="../../drill/">SQL-детализация</a> · <a href="../../sql/">SQL-комплект</a>
+    <a href="../../">← платформа для подготовки аналитиков</a> &middot; <a href="../sql-comments/">Как комментировать в SQL</a> · <a href="../sql-comment-syntax-by-database/">Синтаксис комментариев по базе данных</a> · <a href="../sql-teaching-comments/">Комментирование SQL для обучения</a> · <a href="../sql-foundations/">Основы SQL</a> · <a href="../sql-null/">NULL в SQL</a> · <a href="../documenting-data-limitations/">Документирование ограничений данных</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../which-sql-database-to-install/">какую базу данных установить</a> · <a href="../../drill/">SQL-практикум</a> · <a href="../../sql/">Курс SQL</a>
     <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
   
     <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Контакт</a> · <a href="../../privacy.html">Конфиденциальность</a> · <a href="../../terms.html">Условия</a></p>

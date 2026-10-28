@@ -29,7 +29,7 @@
     style.id = 'apkLearningOrderStyle';
     style.textContent = [
       '.skill-item.apk-ordered{position:relative;padding-right:44px!important;}',
-      ".apk-learning-step{позиция: абсолютная; справа: 9 пикселей; сверху: 9 пикселей; дисплей: встроенная сетка; место-элементы: центр; минимальная ширина: 25 пикселей; высота: 25 пикселей; отступ: 0 4 пикселя; граница: 1 пиксель сплошной rgba(141,216,177,.56);border-radius:8px;background:linear-gradient(145deg,#284b37,#1d3426);цвет:#c7f6d8;шрифт:850 11px/1 system-ui,-apple-system,\"Segoe UI\",sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.16);}",
+      ".apk-шаг обучения{позиция: абсолютная; справа: 9 пикселей; сверху: 9 пикселей; дисплей: встроенная сетка; место-элементы: центр; минимальная ширина: 25 пикселей; высота: 25 пикселей; отступ: 0 4 пикселя; граница: 1 пиксель сплошной РГБА(141,216,177,.56);граница-радиус:8пикселей;фон:линейный градиент(145град,#284б37,#1д3426);цвет:#c7f6d8;шрифт:850 11px/1 системный интерфейс,-Apple-система,\"Следуйте пользовательскому интерфейсу\",без засечек;коробка-тень:0 2пикселей 8пикселей RGBA(0,0,0,.16);}",
       '.apk-learning-sequence-note{margin:8px 0 12px;padding:10px 12px;border:1px solid var(--line,#34443a);border-radius:10px;background:var(--surf2,#17211b);color:var(--muted,#b6c7bb);font:12px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;}',
       '.apk-learning-sequence-note strong{color:var(--ink,#edf5f0);}',
       '.apk-learning-sequence-note span{color:#9be7b5;font-weight:800;}'

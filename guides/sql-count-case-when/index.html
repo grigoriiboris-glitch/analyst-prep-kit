@@ -31,7 +31,7 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SQL COUNT CASE WHEN: условные подсчеты в одном запросе — комплект подготовки аналитика</title>
+<title>SQL COUNT CASE WHEN: условные подсчеты в одном запросе — платформа для подготовки аналитиков</title>
 <meta name="description" content="Один проход над столом, несколько отсчетов подряд. Почему COUNT игнорирует NULL, а SUM — нет, ELSE 0, превращающий счет 5 в счет 8, и предложение FILTER, которое говорит об этом более четко.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-count-case-when/">
 <meta property="og:title" content="COUNT с CASE WHEN: подсчет некоторых строк без фильтрации остальных">
@@ -143,7 +143,7 @@
       "name": "Должен ли я использовать SUM или COUNT с CASE?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Либо работает, если написано правильно. SUM(СЛУЧАЙ КОГДА с ТОГДА 1 ELSE 0 END) и COUNT(СЛУЧАЙ КОГДА с ТОГДА 1 END) возвращают количество совпадающих строк. Выберите один и используйте его повсюду, чтобы случайное слово ELSE считалось ошибкой."
+        "text": "Либо работает, если написано правильно. SUM(CASE WHEN с THEN 1 ELSE 0 END) и COUNT(CASE WHEN с THEN 1 END) возвращают количество совпадающих строк. Выберите один и используйте его повсюду, чтобы случайное слово ELSE считалось ошибкой."
       }
     },
     {
@@ -151,7 +151,7 @@
       "name": "Что такое предложение FILTER в SQL?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Более понятный способ записи условного агрегата: COUNT(*) FILTER (ГДЕ статус = отгружено), со значением, указанным как обычно. Это стандартный SQL, поддерживаемый PostgreSQL и SQLite. SQL-сервер и MySQL по-прежнему нуждаются в форме CASE."
+        "text": "Более понятный способ записи условного агрегата: COUNT(*) FILTER (ГДЕ статус = отгружено), со значением, указанным как обычно. Это стандартный SQL, поддерживаемый PostgreSQL и SQLite. SQL Server и MySQL по-прежнему нуждаются в форме CASE."
       }
     }
   ]
@@ -161,7 +161,7 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../../sql/">SQL-комплект</a></p>
+  <p class="crumb"><a href="../../">← Все курсы</a> &middot; <a href="../../sql/">Курс SQL</a></p>
   <h1>COUNT с CASE WHEN: подсчет некоторых строк без фильтрации остальных</h1>
   <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Каждый запрос на этой странице был выполнен до его публикации.</p>
 
@@ -192,7 +192,7 @@ FROM orders;</code></pre>
   </table>
   <p>Один проход по столу, четыре ответа, и каждый из них уважает то, что  <code>WHERE</code>  пункт, который вы добавите позже. В этом заключается практическое преимущество перед тремя отдельными запросами: фильтры никогда не разойдутся.</p>
 
-  <h2>ИНАЧЕ, которое ломает это</h2>
+  <h2>ELSE, которое ломает это</h2>
   <pre><code>COUNT(CASE WHEN status = 'shipped' THEN 1 END)          -- 5, correct
 COUNT(CASE WHEN status = 'shipped' THEN 1 ELSE 0 END)   -- 8, wrong</code></pre>
   <p>A <code>CASE</code>  без совпадения  <code>WHEN</code>  и нет  <code>ELSE</code>  возвращает NULL и  <code>COUNT</code>  пропускает NULL. Писать  <code>ELSE 0</code>  и каждая строка теперь дает ноль, который является значением, поэтому  <code>COUNT</code>  считает все восемь.</p>
@@ -236,7 +236,7 @@ ORDER BY customer_id;</code></pre>
   COUNT(*) FILTER (WHERE status = 'shipped') AS shipped,
   SUM(amount) FILTER (WHERE status = 'shipped') AS shipped_value
 FROM orders;</code></pre>
-  <p>Стандартный SQL, поддерживаемый PostgreSQL и SQLite. Он говорит именно то, что означает, и не имеет никакого значения.  <code>ELSE</code>    ошибиться. SQL-сервер и MySQL его не поддерживают, поэтому    <code>CASE</code>    форма остается портативным ответом, и в любом случае стоит свободно владеть им.</p>
+  <p>Стандартный SQL, поддерживаемый PostgreSQL и SQLite. Он говорит именно то, что означает, и не имеет никакого значения.  <code>ELSE</code>        ошибиться. SQL Server и MySQL его не поддерживают, поэтому        <code>CASE</code>    форма остается портативным ответом, и в любом случае стоит свободно владеть им.</p>
 
   <h2>Как применить это в своей работе</h2>
   <ol>
@@ -262,13 +262,13 @@ FROM orders;</code></pre>
 
   <div class="cta">
     <strong>Введите запросы, а не просто читайте их.</strong>
-    <p style="margin:6px 0 0"><a href="../sql-count-function/">СЧЕТ в SQL</a>  охватывает саму функцию,  <a href="../sql-case-expression/">Выражение CASE</a>  покрывает другую половину, и  <a href="../../drill/">SQL-детализация</a>  передает вам один выполняемый запрос за раз.</p>
+    <p style="margin:6px 0 0"><a href="../sql-count-function/">СЧЕТ в SQL</a>  охватывает саму функцию,  <a href="../sql-case-expression/">Выражение CASE</a>  покрывает другую половину, и  <a href="../../drill/">SQL-практикум</a>  передает вам один выполняемый запрос за раз.</p>
     <a class="btn" href="../../drill/">Открыть SQL-детализацию →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql-count-function/">СЧЕТ в SQL</a> &middot; <a href="../sql-case-expression/">Выражение CASE</a> &middot; <a href="../sql-group-by-case/">ГРУППИРОВАТЬ ПО с CASE</a> &middot; <a href="../sql-null/">NULL в SQL</a> &middot; <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> &middot; <a href="../../drill/">SQL-детализация</a> &middot; <a href="../../sql/">SQL-комплект</a>
+    <a href="../../">← платформа для подготовки аналитиков</a> &middot; <a href="../sql-count-function/">СЧЕТ в SQL</a> &middot; <a href="../sql-case-expression/">Выражение CASE</a> &middot; <a href="../sql-group-by-case/">GROUP BY с CASE</a> &middot; <a href="../sql-null/">NULL в SQL</a> &middot; <a href="../sql-group-by-having/">GROUP BY и HAVING</a> &middot; <a href="../../drill/">SQL-практикум</a> &middot; <a href="../../sql/">Курс SQL</a>
     <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
     <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Контакт</a> &middot; <a href="../../privacy.html">Конфиденциальность</a> &middot; <a href="../../terms.html">Условия</a></p>
   </footer>

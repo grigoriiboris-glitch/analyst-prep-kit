@@ -134,8 +134,8 @@ const CARD_DRILLS = {
  {p:"Общий доход по Product_id.",sql:"SELECT product_id, SUM(amount) AS revenue FROM sales GROUP BY product_id;"}]},
 "COUNT(*)":{tries:[
  {p:"Сколько строк продаж?",sql:"SELECT COUNT(*) FROM sales;"},
- {p:"Сколько продаж имеют NULL-регион? (COUNT(*) считает их; COUNT(регион) — нет.)",sql:"SELECT COUNT(*) FROM sales WHERE region IS NULL;"},
- {p:"Сравните: COUNT(*) и COUNT(Регион) по всем продажам — определите НУЛЕВОЙ разрыв.",sql:"SELECT COUNT(*) AS all_rows, COUNT(region) AS with_region FROM sales;"}]},
+ {p:"Сколько продаж имеют NULL-регион? (COUNT(*) считает их; COUNT(region) — нет.)",sql:"SELECT COUNT(*) FROM sales WHERE region IS NULL;"},
+ {p:"Сравните: COUNT(*) и COUNT(Регион) по всем продажам — определите NULL разрыв.",sql:"SELECT COUNT(*) AS all_rows, COUNT(region) AS with_region FROM sales;"}]},
 "SUM(col)":{tries:[
  {p:"Общий доход по всем продажам.",sql:"SELECT SUM(amount) FROM sales;"},
  {p:"Общее количество проданных единиц (кол-во).",sql:"SELECT SUM(qty) FROM sales;"},
@@ -200,7 +200,7 @@ const CARD_DRILLS = {
  {p:"Все клиенты И все клиенты_старые, по возможности сопоставлены.",sql:"SELECT c.id AS cur_id, co.id AS old_id FROM customers c FULL OUTER JOIN customers_old co ON c.id = co.id;"},
  {p:"Отфильтруйте это только по несовпадениям — строки отсутствуют с обеих сторон.",sql:"SELECT c.id AS cur_id, co.id AS old_id FROM customers c FULL OUTER JOIN customers_old co ON c.id = co.id WHERE c.id IS NULL OR co.id IS NULL;"}]},
 "CURDATE()":{note:"CURDATE() — это MySQL. В этой лабораторной работе используется SQLite, эквивалент которого: <code>дата('сейчас')</code> — попрактикуйтесь в написании этой идеи в SQLite.",tries:[
- {p:"Сегодняшняя дата (написание SQLite).",sql:"ВЫБРАТЬ дату('сейчас') КАК сегодня;"},
+ {p:"Сегодняшняя дата (написание SQLite).",sql:"SELECT дату('сейчас') КАК сегодня;"},
  {p:"Продажи осуществлены до сегодняшнего дня (все — данные за 2024 год).",sql:"SELECT COUNT(*) FROM sales WHERE sale_date < date('now');"}]},
 "DATE_SUB(date, INTERVAL n unit)":{note:"DATE_SUB — это MySQL. SQLite использует модификаторы даты: <code>Дата('сейчас','-30 дней')</code>.",tries:[
  {p:"Дата 30 дней назад.",sql:"SELECT date('now','-30 day') AS thirty_days_ago;"},
@@ -221,6 +221,6 @@ const CARD_DRILLS = {
  {p:"Создайте временную таблицу крупных продаж и затем запросите ее.",sql:"CREATE TEMP TABLE IF NOT EXISTS big_sales AS SELECT * FROM sales WHERE amount >= 100;\nSELECT COUNT(*) FROM big_sales;"},
  {p:"Используйте временную таблицу в объединении, как и любую другую таблицу.",sql:"SELECT p.name, COUNT(*) AS big_sale_count FROM big_sales b JOIN products p ON b.product_id = p.product_id GROUP BY p.name ORDER BY big_sale_count DESC;"}]},
 "View":{tries:[
- {p:"Создайте представление дохода по категориям, а затем ВЫБЕРИТЕ из него.",sql:"CREATE VIEW IF NOT EXISTS category_revenue AS\nSELECT p.category, SUM(s.amount) AS revenue\nFROM sales s JOIN products p ON s.product_id = p.product_id\nGROUP BY p.category;\nSELECT * FROM category_revenue ORDER BY revenue DESC;"},
+ {p:"Создайте представление дохода по категориям, а затем SELECT из него.",sql:"CREATE VIEW IF NOT EXISTS category_revenue AS\nSELECT p.category, SUM(s.amount) AS revenue\nFROM sales s JOIN products p ON s.product_id = p.product_id\nGROUP BY p.category;\nSELECT * FROM category_revenue ORDER BY revenue DESC;"},
  {p:"Представления повторяются в реальном времени: фильтруйте представление как таблицу.",sql:"SELECT * FROM category_revenue WHERE revenue > 900;"}]}
 };

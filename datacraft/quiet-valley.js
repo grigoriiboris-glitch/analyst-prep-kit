@@ -14,11 +14,11 @@ var ZONES=[
 {id:'cave',name:'💎 Сумеречная пещера',short:'Пещера',price:40,kind:'cave'},
 {id:'waterfall',name:'💧 Долина водопада',short:'Водопад',price:50,kind:'waterfall'}];
 var ITEMS=[
-{id:'roof-terracotta',name:'Черепичная крыша',emoji:'🏠',cat:'house',price:14,kind:'upgrade',slot:'roof',value:'#b9654b',desc:'Тёплая терракотовая крыша.'},
-{id:'roof-nightblue',name:'Синяя крыша',emoji:'🏡',cat:'house',price:18,kind:'upgrade',slot:'roof',value:'#53769a',desc:'Спокойный синий оттенок.'},
-{id:'wall-cream',name:'Кремовые стены',emoji:'🧱',cat:'house',price:10,kind:'upgrade',slot:'wall',value:'#e4d2a4',desc:'Светлый уютный дом.'},
-{id:'wall-sage',name:'Фисташковые стены',emoji:'🏡',cat:'house',price:13,kind:'upgrade',slot:'wall',value:'#a8c69a',desc:'Мягкий зелёный цвет.'},
-{id:'window-glow',name:'Тёплый свет в окнах',emoji:'🪟',cat:'house',price:9,kind:'upgrade',slot:'window',value:'glow',desc:'Дом уютно светится в сумерках.'},
+{id:'roof-terracotta',name:'Черепичная крыша',emoji:'🏠',cat:'house',price:14,kind:'upgrade',slot:"крыша",value:'#b9654b',desc:'Тёплая терракотовая крыша.'},
+{id:'roof-nightblue',name:'Синяя крыша',emoji:'🏡',cat:'house',price:18,kind:'upgrade',slot:"крыша",value:'#53769a',desc:'Спокойный синий оттенок.'},
+{id:'wall-cream',name:'Кремовые стены',emoji:'🧱',cat:'house',price:10,kind:'upgrade',slot:"стена",value:'#e4d2a4',desc:'Светлый уютный дом.'},
+{id:'wall-sage',name:'Фисташковые стены',emoji:'🏡',cat:'house',price:13,kind:'upgrade',slot:"стена",value:'#a8c69a',desc:'Мягкий зелёный цвет.'},
+{id:'window-glow',name:'Тёплый свет в окнах',emoji:'🪟',cat:'house',price:9,kind:'upgrade',slot:"Окно",value:'glow',desc:'Дом уютно светится в сумерках.'},
 {id:'porch-lantern',name:'Фонарь у крыльца',emoji:'🏮',cat:'house',price:8,kind:'item',desc:'Маленький фонарь рядом с домом.'},
 {id:'oak-tree',name:'Дуб',emoji:'🌳',cat:'garden',price:9,kind:'item',desc:'Тенистое дерево для участка.'},
 {id:'flower-tulips',name:'Тюльпаны',emoji:'🌷',cat:'garden',price:4,kind:'item',desc:'Яркая цветочная клумба.'},

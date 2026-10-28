@@ -86,7 +86,7 @@
       '<section class="pg-workbench" aria-label="Редактор SQL"><div class="pg-workbench-head"><h3>SQL-песочница</h3><span class="pg-engine-state" id="engineState">'+(db?'PostgreSQL готов · данные изолированы':'Движок загрузится при первом запуске')+'</span></div>'+
       '<textarea id="sqlEditor" class="pg-editor" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Твой SQL-запрос"></textarea>'+
       "<div class=\"pg-run-actions\"><button class=\"pg-button primary\" type=\"button\" id=\"runQueryBtn\">▶ Выполнить запрос</button><button class=\"pg-button\" type=\"button\" id=\"copyQueryBtn\">Копировать SQL</button><button class=\"pg-button\" type=\"button\" id=\"downloadCsvBtn\" disabled>Скачать результат CSV</button><span class=\"pg-muted\">Ctrl + Входить — выполнить · максимум 20 000 символов</span></div>"+
-      "<div class=\"pg-output\" id=\"queryOutput\" aria-live=\"polite\"><div class=\"pg-output-placeholder\">Выполни пример в изолированной учебной базе. Первый запуск загрузит движок ПостгреSQL.</div></div></section>"+
+      "<div class=\"pg-output\" id=\"queryOutput\" aria-live=\"polite\"><div class=\"pg-output-placeholder\">Выполни пример в изолированной учебной базе. Первый запуск загрузит движок PostgreSQL.</div></div></section>"+
       '<section class="pg-quiz"><h3>Проверь понимание</h3><p class="pg-quiz-q">'+inlineText(quiz.q)+'</p><div class="pg-answers" id="quizAnswers">'+quiz.options.map(function(op,i){return '<button class="pg-answer'+(quizPassed&&i===quiz.correct?' correct':'')+"\" тип=\"кнопка\" данные-ответ=\""+i+'"'+(quizPassed?' disabled':'')+'>'+inlineText(op)+'</button>';}).join('')+'</div><p class="pg-quiz-feedback" id="quizFeedback" aria-live="polite">'+(quizPassed?'Верно. '+escapeHTML(quiz.why):'Ответь правильно, чтобы отметить урок завершённым.')+'</p></section>'+
       '<div class="pg-lesson-actions"><button class="pg-button" type="button" id="prevLessonBtn"'+(Number(l.id)===Number(lessons[0].id)?' disabled':'')+'>← Предыдущий урок</button><button class="pg-button primary" type="button" id="completeLessonBtn"'+(!(runPassed&&quizPassed)||done?' disabled':'')+'>'+(done?'✓ Урок пройден':'Завершить урок')+'</button><button class="pg-button" type="button" id="nextLessonBtn">'+(Number(l.id)===Number(lessons[lessons.length-1].id)?'К началу курса ↻':'Следующий урок →')+'</button><span class="spacer"></span><span class="pg-muted">'+(runPassed?'Практика выполнена ✓':'Практика ещё не пройдена')+' · '+(quizPassed?'Ответ верный ✓':'Контрольный вопрос не пройден')+'</span></div>';
     view.innerHTML=html;
@@ -137,7 +137,7 @@
       var instance=new module.PGlite();await instance.exec(await response.text());
       try{await instance.exec("SET оператор_таймаут = '4000 мс'; SET lock_timeout = '1000 мс';");}catch(_){}
       db=instance;statusEngine('PostgreSQL готов · 7 таблиц с учебными данными');return db;
-    })().catch(function(error){enginePromise=null;statusEngine('Движок пока недоступен');showOutputMessage("Не удалось подготовить ПостгреSQL. Проверь интернет и открой курс через веб-сервер. "+translateEngineError(error),'error');throw error;});
+    })().catch(function(error){enginePromise=null;statusEngine('Движок пока недоступен');showOutputMessage("Не удалось подготовить PostgreSQL. Проверь интернет и открой курс через веб-сервер. "+translateEngineError(error),'error');throw error;});
     return enginePromise;
   }
   function translateEngineError(error){var m=String(error&&error.message||error||'Неизвестная ошибка');if(/Failed to fetch|NetworkError|fetch/i.test(m))return 'Не удалось скачать движок или учебную схему.';return m;}
@@ -238,6 +238,6 @@
   schemaPanel.addEventListener('toggle',function(){if(schemaPanel.open)renderSchemaDiagram();});
   window.addEventListener('storage',function(e){if(e.key===PROGRESS_KEY){state=normalizeProgress(readJSON(PROGRESS_KEY,defaultState));activeId=numberOr(state.currentLessonId,firstIncompleteId());renderLesson();}});
   window.addEventListener('apk:progress-restored',function(){state=normalizeProgress(readJSON(PROGRESS_KEY,defaultState));activeId=numberOr(state.currentLessonId,firstIncompleteId());renderLesson();});
-  if(!lessons.length){view.innerHTML="<h2>Не удалось загрузить программу</h2><p>Обнови страницу. Файл курс-data.js не содержит уроков.</p>";return;}
+  if(!lessons.length){view.innerHTML="<h2>Не удалось загрузить программу</h2><p>Обнови страницу. Файл курс-данные.js не содержит уроков.</p>";return;}
   updateProgressHeader();renderNav();renderLesson();
 })();

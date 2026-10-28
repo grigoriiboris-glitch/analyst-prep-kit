@@ -15,7 +15,7 @@
     style.id = 'apkAiContextCopyStyle';
     style.textContent = [
       '.apk-ai-context-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0;padding:10px 12px;border:1px solid rgba(102,190,139,.42);border-radius:11px;background:linear-gradient(120deg,rgba(36,67,48,.92),rgba(26,43,33,.92));color:var(--ink,#edf5f0);}',
-      ".apk-ai-context-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:36px;padding:8px 12px;border:1px Solid #5ba979;border-radius:9px;background:#28523a;цвет:#effff3;шрифт:700 12px/1.3 system-ui,-apple-system,\"Segoe UI\", без засечек;курсор:указатель;переход:фон .15с,цвет границы .15с,преобразование .15с;}",
+      ".apk-ai-контекстная кнопка{отображать:встроенный гибкий;выравнивание элементов:центр;оправдание-содержание:центр;зазор:8пикселей;минимальная высота:36пикселей;прокладка:8пикселей 12пикселей;граница:1пикселей сплошной #5ba979;граница-радиус:9пикселей;фон:#28523а;цвет:#effff3;шрифт:700 12px/1.3 системный интерфейс,-Apple-система,\"Следуйте пользовательскому интерфейсу\", без засечек;курсор:указатель;переход:фон .15с,цвет границы .15с,преобразование .15с;}",
       '.apk-ai-context-button:hover{background:#326847;border-color:#91e4b1;}',
       ".apk-ai-context-button:focus-visible{outline:2px Solid #a8f0c0;outline-offset:3px;}",
       '.apk-ai-context-button:active{transform:translateY(1px);}',
@@ -30,7 +30,7 @@
 
   function visibleLessonRoot(root) {
     if (!root || root.nodeType !== 1) return false;
-    if (root.closest("nav, в сторону, заголовок, нижний колонтитул, .lesson-nav, .sidebar, .lesson-list, .curriculum-course-list")) return false;
+    if (root.closest("навигация, в сторону, заголовок, нижний колонтитул, .урок-навигация, .боковая панель, .список уроков, .список-курсов-курсов")) return false;
     if (root.matches('[hidden],[aria-hidden="true"]')) return false;
     var heading = root.querySelector('h1,h2,h3,.lesson-title,[data-lesson-title]');
     if (!heading) return false;
@@ -104,7 +104,7 @@
     Array.prototype.forEach.call(clone.querySelectorAll(
       'script,style,button,input,select,option,textarea,nav,header,footer,aside,' +
       '.apk-ai-context-bar,.lesson-nav,.sidebar,.lesson-progress,.progressbar,' +
-      ".lesson-actions,.actions,.nav,.toolbar,.topbar,.modal,.toast,.кнопка обратной связи"
+      ".уроки-действия,.Действия,.навигация,.панель инструментов,.артиллерия,.модальный,.тост,.кнопка обратной связи"
     ), function (node) { if (node.parentNode) node.parentNode.removeChild(node); });
 
     // Keep important block boundaries so copied context remains readable.
@@ -138,7 +138,7 @@
     var content = cloneLessonText(root);
     var editors = editorContext(root);
     var instructions = [
-      "Ты — учебный ИИ-помощник по курсу Подготовительный комплект для аналитика.",
+      "Ты — учебный ИИ-помощник по курсу платформа для подготовки аналитиков.",
       'Помоги ученику разобраться в уроке простым языком и на примерах.',
       'Сначала объясни принцип и ход рассуждения; не выдавай готовое решение без пояснения.',
       'Если ученик прислал ошибку или свой запрос, объясни причину, предложи исправление и способ проверить результат.',
@@ -205,7 +205,7 @@
       if (pieces.length) extra = pieces.join('\n\n');
     }
     var instructions = [
-      "Ты — учебный ИИ-помощник Подготовительный комплект для аналитика.",
+      "Ты — учебный ИИ-помощник платформа для подготовки аналитиков.",
       'Объясняй тему простым языком, пошагово и на небольших примерах.',
       'Если ученик просит проверить решение, сначала разберись в его подходе, затем объясни ошибку и предложи способ проверить исправление.',
       'Не придумывай отсутствующие требования и не утверждай, что выполнял код или запрос, если это не подтверждено.',

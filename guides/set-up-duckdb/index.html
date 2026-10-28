@@ -31,7 +31,7 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Как настроить DuckDB (запустить SQL в CSV без этапа импорта) — комплект подготовки аналитика</title>
+<title>Как настроить DuckDB (запустить SQL в CSV без этапа импорта) — платформа для подготовки аналитиков</title>
 <meta name="description" content="Установите DuckDB одной командой и запустите SQL прямо в CSV-файле, без CREATE TABLE и без импорта. Реальный вывод, трюк с подстановкой папок и когда SQLite по-прежнему остается лучшим выбором.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/set-up-duckdb/">
 <meta property="og:title" content="Как настроить DuckDB (запустить SQL в CSV без этапа импорта)">
@@ -132,7 +132,7 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../">Все руководства</a></p>
+  <p class="crumb"><a href="../../">← Все курсы</a> · <a href="../../sql/">Курс SQL</a> · <a href="../">Все руководства</a></p>
   <h1>Как настроить DuckDB</h1>
   <p class="meta">Одна команда установки, затем поместите имя файла туда, где идет имя таблицы. · Часть  <a href="../../">Analyst Prep Kit</a></p>
   <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">К <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-08">8 августа 2026 г.</time></p>
@@ -196,7 +196,7 @@
       <li>Запросить CSV без импорта</li>
       <li>Что получилось с вашим файлом</li>
       <li>Вся папка как одна таблица</li>
-      <li>В панд и обратно</li>
+      <li>В pandas и обратно</li>
       <li>DuckDB или SQLite: что, когда</li>
       <li>Полное до и после</li>
       <li>Что пошло не так и как это исправить</li>
@@ -295,9 +295,9 @@ print(duckdb.sql("""
   </div>
 
   <div class="step">
-    <h2>5. В панды и обратно</h2>
+    <h2>5. В pandas и обратно</h2>
 
-    <p>DuckDB создан для того, чтобы находиться рядом с пандами, а не заменять их. Добавлять  <code>.df()</code>  чтобы получить DataFrame.</p>
+    <p>DuckDB создан для того, чтобы находиться рядом с pandas, а не заменять их. Добавлять    <code>.df()</code>  чтобы получить DataFrame.</p>
 
     <pre><code>df = duckdb.sql("""
     SELECT Country, COUNT(*) AS n
@@ -313,7 +313,7 @@ print(df)</code></pre>
 
     <p>Для этого необходимо установить pandas, чего DuckDB сам по себе не требует. Это работает и наоборот: DataFrame, уже находящийся в памяти, можно запросить по имени, поэтому  <code>SELECT * FROM my_dataframe</code>  работает вообще без этапа преобразования.</p>
 
-    <p>Эта улица с двусторонним движением является разумным разделением труда. Используйте SQL для фильтрации, объединения и группировки (а это то, в чем SQL лучше всего справляется), а затем передайте небольшой результат пандам для изменения формы и построения диаграмм. Это та же самая разделительная линия, описанная в  <a href="../connect-python-to-a-sql-database/">подключение Python к базе данных SQL</a>, с меньшими церемониями в середине.</p>
+    <p>Эта улица с двусторонним движением является разумным разделением труда. Используйте SQL для фильтрации, объединения и группировки (а это то, в чем SQL лучше всего справляется), а затем передайте небольшой результат pandas для изменения формы и построения диаграмм. Это та же самая разделительная линия, описанная в    <a href="../connect-python-to-a-sql-database/">подключение Python к базе данных SQL</a>, с меньшими церемониями в середине.</p>
   </div>
 
   <div class="step">
@@ -388,7 +388,7 @@ duckdb.sql("SELECT Country, SUM(Total) FROM 'months/*.csv' GROUP BY Country")</c
     <li><strong>Бегать <code>DESCRIBE</code>  в любом новом файле в первую очередь.</strong>  Две секунды — и вы узнаете, какое решение принял инструмент, прежде чем вы начнете его использовать.</li>
     <li><strong>Назовите нужные столбцы</strong>  скорее, чем  <code>SELECT *</code>. Вот где живет скорость.</li>
     <li><strong>Поместите файлы одинаковой формы в одну папку.</strong>  и запрашивайте их, отмечая звездочкой, вместо того, чтобы писать код, который соединяет их вместе.</li>
-    <li><strong>Агрегируйте в запросе, диаграмму в пандах.</strong>  Ручные панды — небольшой результат, а не весь файл.</li>
+    <li><strong>Агрегируйте в запросе, диаграмму в pandas.</strong>    Ручные pandas — небольшой результат, а не весь файл.</li>
     <li><strong>Сохраните SQLite для своей базы данных.</strong>и используйте DuckDB для поступающих файлов. Они не конкурируют.</li>
   </ol>
 
@@ -409,7 +409,7 @@ duckdb.sql("SELECT Country, SUM(Total) FROM 'months/*.csv' GROUP BY Country")</c
     <tr><td><code>DESCRIBE SELECT * FROM 'f.csv'</code></td><td>Показывает, какое решение было принято в каждом столбце. Всегда запускайте его первым.</td></tr>
     <tr><td>Введите строку в выводе</td><td>По умолчанию печатается под именами столбцов.</td></tr>
     <tr><td><code>FROM 'months/*.csv'</code></td><td>Каждый соответствующий файл как одна таблица. Нет цикла, нет конкатенации.</td></tr>
-    <tr><td><code>.df()</code></td><td>Возвращает Панды DataFrame. Требуется установка панд.</td></tr>
+    <tr><td><code>.df()</code></td><td>Возвращает pandas DataFrame. Требуется установка pandas.</td></tr>
     <tr><td>Запрос DataFrame</td><td><code>SELECT * FROM my_df</code>  работает без конвертации.</td></tr>
     <tr><td>Хранение столбцов</td><td>Читает только те столбцы, которые вы называете. Почему  <code>SELECT *</code>  дорого.</td></tr>
     <tr><td>Искаженный вывод Окна</td><td>Персонажи, рисующие коробки. Набор  <code>PYTHONIOENCODING=utf-8</code>.</td></tr>
@@ -436,13 +436,13 @@ duckdb.sql("SELECT Country, SUM(Total) FROM 'months/*.csv' GROUP BY Country")</c
 
   <div class="cta">
     <strong>Инструмент — это самая простая часть. Вопрос в навыке.</strong>
-    <p style="margin:6px 0 0">Все, что здесь запускает DuckDB, — это обычный SQL, поэтому представители передаются.  <a href="../../drill/">SQL-детализация</a>  передает вам по одному работоспособному запросу и просит ввести его, а  <a href="../../sql/">SQL-комплект</a>  охватывает соединения, группировку и оконные функции с активной базой данных в браузере.</p>
-    <a class="btn" href="../../drill/">Откройте SQL-детализация →</a>
+    <p style="margin:6px 0 0">Все, что здесь запускает DuckDB, — это обычный SQL, поэтому представители передаются.  <a href="../../drill/">SQL-практикум</a>  передает вам по одному работоспособному запросу и просит ввести его, а  <a href="../../sql/">Курс SQL</a>  охватывает соединения, группировку и оконные функции с активной базой данных в браузере.</p>
+    <a class="btn" href="../../drill/">Откройте SQL-практикум →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../which-sql-database-to-install/">Какую базу данных SQL установить</a> · <a href="../sample-database-for-sql-practice/">Получить образец базы данных</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../connect-python-to-a-sql-database/">Подключите Python к базе данных</a> · <a href="../install-python-for-data-analysis/">Установить Python</a> · <a href="../pandas-groupby/">панды группируются</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../free-datasets-to-practice-with/">Бесплатные наборы данных</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../../python/">Комплект Python</a>
+    <a href="../../">← платформа для подготовки аналитиков</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../which-sql-database-to-install/">Какую базу данных SQL установить</a> · <a href="../sample-database-for-sql-practice/">Получить образец базы данных</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../connect-python-to-a-sql-database/">Подключите Python к базе данных</a> · <a href="../install-python-for-data-analysis/">Установить Python</a> · <a href="../pandas-groupby/">pandas.groupby</a> · <a href="../sql-group-by-having/">GROUP BY и HAVING</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../free-datasets-to-practice-with/">Бесплатные наборы данных</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../sql/">Курс SQL</a> · <a href="../../python/">Курс Python</a>
     <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
   
     <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Контакт</a> · <a href="../../privacy.html">Конфиденциальность</a> · <a href="../../terms.html">Условия</a></p>

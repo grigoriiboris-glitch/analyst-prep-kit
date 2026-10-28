@@ -225,7 +225,7 @@ footer{margin-top:50px;padding-top:24px;border-top:1px solid var(--border);text-
 <script src="../assets/progress-state.js"></script>
 <script src="../assets/supabase_auth_sync.js?v=3"></script>
 <nav>
-  <button class="nav-btn" onclick="window.location='../index.html'" title="Вернуться ко всем комплектам">← Все комплекты</button>
+  <button class="nav-btn" onclick="window.location='../index.html'" title="Вернуться ко всем комплектам">← Все курсы</button>
   <span class="nav-title"><span class="logo-mark"><i data-lucide="clipboard-check"></i></span>Комплект итогового экзамена</span>
   <button class="nav-btn" id="navHome" onclick="setView('home')">Дом</button>
   <button class="nav-btn" id="navStudy" onclick="setView('study')">Учебное руководство</button>
@@ -293,7 +293,7 @@ const STUDY = [
       `<strong>.место против .iloc</strong>: <code>.loc</code> использует метки (имена столбцов); <code>.iloc</code> использует целочисленные позиции.`,
       `<strong>Группа + совокупность</strong>: <code>df.groupby('регион')['доход'].сумма()</code> это 80% того, что вы напишете.`,
       `<strong>Нулевые значения</strong>: <code>df.isnull().сумма()</code> для счетов; <code>df.fillna(0)</code> заменить; <code>df.dropna()</code> удалить.`,
-      `<strong>Список против диктата</strong>:список = упорядоченный, индексированный целыми числами; диктовать = ключ → поиск значения. Панды серии представляет собой список; DataFrame является диктовкой серий.`
+      `<strong>Список против диктата</strong>:список = упорядоченный, индексированный целыми числами; диктовать = ключ → поиск значения. pandas серии представляет собой список; DataFrame является диктовкой серий.`
     ]},
   {key:'tableau', color:'var(--c-tableau)', label:'Tableau', kitPath:'../tableau/',
     must:[
@@ -350,8 +350,8 @@ const GUIDE_LINKS = {
   s3: {slug:'sql-joins', title:"SQL JOIN: как соединить две таблицы без потери или удвоения строк"},
   s4: {slug:'sql-foundations', title:"Основы SQL, от начала до конца"},
   /* Python */
-  p1: {slug:'pandas-read-csv', title:"панды read_csv: ваш первый DataFrame и что он угадал"},
-  p4: {slug:'pandas-groupby', title:"панды группируются: как суммировать фрейм данных, не теряя строк"},
+  p1: {slug:'pandas-read-csv', title:"pandas.read_csv: ваш первый DataFrame и что он угадал"},
+  p4: {slug:'pandas-groupby', title:"pandas.groupby: как суммировать фрейм данных, не теряя строк"},
   /* Tableau */
   t1: {slug:'choose-the-right-chart', title:"Как выбрать правильную диаграмму: один вопрос о ваших данных"},
   t2: {slug:'tableau-concepts', title:"Концепции Tableau, от начала до конца"},
@@ -445,7 +445,7 @@ const QUESTIONS = [
 FROM sales
 GROUP BY product
 ________</pre>`,
-    choices:[`СОРТИРОВАТЬ ПО сумме DESC LIMIT 5`, `СОРТИРОВАТЬ ПО сумме ASC LIMIT 5`, `ОГРАНИЧЕНИЕ 5 Упорядочить по общему убыванию`, `СОРТИРОВАТЬ ПО сумме УДАЧИ ТОП 5`],
+    choices:[`ORDER BY сумме DESC LIMIT 5`, `ORDER BY сумме ASC LIMIT 5`, `LIMIT 5 Упорядочить по общему убыванию`, `ORDER BY сумме УДАЧИ ТОП 5`],
     correct:0,
     explain:`<code>СОРТИРОВАТЬ ПО УБЫТКУ</code> сначала сортирует самый большой, <code>ОГРАНИЧЕНИЕ 5</code> берет только пятерку лучших — и <code>LIMIT</code> должно прийти после <code>ORDER BY</code>. (Некоторые базы данных используют <code>ТОП 5</code> или <code>ВЫБРАТЬ ТОЛЬКО ПЕРВЫЕ 5 СТРОК</code> вместо <code>LIMIT</code>, но нет <code>SORT BY</code>.)`},
 
@@ -454,7 +454,7 @@ ________</pre>`,
     choices:[`<code>pd.load_csv()</code>`, `<code>pd.read_csv()</code>`, `<code>pd.open_csv()</code>`, `<code>pd.import_csv()</code>`],
     correct:1,
     explain:`<code>pd.read_csv('file.csv')</code>. <code>читать_*</code> Семейство также охватывает Excel, JSON, паркет, запросы SQL и многое другое.`},
-  {id:'p2', section:'python', type:'mc', q:`Чтобы выбрать строки, в которых <code>region</code> столбец равен <code>«Запад»</code> в Панды DataFrame под названием <code>df</code>:`,
+  {id:'p2', section:'python', type:'mc', q:`Чтобы выбрать строки, в которых <code>region</code> столбец равен <code>«Запад»</code> в pandas DataFrame под названием <code>df</code>:`,
     choices:[
       `<code>df.select('регион == Запад')</code>`,
       `<code>дф[дф['Регион'] == 'Запад']</code>`,
@@ -470,10 +470,10 @@ ________</pre>`,
       `<code>.iloc</code> быстрее и всегда должен быть предпочтительным.`
     ], correct:1,
     explain:`<code>.loc[0]</code> дает вам строку с меткой 0 (которая может быть не первой строкой); <code>.iloc[0]</code> всегда дает первую строку позиционно.`},
-  {id:'p4', section:'python', type:'mc', q:`Какие однострочные группы панд <code>df</code>К<code>region</code> и суммы <code>revenue</code>?`,
+  {id:'p4', section:'python', type:'mc', q:`Какие однострочные группы pandas <code>df</code>К<code>region</code> и суммы <code>revenue</code>?`,
     choices:[`df.groupby('доход')['регион'].сумма()`, `df.groupby('регион')['доход'].сумма()`, `df.sum('доход').группировка('регион')`, `дф['регион'].сумма().группировка('доход')`],
     correct:1,
-    explain:`тот<code>группировка → столбец → совокупность</code> Шаблон — это рабочая лошадка анализа панд: группировка по РАЗМЕРУ (<code>region</code>), выберите МЕРУ (<code>revenue</code>), затем суммируйте. Первая группа вариантов по размеру — классический своп.`},
+    explain:`тот<code>группировка → столбец → совокупность</code> Шаблон — это рабочая лошадка анализа pandas: группировка по РАЗМЕРУ (<code>region</code>), выберите МЕРУ (<code>revenue</code>), затем суммируйте. Первая группа вариантов по размеру — классический своп.`},
 
   // TABLEAU
   {id:'t1', section:'tableau', type:'mc', q:`Лучшая диаграмма, показывающая, как метрика меняется с течением времени:`,
@@ -537,7 +537,7 @@ ________</pre>`,
       `Загрузка и преобразование данных при их попадании в модель.`,
       `Написание мер и вычисляемых столбцов для анализа.`,
       `Построение визуализаций на холсте.`,
-      `Публикация отчетов в службе Мощность БИ.`
+      `Публикация отчетов в службе Power BI.`
     ], correct:1,
     explain:`DAX (выражения анализа данных) — это язык формул для показателей и вычисляемых столбцов. Загрузка/преобразование данных — это работа Power Query (с использованием M).`},
   {id:'b2', section:'powerbi', type:'mc', q:`Рекомендуемая форма модели данных для Power BI обычно следующая:`,
@@ -741,7 +741,7 @@ function studyTitleFor(key){
   return {
     excel:"Основы Excel",
     sql:"Основы SQL",
-    python:"Основы Python и панд",
+    python:"Основы Python и pandas",
     tableau:"Основы таблицы",
     stats:"Основы статистики",
     powerbi:"Основы Power BI",
@@ -1029,7 +1029,7 @@ function attachFooter(app){
       <a href="../powerbi/">Power BI</a>
       <a href="../interview/">Интервью</a>
       <a href="../simulator/">Симулятор работы младшего аналитика данных</a>
-      <a href="../">← Все комплекты</a>
+      <a href="../">← Все курсы</a>
     </div>
     Часть <a href="../">Analyst Prep Kit</a> · Прогресс сохраняется локально
   `;
@@ -1151,12 +1151,12 @@ setTimeout(initAuthUI,600);
   <ul>
     <li><a href="../guides/sql-foundations/">Основы SQL</a></li>
     <li><a href="../guides/excel-pivot-tables/">сводные таблицы Excel</a></li>
-    <li><a href="../guides/pandas-groupby/">панды группируются</a></li>
+    <li><a href="../guides/pandas-groupby/">pandas.groupby</a></li>
     <li><a href="../guides/tableau-concepts/">Основные концепции Tableau</a></li>
     <li><a href="../guides/mean-vs-median/">Среднее против медианы</a></li>
     <li><a href="../guides/powerbi-measures-vs-columns/">Меры и вычисляемые столбцы</a></li>
   </ul>
-  <p><a href="../guides/">Просмотреть все руководства</a> · <a href="../">Все комплекты</a></p>
+  <p><a href="../guides/">Просмотреть все руководства</a> · <a href="../">Все курсы</a></p>
 </section>
 <!-- APK:KIT-SEO:END -->
 

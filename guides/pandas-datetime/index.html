@@ -31,7 +31,7 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>панды to_datetime: форматы, день по началу и группировка по месяцам — комплект для подготовки аналитика</title>
+<title>pandas to_datetime: форматы, день по началу и группировка по месяцам — комплект для подготовки аналитика</title>
 <meta name="description" content="Одна и та же строка анализируется до двух разных дат в зависимости от одного аргумента, и ни одна из них не вызывает ошибки. Как явно анализировать, что на самом деле делает первый день, и методы доступа, которые группируют по месяцам в одну строку.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/pandas-datetime/">
 <meta property="og:title" content="Даты в pandas: один раз разобрать их правильно">
@@ -112,7 +112,7 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "даты в пандах",
+      "name": "даты в pandas",
       "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/pandas-datetime/"
     }
   ]
@@ -124,7 +124,7 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Как преобразовать столбец в даты в пандах?",
+      "name": "Как преобразовать столбец в даты в pandas?",
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "pd.to_datetime(дф[\"Дата\"], Формат=\"%Д/%м/%Y\"). Передавайте формат явно, когда он вам известен, потому что вывод — это предположение, которое может привести к неправильной интерпретации."
@@ -132,7 +132,7 @@
     },
     {
       "@type": "Question",
-      "name": "Что делает первый день в панды to_datetime?",
+      "name": "Что делает первый день в pandas to_datetime?",
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "Он сообщает синтаксическому анализатору читать неоднозначные строки как день/месяц/год, а не месяц/день/год. Без него 04.03.2026 анализируется как 4 марта 2026 года; с первый день=Верно анализируется как 3 апреля 2026 года. Оба выполняются без ошибок."
@@ -140,7 +140,7 @@
     },
     {
       "@type": "Question",
-      "name": "Как мне группировать по месяцам в пандах?",
+      "name": "Как мне группировать по месяцам в pandas?",
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "Либо df.groupby(дф[\"Дата\"].период dt.to_(\"M\")) для меток периода, либо передискретизация(\"MS\") по индексу датавремя. к_ период сохраняет метку читаемой; повторная выборка заполняет месяцы без строк, что часто и требуется для отчета."
@@ -161,7 +161,7 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../../python/">Комплект Python</a></p>
+  <p class="crumb"><a href="../../">← Все курсы</a> &middot; <a href="../../python/">Курс Python</a></p>
   <h1>Даты в pandas: один раз разобрать их правильно</h1>
   <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Все числа на этой странице были обработаны до их публикации.</p>
 
@@ -178,7 +178,7 @@ s = pd.Series(['03/04/2026', '11/12/2026'])
 
 pd.to_datetime(s)                          # 2026-03-04, 2026-11-12
 pd.to_datetime(s, format='%d/%m/%Y')       # 2026-04-03, 2026-12-11</code></pre>
-  <p>Те же две строки, два разных результата. Предоставленные сами себе, панды читают их в первый месяц. Согласно заявленному формату, они идут первым днем. Ни один из вызовов ничего не дал, и оба дали действительные даты.</p>
+  <p>Те же две строки, два разных результата. Предоставленные сами себе, pandas читают их в первый месяц. Согласно заявленному формату, они идут первым днем. Ни один из вызовов ничего не дал, и оба дали действительные даты.</p>
   <p>В реальном файле это хуже, чем кажется. Дни выше 12 однозначны и в любом случае анализируются правильно, поэтому затрагиваются только первые двенадцать дней каждого месяца. Примерно треть ваших строк неверны, разбросаны, а столбец по-прежнему отлично сортируется и отображается в диаграммах.</p>
 
   <div class="note"><strong>Расскажите.</strong>  Сгруппируйте по месяцам и посмотрите на распределение. Файл, проанализированный неправильно, имеет тенденцию создавать странную концентрацию в первые двенадцать дней каждого месяца или месяцев, которые заканчиваются на 12-м дне. И то, и другое видно через десять секунд и невидимо в необработанном столбце.</div>
@@ -247,11 +247,11 @@ df['order_date'] + pd.Timedelta(days=30)     # exactly 30 days</code></pre>
 
   <p>Знаете ли вы, в каком порядке были прочитаны даты в вашем основном файле?</p>
 
-  <div class="note"><strong>Каждый результат здесь был просчитан до его публикации,</strong>  это панды 3.0.2.  <code>pd.to_datetime(pd.Series(["03/04/2026"]))</code>  возвращает 04.03.2026 и тот же вызов с  <code>format="%d/%m/%Y"</code>  возвращается 03 апреля 2026 г.</div>
+  <div class="note"><strong>Каждый результат здесь был просчитан до его публикации,</strong>    это pandas 3.0.2.    <code>pd.to_datetime(pd.Series(["03/04/2026"]))</code>  возвращает 04.03.2026 и тот же вызов с  <code>format="%d/%m/%Y"</code>  возвращается 03 апреля 2026 г.</div>
 
   <div class="book">
     <strong>Дата, проанализированная неправильно, неверна только в двух третях строк, поэтому никто этого не замечает.</strong>
-    <p><em>Python для аналитиков</em>  — это рабочая книга по аналитике панд: прочитайте файл, исправьте его типы, сгруппируйте его, присоединитесь к нему и проверьте ответ, прежде чем его увидит кто-либо еще.</p>
+    <p><em>Python для аналитиков</em>    — это рабочая книга по аналитике pandas: прочитайте файл, исправьте его типы, сгруппируйте его, присоединитесь к нему и проверьте ответ, прежде чем его увидит кто-либо еще.</p>
     <a class="booklink" href="https://michaelnocito.gumroad.com/l/python-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=python-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-pandas-datetime'})">Python для аналитиков, 19 $ →</a>
   </div>
 
@@ -263,7 +263,7 @@ df['order_date'] + pd.Timedelta(days=30)     # exactly 30 days</code></pre>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../pandas-read-csv/">панды read_csv</a> &middot; <a href="../sql-dates/">даты в SQL</a> &middot; <a href="../excel-dates/">Даты в Excel</a> &middot; <a href="../pandas-groupby/">панды группируются</a> &middot; <a href="../review-ai-data-cleaning/">Просмотр сценария очистки</a> &middot; <a href="../../python/">Комплект Python</a>
+    <a href="../../">← платформа для подготовки аналитиков</a> &middot; <a href="../pandas-read-csv/">pandas.read_csv</a> &middot; <a href="../sql-dates/">даты в SQL</a> &middot; <a href="../excel-dates/">Даты в Excel</a> &middot; <a href="../pandas-groupby/">pandas.groupby</a> &middot; <a href="../review-ai-data-cleaning/">Просмотр сценария очистки</a> &middot; <a href="../../python/">Курс Python</a>
     <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
     <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Контакт</a> &middot; <a href="../../privacy.html">Конфиденциальность</a> &middot; <a href="../../terms.html">Условия</a></p>
   </footer>

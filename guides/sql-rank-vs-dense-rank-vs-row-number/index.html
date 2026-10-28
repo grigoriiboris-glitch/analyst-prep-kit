@@ -31,7 +31,7 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>RANK, DENSE_RANK и ROW_NUMBER в SQL — комплект подготовки аналитика</title>
+<title>RANK, DENSE_RANK и ROW_NUMBER в SQL — платформа для подготовки аналитиков</title>
 <meta name="description" content="Три функции ранжирования различаются только тем, как они обрабатывают ничью. Вот одна таблица, которая это показывает, вопрос, на который каждая из них отвечает, и одни и те же первые три, возвращающие 6, 8 или 10 строк в зависимости от того, что вы выберете.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-rank-vs-dense-rank-vs-row-number/">
 <meta property="og:title" content="RANK против DENSE_RANK против ROW_NUMBER в SQL">
@@ -161,7 +161,7 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-комплект</a></p>
+  <p class="crumb"><a href="../../">← Все курсы</a> · <a href="../../sql/">Курс SQL</a></p>
   <h1>RANK против DENSE_RANK против ROW_NUMBER в SQL</h1>
   <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Каждый запрос на этой странице был выполнен до его публикации.</p>
 
@@ -313,7 +313,7 @@ ORDER BY region, deals DESC;</code></pre>
   <p><strong>NULL нужно указать, где сидеть.</strong>  Представитель с  <code>NULL</code>  сделки все еще получают номер. SQLite и MySQL лечат  <code>NULL</code>    как наименьшее значение, поэтому при сортировке по убыванию оно ставится последним. PostgreSQL и Оракул считают его самым большим, поэтому та же сортировка по убыванию ставит его на первое место в таблице лидеров. Скажи, что ты хочешь с    <code>ORDER BY deals DESC NULLS LAST</code>  где ваш движок поддерживает это, вместо того, чтобы наследовать значение по умолчанию, которое меняется, когда это делает база данных.</p>
   <p><strong><code>PARTITION BY</code>  является необязательным.  <code>ORDER BY</code>  нет.</strong>  Пропустить  <code>PARTITION BY</code>  и вы ранжируете всю таблицу, а это зачастую именно то, что вам нужно. Пропустить  <code>ORDER BY</code>  и цифры ничего не значат, потому что ничто не решает, что означает первое.</p>
   <p><strong>Еще двое в одной семье.</strong> <code>NTILE(4)</code>  разбивает отсортированные строки на четыре сегмента и помечает каждую строку соответствующим сегментом, таким образом строятся квартили.  <code>PERCENT_RANK()</code>  дает место в виде дроби от 0 до 1, что вам нужно, когда две группы имеют разные размеры и необработанное место не может сравниваться.</p>
-  <p><strong>Поддержка сейчас универсальна, но не древняя.</strong>    Функции ранжирования появились в SQL-сервер 2005, PostgreSQL 8.4, MySQL 8.0 и SQLite 3.25. Если    <code>ROW_NUMBER</code>  выдает синтаксическую ошибку, проверьте версию, прежде чем проверять синтаксис.</p>
+  <p><strong>Поддержка сейчас универсальна, но не древняя.</strong>        Функции ранжирования появились в SQL Server 2005, PostgreSQL 8.4, MySQL 8.0 и SQLite 3.25. Если        <code>ROW_NUMBER</code>  выдает синтаксическую ошибку, проверьте версию, прежде чем проверять синтаксис.</p>
 
   <h2>Почему числа ведут себя таким образом</h2>
   <p>Три функции — это не три версии одной идеи. Они считают три разные вещи, и названия говорят, какие именно.</p>
@@ -357,14 +357,14 @@ ORDER BY region, deals DESC;</code></pre>
 
   <div class="cta">
     <strong>Введите их самостоятельно, по одному.</strong>
-    <p style="margin:6px 0 0">тот <a href="../../sql/">SQL-комплект</a>  охватывает SELECT, WHERE, JOIN и GROUP BY с отработанными примерами, практикой и пробным экзаменом, и все это в браузере. Более широкое семейство оконных функций, включая текущие итоги и  <code>LAG</code>, находится в  <a href="../sql-window-functions/">Оконные функции SQL</a>.</p>
+    <p style="margin:6px 0 0">тот <a href="../../sql/">Курс SQL</a>  охватывает SELECT, WHERE, JOIN и GROUP BY с отработанными примерами, практикой и пробным экзаменом, и все это в браузере. Более широкое семейство оконных функций, включая текущие итоги и  <code>LAG</code>, находится в  <a href="../sql-window-functions/">Оконные функции SQL</a>.</p>
     <a class="btn" href="../../sql/">Откройте набор SQL →</a>
-    <p style="margin:10px 0 0;font-size:15px">Или получите повторения:  <a href="../../drill/">открыть SQL-детализация</a>  и вводите по одному исполняемому запросу за раз.</p>
+    <p style="margin:10px 0 0;font-size:15px">Или получите повторения:  <a href="../../drill/">открыть SQL-практикум</a>  и вводите по одному исполняемому запросу за раз.</p>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql-window-functions/">Оконные функции</a> · <a href="../sql-ctes/">SQL CTE</a> · <a href="../sql-find-duplicates/">Найти повторяющиеся строки</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-null/">NULL в SQL</a> · <a href="../sql-subqueries/">SQL-подзапросы</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../../drill/">SQL-детализация</a> · <a href="../../sql/">SQL-комплект</a>
+    <a href="../../">← платформа для подготовки аналитиков</a> &middot; <a href="../sql-window-functions/">Оконные функции</a> · <a href="../sql-ctes/">SQL CTE</a> · <a href="../sql-find-duplicates/">Найти повторяющиеся строки</a> · <a href="../sql-group-by-having/">GROUP BY и HAVING</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-null/">NULL в SQL</a> · <a href="../sql-subqueries/">SQL-подзапросы</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../../drill/">SQL-практикум</a> · <a href="../../sql/">Курс SQL</a>
     <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
     <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Контакт</a> · <a href="../../privacy.html">Конфиденциальность</a> · <a href="../../terms.html">Условия</a></p>
   </footer>

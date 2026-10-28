@@ -31,7 +31,7 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LIKE в SQL: подстановочные знаки и сопоставление с образцом, для начинающих — комплект подготовки аналитика</title>
+<title>LIKE в SQL: подстановочные знаки и сопоставление с образцом, для начинающих — платформа для подготовки аналитиков</title>
 <meta name="description" content="Руководство для начинающих по SQL LIKE: что делают подстановочные знаки % и _, как перемещение подстановочного знака меняет вопрос, чувствительность к регистру в зависимости от базы данных, ловушка чрезмерного совпадения, NOT LIKE, экранирование буквального знака процента и почему LIKE '%Текст%' работает медленно.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-like-pattern-matching/">
 <meta property="og:title" content="LIKE в SQL, объяснение для начинающих">
@@ -127,7 +127,7 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../../sql/">SQL-комплект</a></p>
+  <p class="crumb"><a href="../../">← Все курсы</a> &middot; <a href="../../sql/">Курс SQL</a></p>
   <h1>LIKE в SQL: сопоставление с образцом для начинающих</h1>
   <p class="meta">Инструмент для поиска внутри текстового столбца, а не просто сопоставления с ним. · Часть  <a href="../../">Analyst Prep Kit</a></p>
   <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">К <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Обновлено  <time datetime="2026-08-19">19 августа 2026 г.</time></p>
@@ -211,7 +211,7 @@ WHERE name NOT LIKE '%Shirt%';</code></pre>
     <tr><td>SQLite</td><td>Нет для простых букв от A до Z, да для букв с акцентом и неанглийских букв.</td><td>Уже нечувствителен к А-Я</td></tr>
     <tr><td>PostgreSQL</td><td>Да</td><td> Использовать  <code>ILIKE</code></td></tr>
     <tr><td>MySQL</td><td>Зависит от параметров сортировки столбцов, обычно нет</td><td>Обычно уже нечувствителен</td></tr>
-    <tr><td>SQL-сервер</td><td>Зависит от сортировки, обычно нет</td><td>Обычно уже нечувствителен</td></tr>
+    <tr><td>SQL Server</td><td>Зависит от сортировки, обычно нет</td><td>Обычно уже нечувствителен</td></tr>
   </table>
   <p>Переносной ход, если вы хотите, чтобы везде был один и тот же ответ, — это сгладить обе стороны самостоятельно:</p>
   <pre><code>SELECT name
@@ -248,7 +248,7 @@ WHERE genres LIKE '%RPG%';</code></pre>
   <pre><code>SELECT name
 FROM games
 WHERE ',' || genres || ',' LIKE '%,RPG,%';</code></pre>
-  <p>тот <code>||</code>  склеивает текст вместе, поэтому  <code>Action,Indie,RPG</code>  временно становится  <code>,Action,Indie,RPG,</code>. Теперь каждый тег имеет запятую с обеих сторон, включая первую и последнюю, а также шаблон  <code>'%,RPG,%'</code>  может соответствовать только целому тегу. Жанр под названием  <code>RPGMaker</code>  больше не будет ложным попаданием. Использовать  <code>CONCAT(',', genres, ',')</code>  вместо  <code>||</code>    в MySQL и SQL-сервер.</p>
+  <p>тот <code>||</code>  склеивает текст вместе, поэтому  <code>Action,Indie,RPG</code>  временно становится  <code>,Action,Indie,RPG,</code>. Теперь каждый тег имеет запятую с обеих сторон, включая первую и последнюю, а также шаблон  <code>'%,RPG,%'</code>  может соответствовать только целому тегу. Жанр под названием  <code>RPGMaker</code>  больше не будет ложным попаданием. Использовать  <code>CONCAT(',', genres, ',')</code>  вместо  <code>||</code>        в MySQL и SQL Server.</p>
   <p>Такая форма столбца вызывает больше проблем, чем просто поиск, включая отдельные подсчеты, которые возвращаются неправильно и никогда об этом не говорят.  <a href="../sql-multi-value-column/">Одна ячейка, много значений</a>  охватывает всю проблему.</p>
 
   <h2>Соответствие буквальному % или _</h2>
@@ -296,14 +296,14 @@ WHERE note LIKE '%!%%' ESCAPE '!';</code></pre>
 
   <div class="cta">
     <strong>Сделайте WHERE, GROUP BY, JOIN и все остальное привычным.</strong>
-    <p style="margin:6px 0 0">тот <a href="../../sql/">SQL-комплект</a>    обучает основам аналитического SQL на рабочих примерах, интерактивной лаборатории JOIN и Агрегация, которую вы запускаете в браузере, флэш-карточках и пробном экзамене. Нечего устанавливать.</p>
+    <p style="margin:6px 0 0">тот <a href="../../sql/">Курс SQL</a>    обучает основам аналитического SQL на рабочих примерах, интерактивной лаборатории JOIN и Агрегация, которую вы запускаете в браузере, флэш-карточках и пробном экзамене. Нечего устанавливать.</p>
     <a class="btn" href="../../sql/">Откройте набор SQL →</a>
-      <p style="margin:10px 0 0;font-size:15px">Или приступайте к делу и учитесь, написав запросы:  <a href="../../drill/">открыть SQL-детализация</a>, тринадцать запросов, каждый из которых добавляет что-то одно к последнему.</p>
+      <p style="margin:10px 0 0;font-size:15px">Или приступайте к делу и учитесь, написав запросы:  <a href="../../drill/">открыть SQL-практикум</a>, тринадцать запросов, каждый из которых добавляет что-то одно к последнему.</p>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql-foundations/">Основы SQL</a> &middot; <a href="../sql-like-pattern-matching/">НРАВИТСЯ и подстановочные знаки</a> &middot; <a href="../sql-multi-value-column/">Одна ячейка, много значений</a> &middot; <a href="../sql-count-function/">СЧЕТ в SQL</a> &middot; <a href="../sql-null/">NULL в SQL</a> &middot; <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> &middot; <a href="../sql-ctes/">SQL CTE</a> &middot; <a href="../sql-window-functions/">Оконные функции</a> &middot; <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> &middot; <a href="../sql-case-expression/">Выражение CASE</a> &middot; <a href="../sql-find-duplicates/">Найти дубликаты</a> &middot; <a href="../sql-indexing-for-analysts/">Индексирование для аналитиков</a> &middot; <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> &middot; <a href="../documenting-data-limitations/">Документирование ограничений</a> &middot; <a href="../entity-resolution/">Разрешение объекта</a> &middot; <a href="../sql-teaching-comments/">Комментирование SQL</a> &middot; <a href="../../drill/">SQL-детализация</a> &middot; <a href="../../sql/">SQL-комплект</a> &middot; <a href="../../projects/">Портфельные проекты</a>
+    <a href="../../">← платформа для подготовки аналитиков</a> &middot; <a href="../sql-foundations/">Основы SQL</a> &middot; <a href="../sql-like-pattern-matching/">НРАВИТСЯ и подстановочные знаки</a> &middot; <a href="../sql-multi-value-column/">Одна ячейка, много значений</a> &middot; <a href="../sql-count-function/">СЧЕТ в SQL</a> &middot; <a href="../sql-null/">NULL в SQL</a> &middot; <a href="../sql-group-by-having/">GROUP BY и HAVING</a> &middot; <a href="../sql-ctes/">SQL CTE</a> &middot; <a href="../sql-window-functions/">Оконные функции</a> &middot; <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> &middot; <a href="../sql-case-expression/">Выражение CASE</a> &middot; <a href="../sql-find-duplicates/">Найти дубликаты</a> &middot; <a href="../sql-indexing-for-analysts/">Индексирование для аналитиков</a> &middot; <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> &middot; <a href="../documenting-data-limitations/">Документирование ограничений</a> &middot; <a href="../entity-resolution/">Разрешение объекта</a> &middot; <a href="../sql-teaching-comments/">Комментирование SQL</a> &middot; <a href="../../drill/">SQL-практикум</a> &middot; <a href="../../sql/">Курс SQL</a> &middot; <a href="../../projects/">Портфельные проекты</a>
 
     <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Контакт</a> &middot; <a href="../../privacy.html">Конфиденциальность</a> &middot; <a href="../../terms.html">Условия</a></p>
   </footer>
