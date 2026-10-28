@@ -10,7 +10,8 @@ const htmlFiles = [
   "portfolio-projects/index.html",
   "decision-making/index.html",
   "business-analysis/index.html",
-  "datacraft/index.html"
+  "datacraft/index.html",
+  "postgresql/index.html"
 ];
 const requiredRoutes = [
   "foundations/",
@@ -18,7 +19,8 @@ const requiredRoutes = [
   "portfolio-projects/",
   "decision-making/",
   "business-analysis/",
-  "datacraft/"
+  "datacraft/",
+  "postgresql/"
 ];
 
 for (const file of htmlFiles) {
@@ -243,7 +245,7 @@ console.log("OK: Quiet Valley builder, study-coin purchases, place/move/rotate/s
 const lessonCatalog = fs.readFileSync(path.join(root, "datacraft/lesson-catalog.js"), "utf8");
 new Function(lessonCatalog);
 const catalogMatches = [
-  ["foundations", 8], ["quality", 5], ["sql", 48], ["excel", 51],
+  ["foundations", 8], ["quality", 5], ["sql", 48], ["postgresql", 30], ["excel", 51],
   ["python", 42], ["powerbi", 39], ["stats", 16], ["tableau", 32],
   ["charts", 13], ["forecasting", 13], ["decision", 6], ["interview", 16],
   ["portfolio", 3], ["simulator", 10], ["final", 7], ["projectStudio", 4]
@@ -303,4 +305,61 @@ assert.ok(staticRussianAudit.includes('data-static-ru') && staticRussianAudit.in
   "Static Russian HTML audit must verify document language and static marker");
 assert.ok(fs.readFileSync(path.join(root, "README.md"), "utf8").includes("RUN_RU.md"), "README must link to setup guide");
 assert.ok(fs.readFileSync(path.join(root, "RUN_RU.md"), "utf8").includes("Ubuntu Linux"), "Setup guide must cover Ubuntu");
+
+const postgresqlPage = fs.readFileSync(path.join(root, "postgresql/index.html"), "utf8");
+const postgresqlApp = fs.readFileSync(path.join(root, "postgresql/app.js"), "utf8");
+const postgresqlData = fs.readFileSync(path.join(root, "postgresql/course-data.js"), "utf8");
+const postgresqlSeed = fs.readFileSync(path.join(root, "postgresql/seed.sql"), "utf8");
+assert.ok(postgresqlPage.includes('<html lang="ru" data-static-ru="true"') || /<html[^>]*lang="ru"[^>]*data-static-ru="true"/.test(postgresqlPage),
+  "PostgreSQL course must be Russian-first and marked as statically translated");
+assert.ok(postgresqlPage.includes('href="../sql/"'), "PostgreSQL course must link back to SQL");
+assert.ok(postgresqlPage.includes('src="../assets/supabase_auth_sync.js?v=3"'), "PostgreSQL progress must use shared account sync");
+assert.ok(postgresqlPage.includes('src="../assets/ai-context-copy.js"') && postgresqlPage.includes('src="app.js"'),
+  "PostgreSQL course must load the AI context action and lesson app");
+for (const table of ["customers", "products", "orders", "order_items", "payments", "page_events", "support_tickets"]) {
+  assert.ok(postgresqlSeed.includes("CREATE TABLE " + table + " "), "PostgreSQL practice table missing: " + table);
+}
+assert.ok(postgresqlApp.includes("apk-postgresql-progress-v1") && postgresqlApp.includes("apk-postgresql-drafts-v1"),
+  "PostgreSQL progress and local draft persistence missing");
+assert.ok(postgresqlApp.includes("import(PGLITE_URL)") && postgresqlApp.includes("guardedSQL"),
+  "PostgreSQL sandbox lazy loading or SQL command guard missing");
+new Function(postgresqlApp);
+new Function(postgresqlData);
+assert.ok(postgresqlData.includes("window.PostgreSQLLessons") && (postgresqlData.match(/"id":/g) || []).length === 30,
+  "PostgreSQL must have 30 structured lessons");
+const sqlMermaid = fs.readFileSync(path.join(root, "assets/sql-mermaid.js"), "utf8");
+new Function(sqlMermaid);
+assert.ok(sqlMermaid.includes("panelHTML") && sqlMermaid.includes("diagramSource") && sqlMermaid.includes("render"),
+  "SQL lesson diagram renderer exports are missing");
+assert.ok(fs.readFileSync(path.join(root, "sql/index.html"), "utf8").includes('src="../assets/sql-mermaid.js?v=1"'),
+  "SQL course must load the diagram renderer");
+assert.ok(fs.existsSync(path.join(root, "tests/sql-mermaid.test.js")), "SQL Mermaid tests are missing");
+assert.ok(fs.existsSync(path.join(root, "tests/postgresql-module.test.js")), "PostgreSQL tests are missing");
+assert.ok(fs.existsSync(path.join(root, "tests/ai-context-copy.test.js")) &&
+  fs.existsSync(path.join(root, "tests/ai-context-and-learning-order.test.js")),
+  "AI context and learning-order regression tests are missing");
+const aiContext = fs.readFileSync(path.join(root, "assets/ai-context-copy.js"), "utf8");
+const learningOrder = fs.readFileSync(path.join(root, "assets/learning-order.js"), "utf8");
+new Function(aiContext);
+new Function(learningOrder);
+assert.ok(aiContext.includes("apk-ai-context-button") && aiContext.includes("data-lesson-title"),
+  "AI lesson context helper must support reusable lesson metadata");
+assert.ok(learningOrder.includes("var STEPS") && learningOrder.includes("postgresql") && learningOrder.includes("18"),
+  "Recommended 18-step learning order is missing");
+const homepageIntegrated = fs.readFileSync(path.join(root, "index.html"), "utf8");
+assert.ok(homepageIntegrated.includes('class="lesson-plan-cta" href="datacraft/"') &&
+  homepageIntegrated.includes("Перейти к плану уроков"), "DataCraft homepage shortcut is missing");
+assert.ok(homepageIntegrated.includes("kariernik.ru/blog/git-dlya-analitika") &&
+  homepageIntegrated.includes("Git для аналитика"), "Git for analysts resource is missing");
+assert.ok(homepageIntegrated.includes('class="premium-chip"') &&
+  homepageIntegrated.includes("Премиум-доступ"), "Premium access badge is missing");
+const dataCraftMap = fs.readFileSync(path.join(root, "datacraft/curriculum-map.js"), "utf8");
+assert.ok(dataCraftMap.includes("RECOMMENDED_ORDER") && dataCraftMap.includes("{id:'postgresql',spriteIdx:2") &&
+  dataCraftMap.includes("case 'postgresql'"), "DataCraft PostgreSQL node and recommended sequence are missing");
+assert.ok(!/высота=|табиндекс=|роль=|ария-метка=|<класс|<тип кнопки=|<я стиль=|<диапазона=/i.test(dataCraftMap),
+  "DataCraft map markup contains translated HTML tags or attributes");
+assert.ok(fs.readFileSync(path.join(root, "assets/datacraft-economy.js"), "utf8").includes("apk-postgresql-progress-v1") &&
+  fs.readFileSync(path.join(root, "assets/progress-state.js"), "utf8").includes("postgresql-v1"),
+  "PostgreSQL progress must integrate with the shared wallet and sync state");
+
 console.log("OK: course content, exports, static Russian-only pages, and Windows/Ubuntu instructions");

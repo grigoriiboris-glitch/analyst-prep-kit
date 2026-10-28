@@ -1,5 +1,157 @@
 /* Lesson outlines extracted from the actual Analyst Prep Kit modules. */
 window.DataCraftLessonCatalog = {
+  "postgresql": [
+    {
+      "id": "1",
+      "title": "Что такое PostgreSQL и чем он отличается от SQL",
+      "unit": "0 · Старт"
+    },
+    {
+      "id": "2",
+      "title": "База, схема, таблица и search_path",
+      "unit": "0 · Старт"
+    },
+    {
+      "id": "3",
+      "title": "SELECT, FROM и псевдонимы",
+      "unit": "1 · Запросы и фильтрация"
+    },
+    {
+      "id": "4",
+      "title": "WHERE и логика условий",
+      "unit": "1 · Запросы и фильтрация"
+    },
+    {
+      "id": "5",
+      "title": "NULL, COALESCE и IS DISTINCT FROM",
+      "unit": "1 · Запросы и фильтрация"
+    },
+    {
+      "id": "6",
+      "title": "Поиск по тексту: LIKE, ILIKE и регулярные выражения",
+      "unit": "1 · Запросы и фильтрация"
+    },
+    {
+      "id": "7",
+      "title": "ORDER BY, LIMIT и правильная пагинация",
+      "unit": "1 · Запросы и фильтрация"
+    },
+    {
+      "id": "8",
+      "title": "Типы данных и явное приведение",
+      "unit": "2 · Типы и время"
+    },
+    {
+      "id": "9",
+      "title": "DATE, timestamp и часовые пояса",
+      "unit": "2 · Типы и время"
+    },
+    {
+      "id": "10",
+      "title": "COUNT, SUM, AVG и FILTER",
+      "unit": "3 · Агрегации"
+    },
+    {
+      "id": "11",
+      "title": "GROUP BY, HAVING и уровень детализации",
+      "unit": "3 · Агрегации"
+    },
+    {
+      "id": "12",
+      "title": "JOIN и кардинальность связей",
+      "unit": "4 · Связи и сложные запросы"
+    },
+    {
+      "id": "13",
+      "title": "EXISTS и проверка наличия связанных строк",
+      "unit": "4 · Связи и сложные запросы"
+    },
+    {
+      "id": "14",
+      "title": "Подзапросы, NOT EXISTS и ловушка NOT IN",
+      "unit": "4 · Связи и сложные запросы"
+    },
+    {
+      "id": "15",
+      "title": "CTE: WITH как имя промежуточного результата",
+      "unit": "4 · Связи и сложные запросы"
+    },
+    {
+      "id": "16",
+      "title": "Рекурсивный CTE",
+      "unit": "4 · Связи и сложные запросы"
+    },
+    {
+      "id": "17",
+      "title": "Оконные функции: ROW_NUMBER, RANK, LAG",
+      "unit": "4 · Связи и сложные запросы"
+    },
+    {
+      "id": "18",
+      "title": "UNION, UNION ALL, INTERSECT и EXCEPT",
+      "unit": "4 · Связи и сложные запросы"
+    },
+    {
+      "id": "19",
+      "title": "CREATE TABLE, ограничения и идентификаторы",
+      "unit": "5 · Модель данных и изменения"
+    },
+    {
+      "id": "20",
+      "title": "INSERT, UPDATE, DELETE и RETURNING",
+      "unit": "5 · Модель данных и изменения"
+    },
+    {
+      "id": "21",
+      "title": "UPSERT: INSERT ... ON CONFLICT",
+      "unit": "5 · Модель данных и изменения"
+    },
+    {
+      "id": "22",
+      "title": "Транзакции, COMMIT, ROLLBACK и SAVEPOINT",
+      "unit": "5 · Модель данных и изменения"
+    },
+    {
+      "id": "23",
+      "title": "JSON и JSONB",
+      "unit": "6 · Возможности PostgreSQL"
+    },
+    {
+      "id": "24",
+      "title": "Массивы, ANY и unnest",
+      "unit": "6 · Возможности PostgreSQL"
+    },
+    {
+      "id": "25",
+      "title": "DISTINCT ON: PostgreSQL-способ выбрать последнюю строку",
+      "unit": "6 · Возможности PostgreSQL"
+    },
+    {
+      "id": "26",
+      "title": "Индексы: B-tree, составные, частичные и GIN",
+      "unit": "6 · Возможности PostgreSQL"
+    },
+    {
+      "id": "27",
+      "title": "EXPLAIN и EXPLAIN ANALYZE",
+      "unit": "6 · Возможности PostgreSQL"
+    },
+    {
+      "id": "28",
+      "title": "Полнотекстовый поиск",
+      "unit": "6 · Возможности PostgreSQL"
+    },
+    {
+      "id": "29",
+      "title": "Роли, GRANT, схемы и эксплуатация",
+      "unit": "7 · Рабочий процесс и безопасность"
+    },
+    {
+      "id": "30",
+      "title": "Итоговый проект: выручка интернет-магазина",
+      "unit": "8 · Итоговый кейс"
+    }
+  ],
   "sql": [
     {
       "id": "100",

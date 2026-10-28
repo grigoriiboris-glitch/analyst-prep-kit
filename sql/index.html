@@ -559,6 +559,19 @@ body.sprint-on .sc-supporting:hover{opacity:.85;transition:opacity .15s}
 .sr-meta{font:600 11px var(--mono);color:var(--muted);white-space:nowrap}
 .sr-reps{font-size:11px;color:var(--muted);opacity:.8;white-space:nowrap}
 
+.sql-mermaid-panel{margin-top:16px;overflow:hidden}
+.sql-mermaid-title{font-size:15px;font-weight:750;line-height:1.4;margin:0 0 6px;color:var(--text)}
+.sql-mermaid-intro{font-size:12.5px;line-height:1.65;color:var(--muted);margin:0 0 12px;max-width:78ch}
+.sql-mermaid-canvas{width:100%;min-width:0;overflow-x:auto;overscroll-behavior-x:contain;border:1px solid var(--border);border-radius:12px;background:var(--surf2);padding:12px 8px}
+.sql-mermaid-canvas svg{display:block;max-width:100%;height:auto;margin:0 auto}
+.sql-mermaid-source{font-size:12px;line-height:1.5;text-align:left}
+.sql-mermaid-details{margin-top:10px;font-size:12px;color:var(--muted)}
+.sql-mermaid-details summary{cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.sql-mermaid-code{margin:8px 0 0;max-height:240px;overflow:auto;padding:12px;border:1px solid var(--border);border-radius:9px;background:var(--surf2);font:12px/1.6 var(--mono);white-space:pre}
+.sql-mermaid-fallback{margin:0;padding:12px;font-size:13px;line-height:1.6;color:var(--muted)}
+.sql-mermaid-loading{margin:0;padding:14px;font-size:13px;line-height:1.6;color:var(--muted);text-align:center}
+@media(max-width:640px){.sql-mermaid-canvas{padding:8px 4px}.sql-mermaid-canvas svg{max-width:none}.sql-mermaid-code{font-size:11px}}
+
 /* FREE LAB SCHEMA — the columns, read out of the database, clickable */
 .lab-sch-head{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:9px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
 .lab-sch-head span{text-transform:none;letter-spacing:0;font-weight:500;opacity:.75}
@@ -668,6 +681,8 @@ body.sprint-on .sc-supporting:hover{opacity:.85;transition:opacity .15s}
 <div id="celebrate-overlay"></div>
 <div id="toast"></div>
 
+<script src="../assets/sql-mermaid.js?v=1"></script>
+<script src="../assets/ai-context-copy.js" defer></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
 localStorage.removeItem('apk-basics'); // Bare Basics mode removed
@@ -2455,6 +2470,7 @@ function renderLesson(id){
     ${l.story?`<div class="lesson-story"><i data-lucide="book-open"></i><span>${l.story}</span></div>`:l.prereq?`<div class="lesson-story"><i data-lucide="corner-down-right"></i><span><strong>До этого:</strong> ${l.prereq}</span></div>`:''}
     ${l.intro?`<p style="margin-bottom:20px">${l.intro}</p>`:''}
     ${ralBlockHTML(l.ral)}
+    ${SqlMermaid.panelHTML(l)}
     ${l.viz&&l.viz.show!==false?lessonResultHTML(l.viz):''}
     <div class="card" style="margin-top:16px">
       <h3><i data-lucide="lightbulb"></i>Обрати внимание</h3>
@@ -2468,6 +2484,7 @@ function renderLesson(id){
     </div>
     ${missPanelHTML(l.id)}`;
   if(window.lucide) lucide.createIcons();
+  SqlMermaid.render(document);
 }
 
 // ─── AUTO MISS CAPTURE ─────────────────────────────────────────
@@ -3583,6 +3600,7 @@ function v2SqlBody(l, done){
         <h3 style="margin:0"><i data-lucide="eye"></i>Разобранный пример</h3>
       </div>
       ${ralBlockHTML(l.ral)}
+      ${SqlMermaid.panelHTML(l)}
       ${l.viz&&l.viz.show!==false?lessonResultHTML(l.viz):''}
       ${l.chart?sqlChartHTML(l.chart):''}
       <div class="row" style="margin-top:18px;gap:10px">
@@ -3661,6 +3679,7 @@ function v2SqlBody(l, done){
     ${body}
     ${stageGuide}`;
   if(window.lucide) lucide.createIcons();
+  SqlMermaid.render(document);
 }
 
 // ─── GUIDED PATH (lesson → its drills → next lesson) ────────────────────────
