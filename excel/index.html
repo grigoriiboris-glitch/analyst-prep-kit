@@ -5166,9 +5166,12 @@ setTimeout(initAuthUI,600);
       var missN = Math.max(0, missCount() - miss0);
       var statHref = doneHref + (doneHref.indexOf('?') > -1 ? '&' : '?') + 's=' + secs + '&miss=' + missN;
       var mins = Math.max(1, Math.round(secs / 60));
-      var statLine = 'Done in ' + mins + ' minute' + (mins === 1 ? '' : 's') +
-        (missN === 0 ? ", ничего не пропало. Чистый пробег."
-                     : ', ' + missN + (missN === 1 ? ' retry' : ' retries') + " по пути.");
+      var minuteWord = mins % 10 === 1 && mins % 100 !== 11 ? 'минуту'
+        : mins % 10 >= 2 && mins % 10 <= 4 && (mins % 100 < 12 || mins % 100 > 14) ? 'минуты'
+        : 'минут';
+      var statLine = 'Выполнено за ' + mins + ' ' + minuteWord
+        + (missN === 0 ? '. Ошибок нет. Отличная работа!'
+          : '. Ошибок: ' + missN + '. Вернитесь к этим заданиям в практике.');
       var lt = lessonTitle();
       bar.href = statHref;
       bar.textContent = "✓ Шаг выполнен. Вернуться к вашему плану";
