@@ -262,6 +262,7 @@ test("DAX explanations do not translate functions or identifiers into broken cod
   assert.ok(!powerbi.includes("СУММА суммирует"));
   assert.ok(powerbi.includes("DIVIDE([Sales] - [Previous Month Sales], [Previous Month Sales])"));
   assert.ok(powerbi.includes("DATEADD"));
+  assert.ok(powerbi.includes("SUM суммирует значения, COUNT подсчитывает их, а AVERAGE вычисляет среднее"));
 });
 
 
