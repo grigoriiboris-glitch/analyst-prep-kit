@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import fs from "node:fs";
 import { applyEditorialCorrections } from "../tools/russian-editorial-copy.mjs";
 
 test("repairs common mistranslations of product and database names", () => {
@@ -33,4 +34,9 @@ test("editorial corrections are stable when localization is rebuilt", () => {
   const copy = "Мощность БИ · УПСЕРТ: ВСТАВЬТЕ... О КОНФЛИКТЕ · Массивы, ANY и пожалуйста";
   const once = applyEditorialCorrections(copy);
   assert.equal(applyEditorialCorrections(once), once);
+});
+
+test("keeps Mermaid syntax and styling source out of automatic translation", () => {
+  const translator = fs.readFileSync(new URL("../tools/static-russian-translation.mjs", import.meta.url), "utf8");
+  assert.match(translator, /assets\\/sql-mermaid\\.js/);
 });
