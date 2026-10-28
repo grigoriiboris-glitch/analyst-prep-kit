@@ -137,7 +137,7 @@ function pumpTranslationQueue() {
     });
   }
 }
-async function translateOne(item) {
+async function translateOne(item, recordFailure = true) {
   let lastError = "Ответ переводчика не распознан";
   for (let attempt = 0; attempt < 4; attempt++) {
     try {
@@ -166,7 +166,7 @@ async function translateOne(item) {
       if (attempt < 3) await sleep(400 * (2 ** attempt));
     }
   }
-  failures.push({ text: item.src.slice(0, 120), error: lastError });
+  if (recordFailure) failures.push({ text: item.src.slice(0, 120), error: lastError });
   return null;
 }
 async function translateBatch(batch) {
@@ -177,7 +177,7 @@ async function translateBatch(batch) {
     const separator = "\nZXQZAPKSEPARATOR9471QXZ\n";
     const merged = batch.map(item => item.src).join(separator);
     const mergedItem = { src: merged };
-    const combined = await translateOne(mergedItem);
+    const combined = await translateOne(mergedItem, false);
     if (combined) {
       const pieces = combined.split(separator);
       if (pieces.length === batch.length && pieces.every(piece => piece.trim())) {
