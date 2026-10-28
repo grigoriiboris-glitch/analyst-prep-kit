@@ -714,7 +714,9 @@ async function processHtml(file, original) {
     if (node.content) await walk(node.content, skipHere);
   }
   await walk(document);
-  if (!replacements.length) return source;
+  if (!replacements.length) {
+    return file === "index.html" ? source.replaceAll(homeBrandToken, "Grain") : source;
+  }
   replacements.sort((a, b) => b.start - a.start);
   let result = source;
   let lastStart = Infinity;
