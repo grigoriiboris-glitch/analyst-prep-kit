@@ -11,6 +11,7 @@ import path from "node:path";
 import { parse } from "parse5";
 import * as acorn from "acorn";
 import markupGuard from "./static-russian-markup-guard.cjs";
+import { applyEditorialCorrections } from "./russian-editorial-copy.mjs";
 const { containsHtmlMarkup, shouldPreserveHtmlAttributeFragment } = markupGuard;
 
 const ROOT = process.cwd();
@@ -19,7 +20,7 @@ const OMIT_DIRS = new Set([".git", ".github", "node_modules", "tools", "tests"])
 // The DataCraft map renderer builds HTML from concatenated JS string fragments.
 // Its visible UI copy is already Russian; keep the authored markup untouched so
 // static translation cannot rename attributes such as height/tabindex/aria-label.
-const OMIT_FILES = new Set(["assets/ru-localization.js", "assets/ru-localization-boot.js", "datacraft/curriculum-map.js"]);
+const OMIT_FILES = new Set(["assets/ru-localization.js", "assets/ru-localization-boot.js", "assets/sql-mermaid.js", "datacraft/curriculum-map.js"]);
 const SKIP_TAGS = new Set(["script", "style", "pre", "code", "kbd", "samp", "svg", "canvas", "iframe"]);
 const SKIP_CLASSES = new Set(["code-block", "code-sample", "code-snippet", "code-example", "formula-code", "ral-code", "ral-note-chunk", "terminal-editor"]);
 const HUMAN_KEYS = new Set([
@@ -40,7 +41,9 @@ const HUMAN_KEYS = new Set([
   "signals", "categories", "tasks", "left", "right", "terms", "definitions",
   "businessQuestion", "businessContext", "deliverables", "metricDescription", "feedbackText",
   "headline", "name", "articleBody", "articleSection", "alternativeHeadline", "abstract",
-  "keywords", "disambiguatingDescription", "byline", "publisher", "author"
+  "keywords", "disambiguatingDescription", "byline", "publisher", "author",
+  "story", "say", "sub", "lines", "close", "compare", "unlock", "q", "opts", "exp",
+  "is", "use", "like", "slot", "setup", "walkthrough", "takeaways"
 ].map(x => x.toLowerCase()));
 const VISIBLE_PROPERTIES = new Set([
   "textContent", "innerText", "innerHTML", "outerHTML", "placeholder", "title",
@@ -98,7 +101,7 @@ const MANUAL_TRANSLATIONS = new Map([
   ["Continue with Google", "Продолжить с Google"], ["Create Account", "Создать аккаунт"],
   ["Home", "Главная"], ["Lessons", "Уроки"], ["Guides", "Руководства"],
   ["Practice", "Практика"], ["Workspace", "Рабочая область"], ["Cards", "Карточки"],
-  ["Glossary", "Глоссарий"], ["Line", "Линия"], ["Scatter", "Точечная"],
+  ["Glossary", "Глоссарий"], ["Line", "Линейная диаграмма"], ["Scatter", "Точечная диаграмма"],
   ["Save", "Сохранить"], ["Export", "Экспортировать"], ["Download", "Скачать"],
   ["Back", "Назад"], ["Next", "Далее"], ["Skip", "Пропустить"], ["Hint", "Подсказка"],
   ["Show answer", "Показать ответ"], ["Check answer", "Проверить ответ"],
@@ -483,13 +486,20 @@ async function translateVisibleString(value, context = null, htmlText = false) {
   if (/^<\/?[A-Za-z][^>]*$/.test(trimmedSource) && !trimmedSource.endsWith(">")) return value;
   // HTML fragments are parsed first so that only their visible text is translated.
   if (/<\/?[A-Za-z][^>]*>/.test(source)) return translateMarkup(source);
+  if (isCodeLike(source.trim())) return value;
+  const correctedSource = applyEditorialCorrections(source);
+  if (correctedSource !== source && !/[A-Za-z]/.test(correctedSource)) {
+    return preserveWhitespace(source, correctedSource);
+  }
   const manualKey = normalize(source);
   if (MANUAL_TRANSLATIONS.has(manualKey)) {
-    return preserveWhitespace(source, MANUAL_TRANSLATIONS.get(manualKey));
+    return applyEditorialCorrections(preserveWhitespace(source, MANUAL_TRANSLATIONS.get(manualKey)));
   }
-  if (!candidate(source, context, htmlText)) return value;
-  if (/[А-Яа-яЁё]/.test(source) && /[A-Za-z]/.test(source)) return translateMixedSegments(source);
-  return translateText(source);
+  if (!candidate(source, context, htmlText)) return correctedSource;
+  if (/[А-Яа-яЁё]/.test(source) && /[A-Za-z]/.test(source)) {
+    return applyEditorialCorrections(await translateMixedSegments(source));
+  }
+  return applyEditorialCorrections(await translateText(source));
 }
 
 async function translateHtmlTemplateFragment(fragment, state) {
@@ -636,7 +646,8 @@ async function translateJavaScript(source, filename) {
       const hasManualTranslation = Boolean(context) && MANUAL_TRANSLATIONS.has(normalize(node.value));
       const hasHtmlFragment = /<\/?[A-Za-z][^>]*>/.test(node.value);
       const isSentence = candidate(node.value, null, false);
-      if (isHuman || isSentence || hasManualTranslation || hasHtmlFragment) {
+      const hasEditorialCorrection = !isCodeLike(node.value) && applyEditorialCorrections(node.value) !== node.value;
+      if (isHuman || isSentence || hasManualTranslation || hasHtmlFragment || hasEditorialCorrection) {
         const original = node.value;
         const translated = await translateVisibleString(original, isHuman || hasManualTranslation ? (context || "visible") : null, isHuman);
         if (translated !== original) replacements.push({ start: node.start, end: node.end, value: JSON.stringify(translated) });
@@ -658,7 +669,8 @@ async function translateJavaScript(source, filename) {
           const original = quasi.value.cooked ?? quasi.value.raw;
           const hasManualTranslation = Boolean(context) && MANUAL_TRANSLATIONS.has(normalize(original));
           const isSentence = candidate(original, null, false);
-          if (!isHuman && !hasManualTranslation && !isSentence) continue;
+          const hasEditorialCorrection = !isCodeLike(original) && applyEditorialCorrections(original) !== original;
+          if (!isHuman && !hasManualTranslation && !isSentence && !hasEditorialCorrection) continue;
           const translated = await translateVisibleString(original, isHuman || hasManualTranslation ? (context || "visible") : null);
           if (translated !== original) replacements.push({ start: quasi.start, end: quasi.end, value: escapeTemplateQuasi(translated) });
         }
@@ -794,7 +806,7 @@ async function processHtml(file, original) {
         const inputButton = tag === "input" && normalizedName === "value" && /^(?:button|submit|reset)$/i.test(attrByName.get("type") || "");
         if (!(visibleAttr || metaText || inputButton)) continue;
         const current = attrByName.get(normalizedName);
-        if (!current || !candidate(current, "attribute")) continue;
+        if (!current || (!candidate(current, "attribute") && applyEditorialCorrections(current) === current)) continue;
         const translated = await translateVisibleString(current, "attribute");
         if (translated === current) continue;
         const rawAttr = source.slice(rawLoc.startOffset, rawLoc.endOffset);
@@ -809,7 +821,7 @@ async function processHtml(file, original) {
     if (!skipHere && node.nodeName === "#text" && node.sourceCodeLocation) {
       const raw = source.slice(node.sourceCodeLocation.startOffset, node.sourceCodeLocation.endOffset);
       const decoded = node.value || htmlEntitiesToText(raw);
-      if (candidate(decoded, null, true)) {
+      if (candidate(decoded, null, true) || applyEditorialCorrections(decoded) !== decoded) {
         const translated = await translateVisibleString(decoded, null, true);
         if (translated !== decoded) {
           const preserved = preserveWhitespace(decoded, translated);

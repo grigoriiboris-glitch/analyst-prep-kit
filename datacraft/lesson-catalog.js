@@ -8,7 +8,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "2",
-      "title": "База, схема, таблица и путь_поиска",
+      "title": "База данных, схема, таблица и search_path",
       "unit": "0 · Старт"
     },
     {
@@ -103,7 +103,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "21",
-      "title": "УПСЕРТ: ВСТАВЬТЕ... О КОНФЛИКТЕ",
+      "title": "INSERT ... ON CONFLICT: вставка с обработкой конфликта",
       "unit": "5 · Модель данных и изменения"
     },
     {
@@ -118,7 +118,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "24",
-      "title": "Массивы, ANY и пожалуйста",
+      "title": "Массивы, ANY и ALL",
       "unit": "6 · Возможности PostgreSQL"
     },
     {
@@ -886,7 +886,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "1",
-      "title": "Интерфейс — Мощность БИ.",
+      "title": "Интерфейс Power BI",
       "unit": "Раздел 1: Интерфейс и данные"
     },
     {
