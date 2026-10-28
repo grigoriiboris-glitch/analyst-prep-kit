@@ -41,7 +41,9 @@ const HUMAN_KEYS = new Set([
   "signals", "categories", "tasks", "left", "right", "terms", "definitions",
   "businessQuestion", "businessContext", "deliverables", "metricDescription", "feedbackText",
   "headline", "name", "articleBody", "articleSection", "alternativeHeadline", "abstract",
-  "keywords", "disambiguatingDescription", "byline", "publisher", "author"
+  "keywords", "disambiguatingDescription", "byline", "publisher", "author",
+  "story", "say", "sub", "lines", "close", "compare", "unlock", "q", "opts", "exp",
+  "is", "use", "like", "slot", "setup", "walkthrough", "takeaways"
 ].map(x => x.toLowerCase()));
 const VISIBLE_PROPERTIES = new Set([
   "textContent", "innerText", "innerHTML", "outerHTML", "placeholder", "title",
