@@ -282,17 +282,19 @@ async function translateJavaScript(source, filename) {
       return;
     }
     if (node.type === "ArrayExpression") {
-      for (const element of node.elements) await visit(element, node, context);
+      await Promise.all(node.elements.map(element => visit(element, node, context)));
       return;
     }
+    const children = [];
     for (const [key, value] of Object.entries(node)) {
       if (key === "start" || key === "end" || key === "loc" || key === "range" || key === "comments" || key === "tokens") continue;
       if (Array.isArray(value)) {
-        for (const child of value) if (child && typeof child.type === "string") await visit(child, node, null);
+        for (const child of value) if (child && typeof child.type === "string") children.push(visit(child, node, null));
       } else if (value && typeof value.type === "string") {
-        await visit(value, node, null);
+        children.push(visit(value, node, null));
       }
     }
+    await Promise.all(children);
   }
   await visit(ast);
   if (!replacements.length) return source;
@@ -380,7 +382,7 @@ async function processHtml(file, original) {
         }
       }
     }
-    if (node.childNodes) for (const child of node.childNodes) await walk(child, skipHere);
+    if (node.childNodes) await Promise.all(node.childNodes.map(child => walk(child, skipHere)));
     if (node.content) await walk(node.content, skipHere);
   }
   await walk(document);
@@ -406,11 +408,10 @@ async function processJson(file, original) {
     }
     if (Array.isArray(value)) return Promise.all(value.map(item => visit(item, context)));
     if (value && typeof value === "object") {
-      const result = {};
-      for (const [key, child] of Object.entries(value)) {
-        result[key] = await visit(child, HUMAN_KEYS.has(key.toLowerCase()) ? key : null);
-      }
-      return result;
+      const pairs = await Promise.all(Object.entries(value).map(async ([key, child]) => [
+        key, await visit(child, HUMAN_KEYS.has(key.toLowerCase()) ? key : null)
+      ]));
+      return Object.fromEntries(pairs);
     }
     return value;
   }
