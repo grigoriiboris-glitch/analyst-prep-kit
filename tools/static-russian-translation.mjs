@@ -300,7 +300,7 @@ async function translateText(text) {
 async function translateMixedSegments(value) {
   const source = String(value);
   if (!/[А-Яа-яЁё]/.test(source) || !/[A-Za-z]/.test(source)) return translateText(source);
-  const pattern = /[A-Za-z][A-Za-z0-9+#._/-]*(?:[ \\t]+[A-Za-z][A-Za-z0-9+#._/-]*)*/g;
+  const pattern = /[A-Za-z][A-Za-z0-9+#._/-]*(?:[ \t]+[A-Za-z][A-Za-z0-9+#._/-]*)*/g;
   const matches = [...source.matchAll(pattern)];
   if (!matches.length) return source;
   const pieces = [];
@@ -310,7 +310,7 @@ async function translateMixedSegments(value) {
     const phrase = match[0];
     const trimmed = phrase.trim();
     if (PRESERVED_TERMS_NORMALIZED.has(trimmed.toLowerCase()) ||
-        /^(?:[A-Z][A-Z0-9_+#.-]*)(?:\\s+[A-Z][A-Z0-9_+#.-]*)*$/.test(trimmed)) {
+        /^(?:[A-Z][A-Z0-9_+#.-]*)(?:\s+[A-Z][A-Z0-9_+#.-]*)*$/.test(trimmed)) {
       pieces.push(phrase);
     } else {
       pieces.push(await translateText(phrase));
@@ -322,11 +322,11 @@ async function translateMixedSegments(value) {
 }
 
 async function translateMarkup(value) {
-  const pieces = String(value).split(/(<\\/?[A-Za-z][^>]*>)/g);
+  const pieces = String(value).split(/(<\/?[A-Za-z][^>]*>)/g);
   const result = [];
   for (const piece of pieces) {
     if (!piece) continue;
-    if (/^<\\/?[A-Za-z][^>]*>$/.test(piece)) result.push(piece);
+    if (/^<\/?[A-Za-z][^>]*>$/.test(piece)) result.push(piece);
     else if (candidate(piece, null, true)) {
       result.push(/[А-Яа-яЁё]/.test(piece) && /[A-Za-z]/.test(piece)
         ? await translateMixedSegments(piece)
@@ -338,7 +338,7 @@ async function translateMarkup(value) {
 
 async function translateVisibleString(value, context = null, htmlText = false) {
   if (!candidate(value, context, htmlText)) return value;
-  if (/<\\/?[A-Za-z][^>]*>/.test(value)) return translateMarkup(value);
+  if (/<\/?[A-Za-z][^>]*>/.test(value)) return translateMarkup(value);
   if (/[А-Яа-яЁё]/.test(value) && /[A-Za-z]/.test(value)) return translateMixedSegments(value);
   return translateText(value);
 }
