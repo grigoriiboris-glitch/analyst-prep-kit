@@ -28,6 +28,10 @@ const HUMAN_KEYS = new Set([
   "descriptionText", "instructionText", "success", "error", "warning", "recommendation",
   "resultText", "empty", "emptyState", "statusText", "questionText", "answerText",
   "correctAnswerText", "incorrectAnswerText", "why", "how", "when", "what", "purpose",
+  "nodes", "items", "headers", "rows", "parts", "formula", "lessons",
+  "examples", "rules", "metrics", "sections", "cards", "bullets", "keyTerms",
+  "checklist", "criteria", "activities", "stages", "outcomes", "requirements",
+  "signals", "categories", "tasks", "left", "right", "terms", "definitions",
   "businessQuestion", "businessContext", "deliverables", "metricDescription", "feedbackText"
 ].map(x => x.toLowerCase()));
 const VISIBLE_PROPERTIES = new Set([
@@ -324,14 +328,16 @@ async function processHtml(file, original) {
   async function walk(node, inSkipped = false) {
     const tag = (node.tagName || "").toLowerCase();
     const skipHere = inSkipped || SKIP_TAGS.has(tag);
-    if (tag === "html" && node.sourceCodeLocation) {
-      const loc = node.sourceCodeLocation;
+    if (tag === "html" && node.sourceCodeLocation?.startTag) {
+      // Use only the opening tag. The element's full location spans the entire
+      // document, which would overlap every text replacement and could truncate a page.
+      const loc = node.sourceCodeLocation.startTag;
       const raw = source.slice(loc.startOffset, loc.endOffset);
       let opening = raw;
       if (/\blang\s*=\s*(["'])[^"']*\1/i.test(opening)) opening = opening.replace(/\blang\s*=\s*(["'])[^"']*\1/i, 'lang="ru"');
       else opening = opening.replace(/^<html\b/i, '<html lang="ru"');
       if (!/\bdata-static-ru\s*=/i.test(opening)) opening = opening.replace(/>$/, ' data-static-ru="true">');
-      replacements.push({ start: loc.startOffset, end: loc.endOffset, value: opening });
+      if (opening !== raw) replacements.push({ start: loc.startOffset, end: loc.endOffset, value: opening });
     }
 
     if (tag === "script" && node.sourceCodeLocation && node.sourceCodeLocation.startTag && node.sourceCodeLocation.endTag && !node.attrs?.some(a => a.name === "src")) {
