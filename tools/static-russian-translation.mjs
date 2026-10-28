@@ -354,20 +354,22 @@ async function translateMarkup(value) {
   for (const piece of pieces) {
     if (!piece) continue;
     if (/^<\/?[A-Za-z][^>]*>$/.test(piece)) result.push(piece);
-    else if (candidate(piece, null, true)) {
-      result.push(/[А-Яа-яЁё]/.test(piece) && /[A-Za-z]/.test(piece)
-        ? await translateMixedSegments(piece)
-        : await translateText(piece));
-    } else result.push(piece);
+    else result.push(await translateVisibleString(piece, null, true));
   }
   return result.join("");
 }
 
 async function translateVisibleString(value, context = null, htmlText = false) {
-  if (!candidate(value, context, htmlText)) return value;
-  if (/<\/?[A-Za-z][^>]*>/.test(value)) return translateMarkup(value);
-  if (/[А-Яа-яЁё]/.test(value) && /[A-Za-z]/.test(value)) return translateMixedSegments(value);
-  return translateText(value);
+  const source = String(value);
+  // HTML fragments are parsed first so that only their visible text is translated.
+  if (/<\/?[A-Za-z][^>]*>/.test(source)) return translateMarkup(source);
+  const manualKey = normalize(source);
+  if (MANUAL_TRANSLATIONS.has(manualKey)) {
+    return preserveWhitespace(source, MANUAL_TRANSLATIONS.get(manualKey));
+  }
+  if (!candidate(source, context, htmlText)) return value;
+  if (/[А-Яа-яЁё]/.test(source) && /[A-Za-z]/.test(source)) return translateMixedSegments(source);
+  return translateText(source);
 }
 
 async function translateHtmlTemplateFragment(fragment, state) {
@@ -376,8 +378,7 @@ async function translateHtmlTemplateFragment(fragment, state) {
   let textBuffer = "";
   async function flushText() {
     if (!textBuffer) return;
-    if (candidate(textBuffer, null, true)) output.push(await translateVisibleString(textBuffer, null, true));
-    else output.push(textBuffer);
+    output.push(await translateVisibleString(textBuffer, null, true));
     textBuffer = "";
   }
   for (let i = 0; i < source.length; i++) {
