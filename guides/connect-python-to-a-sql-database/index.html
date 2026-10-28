@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>How to Connect Python to a SQL Database (Straight Into a DataFrame) — Analyst Prep Kit</title>
-<meta name="description" content="Query a SQL database from Python and get a labelled DataFrame back, not bare tuples. sqlite3, pandas read_sql, parameters instead of f-strings, and how the same code reaches Postgres and MySQL.">
+<title>Как подключить Python к базе данных SQL (прямо в DataFrame) — комплект для подготовки аналитика</title>
+<meta name="description" content="Выполните запрос к базе данных SQL из Python и получите обратно помеченный DataFrame, а не голые кортежи. sqlite3, pandas read_sql, параметры вместо f-строк и то, как один и тот же код достигает Postgres и MySQL.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/connect-python-to-a-sql-database/">
-<meta property="og:title" content="How to Connect Python to a SQL Database (Straight Into a DataFrame)">
-<meta property="og:description" content="Three lines get you from a database file to a labelled table in Python. Here they are, with real output, plus the one habit that keeps your queries safe.">
+<meta property="og:title" content="Как подключить Python к базе данных SQL (прямо в DataFrame)">
+<meta property="og:description" content="Три строки переведут вас из файла базы данных в помеченную таблицу в Python. Вот они, с реальными результатами, а также с одной привычкой, которая обеспечивает безопасность ваших запросов.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/connect-python-to-a-sql-database.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/connect-python-to-a-sql-database/">
@@ -134,18 +134,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../python/">Python Kit</a> · <a href="../">All guides</a></p>
-  <h1>How to Connect Python to a SQL Database</h1>
-  <p class="meta">Three lines to a labelled table, and the one habit that keeps the query safe · Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-08">August 8, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../python/">Комплект Python</a> · <a href="../">Все руководства</a></p>
+  <h1>Как подключить Python к базе данных SQL</h1>
+  <p class="meta">Три строки в размеченной таблице и одна привычка, обеспечивающая безопасность запроса · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-08">8 августа 2026 г.</time></p>
 
-  <p>By the end of this page you will run a SQL query from Python and get back a pandas DataFrame with real column names, ready to chart or export. It takes three lines, needs nothing installed beyond pandas, and works the same way against Postgres and MySQL once you swap the connection.</p>
+  <p>К концу этой страницы вы запустите SQL-запрос из Python и получите DataFrame pandas с реальными именами столбцов, готовый к диаграмме или экспорту. Он занимает три строки, не требует установки ничего, кроме pandas, и работает одинаково с Postgres и MySQL, если вы поменяете соединение.</p>
 
-  <p>Here is what to actually do today. Use <code>pd.read_sql(query, connection)</code> rather than a cursor and <code>fetchall()</code>. Both work. Only one of them hands you column names, and the other hands you a list of anonymous tuples you then have to label by counting positions.</p>
+  <p>Вот чем на самом деле заняться сегодня. Использовать  <code>pd.read_sql(query, connection)</code>  вместо курсора и  <code>fetchall()</code>. Оба работают. Только один из них передает вам имена столбцов, а другой передает список анонимных кортежей, которые вам затем нужно пометить, подсчитав позиции.</p>
 
-  <p>The short version: <code>sqlite3.connect()</code> for a database file, <code>pd.read_sql()</code> for the query, and pass values as parameters instead of building the SQL string yourself.</p>
+  <p>Краткая версия:  <code>sqlite3.connect()</code>  для файла базы данных,  <code>pd.read_sql()</code>  для запроса и передавать значения в качестве параметров вместо того, чтобы создавать строку SQL самостоятельно.</p>
 
-  <p>The difference between the two ways of fetching is the one idea worth the page, so it gets the picture.</p>
+  <p>Разница между этими двумя способами получения информации заключается в том, что одна идея стоит страницы, поэтому она дает представление о картине.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 250" role="img" aria-labelledby="cpTitle cpDesc" xmlns="http://www.w3.org/2000/svg">
@@ -197,32 +197,32 @@
         <path d="M420 150 v90 M492 150 v90" stroke="#0E7490" stroke-width="1.2"/>
       </g>
     </svg>
-    <figcaption>Same rows, same values, both correct. The upper route drops the column names on the floor and leaves you counting positions to find out which number is revenue.</figcaption>
+    <figcaption>Те же строки, те же значения, оба правильные. Верхний маршрут опускает имена столбцов на пол и оставляет вам возможность подсчитывать позиции, чтобы определить, какое число является доходом.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>What you'll do</strong>
+    <strong>Что ты будешь делать</strong>
     <ol>
-      <li>The three lines</li>
-      <li>What each line is doing</li>
-      <li>The cursor, and when you actually want it</li>
-      <li>Passing values safely</li>
-      <li>Reaching Postgres, MySQL and the rest</li>
-      <li>Where to draw the line between SQL and pandas</li>
-      <li>The full before and after</li>
-      <li>What goes wrong, and the fix</li>
-      <li>Why this works</li>
-      <li>Using this on your own project</li>
-      <li>The whole thing on one screen</li>
+      <li>Три линии</li>
+      <li>Что делает каждая строка</li>
+      <li>Курсор и когда вы действительно этого хотите</li>
+      <li>Безопасная передача значений</li>
+      <li>Достижение Postgres, MySQL и остальных</li>
+      <li>Где провести грань между SQL и пандами</li>
+      <li>Полное до и после</li>
+      <li>Что пошло не так и как это исправить</li>
+      <li>Почему это работает</li>
+      <li>Использование этого в вашем собственном проекте</li>
+      <li>Все на одном экране</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Every output on this page is real.</strong> Each snippet was run on 8 August 2026 against the Chinook sample database with Python 3.11 and pandas 3.0.2. If you want the same file to follow along with, <a href="../sample-database-for-sql-practice/">getting a sample database</a> is a one-minute download.</div>
+  <div class="note"><strong>Каждый вывод на этой странице реален.</strong>  Каждый фрагмент был запущен 8 августа 2026 года на примере базы данных Chinook с Python 3.11 и pandas 3.0.2. Если вы хотите, чтобы тот же файл следовал за ним,  <a href="../sample-database-for-sql-practice/">получение образца базы данных</a>  это минутная загрузка.</div>
 
   <div class="step">
-    <h2>1. The three lines</h2>
+    <h2>1. Три линии</h2>
 
-    <p>Before the explanation: pandas can already read a CSV. What would connecting straight to a database give you that exporting a CSV first does not?</p>
+    <p>Перед пояснением: панды уже умеют читать CSV. Что даст вам прямое подключение к базе данных, чего нет при предварительном экспорте CSV?</p>
 
     <pre><code>import sqlite3
 import pandas as pd
@@ -249,25 +249,25 @@ print(df)</code></pre>
  Brazil        35   190.10
 Germany        28   156.48</code></pre>
 
-    <p>That is the whole mechanism. The answer to the opening question is two things: there is no export step to repeat or forget, and the column types arrive with the data rather than being guessed from text. Nothing here has to be re-run by hand next month.</p>
+    <p>Вот и весь механизм. Ответ на первый вопрос заключается в двух вещах: нет этапа экспорта, который нужно повторить или забыть, и типы столбцов поступают вместе с данными, а не угадываются из текста. Ничто здесь не должно быть перезапущено вручную в следующем месяце.</p>
   </div>
 
   <div class="step">
-    <h2>2. What each line is doing</h2>
+    <h2>2. Что делает каждая строка</h2>
 
-    <p><code>import sqlite3</code> costs nothing and installs nothing, because it is part of Python itself. That is worth knowing on a locked-down machine where installing software needs permission.</p>
+    <p><code>import sqlite3</code>  ничего не стоит и ничего не устанавливает, поскольку он является частью самого Python. Это стоит знать на заблокированном компьютере, где для установки программного обеспечения требуется разрешение.</p>
 
-    <p><code>sqlite3.connect('Chinook_Sqlite.sqlite')</code> opens the file and hands back a <strong>connection</strong>, which is your open line to the database. One warning: if that filename does not exist, SQLite creates a new empty database rather than complaining. So a typo in the path produces zero tables and no error, which is a confusing five minutes the first time.</p>
+    <p><code>sqlite3.connect('Chinook_Sqlite.sqlite')</code>  открывает файл и возвращает  <strong>connection</strong>, это ваша открытая линия к базе данных. Одно предупреждение: если это имя файла не существует, SQLite вместо того, чтобы жаловаться, создает новую пустую базу данных. Таким образом, опечатка в пути приводит к нулевым таблицам и ошибкам, что в первый раз занимает пять минут путаницы.</p>
 
-    <p><code>pd.read_sql(query, con)</code> sends the SQL, reads the result, and builds a DataFrame with the column names from your query. Notice that the names came from the <code>AS</code> aliases: <code>invoices</code> and <code>revenue</code> are labels you chose, and naming things in SQL means not renaming them in Python later. <a href="../sql-aliasing/">SQL aliases</a> covers that habit.</p>
+    <p><code>pd.read_sql(query, con)</code>  отправляет SQL, считывает результат и создает DataFrame с именами столбцов из вашего запроса. Обратите внимание, что названия взяты из  <code>AS</code>  псевдонимы:  <code>invoices</code> and <code>revenue</code>  — это метки, которые вы выбрали, и присвоение им имен в SQL означает, что вам не придется переименовывать их в Python позже.  <a href="../sql-aliasing/">SQL-псевдонимы</a>  покрывает эту привычку.</p>
 
-    <p>The triple-quoted string is doing quiet work too. It lets the SQL sit on several lines, indented and readable, exactly as you would write it in a database tool. A long query squeezed onto one line is the main reason people stop formatting their SQL once it moves into Python.</p>
+    <p>Строка в тройных кавычках тоже работает тихо. Он позволяет SQL располагаться в нескольких строках с отступами и читаемостью, точно так же, как если бы вы писали его в инструменте базы данных. Длинный запрос, сжатый в одну строку, является основной причиной, по которой люди перестают форматировать свой SQL после его перехода на Python.</p>
   </div>
 
   <div class="step">
-    <h2>3. The cursor, and when you actually want it</h2>
+    <h2>3. Курсор и когда он вам действительно нужен</h2>
 
-    <p>The other way to get data out looks like this.</p>
+    <p>Другой способ получить данные выглядит следующим образом.</p>
 
     <pre><code>cur = con.cursor()
 cur.execute("SELECT COUNT(*) FROM Track")
@@ -275,25 +275,25 @@ print(cur.fetchone())</code></pre>
 
     <pre><code>(3503,)</code></pre>
 
-    <p>A <strong>cursor</strong> is a pointer into a result set that you step through yourself. <code>fetchone()</code> takes one row, <code>fetchall()</code> takes them all. Notice what came back: a tuple holding a single number, with no column name attached and a trailing comma that confuses everyone once.</p>
+    <p>A <strong>cursor</strong>  — это указатель на набор результатов, который вы выполняете самостоятельно.  <code>fetchone()</code>  занимает одну строку,  <code>fetchall()</code>  берет их всех. Обратите внимание, что получилось: кортеж, содержащий одно число, без имени столбца и с завершающей запятой, которая однажды сбила всех с толку.</p>
 
-    <p>Say when that would be preferable to a DataFrame, before reading on.</p>
+    <p>Прежде чем читать дальше, скажите, когда это будет предпочтительнее DataFrame.</p>
 
-    <p>Two cases, and both are real. When you want <strong>one value</strong> rather than a table, as above, building a whole DataFrame to hold the number 3503 is silly. And when you are <strong>changing</strong> data rather than reading it, with INSERT, UPDATE, DELETE or CREATE TABLE, a cursor is the correct tool, and you must call <code>con.commit()</code> afterwards or your change quietly disappears when the program ends.</p>
+    <p>Два случая, и оба реальные. Когда ты хочешь  <strong>одно значение</strong>  вместо таблицы, как указано выше, создавать целый DataFrame для хранения числа 3503 глупо. И когда ты  <strong>changing</strong>  данных, а не читать их, с помощью INSERT, UPDATE, DELETE или CREATE TABLE курсор является правильным инструментом, и вы должны вызвать  <code>con.commit()</code>  после этого, иначе ваши изменения исчезнут, когда программа завершится.</p>
 
-    <p>For everything else, which as an analyst is nearly everything, read into a DataFrame. The labels are not a convenience; they are what stops you from writing <code>row[3]</code> and being wrong about which column that is after somebody adds a field.</p>
+    <p>For everything else, which as an analyst is nearly everything, read into a DataFrame. The labels are not a convenience; they are what stops you from writing <code>row[3]</code>  и ошибаюсь в отношении того, какой столбец находится после того, как кто-то добавляет поле.</p>
   </div>
 
   <div class="step">
-    <h2>4. Passing values safely</h2>
+    <h2>4. Безопасная передача значений</h2>
 
-    <p>Sooner or later the query needs a value from a variable: a date, a customer, a threshold. There is an obvious way to do it and it is the wrong one.</p>
+    <p>Рано или поздно запросу потребуется значение переменной: дата, клиент, порог. Есть очевидный способ сделать это, но он неправильный.</p>
 
     <pre><code># Do not do this.
 threshold = 600000
 df = pd.read_sql(f"SELECT Name FROM Track WHERE Milliseconds > {threshold}", con)</code></pre>
 
-    <p>Write it with a placeholder instead, and pass the value separately.</p>
+    <p>Вместо этого напишите его с заполнителем и передайте значение отдельно.</p>
 
     <pre><code>df = pd.read_sql(
     "SELECT Name, Milliseconds FROM Track WHERE Milliseconds > ? LIMIT 3",
@@ -307,17 +307,17 @@ print(df)</code></pre>
     You Shook Me(2)        619467
 How Many More Times        711836</code></pre>
 
-    <p>The <code>?</code> is a placeholder, and <code>params</code> supplies what goes there. The database receives the query and the value as two separate things, so the value can never be read as instructions. With an f-string they arrive as one string, and any text inside it that happens to look like SQL is executed as SQL. That is the whole of what people mean by SQL injection, and it is a real hazard the moment a value comes from anywhere you do not control.</p>
+    <p>The <code>?</code>  является заполнителем, и  <code>params</code>  поставляет то, что туда идет. База данных получает запрос и значение как две отдельные вещи, поэтому значение никогда не может быть прочитано как инструкции. В случае f-строки они поступают как одна строка, и любой текст внутри нее, который выглядит как SQL, выполняется как SQL. Вот и все, что люди подразумевают под SQL-инъекцией, и это реальная опасность в тот момент, когда значение приходит откуда-то, что вы не контролируете.</p>
 
-    <p>Two smaller reasons to prefer placeholders even on data you trust. Quoting and date formats are handled for you, which removes a persistent source of "why does this work in the database tool and not here". And <code>params=(600000,)</code> needs that trailing comma, because without it the brackets are just brackets rather than a tuple of one item.</p>
+    <p>Две меньшие причины предпочитать заполнители даже для данных, которым вы доверяете. Форматы кавычек и дат обрабатываются за вас, что устраняет постоянный источник вопросов «почему это работает в инструменте базы данных, а не здесь». И  <code>params=(600000,)</code>  нужна эта завершающая запятая, потому что без нее скобки — это просто скобки, а не кортеж из одного элемента.</p>
   </div>
 
   <div class="step">
-    <h2>5. Reaching Postgres, MySQL and the rest</h2>
+    <h2>5. Доступ к Postgres, MySQL и остальным</h2>
 
-    <p>Everything above changes by one line when the database is a server rather than a file. The query, the DataFrame and the placeholders stay the same.</p>
+    <p>Все вышеперечисленное меняется на одну строку, когда база данных представляет собой сервер, а не файл. Запрос, DataFrame и заполнители остаются прежними.</p>
 
-    <p>The usual route is SQLAlchemy, which gives every engine one consistent way to describe a connection.</p>
+    <p>Обычный путь — SQLAlchemy, который дает каждому механизму один согласованный способ описания соединения.</p>
 
     <pre><code>python -m pip install sqlalchemy psycopg2-binary   # Postgres
 python -m pip install sqlalchemy pymysql            # MySQL</code></pre>
@@ -328,26 +328,26 @@ import pandas as pd
 engine = create_engine('postgresql+psycopg2://user:password@host:5432/dbname')
 df = pd.read_sql("SELECT * FROM sales LIMIT 5", engine)</code></pre>
 
-    <p>That string is a connection URL and it reads left to right: which engine, which driver, who you are, which machine, which port, which database. Swap <code>postgresql+psycopg2</code> for <code>mysql+pymysql</code> and the same line reaches MySQL.</p>
+    <p>Эта строка представляет собой URL-адрес соединения и читается слева направо: какой движок, какой драйвер, кто вы, какой компьютер, какой порт, какая база данных. Менять  <code>postgresql+psycopg2</code> for <code>mysql+pymysql</code>  и та же линия достигает MySQL.</p>
 
-    <p>One thing not to do: never type a real password into a file you will commit. Read it from an environment variable with <code>os.environ['DB_PASSWORD']</code> instead, and keep the value out of your repository. <a href="../git-for-analysts/">Git for analysts</a> covers what else must never be committed.</p>
+    <p>Единственное, чего делать не следует: никогда не вводите настоящий пароль в файл, который вы собираетесь сохранить. Прочитайте его из переменной среды с помощью  <code>os.environ['DB_PASSWORD']</code>  вместо этого и храните значение вне своего репозитория.  <a href="../git-for-analysts/">Git для аналитиков</a>  охватывает то, что еще никогда нельзя совершать.</p>
   </div>
 
   <div class="step">
-    <h2>6. Where to draw the line between SQL and pandas</h2>
+    <h2>6. Где провести грань между SQL и пандами</h2>
 
-    <p>Once both tools are in one script, the same job can be done in either, and the choice affects how long you wait.</p>
+    <p>Когда оба инструмента включены в один сценарий, одну и ту же работу можно выполнять в любом из них, и выбор влияет на продолжительность ожидания.</p>
 
-    <p>The rule that holds up: <strong>filter and aggregate in SQL, then reshape and chart in pandas.</strong> Databases are built to reduce millions of rows to hundreds, and doing that first means only the hundreds travel into memory. Pulling a whole table into pandas and grouping it there works on a small table and stops working on a real one, usually on the day it matters.</p>
+    <p>Действующее правило:  <strong>фильтруйте и агрегируйте данные в SQL, затем изменяйте форму и составляйте диаграммы в Pandas.</strong>  Базы данных созданы для сокращения миллионов строк до сотен, а это означает, что в память попадают только сотни строк. Перенос целой таблицы в pandas и группировка ее там работает на маленькой таблице и перестает работать на реальной, обычно в тот день, когда это важно.</p>
 
-    <p>So <code>WHERE</code>, <code>JOIN</code>, <code>GROUP BY</code> and <code>HAVING</code> belong in the query. Plotting, reshaping, joining to something that is not in the database, and anything iterative belong in pandas. If the grouping half is unfamiliar, <a href="../sql-group-by-having/">GROUP BY and HAVING</a> and <a href="../pandas-groupby/">pandas GroupBy</a> are the same idea in both languages.</p>
+    <p>So <code>WHERE</code>, <code>JOIN</code>, <code>GROUP BY</code> and <code>HAVING</code>  принадлежать к запросу. Построение графиков, изменение формы, присоединение к чему-то, чего нет в базе данных, и все итеративные действия относятся к пандам. Если группирующая половина незнакома,  <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> and <a href="../pandas-groupby/">панды группируются</a>  представляют собой одну и ту же идею на обоих языках.</p>
 
-    <p>Now picture your own current script. Which line first turns a big thing into a small thing, and how many rows are sitting in memory before it? If the answer is all of them, that line probably belongs in the query.</p>
+    <p>Теперь представьте себе свой текущий сценарий. Какая строка первой превращает большую вещь в маленькую и сколько строк находится в памяти до нее? Если ответ — все из них, эта строка, вероятно, принадлежит запросу.</p>
   </div>
 
-  <h2>The full before and after</h2>
+  <h2>Полное до и после</h2>
 
-  <p>Same goal: revenue by country, in a chart.</p>
+  <p>Та же цель: доход по странам на диаграмме.</p>
 
   <h3>Before</h3>
   <pre><code>1. Run the query in DB Browser
@@ -356,106 +356,106 @@ df = pd.read_sql("SELECT * FROM sales LIMIT 5", engine)</code></pre>
 4. Fix the revenue column, which arrived as text
 5. Chart it
 6. Next month, repeat all six</code></pre>
-  <p>It works, and every step is a chance to do something slightly differently than last time. Step 4 is the one that hurts, because a thousands separator in the export turns a number column into text and the fix has to be remembered rather than recorded.</p>
+  <p>Это работает, и каждый шаг — это шанс сделать что-то немного иначе, чем в прошлый раз. Шаг 4 является самым болезненным, потому что разделитель тысяч в экспорте превращает числовой столбец в текст, и исправление приходится запоминать, а не записывать.</p>
 
   <h3>After</h3>
   <pre><code>con = sqlite3.connect('Chinook_Sqlite.sqlite')
 df = pd.read_sql(QUERY, con)
 df.plot(x='Country', y='revenue', kind='bar')</code></pre>
-  <p>Three lines, and the whole thing re-runs by pressing play. The type problem cannot happen, because the numbers never became text: <code>invoices</code> arrives as an integer and <code>revenue</code> as a float, carried across from the database rather than parsed out of a file. Re-running it next month is not a procedure, it is the same three lines.</p>
+  <p>Три строчки и все заново запускается по нажатию плей. Проблема с типом возникнуть не может, потому что числа никогда не превращались в текст:  <code>invoices</code>  приходит как целое число и  <code>revenue</code>  как число с плавающей запятой, переносимое из базы данных, а не анализируемое из файла. Повторный запуск в следующем месяце — это не процедура, это те же три строчки.</p>
 
   <div class="step">
-    <h2>What goes wrong, and the fix</h2>
+    <h2>Что пошло не так и как это исправить</h2>
 
-    <p>Six that come up constantly.</p>
+    <p>Шесть, которые появляются постоянно.</p>
 
-    <p><strong>"no such table" on a database you know has tables.</strong> The path was wrong, so SQLite created a new empty file. Check the path, and list what is actually there with <code>pd.read_sql("SELECT name FROM sqlite_master WHERE type='table'", con)</code>.</p>
+    <p><strong>«Нет такой таблицы» в базе данных, в которой, как вы знаете, есть таблицы.</strong>  Путь был неправильным, поэтому SQLite создал новый пустой файл. Проверьте путь и перечислите, что там на самом деле есть с помощью  <code>pd.read_sql("SELECT name FROM sqlite_master WHERE type='table'", con)</code>.</p>
 
-    <p><strong>Your INSERT or UPDATE did nothing.</strong> You did not call <code>con.commit()</code>. Reads need no commit; writes do.</p>
+    <p><strong>Ваш INSERT или UPDATE ничего не сделал.</strong>  Ты не звонил  <code>con.commit()</code>. Чтение не требует фиксации; пишет, делаю.</p>
 
-    <p><strong>The database is locked.</strong> Another program has it open with unsaved changes, very often DB Browser. Press Write Changes there, or close it.</p>
+    <p><strong>База данных заблокирована.</strong>  В другой программе он открыт с несохраненными изменениями, очень часто в DB Browser. Нажмите там «Записать изменения» или закройте его.</p>
 
-    <p><strong>Numbers arrive as text.</strong> Rare from a database and common from CSV, which is the point. If it happens, the column is genuinely stored as text in the table, and <code>CAST(col AS REAL)</code> in the query is the honest fix.</p>
+    <p><strong>Числа приходят в виде текста.</strong>  Редкие из базы данных и общие из CSV, вот в чем суть. Если это произойдет, столбец действительно будет сохранен в виде текста в таблице, и  <code>CAST(col AS REAL)</code>  в запросе есть честное исправление.</p>
 
-    <p><strong>The script hangs on a big query.</strong> You asked for more rows than you need. Add a <code>LIMIT</code> while developing, then take it off once the query is right.</p>
+    <p><strong>Скрипт зависает на большом запросе.</strong>  Вы запросили больше строк, чем вам нужно. Добавить  <code>LIMIT</code>  во время разработки, а затем снимите его, как только запрос будет правильным.</p>
 
-    <p><strong>The connection is never closed.</strong> Use <code>with sqlite3.connect(path) as con:</code> or call <code>con.close()</code>. Leaving connections open is what eventually produces the locked-database message above.</p>
+    <p><strong>Соединение никогда не закрывается.</strong> Use <code>with sqlite3.connect(path) as con:</code>  или позвоните  <code>con.close()</code>. Если оставить соединения открытыми, это в конечном итоге приведет к появлению сообщения о заблокированной базе данных, приведенному выше.</p>
   </div>
 
-  <h2>Why this works</h2>
+  <h2>Почему это работает</h2>
 
-  <p>The reason one line reaches every database is a specification rather than a coincidence. Python defines a common database interface, so any driver that follows it offers the same <code>connect</code>, <code>cursor</code>, <code>execute</code> and <code>fetch</code> vocabulary, which is why swapping SQLite for Postgres changes the connection line and nothing else. <code>read_sql</code> sits on top of that shared vocabulary, which is why it works against all of them without knowing which one it is talking to.</p>
+  <p>Причина, по которой одна строка достигает каждой базы данных, — это спецификация, а не совпадение. Python определяет общий интерфейс базы данных, поэтому любой драйвер, следующий за ним, предлагает один и тот же интерфейс.  <code>connect</code>, <code>cursor</code>, <code>execute</code> and <code>fetch</code>  словарь, поэтому замена SQLite на Postgres меняет линию соединения и ничего больше.  <code>read_sql</code>  находится поверх этого общего словаря, поэтому он работает против всех, даже не зная, с кем из них разговаривает.</p>
 
-  <p>Placeholders work for a structural reason worth understanding once. The database receives the query text and the values through separate channels, parses the query first, and only then fills the values into the parsed structure. A value therefore cannot change what the query means, because by the time it arrives the meaning is already fixed. String formatting removes that separation, which is why the advice is a rule rather than a preference.</p>
+  <p>Заполнители работают по структурной причине, которую стоит понять один раз. База данных получает текст запроса и значения по отдельным каналам, сначала анализирует запрос и только потом заполняет значения в анализируемую структуру. Таким образом, значение не может изменить то, что означает запрос, поскольку к моменту его поступления значение уже фиксировано. Форматирование строк устраняет это разделение, поэтому совет является правилом, а не предпочтением.</p>
 
-  <p>One note on the way this page is written. It kept asking you to commit to an answer, what a connection buys over a CSV, when a cursor beats a DataFrame, before giving one. Attempting an answer before seeing the correct one reliably improves how well the correct one is retained, even when the attempt is wrong (Bisra, Liu, Nesbit, Salimi, &amp; Winne, 2018, <em>Educational Psychology Review</em>, 30(3), 703–725).</p>
+  <p>Одно замечание по поводу написания этой страницы. Он постоянно просил вас дать ответ, что соединение покупает по сравнению с CSV, когда курсор превосходит DataFrame, прежде чем дать его. Попытка дать ответ до того, как вы увидите правильный, достоверно повышает, насколько хорошо сохраняется правильный ответ, даже если попытка неверна (Бисра, Лю, Несбит, Салими и Винн, 2018,  <em>Обзор педагогической психологии</em>, 30(3), 703–725).</p>
 
-  <h2>Using this on your own project</h2>
+  <h2>Использование этого в вашем собственном проекте</h2>
 
-  <p>Five habits, in order.</p>
+  <p>Пять привычек по порядку.</p>
 
   <ol>
-    <li><strong>Use <code>read_sql</code> by default</strong>, and a cursor only for single values and for changing data.</li>
-    <li><strong>Name every computed column with <code>AS</code></strong> in the query, so the DataFrame arrives labelled and nothing needs renaming.</li>
-    <li><strong>Never build SQL with an f-string.</strong> Placeholders and <code>params</code>, every time, even on data you trust.</li>
-    <li><strong>Filter and group in SQL</strong>, reshape and plot in pandas. Only the small result should travel.</li>
-    <li><strong>Keep credentials out of the file</strong>, in environment variables, and out of your repository.</li>
+    <li><strong>Use <code>read_sql</code>  по умолчанию</strong>и курсор только для отдельных значений и для изменения данных.</li>
+    <li><strong>Назовите каждый вычисляемый столбец с помощью  <code>AS</code></strong>  в запросе, поэтому DataFrame поступает с меткой и ничего не нужно переименовывать.</li>
+    <li><strong>Никогда не создавайте SQL с помощью f-строки.</strong>  Заполнители и  <code>params</code>, каждый раз, даже по данным, которым вы доверяете.</li>
+    <li><strong>Фильтрация и группировка в SQL</strong>, изменение формы и построение графиков в pandas. Только небольшой результат должен путешествовать.</li>
+    <li><strong>Хранить учетные данные вне файла</strong>, в переменных среды и за пределами вашего репозитория.</li>
   </ol>
 
-  <p>If you have paper nearby, one optional drawing is worth five minutes. Draw your script as a line from database to chart, and mark the point where the data stops being millions of rows and becomes hundreds. Everything to the left of that mark should be happening inside the query.</p>
+  <p>Если у вас под рукой есть бумага, один дополнительный рисунок стоит пяти минут. Нарисуйте свой сценарий в виде линии от базы данных к диаграмме и отметьте точку, в которой данные перестанут состоять из миллионов строк и станут сотнями. Все, что находится слева от этой отметки, должно происходить внутри запроса.</p>
 
-  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: getting set up, SQL, Excel, Python, and the working habits around them.</div>
+  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: настройка, SQL, Excel, Python и навыки работы с ними.</div>
 
-  <h2>The whole thing on one screen</h2>
+  <h2>Все на одном экране</h2>
 
-  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
+  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
 
   <table>
-    <tr><th>Thing</th><th>What it is, or what it does</th></tr>
-    <tr><td><code>import sqlite3</code></td><td>Built into Python. Nothing to install.</td></tr>
-    <tr><td><code>sqlite3.connect(path)</code></td><td>Opens the file. A wrong path silently creates an empty database.</td></tr>
-    <tr><td><code>pd.read_sql(q, con)</code></td><td>Runs the query, returns a labelled DataFrame. The default choice.</td></tr>
-    <tr><td>Cursor and <code>fetchall()</code></td><td>Bare tuples, no column names. For single values and for writes.</td></tr>
-    <tr><td><code>con.commit()</code></td><td>Required after INSERT, UPDATE, DELETE. Reads need none.</td></tr>
-    <tr><td><code>AS</code> aliases</td><td>Become the DataFrame's column names. Name things in the query.</td></tr>
-    <tr><td><code>?</code> and <code>params=</code></td><td>Sends value and query separately. The safe way, always.</td></tr>
-    <tr><td>f-string SQL</td><td>Merges value into instructions. This is SQL injection.</td></tr>
-    <tr><td><code>params=(600000,)</code></td><td>The trailing comma is what makes it a tuple.</td></tr>
-    <tr><td><code>create_engine(url)</code></td><td>SQLAlchemy. One line changes to reach Postgres or MySQL.</td></tr>
-    <tr><td>Connection URL</td><td>engine+driver://user:password@host:port/database</td></tr>
-    <tr><td>Credentials</td><td><code>os.environ</code>, never typed into a committed file.</td></tr>
-    <tr><td>The dividing line</td><td>Filter and group in SQL. Reshape and plot in pandas.</td></tr>
-    <tr><td>"database is locked"</td><td>Another program holds it, usually DB Browser with unsaved changes.</td></tr>
-    <tr><td>Listing tables</td><td><code>SELECT name FROM sqlite_master WHERE type='table'</code></td></tr>
+    <tr><th>Thing</th><th>Что это такое или что оно делает</th></tr>
+    <tr><td><code>import sqlite3</code></td><td>Встроенный в Python. Нечего устанавливать.</td></tr>
+    <tr><td><code>sqlite3.connect(path)</code></td><td>Открывает файл. Неправильный путь автоматически создает пустую базу данных.</td></tr>
+    <tr><td><code>pd.read_sql(q, con)</code></td><td>Запускает запрос, возвращает помеченный DataFrame. Выбор по умолчанию.</td></tr>
+    <tr><td>Курсор и  <code>fetchall()</code></td><td>Голые кортежи, без имен столбцов. Для одиночных значений и для записи.</td></tr>
+    <tr><td><code>con.commit()</code></td><td>Требуется после INSERT, UPDATE, DELETE. Чтения никому не нужны.</td></tr>
+    <tr><td><code>AS</code> aliases</td><td>Станьте именами столбцов DataFrame. Назовите предметы в запросе.</td></tr>
+    <tr><td><code>?</code> and <code>params=</code></td><td>Отправляет значение и запрос отдельно. Всегда безопасный путь.</td></tr>
+    <tr><td>f-строка SQL</td><td>Объединяет значение в инструкции. Это SQL-инъекция.</td></tr>
+    <tr><td><code>params=(600000,)</code></td><td>Завершающая запятая делает его кортежем.</td></tr>
+    <tr><td><code>create_engine(url)</code></td><td>SQLАлхимия. Одна строка меняется, чтобы перейти к Postgres или MySQL.</td></tr>
+    <tr><td>URL-адрес подключения</td><td>двигатель+драйвер://пользователь:пароль@хост:порт/база данных</td></tr>
+    <tr><td>Credentials</td><td><code>os.environ</code>, никогда не вводился в зафиксированный файл.</td></tr>
+    <tr><td>Разделительная линия</td><td>Фильтрация и группировка в SQL. Измените форму и постройте график в пандах.</td></tr>
+    <tr><td>«база данных заблокирована»</td><td>Его хранит другая программа, обычно браузер БД с несохраненными изменениями.</td></tr>
+    <tr><td>Листинг таблиц</td><td><code>SELECT name FROM sqlite_master WHERE type='table'</code></td></tr>
   </table>
 
-  <div class="note"><strong>The one habit to keep.</strong> Placeholders instead of f-strings, without exception. It is one character of extra typing, it removes an entire category of security problem, and it fixes the quoting and date bugs that make a query behave differently in Python than it did in your database tool. If something breaks in a way this page does not cover, there is a general <a href="../technical-tenacity/">diagnosis loop for being stuck</a>.</div>
+  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Плейсхолдеры вместо f-строк, все без исключения. Это один символ дополнительной типизации, который устраняет целую категорию проблем безопасности, а также исправляет ошибки цитирования и даты, из-за которых запрос в Python ведет себя иначе, чем в вашем инструменте базы данных. Если что-то сломалось так, как не описано на этой странице, существует общая  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>.</div>
 
-  <p>One last thought, and I would genuinely like other people's answers. The first time I pointed a script at the wrong path, SQLite cheerfully made me an empty database and every query returned nothing at all, with no error to explain why. What silent success cost you the most time?</p>
+  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Когда я впервые указал скрипту неправильный путь, SQLite радостно создал пустую базу данных, и каждый запрос вообще ничего не возвращал, без каких-либо ошибок, объясняющих почему. Какой молчаливый успех стоил вам больше всего времени?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Bisra, K., Liu, Q., Nesbit, J. C., Salimi, F., &amp; Winne, P. H. (2018). Inducing self-explanation: A meta-analysis. <em>Educational Psychology Review</em>, 30(3), 703–725.</li>
+    <li>Бисра К., Лю К., Несбит Дж. К., Салими Ф. и Винн П. Х. (2018). Побуждение к самообъяснению: метаанализ.  <em>Обзор педагогической психологии</em>, 30(3), 703–725.</li>
   </ul>
 
   <div class="book">
-    <strong>The connection works. The stall is what to do with the dataframe once the query returns.</strong>
-    <p><em>Python for Analysts</em> is 203 pages, pandas read line by line in plain words, picking up exactly where a result set leaves off.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/python-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=python-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-connect-python-to-a-sql-database'})">Python for Analysts, $19 &rarr;</a>
+    <strong>Соединение работает. Застой — это то, что делать с кадром данных после возврата запроса.</strong>
+    <p><em>Python для аналитиков</em>  составляет 203 страницы, панды читают построчно простыми словами, начиная именно с того места, где заканчивается набор результатов.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/python-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=python-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-connect-python-to-a-sql-database'})">Python для аналитиков, 19 $ →</a>
   </div>
 
   <div class="cta">
-    <strong>The connection is one line. The query is the skill.</strong>
-    <p style="margin:6px 0 0">The <a href="../../python/">Python Kit</a> runs real CPython in the browser and covers reading, grouping, cleaning and charting in the order an analyst meets them. If it is the SQL half you want reps on, the <a href="../../drill/">SQL Drill</a> hands you one runnable query at a time.</p>
-    <a class="btn" href="../../python/">Open the Python Kit →</a>
+    <strong>Соединение однолинейное. Вопрос в навыке.</strong>
+    <p style="margin:6px 0 0">The <a href="../../python/">Комплект Python</a>  запускает настоящий CPython в браузере и обеспечивает чтение, группировку, очистку и построение диаграмм в том порядке, в котором их видит аналитик. Если вам нужны представители SQL-половины,  <a href="../../drill/">SQL-детализация</a>  передает вам один выполняемый запрос за раз.</p>
+    <a class="btn" href="../../python/">Откройте комплект Python →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> · <a href="../install-python-for-data-analysis/">Install Python</a> · <a href="../install-jupyter-notebook/">Set Up Jupyter</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../pandas-groupby/">pandas GroupBy</a> · <a href="../sample-database-for-sql-practice/">Get a Sample Database</a> · <a href="../set-up-a-sql-database/">Set Up a SQL Database</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../sql-joins/">SQL JOINs</a> · <a href="../sql-aliasing/">SQL Aliases</a> · <a href="../git-for-analysts/">Git for Analysts</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../python/">Python Kit</a> · <a href="../../sql/">SQL Kit</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../install-python-for-data-analysis/">Установить Python</a> · <a href="../install-jupyter-notebook/">Настройка Юпитера</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../pandas-groupby/">панды группируются</a> · <a href="../sample-database-for-sql-practice/">Получить образец базы данных</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-aliasing/">SQL-псевдонимы</a> · <a href="../git-for-analysts/">Git для аналитиков</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../python/">Комплект Python</a> · <a href="../../sql/">SQL-комплект</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

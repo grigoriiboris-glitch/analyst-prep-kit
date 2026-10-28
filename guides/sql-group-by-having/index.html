@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GROUP BY and HAVING: How to Summarize Rows Without Getting a Fake Answer — Analyst Prep Kit</title>
-<meta name="description" content="What GROUP BY actually does to your rows, why WHERE and HAVING are not interchangeable, and the one line that stops a category of eleven records from topping your chart. Worked on 82,956 real games.">
+<title>GROUP BY и HAVING: как суммировать строки, не получая ложного ответа — комплект для подготовки аналитика</title>
+<meta name="description" content="Что на самом деле делает GROUP BY с вашими строками, почему WHERE и HAVING не взаимозаменяемы, а также единственная строка, которая не позволяет категории из одиннадцати записей занять первое место в вашей диаграмме. Работал над 82 956 реальными играми.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-group-by-having/">
-<meta property="og:title" content="GROUP BY and HAVING: How to Summarize Rows Without Getting a Fake Answer">
-<meta property="og:description" content="Without a minimum count, the highest-rated genre in 82,956 games is Accounting, on a sample of eleven. Here is what GROUP BY does, where HAVING goes, and why that ranking was never real.">
+<meta property="og:title" content="GROUP BY и HAVING: как суммировать строки, не получая ложного ответа">
+<meta property="og:description" content="Без минимального подсчета самым высоким рейтингом в 82 956 играх является «Бухгалтерский учет» (выборка из одиннадцати игр). Вот чем занимается GROUP BY, куда движется HAVING и почему этот рейтинг никогда не был реальным.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/sql-group-by-having.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-group-by-having/">
@@ -134,18 +134,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../sql/">SQL Kit</a> · <a href="../">All guides</a></p>
-  <h1>GROUP BY and HAVING: How to Summarize Rows Without Getting a Fake Answer</h1>
-  <p class="meta">One row per group, and the filter that has to run after · Written to be listened to · Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-07-29">July 29, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../">Все руководства</a></p>
+  <h1>GROUP BY и HAVING: как суммировать строки, не получая ложного ответа</h1>
+  <p class="meta">Одна строка на группу и фильтр, который должен выполняться после · Написано для прослушивания · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-07-29">29 июля 2026 г.</time></p>
 
-  <p>By the end of this page you can write a summary query and know its answer is real. You will know exactly what <code>GROUP BY</code> does to your rows, which columns you are allowed to select afterwards and why, where <code>WHERE</code> goes, where <code>HAVING</code> goes, and why swapping them is the difference between a finding and a number that means nothing. It is about twenty-five minutes.</p>
+  <p>К концу этой страницы вы сможете написать сводный запрос и быть уверенным, что ответ на него реален. Вы будете знать, что именно  <code>GROUP BY</code>  делает с вашими строками, какие столбцы вам разрешено выбирать впоследствии и почему, где  <code>WHERE</code>  идет, куда  <code>HAVING</code>  идет, и почему их замена — это разница между находкой и числом, которое ничего не значит. Это около двадцати пяти минут.</p>
 
-  <p>Here is what to actually do with it. On the next summary query you write, add one line setting a minimum group size before you read the ranking. One line, and it removes the most common way a summary query produces a confident wrong answer.</p>
+  <p>Вот что на самом деле с этим делать. В следующий сводный запрос, который вы напишете, добавьте одну строку, устанавливающую минимальный размер группы, прежде чем читать рейтинг. Одна строка, и она устраняет наиболее распространенный способ, которым сводный запрос дает уверенный неправильный ответ.</p>
 
-  <p>The short version: <code>WHERE</code> filters rows before grouping. <code>HAVING</code> filters groups after. Without a <code>HAVING</code> floor, tiny groups float to the top of every ranking.</p>
+  <p>Краткая версия:  <code>WHERE</code>  фильтрует строки перед группировкой.  <code>HAVING</code>  фильтрует группы после. Без  <code>HAVING</code>  На первом этаже крошечные группы занимают верхние строчки каждого рейтинга.</p>
 
-  <p>One idea decides everything else here, so it gets the picture. Grouping happens in the middle of the query, and the two filters sit on opposite sides of it.</p>
+  <p>Здесь одна идея решает все остальное, поэтому она и дает представление о картине. Группировка происходит в середине запроса, а два фильтра располагаются по разные стороны от него.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 330" role="img" aria-labelledby="gbTitle gbDesc" xmlns="http://www.w3.org/2000/svg">
@@ -200,36 +200,36 @@
         <text x="40" y="303" font-size="13.5" fill="#09090B">The two gates are on opposite sides of the grouping step. That is the whole reason they are not interchangeable.</text>
       </g>
     </svg>
-    <figcaption>WHERE acts on rows that still exist individually. HAVING acts on groups that only exist after grouping.</figcaption>
+    <figcaption>WHERE действует на строки, которые все еще существуют индивидуально. HAVING действует на группы, которые существуют только после группировки.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>What you'll learn</strong>
+    <strong>Что вы узнаете</strong>
     <ol>
-      <li>What GROUP BY actually does to your rows</li>
-      <li>Which columns you can select, and the rule behind it</li>
-      <li>WHERE against HAVING, and why the order is forced</li>
-      <li>The small-group problem, and the line that fixes it</li>
-      <li>The full before and after</li>
-      <li>Edge cases that break summary queries in real data</li>
-      <li>Why this works</li>
-      <li>Using this on your own project</li>
-      <li>The whole thing on one screen</li>
+      <li>Что GROUP BY на самом деле делает с вашими строками</li>
+      <li>Какие столбцы вы можете выбрать, и правило, лежащее в основе этого</li>
+      <li>ГДЕ против ИМЕЮЩИХ, и почему приказ вынужденный</li>
+      <li>Проблема малых групп и линия, которая ее решает</li>
+      <li>Полное до и после</li>
+      <li>Пограничные случаи, которые нарушают сводные запросы в реальных данных</li>
+      <li>Почему это работает</li>
+      <li>Использование этого в вашем собственном проекте</li>
+      <li>Все на одном экране</li>
     </ol>
   </div>
 
-  <div class="note"><strong>The worked example is real.</strong> Every number on this page comes from a published portfolio project: 82,956 games from the Steam catalogue, with review counts, ratings and genres. The queries run against the full dataset at <a href="https://github.com/michaelnocito/steam-hidden-gems" target="_blank" rel="noopener">Steam Hidden Gems on GitHub</a>. If <code>SELECT</code> and <code>WHERE</code> are also new, start with <a href="../sql-foundations/">SQL foundations</a> and come back.</div>
+  <div class="note"><strong>Проработанный пример реальный.</strong>  Все цифры на этой странице взяты из опубликованного портфолио проекта: 82 956 игр из каталога Steam с количеством обзоров, рейтингами и жанрами. Запросы выполняются к полному набору данных по адресу  <a href="https://github.com/michaelnocito/steam-hidden-gems" target="_blank" rel="noopener">Скрытые сокровища Steam на GitHub</a>. Если  <code>SELECT</code> and <code>WHERE</code>  также новые, начните с  <a href="../sql-foundations/">Основы SQL</a>  и вернись.</div>
 
   <div class="step">
-    <h2>1. What GROUP BY actually does to your rows</h2>
+    <h2>1. Что GROUP BY на самом деле делает с вашими строками</h2>
 
-    <p>Before the explanation: your table has 82,956 rows. You group it by genre and get 28 rows back. Where did the other 82,928 rows go, and can you still see any of them?</p>
+    <p>Перед пояснением: в вашей таблице 82 956 строк. Вы группируете его по жанрам и получаете обратно 28 строк. Куда делись остальные 82 928 строк и можно ли их еще увидеть?</p>
 
-    <p>Here is the rule. <code>GROUP BY</code> sorts every row into a bucket, then replaces each bucket with exactly one output row. Nothing is deleted. The rows are still in there, collapsed. What changes is what one row of your result means.</p>
+    <p>Вот правило.  <code>GROUP BY</code>  сортирует каждую строку в сегмент, затем заменяет каждый блок ровно одной выходной строкой. Ничего не удаляется. Ряды все еще там, рухнувшие. Что меняется, так это то, что означает одна строка вашего результата.</p>
 
-    <p>That last sentence is the whole idea. Before grouping, one row was one game. After grouping by genre, one row is one genre. The word for this is <strong>grain</strong>, and saying the new grain out loud before you write anything else prevents most of the mistakes on this page.</p>
+    <p>В этом последнем предложении и заключается вся идея. До группировки один ряд был одной игрой. После группировки по жанрам одна строка — это один жанр. Слово для этого  <strong>grain</strong>и произнесение новой детали вслух, прежде чем писать что-либо еще, предотвращает большинство ошибок на этой странице.</p>
 
-    <p>An aggregate function is how you get a value back out of a collapsed bucket. <code>COUNT(*)</code> asks how many rows are in this bucket. <code>AVG(PctPositive)</code> asks for the mean of that column across the bucket. <code>SUM</code>, <code>MIN</code> and <code>MAX</code> work the same way. Each one takes many values and returns one, which is exactly what a single output row needs.</p>
+    <p>Агрегатная функция позволяет получить значение обратно из свернутого сегмента.  <code>COUNT(*)</code>  спрашивает, сколько строк в этом ведре.  <code>AVG(PctPositive)</code>  запрашивает среднее значение этого столбца в ведре.  <code>SUM</code>, <code>MIN</code> and <code>MAX</code>  работать так же. Каждый из них принимает множество значений и возвращает одно, а это именно то, что нужно для одной выходной строки.</p>
 
     <pre><code>SELECT PrimaryGenre,
        COUNT(*) AS games,
@@ -237,56 +237,56 @@
 FROM games
 GROUP BY PrimaryGenre;</code></pre>
 
-    <p>That returns 28 rows, one per genre. Action has 35,149 games and averages 75.4% positive. Adventure has 17,486 and averages 77.7%. The 82,956 original rows are all still accounted for, because every game landed in exactly one bucket.</p>
+    <p>Это возвращает 28 строк, по одной на каждый жанр. На счету Action 35 149 игр и средний показатель положительных результатов 75,4%. Приключение имеет 17 486 и составляет в среднем 77,7%. Все 82 956 исходных строк все еще учтены, поскольку каждая игра попала ровно в одну корзину.</p>
 
-    <div class="note"><strong>Name the new grain before you write the aggregate.</strong> "One row per genre" tells you immediately that a game's individual rating is no longer available, and that anything you select has to be true of the whole genre.</div>
+    <div class="note"><strong>Назовите новое зерно, прежде чем писать совокупность.</strong>  «Одна строка на жанр» сразу сообщает вам, что индивидуальный рейтинг игры больше не доступен и что все, что вы выбираете, должно относиться ко всему жанру.</div>
   </div>
 
   <div class="step">
-    <h2>2. Which columns you can select, and the rule behind it</h2>
+    <h2>2. Какие столбцы можно выбирать и какое правило стоит за этим</h2>
 
-    <p>Before the explanation: you group by genre and also select the game's name. The database either errors or hands you one name out of 35,149. Which name should it give you?</p>
+    <p>Перед пояснением: группируете по жанрам, а также выбираете название игры. База данных либо выдаёт ошибку, либо выдает вам одно имя из 35 149. Какое имя оно должно вам дать?</p>
 
-    <p>There is no sensible answer, which is why the rule exists. After grouping, every column in your <code>SELECT</code> must be one of two things.</p>
+    <p>Разумного ответа нет, поэтому и существует правило. После группировки каждый столбец в вашем  <code>SELECT</code>  должно быть одно из двух.</p>
     <ul>
-      <li><strong>A column you grouped by.</strong> It is safe because every row in the bucket has the same value for it. All 35,149 Action games have the genre Action.</li>
-      <li><strong>An aggregate.</strong> It is safe because it turns the whole bucket into one value on purpose.</li>
+      <li><strong>Столбец, по которому вы сгруппировали.</strong>  Это безопасно, поскольку каждая строка в сегменте имеет одно и то же значение. Все 35 149 экшн-игр относятся к жанру Action.</li>
+      <li><strong>Агрегат.</strong>  Это безопасно, поскольку намеренно превращает всю корзину в одно значение.</li>
     </ul>
 
-    <p>Anything else is a column with 35,149 different values and one slot to put them in. Most databases refuse. PostgreSQL and SQL Server raise an error naming the column. SQLite and older MySQL settings do something worse: they pick a value arbitrarily and return it without comment, so you get a real-looking name attached to a genre-wide average.</p>
+    <p>Все остальное — это столбец с 35 149 различными значениями и одним слотом для их размещения. Большинство баз данных отказываются. PostgreSQL и SQL Server выдают ошибку при присвоении имени столбцу. Настройки SQLite и старых MySQL делают нечто худшее: они выбирают значение произвольно и возвращают его без комментариев, поэтому вы получаете реально выглядящее имя, привязанное к среднему значению по жанру.</p>
 
     <pre><code>-- Errors on PostgreSQL, returns a misleading row on SQLite
 SELECT PrimaryGenre, Name, AVG(PctPositive)
 FROM games
 GROUP BY PrimaryGenre;</code></pre>
 
-    <p>Say why that query has no correct answer, in your own words, before reading on. If you can state the reason, the error message will never confuse you again.</p>
+    <p>Прежде чем читать дальше, скажите своими словами, почему на этот вопрос нет правильного ответа. Если вы сможете указать причину, сообщение об ошибке больше никогда вас не смутит.</p>
 
-    <p>The reason is that <code>Name</code> is at the wrong grain. It describes one game, and the row now describes a genre. When you genuinely want the top name per group, that is a different tool, and it is the subject of <a href="../sql-window-functions/">window functions</a>.</p>
+    <p>Причина в том, что  <code>Name</code>  находится не в том зерне. Он описывает одну игру, а строка теперь описывает жанр. Если вы действительно хотите, чтобы в каждой группе было первое имя, это другой инструмент, и это предмет  <a href="../sql-window-functions/">Оконные функции</a>.</p>
 
-    <p>Grouping by more than one column works the same way, with a finer bucket. <code>GROUP BY PrimaryGenre, ReleaseYear</code> makes one row per genre per year, and both of those columns are then safe to select.</p>
+    <p>Группировка по нескольким столбцам работает таким же образом, но с более мелким сегментом.  <code>GROUP BY PrimaryGenre, ReleaseYear</code>  составляет одну строку для каждого жанра в год, и тогда оба этих столбца можно безопасно выбрать.</p>
   </div>
 
   <div class="step">
-    <h2>3. WHERE against HAVING, and why the order is forced</h2>
+    <h2>3. ГДЕ против ИМЕТЬ, и почему приказ вынужденный</h2>
 
-    <p>Before the explanation: you want genres whose average rating is above 80. You try putting that condition in <code>WHERE</code> and the database refuses. Why can it not simply work it out?</p>
+    <p>Перед пояснением: вам нужны жанры со средним рейтингом выше 80. Попробуйте поставить это условие в  <code>WHERE</code>  и база данных отказывается. Почему это не может просто решиться?</p>
 
-    <p>Because when <code>WHERE</code> runs, the average does not exist yet. This is not a style preference. It is the order the database evaluates the clauses in, and that order is fixed.</p>
+    <p>Потому что когда  <code>WHERE</code>  работает, среднего еще не существует. Это не стилевое предпочтение. Это порядок, в котором база данных оценивает предложения, и этот порядок фиксирован.</p>
 
     <table>
-      <tr><th>Order</th><th>Clause</th><th>What it can see</th></tr>
-      <tr><td>1</td><td><code>FROM</code></td><td>The tables</td></tr>
-      <tr><td>2</td><td><code>WHERE</code></td><td>Individual rows. No aggregates exist yet.</td></tr>
-      <tr><td>3</td><td><code>GROUP BY</code></td><td>Sorts surviving rows into buckets</td></tr>
-      <tr><td>4</td><td><code>HAVING</code></td><td>Whole groups, and their aggregates</td></tr>
-      <tr><td>5</td><td><code>SELECT</code></td><td>Builds the output row per group</td></tr>
-      <tr><td>6</td><td><code>ORDER BY</code></td><td>Sorts the finished output</td></tr>
+      <tr><th>Order</th><th>Clause</th><th>Что он может видеть</th></tr>
+      <tr><td>1</td><td><code>FROM</code></td><td>Столы</td></tr>
+      <tr><td>2</td><td><code>WHERE</code></td><td>Отдельные строки. Никаких агрегатов пока не существует.</td></tr>
+      <tr><td>3</td><td><code>GROUP BY</code></td><td>Сортирует оставшиеся строки в сегменты.</td></tr>
+      <tr><td>4</td><td><code>HAVING</code></td><td>Целые группы и их совокупности</td></tr>
+      <tr><td>5</td><td><code>SELECT</code></td><td>Строит выходную строку для каждой группы</td></tr>
+      <tr><td>6</td><td><code>ORDER BY</code></td><td>Сортирует готовый результат</td></tr>
     </table>
 
-    <p>So <code>WHERE COUNT(*) &gt;= 500</code> is asking step two for a number that step four invents. The error is the database telling you the truth about its own sequence.</p>
+    <p>So <code>WHERE COUNT(*) &gt;= 500</code>  запрашивает у второго шага число, которое придумывает четвертый шаг. Ошибка заключается в том, что база данных сообщает вам правду о своей последовательности.</p>
 
-    <p>The practical version is short. If your condition is about one row, it goes in <code>WHERE</code>. If it is about a whole group, it goes in <code>HAVING</code>.</p>
+    <p>Практическая версия короткая. Если ваше условие составляет около одной строки, оно входит в  <code>WHERE</code>. Если речь идет о целой группе, то она входит  <code>HAVING</code>.</p>
 
     <pre><code>SELECT PrimaryGenre,
        COUNT(*) AS games,
@@ -297,19 +297,19 @@ GROUP BY PrimaryGenre
 HAVING COUNT(*) >= 500           -- about a whole genre
 ORDER BY avg_rating DESC;</code></pre>
 
-    <p>Both filters in one query, and they are doing different jobs. The <code>WHERE</code> line says a game needs enough reviews for its own rating to mean anything, which drops the catalogue from 82,956 games to 10,507. The <code>HAVING</code> line says a genre needs enough games for its average to mean anything.</p>
+    <p>Оба фильтра в одном запросе и выполняют разную работу.  <code>WHERE</code>  line говорит, что игре нужно достаточное количество обзоров, чтобы ее собственный рейтинг мог что-то значить, в результате чего каталог упал с 82 956 игр до 10 507.  <code>HAVING</code>  линия говорит, что жанру нужно достаточно игр, чтобы его средний показатель мог что-то значить.</p>
 
-    <div class="note"><strong>Prefer WHERE when you have the choice.</strong> Filtering early means fewer rows to sort into buckets, so the query is faster. Use <code>HAVING</code> for the conditions that genuinely cannot be checked until the group exists.</div>
+    <div class="note"><strong>Предпочитайте ГДЕ, когда у вас есть выбор.</strong>  Ранняя фильтрация означает меньшее количество строк для сортировки по сегментам, поэтому запрос выполняется быстрее. Использовать  <code>HAVING</code>  для условий, которые действительно невозможно проверить, пока группа не существует.</div>
   </div>
 
   <div class="step">
-    <h2>4. The small-group problem, and the line that fixes it</h2>
+    <h2>4. Проблема малых групп и способ ее решения</h2>
 
-    <p>Before the explanation: which genre in a catalogue of 82,956 games do you think has the highest average rating? Commit to a guess before you read the answer.</p>
+    <p>Перед пояснением: как вы думаете, какой жанр в каталоге из 82 956 игр имеет самый высокий средний рейтинг? Прежде чем прочитать ответ, сделайте предположение.</p>
 
-    <p>It is Accounting, at 79.5% positive. Ahead of Adventure, ahead of RPG, ahead of everything. The query is correct, the data is real, and the answer is worthless, because there are eleven accounting games in the entire catalogue.</p>
+    <p>Это бухгалтерский учет, на 79,5% положительный. Впереди приключения, впереди РПГ, впереди все. Запрос правильный, данные реальные, а ответ ничего не стоит, потому что во всем каталоге одиннадцать бухгалтерских игр.</p>
 
-    <p>Here is the ranking without a floor.</p>
+    <p>Вот рейтинг без пола.</p>
 
     <pre><code>SELECT PrimaryGenre,
        COUNT(*) AS games,
@@ -319,17 +319,17 @@ GROUP BY PrimaryGenre
 ORDER BY avg_rating DESC;</code></pre>
 
     <table>
-      <tr><th>Genre</th><th>Games</th><th>Average rating</th></tr>
+      <tr><th>Genre</th><th>Games</th><th>Средний рейтинг</th></tr>
       <tr><td>Accounting</td><td>11</td><td>79.5</td></tr>
-      <tr><td>Game Development</td><td>7</td><td>79.1</td></tr>
+      <tr><td>Разработка игр</td><td>7</td><td>79.1</td></tr>
       <tr><td>Adventure</td><td>17,486</td><td>77.7</td></tr>
-      <tr><td>Photo Editing</td><td>21</td><td>77.2</td></tr>
+      <tr><td>Редактирование фотографий</td><td>21</td><td>77.2</td></tr>
       <tr><td>Casual</td><td>15,007</td><td>76.9</td></tr>
     </table>
 
-    <p>Three of the top five are categories with fewer than 25 items. This is not bad luck. It is arithmetic: a mean over eleven values moves freely, and a mean over seventeen thousand barely moves at all. So the extremes of any ranking fill up with the smallest groups every time, in both directions.</p>
+    <p>Три из пяти первых категорий — это категории, содержащие менее 25 позиций. Это не невезение. Это арифметика: среднее значение более одиннадцати значений движется свободно, а среднее значение более семнадцати тысяч почти не движется вообще. Таким образом, крайние точки любого рейтинга каждый раз заполняются наименьшими группами в обоих направлениях.</p>
 
-    <p>One line fixes it.</p>
+    <p>Одна строка исправляет это.</p>
 
     <pre><code>SELECT PrimaryGenre,
        COUNT(*) AS games,
@@ -340,7 +340,7 @@ HAVING COUNT(*) >= 500
 ORDER BY avg_rating DESC;</code></pre>
 
     <table>
-      <tr><th>Genre</th><th>Games</th><th>Average rating</th></tr>
+      <tr><th>Genre</th><th>Games</th><th>Средний рейтинг</th></tr>
       <tr><td>Adventure</td><td>17,486</td><td>77.7</td></tr>
       <tr><td>Casual</td><td>15,007</td><td>76.9</td></tr>
       <tr><td>RPG</td><td>1,326</td><td>76.2</td></tr>
@@ -349,17 +349,17 @@ ORDER BY avg_rating DESC;</code></pre>
       <tr><td>Action</td><td>35,149</td><td>75.4</td></tr>
     </table>
 
-    <p>That floor removed 20 of the 28 genres and produced the first ranking anyone could act on. The spread also collapsed, from a top of 79.5 down to 77.7, which is the honest picture: genres are much more alike than the first table suggested.</p>
+    <p>На этом этаже были удалены 20 из 28 жанров и создан первый рейтинг, на который можно было опереться. Спред также рухнул с вершины 79,5 до 77,7, что является честной картиной: жанры гораздо более похожи, чем предполагалось в первой таблице.</p>
 
-    <p>The number 500 is a judgement, not a fact, and it has to be defensible. Pick it from the data rather than from taste, write down why, and check whether the ranking survives a different choice. <a href="../data-driven-thresholds/">Choosing thresholds from the data</a> covers how to do that honestly.</p>
+    <p>Число 500 — это суждение, а не факт, и оно должно быть оправдано. Выбирайте его на основании данных, а не по вкусу, запишите почему и проверьте, выдержит ли рейтинг другой выбор.  <a href="../data-driven-thresholds/">Выбор порогов из данных</a>  рассказывает, как это сделать честно.</p>
 
-    <p>Now picture the last summary query you shipped. If you added <code>HAVING COUNT(*) &gt;= 30</code> to it, would the top of the result change? That is the hinge of this guide, and for most real reports the answer is yes.</p>
+    <p>Теперь представьте себе последний отправленный вами сводный запрос. Если вы добавили  <code>HAVING COUNT(*) &gt;= 30</code>  к этому, изменится ли верхняя часть результата? Это основа данного руководства, и для большинства реальных отчетов ответ — да.</p>
   </div>
 
   <div class="step">
-    <h2>5. The full before and after</h2>
+    <h2>5. Полное до и после</h2>
 
-    <p>Same table, same question: which genres do players rate highest?</p>
+    <p>Та же таблица, тот же вопрос: какие жанры игроки оценивают выше всего?</p>
 
     <h3>Before</h3>
     <pre><code>SELECT PrimaryGenre, AVG(PctPositive) AS avg_rating
@@ -367,7 +367,7 @@ FROM games
 GROUP BY PrimaryGenre
 ORDER BY avg_rating DESC;</code></pre>
 
-    <p>Three problems, none of which produce an error. Games with three reviews count the same as games with thirty thousand. Genres with eleven games count the same as genres with thirty-five thousand. And the reader cannot see either problem, because the group sizes are not on the screen.</p>
+    <p>Три проблемы, ни одна из которых не приводит к ошибке. Игры с тремя обзорами засчитываются так же, как игры с тридцатью тысячами. Жанры с одиннадцатью играми считаются так же, как жанры с тридцатью пятью тысячами. И читатель не видит ни одной проблемы, потому что размеров групп нет на экране.</p>
 
     <h3>After</h3>
     <pre><code>-- ============================================================
@@ -397,109 +397,109 @@ GROUP BY PrimaryGenre
 HAVING COUNT(*) >= 500
 ORDER BY avg_rating DESC;</code></pre>
 
-    <p>The group size is now a visible column, so a reader can judge the average for themselves. Both floors are stated with a reason. The coverage line names what was excluded. The comment format is the one from <a href="../sql-teaching-comments/">how to comment SQL so it teaches</a>.</p>
+    <p>Размер группы теперь отображается в виде видимого столбца, поэтому читатель может самостоятельно оценить среднее значение. Оба этажа указаны не без причины. В строке покрытия указано, что было исключено. Формат комментариев тот же, что и у  <a href="../sql-teaching-comments/">Как комментировать SQL, чтобы он обучал</a>.</p>
   </div>
 
   <div class="step">
-    <h2>6. Edge cases that break summary queries in real data</h2>
+    <h2>6. Крайние случаи, которые нарушают сводные запросы в реальных данных</h2>
 
-    <p>Before the explanation: a genre you know exists is missing from your grouped result entirely. Not zero. Absent. What would you check first?</p>
+    <p>Перед объяснением: жанр, о существовании которого вы знаете, полностью отсутствует в вашем сгруппированном результате. Не ноль. Отсутствующий. Что бы вы проверили в первую очередь?</p>
 
-    <p>Six things that each cost someone an afternoon.</p>
+    <p>Шесть вещей, каждая из которых стоит кому-то дня.</p>
 
-    <p><strong>A <code>WHERE</code> filter emptied the group.</strong> This is the answer to the prequestion. Grouping can only produce a bucket for rows that survived <code>WHERE</code>. If every game in a genre had fewer than 500 reviews, that genre has no rows to collapse and no output row at all. A group that should read zero is instead invisible, which is a different and more misleading thing.</p>
+    <p><strong>A <code>WHERE</code>  фильтр очистил группу.</strong>  Это ответ на предварительный вопрос. Группировка может создавать сегмент только для сохранившихся строк.  <code>WHERE</code>. Если каждая игра определенного жанра имеет менее 500 обзоров, в этом жанре нет строк, которые можно было бы свернуть, и вообще нет выходной строки. Группа, которая должна читать ноль, вместо этого невидима, что является другой и более вводящей в заблуждение вещью.</p>
 
-    <p><strong><code>COUNT(*)</code> and <code>COUNT(column)</code> are not the same.</strong> <code>COUNT(*)</code> counts rows. <code>COUNT(column)</code> counts rows where that column is not <code>NULL</code>. On a column with missing values they return different numbers, and only one of them answers your question. <a href="../sql-count-function/">COUNT in SQL</a> goes through the whole family.</p>
+    <p><strong><code>COUNT(*)</code> and <code>COUNT(column)</code>  не одинаковы.</strong> <code>COUNT(*)</code>  считает строки.  <code>COUNT(column)</code>  подсчитывает строки, где этого столбца нет  <code>NULL</code>. В столбце с пропущенными значениями возвращаются разные числа, и только одно из них отвечает на ваш вопрос.  <a href="../sql-count-function/">СЧЕТ в SQL</a>  проходит всю семью.</p>
 
-    <p><strong><code>NULL</code> becomes its own group.</strong> Rows with a missing genre collapse into a single bucket that usually prints as blank. It looks like a formatting glitch and it is really a count of your missing data, which is worth reading rather than hiding.</p>
+    <p><strong><code>NULL</code>  становится отдельной группой.</strong>  Строки с отсутствующим жанром сворачиваются в одну корзину, которая обычно печатается как пустая. Это похоже на ошибку форматирования, и на самом деле это подсчет недостающих данных, которые стоит прочитать, а не скрывать.</p>
 
-    <p><strong>Aggregates skip <code>NULL</code>, and that moves your average.</strong> <code>AVG</code> divides by the number of non-null values, not by the number of rows. So an average over a column that is 30% empty is an average of the 70% who answered, which is a genuinely different claim.</p>
+    <p><strong>Агрегаты пропускают  <code>NULL</code>, и это перемещает ваше среднее значение.</strong> <code>AVG</code>  делится на количество ненулевых значений, а не на количество строк. Таким образом, среднее значение по столбцу, пустому на 30 %, представляет собой среднее значение для 70 % ответивших, а это совсем другое утверждение.</p>
 
-    <p><strong>You cannot use a <code>SELECT</code> alias in <code>HAVING</code> everywhere.</strong> <code>HAVING avg_rating &gt; 80</code> works in MySQL and SQLite and fails in PostgreSQL and SQL Server, because <code>SELECT</code> runs after <code>HAVING</code>. Repeating the full <code>AVG(PctPositive) &gt; 80</code> works everywhere.</p>
+    <p><strong>Вы не можете использовать  <code>SELECT</code> Псевдоним в  <code>HAVING</code>  повсюду.</strong> <code>HAVING avg_rating &gt; 80</code>  работает в MySQL и SQLite и не работает в PostgreSQL и SQL Server, потому что  <code>SELECT</code>  бежит за  <code>HAVING</code>. Повторяю полностью  <code>AVG(PctPositive) &gt; 80</code>  работает везде.</p>
 
-    <p><strong>Grouping after a join counts duplicates.</strong> If a join multiplied your rows, <code>COUNT(*)</code> now counts pairs rather than things. <code>COUNT(DISTINCT id)</code> is usually what you meant. This is the most common wrong number in real reporting, and <a href="../sql-joins/">SQL joins</a> covers why it happens.</p>
+    <p><strong>Группировка после объединения учитывает дубликаты.</strong>  Если соединение умножило ваши строки,  <code>COUNT(*)</code>  теперь считает пары, а не вещи.  <code>COUNT(DISTINCT id)</code>  обычно это то, что вы имели в виду. Это наиболее распространенная неправильная цифра в реальной отчетности.  <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a>  объясняет, почему это происходит.</p>
   </div>
 
-  <h2>Why this works</h2>
+  <h2>Почему это работает</h2>
 
-  <p>The clause order is not a convention that a database chose. Grouping is defined as a partition of the rows into disjoint sets, and an aggregate is a function from a set to a single value. Codd's relational model defines operations that way, over relations rather than over individual records (Codd, 1970, <em>Communications of the ACM</em>, 13(6), 377–387). Once grouping is a partition, a filter on a group cannot possibly run before the partition exists, and a column at row grain cannot survive into a row that represents a set. Both rules on this page fall out of that, rather than being bolted on.</p>
+  <p>Порядок предложений не является соглашением, выбранным базой данных. Группировка определяется как разделение строк на непересекающиеся наборы, а агрегат — это функция от набора к одному значению. Реляционная модель Кодда определяет операции именно над отношениями, а не над отдельными записями (Codd, 1970,  <em>Коммуникации ACM</em>, 13(6), 377–387). Если группировка представляет собой раздел, фильтр группы не может работать до того, как раздел существует, а столбец на уровне строки не может сохраниться в строке, представляющей набор. Оба правила на этой странице выпадают из этого, а не закреплены болтами.</p>
 
-  <p>The small-group problem is older than SQL and it is not really a query bug. Any ranking of averages puts the smallest samples at both extremes, because the variance of a mean falls as the sample grows. Gelman and Price show that this makes maps and league tables of rates systematically misleading, and that no simple ranking of estimates escapes it (Gelman &amp; Price, 1999, <em>Statistics in Medicine</em>, 18(23), 3221–3234). The eleven accounting games are that exact effect. A <code>HAVING</code> floor is the blunt fix, and it is the right one for a report.</p>
+  <p>Проблема малых групп старше SQL и на самом деле не является ошибкой запроса. Любое ранжирование средних значений помещает наименьшие выборки в обе крайности, поскольку дисперсия среднего значения падает по мере роста выборки. Гельман и Прайс показывают, что это приводит к тому, что карты и рейтинговые таблицы систематически вводят в заблуждение, и что от этого не ускользает простое ранжирование оценок (Gelman &amp; Price, 1999,  <em>Статистика в медицине</em>, 18(23), 3221–3234). Одиннадцать бухгалтерских игр дают именно такой эффект. А  <code>HAVING</code>  пол — это грубое решение, и оно подходит для отчета.</p>
 
-  <p>There is a second reason this page keeps asking you to guess before it answers. Being asked a question before you have been given the answer improves memory for that specific information, even when the guess is wrong, and the effect is reliable across a large body of studies (Bisra, Liu, Nesbit, Salimi, &amp; Winne, 2018, <em>Educational Psychology Review</em>, 30(3), 703–725). Guessing which genre ranked highest is why the answer sticks.</p>
+  <p>Есть и вторая причина, по которой эта страница постоянно просит вас угадать, прежде чем она ответит. Если вам задают вопрос до того, как вам дадут ответ, это улучшает память на эту конкретную информацию, даже если предположение неверно, и эффект надежен в большом количестве исследований (Бисра, Лю, Несбит, Салими и Винн, 2018,  <em>Обзор педагогической психологии</em>, 30(3), 703–725). Ответ остается неизменным, если вы угадаете, какой жанр занял первое место.</p>
 
-  <h2>Using this on your own project</h2>
+  <h2>Использование этого в вашем собственном проекте</h2>
 
-  <p>Think of a summary you have already sent to someone. Can you say how many records sit behind its top row? If you cannot, that is the one to check first.</p>
+  <p>Подумайте о резюме, которое вы уже кому-то отправили. Можете ли вы сказать, сколько записей находится за верхним рядом? Если вы не можете, это то, что нужно проверить в первую очередь.</p>
 
-  <p>Auditing every grouped query at once is miserable work and you will stop halfway. Do this instead, in order.</p>
+  <p>Аудит каждого сгруппированного запроса сразу — жалкая работа, и вы остановитесь на полпути. Вместо этого сделайте это по порядку.</p>
 
   <ol>
-    <li><strong>Say the new grain out loud</strong> before you write the query. "One row per genre." Five seconds, and it tells you which columns are legal.</li>
-    <li><strong>Put <code>COUNT(*)</code> in every grouped query</strong>, even when nobody asked for it. It is the column that lets a reader judge the rest, and it costs nothing.</li>
-    <li><strong>Add a <code>HAVING</code> floor before you read the ranking</strong>, not after. Reading the unfiltered version first anchors you to an answer you will not want to give up.</li>
-    <li><strong>Write the floor and its reason into the file</strong> as a comment, in the same pass. This is the first number a reviewer questions.</li>
-    <li><strong>Check every non-aggregate column</strong> against the <code>GROUP BY</code> list. If a column is in neither place, your database may be quietly choosing a value for you.</li>
+    <li><strong>Скажи вслух новое зерно</strong>  прежде чем писать запрос. «Одна строка на жанр». Пять секунд, и вы узнаете, какие столбцы являются допустимыми.</li>
+    <li><strong>Put <code>COUNT(*)</code>  в каждом сгруппированном запросе</strong>, даже когда никто об этом не просил. Именно колонка позволяет читателю судить обо всем остальном, и это ничего не стоит.</li>
+    <li><strong>Добавить  <code>HAVING</code>  этаж, прежде чем прочитать рейтинг</strong>, а не после. Чтение нефильтрованной версии сначала дает вам ответ, от которого вы не захотите отказаться.</li>
+    <li><strong>Запишите пол и его причину в файл</strong>  в качестве комментария в том же проходе. Это первый номер, который задает рецензент.</li>
+    <li><strong>Проверьте каждый неагрегированный столбец</strong>  против  <code>GROUP BY</code>  список. Если столбец отсутствует ни в одном из этих мест, возможно, ваша база данных незаметно выбирает значение за вас.</li>
   </ol>
 
-  <p>If you have paper nearby and five spare minutes, there is one drawing worth doing, and it is optional. Draw eight rows, cross two out, collapse the remaining six into three buckets, then cross out the bucket holding one row. Label the two crossings-out yourself. Redrawing that from memory is both a retrieval attempt and a check on whether you have it.</p>
+  <p>Если у вас под рукой есть бумага и пять свободных минут, стоит сделать один рисунок, и он не является обязательным. Нарисуйте восемь рядов, вычеркните два, сложите оставшиеся шесть в три ведра, затем вычеркните ведро, в котором находится один ряд. Обозначьте два зачеркивания самостоятельно. Перерисовка этого по памяти — это и попытка извлечения, и проверка того, есть ли оно у вас.</p>
 
-  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: SQL, Tableau, data migration, and the working habits around them.</div>
+  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: SQL, Tableau, миграция данных и связанные с ними рабочие привычки.</div>
 
-  <h2>The whole thing on one screen</h2>
+  <h2>Все на одном экране</h2>
 
-  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
+  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
 
   <table>
-    <tr><th>Concept</th><th>What it does</th></tr>
-    <tr><td><code>GROUP BY</code></td><td>Sorts rows into buckets, then returns one row per bucket.</td></tr>
-    <tr><td>Grain after grouping</td><td>One row per group, not one row per record. Say it out loud.</td></tr>
-    <tr><td>Legal columns</td><td>Only grouped columns and aggregates. Everything else is at the wrong grain.</td></tr>
-    <tr><td><code>COUNT(*)</code></td><td>Rows in the bucket, including rows with nulls.</td></tr>
-    <tr><td><code>COUNT(col)</code></td><td>Rows where that column is not null. Often a different number.</td></tr>
-    <tr><td><code>COUNT(DISTINCT col)</code></td><td>Distinct values. What you usually want after a join.</td></tr>
-    <tr><td><code>AVG</code>, <code>SUM</code>, <code>MIN</code>, <code>MAX</code></td><td>Many values to one value. All of them skip nulls.</td></tr>
-    <tr><td><code>WHERE</code></td><td>Filters individual rows, before any group exists.</td></tr>
-    <tr><td><code>HAVING</code></td><td>Filters whole groups, after they are formed. The only one that sees an aggregate.</td></tr>
-    <tr><td>Clause order</td><td>FROM, WHERE, GROUP BY, HAVING, SELECT, ORDER BY.</td></tr>
-    <tr><td>Why they cannot swap</td><td>The aggregate does not exist when <code>WHERE</code> runs.</td></tr>
-    <tr><td>Alias in <code>HAVING</code></td><td>Works in MySQL and SQLite, fails in PostgreSQL and SQL Server. Repeat the expression.</td></tr>
-    <tr><td>The small-group problem</td><td>Tiny groups fill both ends of every ranking of averages.</td></tr>
-    <tr><td>The fix</td><td>A <code>HAVING COUNT(*)</code> floor, chosen from the data and written down.</td></tr>
-    <tr><td>Missing group</td><td>Every one of its rows was removed by <code>WHERE</code>, so no bucket formed.</td></tr>
-    <tr><td><code>NULL</code> group</td><td>Collapses into one blank-looking bucket. It is a count of your missing data.</td></tr>
-    <tr><td>Grouping after a join</td><td><code>COUNT(*)</code> counts pairs, not things. Use <code>COUNT(DISTINCT id)</code>.</td></tr>
+    <tr><th>Concept</th><th>Что он делает</th></tr>
+    <tr><td><code>GROUP BY</code></td><td>Сортирует строки по сегментам, а затем возвращает по одной строке для каждого сегмента.</td></tr>
+    <tr><td>Зерно после группировки</td><td>Одна строка на группу, а не одна строка на запись. Скажите это вслух.</td></tr>
+    <tr><td>Юридические колонки</td><td>Только сгруппированные столбцы и агрегаты. Все остальное не в том направлении.</td></tr>
+    <tr><td><code>COUNT(*)</code></td><td>Строки в сегменте, включая строки с нулями.</td></tr>
+    <tr><td><code>COUNT(col)</code></td><td>Строки, в которых этот столбец не равен нулю. Часто другой номер.</td></tr>
+    <tr><td><code>COUNT(DISTINCT col)</code></td><td>Разные ценности. Что вы обычно хотите после присоединения.</td></tr>
+    <tr><td><code>AVG</code>, <code>SUM</code>, <code>MIN</code>, <code>MAX</code></td><td>Множество значений в одном значении. Все они пропускают нули.</td></tr>
+    <tr><td><code>WHERE</code></td><td>Фильтрует отдельные строки до создания какой-либо группы.</td></tr>
+    <tr><td><code>HAVING</code></td><td>Фильтрует целые группы после их формирования. Единственный, который видит агрегат.</td></tr>
+    <tr><td>Порядок пунктов</td><td>ОТКУДА, ГДЕ, ГРУППИРУЙТЕ ПО, ИМЕЕТ, ВЫБИРАЙТЕ, Упорядочивайте.</td></tr>
+    <tr><td>Почему они не могут поменяться</td><td>Агрегат не существует, когда  <code>WHERE</code>  бежит.</td></tr>
+    <tr><td>Псевдоним в  <code>HAVING</code></td><td>Работает в MySQL и SQLite, не работает в PostgreSQL и SQL Server. Повторите выражение.</td></tr>
+    <tr><td>Проблема маленькой группы</td><td>Крошечные группы заполняют оба конца каждого рейтинга средних показателей.</td></tr>
+    <tr><td>Исправление</td><td>A <code>HAVING COUNT(*)</code>  этаж, выбранный из данных и записанный.</td></tr>
+    <tr><td>Отсутствует группа</td><td>Каждая из его строк была удалена  <code>WHERE</code>, поэтому ведро не образовалось.</td></tr>
+    <tr><td><code>NULL</code> group</td><td>Сваливается в одно пустое на вид ведро. Это подсчет недостающих данных.</td></tr>
+    <tr><td>Группировка после объединения</td><td><code>COUNT(*)</code>  считает пары, а не вещи. Использовать  <code>COUNT(DISTINCT id)</code>.</td></tr>
   </table>
 
-  <div class="note"><strong>The one habit to keep.</strong> If you take nothing else from this page, put <code>COUNT(*)</code> in every grouped query and set a floor before you read the ranking. The wrong answer here never looks wrong. It looks like a result. If a summary query breaks in a way this page does not cover, there is a general <a href="../technical-tenacity/">diagnosis loop for being stuck</a>.</div>
+  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Если вы больше ничего не берете с этой страницы, поставьте  <code>COUNT(*)</code>  в каждом сгруппированном запросе и установите минимальный уровень, прежде чем читать рейтинг. Неправильный ответ здесь никогда не выглядит неправильным. Похоже на результат. Если сводный запрос нарушается так, как это не описано на этой странице, существует общая  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>.</div>
 
-  <p>One last thought, and I would genuinely like other people's answers. My eleven accounting games were obviously silly once I saw the count, but I only saw the count because I had put it in the query. What is the smallest group that has ever topped one of your charts, and how long did it take you to notice?</p>
+  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Мои одиннадцать бухгалтерских игр стали явно глупыми, когда я увидел подсчет, но я увидел подсчет только потому, что включил его в запрос. Какая самая маленькая группа когда-либо возглавляла один из ваших чартов, и сколько времени вам понадобилось, чтобы это заметить?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Codd, E. F. (1970). A relational model of data for large shared data banks. <em>Communications of the ACM</em>, 13(6), 377–387.</li>
-    <li>Gelman, A., &amp; Price, P. N. (1999). All maps of parameter estimates are misleading. <em>Statistics in Medicine</em>, 18(23), 3221–3234.</li>
-    <li>Bisra, K., Liu, Q., Nesbit, J. C., Salimi, F., &amp; Winne, P. H. (2018). Inducing self-explanation: A meta-analysis. <em>Educational Psychology Review</em>, 30(3), 703–725.</li>
+    <li>Кодд, EF (1970). Реляционная модель данных для крупных общих банков данных.  <em>Коммуникации ACM</em>, 13(6), 377–387.</li>
+    <li>Гельман А. и Прайс П.Н. (1999). Все карты оценок параметров вводят в заблуждение.  <em>Статистика в медицине</em>, 18(23), 3221–3234.</li>
+    <li>Бисра К., Лю К., Несбит Дж. К., Салими Ф. и Винн П. Х. (2018). Побуждение к самообъяснению: метаанализ.  <em>Обзор педагогической психологии</em>, 30(3), 703–725.</li>
   </ul>
 
   <div class="book">
-    <strong>The filter belongs somewhere and WHERE and HAVING both look plausible.</strong>
-    <p><em>SQL for Analysts</em> is 458 pages, GROUP BY and HAVING read line by line, including the order the database does things in.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-group-by-having'})">SQL for Analysts, $19 &rarr;</a>
+    <strong>Фильтр где-то принадлежит, и WHERE, и HAVING выглядят правдоподобно.</strong>
+    <p><em>SQL для аналитиков</em>  составляет 458 страниц, GROUP BY и HAVING читаются построчно, включая порядок, в котором база данных выполняет действия.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-group-by-having'})">SQL для аналитиков, 19 $ →</a>
   </div>
 
   <div class="cta">
-    <strong>Practice grouping with the data in front of you.</strong>
-    <p style="margin:6px 0 0">The <a href="../../sql/">SQL Kit</a> runs SQLite in the browser, so you write the query, run it, and watch the row count collapse. Worked examples, flash cards, and a mock exam sit alongside it. Nothing to install, no account needed.</p>
-    <a class="btn" href="../../sql/">Open the SQL Kit →</a>
+    <strong>Попрактикуйтесь в группировке данных, находящихся перед вами.</strong>
+    <p style="margin:6px 0 0">The <a href="../../sql/">SQL-комплект</a>  запускает SQLite в браузере, поэтому вы пишете запрос, запускаете его и наблюдаете за коллапсом количества строк. Рядом с ним лежат рабочие примеры, карточки и пробный экзамен. Ничего устанавливать, учетная запись не требуется.</p>
+    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> · <a href="../sql-foundations/">SQL Foundations</a> · <a href="../sql-joins/">SQL JOINs</a> · <a href="../sql-ctes/">SQL CTEs</a> · <a href="../sql-window-functions/">Window Functions</a> · <a href="../../drill/">SQL Drill</a> · <a href="../what-is-data-analysis/">What Is Data Analysis?</a> · <a href="../sql-teaching-comments/">Comment SQL So It Teaches</a> · <a href="../sql-count-function/">COUNT in SQL</a> · <a href="../sql-case-expression/">The CASE Expression</a> · <a href="../sql-aliasing/">SQL Aliases</a> · <a href="../set-up-a-sql-database/">Set Up a SQL Database</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../git-for-analysts/">Git for Analysts</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../data-driven-thresholds/">Data-Driven Thresholds</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../entity-resolution/">Entity Resolution</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../tableau-concepts/">Tableau Concepts</a> · <a href="../build-a-tableau-dashboard/">Build a Tableau Dashboard</a> · <a href="../../sql/">SQL Kit</a> · <a href="../../projects/">Portfolio Projects</a>
+    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../sql-foundations/">Основы SQL</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-ctes/">SQL CTE</a> · <a href="../sql-window-functions/">Оконные функции</a> · <a href="../../drill/">SQL-детализация</a> · <a href="../what-is-data-analysis/">Что такое анализ данных?</a> · <a href="../sql-teaching-comments/">Комментарий SQL, чтобы он научился</a> · <a href="../sql-count-function/">СЧЕТ в SQL</a> · <a href="../sql-case-expression/">Выражение CASE</a> · <a href="../sql-aliasing/">SQL-псевдонимы</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../git-for-analysts/">Git для аналитиков</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../data-driven-thresholds/">Пороги, управляемые данными</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../tableau-concepts/">Концепции таблиц</a> · <a href="../build-a-tableau-dashboard/">Создайте панель управления Tableau</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../../projects/">Портфельные проекты</a>
     
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

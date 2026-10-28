@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru" data-static-ru="true">
 <head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Which SQL Database Should You Install? A One-Question Answer — Analyst Prep Kit</title>
-<meta name="description" content="Which SQL database to install for learning and analysis work: file-based engines like SQLite and DuckDB versus servers like PostgreSQL, MySQL and SQL Server. One question decides it, and most analysts never need the server.">
+<title>Какую базу данных SQL следует установить? Ответ на один вопрос — комплект для подготовки аналитика</title>
+<meta name="description" content="Какую базу данных SQL установить для обучения и анализа: файловые механизмы, такие как SQLite и DuckDB, или серверы, такие как PostgreSQL, MySQL и SQL Server. Все решает один вопрос, и большинству аналитиков сервер никогда не понадобится.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/which-sql-database-to-install/">
-<meta property="og:title" content="Which SQL Database Should You Install?">
-<meta property="og:description" content="One question decides between a database that is a file and a database that is a server. Most analysts never need the server.">
+<meta property="og:title" content="Какую базу данных SQL следует установить?">
+<meta property="og:description" content="Один вопрос решает между базой данных, которая является файлом, и базой данных, которая является сервером. Большинству аналитиков сервер никогда не понадобится.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/which-sql-database-to-install/">
 <meta name="twitter:card" content="summary_large_image">
@@ -136,125 +136,125 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../sql/">SQL Kit</a></p>
-  <h1>Which SQL Database Should You Install?</h1>
-  <p class="meta">One question decides it, and for analysis work the answer is usually the smaller one · Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-07">August 7, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-комплект</a></p>
+  <h1>Какую базу данных SQL следует установить?</h1>
+  <p class="meta">Все решает один вопрос, а для аналитической работы ответ обычно меньший · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-07">7 августа 2026 г.</time></p>
 
-  <p>If you want to write SQL against your own data today, install a file-based engine: <strong>SQLite</strong> if you are learning, <strong>DuckDB</strong> if your data is already in CSV files. Both give you the whole SQL language. Neither has a server to start, a port to open, or a password to set.</p>
+  <p>Если вы хотите написать SQL для своих собственных данных сегодня, установите файловый движок:  <strong>SQLite</strong>  если ты учишься,  <strong>DuckDB</strong>  если ваши данные уже находятся в файлах CSV. Оба предоставляют вам весь язык SQL. Ни у одного из них нет сервера, который нужно запустить, порта, который нужно открыть, или пароля, который нужно установить.</p>
 
-  <p>Install a server such as PostgreSQL, MySQL or SQL Server when, and only when, more than one person or program needs to read and write the same data at the same time. That is the whole decision. The rest of this page shows you how to check which side of it you are on, so you can stop reading in two minutes and go write a query.</p>
+  <p>Устанавливайте сервер, такой как PostgreSQL, MySQL или SQL Server, тогда и только тогда, когда более чем одному человеку или программе необходимо одновременно читать и записывать одни и те же данные. Вот и все решение. В оставшейся части этой страницы показано, как проверить, на какой стороне вы находитесь, чтобы через две минуты прекратить чтение и приступить к написанию запроса.</p>
 
-  <div class="note"><strong>The short version.</strong> A file-based database is a file you open. A server database is a program you run. If nobody else is connecting to your data, you do not need the program.</div>
+  <div class="note"><strong>Краткая версия.</strong>  Файловая база данных — это файл, который вы открываете. База данных сервера — это программа, которую вы запускаете. Если никто больше не подключается к вашим данным, программа вам не нужна.</div>
 
   <div class="toc">
-    <strong>What's here</strong>
+    <strong>Что здесь</strong>
     <ol>
-      <li>The question that decides it</li>
-      <li>What "a file" and "a server" actually mean</li>
-      <li>SQLite, and why you may already have it</li>
-      <li>DuckDB, if your data is CSV files</li>
-      <li>When you genuinely do need a server</li>
-      <li>Does the SQL you learn transfer?</li>
-      <li>Cheat sheet</li>
+      <li>Вопрос, который решает это</li>
+      <li>Что на самом деле означают «файл» и «сервер»</li>
+      <li>SQLite и почему он, возможно, у вас уже есть</li>
+      <li>DuckDB, если ваши данные представляют собой файлы CSV.</li>
+      <li>Когда вам действительно нужен сервер</li>
+      <li>Переносится ли SQL, который вы изучаете?</li>
+      <li>Шпаргалка</li>
     </ol>
   </div>
 
-  <h2>The question that decides it</h2>
-  <p>Before the answer: think about the data you want to query right now. How many people, other than you, need to change it while you are looking at it?</p>
+  <h2>Вопрос, который решает это</h2>
+  <p>Прежде чем ответить: подумайте о данных, которые вы хотите запросить прямо сейчас. Скольким людям, кроме вас, нужно изменить его, пока вы на него смотрите?</p>
 
-  <p>Here is the fork, laid out.</p>
+  <p>Вот вилка выложена.</p>
 
-  <p><strong>The question.</strong> Does anything other than you need to read and write this data at the same time as you?</p>
+  <p><strong>Вопрос.</strong>  Нужно ли что-нибудь кроме вас читать и записывать эти данные одновременно с вами?</p>
 
-  <p><strong>Answer one: no.</strong> It is your data, on your machine, and you are the only one touching it. If that is true, a database that is a single file does everything you need. You skip accounts, ports, services and permissions, because there is nobody to keep out and nothing to coordinate.</p>
+  <p><strong>Ответ один: нет.</strong>  Это ваши данные на вашем компьютере, и вы единственный, кто к ним прикасается. Если это правда, база данных, представляющая собой один файл, делает все, что вам нужно. Вы пропускаете учетные записи, порты, службы и разрешения, потому что некого не пускать и нечего координировать.</p>
 
-  <p><strong>Answer two: yes.</strong> An application writes to it, or a team queries it, or it has to be reachable from another machine. If that is true, you need a server, because something has to sit in the middle and decide what happens when two callers arrive at once.</p>
+  <p><strong>Ответ второй: да.</strong>  Приложение записывает в него данные, или команда запрашивает его, или он должен быть доступен с другой машины. Если это правда, вам нужен сервер, потому что что-то должно находиться посередине и решать, что произойдет, когда два вызывающих абонента прибудут одновременно.</p>
 
-  <p><strong>What decides between them</strong> is not the size of your data and not how serious the work is. It is only whether there is a second caller.</p>
+  <p><strong>Что решает между ними</strong>  Дело не в размере ваших данных и не в том, насколько серьезна работа. Вопрос только в том, есть ли второй звонящий.</p>
 
-  <p><strong>Why it matters</strong> is that installing a server first is where most people stall. Setting up PostgreSQL means a service, a superuser, a port, a client, and a connection string, and none of that teaches you any SQL. People spend an evening on it, hit an authentication error, and never get to the query. Starting with a file means your first <code>SELECT</code> runs in about fifteen minutes.</p>
+  <p><strong>Зачем это нужно</strong>  заключается в том, что большинство людей застревают в первой установке сервера. Настройка PostgreSQL подразумевает наличие службы, суперпользователя, порта, клиента и строки подключения, и ничто из этого не научит вас SQL. Люди тратят на это вечер, сталкиваются с ошибкой аутентификации и так и не доходят до запроса. Если вы начинаете с файла, это означает, что вы впервые  <code>SELECT</code>  проходит примерно за пятнадцать минут.</p>
 
-  <h2>What "a file" and "a server" actually mean</h2>
-  <p>These two words do a lot of work, so here is what each one is.</p>
+  <h2>Что на самом деле означают «файл» и «сервер»</h2>
+  <p>Эти два слова выполняют большую работу, поэтому вот что означает каждое из них.</p>
 
-  <p><strong>A file-based database is a library your program loads.</strong> The engine runs inside whatever you are already running, and the whole database, tables and rows and indexes, is one file on disk. You can copy that file to a USB stick, email it, or put it in a folder. Nothing is running when you are not using it.</p>
+  <p><strong>Файловая база данных — это библиотека, загружаемая вашей программой.</strong>  Движок работает внутри того, что вы уже используете, и вся база данных, таблицы, строки и индексы представляют собой один файл на диске. Вы можете скопировать этот файл на USB-накопитель, отправить его по электронной почте или поместить в папку. Ничего не работает, когда вы его не используете.</p>
 
-  <p><strong>A server database is a separate program that stays running.</strong> It starts when your computer starts and waits for connections. Your query does not read the data itself. It sends a request to that program, over a network connection, and the program reads the data and sends rows back.</p>
+  <p><strong>База данных сервера — это отдельная программа, которая продолжает работать.</strong>  Он запускается при запуске вашего компьютера и ожидает подключения. Ваш запрос не считывает сами данные. Он отправляет запрос этой программе через сетевое соединение, и программа считывает данные и отправляет строки обратно.</p>
 
-  <p>Every difference people list between the two comes out of that one structural fact. Say why a server needs user accounts before reading on. It needs them because it accepts connections from callers it cannot see, so it has to be able to tell them apart. A file has no callers to tell apart. The file's permissions are the folder's permissions, and that is the end of it.</p>
+  <p>Любое различие между этими двумя людьми, которое люди называют, вытекает из одного структурного факта. Прежде чем читать дальше, скажите, зачем серверу нужны учетные записи пользователей. Они нужны ему, потому что он принимает соединения от вызывающих абонентов, которых не видит, поэтому он должен иметь возможность отличать их друг от друга. В файле нет вызывающих абонентов, которые можно было бы отличить друг от друга. Разрешения файла — это разрешения папки, и на этом все.</p>
 
-  <h2>SQLite, and why you may already have it</h2>
-  <p>SQLite is the file-based engine to reach for while you are learning. It is the most widely deployed database in the world, mostly because it is inside things rather than installed next to them: phones, browsers, desktop apps.</p>
+  <h2>SQLite и почему он, возможно, у вас уже есть</h2>
+  <p>SQLite — это файловый движок, которым можно пользоваться во время обучения. Это наиболее широко используемая база данных в мире, главным образом потому, что она находится внутри вещей, а не устанавливается рядом с ними: телефоны, браузеры, настольные приложения.</p>
 
-  <p>That includes Python. SQLite ships in Python's standard library, so if you have Python you already have a working SQL engine and did not install one. Two lines proves it:</p>
+  <p>Это включает в себя Python. SQLite поставляется в стандартной библиотеке Python, поэтому, если у вас есть Python, у вас уже есть работающий механизм SQL, и вы не устанавливали его. Две строки доказывают это:</p>
   <pre><code>import sqlite3
 print(sqlite3.sqlite_version)</code></pre>
-  <p>On the machine this guide was written on, that prints <code>3.38.4</code>. Yours will differ, and any version will do.</p>
+  <p>На машине, на которой было написано это руководство, которая печатает  <code>3.38.4</code>. Ваша будет отличаться, и подойдет любая версия.</p>
 
-  <p>For a window you can click around in rather than a script, DB Browser for SQLite is an open-source desktop app that opens the file, shows the tables, imports a CSV and runs queries. That combination, DB Browser plus one <code>.db</code> file, is the fastest route from nothing to a real query, and it is the one walked step by step in <a href="../set-up-a-sql-database/">how to set up a SQL database</a>.</p>
+  <p>DB Browser for SQLite — это настольное приложение с открытым исходным кодом, которое открывает файл, показывает таблицы, импортирует CSV-файл и выполняет запросы в качестве окна, по которому можно щелкать, а не сценария. Эта комбинация, DB Browser плюс один  <code>.db</code>  файл — это самый быстрый путь от ничего к реальному запросу, и именно он проходится шаг за шагом в  <a href="../set-up-a-sql-database/">Как настроить базу данных SQL</a>.</p>
 
-  <h2>DuckDB, if your data is CSV files</h2>
-  <p>DuckDB is file-based like SQLite, and built for the shape of work analysts actually do: reading a lot of rows and summarizing them. The practical difference you will feel on day one is that it queries a CSV directly. There is no import step.</p>
+  <h2>DuckDB, если ваши данные представляют собой файлы CSV.</h2>
+  <p>DuckDB основан на файлах, как и SQLite, и создан для той работы, которую фактически выполняют аналитики: чтение большого количества строк и их суммирование. Практическая разница, которую вы почувствуете в первый же день, заключается в том, что он напрямую запрашивает CSV. Этапа импорта нет.</p>
 
   <pre><code>import duckdb
 duckdb.sql("SELECT name, score FROM 'players.csv' WHERE score > 50")</code></pre>
 
-  <p>That runs against the file as it sits on disk. No table to create, no columns to declare, no load. For anyone who has been doing this in a spreadsheet and has a folder of exports, that is the shortest path from a CSV to a <code>GROUP BY</code> that exists.</p>
+  <p>Это работает с файлом, находящимся на диске. Нет таблицы, которую нужно создать, нет столбцов, которые нужно объявить, нет нагрузки. Для тех, кто делал это в электронной таблице и имеет папку экспорта, это кратчайший путь от CSV к файлу.  <code>GROUP BY</code>  что существует.</p>
 
-  <p>Picture your own downloads folder. If the answer you want lives across three of those CSVs, this is the engine that gets you there without building anything first.</p>
+  <p>Представьте себе собственную папку загрузок. Если ответ, который вам нужен, содержится в трех из этих CSV-файлов, это механизм, который доставит вас туда, не создавая ничего предварительно.</p>
 
-  <h2>When you genuinely do need a server</h2>
-  <p>Four situations, and they are all the same situation.</p>
+  <h2>Когда вам действительно нужен сервер</h2>
+  <p>Четыре ситуации, и все они одна и та же ситуация.</p>
   <ul>
-    <li><strong>An application writes to the data while you read it.</strong> A web app, a scheduled job, anything with its own connection.</li>
-    <li><strong>Other people need to query it.</strong> Colleagues on their own machines, hitting the same data.</li>
-    <li><strong>It has to be reachable from somewhere else.</strong> Another server, a hosted tool, a dashboard product.</li>
-    <li><strong>The work requires a specific product.</strong> The job runs on SQL Server, so you practice on SQL Server. That is a real reason and it outranks everything above.</li>
+    <li><strong>Приложение записывает данные, пока вы их читаете.</strong>  Веб-приложение, запланированное задание — что угодно, имеющее собственное подключение.</li>
+    <li><strong>Другие люди должны задать этот вопрос.</strong>  Коллеги на своих машинах, набивают те же данные.</li>
+    <li><strong>Он должен быть доступен откуда-то еще.</strong>  Другой сервер, размещенный инструмент, продукт информационной панели.</li>
+    <li><strong>Для работы нужен конкретный продукт.</strong>  Работа выполняется на SQL Server, поэтому вы практикуетесь на SQL Server. Это реальная причина, и она превосходит все вышеперечисленное.</li>
   </ul>
-  <p>When one of those is true, PostgreSQL is the usual choice for analysis work and MySQL is the usual choice behind web applications. If your workplace runs Microsoft, SQL Server with SQL Server Management Studio is what you will meet. Match the tool to the job you are aiming at, rather than to a general ranking.</p>
+  <p>Когда одно из этих утверждений верно, PostgreSQL является обычным выбором для аналитической работы, а MySQL — обычным выбором для веб-приложений. Если на вашем рабочем месте работает Microsoft, вы встретите SQL Server с SQL Server Management Studio. Сопоставьте инструмент с задачей, к которой вы стремитесь, а не с общим рейтингом.</p>
 
-  <h2>Does the SQL you learn transfer?</h2>
-  <p>Mostly, yes, and this is the part worth being precise about because it decides whether starting small costs you anything.</p>
-  <p><strong>What transfers unchanged:</strong> <code>SELECT</code>, <code>WHERE</code>, <code>JOIN</code>, <code>GROUP BY</code>, <code>HAVING</code>, <code>ORDER BY</code>, subqueries, <a href="../sql-ctes/">CTEs</a>, <a href="../sql-window-functions/">window functions</a>, <a href="../sql-case-expression/">CASE</a>, and <a href="../sql-comments/">both comment syntaxes</a>. That is the whole of analyst SQL and effectively all of what an interview will ask you.</p>
-  <p><strong>What does not transfer:</strong> function names around the edges. String handling, date maths and type conversion are named differently in each product. SQLite uses <code>INSTR</code> and <code>SUBSTR</code> where SQL Server uses <code>CHARINDEX</code> and <code>SUBSTRING</code>. You look those up when you meet them, and looking them up is what practitioners do anyway.</p>
-  <p>So the cost of learning on a file and moving to a server later is a handful of function names. The cost of trying to install a server first is often the whole first evening.</p>
+  <h2>Переносится ли SQL, который вы изучаете?</h2>
+  <p>В основном да, и на эту часть стоит обратить внимание, потому что от нее зависит, стоит ли вам чего-нибудь начинать с малого.</p>
+  <p><strong>Что переносится без изменений:</strong> <code>SELECT</code>, <code>WHERE</code>, <code>JOIN</code>, <code>GROUP BY</code>, <code>HAVING</code>, <code>ORDER BY</code>, подзапросы,  <a href="../sql-ctes/">CTEs</a>, <a href="../sql-window-functions/">Оконные функции</a>, <a href="../sql-case-expression/">CASE</a>, и  <a href="../sql-comments/">оба синтаксиса комментариев</a>. Это весь аналитический SQL и, по сути, все, о чем вас спросят на собеседовании.</p>
+  <p><strong>Что не переносится:</strong>  имена функций по краям. Обработка строк, математические вычисления с датами и преобразование типов называются в каждом продукте по-разному. SQLite использует  <code>INSTR</code> and <code>SUBSTR</code>  где SQL Server использует  <code>CHARINDEX</code> and <code>SUBSTRING</code>. Вы просматриваете их, когда встречаете их, и практикующие в любом случае ищут их.</p>
+  <p>Таким образом, стоимость изучения файла и последующего перехода на сервер — это несколько имен функций. Стоимость первой попытки установить сервер зачастую составляет весь первый вечер.</p>
 
-  <h2>Cheat sheet</h2>
+  <h2>Шпаргалка</h2>
   <table>
-    <tr><th>Your situation</th><th>Install</th><th>Why</th></tr>
-    <tr><td>Learning SQL, data is yours alone</td><td>SQLite, with DB Browser</td><td>One file, no setup between you and the first query</td></tr>
-    <tr><td>Already have Python</td><td>Nothing</td><td>SQLite is in the standard library</td></tr>
-    <tr><td>Data is a folder of CSVs</td><td>DuckDB</td><td>Queries the CSV directly, no import step</td></tr>
-    <tr><td>Building a portfolio project</td><td>SQLite or DuckDB</td><td>The database file goes in the repo, so anyone can rerun your work</td></tr>
-    <tr><td>An app or a team writes to the data</td><td>PostgreSQL or MySQL</td><td>Something has to arbitrate concurrent writers</td></tr>
-    <tr><td>Preparing for a job that names a product</td><td>That product</td><td>The job's tools outrank any general ranking</td></tr>
+    <tr><th>Ваша ситуация</th><th>Install</th><th>Why</th></tr>
+    <tr><td>Изучая SQL, данные принадлежат только вам</td><td>SQLite с браузером БД</td><td>Один файл, никаких настроек между вами и первым запросом</td></tr>
+    <tr><td>Питон уже есть</td><td>Nothing</td><td>SQLite находится в стандартной библиотеке</td></tr>
+    <tr><td>Данные — это папка с CSV-файлами.</td><td>DuckDB</td><td>Запрашивает CSV напрямую, без этапа импорта</td></tr>
+    <tr><td>Создание портфолио проекта</td><td>SQLite или DuckDB</td><td>Файл базы данных хранится в репозитории, поэтому любой может повторно запустить вашу работу.</td></tr>
+    <tr><td>Приложение или команда записывает данные</td><td>PostgreSQL или MySQL</td><td>Что-то должно решать одновременных авторов</td></tr>
+    <tr><td>Подготовка к работе по названию продукта</td><td>Этот продукт</td><td>Инструменты работы превосходят любой общий рейтинг</td></tr>
   </table>
 
-  <h2>The one habit to keep</h2>
-  <p>Choose the smallest thing that answers your question, and add machinery only when something breaks. Most analysis work never outgrows a file, and the evening you did not spend on a server install is an evening of writing queries.</p>
+  <h2>Единственная привычка, которую нужно сохранить</h2>
+  <p>Выбирайте самую маленькую вещь, которая отвечает на ваш вопрос, и добавляйте технику только тогда, когда что-то сломается. Большая часть аналитической работы никогда не выходит за рамки файла, и вечер, который вы не потратили на установку сервера, — это вечер написания запросов.</p>
 
-  <p>What is stopping you from running a query on your own data right now: the tool, or not knowing which question to ask it?</p>
+  <p>Что мешает вам прямо сейчас выполнить запрос к собственным данным: инструмент или незнание, какой вопрос ему задать?</p>
 
   <div class="book">
-    <strong>The dialects differ in the small ways and the ideas underneath do not.</strong>
-    <p><em>SQL for Analysts</em> is 458 pages, the SQL that carries across engines, with the places a dialect actually changes the answer.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-which-sql-database-to-install'})">SQL for Analysts, $19 &rarr;</a>
+    <strong>Диалекты различаются незначительно, а лежащие в их основе идеи — нет.</strong>
+    <p><em>SQL для аналитиков</em>  это 458 страниц, SQL, который передается по всем движкам, с местами, где диалект фактически меняет ответ.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-which-sql-database-to-install'})">SQL для аналитиков, 19 $ →</a>
   </div>
 
   <div class="cta">
-    <strong>Once it is installed, the next fifteen minutes matter most.</strong>
-    <p style="margin:6px 0 0">Walk the whole path from empty folder to first result in <a href="../set-up-a-sql-database/">how to set up a SQL database</a>, then use the <a href="../../sql/">SQL Kit</a> for SELECT, WHERE, JOIN and GROUP BY with worked examples and a mock exam.</p>
-    <a class="btn" href="../set-up-a-sql-database/">Set up your first database →</a>
-    <p style="margin:10px 0 0;font-size:15px">Prefer to learn by typing: <a href="../../drill/">open SQL Drill</a>, thirteen queries that each add one thing to the last.</p>
+    <strong>После установки наиболее важными являются следующие пятнадцать минут.</strong>
+    <p style="margin:6px 0 0">Пройдите весь путь от пустой папки до первого результата  <a href="../set-up-a-sql-database/">Как настроить базу данных SQL</a>, затем используйте  <a href="../../sql/">SQL-комплект</a>  для SELECT, WHERE, JOIN и GROUP BY с проработанными примерами и пробным экзаменом.</p>
+    <a class="btn" href="../set-up-a-sql-database/">Настройте свою первую базу данных →</a>
+    <p style="margin:10px 0 0;font-size:15px">Предпочитаю учиться, набрав:  <a href="../../drill/">открыть SQL Drill</a>, тринадцать запросов, каждый из которых добавляет что-то одно к последнему.</p>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> &middot; <a href="../set-up-a-sql-database/">Set Up a SQL Database</a> · <a href="../sql-foundations/">SQL Foundations</a> · <a href="../sql-comments/">How to Comment in SQL</a> · <a href="../sql-teaching-comments/">Commenting SQL So It Teaches</a> · <a href="../sql-case-expression/">SQL CASE</a> · <a href="../sql-joins/">SQL JOINs</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../sql-ctes/">SQL CTEs</a> · <a href="../sql-window-functions/">Window Functions</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../git-for-analysts/">Git for Analysts</a> · <a href="../../drill/">SQL Drill</a> · <a href="../../sql/">SQL Kit</a>
-    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../sql-foundations/">Основы SQL</a> · <a href="../sql-comments/">Как комментировать в SQL</a> · <a href="../sql-teaching-comments/">Комментирование SQL для обучения</a> · <a href="../sql-case-expression/">СЛУЧАЙ SQL</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-ctes/">SQL CTE</a> · <a href="../sql-window-functions/">Оконные функции</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../git-for-analysts/">Git для аналитиков</a> · <a href="../../drill/">SQL-детализация</a> · <a href="../../sql/">SQL-комплект</a>
+    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

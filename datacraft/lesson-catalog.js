@@ -28,7 +28,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "3",
-      "title": "ORDER BY & LIMIT",
+      "title": "СОРТИРОВАТЬ ПО И ОГРАНИЧИТЬ",
       "unit": "Раздел 1: Первые запросы"
     },
     {
@@ -38,7 +38,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "5",
-      "title": "COUNT, SUM & GROUP BY",
+      "title": "СЧИТАТЬ, СУММИРОВАТЬ И ГРУППИРОВАТЬ ПО",
       "unit": "Раздел 2: Агрегация и преобразование данных"
     },
     {
@@ -58,7 +58,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "4",
-      "title": "INNER JOIN",
+      "title": "ВНУТРЕННЕЕ СОЕДИНЕНИЕ",
       "unit": "Раздел 3: Соединение таблиц"
     },
     {
@@ -68,7 +68,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "13",
-      "title": "RIGHT JOIN & FULL OUTER JOIN",
+      "title": "ПРАВОЕ СОЕДИНЕНИЕ И ПОЛНОЕ ВНЕШНЕЕ СОЕДИНЕНИЕ",
       "unit": "Раздел 3: Соединение таблиц"
     },
     {
@@ -734,7 +734,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "1",
-      "title": "Интерфейс Power BI",
+      "title": "Интерфейс — Power BI.",
       "unit": "Раздел 1: Интерфейс и данные"
     },
     {
@@ -1013,7 +1013,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "1",
-      "title": "Интерфейс Tableau",
+      "title": "Интерфейс таблицы",
       "unit": "Раздел 1: Основы Tableau"
     },
     {
@@ -1063,7 +1063,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "8",
-      "title": "Агрегация в Tableau",
+      "title": "Агрегация в Таблице",
       "unit": "Раздел 2: Улучшение визуализаций"
     },
     {

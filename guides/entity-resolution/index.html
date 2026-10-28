@@ -1,6 +1,6 @@
 ﻿<!doctype html>
 <html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Entity Resolution for Beginners: One Real Thing, Many Messy Names — Analyst Prep Kit</title>
-<meta name="description" content="Entity resolution and record linkage explained for beginner analysts: why one artist appears under seven names, how normalization rules get built and tested, match rates, clerical review, and when NOT to merge — a complete worked example on real chart data.">
+<title>Разрешение сущностей для начинающих: одна реальная вещь, много запутанных имен — комплект для подготовки аналитика</title>
+<meta name="description" content="Объяснение разрешения сущностей и привязки записей для начинающих аналитиков: почему один артист появляется под семью именами, как создаются и тестируются правила нормализации, коэффициенты совпадений, канцелярская проверка и когда НЕ следует объединяться — полный проработанный пример на реальных данных диаграммы.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/entity-resolution/">
-<meta property="og:title" content="Entity Resolution: One Real Thing, Many Messy Names">
-<meta property="og:description" content="Elvis appears under seven different credits in Billboard history. Fixing that — without shredding Hall & Oates — is entity resolution, the messiest everyday skill in data work.">
+<meta property="og:title" content="Разрешение сущностей: одна реальная вещь, много запутанных имен">
+<meta property="og:description" content="Элвис фигурирует в семи разных титрах в истории Billboard. Исправить это без уничтожения Холла и Оутса — это разрешение сущностей, самый запутанный повседневный навык в работе с данными.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/entity-resolution.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/entity-resolution/">
@@ -129,143 +129,143 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../sql-case-expression/">SQL CASE Expression</a> · <a href="../../sql/">SQL Kit</a></p>
-  <h1>Entity Resolution: One Real Thing, Many Messy Names</h1>
-  <p class="meta">How to work out which records are the same real thing, in five steps, on real uncooperative data · Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Updated <time datetime="2026-07-30">July 30, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../sql-case-expression/">SQL-выражение CASE</a> · <a href="../../sql/">SQL-комплект</a></p>
+  <h1>Разрешение сущностей: одна реальная вещь, много запутанных имен</h1>
+  <p class="meta">Как определить, какие записи являются одними и теми же реальными вещами, за пять шагов на реальных невзаимодействующих данных · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Обновлено  <time datetime="2026-07-30">30 июля 2026 г.</time></p>
 
-  <p>This guide walks through five steps for working out which records are the same real thing, and merging them without wrecking your data. It runs on real chart data, and it includes the two times the rules came out wrong.</p>
+  <p>В этом руководстве описаны пять шагов, позволяющих определить, какие записи являются одними и теми же реальными, и объединить их, не повреждая ваши данные. Он работает на реальных диаграммах и включает в себя два случая, когда правила оказались неправильными.</p>
 
-  <p>Here is the problem in one example. Count the distinct artists in Billboard's public chart history and the number is wrong. "Elvis Presley" and "Elvis Presley With The Jordanaires" are the same man, and so are five other credit strings. One real-world <em>entity</em>, seven database <em>strings</em>.</p>
+  <p>Вот проблема в одном примере. Посчитайте отдельных артистов в истории публичных чартов Billboard, и вы поймете, что это неверное число. «Элвис Пресли» и «Элвис Пресли с The Jordanaires» — один и тот же человек, как и пять других кредитных линий. Один реальный мир  <em>entity</em>, семь баз данных  <em>strings</em>.</p>
 
-  <p>Every dataset with human-entered names has this. Customers who signed up twice. "IBM" against "I.B.M." against "International Business Machines". The same supplier in two systems, spelled two ways.</p>
+  <p>Это есть в каждом наборе данных с именами, введенными человеком. Клиенты, которые зарегистрировались дважды. «ИБМ» против «ИБМ». против «Международных бизнес-машин». Один и тот же поставщик в двух системах, записанных двояко.</p>
 
-  <p>The work of fixing it is called <strong>entity resolution</strong>. Matching across two datasets is <strong>record linkage</strong>. Removing duplicates inside one is <strong>deduplication</strong>. They are the same skill pointed at different situations, and it is one of the most common tasks an analyst actually gets handed.</p>
+  <p>Работа по его закреплению называется  <strong>Разрешение объекта</strong>. Сопоставление двух наборов данных  <strong>связь записи</strong>. Удаление дубликатов внутри одного  <strong>deduplication</strong>. Это один и тот же навык, применяемый в разных ситуациях, и это одна из наиболее распространенных задач, которые фактически приходится выполнять аналитику.</p>
 
   <div class="toc">
-    <strong>What's here</strong>
+    <strong>Что здесь</strong>
     <ol>
-      <li>The vocabulary map</li>
-      <li>Step 1: measure the fragmentation before fixing anything</li>
-      <li>Step 2: build rules by preview, catch, fix, re-check</li>
-      <li>Step 3: know when NOT to merge (the false-positive check)</li>
-      <li>Step 4: match rates, the number that keeps you honest</li>
-      <li>Step 5: clerical review — reading the leftovers</li>
-      <li>The principles, distilled</li>
+      <li>Карта словаря</li>
+      <li>Шаг 1: измерьте фрагментацию, прежде чем что-либо исправлять</li>
+      <li>Шаг 2: создайте правила путем предварительного просмотра, поймайте, исправьте, перепроверьте</li>
+      <li>Шаг 3: знайте, когда НЕ следует выполнять слияние (ложноположительная проверка)</li>
+      <li>Шаг 4. Коэффициент соответствия — показатель, который поможет вам быть честным</li>
+      <li>Шаг 5: канцелярская проверка — чтение остатков</li>
+      <li>Принципы, очищенные</li>
       <li>References</li>
     </ol>
   </div>
 
-  <h2>The vocabulary map</h2>
+  <h2>Карта словаря</h2>
   <table>
     <tr><th>Term</th><th>Meaning</th></tr>
-    <tr><td><strong>Entity</strong></td><td>The real-world thing: one artist, one customer, one company</td></tr>
-    <tr><td><strong>Entity resolution</strong></td><td>Figuring out which records refer to the same entity</td></tr>
-    <tr><td><strong>Record linkage</strong></td><td>The same problem across two datasets. "Is row 5 in file A the same person as row 90 in file B?" Formalized by Fellegi &amp; Sunter (1969)</td></tr>
-    <tr><td><strong>Deduplication</strong></td><td>The same problem inside one dataset</td></tr>
-    <tr><td><strong>Normalization / standardization</strong></td><td>Transforming values toward a canonical form (lowercasing, trimming, cutting suffixes) so equal things become equal strings</td></tr>
-    <tr><td><strong>Match key</strong></td><td>The cleaned column(s) you actually join on</td></tr>
-    <tr><td><strong>Match rate</strong></td><td>The share of records that found their counterpart. This is the number that keeps the whole exercise honest</td></tr>
-    <tr><td><strong>Clerical review</strong></td><td>Human eyes on the records the rules could not decide. This is a formal stage of the classic framework, not an admission of failure</td></tr>
+    <tr><td><strong>Entity</strong></td><td>Реальная ситуация: один художник, один клиент, одна компания.</td></tr>
+    <tr><td><strong>Разрешение объекта</strong></td><td>Выяснение того, какие записи относятся к одной и той же сущности</td></tr>
+    <tr><td><strong>связь записи</strong></td><td>Та же проблема в двух наборах данных. «Является ли строка 5 в файле A тем же человеком, что и строка 90 в файле B?» Формализовано Fellegi &amp; Sunter (1969).</td></tr>
+    <tr><td><strong>Deduplication</strong></td><td>Та же проблема внутри одного набора данных</td></tr>
+    <tr><td><strong>Нормализация/стандартизация</strong></td><td>Преобразование значений в каноническую форму (строчные буквы, обрезка, вырезание суффиксов), чтобы одинаковые вещи стали равными строками.</td></tr>
+    <tr><td><strong>Ключ совпадения</strong></td><td>Очищенные столбцы, к которым вы фактически присоединились.</td></tr>
+    <tr><td><strong>Коэффициент соответствия</strong></td><td>Доля записей, нашедших аналог. Это число, которое обеспечивает честность всего упражнения.</td></tr>
+    <tr><td><strong>Канцелярский обзор</strong></td><td>Человеческие глаза на записях не могли определить правила. Это формальный этап классической схемы, а не признание неудачи.</td></tr>
   </table>
 
   <div class="step">
-    <h2>Step 1: measure the fragmentation before fixing anything</h2>
-    <p>The worked example is Billboard Hot 100 history, 1958 to present. The goal is one clean row per artist. Before writing a single fix, size the problem. Guess the number first: how many different ways do you think one famous artist appears in a chart database? Hold that number.</p>
+    <h2>Шаг 1: измерьте фрагментацию, прежде чем что-либо исправлять</h2>
+    <p>Проработанный пример — история Billboard Hot 100 с 1958 года по настоящее время. Цель — один чистый ряд на каждого исполнителя. Прежде чем писать одно исправление, определите масштаб проблемы. Сначала угадайте число: как вы думаете, сколькими разными способами один известный артист появляется в базе данных чартов? Держи этот номер.</p>
     <ul>
-      <li><strong>Depth:</strong> every credit containing "Elvis Presley" gave <strong>seven</strong> distinct strings for one man. His catalog splits almost evenly between "Elvis Presley" at 50 songs and "Elvis Presley With The Jordanaires" at 53. Count by raw credit and you undercount him by half.</li>
-      <li><strong>Breadth:</strong> across all 11,275 distinct credits, " Featuring " appears in 2,662, " With " in 244, and " &amp; " in 1,994. Up to <strong>43% of all credits</strong> carry a joiner. That is not edge-case cleanup. It is a core design requirement.</li>
+      <li><strong>Глубина:</strong>  каждый кредит, содержащий "Элвис Пресли", дал  <strong>seven</strong>  отдельные струны для одного человека. Его каталог почти поровну разделен между «Элвисом Пресли» с 50 песнями и «Элвисом Пресли с The Jordanaires» с 53 песнями. Посчитайте по голым кредитам, и вы недооцените его наполовину.</li>
+      <li><strong>Ширина:</strong>  среди всех 11 275 различных титров «С участием» появляется в 2662, «С» в 244 и «&amp;» в 1994. До  <strong>43% всех кредитов</strong>  носить столяр. Это не крайняя очистка. Это основное требование к дизайну.</li>
     </ul>
-    <p>Those two numbers decided everything after them. Fragmentation this widespread makes normalization rules mandatory. And any rule will touch thousands of rows, so the rules have to be <em>tested</em> rather than trusted.</p>
+    <p>Эти два числа решили все после них. Столь широко распространенная фрагментация делает правила нормализации обязательными. Любое правило затрагивает тысячи строк, поэтому правила должны быть  <em>tested</em>  а не доверять.</p>
   </div>
 
   <div class="step">
-    <h2>Step 2: build rules by preview, catch, fix, re-check</h2>
-    <p>The extraction rule was simple to state: the primary artist is the text before the joiner word. It was built as a CASE ladder and proven on real rows before anything else was built from it. What happened next is the lesson:</p>
+    <h2>Шаг 2: создайте правила путем предварительного просмотра, поймайте, исправьте, перепроверьте</h2>
+    <p>Правило извлечения было сформулировано просто: основной художник — это текст перед соединительным словом. Она была построена как лестница CASE и проверена на реальных рядах, прежде чем на ее основе было построено что-либо еще. То, что произошло дальше, является уроком:</p>
     <ol>
-      <li>First preview caught <strong>"2Pac Duet With Mopreme" → "2Pac Duet"</strong>: the credit joins with " Duet With ", the rule only knew " With ". A fake artist, invented by a cleaning rule.</li>
-      <li>The fix added a " Duet With " rung above " With ". In a CASE ladder, specific patterns must sit above the general patterns they contain. Re-checking the exact rows the fix targeted caught another one: <strong>"Patti Austin A Duet With James Ingram" became "Patti Austin A"</strong>. So it needed one more rung, " A Duet With ".</li>
-      <li>Re-check again: clean. The ladder was frozen and used to build the artist table: 11,275 raw credits collapsed to 8,896 artists.</li>
+      <li>Первый предварительный просмотр пойман  <strong>«Дуэт 2Pac с Mopreme» → «Дуэт 2Pac»</strong>ЗЫ: титр присоединяется к "Дуэту С", правило знал только "С". Фальшивый художник, придуманный по правилу уборки.</li>
+      <li>Исправление добавило ступеньку «Дуэт с» над «С». В лестнице CASE конкретные шаблоны должны находиться над общими шаблонами, которые они содержат. Повторная проверка точных строк, на которые нацелено исправление, обнаружила еще одну:  <strong>«Патти Остин, дуэт с Джеймсом Ингрэмом» стала «Патти Остин А».</strong>. Так что нужна была еще одна ступенька, «Дуэт с».</li>
+      <li>Еще раз проверьте: чисто. Лестницу заморозили и использовали для построения таблицы художников: 11 275 необработанных кредитов рухнули до 8 896 художников.</li>
     </ol>
-    <p>Nobody writes the complete rule first time. And the data will not raise an error when your rule invents "2Pac Duet". So the loop is: preview on real rows, catch the defect, add a rung, re-check the exact rows you targeted. Repeat until the exceptions stop. The full ladder, with every defect it caught, is walked through in the <a href="../sql-case-expression/">CASE expression guide</a>.</p>
+    <p>Никто не пишет полное правило с первого раза. И данные не выдадут ошибку, когда ваше правило изобретет «2Pac Duet». Итак, цикл таков: предварительный просмотр реальных строк, обнаружение дефекта, добавление ступеньки, повторная проверка именно тех строк, на которые вы нацелились. Повторяйте, пока исключения не прекратятся. Полную лестницу, со всеми обнаруженными дефектами, просматривают в  <a href="../sql-case-expression/">Руководство по выражениям CASE</a>.</p>
   </div>
 
   <div class="step">
-    <h2>Step 3: know when NOT to merge (the false-positive check)</h2>
-    <p>The "&amp;" joiner appeared in 1,994 credits. Should it split too? Decide before you read the next paragraph. The rule is simple and it worked on the other joiners, so the case for splitting is strong.</p>
+    <h2>Шаг 3: знайте, когда НЕ следует выполнять слияние (ложноположительная проверка)</h2>
+    <p>Знак "&amp;" появился в 1994 титрах. Он тоже должен расколоться? Решите, прежде чем читать следующий абзац. Правило простое, и оно сработало для других участников, поэтому аргументы в пользу разделения веские.</p>
 
-  <p>Reading the highest-volume "&amp;" credits first settled it. The list is dominated by <strong>permanent duos and bands</strong>: Kool &amp; The Gang, Earth, Wind &amp; Fire, Simon &amp; Garfunkel. Only a few are temporary collaborations. Say what that means for the rule before reading on. Splitting on "&amp;" would shred real bands into artists who do not exist.</p>
+  <p>Чтение самых крупных кредитов «&amp;» сначала решило проблему. В списке преобладают  <strong>постоянные дуэты и группы</strong>: Кул и банда, Земля, ветер и пламя, Саймон и Гарфанкел. Лишь немногие из них являются временным сотрудничеством. Прежде чем читать дальше, скажите, что это означает для правила. Разделение на «&amp;» разделило бы настоящие группы на несуществующих артистов.</p>
 
-  <p><strong>So the decision was not to split.</strong> That has a cost. A duo member's solo career never merges with their duo work. The cost was written down as a limitation instead of being fixed.</p>
-    <p>This is the half of entity resolution that is easy to skip. Over-merging destroys as much as under-merging does, and sometimes the right output is a refusal you wrote down.</p>
+  <p><strong>Поэтому решение было не разделяться.</strong>  Это имеет свою цену. Сольная карьера участника дуэта никогда не сливается с дуэтной работой. Стоимость была записана как ограничение, а не фиксирована.</p>
+    <p>Это половина разрешения объекта, которую легко пропустить. Чрезмерное слияние разрушает столько же, сколько и недостаточное, и иногда правильным результатом является записанный вами отказ.</p>
 
-  <p>The same project made the point twice more. One duo appeared as both "¥$: Ye &amp; Ty Dolla $ign" and "¥$: Kanye West &amp; Ty Dolla $ign". Those are aliases, and no rule can know they are one act without a lookup dictionary. Separately, three artists were split purely by capitalization, "Tyler, The Creator" against "Tyler, the Creator". That one was cured by lowercased match keys.</p>
+  <p>Тот же проект еще дважды подчеркивал эту точку зрения. Один дуэт появился как «¥$: Ye &amp; Ty Dolla $ign» и «¥$: Kanye West &amp; Ty Dolla $ign». Это псевдонимы, и ни одно правило не может знать, что это одно действие, без словаря поиска. Отдельно три артиста были разделены исключительно по заглавным буквам: «Тайлер, Создатель» и «Тайлер, Создатель». Это вылечилось с помощью клавиш сопоставления в нижнем регистре.</p>
   </div>
 
   <div class="step">
-    <h2>Step 4: match rates, the number that keeps you honest</h2>
-    <p>Picture your own messy column for a moment. Customer names, product codes, hospital sites, whatever you actually work with. How many distinct values does it hold, and how many real things are behind them? If those two numbers are the same, you have no problem here. Most people find they cannot answer the second one at all, and that gap is the job.</p>
-    <p>The payoff needed the chart data linked to a second dataset, listener statistics from a music API, matched on artist and title text. That is record linkage. The discipline is simple: <strong>measure the match rate before and after every cleaning rule.</strong></p>
+    <h2>Шаг 4. Коэффициент соответствия — показатель, который поможет вам быть честным</h2>
+    <p>Представьте на мгновение свою беспорядочную колонку. Имена клиентов, коды продуктов, сайты больниц — все, с чем вы на самом деле работаете. Сколько различных ценностей оно содержит и сколько реальных вещей стоит за ними? Если эти два числа одинаковы, у вас нет проблем. Большинство людей обнаруживают, что вообще не могут ответить на второй вопрос, и этот пробел и есть работа.</p>
+    <p>В качестве вознаграждения требовались данные диаграммы, связанные со вторым набором данных, статистика слушателей из музыкального API, сопоставленная с исполнителем и текстом названия. Это связь записей. Дисциплина проста:  <strong>измеряйте коэффициент совпадения до и после каждого правила очистки.</strong></p>
     <ul>
-      <li>Baseline, case-insensitive matching only: <strong>31.2%</strong> of tracks found their chart counterpart.</li>
-      <li>After one targeted rule, <strong>37.0%</strong>. The rule trimmed " (feat. …)" and " (with …)" tails, which the API titles carry and the chart titles do not. It recovered 763 real matches.</li>
-      <li>Stripping all parentheses would have scored higher still, and been wrong. A quick look showed parentheses are often part of the song's real name, as in "Single Ladies (Put a Ring on It)". Same lesson as "&amp;": read before you rule.</li>
+      <li>Только базовое сопоставление без учета регистра:  <strong>31.2%</strong>  треков нашли свой аналог в чартах.</li>
+      <li>После одного целевого правила  <strong>37.0%</strong>. Правило обрезало хвосты «(feat. …)» и «(with…)», которые есть в заголовках API, а в заголовках диаграмм — нет. Было восстановлено 763 реальных совпадения.</li>
+      <li>Удаление всех круглых скобок дало бы еще более высокий балл, и это было бы неправильно. Беглый просмотр показал, что скобки часто являются частью настоящего названия песни, как, например, в «Single Ladies (Put a Ring on It)». Тот же урок, что и «&amp;»: прочитайте, прежде чем править.</li>
     </ul>
-    <p>Note what the match rate is <em>for</em>. In this project it was never meant to reach 100%. Unmatched tracks were the whole point, because they were songs that never charted.</p>
+    <p>Обратите внимание, каков коэффициент совпадения  <em>for</em>. В этом проекте никогда не предполагалось достичь 100%. Вся суть заключалась в непревзойденных треках, потому что это были песни, которые никогда не попадали в чарты.</p>
 
-  <p>The rate's job is to separate signal from defect. A good rule recovers the <em>spelling casualties</em> without inventing false matches. The rate shows what each rule contributed, so you know to stop cleaning when the improvements stop.</p>
+  <p>Задача тарифа — отделить сигнал от дефекта. Хорошее правило восстанавливает  <em>орфографические потери</em>  без изобретения ложных совпадений. Оценка показывает, какой вклад внесло каждое правило, поэтому вы сможете прекратить уборку, когда улучшения прекратятся.</p>
   </div>
 
   <div class="step">
-    <h2>Step 5: clerical review, or reading the leftovers</h2>
-    <p>The classic record-linkage framework sorts candidate pairs three ways: confident matches, confident non-matches, and a middle zone that goes to a human (Fellegi &amp; Sunter, 1969).</p>
+    <h2>Шаг 5: канцелярский обзор или чтение остатков</h2>
+    <p>Классическая система связывания записей сортирует пары кандидатов тремя способами: уверенное совпадение, уверенное несовпадение и средняя зона, которая достается человеку (Fellegi &amp; Sunter, 1969).</p>
 
-  <p>In everyday analyst work that third bucket is simpler and cheaper than it sounds. <strong>After the rules run, read the unmatched rows, sorted so the most consequential come first.</strong></p>
+  <p>В повседневной работе аналитика третье ведро проще и дешевле, чем кажется.  <strong>После выполнения правил прочитайте несовпадающие строки, отсортированные таким образом, чтобы наиболее важные были первыми.</strong></p>
 
-  <p>Then judge what you see. If the top of that list is full of records that obviously should have matched, your rules have a gap. If it reads as genuinely unmatched, the linkage is done, and what is left becomes a limitation you document and quantify.</p>
+  <p>Затем оцените то, что вы видите. Если верхняя часть этого списка заполнена записями, которые, очевидно, должны были совпадать, в ваших правилах есть пробел. Если оно действительно не имеет себе равных, связь завершена, а то, что осталось, становится ограничением, которое вы документируете и даете количественную оценку.</p>
 
-  <p>It takes about ten minutes. It is the difference between "the join ran" and "the join is right".</p>
+  <p>Это занимает около десяти минут. В этом разница между «соединение выполнено» и «соединение правильное».</p>
   </div>
 
-  <h2>The principles, distilled</h2>
+  <h2>Принципы, очищенные</h2>
   <table>
-    <tr><th>Principle</th><th>One-line version</th></tr>
-    <tr><td>Measure first</td><td>Size the fragmentation (depth on one entity, breadth across the table) before writing any rule.</td></tr>
-    <tr><td>Preview every rule</td><td>Show original and transformed side by side on real rows; read them.</td></tr>
-    <tr><td>Specific above general</td><td>In any rule ladder, the narrow pattern outranks the broad pattern it contains.</td></tr>
-    <tr><td>Check false positives</td><td>Before merging or splitting, read the rows where a wrong rule does the most damage.</td></tr>
-    <tr><td>Sometimes: don't merge</td><td>Over-merging destroys real entities. A documented refusal is a valid output.</td></tr>
-    <tr><td>Match keys, stored and indexed</td><td>Compute normalized keys once into real columns; join on those, not on function-wrapped originals.</td></tr>
-    <tr><td>Match rate per rule</td><td>Measure before and after each rule; stop when the rate stops moving for honest reasons.</td></tr>
-    <tr><td>Clerical review</td><td>Read the leftovers before declaring victory.</td></tr>
-    <tr><td>Log everything</td><td>Every decision (including refusals) goes in the data-quality record and the <a href="../documenting-data-limitations/">limitations section</a>.</td></tr>
+    <tr><th>Principle</th><th>Однострочная версия</th></tr>
+    <tr><td>Сначала измерьте</td><td>Прежде чем писать какое-либо правило, определите размер фрагментации (глубина одного объекта и ширина по всей таблице).</td></tr>
+    <tr><td>Предварительный просмотр каждого правила</td><td>Показывать исходные и преобразованные изображения рядом в реальных строках; прочитайте их.</td></tr>
+    <tr><td>Конкретное выше общего</td><td>В любой лестнице правил узкая модель превосходит содержащуюся в ней широкую модель.</td></tr>
+    <tr><td>Проверьте ложные срабатывания</td><td>Прежде чем объединять или разделять данные, прочтите строки, в которых неправильное правило наносит наибольший ущерб.</td></tr>
+    <tr><td>Иногда: не объединяйтесь</td><td>Чрезмерное слияние уничтожает реальные сущности. Документально подтвержденный отказ является действительным результатом.</td></tr>
+    <tr><td>Ключи сопоставления, сохраненные и индексированные</td><td>Compute normalized keys once into real columns; join on those, not on function-wrapped originals.</td></tr>
+    <tr><td>Коэффициент совпадения по правилу</td><td>Измеряйте до и после каждого правила; остановитесь, когда курс перестанет двигаться по честным причинам.</td></tr>
+    <tr><td>Канцелярский обзор</td><td>Прочтите остатки, прежде чем объявить о победе.</td></tr>
+    <tr><td>Записывать все</td><td>Каждое решение (включая отказы) фиксируется в протоколе качества данных и  <a href="../documenting-data-limitations/">раздел ограничений</a>.</td></tr>
   </table>
 
   <div class="cta">
-    <strong>See it run end to end.</strong>
-    <p style="margin:6px 0 0">The <a href="https://github.com/michaelnocito/steam-hidden-gems">Steam Hidden Gems</a> and <a href="https://github.com/michaelnocito/streaming-hidden-gems">Streaming Hidden Gems</a> projects carry these habits through full analyses you can read. The <a href="../../sql/">SQL Kit</a> teaches the LIKE, CASE, LOWER and JOIN moves that every step above uses.</p>
-    <a class="btn" href="../../sql/">Open the SQL Kit →</a>
-      <p style="margin:10px 0 0;font-size:15px">Or get right into it and learn by writing queries: <a href="../../drill/">open SQL Drill</a>, thirteen queries that each add one thing to the last.</p>
+    <strong>Посмотрите, как это работает от начала до конца.</strong>
+    <p style="margin:6px 0 0">The <a href="https://github.com/michaelnocito/steam-hidden-gems">Скрытые сокровища Steam</a> and <a href="https://github.com/michaelnocito/streaming-hidden-gems">Потоковое вещание «Скрытые жемчужины»</a>  проекты реализуют эти привычки посредством полного анализа, который вы можете прочитать.  <a href="../../sql/">SQL-комплект</a>  обучает движениям LIKE, CASE, LOWER и JOIN, которые используются на каждом этапе выше.</p>
+    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
+      <p style="margin:10px 0 0;font-size:15px">Или приступайте к делу и учитесь, написав запросы:  <a href="../../drill/">открыть SQL Drill</a>, тринадцать запросов, каждый из которых добавляет что-то одно к последнему.</p>
   </div>
 
     <div class="book">
-    <strong>You can do the work once somebody tells you what the work is. A vague question is the part that stalls you.</strong>
-    <p><em>Thinking Like an Analyst</em> is 64 pages on the judgment half of the job: defining a metric, telling a report from an analysis, exploring data before you trust it, and saying out loud what your data cannot tell you.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/thinking-like-an-analyst?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=thinking-like-an-analyst" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-entity-resolution'})">Thinking Like an Analyst, $19 &rarr;</a>
+    <strong>Вы можете выполнять работу, как только кто-то скажет вам, в чем она заключается. Расплывчатый вопрос — это та часть, которая вас останавливает.</strong>
+    <p><em>Думать как аналитик</em>  Это 64 страницы, посвященные половине работы: определение показателя, составление отчета по результатам анализа, изучение данных, прежде чем вы им поверите, и высказывание вслух того, о чем ваши данные не могут вам сказать.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/thinking-like-an-analyst?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=thinking-like-an-analyst" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-entity-resolution'})">Думать как аналитик, 19 $ →</a>
   </div>
 
 <h2>References</h2>
   <ol class="refs">
-    <li>Fellegi, I. P., &amp; Sunter, A. B. (1969). A theory for record linkage. <em>Journal of the American Statistical Association, 64</em>(328), 1183–1210. doi:10.1080/01621459.1969.10501049</li>
-    <li>Wang, R. Y., &amp; Strong, D. M. (1996). Beyond accuracy: What data quality means to data consumers. <em>Journal of Management Information Systems, 12</em>(4), 5–33. (The fitness-for-use standard the merge/don't-merge tradeoffs answer to.)</li>
+    <li>Феллеги, И.П. и Сантер, А.Б. (1969). Теория связи записей.  <em>Журнал Американской статистической ассоциации, 64.</em>(328), 1183–1210. doi:10.1080/01621459.1969.10501049</li>
+    <li>Ван, Р.Ю., и Стронг, Д.М. (1996). За пределами точности: что качество данных означает для потребителей данных.  <em>Журнал информационных систем управления, 12</em>(4), 5–33. (Стандарт пригодности для использования, которому отвечают компромиссы слияния/не слияния.)</li>
   </ol>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../sql-ctes/">SQL CTEs</a> · <a href="../sql-window-functions/">Window Functions</a> · <a href="../tableau-relationships/">Tableau Relationships</a> · <a href="../tableau-sets/">Tableau Sets</a> · <a href="../../drill/">SQL Drill</a> · <a href="../what-is-data-analysis/">What Is Data Analysis?</a> · <a href="../sql-teaching-comments/">Commenting SQL</a> · <a href="../sql-case-expression/">SQL CASE Expression</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../data-driven-thresholds/">Data-Driven Thresholds</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../sql-joins/">SQL JOINs</a> &middot; <a href="../sql-count-function/">COUNT in SQL</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../sql-aliasing/">SQL Aliases</a> &middot; <a href="../../sql/">SQL Kit</a> · <a href="../../projects/">Portfolio Projects</a>
+    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-ctes/">SQL CTE</a> · <a href="../sql-window-functions/">Оконные функции</a> · <a href="../tableau-relationships/">Табличные отношения</a> · <a href="../tableau-sets/">Наборы таблиц</a> · <a href="../../drill/">SQL-детализация</a> · <a href="../what-is-data-analysis/">Что такое анализ данных?</a> · <a href="../sql-teaching-comments/">Комментирование SQL</a> · <a href="../sql-case-expression/">SQL-выражение CASE</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../data-driven-thresholds/">Пороги, управляемые данными</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> &middot; <a href="../sql-count-function/">СЧЕТ в SQL</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../sql-aliasing/">SQL-псевдонимы</a> &middot; <a href="../../sql/">SQL-комплект</a> · <a href="../../projects/">Портфельные проекты</a>
     
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

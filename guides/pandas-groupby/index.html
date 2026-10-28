@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>pandas GroupBy: How to Summarize a DataFrame Without Losing Track of Your Rows — Analyst Prep Kit</title>
-<meta name="description" content="groupby, agg, size vs count, transform, and dropna, worked on one 14-row table. Two rows vanish from the default result, and one line brings them back.">
+<title>pandas GroupBy: как суммировать фрейм данных, не теряя при этом строк — комплект для подготовки аналитика</title>
+<meta name="description" content="groupby, agg, size vs count, Transform и dropna работали над одной 14-строчной таблицей. Две строки исчезают из результата по умолчанию, а одна строка возвращает их обратно.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/pandas-groupby/">
-<meta property="og:title" content="pandas GroupBy: How to Summarize a DataFrame Without Losing Track of Your Rows">
-<meta property="og:description" content="Split, apply, combine on one 14-row table: groupby basics, named aggregation, size vs count, transform, and the two rows the default settings silently drop.">
+<meta property="og:title" content="pandas GroupBy: как суммировать фрейм данных, не теряя строк">
+<meta property="og:description" content="Разделение, применение, объединение в одной таблице из 14 строк: основные сведения о группировке, именованная агрегация, размер и количество, преобразование и две строки, настройки по умолчанию автоматически удаляются.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/pandas-groupby.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/pandas-groupby/">
@@ -134,18 +134,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../python/">Python Kit</a> · <a href="../">All guides</a></p>
-  <h1>pandas GroupBy: How to Summarize a DataFrame Without Losing Track of Your Rows</h1>
-  <p class="meta">Split, apply, combine, and the rows that quietly go missing · Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-07">August 7, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../python/">Комплект Python</a> · <a href="../">Все руководства</a></p>
+  <h1>pandas GroupBy: как суммировать фрейм данных, не теряя строк</h1>
+  <p class="meta">Разделяйте, применяйте, объединяйте и незаметно пропадающие строки · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-07">7 августа 2026 г.</time></p>
 
-  <p>By the end of this page you can take a DataFrame, summarize it by any column or combination of columns, get several statistics at once with sensible names, and account for every row that went in, including the ones pandas would otherwise drop without telling you. It is about twenty-five minutes, and every output shown was produced by actually running the code on the table printed below.</p>
+  <p>К концу этой страницы вы можете взять DataFrame, суммировать его по любому столбцу или комбинации столбцов, получить сразу несколько статистических данных с разумными именами и учесть каждую вошедшую строку, включая те, которые панды в противном случае удалили бы, не сообщая вам. Это около двадцати пяти минут, и каждый показанный результат был получен путем фактического запуска кода из таблицы, напечатанной ниже.</p>
 
-  <p>Here is what to actually do today. In your next <code>groupby</code>, add a row count beside whatever statistic you are computing, using <code>size</code>, and run it once with <code>dropna=False</code>. Those two additions surface the two most common silent problems in grouped results: averages built on almost nothing, and rows that vanished because their key was missing.</p>
+  <p>Вот чем на самом деле заняться сегодня. В вашем следующем  <code>groupby</code>, добавьте количество строк рядом со статистикой, которую вы вычисляете, используя  <code>size</code>и запустите его один раз с помощью  <code>dropna=False</code>. Эти два дополнения выявляют две наиболее распространенные молчаливые проблемы в сгруппированных результатах: средние значения, построенные почти на пустом месте, и строки, которые исчезли из-за отсутствия ключа.</p>
 
-  <p>The short version: <code>groupby</code> splits the table into one mini-table per key value, applies your function to each, and combines the answers into a new table with one row per group. <code>count</code> skips missing values, <code>size</code> does not, and rows with a missing key are dropped entirely unless you ask otherwise.</p>
+  <p>Краткая версия:  <code>groupby</code>  разбивает таблицу на одну мини-таблицу для каждого значения ключа, применяет вашу функцию к каждой и объединяет ответы в новую таблицу с одной строкой на группу.  <code>count</code>  пропускает пропущенные значения,  <code>size</code>  нет, и строки с отсутствующим ключом полностью удаляются, если вы не попросите иного.</p>
 
-  <p>The split-apply-combine shape is the one idea everything else on this page hangs from, so it gets the picture.</p>
+  <p>Форма «разделить-применить-объединить» — это единственная идея, на которой основано все остальное на этой странице, поэтому она понятна.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 320" role="img" aria-labelledby="pgTitle pgDesc" xmlns="http://www.w3.org/2000/svg">
@@ -212,31 +212,31 @@
         <text x="600" y="216" font-size="12.5" fill="#52525B">one row per group</text>
       </g>
     </svg>
-    <figcaption>Split the rows by key, apply one function per mini-table, combine the answers into one row per group. The dashed row had no key, and by default it is dropped before the split, not carried as its own group.</figcaption>
+    <figcaption>Разделите строки по ключу, примените одну функцию к каждой мини-таблице, объедините ответы в одну строку на группу. У пунктирной строки нет ключа, и по умолчанию она удаляется перед разделением и не переносится как отдельная группа.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>What you'll learn</strong>
+    <strong>Что вы узнаете</strong>
     <ol>
-      <li>What groupby actually does: split, apply, combine</li>
-      <li>The basic move: one column, one statistic</li>
-      <li>Several statistics at once: agg and named aggregation</li>
-      <li>size against count, and which one answers your question</li>
-      <li>Two grouping columns, the MultiIndex, and getting a flat table back</li>
-      <li>The small-group problem, carried over from SQL</li>
-      <li>transform: a group statistic on every row</li>
-      <li>The rows that vanish: dropna</li>
-      <li>The full before and after</li>
-      <li>Edge cases that break grouped results in real data</li>
-      <li>Why this works</li>
-      <li>Using this on your own project</li>
-      <li>The whole thing on one screen</li>
+      <li>Что на самом деле делает groupby: разделить, применить, объединить</li>
+      <li>Основной ход: один столбец, одна статистика</li>
+      <li>Сразу несколько статистических данных: агрегирование и именованная агрегация</li>
+      <li>размер по количеству, и какой из них отвечает на ваш вопрос</li>
+      <li>Два группирующих столбца, MultiIndex и возвращение плоской таблицы</li>
+      <li>Проблема малых групп, перенесенная из SQL</li>
+      <li>преобразование: групповая статистика в каждой строке</li>
+      <li>Строки, которые исчезают: dropna</li>
+      <li>Полное до и после</li>
+      <li>Пограничные случаи, которые нарушают сгруппированные результаты в реальных данных</li>
+      <li>Почему это работает</li>
+      <li>Использование этого в вашем собственном проекте</li>
+      <li>Все на одном экране</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Every output on this page is real.</strong> One 14-row sales table, printed in full below, and every result was produced by running the code with pandas. If you already group in SQL, this page is the pandas half of a pair: <a href="../sql-group-by-having/">GROUP BY and HAVING</a> is the same idea in its original home, and I will point at the twin moves as they come up.</div>
+  <div class="note"><strong>Каждый вывод на этой странице реален.</strong>  Одна таблица продаж из 14 строк, полностью напечатанная ниже, и каждый результат был получен путем запуска кода с помощью pandas. Если вы уже группируете SQL, эта страница представляет собой половину пары панд:  <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a>  это та же самая идея в своем изначальном источнике, и я буду указывать на двойные ходы по мере их появления.</div>
 
-  <p>Here is the whole dataset. Fourteen orders, a region, a category, and an amount. Two things are deliberately imperfect, because real data always is: order 1008 has a missing amount, and orders 1013 and 1014 have a missing region.</p>
+  <p>Вот весь набор данных. Четырнадцать заказов, регион, категория и сумма. Две вещи намеренно несовершенны, потому что реальные данные всегда таковы: в заказе 1008 отсутствует сумма, а в заказах 1013 и 1014 отсутствует регион.</p>
 
   <pre><code>import pandas as pd
 import numpy as np
@@ -270,19 +270,19 @@ df = pd.DataFrame({
   </table>
 
   <div class="step">
-    <h2>1. What groupby actually does: split, apply, combine</h2>
+    <h2>1. Что на самом деле делает groupby: разделить, применить, объединить</h2>
 
-    <p>Before the explanation: the table has 14 rows. You group by region and get 3 rows back. In your own head, where are the other 11 rows, and what does one row of the result now mean?</p>
+    <p>Перед пояснением: в таблице 14 строк. Вы группируете по регионам и получаете обратно 3 строки. Где же в вашей голове остальные 11 строк и что теперь означает одна строка результата?</p>
 
-    <p>The name for the mechanism is <strong>split-apply-combine</strong>. <em>Split</em>: pandas sorts the rows into one mini-table per distinct key value, every East row together, every West row together, every South row together. <em>Apply</em>: it runs your function, say a mean, on each mini-table separately. <em>Combine</em>: it stacks the answers into a new table with one row per group. Nothing is averaged across groups by accident, because each function call only ever saw one group's rows.</p>
+    <p>Название механизма  <strong>split-apply-combine</strong>. <em>Split</em>: pandas сортирует строки в одну мини-таблицу для каждого отдельного значения ключа, каждую восточную строку вместе, каждую западную строку вместе, каждую южную строку вместе.  <em>Apply</em>: он запускает вашу функцию, скажем, среднее значение, для каждой мини-таблицы отдельно.  <em>Combine</em>: ответы складываются в новую таблицу, по одной строке на группу. Ничто не усредняется по группам случайно, поскольку каждый вызов функции видел только строки одной группы.</p>
 
-    <p>The part worth saying out loud is what one row means afterwards. Before grouping, one row was one order. After grouping by region, one row is one region. That change of meaning is called the <strong>grain</strong> of the table, and it is exactly the discipline SQL forces with <code>GROUP BY</code>: once the grain is one-row-per-region, an individual order's amount no longer exists in the result, and any column you want to see must be a group key or a summary. pandas will not error the way SQL does if you confuse grains; it will just hand you something you did not mean. Naming the new grain before you type is the cheap defence.</p>
+    <p>Часть, которую стоит произнести вслух, — это то, что означает одна строка после нее. До группировки одна строка представляла собой один заказ. После группировки по регионам одна строка — это один регион. Такое изменение значения называется  <strong>grain</strong>  таблицы, и это именно та дисциплина, которую SQL заставляет  <code>GROUP BY</code>: как только детализация составит одну строку на регион, сумма отдельного заказа больше не будет присутствовать в результате, и любой столбец, который вы хотите видеть, должен быть групповым ключом или сводкой. pandas не будет выдавать ошибку, как это делает SQL, если вы перепутаете зерна; это просто даст вам то, что вы не имели в виду. Назвать новое зерно перед вводом — дешевая защита.</p>
   </div>
 
   <div class="step">
-    <h2>2. The basic move: one column, one statistic</h2>
+    <h2>2. Основной ход: один столбец, одна статистика.</h2>
 
-    <p>The workhorse line reads almost like the sentence you would say: group by region, take the amount column, take the mean.</p>
+    <p>Строка «рабочей лошадки» читается почти как предложение, которое вы бы сказали: сгруппируйте по регионам, возьмите столбец суммы, возьмите среднее значение.</p>
 
     <pre><code>df.groupby('region')['amount'].mean()</code></pre>
 
@@ -292,15 +292,15 @@ South     83.333333
 West     186.666667
 Name: amount, dtype: float64</code></pre>
 
-    <p>Check East by hand: (120 + 80 + 300 + 250 + 40) ÷ 5 = 790 ÷ 5 = 158. South: (90 + 110 + 50) ÷ 3 = 250 ÷ 3 = 83.33. West has four rows but one amount is missing, and <code>mean</code> skips missing values: (100 + 400 + 60) ÷ 3 = 560 ÷ 3 = 186.67. Divided by three, not four. Keep that skip in mind; it becomes a whole section shortly.</p>
+    <p>Проверьте Восток вручную: (120 + 80 + 300 + 250 + 40) ÷ 5 = 790 ÷ 5 = 158. Юг: (90 + 110 + 50) ÷ 3 = 250 ÷ 3 = 83,33. У Запада четыре строки, но одна сумма отсутствует, и  <code>mean</code>  пропускает пропущенные значения: (100 + 400 + 60) ÷ 3 = 560 ÷ 3 = 186,67. Делится на три, а не на четыре. Имейте это в виду; вскоре это станет целым разделом.</p>
 
-    <p>Two smaller things before moving on. Swap <code>mean</code> for <code>sum</code>, <code>median</code>, <code>min</code>, <code>max</code>, or <code>std</code> and the shape is identical. And the result here is a Series whose index is the group key, which is fine for a quick look and awkward for anything downstream; section five shows the flat-table version.</p>
+    <p>Прежде чем двигаться дальше, две вещи поменьше. Менять  <code>mean</code> for <code>sum</code>, <code>median</code>, <code>min</code>, <code>max</code>, или  <code>std</code>  и форма идентична. В результате получается серия, индекс которой является групповым ключом, что удобно для быстрого просмотра и неудобно для чего-либо последующего; в пятом разделе показана версия с плоским столом.</p>
   </div>
 
   <div class="step">
-    <h2>3. Several statistics at once: agg and named aggregation</h2>
+    <h2>3. Сразу несколько статистик: агрегация и именованная агрегация</h2>
 
-    <p>A single mean is rarely the deliverable. <code>agg</code> takes a list of functions and computes them per group in one pass.</p>
+    <p>Единственное среднее редко является результатом.  <code>agg</code>  берет список функций и вычисляет их для каждой группы за один проход.</p>
 
     <pre><code>df.groupby('region')['amount'].agg(['mean', 'sum', 'size', 'count'])</code></pre>
 
@@ -310,7 +310,7 @@ East    158.000000  790.0     5      5
 South    83.333333  250.0     3      3
 West    186.666667  560.0     4      3</code></pre>
 
-    <p>The version I actually ship is <strong>named aggregation</strong>, where you name each output column yourself and say which input column and which function feed it. The pattern is <code>new_name=('column', 'function')</code>.</p>
+    <p>Версия, которую я на самом деле отправляю,  <strong>именованная агрегация</strong>, где вы сами называете каждый выходной столбец и указываете, какой входной столбец и какая функция его подают. Шаблон  <code>new_name=('column', 'function')</code>.</p>
 
     <pre><code>df.groupby('region').agg(
     avg_amount=('amount', 'mean'),
@@ -323,25 +323,25 @@ East    158.000000       5
 South    83.333333       3
 West    186.666667       4</code></pre>
 
-    <p>The named form costs a few more characters and pays twice. The output columns are called <code>avg_amount</code> and <code>orders</code> instead of <code>mean</code> and <code>size</code>, so the result is readable without the code beside it. And each statistic states its input column explicitly, so adding a second value column to the table later cannot silently change what gets aggregated.</p>
+    <p>Названная форма стоит на несколько символов больше и платит дважды. Выходные столбцы называются  <code>avg_amount</code> and <code>orders</code>  вместо  <code>mean</code> and <code>size</code>, поэтому результат можно прочитать без кода рядом с ним. И каждая статистика явно указывает свой входной столбец, поэтому добавление второго столбца значений в таблицу позже не может незаметно изменить то, что агрегируется.</p>
   </div>
 
   <div class="step">
-    <h2>4. size against count, and which one answers your question</h2>
+    <h2>4. размер по количеству, и какой из них отвечает на ваш вопрос</h2>
 
-    <p>Before the explanation: in the table two sections back, West shows size 4 and count 3. Both claim to be counting. Decide what each one counted before reading the answer.</p>
+    <p>Перед пояснением: в таблице двумя секциями назад Уэст показывает размер 4 и количество 3. Оба утверждают, что считают. Решите, что каждый из них посчитал, прежде чем читать ответ.</p>
 
-    <p><code>size</code> counts rows in the group, missing or not. West has four order rows, so size says 4. <code>count</code> counts non-missing values in the chosen column. West's four rows include order 1008 with a missing amount, so count says 3. One missing value is the entire gap between the two answers.</p>
+    <p><code>size</code>  подсчитывает строки в группе, отсутствуют они или нет. У Запада четыре ряда порядка, поэтому размер равен 4.  <code>count</code>  подсчитывает непропущенные значения в выбранном столбце. Четыре строки Уэста включают заказ 1008 с пропущенной суммой, поэтому счетчик показывает 3. Одно пропущенное значение — это весь разрыв между двумя ответами.</p>
 
-    <p>This is exactly SQL's split between <code>COUNT(*)</code> and <code>COUNT(col)</code>: <code>size</code> is <code>COUNT(*)</code>, rows in the bucket, and <code>count</code> is <code>COUNT(col)</code>, values present in one column. Neither is the correct one in general; they answer different questions. "How many orders did West place?" is a size question: 4. "How many West orders have an amount I can add up?" is a count question: 3. The mistake is not picking the wrong function so much as not noticing they can differ, because on clean columns they agree and the habit forms that they always will.</p>
+    <p>Это точное разделение SQL между  <code>COUNT(*)</code> and <code>COUNT(col)</code>: <code>size</code> is <code>COUNT(*)</code>, строки в ведре и  <code>count</code> is <code>COUNT(col)</code>, values present in one column. Neither is the correct one in general; they answer different questions. "How many orders did West place?" is a size question: 4. "How many West orders have an amount I can add up?" is a count question: 3. The mistake is not picking the wrong function so much as not noticing they can differ, because on clean columns they agree and the habit forms that they always will.</p>
 
-    <p>Say in one sentence why West's mean divided by 3 and not 4, before reading on. It is the same fact wearing a different hat: aggregations skip missing values, so the mean's denominator is count, not size. A mean over a column that is one-quarter missing is a statement about the three-quarters that answered.</p>
+    <p>Прежде чем читать дальше, скажите в одном предложении, почему среднее значение Уэста делится на 3, а не на 4. Это тот же факт, но в другой шляпе: агрегации пропускают пропущенные значения, поэтому знаменателем среднего является количество, а не размер. Среднее значение по столбцу, в котором отсутствует одна четверть, представляет собой утверждение о трех четвертях, которые ответили.</p>
   </div>
 
   <div class="step">
-    <h2>5. Two grouping columns, the MultiIndex, and getting a flat table back</h2>
+    <h2>5. Два группирующих столбца, MultiIndex и возвращение плоской таблицы.</h2>
 
-    <p>Pass a list of columns and the grain gets finer: one row per region per category.</p>
+    <p>Передайте список столбцов, и зерно станет более мелким: одна строка на регион на категорию.</p>
 
     <pre><code>df.groupby(['region', 'category'])['amount'].mean()</code></pre>
 
@@ -356,9 +356,9 @@ West    Chairs      100.0
         Lamps        60.0
 Name: amount, dtype: float64</code></pre>
 
-    <p>East Chairs by hand: (120 + 80) ÷ 2 = 100. East Desks: (300 + 250) ÷ 2 = 275. The staircase layout on the left is a <strong>MultiIndex</strong>: the group keys have become a two-level row index rather than ordinary columns. It prints nicely and then fights you the moment you try to merge, filter, plot, or export, because <code>region</code> is no longer a column you can just refer to.</p>
+    <p>Восток Стулья вручную: (120 + 80) ÷ 2 = 100. Восточные столы: (300 + 250) ÷ 2 = 275. Схема лестницы слева представляет собой  <strong>MultiIndex</strong>: групповые ключи стали двухуровневым индексом строки, а не обычными столбцами. Он хорошо печатает, а затем начинает ссориться в тот момент, когда вы пытаетесь объединить, отфильтровать, вывести на печать или экспортировать, потому что  <code>region</code>  больше не является столбцом, на который можно просто сослаться.</p>
 
-    <p>Two ways to get a plain flat table, and they end in the same place. Ask for it up front with <code>as_index=False</code>, which keeps the keys as regular columns, or repair it afterwards with <code>.reset_index()</code>, which moves index levels back into columns.</p>
+    <p>Два способа получить простой плоский стол, и заканчиваются они в одном месте. Попросите об этом заранее с  <code>as_index=False</code>, который сохраняет ключи как обычные столбцы, или впоследствии восстановите его с помощью  <code>.reset_index()</code>, который перемещает уровни индекса обратно в столбцы.</p>
 
     <pre><code>df.groupby(['region', 'category'], as_index=False)['amount'].mean()</code></pre>
 
@@ -372,13 +372,13 @@ Name: amount, dtype: float64</code></pre>
   West    Desks   400.0
   West    Lamps    60.0</code></pre>
 
-    <p>Also worth noticing: South has no Desks row at all, not a zero. Combinations with no rows simply never form a group, the same way a filtered-out group goes missing in SQL. If a category you know exists is absent from a grouped result, the rows behind it never made it into the split.</p>
+    <p>Также стоит отметить: на юге вообще нет строки «Парты», нет нуля. Комбинации без строк просто никогда не образуют группу, точно так же, как отфильтрованная группа теряется в SQL. Если известная вам категория отсутствует в сгруппированном результате, строки, стоящие за ней, никогда не попали в разделение.</p>
   </div>
 
   <div class="step">
-    <h2>6. The small-group problem, carried over from SQL</h2>
+    <h2>6. Проблема малых групп, перенесенная из SQL</h2>
 
-    <p>Rankings of group averages have a structural bias: the smallest groups float to the extremes, because a mean over three values swings much more freely than a mean over three thousand. The SQL guide's fix carries straight over: always compute the group size beside the statistic, and set a floor before you read the ranking.</p>
+    <p>Рейтинги групповых средних показателей имеют структурную предвзятость: самые маленькие группы плавают в крайностях, потому что среднее значение более трех значений колеблется гораздо свободнее, чем среднее значение более трех тысяч. Исправление из руководства по SQL остается в силе: всегда вычисляйте размер группы рядом со статистикой и устанавливайте нижний предел, прежде чем читать рейтинг.</p>
 
     <pre><code>summary = df.groupby('region').agg(
     avg_amount=('amount', 'mean'),
@@ -391,15 +391,15 @@ region
 East    158.000000       5
 West    186.666667       4</code></pre>
 
-    <p>South, with its 3 orders averaging 83.33, is excluded from the comparison rather than allowed to look like a stable finding. The boolean filter line is pandas's <code>HAVING</code>: it runs on the combined result, after the groups exist, which is the only time a per-group condition can be checked. On fourteen rows the floor of 4 is obviously a demonstration; on real data the floor is a judgement you should pick from the data and write down, and <a href="../data-driven-thresholds/">choosing thresholds from the data</a> covers how.</p>
+    <p>Юг, с его тремя порядками со средним значением 83,33, исключен из сравнения, а не может выглядеть как стабильный результат. Строка логического фильтра принадлежит пандам.  <code>HAVING</code>: it runs on the combined result, after the groups exist, which is the only time a per-group condition can be checked. On fourteen rows the floor of 4 is obviously a demonstration; on real data the floor is a judgement you should pick from the data and write down, and <a href="../data-driven-thresholds/">Выбор порогов из данных</a>  рассказывает о том, как.</p>
 
-    <p>Now picture running the named-aggregation line on your own table, whatever it is: tickets by assignee, revenue by client, scores by school. Which group do you already suspect has single-digit rows behind a confident-looking average? That suspicion is the reason <code>orders=</code> goes in every grouped result I ship.</p>
+    <p>Теперь представьте, как вы запускаете строку именованного агрегирования в своей таблице, что бы это ни было: билеты по правопреемникам, доходы по клиентам, баллы по школам. Как вы уже подозреваете, в какой группе за уверенным средним показателем стоят однозначные ряды? Это подозрение является причиной  <code>orders=</code>  входит в каждый сгруппированный результат, который я отправляю.</p>
   </div>
 
   <div class="step">
-    <h2>7. transform: a group statistic on every row</h2>
+    <h2>7. Преобразование: групповая статистика в каждой строке.</h2>
 
-    <p>Everything so far collapsed the table. Sometimes you want the opposite: keep all the original rows and attach a group-level number to each, so you can compute each row's share of its group. <code>transform</code> applies the function per group and then broadcasts the answer back to every row of that group, so the result is the same length as the input.</p>
+    <p>Все до сих пор рухнуло на стол. Иногда вам нужно обратное: сохранить все исходные строки и прикрепить к каждой номер уровня группы, чтобы можно было вычислить долю каждой строки в ее группе.  <code>transform</code>  применяет функцию для каждой группы, а затем передает ответ обратно в каждую строку этой группы, поэтому результат имеет ту же длину, что и входные данные.</p>
 
     <pre><code>d2 = df.dropna(subset=['region', 'amount']).copy()
 d2['region_total'] = d2.groupby('region')['amount'].transform('sum')
@@ -418,19 +418,19 @@ d2['share'] = d2['amount'] / d2['region_total']</code></pre>
      1011  South   Chairs   110.0         250.0  0.440
      1012  South    Lamps    50.0         250.0  0.200</code></pre>
 
-    <p>Every East row carries East's total of 790, every West row 560, every South row 250. Order 1007's share checks by hand: 400 ÷ 560 = 0.714, so one desk order is 71% of West's spend. The rule of thumb: <code>agg</code> when the deliverable is one row per group, <code>transform</code> when the deliverable is the original rows with a group fact attached. In SQL this same keep-the-rows move is a window function.</p>
+    <p>В каждом восточном ряду общее количество заказов Востока составляет 790, в каждом западном ряду — 560, в каждом южном ряду — 250. Доля заказа 1007 проверяется вручную: 400 ÷ 560 = 0,714, поэтому один кассовый заказ составляет 71% расходов Запада. Эмпирическое правило:  <code>agg</code>  когда результат составляет одну строку на группу,  <code>transform</code>  когда результатом являются исходные строки с прикрепленным групповым фактом. В SQL то же самое перемещение строк является оконной функцией.</p>
 
-    <p>The first line dropped the rows with a missing region or amount on purpose, and out loud, before dividing. Which is the perfect segue.</p>
+    <p>В первой строке специально и вслух перед разделением пропадали строки с пропущенным регионом или суммой. Это идеальный переход.</p>
   </div>
 
   <div class="step">
-    <h2>8. The rows that vanish: dropna</h2>
+    <h2>8. Исчезающие строки: dropna</h2>
 
-    <p>Before the explanation: our table has 14 rows, and the region sizes in section three were 5 + 3 + 4 = 12. Two rows have been missing from every grouped result on this page so far. Which two?</p>
+    <p>Перед пояснением: в нашей таблице 14 строк, а размеры регионов в третьем разделе были 5 + 3 + 4 = 12. До сих пор в каждом сгруппированном результате на этой странице отсутствовали две строки. Какие два?</p>
 
-    <p>Orders 1013 and 1014, the ones with a missing region. By default <code>groupby</code> runs with <code>dropna=True</code>, which means rows whose group key is missing are excluded before the split even happens. They are not a group that shows up blank; they are simply not there, and no warning is printed. On this page that is 2 rows of 14, holding 260 + 45 = 305 in sales. On a real table it can be a fifth of your revenue, absent from every regional report, with every printed number still individually correct.</p>
+    <p>Заказы 1013 и 1014, те, у которых отсутствует регион. По умолчанию  <code>groupby</code>  бежит с  <code>dropna=True</code>, which means rows whose group key is missing are excluded before the split even happens. They are not a group that shows up blank; they are simply not there, and no warning is printed. On this page that is 2 rows of 14, holding 260 + 45 = 305 in sales. On a real table it can be a fifth of your revenue, absent from every regional report, with every printed number still individually correct.</p>
 
-    <p>One argument surfaces them as their own group.</p>
+    <p>Один аргумент представляет их как отдельную группу.</p>
 
     <pre><code>df.groupby('region', dropna=False)['amount'].mean()</code></pre>
 
@@ -441,16 +441,16 @@ West     186.666667
 NaN      152.500000
 Name: amount, dtype: float64</code></pre>
 
-    <p>The NaN group's mean checks by hand: (260 + 45) ÷ 2 = 305 ÷ 2 = 152.5. That row is not an error to hide. It is a measurement of your missing data, and the honest move is to report it: "two orders, 305 in sales, have no region recorded." Silent exclusions are exactly the kind of thing that belongs in writing next to a result, and <a href="../documenting-data-limitations/">documenting data limitations</a> is the guide for how to say it. My habit is to run the <code>dropna=False</code> version once for every key I group by, read the NaN row, then decide what to do about it, rather than letting the default decide for me.</p>
+    <p>Среднее число проверок группы NaN вручную: (260 + 45) ÷ 2 = 305 ÷ 2 = 152,5. Эта строка не является ошибкой, которую нужно скрывать. Это измерение недостающих данных, и честным шагом будет сообщить об этом: «Два заказа, 305 продаж, не имеют зарегистрированного региона». Негласные исключения — это именно то, что следует писать рядом с результатом, и  <a href="../documenting-data-limitations/">Документирование ограничений данных</a>  это руководство о том, как это сказать. Моя привычка — запускать  <code>dropna=False</code>  версию один раз для каждого ключа, по которому я группирую, прочитайте строку NaN, а затем решите, что с этим делать, вместо того, чтобы позволять значению по умолчанию решать за меня.</p>
   </div>
 
-  <h2>The full before and after</h2>
+  <h2>Полное до и после</h2>
 
-  <p>Same 14-row table, same question: how do the regions compare on order value?</p>
+  <p>Та же таблица из 14 строк, тот же вопрос: как регионы сравниваются по стоимости заказа?</p>
 
   <h3>Before</h3>
   <pre><code>df.groupby('region')['amount'].mean()</code></pre>
-  <p>Three problems, none of which raise an error. There is no group size, so South's 83.33 on three orders reads as confidently as East's 158 on five. Two whole rows are missing because their region is blank, and nothing says so. And the result is an index-keyed Series that the next step will trip over.</p>
+  <p>Три проблемы, ни одна из которых не приводит к ошибке. Размер группы отсутствует, поэтому показатель Юга 83,33 по трем порядкам читается так же уверенно, как 158 у Востока по пяти. Целых две строки отсутствуют, потому что их область пуста, и об этом ничего не говорится. В результате получается серия с индексным ключом, о которой следующий шаг будет спотыкаться.</p>
 
   <h3>After</h3>
   <pre><code># One row per region, sizes shown, missing keys surfaced, flat table, sorted.
@@ -465,100 +465,100 @@ result = (
   East  158.000000       5
  South   83.333333       3
    NaN  152.500000       2</code></pre>
-  <p>(The NaN row appears because of <code>dropna=False</code>; pandas keeps it at the end of the sort.) Every one of the 14 input rows is now accounted for: 4 + 5 + 3 + 2 = 14. The reader can see that South's average stands on 3 orders, and that 2 orders have no region at all. <code>sort_values('avg_amount', ascending=False)</code> orders the result by the statistic, highest first, because a comparison table should be sorted by the thing being compared, not by alphabet.</p>
+  <p>(Строка NaN появляется из-за  <code>dropna=False</code>; pandas сохраняет его в конце сортировки.) Теперь учитывается каждая из 14 входных строк: 4 + 5 + 3 + 2 = 14. Читатель может видеть, что среднее значение Юга составляет 3 порядка, а 2 порядка вообще не имеют региона.  <code>sort_values('avg_amount', ascending=False)</code>  результат упорядочивается по статистике, начиная с самой высокой, поскольку таблица сравнения должна быть отсортирована по сравниваемому объекту, а не по алфавиту.</p>
 
   <div class="step">
-    <h2>Edge cases that break grouped results in real data</h2>
+    <h2>Пограничные случаи, которые нарушают сгруппированные результаты в реальных данных</h2>
 
-    <p>Five that each cost someone an afternoon.</p>
+    <p>Пять, каждая из которых стоила кому-то дня.</p>
 
-    <p><strong>The key column has near-duplicate values.</strong> <code>'East'</code> and <code>'East '</code> with a trailing space are two different groups, and your regional report quietly grows a fourth region. Normalize keys before grouping, <code>df['region'].str.strip()</code> at minimum. When the duplicates are messier than whitespace, that is <a href="../entity-resolution/">entity resolution</a>.</p>
+    <p><strong>Ключевой столбец содержит почти повторяющиеся значения.</strong> <code>'East'</code> and <code>'East '</code>  с пробелом в конце — это две разные группы, и в вашем региональном отчете незаметно увеличивается четвертый регион. Нормализовать ключи перед группировкой,  <code>df['region'].str.strip()</code>  как минимум. Когда дубликаты более беспорядочны, чем пробелы, то есть  <a href="../entity-resolution/">Разрешение объекта</a>.</p>
 
-    <p><strong>A group whose values are all missing returns NaN, not zero.</strong> If every amount in a group is missing, <code>sum</code> returns 0 but <code>mean</code> returns NaN, and a NaN in a report column tends to get "fixed" to zero by whoever formats it. A group with no measurable values and a group averaging zero are different findings.</p>
+    <p><strong>Группа, все значения которой отсутствуют, возвращает NaN, а не ноль.</strong>  Если каждая сумма в группе отсутствует,  <code>sum</code>  возвращает 0, но  <code>mean</code>  возвращает NaN, а NaN в столбце отчета имеет тенденцию быть «фиксированным» до нуля тем, кто его форматирует. Группа без измеримых значений и группа со средним значением 0 — это разные результаты.</p>
 
-    <p><strong>Grouping after a merge counts duplicates.</strong> If an upstream join multiplied rows, <code>size</code> now counts pairs, not orders. The check is the one this page keeps using: do the group sizes still add to the row count you expected?</p>
+    <p><strong>Группировка после слияния учитывает дубликаты.</strong>  Если восходящее соединение объединяет несколько строк,  <code>size</code>  теперь считает пары, а не заказы. На этой странице постоянно используется проверка: добавляются ли размеры групп к ожидаемому количеству строк?</p>
 
-    <p><strong>The MultiIndex survives into your export.</strong> Write a two-key grouped result straight to CSV and the staircase index becomes blank cells under <code>region</code>, which Excel users will read as missing data. Flatten with <code>as_index=False</code> or <code>reset_index()</code> before anything leaves Python.</p>
+    <p><strong>MultiIndex сохраняется при экспорте.</strong>  Запишите результат, сгруппированный двумя ключами, прямо в CSV, и индекс лестницы станет пустыми ячейками под  <code>region</code>, которые пользователи Excel будут считать отсутствующими данными. Сгладить с помощью  <code>as_index=False</code> or <code>reset_index()</code>  прежде чем что-либо покинет Python.</p>
 
-    <p><strong>Sorting by the index when you meant the values.</strong> <code>sort_index()</code> orders by group name, alphabetically. <code>sort_values('avg_amount')</code> orders by the number. A ranking sorted alphabetically still looks sorted, which is what makes it easy to miss.</p>
+    <p><strong>Сортировка по индексу, когда вы имели в виду значения.</strong> <code>sort_index()</code>  упорядочивает по названию группы в алфавитном порядке.  <code>sort_values('avg_amount')</code>  заказы по номеру. Рейтинг, отсортированный по алфавиту, по-прежнему выглядит отсортированным, поэтому его легко пропустить.</p>
   </div>
 
-  <h2>Why this works</h2>
+  <h2>Почему это работает</h2>
 
-  <p>Split-apply-combine is not just how pandas happens to be built; it is a named, general strategy for data analysis. Wickham's account of it, written for the R world, argues that an enormous share of practical analysis is exactly this pattern, break a problem into pieces along a key, operate on each piece independently, put the pieces back together, and that naming the pattern is what lets you recognize it across tools (Wickham, 2011, <em>Journal of Statistical Software</em>, 40(1), 1–29). That is why this page kept pointing at SQL: <code>groupby</code>, <code>GROUP BY</code>, Excel pivot tables, and window functions are one strategy wearing four syntaxes, and the grain discipline transfers with it. The theory underneath is older still: grouping is a partition of rows into disjoint sets, and an aggregate is a function from a set to a single value, which is the relational footing SQL formalized from the start (Codd, 1970, <em>Communications of the ACM</em>, 13(6), 377–387). Once you see a grouped result as a partition, the page's oddities stop being quirks: a dropped NaN key is a row assigned to no set, and size against count is the size of the set against the values present in one attribute of it.</p>
+  <p>Разделить-применить-объединить — это не просто то, как создаются панды; это именованная общая стратегия анализа данных. В описании Уикхэма, написанном для мира R, утверждается, что огромная часть практического анализа заключается именно в этом шаблоне: разбить проблему на части по ключу, работать с каждой частью независимо, снова собрать части вместе, и что присвоение имени шаблону позволяет распознавать его в разных инструментах (Wickham, 2011,  <em>Журнал статистического программного обеспечения</em>, 40(1), 1–29). Вот почему эта страница продолжала указывать на SQL:  <code>groupby</code>, <code>GROUP BY</code>, сводные таблицы Excel и оконные функции — это одна стратегия, использующая четыре синтаксиса, и вместе с ней передается зернистость. Теория, лежащая в ее основе, еще старше: группировка — это разделение строк на непересекающиеся наборы, а агрегат — это функция от набора к одному значению, что представляет собой реляционную основу SQL, формализованную с самого начала (Codd, 1970,  <em>Коммуникации ACM</em>, 13(6), 377–387). Как только вы увидите сгруппированный результат в виде раздела, странности страницы перестанут быть причудами: отброшенный ключ NaN — это строка, не назначенная ни одному набору, а размер по сравнению со счетчиком — это размер набора по сравнению со значениями, присутствующими в одном из его атрибутов.</p>
 
-  <p>And there is a reason this page kept asking you to commit to an answer, where are the missing rows, what did size count, before giving it. Attempting an answer before seeing the correct one reliably improves how well the correct one is retained, even when the attempt is wrong (Bisra, Liu, Nesbit, Salimi, &amp; Winne, 2018, <em>Educational Psychology Review</em>, 30(3), 703–725). The 5 + 3 + 4 = 12 arithmetic sticks because you were asked to find the gap before it was named.</p>
+  <p>И есть причина, по которой эта страница продолжала просить вас дать ответ, где находятся недостающие строки, какой размер учитывался, прежде чем дать его. Попытка дать ответ до того, как вы увидите правильный, достоверно повышает, насколько хорошо сохраняется правильный ответ, даже если попытка неверна (Бисра, Лю, Несбит, Салими и Винн, 2018,  <em>Обзор педагогической психологии</em>, 30(3), 703–725). 5 + 3 + 4 = 12 арифметических палочек, потому что вас попросили найти пробел до того, как он был назван.</p>
 
-  <h2>Using this on your own project</h2>
+  <h2>Использование этого в вашем собственном проекте</h2>
 
-  <p>Retrofitting every grouped line in an old notebook is miserable and you will stop at the third cell. Do this instead, in order.</p>
+  <p>Переделывать каждую сгруппированную строку в старом блокноте – занятие унылое, и вы остановитесь на третьей ячейке. Вместо этого сделайте это по порядку.</p>
 
   <ol>
-    <li><strong>Say the new grain out loud</strong> before you type: "one row per region per month." It decides the key list and warns you what stops existing.</li>
-    <li><strong>Use named aggregation by default</strong>, even for one statistic. Future-you gets column names that explain themselves.</li>
-    <li><strong>Put a <code>size</code> beside every statistic</strong>, and check the sizes add up to the row count you started with. The 5 + 3 + 4 = 12 check on this page is the whole method.</li>
-    <li><strong>Run each key once with <code>dropna=False</code></strong> and read the NaN row before deciding whether to exclude it, fill it, or report it.</li>
-    <li><strong>Flatten before anything leaves Python</strong>: <code>as_index=False</code> or <code>reset_index()</code>, then <code>sort_values</code> by the statistic.</li>
+    <li><strong>Скажи вслух новое зерно</strong>  прежде чем ввести: «одна строка на регион в месяц». Он определяет список ключей и предупреждает вас, что перестает существовать.</li>
+    <li><strong>Использовать именованную агрегацию по умолчанию</strong>, даже для одной статистики. Future-you получает имена столбцов, которые объясняют сами себя.</li>
+    <li><strong>Поставьте  <code>size</code>  рядом с каждой статистикой</strong>и проверьте, что размеры в сумме соответствуют количеству строк, с которого вы начали. Проверка 5 + 3 + 4 = 12 на этой странице — это весь метод.</li>
+    <li><strong>Запустите каждую клавишу один раз с помощью  <code>dropna=False</code></strong>  и прочитайте строку NaN, прежде чем решить, следует ли ее исключить, заполнить или сообщить о ней.</li>
+    <li><strong>Сгладить, прежде чем что-либо покинет Python</strong>: <code>as_index=False</code> or <code>reset_index()</code>, затем  <code>sort_values</code>  по статистике.</li>
   </ol>
 
-  <p>If you have paper nearby, one optional drawing is worth five minutes: redraw the split-apply-combine picture from memory for your own table, seven rows, three shadings, one dashed row with a missing key, and mark where that dashed row goes. Placing the dropped row correctly, before the split rather than after, is the whole dropna lesson in one pen stroke.</p>
+  <p>Если у вас под рукой есть бумага, один дополнительный рисунок стоит пяти минут: перерисуйте по памяти картинку «разделить-применить-объединить» для своей таблицы, семь рядов, три штриховки, один пунктирный ряд с недостающим ключом и отметить, куда идет этот пунктирный ряд. Правильное размещение пропущенной строки, до разделения, а не после, — это весь урок дропны одним росчерком пера.</p>
 
-  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: SQL, Python, Excel, and the working habits around them.</div>
+  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: SQL, Python, Excel и связанные с ними рабочие привычки.</div>
 
-  <h2>The whole thing on one screen</h2>
+  <h2>Все на одном экране</h2>
 
-  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
+  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
 
   <table>
-    <tr><th>Concept</th><th>What it does</th></tr>
-    <tr><td>Split-apply-combine</td><td>One mini-table per key, one function call per mini-table, answers stacked into one row per group.</td></tr>
-    <tr><td>Grain after grouping</td><td>One row per group, not one row per record. Say it before typing.</td></tr>
-    <tr><td><code>df.groupby('k')['v'].mean()</code></td><td>The basic move: key, value column, statistic.</td></tr>
-    <tr><td><code>agg(['mean','sum'])</code></td><td>Several statistics per group in one pass.</td></tr>
-    <tr><td>Named aggregation</td><td><code>agg(avg=('v','mean'), n=('v','size'))</code>. Your names, explicit inputs.</td></tr>
-    <tr><td><code>size</code></td><td>Rows in the group, missing included. SQL's <code>COUNT(*)</code>.</td></tr>
-    <tr><td><code>count</code></td><td>Non-missing values in one column. SQL's <code>COUNT(col)</code>. Can be smaller.</td></tr>
-    <tr><td>Aggregations and NaN</td><td>mean, sum and friends skip missing values. The denominator is count, not size.</td></tr>
-    <tr><td>Several keys</td><td><code>groupby(['a','b'])</code>: finer grain, result carries a MultiIndex.</td></tr>
-    <tr><td>Flat table back</td><td><code>as_index=False</code> up front, or <code>.reset_index()</code> after.</td></tr>
-    <tr><td>Small groups</td><td>Ship a size column, filter <code>summary[summary['n'] &gt;= floor]</code>. pandas's HAVING.</td></tr>
-    <tr><td><code>transform</code></td><td>Group statistic broadcast back onto every original row. For shares and comparisons to the group.</td></tr>
-    <tr><td><code>agg</code> vs <code>transform</code></td><td>agg collapses to one row per group; transform keeps every row.</td></tr>
-    <tr><td>Missing keys</td><td>Dropped before the split by default. <code>dropna=False</code> keeps them as a NaN group.</td></tr>
-    <tr><td>Missing combination</td><td>No rows means no group at all, not a zero row.</td></tr>
-    <tr><td>The reconciliation check</td><td>Group sizes must add back to the input row count. Here: 5 + 3 + 4 + 2 = 14.</td></tr>
-    <tr><td><code>sort_values</code></td><td>Order the result by the statistic, not the alphabet.</td></tr>
+    <tr><th>Concept</th><th>Что он делает</th></tr>
+    <tr><td>Split-apply-combine</td><td>Одна мини-таблица для каждой клавиши, один вызов функции для каждой мини-таблицы, ответы складываются в одну строку на группу.</td></tr>
+    <tr><td>Зерно после группировки</td><td>Одна строка на группу, а не одна строка на запись. Скажите это, прежде чем печатать.</td></tr>
+    <tr><td><code>df.groupby('k')['v'].mean()</code></td><td>Основной ход: ключ, столбец значений, статистика.</td></tr>
+    <tr><td><code>agg(['mean','sum'])</code></td><td>Несколько статистических данных на группу за один проход.</td></tr>
+    <tr><td>именованная агрегация</td><td><code>agg(avg=('v','mean'), n=('v','size'))</code>. Ваши имена, явные данные.</td></tr>
+    <tr><td><code>size</code></td><td>Строки в группе, включая отсутствующие. SQL  <code>COUNT(*)</code>.</td></tr>
+    <tr><td><code>count</code></td><td>Непропущенные значения в одном столбце. SQL  <code>COUNT(col)</code>. Может быть меньше.</td></tr>
+    <tr><td>Агрегации и NaN</td><td>среднее, сумма и друзья пропускают пропущенные значения. Знаменатель – это количество, а не размер.</td></tr>
+    <tr><td>Несколько ключей</td><td><code>groupby(['a','b'])</code>: более мелкое зерно, результат содержит MultiIndex.</td></tr>
+    <tr><td>Плоская спинка стола</td><td><code>as_index=False</code>  вперед, или  <code>.reset_index()</code>  после.</td></tr>
+    <tr><td>Маленькие группы</td><td>Отправьте столбец размера, фильтр  <code>summary[summary['n'] &gt;= floor]</code>. панды имеют.</td></tr>
+    <tr><td><code>transform</code></td><td>Групповая статистика транслируется обратно в каждую исходную строку. Для акций и сравнений с группой.</td></tr>
+    <tr><td><code>agg</code> vs <code>transform</code></td><td>agg сворачивается до одной строки на группу; Transform сохраняет каждую строку.</td></tr>
+    <tr><td>Отсутствующие ключи</td><td>По умолчанию выпадает перед разделением.  <code>dropna=False</code>  сохраняет их как группу NaN.</td></tr>
+    <tr><td>Отсутствует комбинация</td><td>Отсутствие строк означает отсутствие группы вообще, а не нулевую строку.</td></tr>
+    <tr><td>Проверка сверки</td><td>Размеры групп должны добавляться к количеству входных строк. Здесь: 5+3+4+2=14.</td></tr>
+    <tr><td><code>sort_values</code></td><td>Упорядочивайте результат по статистике, а не по алфавиту.</td></tr>
   </table>
 
-  <div class="note"><strong>The one habit to keep.</strong> Every grouped result ships with a size column, and the sizes must add back to the rows you started with. That single reconciliation catches missing keys, join blowups, and hollow averages in one move. If a grouped result breaks in a way this page does not cover, there is a general <a href="../technical-tenacity/">diagnosis loop for being stuck</a>.</div>
+  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Каждый сгруппированный результат поставляется со столбцом размера, и размеры необходимо добавить обратно к строкам, с которых вы начали. Эта единственная сверка выявляет недостающие ключи, объединения раздутий и пустые средние значения за один ход. Если сгруппированный результат нарушается так, как это не описано на этой странице, существует общая ошибка.  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>.</div>
 
-  <p>One last thought, and I would genuinely like other people's answers. The first time I ran a regional report, the rows with no region were simply not in it, and I only found them weeks later reconciling against a finance total that would not match. What have you found living in your NaN group, and how long had it been there?</p>
+  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Когда я впервые запускал региональный отчет, в нем просто не было строк без региона, и я обнаружил, что они сверяются с несовпадающей общей суммой финансов только несколько недель спустя. Что вы обнаружили в своей группе NaN и как долго она там существует?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Wickham, H. (2011). The split-apply-combine strategy for data analysis. <em>Journal of Statistical Software</em>, 40(1), 1–29.</li>
-    <li>Codd, E. F. (1970). A relational model of data for large shared data banks. <em>Communications of the ACM</em>, 13(6), 377–387.</li>
-    <li>Bisra, K., Liu, Q., Nesbit, J. C., Salimi, F., &amp; Winne, P. H. (2018). Inducing self-explanation: A meta-analysis. <em>Educational Psychology Review</em>, 30(3), 703–725.</li>
+    <li>Уикхэм, Х. (2011). Стратегия «разделить-применить-объединить» для анализа данных.  <em>Журнал статистического программного обеспечения</em>, 40(1), 1–29.</li>
+    <li>Кодд, EF (1970). Реляционная модель данных для крупных общих банков данных.  <em>Коммуникации ACM</em>, 13(6), 377–387.</li>
+    <li>Бисра К., Лю К., Несбит Дж. К., Салими Ф. и Винн П. Х. (2018). Побуждение к самообъяснению: метаанализ.  <em>Обзор педагогической психологии</em>, 30(3), 703–725.</li>
   </ul>
 
   <div class="book">
-    <strong>The groupby returns something with two levels of index and you cannot get a plain table back.</strong>
-    <p><em>Python for Analysts</em> is 203 pages, groupby, agg and reset_index read line by line, with the output printed at every step.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/python-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=python-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-pandas-groupby'})">Python for Analysts, $19 &rarr;</a>
+    <strong>Groupby возвращает что-то с двумя уровнями индекса, и вы не можете вернуть простую таблицу.</strong>
+    <p><em>Python для аналитиков</em>  составляет 203 страницы, группировка, agg и сброс_индекс читаются построчно, с выводом на каждом этапе.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/python-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=python-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-pandas-groupby'})">Python для аналитиков, 19 $ →</a>
   </div>
 
   <div class="cta">
-    <strong>Practice grouping with real data in front of you.</strong>
-    <p style="margin:6px 0 0">The <a href="../../python/">Python Kit</a> gives you the repetitions: worked pandas examples, flash cards on exactly the size-count-dropna distinctions from this page, and a mock exam that asks you to predict outputs before running them. You now own the method; the kit is the practice. Nothing to install, no account needed.</p>
-    <a class="btn" href="../../python/">Open the Python Kit →</a>
+    <strong>Попрактикуйтесь в группировке, имея перед собой реальные данные.</strong>
+    <p style="margin:6px 0 0">The <a href="../../python/">Комплект Python</a> gives you the repetitions: worked pandas examples, flash cards on exactly the size-count-dropna distinctions from this page, and a mock exam that asks you to predict outputs before running them. You now own the method; the kit is the practice. Nothing to install, no account needed.</p>
+    <a class="btn" href="../../python/">Откройте комплект Python →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../sql-foundations/">SQL Foundations</a> · <a href="../sql-joins/">SQL JOINs</a> · <a href="../sql-null/">NULL in SQL</a> · <a href="../sql-find-duplicates/">Find Duplicates in SQL</a> · <a href="../sql-month-over-month/">Month-over-Month in SQL</a> · <a href="../sql-window-functions/">Window Functions</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../data-driven-thresholds/">Data-Driven Thresholds</a> · <a href="../entity-resolution/">Entity Resolution</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../git-for-analysts/">Git for Analysts</a> · <a href="../correlation-vs-causation/">Correlation vs Causation</a> · <a href="../choose-the-right-chart/">Choose the Right Chart</a> · <a href="../powerbi-measures-vs-columns/">Columns vs Measures in Power BI</a> · <a href="../what-is-data-analysis/">What Is Data Analysis?</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../python/">Python Kit</a> · <a href="../../sql/">SQL Kit</a> · <a href="../../projects/">Portfolio Projects</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../sql-foundations/">Основы SQL</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-null/">NULL в SQL</a> · <a href="../sql-find-duplicates/">Найти дубликаты в SQL</a> · <a href="../sql-month-over-month/">Месяц за месяцем в SQL</a> · <a href="../sql-window-functions/">Оконные функции</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../data-driven-thresholds/">Пороги, управляемые данными</a> · <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../git-for-analysts/">Git для аналитиков</a> · <a href="../correlation-vs-causation/">Корреляция против причинно-следственной связи</a> · <a href="../choose-the-right-chart/">Выберите правильный график</a> · <a href="../powerbi-measures-vs-columns/">Столбцы и меры в Power BI</a> · <a href="../what-is-data-analysis/">Что такое анализ данных?</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../python/">Комплект Python</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../../projects/">Портфельные проекты</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

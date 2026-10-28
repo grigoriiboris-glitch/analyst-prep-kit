@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SQL Self Join: How to Join the Same Table Twice &mdash; Analyst Prep Kit</title>
-<meta name="description" content="Employees and their managers live in one table, so the join has two copies of it. Why aliases stop being optional, why the inner version loses the people at the top, and the pair query that returns every pair twice.">
+<title>Самостоятельное объединение SQL: как дважды присоединиться к одной и той же таблице — комплект для подготовки аналитика</title>
+<meta name="description" content="Сотрудники и их менеджеры живут в одной таблице, поэтому объединение имеет две ее копии. Почему псевдонимы перестают быть необязательными, почему внутренняя версия теряет людей вверху и почему парный запрос возвращает каждую пару дважды.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-self-join/">
-<meta property="og:title" content="Joining a Table to Itself: Managers, Pairs and the Same Table Twice">
-<meta property="og:description" content="Eight employees, one table, joined to itself. Inner returns 6 rows, LEFT returns 8.">
+<meta property="og:title" content="Соединение таблицы самой с собой: менеджеры, пары и одна и та же таблица дважды">
+<meta property="og:description" content="Восемь сотрудников, один стол, объединившийся сам с собой. Inner возвращает 6 строк, LEFT возвращает 8.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-self-join/">
 <meta name="twitter:card" content="summary_large_image">
@@ -164,17 +164,17 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../../sql/">SQL Kit</a></p>
-  <h1>Joining a Table to Itself: Managers, Pairs and the Same Table Twice</h1>
-  <p class="meta">Michael Nocito &middot; Updated August 2026 &middot; Every query on this page was run before it was published</p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../../sql/">SQL-комплект</a></p>
+  <h1>Соединение таблицы самой с собой: менеджеры, пары и одна и та же таблица дважды</h1>
+  <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Каждый запрос на этой странице был выполнен до его публикации.</p>
 
-  <p>Employees and their managers are both employees, so both live in the same table. To show a name next to a manager name you have to join that table to itself, which feels wrong the first few times and is completely ordinary.</p>
+  <p>Сотрудники и их менеджеры являются сотрудниками, поэтому оба живут в одной таблице. Чтобы отобразить имя рядом с именем менеджера, вам нужно соединить эту таблицу с самой собой, что первые несколько раз кажется неправильным и совершенно обычным.</p>
 
-  <p>What you do: write the table twice with two aliases, and treat them as two separate tables from then on. On the eight employees below, the inner version returns 6 rows and the LEFT version returns 8.</p>
+  <p>Что вы делаете: дважды напишите таблицу с двумя псевдонимами и с этого момента обрабатывайте их как две отдельные таблицы. Для восьми сотрудников ниже внутренняя версия возвращает 6 строк, а ЛЕВАЯ версия — 8.</p>
 
-  <p><strong>The short version.</strong> A self join is a normal join. The only new thing is that you must name the two copies.</p>
+  <p><strong>Краткая версия.</strong>  Самостоятельное соединение — это обычное соединение. Единственная новая вещь заключается в том, что вы должны назвать две копии.</p>
 
-  <h2>The table</h2>
+  <h2>Стол</h2>
   <pre><code>CREATE TABLE employees(emp_id INT, name TEXT, manager_id INT, dept TEXT, salary INT);
 INSERT INTO employees VALUES
 (1,'Alvarez',NULL,'Exec',120000),
@@ -185,9 +185,9 @@ INSERT INTO employees VALUES
 (6,'Fowler',3,'Support',49000),
 (7,'Grant',NULL,'Support',47000),
 (8,'Hale',3,'Support',45000);</code></pre>
-  <p><code>manager_id</code> points at an <code>emp_id</code> in the same table. Alvarez has no manager, and so does Grant, which turns out to matter.</p>
+  <p><code>manager_id</code>  указывает на  <code>emp_id</code>  в той же таблице. У Альвареса нет менеджера, как и у Гранта, и это имеет значение.</p>
 
-  <h2>The query</h2>
+  <h2>Запрос</h2>
   <pre><code>SELECT e.name AS employee, m.name AS manager
 FROM employees e
 LEFT JOIN employees m ON m.emp_id = e.manager_id
@@ -203,80 +203,80 @@ ORDER BY e.emp_id;</code></pre>
     <tr><td>Grant</td><td>NULL</td></tr>
     <tr><td>Hale</td><td>Cho</td></tr>
   </table>
-  <p>Read the join clause as the sentence it is: the manager copy's <code>emp_id</code> equals the employee copy's <code>manager_id</code>. Getting that the wrong way round is the single most common self join error, and it produces a result that looks fine until you notice the hierarchy is upside down.</p>
+  <p>Прочитайте предложение соединения как предложение: копия менеджера  <code>emp_id</code>  равен копии сотрудника  <code>manager_id</code>. Неправильный вариант — это самая распространенная ошибка самосоединения, и она дает результат, который выглядит нормально, пока вы не заметите, что иерархия перевернута.</p>
 
-  <h2>Inner or LEFT: 6 rows against 8</h2>
+  <h2>Внутренний или ЛЕВЫЙ: 6 рядов против 8.</h2>
   <pre><code>SELECT COUNT(*) FROM employees e JOIN employees m ON m.emp_id = e.manager_id;
 -- 6
 
 SELECT COUNT(*) FROM employees e LEFT JOIN employees m ON m.emp_id = e.manager_id;
 -- 8</code></pre>
-  <p>The inner join silently loses Alvarez and Grant, because neither has a manager row to match. On a headcount report that is a two-person error out of eight, and it is invisible: the output is a perfectly normal-looking list.</p>
-  <p>The rule generalises. Any self join up a hierarchy loses the top of it, and any self join down a hierarchy loses the bottom. Decide which end you are prepared to drop, and if the answer is neither, use <code>LEFT JOIN</code>.</p>
+  <p>Внутреннее объединение молча теряет Альвареса и Гранта, поскольку ни у одного из них нет подходящей строки менеджера. В отчете о численности это ошибка двух человек из восьми, и она невидима: результат представляет собой совершенно нормальный список.</p>
+  <p>Правило обобщает. Любое самостоятельное присоединение к иерархии теряет ее вершину, а любое самостоятельное присоединение к иерархии теряет ее нижнюю часть. Решите, какой конец вы готовы отбросить, и если ответ ни тот, ни другой, используйте  <code>LEFT JOIN</code>.</p>
 
-  <div class="note"><strong>Grant is the interesting row.</strong> Alvarez has no manager because they run the company. Grant has no manager because nobody set the field. Both come back NULL, and the query cannot tell them apart. That is a data quality finding, and it is the kind that only surfaces when somebody joins the table to itself.</div>
+  <div class="note"><strong>Грант - интересный ряд.</strong>  У Альвареса нет менеджера, потому что они управляют компанией. У Гранта нет менеджера, потому что никто не определяет поле. Оба возвращают NULL, и запрос не может отличить их друг от друга. Это результат оценки качества данных, и он проявляется только тогда, когда кто-то присоединяет таблицу к самой себе.</div>
 
-  <h2>Finding pairs in one table</h2>
-  <p>The other main use: rows that share something. Colleagues in the same department, orders from the same customer on the same day, duplicate records.</p>
+  <h2>Поиск пар в одной таблице</h2>
+  <p>Другое основное применение: строки, которые что-то разделяют. Коллеги в одном отделе, заказы от одного и того же клиента в один и тот же день, дублирующиеся записи.</p>
   <pre><code>SELECT a.name, b.name, a.dept
 FROM employees a
 JOIN employees b ON b.dept = a.dept
 WHERE a.emp_id &lt; b.emp_id;</code></pre>
-  <p>The <code>WHERE</code> line does two jobs and both are essential. Without it, every person is matched with themselves, and every genuine pair appears twice in both orders. With <code>a.emp_id &lt; b.emp_id</code>, each pair is returned exactly once and no row pairs with itself.</p>
-  <p>Sales has Brennan, Cho, Diaz and Ellis, which gives 6 pairs. Support has Fowler, Grant and Hale, which gives 3. Exec has one person and gives none. Nine rows, and the arithmetic is the check: n people in a department produce n(n-1)/2 pairs.</p>
+  <p>The <code>WHERE</code>  line выполняет две задачи, и обе они необходимы. Без него каждый человек сопоставляется сам с собой, и каждая подлинная пара появляется дважды в обоих порядках. С  <code>a.emp_id &lt; b.emp_id</code>, каждая пара возвращается ровно один раз и не содержит пар строк сама с собой.</p>
+  <p>В продаже есть Бреннан, Чо, Диас и Эллис, что дает 6 пар. В поддержке есть Фаулер, Грант и Хейл, что дает 3. У Exec есть один человек, а он не дает ни одного. Девять строк, а арифметика — проверка: n человек в отделе производят n(n-1)/2 пар.</p>
 
-  <h2>Three more shapes worth knowing</h2>
+  <h2>Еще три формы, которые стоит знать</h2>
   <table>
     <tr><th>Question</th><th>Shape</th></tr>
-    <tr><td>Who earns more than their manager</td><td>Self join, then <code>WHERE e.salary &gt; m.salary</code></td></tr>
-    <tr><td>Two levels up</td><td>Join the table three times: employee, manager, manager's manager</td></tr>
-    <tr><td>The whole chain, any depth</td><td>A recursive CTE, <code>WITH RECURSIVE</code></td></tr>
+    <tr><td>Кто зарабатывает больше своего менеджера</td><td>Присоединяйтесь сами, тогда  <code>WHERE e.salary &gt; m.salary</code></td></tr>
+    <tr><td>Два уровня вверх</td><td>Присоединяйтесь к таблице три раза: сотрудник, менеджер, менеджер менеджера.</td></tr>
+    <tr><td>Вся цепочка, любая глубина</td><td>Рекурсивный CTE,  <code>WITH RECURSIVE</code></td></tr>
   </table>
-  <p>On this data, Brennan earns 72,000 and their manager Alvarez earns 120,000, so nobody out-earns their manager. Change one number and the query finds it, which is what makes it a useful audit rather than a puzzle.</p>
-  <p>Three levels is the practical limit for repeated joins. Beyond that, or when the depth varies, you need recursion, and that is a different page.</p>
+  <p>По этим данным, Бреннан зарабатывает 72 000, а их менеджер Альварес — 120 000, так что никто не зарабатывает больше своего менеджера. Измените одно число, и запрос найдет его, что делает его полезным аудитом, а не головоломкой.</p>
+  <p>Три уровня — это практический предел для повторных объединений. Помимо этого или когда глубина меняется, вам нужна рекурсия, и это другая страница.</p>
 
-  <h2>The mistakes, in the order they happen</h2>
+  <h2>Ошибки в том порядке, в котором они происходят</h2>
   <ol>
-    <li><strong>No aliases.</strong> The database cannot resolve <code>emp_id</code> and raises an ambiguous column error. This one is loud, which makes it the best of the five.</li>
-    <li><strong>The join condition reversed.</strong> No error. The hierarchy comes out inverted.</li>
-    <li><strong>Inner join up a hierarchy.</strong> No error. The top of the tree disappears.</li>
-    <li><strong>No inequality on a pair query.</strong> Every pair twice, plus self-matches, so counts double.</li>
-    <li><strong>Single-letter aliases everywhere.</strong> Legal, and unreadable in six months. Use <code>emp</code> and <code>mgr</code> rather than <code>a</code> and <code>b</code> when the two copies mean different things.</li>
+    <li><strong>Никаких псевдонимов.</strong>  База данных не может разрешить  <code>emp_id</code>  и вызывает неоднозначную ошибку столбца. Этот громкий, что делает его лучшим из пяти.</li>
+    <li><strong>Условие соединения изменилось.</strong>  Никакой ошибки. Иерархия получается перевернутой.</li>
+    <li><strong>Внутреннее объединение образует иерархию.</strong>  Никакой ошибки. Верхушка дерева исчезает.</li>
+    <li><strong>Никакого неравенства в парном запросе.</strong>  Каждая пара дважды, плюс совпадения, поэтому считается двойной.</li>
+    <li><strong>Повсюду однобуквенные псевдонимы.</strong>  Законно и нечитабельно через шесть месяцев. Использовать  <code>emp</code> and <code>mgr</code>  скорее, чем  <code>a</code> and <code>b</code>  когда две копии означают разные вещи.</li>
   </ol>
 
-  <h2>How to apply this to your own work</h2>
+  <h2>Как применить это в своей работе</h2>
   <ol>
-    <li>Find a table in your database that points at itself: a manager id, a parent category, a replaces-this-record id. It is more common than people expect.</li>
-    <li>Write the LEFT JOIN version first, count the NULLs, and ask whether each one is a real top-of-tree or a missing value.</li>
-    <li>Compare the inner and LEFT counts every time. The difference is the number of rows the inner version would have hidden.</li>
-    <li>Name your aliases after the role, not after the alphabet.</li>
-    <li>On any pair query, check the count against n(n-1)/2 before believing it.</li>
+    <li>Найдите в базе данных таблицу, которая указывает на себя: идентификатор менеджера, родительскую категорию, идентификатор заменяющей этой записи. Это встречается чаще, чем люди ожидают.</li>
+    <li>Сначала напишите версию LEFT JOIN, посчитайте NULL и спросите, является ли каждый из них настоящей вершиной дерева или отсутствующим значением.</li>
+    <li>Каждый раз сравнивайте внутренний и ЛЕВЫЙ счетчики. Разница заключается в количестве строк, которые внутренняя версия могла бы скрыть.</li>
+    <li>Назовите свои псевдонимы по роли, а не по алфавиту.</li>
+    <li>Прежде чем поверить в любой парный запрос, проверьте счетчик на соответствие n(n-1)/2.</li>
   </ol>
 
-  <h2>The one habit to keep</h2>
-  <p>Say the join clause out loud as a sentence about roles: the manager row's id equals the employee row's manager id. A self join has no natural table names to lean on, so the sentence is the only thing keeping the direction straight.</p>
+  <h2>Единственная привычка, которую нужно сохранить</h2>
+  <p>Произнесите вслух предложение соединения как предложение о ролях: идентификатор строки менеджера равен идентификатору менеджера строки сотрудника. Самосоединение не имеет естественных имен таблиц, на которые можно было бы опереться, поэтому предложение — единственное, что сохраняет прямое направление.</p>
 
-  <p>Which table in your database has a column pointing back at its own key?</p>
+  <p>В какой таблице вашей базы данных есть столбец, указывающий на собственный ключ?</p>
 
-  <div class="note"><strong>Every number here was run before it was published.</strong> Eight employees. Inner join returns 6 rows, LEFT JOIN returns 8, and the department pair query returns 9.</div>
+  <div class="note"><strong>Каждый номер здесь был проведён до того, как был опубликован.</strong>  Восемь сотрудников. Внутреннее соединение возвращает 6 строк, LEFT JOIN возвращает 8, а запрос пары отделов возвращает 9.</div>
 
   <div class="book">
-    <strong>The self join is the moment aliases stop being style and start being the query.</strong>
-    <p><em>SQL for Analysts</em> is 458 pages that read queries line by line in everyday words, so a result that came back wrong has somewhere to be traced instead of being retyped until it looks better.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-self-join'})">SQL for Analysts, $19 &rarr;</a>
+    <strong>Самосоединение — это момент, когда псевдонимы перестают быть стилем и становятся запросом.</strong>
+    <p><em>SQL для аналитиков</em>  — это 458 страниц, которые считывают запросы построчно в повседневных словах, поэтому ошибочный результат нужно где-то отслеживать, а не перепечатывать, пока он не станет выглядеть лучше.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-self-join'})">SQL для аналитиков, 19 $ →</a>
   </div>
 
   <div class="cta">
-    <strong>Write the joins rather than reading about them.</strong>
-    <p style="margin:6px 0 0"><a href="../sql-joins/">SQL JOINs explained</a> covers the four types, <a href="../sql-join-duplicate-rows/">why a join duplicates rows</a> covers what happens when the key is not unique, and <a href="../../drill/">SQL Drill</a> gives you one runnable query at a time.</p>
-    <a class="btn" href="../../sql/">Open the SQL Kit &rarr;</a>
+    <strong>Пишите соединения, а не читайте о них.</strong>
+    <p style="margin:6px 0 0"><a href="../sql-joins/">Объяснение SQL JOIN</a>  охватывает четыре типа,  <a href="../sql-join-duplicate-rows/">почему объединение дублирует строки</a>  описывает, что происходит, когда ключ не уникален, и  <a href="../../drill/">SQL-детализация</a>  дает вам один работоспособный запрос за раз.</p>
+    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../sql-joins/">SQL JOINs</a> &middot; <a href="../sql-join-duplicate-rows/">Why a Join Duplicates Rows</a> &middot; <a href="../sql-anti-join/">The Anti-Join</a> &middot; <a href="../sql-aliasing/">Aliasing</a> &middot; <a href="../sql-subqueries/">Subqueries</a> &middot; <a href="../../drill/">SQL Drill</a> &middot; <a href="../../sql/">SQL Kit</a>
-    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> &middot; <a href="../sql-join-duplicate-rows/">почему объединение дублирует строки</a> &middot; <a href="../sql-anti-join/">анти-соединение</a> &middot; <a href="../sql-aliasing/">Aliasing</a> &middot; <a href="../sql-subqueries/">Subqueries</a> &middot; <a href="../../drill/">SQL-детализация</a> &middot; <a href="../../sql/">SQL-комплект</a>
+    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

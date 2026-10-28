@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Setting Up Files and Folders for Data Analysis and SQL Work — Analyst Prep Kit</title>
-<meta name="description" content="A folder structure, naming rules and import routine that turn a messy Excel workbook into clean tables you can query in SQLite, and rebuild in minutes.">
+<title>Настройка файлов и папок для анализа данных и работы с SQL — комплект подготовки аналитика</title>
+<meta name="description" content="Структура папок, правила именования и процедура импорта, которые превращают беспорядочную книгу Excel в чистые таблицы, которые можно запрашивать в SQLite и восстанавливать за считанные минуты.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/folder-setup-for-sql/">
-<meta property="og:title" content="Setting Up Files and Folders for Data Analysis and SQL Work">
-<meta property="og:description" content="A folder structure, naming rules and import routine that turn a messy Excel workbook into clean tables you can query in SQLite, and rebuild in minutes.">
+<meta property="og:title" content="Настройка файлов и папок для анализа данных и работы с SQL">
+<meta property="og:description" content="Структура папок, правила именования и процедура импорта, которые превращают беспорядочную книгу Excel в чистые таблицы, которые можно запрашивать в SQLite и восстанавливать за считанные минуты.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/folder-setup-for-sql/">
 <meta name="twitter:card" content="summary">
@@ -96,41 +96,41 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../">All guides</a></p>
-  <h1>Setting Up Files and Folders for Data Analysis and SQL Work</h1>
-  <p class="meta">The structure you pick on day one decides how painful day thirty is</p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, Implementation Analyst · Published <time datetime="2026-10-23">October 23, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../">Все руководства</a></p>
+  <h1>Настройка файлов и папок для анализа данных и работы с SQL</h1>
+  <p class="meta">Структура, которую вы выбираете в первый день, решает, насколько болезненным будет тридцать день.</p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, Аналитик по внедрению · Опубликовано  <time datetime="2026-10-23">23 октября 2026 г.</time></p>
 
 
-<p>By the end of this page you can set up a project folder that keeps original data safe, shape a spreadsheet so it loads into SQL as clean tables, name things so you can find them in six months, and rebuild your database from scratch in a few minutes. It is about twenty minutes, and nothing here needs more than a file explorer, a text editor and a SQL tool such as DB Browser for SQLite.</p>
+<p>К концу этой страницы вы сможете настроить папку проекта, в которой будут храниться исходные данные, сформировать электронную таблицу так, чтобы она загружалась в SQL в виде чистых таблиц, дать имена вещам, чтобы вы могли найти их через шесть месяцев, и восстановить свою базу данных с нуля за несколько минут. Это около двадцати минут, и здесь не требуется ничего, кроме проводника, текстового редактора и инструмента SQL, такого как DB Browser для SQLite.</p>
 
-<p><strong>Here is what to do today, before moving any file.</strong> Make one empty folder for the project and write one sentence in a text file inside it: what question this folder exists to answer. If you cannot write the sentence, you are not ready to organise anything yet, and no folder structure will fix that.</p>
+<p><strong>Вот что нужно сделать сегодня, прежде чем перемещать какой-либо файл.</strong>  Создайте для проекта одну пустую папку и в текстовом файле напишите внутри нее одно предложение: для ответа на какой вопрос существует эта папка. Если вы не можете написать предложение, значит, вы еще не готовы что-либо систематизировать, и никакая структура папок этого не исправит.</p>
 
-<p><strong>The short version:</strong> keep the original data untouched, make every sheet a clean table, treat the database as something you can delete and rebuild, and save every query as a file. Everything else on this page is detail on those four.</p>
+<p><strong>Краткая версия: </strong>  сохраняйте исходные данные нетронутыми, сделайте каждый лист чистой таблицей, относитесь к базе данных как к чему-то, что вы можете удалить и перестроить, и сохраняйте каждый запрос в виде файла. Все остальное на этой странице подробно описывает эти четыре.</p>
 
-<div class="toc"><strong>What you’ll learn</strong>
+<div class="toc"><strong>Что вы узнаете</strong>
 <ol>
-<li>One project, one folder</li>
-<li>The structure</li>
-<li>Raw data is read-only</li>
-<li>One sheet, one table</li>
-<li>Names: files, tabs and columns</li>
-<li>Getting a workbook into SQLite</li>
-<li>Your SQL lives in files</li>
-<li>The README</li>
-<li>The full before and after</li>
-<li>Edge cases worth knowing</li>
-<li>Why this works</li>
-<li>Using this on your own project</li>
-<li>The whole thing on one screen</li>
+<li>Один проект, одна папка</li>
+<li>Структура</li>
+<li>Необработанные данные доступны только для чтения</li>
+<li>Один лист, одна таблица</li>
+<li>Имена: файлы, вкладки и столбцы.</li>
+<li>Получение книги в SQLite</li>
+<li>Ваш SQL живет в файлах</li>
+<li>README</li>
+<li>Полное до и после</li>
+<li>Пограничные случаи, которые стоит знать</li>
+<li>Почему это работает</li>
+<li>Использование этого в вашем собственном проекте</li>
+<li>Все на одном экране</li>
 </ol></div>
 
-<div class="step"><h2>1. One project, one folder</h2>
-<p>A project is whatever one question needs: the data, the queries, the outputs. Put all of it under a single folder, and use paths that start from that folder, so the whole thing can be moved, zipped or shared without anything breaking.</p>
-<p>Avoid the two common failures. One is a single folder called <code>Data</code> that holds every project you have ever done. The other is files scattered across Downloads, Desktop and a USB stick, which feels fine until you need the version from three weeks ago.</p>
+<div class="step"><h2>1. Один проект, одна папка</h2>
+<p>Проект — это все, что нужно для одного вопроса: данные, запросы, результаты. Поместите все это в одну папку и используйте пути, начинающиеся с этой папки, чтобы все это можно было перемещать, архивировать или публиковать без каких-либо нарушений.</p>
+<p>Избегайте двух распространенных ошибок. Один из них представляет собой одну папку под названием  <code>Data</code>  в нем хранятся все проекты, которые вы когда-либо делали. Другой — это файлы, разбросанные по загрузкам, рабочему столу и USB-накопителю, и все в порядке, пока вам не понадобится версия трехнедельной давности.</p>
 </div>
-<div class="step"><h2>2. The structure</h2>
-<p>This is a sensible default for SQL practice or small analysis work. Start with this and delete what you do not use.</p>
+<div class="step"><h2>2. Структура</h2>
+<p>Это разумный вариант по умолчанию для практики SQL или небольшой аналитической работы. Начните с этого и удалите то, чем вы не пользуетесь.</p>
 <pre><code>personal_tracking/
 ├── README.md
 ├── data/
@@ -142,57 +142,57 @@
 │   ├── schema/       CREATE TABLE statements
 │   └── queries/      your saved analysis queries
 └── outputs/          exports, charts, reports</code></pre>
-<p>Each folder answers one question: <em>where did this come from?</em> <code>raw</code> is the source. <code>processed</code> is what you changed. <code>db</code> is what you built from it. <code>sql</code> is how you built and questioned it. <code>outputs</code> is what you produced. If you can answer that for any file, you know where it belongs.</p>
-<p>If you also write Python, add a <code>scripts/</code> folder next to <code>sql/</code>. Do not add it just in case.</p>
+<p>Каждая папка отвечает на один вопрос:  <em>откуда это взялось?</em> <code>raw</code>  является источником.  <code>processed</code>  это то, что ты изменил.  <code>db</code>  это то, что вы построили из него.  <code>sql</code>  это то, как вы построили и подвергли сомнению это.  <code>outputs</code>  это то, что вы произвели. Если вы можете ответить на этот вопрос для любого файла, вы знаете, где он находится.</p>
+<p>Если вы также пишете на Python, добавьте  <code>scripts/</code>  папка рядом с  <code>sql/</code>. Не добавляйте его на всякий случай.</p>
 </div>
-<div class="step"><h2>3. Raw data is read-only</h2>
-<p>The first rule, and the one that saves the most grief: the file in <code>data/raw/</code> is never edited, renamed or re-saved. Not to fix a typo, not to delete a column, not to “just tidy it up”. Copy it out, and work on the copy.</p>
-<p>The reason is simple. Once you edit the original, you can no longer tell what you changed, and you cannot rerun the work if the source updates. A raw file you never touch is also your proof of what you started with.</p>
-<p>If the workbook is one you update every week, as in a tracker, keep the live version wherever you normally edit it and drop a dated copy into <code>raw</code> each time you want to analyse it, for example <code>personal_tracking_2026-10-23.xlsx</code>. The dated name is what tells you which version a result came from.</p>
+<div class="step"><h2>3. Необработанные данные доступны только для чтения.</h2>
+<p>Первое правило, которое спасает больше всего горя: файл в  <code>data/raw/</code>  никогда не редактируется, не переименовывается и не сохраняется повторно. Не для того, чтобы исправить опечатку, не для того, чтобы удалить столбец, не для того, чтобы «просто привести в порядок». Скопируйте его и работайте над копией.</p>
+<p>Причина проста. После редактирования оригинала вы больше не сможете сказать, что именно вы изменили, и не сможете повторно запустить работу, если исходный код обновится. Необработанный файл, к которому вы никогда не прикасаетесь, также является доказательством того, с чего вы начали.</p>
+<p>Если книга обновляется каждую неделю, как в трекере, сохраните активную версию там, где вы ее обычно редактируете, и поместите датированную копию в  <code>raw</code>  каждый раз, когда вы хотите его проанализировать, например  <code>personal_tracking_2026-10-23.xlsx</code>. Датированное имя — это то, что говорит вам, из какой версии получен результат.</p>
 </div>
-<div class="step"><h2>4. One sheet, one table</h2>
-<p>A SQL table is a rectangle: one header row, then one row per thing, nothing else. A worksheet that follows that rule loads cleanly. One that does not will fight you at every step.</p>
-<p>Keeping unrelated data on separate tabs is exactly right. A tab for platforms, a tab for applications and a tab for earnings are three tables, and SQL can join them later. The work is making each tab a proper rectangle.</p>
+<div class="step"><h2>4. Один лист, одна таблица</h2>
+<p>Таблица SQL представляет собой прямоугольник: одна строка заголовка, затем по одной строке на каждый элемент, и больше ничего. Лист, соответствующий этому правилу, загружается без проблем. Тот, кто не будет сражаться с вами на каждом шагу.</p>
+<p>Хранить несвязанные данные на отдельных вкладках — это совершенно правильно. Вкладка для платформ, вкладка для приложений и вкладка для заработка — это три таблицы, и SQL может присоединиться к ним позже. Работа состоит в том, чтобы сделать каждую вкладку правильным прямоугольником.</p>
 <div class="tw"><table>
-<tr><th>Rule</th><th>Why SQL cares</th></tr>
-<tr><td>Headers in row 1, nothing above them</td><td>The importer reads row 1 as column names. A title row becomes your column names.</td></tr>
-<tr><td>One row per record, no blank rows</td><td>A blank row becomes a row of NULLs.</td></tr>
-<tr><td>No merged cells</td><td>Only the top-left cell holds a value. The rest load as empty.</td></tr>
-<tr><td>One value per cell</td><td>“Python, SQL” in one cell cannot be filtered, counted or joined.</td></tr>
-<tr><td>One type per column</td><td>A column mixing numbers and “n/a” loads as text.</td></tr>
-<tr><td>No totals or notes inside the data</td><td>A total row gets counted as a record and doubles every sum.</td></tr>
-<tr><td>A key column that identifies each row</td><td>It is what you join on. Without it, tabs cannot be linked reliably.</td></tr>
-<tr><td>Dates as <code>YYYY-MM-DD</code></td><td>It sorts correctly as text, and SQLite’s date functions understand it.</td></tr>
+<tr><th>Rule</th><th>Почему SQL заботится</th></tr>
+<tr><td>Заголовки в строке 1, над ними ничего</td><td>Импортер читает строку 1 как имена столбцов. Строка заголовка становится именами ваших столбцов.</td></tr>
+<tr><td>Одна строка на запись, пустых строк нет.</td><td>Пустая строка становится строкой NULL.</td></tr>
+<tr><td>Нет объединенных ячеек</td><td>Только верхняя левая ячейка содержит значение. Остальные загружаются как пустые.</td></tr>
+<tr><td>Одно значение на ячейку</td><td>«Python, SQL» в одной ячейке невозможно отфильтровать, посчитать или соединить.</td></tr>
+<tr><td>Один тип на столбец</td><td>Столбец, в котором смешаны числа и «н/д», загружается как текст.</td></tr>
+<tr><td>Никаких итогов или примечаний внутри данных</td><td>Общая строка считается записью и удваивает каждую сумму.</td></tr>
+<tr><td>Ключевой столбец, идентифицирующий каждую строку</td><td>Это то, к чему вы присоединяетесь. Без этого вкладки не могут быть надежно связаны.</td></tr>
+<tr><td>Даты как  <code>YYYY-MM-DD</code></td><td>Он правильно сортируется как текст, и функции даты SQLite это понимают.</td></tr>
 </table></div>
-<p>Keep summaries, charts and notes on their own tab, and do not import that tab. Then the data tabs stay clean and you still get your dashboard.</p>
+<p>Храните сводки, диаграммы и заметки на отдельной вкладке и не импортируйте эту вкладку. Тогда вкладки с данными останутся чистыми, и вы по-прежнему получите панель управления.</p>
 </div>
-<div class="step"><h2>5. Names: files, tabs and columns</h2>
-<p>Pick one convention and use it everywhere. The one that costs you least in SQL is lowercase words joined by underscores: no spaces, no capitals, no punctuation.</p>
+<div class="step"><h2>5. Имена: файлы, вкладки и столбцы.</h2>
+<p>Выберите одно соглашение и используйте его повсюду. В SQL дешевле всего обходятся слова в нижнем регистре, соединенные подчеркиванием: без пробелов, заглавных букв и знаков препинания.</p>
 <div class="tw"><table>
 <tr><th>Thing</th><th class="bad">Painful</th><th class="good">Better</th></tr>
 <tr><td>Tab</td><td><code>Earnings Log</code></td><td><code>earnings_log</code></td></tr>
 <tr><td>Column</td><td><code>Time Spent(minutes)</code></td><td><code>time_spent_minutes</code></td></tr>
-<tr><td>Raw file</td><td><code>tracking final v2 (1).xlsx</code></td><td><code>tracking_2026-10-23.xlsx</code></td></tr>
-<tr><td>Query file</td><td><code>query new.sql</code></td><td><code>earnings_by_platform.sql</code></td></tr>
+<tr><td>Необработанный файл</td><td><code>tracking final v2 (1).xlsx</code></td><td><code>tracking_2026-10-23.xlsx</code></td></tr>
+<tr><td>Файл запроса</td><td><code>query new.sql</code></td><td><code>earnings_by_platform.sql</code></td></tr>
 </table></div>
-<p>The reason is practical. A column named <code>Time Spent(minutes)</code> has to be wrapped in brackets or quotes in every query you ever write about it, and one missed bracket is an error. A column named <code>time_spent_minutes</code> needs nothing. Put the unit in the name when there is one, because a number without a unit is a guess.</p>
-<p>For files, put the date first when order matters (<code>2026-10-23_export.csv</code>) so a folder listing sorts itself. Never use “final”, “new” or “v2” as a name. If you need versions, use dates.</p>
+<p>Причина практическая. Столбец с именем  <code>Time Spent(minutes)</code>  должен быть заключен в скобки или кавычки в каждом запросе, который вы когда-либо писали об этом, и одна пропущенная скобка является ошибкой. Столбец с именем  <code>time_spent_minutes</code>  ничего не нужно. Добавьте единицу измерения в имя, если она есть, потому что число без единицы измерения является предположением.</p>
+<p>Для файлов сначала ставьте дату, если порядок имеет значение (<code>2026-10-23_export.csv</code>), поэтому список папок сортируется автоматически. Никогда не используйте в качестве имени «final», «new» или «v2». Если вам нужны версии, используйте даты.</p>
 </div>
-<div class="step"><h2>6. Getting a workbook into SQLite</h2>
-<p>Be clear about one limit first. DB Browser for SQLite does not read an <code>.xlsx</code> file directly. It imports CSV, and a CSV holds one sheet. So a workbook with four tabs means four CSV files, and the database is a <em>copy</em> of the workbook as it was when you exported, not a live view of it.</p>
-<p>That is fine, as long as you treat the database as disposable. The routine for each refresh:</p>
+<div class="step"><h2>6. Добавление книги в SQLite</h2>
+<p>Сначала уточните одно ограничение. Браузер БД для SQLite не читает  <code>.xlsx</code>  файл напрямую. Он импортирует CSV, а CSV содержит один лист. Таким образом, книга с четырьмя вкладками означает четыре файла CSV, а база данных — это  <em>copy</em>  книги в том виде, в котором она была при экспорте, а не в режиме реального времени.</p>
+<p>Это нормально, если вы относитесь к базе данных как к одноразовой. Процедура для каждого обновления:</p>
 <ol>
-<li>Copy the current workbook into <code>data/raw/</code> with today’s date.</li>
-<li>Export each data tab as CSV into <code>data/processed/</code>, one file per tab, named after the table: <code>earnings_log.csv</code>.</li>
-<li>Delete <code>db/tracking.db</code> and create a fresh one.</li>
-<li>In DB Browser: File → Import → Table from CSV file. Tick “Column names in first line”, check the delimiter is a comma, and check the table name.</li>
-<li>Open Browse Data on each table and look at the first rows. Then click Write Changes.</li>
+<li>Скопируйте текущую книгу в  <code>data/raw/</code>  с сегодняшней датой.</li>
+<li>Экспортируйте каждую вкладку данных в формате CSV в  <code>data/processed/</code>, по одному файлу на вкладку, названному в честь таблицы:  <code>earnings_log.csv</code>.</li>
+<li>Delete <code>db/tracking.db</code>  и создать новый.</li>
+<li>В браузере БД: Файл → Импорт → Таблица из файла CSV. Отметьте «Имена столбцов в первой строке», проверьте, что разделителем является запятая, и проверьте имя таблицы.</li>
+<li>Откройте «Просмотр данных» в каждой таблице и просмотрите первые строки. Затем нажмите «Записать изменения».</li>
 </ol>
-<p>Step five is the one people skip. Look at the row count against the sheet, and look at one date column and one ID column, because those are where imports quietly go wrong (see the edge cases below).</p>
-<p>If this routine is too heavy for data you refresh weekly, that is the moment a small script is worth it. It is a separate decision from learning SQL, and you can make it later. For practice, the manual routine teaches you what the script would hide.</p>
+<p>Шаг пятый — это тот, который люди пропускают. Посмотрите на количество строк на листе, а также на один столбец даты и один столбец идентификатора, потому что именно там импорт незаметно идет не так (см. крайние случаи ниже).</p>
+<p>Если эта процедура слишком сложна для данных, которые вы обновляете еженедельно, то в этот момент стоит использовать небольшой скрипт. Это отдельное решение от изучения SQL, и вы можете принять его позже. Для практики ручная процедура научит вас тому, что скрывает сценарий.</p>
 </div>
-<div class="step"><h2>7. Your SQL lives in files</h2>
-<p>A query typed into the window and closed is a query you have to rewrite. Save every query that mattered as a <code>.sql</code> file in <code>sql/queries/</code>, one purpose per file, named for what it answers.</p>
+<div class="step"><h2>7. Ваш SQL живет в файлах</h2>
+<p>Запрос, введенный в окно и закрытый, — это запрос, который вам придется переписать. Сохраняйте каждый запрос, который имел значение, как  <code>.sql</code>  файл в  <code>sql/queries/</code>, одна цель для каждого файла, названная в честь того, за что отвечает.</p>
 <pre><code>-- earnings_by_platform.sql
 -- Question: which platform earns the most per hour?
 -- Tables:   earnings_log
@@ -204,21 +204,21 @@ SELECT platform,
 FROM earnings_log
 GROUP BY platform
 ORDER BY total_earned DESC;</code></pre>
-<p>The four comment lines are the habit. They answer the question you will have in a month: what was this for, and what does it read from? Use <code>60.0</code> rather than <code>60</code> when you divide, because SQLite divides two whole numbers as whole numbers and drops the decimals.</p>
-<p>Put the <code>CREATE TABLE</code> statements in <code>sql/schema/</code>, numbered in the order they run: <code>01_create_tables.sql</code>. Together with your CSVs, that is enough to rebuild the whole database from nothing, which is the real test of a good setup.</p>
+<p>Четыре строки комментариев — это привычка. Они отвечают на вопрос, который у вас возникнет через месяц: для чего это было и от чего это читается? Использовать  <code>60.0</code>  скорее, чем  <code>60</code>  когда вы делите, потому что SQLite делит два целых числа как целые и отбрасывает десятичные дроби.</p>
+<p>Положите  <code>CREATE TABLE</code>  заявления в  <code>sql/schema/</code>, пронумерованы в порядке их запуска:  <code>01_create_tables.sql</code>. Вместе с вашими CSV-файлами этого достаточно, чтобы восстановить всю базу данных с нуля, что является настоящим испытанием хорошей установки.</p>
 </div>
-<div class="step"><h2>8. The README</h2>
-<p>One short text file at the top of the project, written for you in six months. It needs five lines, no more.</p>
+<div class="step"><h2>8. README</h2>
+<p>Один короткий текстовый файл в верхней части проекта, написанный для вас за шесть месяцев. Нужно пять строк, не больше.</p>
 <pre><code># personal_tracking
 Question: how much do I earn per hour on each platform?
 Source: data/raw/personal_tracking_2026-10-23.xlsx (copy of live tracker)
 Rebuild: export each tab to data/processed/, import into db/tracking.db
 Tables: platform_info, applications, earnings_log
 Known issues: some earnings blank where payout is pending</code></pre>
-<p>The last line matters most. It is where you write down what you know is wrong with the data, so a number you quote later comes with its limits attached.</p>
+<p>Последняя строка имеет наибольшее значение. Здесь вы записываете то, что, как вы знаете, не так с данными, поэтому число, которое вы указываете позже, сопровождается указанием его пределов.</p>
 </div>
-<h2>The full before and after</h2>
-<p>Same project, same data, one month apart.</p>
+<h2>Полное до и после</h2>
+<p>Тот же проект, те же данные, с разницей в один месяц.</p>
 <p><strong class="bad">Before</strong></p>
 <pre><code>Desktop/
 ├── Personal Tracking.xlsx
@@ -227,7 +227,7 @@ Known issues: some earnings blank where payout is pending</code></pre>
 ├── earnings.csv
 ├── tracking.db
 └── query new.sql</code></pre>
-<p>Three workbooks and no way to tell which one the database came from. A CSV with no date, a query with no name, and nothing recording what any of it was for.</p>
+<p>Три книги и невозможно определить, из какой из них взята база данных. CSV-файл без даты, запрос без имени и ничего, для чего он предназначен.</p>
 <p><strong class="good">After</strong></p>
 <pre><code>personal_tracking/
 ├── README.md
@@ -236,73 +236,73 @@ Known issues: some earnings blank where payout is pending</code></pre>
 ├── db/tracking.db
 ├── sql/schema/01_create_tables.sql
 └── sql/queries/earnings_by_platform.sql</code></pre>
-<p>One source file with a date on it, one cleaned copy per table, a database you can delete and rebuild, and a query that says what it answers. Nothing about the data changed. What changed is that you can now trust where each file came from.</p>
+<p>Один исходный файл с датой, одна очищенная копия на таблицу, база данных, которую можно удалить и перестроить, и запрос, в котором указано, на что она отвечает. В данных ничего не изменилось. Что изменилось, так это то, что теперь вы можете быть уверены в том, откуда взялся каждый файл.</p>
 
-<div class="step"><h2>Edge cases worth knowing</h2>
-<p>Six that come up.</p>
-<p><strong>IDs lose their leading zeros.</strong> An ID like <code>00417</code> is text that looks like a number, and Excel or an importer can turn it into <code>417</code>. If an ID has leading zeros, make sure the import treats that column as text, and check one row after loading.</p>
-<p><strong>Dates export in the wrong shape.</strong> A cell can display as <code>10/23/26</code> and export in a regional format that SQL cannot sort. Format date columns as <code>YYYY-MM-DD</code> in the sheet before exporting.</p>
-<p><strong>Commas and line breaks inside text.</strong> A note such as “paid late, follow up” sits inside quotes in a CSV, which is normal. If the row count after import is higher than in the sheet, a line break inside a cell is the usual cause.</p>
-<p><strong>The importer guesses types.</strong> It looks at the data and decides each column is a number or text. One stray “n/a” in a numeric column can turn the whole column to text, and then <code>SUM</code> misbehaves. Check the column types after import.</p>
-<p><strong>Blank is not zero.</strong> An empty cell can load as an empty string rather than NULL, and the two behave differently in <code>WHERE</code> and <code>COUNT</code>. Decide which you mean, and fix it once at load time rather than in every query.</p>
-<p><strong>Cloud-synced folders and open files.</strong> Keeping the project in a synced folder is fine for backup, but do not keep the <code>.db</code> file open in two places at once. Two programs writing to the same database file is how it gets corrupted.</p>
+<div class="step"><h2>Пограничные случаи, которые стоит знать</h2>
+<p>Шесть, которые появятся.</p>
+<p><strong>Идентификаторы теряют ведущие нули.</strong>  Идентификатор типа  <code>00417</code>  это текст, который выглядит как число, и Excel или программа импорта могут преобразовать его в  <code>417</code>. Если идентификатор имеет ведущие нули, убедитесь, что при импорте этот столбец обрабатывается как текст, и проверьте одну строку после загрузки.</p>
+<p><strong>Даты экспортируются в неправильной форме.</strong>  Ячейка может отображаться как  <code>10/23/26</code>  и экспортировать в региональный формат, который SQL не может сортировать. Отформатируйте столбцы даты как  <code>YYYY-MM-DD</code>  на листе перед экспортом.</p>
+<p><strong>Запятые и разрывы строк внутри текста.</strong>  Такая заметка, как «оплачено с опозданием, принять меры», находится в кавычках в CSV-файле, что является нормальным. Если количество строк после импорта больше, чем на листе, обычной причиной является разрыв строки внутри ячейки.</p>
+<p><strong>Импортер угадывает типы.</strong>  Он просматривает данные и решает, что каждый столбец представляет собой число или текст. Одно случайное «н/д» в числовом столбце может превратить весь столбец в текст, а затем  <code>SUM</code>  плохо себя ведет. Проверьте типы столбцов после импорта.</p>
+<p><strong>Пустое не равно нулю.</strong>  Пустая ячейка может загружаться как пустая строка, а не как NULL, и в  <code>WHERE</code> and <code>COUNT</code>. Решите, что вы имеете в виду, и исправьте это один раз во время загрузки, а не в каждом запросе.</p>
+<p><strong>Папки и открытые файлы, синхронизированные с облаком.</strong>  Хранение проекта в синхронизированной папке подходит для резервного копирования, но не храните  <code>.db</code>  файл открыт в двух местах одновременно. Две программы, записывающие один и тот же файл базы данных, приводят к его повреждению.</p>
 </div>
-<h2>Why this works</h2>
-<p>None of this is personal taste. It is close to what people who study research workflows recommend. A widely cited set of practices for scientific computing tells people to keep raw data separate from derived data, to treat the raw copy as something you never change, and to give each project its own folder with a consistent layout (Wilson et al., 2017, PLOS Computational Biology, 13(6), e1005510). The aim is that someone else, including you later, can tell what each file is and rerun the work.</p>
-<p>The rules for the sheet itself come from the same place. A well-known paper on spreadsheet organisation argues for consistent codes, one value per cell, a single rectangular table per sheet, no empty cells used as formatting, and keeping raw data separate from calculations (Broman &amp; Woo, 2018, The American Statistician, 72(1), 2–10). A table that follows those rules is, nearly by definition, a table SQL can load.</p>
-<p>One note on the cheat sheet below. It is built to be covered and recalled rather than reread, because reviews of study techniques put practice testing and spacing near the top of what works and rereading and highlighting near the bottom, despite rereading feeling much more productive (Dunlosky, Rawson, Marsh, Nathan, &amp; Willingham, 2013, Psychological Science in the Public Interest, 14(1), 4–58).</p>
+<h2>Почему это работает</h2>
+<p>Все это не является личным вкусом. Это близко к тому, что рекомендуют люди, изучающие исследовательские рабочие процессы. Широко цитируемый набор практик научных вычислений предписывает людям хранить необработанные данные отдельно от производных, относиться к необработанной копии как к чему-то, что вы никогда не меняете, и предоставлять каждому проекту отдельную папку с единообразным макетом (Wilson et al., 2017, PLOS Computational Biology, 13(6), e1005510). Цель состоит в том, чтобы кто-то другой, в том числе и вы позже, мог определить, что представляет собой каждый файл, и повторно запустить работу.</p>
+<p>Правила для самого листа взяты из того же места. В известной статье об организации электронных таблиц приводится доводы в пользу единообразных кодов, одного значения на ячейку, одной прямоугольной таблицы на листе, отсутствия пустых ячеек, используемых для форматирования, и хранения необработанных данных отдельно от вычислений (Broman &amp; Woo, 2018, The American Statistician, 72(1), 2–10). Таблица, которая следует этим правилам, почти по определению является таблицей, которую SQL может загрузить.</p>
+<p>Одно замечание в шпаргалке ниже. Он создан для того, чтобы его просматривали и вспоминали, а не перечитывали, потому что в обзорах методов обучения практическое тестирование и интервалы ставятся в верхней части того, что работает, а перечитывание и выделение — в нижней части, несмотря на то, что перечитывание кажется гораздо более продуктивным (Dunlosky, Rawson, Marsh, Nathan &amp; Willingham, 2013, Psychoological Science in the Public Interest, 14(1), 4–58).</p>
 
-<h2>Using this on your own project</h2>
-<p>Do this once, in order. It is about fifteen minutes the first time.</p>
+<h2>Использование этого в вашем собственном проекте</h2>
+<p>Сделайте это один раз по порядку. В первый раз это около пятнадцати минут.</p>
 <ol>
-<li><strong>Write the question.</strong> One sentence, at the top of a new README.</li>
-<li><strong>Create the folders.</strong> <code>data/raw</code>, <code>data/processed</code>, <code>db</code>, <code>sql/queries</code>, <code>outputs</code>.</li>
-<li><strong>Copy, do not move, your workbook</strong> into <code>data/raw</code> and add today’s date to the name.</li>
-<li><strong>Check each tab against the table rules.</strong> Header in row 1, no merged cells, one value per cell, dates as <code>YYYY-MM-DD</code>.</li>
-<li><strong>Rename tabs and columns</strong> in your working copy to lowercase with underscores.</li>
-<li><strong>Export one CSV per tab</strong> into <code>data/processed</code>, then import each into a fresh database in <code>db</code>.</li>
-<li><strong>Check the import.</strong> Row count against the sheet, one date column, one ID column.</li>
-<li><strong>Save your first query</strong> as a <code>.sql</code> file with the four comment lines.</li>
+<li><strong>Напишите вопрос.</strong>  Одно предложение вверху нового README.</li>
+<li><strong>Создайте папки.</strong> <code>data/raw</code>, <code>data/processed</code>, <code>db</code>, <code>sql/queries</code>, <code>outputs</code>.</li>
+<li><strong>Скопируйте, не перемещайте, свою книгу</strong> into <code>data/raw</code>  и добавьте к имени сегодняшнюю дату.</li>
+<li><strong>Проверьте каждую вкладку на соответствие правилам таблицы.</strong>  Заголовок в строке 1, без объединенных ячеек, по одному значению в каждой ячейке, даты как  <code>YYYY-MM-DD</code>.</li>
+<li><strong>Переименование вкладок и столбцов</strong>  в вашей рабочей копии в нижнем регистре с подчеркиванием.</li>
+<li><strong>Экспортируйте один CSV-файл на вкладку</strong> into <code>data/processed</code>, затем импортируйте каждый из них в новую базу данных в  <code>db</code>.</li>
+<li><strong>Проверьте импорт.</strong>  Количество строк на листе, один столбец даты, один столбец идентификатора.</li>
+<li><strong>Сохраните свой первый запрос</strong>  как  <code>.sql</code>  файл с четырьмя строками комментариев.</li>
 </ol>
-<p>If you have paper nearby, one optional sketch is worth five minutes. Draw your tabs as boxes, write the key column in each, and draw a line between any two boxes that share one. That picture is your table relationships, and the boxes with no line are the tabs that are not related, which you can leave out of the database.</p>
+<p>Если у вас под рукой есть бумага, один дополнительный эскиз стоит пяти минут. Нарисуйте вкладки в виде блоков, напишите в каждом ключевой столбец и проведите линию между любыми двумя блоками, которые разделяют один. Это изображение — это ваши отношения в таблицах, а поля без строк — это несвязанные вкладки, которые вы можете исключить из базы данных.</p>
 
-<h2>The whole thing on one screen</h2>
-<p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
+<h2>Все на одном экране</h2>
+<p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
 <div class="tw"><table>
-<tr><th>Thing</th><th>What to remember</th></tr>
-<tr><td>One folder</td><td>One project, one folder, paths relative to it.</td></tr>
-<tr><td><code>data/raw</code></td><td>Originals. Never edited, renamed or re-saved.</td></tr>
-<tr><td><code>data/processed</code></td><td>Cleaned CSVs, one per table.</td></tr>
-<tr><td><code>db</code></td><td>Rebuildable. Safe to delete.</td></tr>
-<tr><td><code>sql/schema</code></td><td>Numbered CREATE TABLE files.</td></tr>
-<tr><td><code>sql/queries</code></td><td>One purpose per file, named for the question.</td></tr>
-<tr><td>Sheet = table</td><td>Header in row 1, one row per record, no merges, no totals.</td></tr>
-<tr><td>Cell</td><td>One value, one type per column.</td></tr>
-<tr><td>Key column</td><td>What you join on. Every table needs one.</td></tr>
+<tr><th>Thing</th><th>Что следует помнить</th></tr>
+<tr><td>Одна папка</td><td>Один проект, одна папка, пути относительно нее.</td></tr>
+<tr><td><code>data/raw</code></td><td>Оригиналы. Никогда не редактировался, не переименовывался и не сохранялся повторно.</td></tr>
+<tr><td><code>data/processed</code></td><td>Очищенные CSV-файлы, по одному на таблицу.</td></tr>
+<tr><td><code>db</code></td><td>Восстанавливаемый. Безопасно удалить.</td></tr>
+<tr><td><code>sql/schema</code></td><td>Нумерованные файлы CREATE TABLE.</td></tr>
+<tr><td><code>sql/queries</code></td><td>Одна цель для каждого файла, названная в честь вопроса.</td></tr>
+<tr><td>Лист = таблица</td><td>Заголовок в строке 1, одна строка на запись, без слияний и итогов.</td></tr>
+<tr><td>Cell</td><td>Одно значение, один тип для каждого столбца.</td></tr>
+<tr><td>Ключевой столбец</td><td>К чему вы присоединяетесь. Каждому столу нужен такой.</td></tr>
 <tr><td>Dates</td><td><code>YYYY-MM-DD</code>.</td></tr>
-<tr><td>Names</td><td>lowercase_with_underscores, unit in the name.</td></tr>
-<tr><td>Versions</td><td>Dates in the name, never “final” or “v2”.</td></tr>
-<tr><td>DB Browser</td><td>Imports CSV, one sheet at a time. Not live.</td></tr>
-<tr><td>After import</td><td>Check row count, a date column, an ID column.</td></tr>
-<tr><td>Query header</td><td>Question, tables, date. Four comment lines.</td></tr>
-<tr><td>README</td><td>Question, source, rebuild steps, known issues.</td></tr>
+<tr><td>Names</td><td>нижний регистр_с_подчеркиванием, единица измерения в имени.</td></tr>
+<tr><td>Versions</td><td>Даты в названии, ни в коем случае не «final» или «v2».</td></tr>
+<tr><td>Браузер БД</td><td>Импортирует CSV по одному листу за раз. Не жить.</td></tr>
+<tr><td>После импорта</td><td>Проверьте количество строк, столбец даты, столбец идентификатора.</td></tr>
+<tr><td>Заголовок запроса</td><td>Вопрос, таблицы, дата. Четыре строки комментариев.</td></tr>
+<tr><td>README</td><td>Вопрос, источник, этапы восстановления, известные проблемы.</td></tr>
 </table></div>
-<div class="note"><strong>The one habit to keep.</strong> Be able to delete the database and rebuild it from files in a few minutes. If you can, everything upstream of it is in order. If you cannot, something is living only in your head or only in a window you closed, and that is the thing to fix first.</div>
-<p><strong>One last thought, and I would genuinely like other people’s answers.</strong> What is the worst file name you have ever had to work with, and what did it cost you to work out what was inside?</p>
+<div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Уметь удалять базу данных и восстанавливать ее из файлов за несколько минут. Если можете, то все, что выше по течению, в порядке. Если не можете, значит, что-то живет только у вас в голове или только в закрытом вами окне, и это то, что нужно исправить в первую очередь.</div>
+<p><strong>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей.</strong>  Какое самое худшее имя файла вам когда-либо приходилось работать, и чего вам стоило выяснить, что находится внутри?</p>
 
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Wilson, G., Bryan, J., Cranston, K., Kitzes, J., Nederbragt, L., &amp; Teal, T. K. (2017). Good enough practices in scientific computing. PLOS Computational Biology, 13(6), e1005510.</li>
-    <li>Broman, K. W., &amp; Woo, K. H. (2018). Data organization in spreadsheets. The American Statistician, 72(1), 2–10.</li>
-    <li>Dunlosky, J., Rawson, K. A., Marsh, E. J., Nathan, M. J., &amp; Willingham, D. T. (2013). Improving students’ learning with effective learning techniques. Psychological Science in the Public Interest, 14(1), 4–58.</li>
+    <li>Уилсон Г., Брайан Дж., Крэнстон К., Китцес Дж., Недербрагт Л. и Тил Т.К. (2017). Достаточно хорошие практики в области научных вычислений. PLOS Вычислительная биология, 13(6), e1005510.</li>
+    <li>Броман, К.В., и Ву, К.Х. (2018). Организация данных в электронных таблицах. Американский статистик, 72 (1), 2–10.</li>
+    <li>Данлоски Дж., Роусон К.А., Марш Э.Дж., Натан М.Дж. и Уиллингем Д.Т. (2013). Улучшение обучения учащихся с помощью эффективных методов обучения. Психологическая наука в общественных интересах, 14 (1), 4–58.</li>
   </ul>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> · <a href="../folder-setup-for-sql/">Folders for SQL work</a> · <a href="../folder-setup-for-implementations/">Folders for implementations</a> · <a href="../folder-system-for-everyday-work/">Folders for everyday work</a> · <a href="../excel-clean-messy-data/">Clean Messy Data</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../../projects/">Portfolio Projects</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../folder-setup-for-sql/">Папки для работы с SQL</a> · <a href="../folder-setup-for-implementations/">Папки для реализаций</a> · <a href="../folder-system-for-everyday-work/">Папки для повседневной работы</a> · <a href="../excel-clean-messy-data/">Очистите беспорядочные данные</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../../projects/">Портфельные проекты</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

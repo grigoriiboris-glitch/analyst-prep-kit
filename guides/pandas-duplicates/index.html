@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>pandas drop_duplicates: keep='first', and the Row It Chose For You — Analyst Prep Kit</title>
-<meta name="description" content="duplicated and drop_duplicates on the same eight rows: 7, 5 or 2 rows out depending on the arguments. Which row survives is decided by the sort, and pandas disagrees with Excel about case.">
+<title>pandas drop_duulates: Keep='first' и строка, которую он выбрал для вас — комплект для подготовки аналитика</title>
+<meta name="description" content="дублированные и drop_duplicates в одних и тех же восьми строках: 7, 5 или 2 строки в зависимости от аргументов. Какая строка сохранится, определяется сортировкой, и pandas не соглашается с Excel по поводу регистра.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/pandas-duplicates/">
-<meta property="og:title" content="pandas drop_duplicates: keep='first', and the Row It Chose For You">
-<meta property="og:description" content="Eight rows in. Seven, five or two out, depending on subset and keep. The survivor is whichever row happened to be higher up, and the same table de-duplicates differently in Excel.">
+<meta property="og:title" content="pandas drop_duulates: Keep='first' и строка, которую он выбрал для вас">
+<meta property="og:description" content="Восемь рядов на входе. Семь, пять или два на выходе, в зависимости от подмножества и позиции. Оставшейся в живых является та строка, которая оказалась выше, и одна и та же таблица дедуплицируется по-разному в Excel.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/pandas-duplicates.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/pandas-duplicates/">
@@ -134,23 +134,23 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../python/">Python Kit</a> · <a href="../">All guides</a></p>
-  <h1>pandas drop_duplicates: keep='first', and the Row It Chose For You</h1>
-  <p class="meta">Two different questions, and the sort that answers one of them · Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-08">August 8, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../python/">Комплект Python</a> · <a href="../">Все руководства</a></p>
+  <h1>pandas drop_duulates: Keep='first' и строка, которую он выбрал для вас</h1>
+  <p class="meta">Два разных вопроса и тот, который отвечает на один из них · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-08">8 августа 2026 г.</time></p>
 
-  <p>By the end of this page you can tell the difference between a repeated row and a repeated key, count each of them without deleting anything, choose which of two conflicting rows survives, and know why the same table de-duplicates differently in pandas and in a spreadsheet. It is about twenty-five minutes, and every number below came out of running the code.</p>
+  <p>К концу этой страницы вы сможете отличить повторяющуюся строку от повторяющегося ключа, посчитать каждую из них, ничего не удаляя, выбрать, какая из двух конфликтующих строк сохранится, и узнать, почему одна и та же таблица по-разному дедуплицируется в пандах и в электронной таблице. Прошло около двадцати пяти минут, и каждое число ниже получено в результате выполнения кода.</p>
 
-  <p>Here is what to do today, before any <code>drop_duplicates</code>. Run these two lines and compare them:</p>
+  <p>Вот что нужно сделать сегодня, прежде чем что-либо  <code>drop_duplicates</code>. Запустите эти две строки и сравните их:</p>
 
   <pre><code>df.duplicated().sum()                       # whole rows repeated
 df.duplicated(subset=["order_id"]).sum()    # keys repeated</code></pre>
 
-  <p>If the second is larger than the first, you have rows that share a key and disagree about something, and those rows are the interesting part of your data rather than a nuisance to be removed.</p>
+  <p>Если второй больше первого, у вас есть строки, которые имеют общий ключ и в чем-то не согласны, и эти строки представляют собой интересную часть ваших данных, а не помеху, которую нужно удалить.</p>
 
-  <p>The short version: <code>keep="first"</code> keeps whichever row happened to be higher up, so the survivor is chosen by the sort rather than by the data.</p>
+  <p>Краткая версия:  <code>keep="first"</code>  сохраняет ту строку, которая оказалась выше, поэтому выжившая выбирается по сортировке, а не по данным.</p>
 
-  <p>That is the idea, so it gets the picture.</p>
+  <p>В этом заключается идея, поэтому она и представляет картину.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 226" role="img" aria-labelledby="pdTitle pdDesc" xmlns="http://www.w3.org/2000/svg">
@@ -176,98 +176,98 @@ df.duplicated(subset=["order_id"]).sum()    # keys repeated</code></pre>
         <path d="M420 144 L700 144" stroke="#B45309" stroke-width="2.4" fill="none"/>
       </g>
     </svg>
-    <figcaption>The same two rows, in two orders. Both times the top one lives and the bottom one goes, so one picture keeps a quantity of 3 and the other keeps 5. Nothing about the data decided that.</figcaption>
+    <figcaption>Те же два ряда, в двух порядках. Оба раза верхний живет, а нижний уходит, поэтому в одном изображении сохраняется количество 3, а в другом — 5. Ничто в данных не решило этого.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>What you'll learn</strong>
+    <strong>Что вы узнаете</strong>
     <ol>
-      <li>Two different questions</li>
-      <li>duplicated, and the three keeps</li>
-      <li>drop_duplicates, and the rows it returns</li>
-      <li>The survivor is chosen by the sort</li>
-      <li>Mark instead of delete</li>
-      <li>pandas is case sensitive, and the spreadsheet is not</li>
-      <li>The index afterwards</li>
-      <li>Counting instead of dropping</li>
-      <li>The full before and after</li>
-      <li>Edge cases worth knowing</li>
-      <li>Why this works</li>
-      <li>Using this on your own project</li>
-      <li>The whole thing on one screen</li>
+      <li>Два разных вопроса</li>
+      <li>дублируется, а тройка сохраняется</li>
+      <li>drop_duplications и строки, которые он возвращает.</li>
+      <li>Выживший выбирается по сортировке</li>
+      <li>Отметить вместо удаления</li>
+      <li>pandas чувствителен к регистру, а электронная таблица — нет.</li>
+      <li>Индекс после этого</li>
+      <li>Считать вместо того, чтобы отбрасывать</li>
+      <li>Полное до и после</li>
+      <li>Пограничные случаи, которые стоит знать</li>
+      <li>Почему это работает</li>
+      <li>Использование этого в вашем собственном проекте</li>
+      <li>Все на одном экране</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Every number on this page is real.</strong> An eight-row table, run in pandas 3.0.2. It is deliberately the same eight rows used in <a href="../excel-remove-duplicates/">the spreadsheet version of this problem</a>, because the two tools give different answers to the same question and section six is about why.</div>
+  <div class="note"><strong>Каждое число на этой странице является реальным.</strong>  Таблица из восьми строк, запущенная в pandas 3.0.2. Это намеренно те же восемь рядов, которые используются в  <a href="../excel-remove-duplicates/">электронная версия этой проблемы</a>, потому что два инструмента дают разные ответы на один и тот же вопрос, а шестой раздел посвящен тому, почему.</div>
 
-  <p>Here is the table. Eight rows, 56 units, and three of the rows repeat an order number.</p>
+  <p>Вот таблица. Восемь рядов, 56 единиц, три ряда повторяют номер заказа.</p>
 
   <table>
-    <tr><th>Row</th><th>order_id</th><th>rep</th><th>region</th><th>units</th><th>What it is</th></tr>
-    <tr><td>0</td><td>1001</td><td>Dana Reyes</td><td>North</td><td>4</td><td></td></tr>
-    <tr><td>1</td><td>1002</td><td>Owen Park</td><td>South</td><td>10</td><td></td></tr>
-    <tr><td>2</td><td>1002</td><td>Owen Park</td><td>South</td><td>10</td><td>the same row twice</td></tr>
-    <tr><td>3</td><td>1003</td><td>Priya Shah</td><td>East</td><td>3</td><td></td></tr>
-    <tr><td>4</td><td>1003</td><td>Priya Shah</td><td>East</td><td>5</td><td>same key, different units</td></tr>
-    <tr><td>5</td><td>1004</td><td>Dana Reyes</td><td>North</td><td>6</td><td></td></tr>
-    <tr><td>6</td><td>1004</td><td>Dana Reyes</td><td>north</td><td>6</td><td>differs by one capital letter</td></tr>
-    <tr><td>7</td><td>1005</td><td>Sam Okafor</td><td>West</td><td>12</td><td></td></tr>
+    <tr><th>Row</th><th>order_id</th><th>rep</th><th>region</th><th>units</th><th>Что это такое</th></tr>
+    <tr><td>0</td><td>1001</td><td>Дана Рейес</td><td>North</td><td>4</td><td></td></tr>
+    <tr><td>1</td><td>1002</td><td>Оуэн Парк</td><td>South</td><td>10</td><td></td></tr>
+    <tr><td>2</td><td>1002</td><td>Оуэн Парк</td><td>South</td><td>10</td><td>одна и та же строка дважды</td></tr>
+    <tr><td>3</td><td>1003</td><td>Прия Шах</td><td>East</td><td>3</td><td></td></tr>
+    <tr><td>4</td><td>1003</td><td>Прия Шах</td><td>East</td><td>5</td><td>тот же ключ, разные единицы измерения</td></tr>
+    <tr><td>5</td><td>1004</td><td>Дана Рейес</td><td>North</td><td>6</td><td></td></tr>
+    <tr><td>6</td><td>1004</td><td>Дана Рейес</td><td>north</td><td>6</td><td>отличается на одну заглавную букву</td></tr>
+    <tr><td>7</td><td>1005</td><td>Сэм Окафор</td><td>West</td><td>12</td><td></td></tr>
   </table>
 
   <div class="step">
-    <h2>1. Two different questions</h2>
+    <h2>1. Два разных вопроса</h2>
 
-    <p>Before the explanation: eight rows, three repeated order numbers. Say how many of the rows are duplicates.</p>
+    <p>Перед пояснением: восемь рядов, три повторяющихся порядковых номера. Скажите, сколько строк повторяются.</p>
 
-    <p>The question has two answers, and which one you want decides everything else.</p>
+    <p>На вопрос есть два ответа, и какой из них вы хотите, решает все остальное.</p>
 
     <pre><code>df.duplicated().sum()                      1     whole rows repeated
 df.duplicated(subset=["order_id"]).sum()   3     keys repeated</code></pre>
 
-    <p>One row is an exact copy of another. Three rows share an order number with a row above them. The gap between one and three is the whole subject: two of those rows repeat a key while carrying different information, and they are not copies of anything.</p>
+    <p>Одна строка является точной копией другой. Три строки имеют общий номер заказа со строкой над ними. Разрыв между единицей и тремя и есть вся тема: две из этих строк повторяют ключ, неся при этом разную информацию, и они не являются копиями чего-либо.</p>
 
-    <p>"Duplicate" is not a property of the data, it is a property of the columns you compare. Comparing every column asks "is this row a copy". Comparing the key asks "should this thing appear only once". Those are different questions and they have different right answers, and <code>drop_duplicates</code> will answer whichever one your <code>subset</code> argument asked for without commenting on the choice.</p>
+    <p>«Дубликат» не является свойством данных, это свойство сравниваемых столбцов. При сравнении каждого столбца возникает вопрос: «Является ли эта строка копией?». При сравнении ключей возникает вопрос: «Должна ли эта вещь появиться только один раз». Это разные вопросы и на них разные правильные ответы.  <code>drop_duplicates</code>  отвечу на любой ваш  <code>subset</code>  аргумент запрошен без комментариев по поводу выбора.</p>
   </div>
 
   <div class="step">
-    <h2>2. duplicated, and the three keeps</h2>
+    <h2>2. дублируется, а тройка сохраняется</h2>
 
-    <p><code>duplicated()</code> returns a boolean per row, and the <code>keep</code> argument decides which member of each group is <em>not</em> flagged.</p>
+    <p><code>duplicated()</code>  возвращает логическое значение для каждой строки, а  <code>keep</code>  аргумент решает, какой член каждой группы является  <em>not</em>  помечен.</p>
 
     <pre><code>df.duplicated()                 flags 1 row     keep='first', the default
 df.duplicated(keep='last')      flags 1 row
 df.duplicated(keep=False)       flags 2 rows</code></pre>
 
-    <p><code>keep='first'</code> flags everything except the first of each group, which is what you want when you are about to drop. <code>keep=False</code> flags <em>every</em> member of any group that has more than one, which is what you want when you are about to look, because it gives you all the rows involved rather than only the extras.</p>
+    <p><code>keep='first'</code>  помечает все, кроме первого из каждой группы, что вам и нужно, когда вы собираетесь его удалить.  <code>keep=False</code> flags <em>every</em>  член любой группы, которая имеет более одной, и это то, что вам нужно, когда вы собираетесь искать, потому что это дает вам все задействованные строки, а не только дополнительные.</p>
 
-    <p>That second one is the more useful of the two while investigating:</p>
+    <p>Второй из двух более полезен при расследовании:</p>
 
     <pre><code>df[df.duplicated(subset=["order_id"], keep=False)]</code></pre>
 
-    <p>That is the query to run first, every time. It returns the six rows that share a key with something, side by side, so you can see what they disagree about before deciding anything.</p>
+    <p>Это запрос, который нужно запускать первым каждый раз. Он возвращает шесть строк, которые имеют общий ключ с чем-то, рядом, так что вы можете увидеть, в чем они не согласны, прежде чем принимать какое-либо решение.</p>
   </div>
 
   <div class="step">
-    <h2>3. drop_duplicates, and the rows it returns</h2>
+    <h2>3. drop_duplications и возвращаемые им строки</h2>
 
-    <p>Same table, four calls, and four different answers.</p>
+    <p>Один и тот же стол, четыре звонка и четыре разных ответа.</p>
 
     <pre><code>drop_duplicates()                                rows 7   units 46
 drop_duplicates(subset=["order_id"])             rows 5   units 35
 drop_duplicates(subset=["order_id"], keep="last") rows 5   units 37
 drop_duplicates(subset=["order_id"], keep=False)  rows 2   units 16</code></pre>
 
-    <p>From 8 rows and 56 units to anywhere between 7 and 2. The last one is the surprise for most people: <code>keep=False</code> here does not mean "keep none of the duplicates", it means <strong>drop every row involved in any group of more than one</strong>, so only the two order numbers that appear exactly once survive.</p>
+    <p>От 8 рядов и 56 единиц до 7–2. Последнее является сюрпризом для большинства людей:  <code>keep=False</code>  здесь не означает «не оставлять дубликатов», это означает  <strong>удалить каждую строку, входящую в любую группу из более чем одной</strong>, поэтому сохраняются только два порядковых номера, которые появляются ровно один раз.</p>
 
-    <p>The middle two differ only in which member of each group lived, and that changed the units total from 35 to 37. Two units, on eight rows, from one keyword. On a real table it is not two units.</p>
+    <p>Два средних отличаются только тем, какой член каждой группы жил, и это изменило общее количество единиц с 35 до 37. Две единицы в восьми строках из одного ключевого слова. На реальном столе это не две единицы.</p>
 
-    <p>Say out loud what a 35 or a 37 would look like in a report. Both are plausible, neither carries any indication that a choice was made, and the person reading it cannot tell which keyword was typed.</p>
+    <p>Скажите вслух, как будут выглядеть 35 или 37 в отчете. Оба варианта правдоподобны, ни один из них не указывает на то, что выбор был сделан, и человек, читающий его, не может сказать, какое ключевое слово было введено.</p>
   </div>
 
   <div class="step">
-    <h2>4. The survivor is chosen by the sort</h2>
+    <h2>4. Выживший выбирается по сорту</h2>
 
-    <p>Since <code>keep="first"</code> means "whichever is higher up", the way to choose deliberately is to put the row you want on top before dropping.</p>
+    <p>Since <code>keep="first"</code>  означает «в зависимости от того, что выше», способ сознательного выбора состоит в том, чтобы поместить нужную строку сверху, прежде чем ее удалять.</p>
 
     <pre><code>df.sort_values(["order_id", "units"]).drop_duplicates(subset=["order_id"])
      1003 keeps 3        total units 35
@@ -278,27 +278,27 @@ df.sort_values(["order_id", "units"], ascending=[True, False]) \
 
     <p>Identical data, identical drop, two different results, decided entirely by the sort in front of it. That is not a flaw; it is the only place where the choice can be expressed, which is why it should be written down rather than left to whatever order the file arrived in.</p>
 
-    <p>Three sorts that come up constantly:</p>
+    <p>Три вида, которые появляются постоянно:</p>
 
     <table>
-      <tr><th>Sort by</th><th>Keeps</th></tr>
-      <tr><td>A timestamp, descending</td><td>The most recent version of each record.</td></tr>
-      <tr><td>An amount, descending</td><td>The largest, which is often the real one and a rerun's is the partial.</td></tr>
-      <tr><td>A completeness score, descending</td><td>The row with fewest blanks: <code>df["filled"] = df.notna().sum(axis=1)</code>.</td></tr>
+      <tr><th>Сортировать по</th><th>Keeps</th></tr>
+      <tr><td>Временная метка, по убыванию</td><td>Самая последняя версия каждой записи.</td></tr>
+      <tr><td>Сумма по убыванию</td><td>Самый большой, который часто является настоящим, а повтор - частичным.</td></tr>
+      <tr><td>Оценка полноты по убыванию</td><td>Строка с наименьшим количеством пробелов:  <code>df["filled"] = df.notna().sum(axis=1)</code>.</td></tr>
     </table>
 
-    <p>Write the sort and the drop as one chained expression, so nobody can move one without the other, and put a comment on it saying which rule you chose.</p>
+    <p>Запишите сортировку и удаление как одно связанное выражение, чтобы никто не мог перемещать одно без другого, и добавьте к нему комментарий, указав, какое правило вы выбрали.</p>
   </div>
 
   <div class="step">
-    <h2>5. Mark instead of delete</h2>
+    <h2>5. Отметьте вместо удаления</h2>
 
-    <p>Two extra columns turn a destructive operation into a reversible one, and they answer both questions from section one at once.</p>
+    <p>Две дополнительные колонки превращают деструктивную операцию в обратимую и отвечают сразу на оба вопроса из первого раздела.</p>
 
     <pre><code>df["seen"]     = df.groupby("order_id").cumcount() + 1
 df["row_seen"] = df.groupby(list(df.columns)).cumcount() + 1</code></pre>
 
-    <p><code>cumcount</code> numbers the rows within each group, starting at zero, so adding one gives a human-readable "this is the nth time I have seen this". Run on the table:</p>
+    <p><code>cumcount</code>  нумерует строки внутри каждой группы, начиная с нуля, поэтому добавление единицы дает удобочитаемый текст: «Я это вижу уже в n-й раз». Бегите по столу:</p>
 
     <pre><code>row  order_id  region  units  seen  row_seen
   0      1001   North      4     1         1
@@ -314,49 +314,49 @@ rows where the key repeats:  3
 rows where the row repeats:  1
 the rows worth looking at:   1003 and 1004</code></pre>
 
-    <p>Rows 4 and 6 are the point. Both have <code>seen = 2</code> and <code>row_seen = 1</code>: the order number has been seen before, and this exact row has not. Those are the two rows where the data disagrees with itself, and a one-column de-duplication destroys both without comment.</p>
+    <p>Строки 4 и 6 являются ключевыми. У обоих есть  <code>seen = 2</code> and <code>row_seen = 1</code>: номер заказа уже был виден, а эта точная строка — нет. Это две строки, в которых данные не согласуются сами с собой, и дедупликация одного столбца уничтожает обе без комментариев.</p>
 
-    <p>Keep the marked frame and filter from it, rather than dropping and hoping. It costs two columns and it means every later question, how many, which ones, what did they disagree about, can be answered without reloading anything.</p>
+    <p>Сохраняйте отмеченный кадр и фильтруйте его, а не отбрасывайте и надейтесь. Стоит две колонки и значит на каждый последующий вопрос, сколько, какие, в чем не согласились, можно ответить ничего не перезагружая.</p>
   </div>
 
   <div class="step">
-    <h2>6. pandas is case sensitive, and the spreadsheet is not</h2>
+    <h2>6. В pandas учитывается регистр, а в электронной таблице нет.</h2>
 
-    <p>Before the explanation: rows 5 and 6 are identical except that one region is <code>North</code> and the other is <code>north</code>. Say whether <code>drop_duplicates()</code> treats them as the same row.</p>
+    <p>Перед пояснением: строки 5 и 6 идентичны, за исключением того, что одна область  <code>North</code>  а другой  <code>north</code>. Скажите, есть ли  <code>drop_duplicates()</code>  рассматривает их как одну и ту же строку.</p>
 
     <pre><code>"North" == "north"                False
 df["region"].nunique()            5    East, North, South, West, north
 df["region"].str.lower().nunique() 4</code></pre>
 
-    <p>It does not. pandas compares strings exactly, so those are two different rows and both survive, which is why <code>drop_duplicates()</code> on all columns returned <strong>seven</strong> rows here.</p>
+    <p>Это не так. pandas точно сравнивает строки, так что это две разные строки, и обе выживают, вот почему  <code>drop_duplicates()</code>  по всем возвращенным столбцам  <strong>seven</strong>  строки здесь.</p>
 
-    <p>The same eight rows in Excel come back as <strong>six</strong>, because its Remove Duplicates comparison ignores capitals. Same data, same intent, two tools, two answers, and neither of them tells you it made a choice about case.</p>
+    <p>Те же восемь строк в Excel возвращаются как  <strong>six</strong>, поскольку сравнение «Удалить дубликаты» игнорирует заглавные буквы. Те же данные, одно и то же намерение, два инструмента, два ответа, и ни один из них не говорит вам, что он сделал выбор в отношении дела.</p>
 
-    <p>That is worth knowing beyond the trivia, because analyses migrate between tools and the row counts stop matching for a reason nobody suspects. The defence is to normalise before comparing rather than to rely on either default:</p>
+    <p>Это стоит знать помимо мелочей, потому что анализы перемещаются между инструментами, и количество строк перестает совпадать по причине, о которой никто не подозревает. Защита состоит в том, чтобы нормализовать перед сравнением, а не полагаться на одно из значений по умолчанию:</p>
 
     <pre><code>key = df["region"].str.strip().str.casefold()</code></pre>
 
-    <p><code>casefold</code> rather than <code>lower</code>, because it handles more of the world's alphabets, and <code>strip</code> first, because whitespace is the other invisible difference. Do the same to any text column you are comparing on, and the two tools agree again.</p>
+    <p><code>casefold</code>  скорее, чем  <code>lower</code>, потому что он обрабатывает больше мировых алфавитов, и  <code>strip</code>  во-первых, потому что пробелы — это еще одно невидимое отличие. Сделайте то же самое с любым текстовым столбцом, который вы сравниваете, и оба инструмента снова согласуются.</p>
   </div>
 
   <div class="step">
-    <h2>7. The index afterwards</h2>
+    <h2>7. Индекс после</h2>
 
-    <p>Dropping rows does not renumber the ones that are left.</p>
+    <p>Удаление строк не приводит к перенумерации оставшихся.</p>
 
     <pre><code>df.drop_duplicates(subset=["order_id"]).index      [0, 1, 3, 5, 7]</code></pre>
 
-    <p>The index has gaps where the dropped rows were, which is correct and occasionally awkward. It means <code>.iloc[2]</code> and <code>.loc[2]</code> now refer to different rows, and anything that assumes a contiguous index, including some plotting and concatenation, will behave oddly.</p>
+    <p>В индексе есть пробелы там, где были пропущенные строки, что правильно, но иногда неудобно. Это означает  <code>.iloc[2]</code> and <code>.loc[2]</code>  теперь ссылайтесь на разные строки, и все, что предполагает непрерывный индекс, включая некоторые построения графиков и конкатенацию, будет вести себя странно.</p>
 
     <pre><code>df.drop_duplicates(subset=["order_id"]).reset_index(drop=True).index   [0, 1, 2, 3, 4]</code></pre>
 
-    <p><code>drop=True</code> matters: without it the old index is kept as a new column called <code>index</code>, which is occasionally useful for tracing a row back to the original file and usually just clutter.</p>
+    <p><code>drop=True</code>  имеет значение: без него старый индекс сохраняется как новый столбец с именем  <code>index</code>, что иногда полезно для отслеживания строки до исходного файла и обычно просто загромождает.</p>
   </div>
 
   <div class="step">
-    <h2>8. Counting instead of dropping</h2>
+    <h2>8. Считаем, а не опускаем</h2>
 
-    <p>Often the honest deliverable is not a de-duplicated table, it is a count.</p>
+    <p>Часто честный результат — это не дедуплицированная таблица, а подсчет.</p>
 
     <pre><code>df["order_id"].value_counts().sort_index()
 
@@ -366,22 +366,22 @@ df["region"].str.lower().nunique() 4</code></pre>
 1004  2
 1005  1</code></pre>
 
-    <p>Three order numbers appear twice. That is a fact about the data, and if the order number is supposed to be unique then it is a fact about a system somewhere that needs fixing, which is a more useful thing to report than a table you tidied on your own initiative.</p>
+    <p>Три номера заказа появляются дважды. Это факт о данных, и если номер заказа должен быть уникальным, то это факт о системе, которая где-то нуждается в исправлении, и сообщать об этом более полезно, чем о таблице, которую вы привели в порядок по собственной инициативе.</p>
 
-    <p>Two related counts worth having beside it. <code>df["order_id"].nunique()</code> against <code>len(df)</code> tells you the size of the problem in one comparison, 5 against 8 here. And <code>value_counts()[lambda s: s &gt; 1]</code> filters straight to the offenders.</p>
+    <p>Два взаимосвязанных пункта, которые стоит иметь рядом.  <code>df["order_id"].nunique()</code> against <code>len(df)</code>  сообщает вам размер проблемы в одном сравнении, здесь 5 против 8. И  <code>value_counts()[lambda s: s &gt; 1]</code>  фильтрует прямо к нарушителям.</p>
 
-    <p>Picture your own most-used extract. If its identifier column stopped being unique next month, is there anything in your code that would notice, or would the totals simply go up?</p>
+    <p>Представьте себе наиболее часто используемый экстракт. Если в следующем месяце его столбец идентификатора перестанет быть уникальным, есть ли что-нибудь в вашем коде, что это заметит, или итоговые значения просто вырастут?</p>
   </div>
 
-  <h2>The full before and after</h2>
+  <h2>Полное до и после</h2>
 
-  <p>Same eight rows, same job: one row per order.</p>
+  <p>Те же восемь рядов, та же работа: по одному ряду на заказ.</p>
 
   <h3>Before</h3>
   <pre><code>df = df.drop_duplicates(subset=["order_id"])
 
 rows 8 -> 5, units 56 -> 35</code></pre>
-  <p>Twenty-one units gone. Five of them belonged to order 1003, which was not a copy of anything, and six to a row that differed only by a capital letter. No record of any of it, and the survivor of each pair was whichever row the file happened to list first.</p>
+  <p>Двадцать одна единица исчезла. Пять из них относились к приказу 1003, не являвшемуся копией чего-либо, а шесть — к ряду, отличавшемуся лишь заглавной буквой. Никаких записей об этом не было, и в каждой паре сохранилась та строка, которая была указана в файле первой.</p>
 
   <h3>After</h3>
   <pre><code># 1. normalise the text you will compare on
@@ -403,106 +403,106 @@ clean = (df.sort_values(["order_id", "units"], ascending=[True, False])
 
 rows 5, units 37, and the choice is in the code</code></pre>
 
-  <p>The claim, and it is why section one comes first: <strong>the same eight rows return 7, 5 or 2 rows depending on two keyword arguments, and the units total moves from 35 to 37 on the choice of <code>keep</code> alone, with nothing in the output recording which was used.</strong></p>
+  <p>Претензия, и именно поэтому первый раздел идет первым:  <strong>те же восемь строк возвращают 7, 5 или 2 строки в зависимости от двух аргументов ключевого слова, а общее количество единиц перемещается с 35 до 37 в зависимости от выбора  <code>keep</code>  один, без ничего в используемой выходной записи.</strong></p>
 
   <div class="step">
-    <h2>Edge cases worth knowing</h2>
+    <h2>Пограничные случаи, которые стоит знать</h2>
 
-    <p>Six that get through.</p>
+    <p>Шесть, которые пройдут.</p>
 
-    <p><strong>Whitespace.</strong> <code>"North "</code> and <code>"North"</code> are different, so duplicates hide behind a trailing space and <code>drop_duplicates</code> reports finding nothing. Strip before comparing.</p>
+    <p><strong>Пробелы.</strong> <code>"North "</code> and <code>"North"</code>  разные, поэтому дубликаты прячутся за конечным пробелом и  <code>drop_duplicates</code>  сообщает, что ничего не нашел. Прежде чем сравнивать, разденьтесь.</p>
 
-    <p><strong>Missing values in the key.</strong> pandas treats <code>NaN</code> as equal to <code>NaN</code> for this purpose, so every row with a missing key is a duplicate of every other one and all but one are dropped. On a partly populated key that can be most of the table.</p>
+    <p><strong>Отсутствующие значения в ключе.</strong>  панда угощает  <code>NaN</code>  как равный  <code>NaN</code>  для этой цели каждая строка с отсутствующим ключом является дубликатом каждой другой, и все строки, кроме одной, удаляются. На частично заполненном ключе, который может занимать большую часть таблицы.</p>
 
-    <p><strong>Floats.</strong> 10.0 and 10.000000001 are different rows and display identically. Round explicitly before comparing on a numeric column.</p>
+    <p><strong>Плавает.</strong>  10.0 и 10.000000001 — это разные строки и отображаются одинаково. Явно округляйте перед сравнением числового столбца.</p>
 
-    <p><strong>Dates with a time.</strong> Two records on the same day are different values if one carries 09:14. Normalise with <code>.dt.normalize()</code> if the day is what you mean.</p>
+    <p><strong>Даты со временем.</strong>  Две записи в один и тот же день имеют разные значения, если одна содержит 09:14. Нормализовать с помощью  <code>.dt.normalize()</code>  если день - это то, что вы имеете в виду.</p>
 
-    <p><strong>Column order in <code>subset</code>.</strong> It does not matter for correctness, and it does matter for reading: list the columns in the order somebody would say them, because that list is your definition of identity.</p>
+    <p><strong>Порядок столбцов в  <code>subset</code>.</strong>  Это не имеет значения для правильности, но имеет значение для чтения: перечислите столбцы в том порядке, в котором кто-то их произнесет, потому что этот список является вашим определением идентичности.</p>
 
-    <p><strong>Duplicates created by a merge.</strong> If the row count went up before you got here, the duplicates are not in the data, they were manufactured by a join to a table whose key was not unique. De-duplicating afterwards hides the cause; <a href="../pandas-merge/">the merge guide</a> has the check that catches it at the source.</p>
+    <p><strong>Дубликаты, созданные в результате слияния.</strong> If the row count went up before you got here, the duplicates are not in the data, they were manufactured by a join to a table whose key was not unique. De-duplicating afterwards hides the cause; <a href="../pandas-merge/">руководство по слиянию</a>  имеет проверку, которая перехватывает его в источнике.</p>
   </div>
 
-  <h2>Why this works</h2>
+  <h2>Почему это работает</h2>
 
-  <p>The reason no default is right is that identity is a claim about the world rather than a property of the table. In relational terms, declaring a key is declaring that some set of columns identifies a row uniquely, and everything downstream depends on that declaration being true (Codd, 1970, <em>Communications of the ACM</em>, 13(6), 377–387). Passing <code>subset=["order_id"]</code> is making that declaration in passing, and the two rows with <code>seen = 2</code> and <code>row_seen = 1</code> are the data telling you the declaration is currently false. Deleting them removes the evidence rather than the problem.</p>
+  <p>Причина, по которой ни одно значение по умолчанию не является правильным, заключается в том, что идентичность — это утверждение о мире, а не свойство таблицы. В реляционных терминах объявление ключа означает объявление того, что некоторый набор столбцов однозначно идентифицирует строку, и все последующие действия зависят от истинности этого объявления (Codd, 1970,  <em>Коммуникации ACM</em>, 13(6), 377–387). Прохождение  <code>subset=["order_id"]</code>  делает это заявление мимоходом, и две строки с  <code>seen = 2</code> and <code>row_seen = 1</code>  являются ли данные, говорящие вам, что декларация в настоящее время является ложной? Их удаление устраняет доказательства, а не проблему.</p>
 
-  <p>The exact-match case is also only the easy half of the job. Detecting records that refer to the same real thing without being byte-identical is a research area with its own similarity measures, thresholds and evaluation methods, because in general there is no exact rule and the decision involves judgement about how much difference still counts as the same entity (Elmagarmid, Ipeirotis, &amp; Verykios, 2007, <em>IEEE Transactions on Knowledge and Data Engineering</em>, 19(1), 1–16). <code>North</code> against <code>north</code> is the mildest possible version of that, and the fact that two mainstream tools resolve it differently is a good indication that it is a judgement rather than a fact.</p>
+  <p>Случай точного совпадения — это лишь легкая половина работы. Обнаружение записей, которые относятся к одному и тому же реальному объекту, но не являются побайтно-идентичными, является областью исследований со своими собственными мерами сходства, пороговыми значениями и методами оценки, поскольку, как правило, не существует точного правила, и решение включает в себя суждение о том, насколько разница по-прежнему считается одной и той же сущностью (Эльмагармид, Ипейротис и Верикиос, 2007,  <em>Транзакции IEEE по знаниям и инженерии данных</em>, 19(1), 1–16). <code>North</code> against <code>north</code>  Это самая мягкая из возможных версий, и тот факт, что два основных инструмента решают ее по-разному, является хорошим показателем того, что это суждение, а не факт.</p>
 
-  <p>One note on why this page separates the two questions before doing anything. Holding several unfamiliar distinctions at once is what makes a topic feel hard, and instructional research treats the load imposed by how material is presented as something a designer controls independently of the material's own difficulty (Sweller, 1988, <em>Cognitive Science</em>, 12(2), 257–285). Repeated row and repeated key are two ideas; trying to learn <code>subset</code>, <code>keep</code> and the sort while still conflating them is three ideas resting on a confusion.</p>
+  <p>Прежде чем что-либо делать, одно замечание о том, почему на этой странице эти два вопроса разделены. Удержание нескольких незнакомых различий одновременно делает тему сложной, а в учебных исследованиях нагрузка, налагаемая тем, как представлен материал, рассматривается как нечто, что дизайнер контролирует независимо от сложности материала (Sweller, 1988,  <em>Когнитивная наука</em>, 12(2), 257–285). Повторяющаяся строка и повторяющийся ключ — это две идеи; пытаюсь научиться  <code>subset</code>, <code>keep</code>  и, хотя их все еще смешивают, это три идеи, основанные на путанице.</p>
 
-  <h2>Using this on your own project</h2>
+  <h2>Использование этого в вашем собственном проекте</h2>
 
-  <p>De-duplicating a whole pipeline is not a task. Do this instead, in order.</p>
+  <p>Дедупликация всего конвейера — это не задача. Вместо этого сделайте это по порядку.</p>
 
   <ol>
-    <li><strong>Compare <code>nunique()</code> with <code>len()</code></strong> on every identifier column. One line, and it sizes the problem.</li>
-    <li><strong>Run the two <code>duplicated</code> counts</strong>, whole row and key, and look at the gap.</li>
-    <li><strong>Look at the offenders</strong> with <code>keep=False</code> before deciding anything.</li>
-    <li><strong>Normalise the text</strong> you compare on: strip, then casefold.</li>
-    <li><strong>Sort deliberately</strong> in front of every drop, and comment the rule you chose.</li>
-    <li><strong>Report the count</strong> as well as shipping the clean table. A key that is not unique is somebody's bug, not your housekeeping.</li>
+    <li><strong>Compare <code>nunique()</code> with <code>len()</code></strong>  в каждом столбце идентификатора. Одна строка, и она определяет проблему.</li>
+    <li><strong>Запустите два  <code>duplicated</code> counts</strong>, целый ряд и ключ, и посмотри на пробел.</li>
+    <li><strong>Посмотрите на преступников</strong> with <code>keep=False</code>  прежде чем что-либо решить.</li>
+    <li><strong>Нормализовать текст</strong>  Вы сравниваете по: полоска, потом футляр.</li>
+    <li><strong>Сортируйте сознательно</strong>  перед каждой каплей и прокомментируйте выбранное вами правило.</li>
+    <li><strong>Сообщить о количестве</strong>  а также доставку чистого стола. Неуникальный ключ — это чья-то ошибка, а не ваша хозяйственная работа.</li>
   </ol>
 
-  <p>If you have paper nearby, one optional sketch is worth five minutes. Write your columns in a row and draw a box around the ones that together identify one real thing. Then write beside the box what you would do if two rows inside it disagreed. That box is your <code>subset</code> and that sentence is your sort, and both are decisions you would otherwise make by accident.</p>
+  <p>Если у вас под рукой есть бумага, один дополнительный эскиз стоит пяти минут. Напишите столбцы в ряд и обведите рамкой те, которые вместе обозначают одну реальную вещь. Затем напишите рядом с полем, что вы будете делать, если две строки внутри него не согласятся. Эта коробка твоя  <code>subset</code>  и это предложение вашего типа, и оба решения вы в противном случае приняли бы случайно.</p>
 
-  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>. The same job in a database, where nothing is deleted and the duplicates are listed instead, is <a href="../sql-find-duplicates/">finding duplicate rows in SQL</a>.</div>
+  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>. То же самое задание в базе данных, где ничего не удалено, а вместо этого перечислены дубликаты,  <a href="../sql-find-duplicates/">поиск повторяющихся строк в SQL</a>.</div>
 
-  <h2>The whole thing on one screen</h2>
+  <h2>Все на одном экране</h2>
 
-  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
+  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
 
   <table>
-    <tr><th>Thing</th><th>What it does</th></tr>
-    <tr><td>Two questions</td><td>Is this row a copy? Should this key appear once? Different answers.</td></tr>
-    <tr><td><code>duplicated()</code></td><td>Boolean per row. Flags all but the first of each group.</td></tr>
-    <tr><td><code>keep='last'</code></td><td>Flags all but the last.</td></tr>
-    <tr><td><code>keep=False</code></td><td>Flags every row in any group of more than one. Use it to look.</td></tr>
-    <tr><td>The look-first query</td><td><code>df[df.duplicated(subset=key, keep=False)]</code></td></tr>
-    <tr><td><code>drop_duplicates()</code></td><td>All columns. Exact copies only. 8 rows became 7.</td></tr>
-    <tr><td><code>subset=["order_id"]</code></td><td>Key only. 8 rows became 5, units 56 became 35.</td></tr>
-    <tr><td><code>keep='last'</code> there</td><td>Same 5 rows, different members, units 37.</td></tr>
-    <tr><td><code>keep=False</code> there</td><td>Drops every involved row. 2 rows left.</td></tr>
-    <tr><td>Which row survives</td><td>Whichever is higher up. Sort first, deliberately.</td></tr>
-    <tr><td>Common sorts</td><td>Newest timestamp, largest amount, fewest blanks.</td></tr>
-    <tr><td>Mark instead</td><td><code>groupby(key).cumcount() + 1</code>, and again over all columns.</td></tr>
-    <tr><td>The interesting rows</td><td>Key seen twice, row seen once. Same key, different data.</td></tr>
-    <tr><td>Case</td><td>pandas is sensitive, Excel is not. Same table, 7 rows against 6.</td></tr>
-    <tr><td>Normalising</td><td><code>.str.strip().str.casefold()</code> before comparing.</td></tr>
-    <tr><td>Missing keys</td><td>Count as equal to each other, so they collapse into one.</td></tr>
-    <tr><td>The index</td><td>Keeps gaps. <code>reset_index(drop=True)</code> to renumber.</td></tr>
-    <tr><td>Counting instead</td><td><code>value_counts()</code>, and <code>nunique()</code> against <code>len()</code>.</td></tr>
+    <tr><th>Thing</th><th>Что он делает</th></tr>
+    <tr><td>Два вопроса</td><td>Является ли эта строка копией? Должен ли этот ключ появиться один раз? Разные ответы.</td></tr>
+    <tr><td><code>duplicated()</code></td><td>Логическое значение для каждой строки. Помечает все, кроме первого, в каждой группе.</td></tr>
+    <tr><td><code>keep='last'</code></td><td>Флаги все, кроме последнего.</td></tr>
+    <tr><td><code>keep=False</code></td><td>Отмечает каждую строку в любой группе, состоящей из более чем одной. Используйте его, чтобы посмотреть.</td></tr>
+    <tr><td>Первоначальный запрос</td><td><code>df[df.duplicated(subset=key, keep=False)]</code></td></tr>
+    <tr><td><code>drop_duplicates()</code></td><td>Все столбцы. Только точные копии. 8 рядов стало 7.</td></tr>
+    <tr><td><code>subset=["order_id"]</code></td><td>Только ключ. 8 рядов стало 5, единиц 56 стало 35.</td></tr>
+    <tr><td><code>keep='last'</code> there</td><td>Одни и те же 5 рядов, разные элементы, единиц 37.</td></tr>
+    <tr><td><code>keep=False</code> there</td><td>Отбрасывает каждую задействованную строку. Осталось 2 ряда.</td></tr>
+    <tr><td>Какая строка выживет</td><td>Тот, что выше. Сначала сортируйте, сознательно.</td></tr>
+    <tr><td>Общие сорта</td><td>Самая новая временная метка, самая большая сумма, наименьшее количество пробелов.</td></tr>
+    <tr><td>Отметьте вместо этого</td><td><code>groupby(key).cumcount() + 1</code>и еще раз по всем столбцам.</td></tr>
+    <tr><td>Интересные строки</td><td>Ключ виден дважды, ряд — один раз. Тот же ключ, разные данные.</td></tr>
+    <tr><td>Case</td><td>pandas чувствителен, а Excel нет. Та же таблица, 7 строк против 6.</td></tr>
+    <tr><td>Normalising</td><td><code>.str.strip().str.casefold()</code>  прежде чем сравнивать.</td></tr>
+    <tr><td>Отсутствующие ключи</td><td>Считайте равными друг другу, чтобы они слились в одно.</td></tr>
+    <tr><td>Индекс</td><td>Сохраняет пробелы.  <code>reset_index(drop=True)</code>  перенумеровать.</td></tr>
+    <tr><td>Вместо этого считать</td><td><code>value_counts()</code>, и  <code>nunique()</code> against <code>len()</code>.</td></tr>
   </table>
 
-  <div class="note"><strong>The one habit to keep.</strong> Compare the whole-row duplicate count with the key duplicate count before you drop anything. When they differ, the gap is made of rows that share an identifier and disagree about the data, and those rows are a finding about a system rather than untidiness in a file. If duplicates behave in a way this page does not cover, there is a general <a href="../technical-tenacity/">diagnosis loop for being stuck</a>.</div>
+  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Прежде чем что-либо удалять, сравните количество дубликатов во всей строке с количеством дубликатов ключа. Когда они различаются, разрыв образуется из строк, имеющих общий идентификатор и несогласных в отношении данных, и эти строки являются выводом о системе, а не неряшливостью в файле. Если дубликаты ведут себя не так, как описано на этой странице, существует общая  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>.</div>
 
-  <p>One last thought, and I would genuinely like other people's answers. Mine was a nightly extract that occasionally ran twice, where the second run had partial amounts, and a <code>drop_duplicates</code> on the order id kept whichever arrived first, so about one night a month reported a smaller number than the business had actually done. What has a de-duplication quietly chosen for you?</p>
+  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. У меня был ночной экстракт, который иногда запускался дважды, причем во втором выпуске были частичные количества, а  <code>drop_duplicates</code>  в заказе сохранялся тот, который поступил первым, поэтому примерно в один вечер в месяц сообщалось о меньшем количестве, чем фактически было выполнено предприятием. Что для вас незаметно выбрала дедупликация?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Codd, E. F. (1970). A relational model of data for large shared data banks. <em>Communications of the ACM</em>, 13(6), 377–387.</li>
-    <li>Elmagarmid, A. K., Ipeirotis, P. G., &amp; Verykios, V. S. (2007). Duplicate record detection: A survey. <em>IEEE Transactions on Knowledge and Data Engineering</em>, 19(1), 1–16.</li>
-    <li>Sweller, J. (1988). Cognitive load during problem solving: Effects on learning. <em>Cognitive Science</em>, 12(2), 257–285.</li>
+    <li>Кодд, EF (1970). Реляционная модель данных для крупных общих банков данных.  <em>Коммуникации ACM</em>, 13(6), 377–387.</li>
+    <li>Эльмагармид А.К., Ипейротис П.Г. и Верикиос В.С. (2007). Обнаружение повторяющихся записей: опрос.  <em>Транзакции IEEE по знаниям и инженерии данных</em>, 19(1), 1–16.</li>
+    <li>Свеллер, Дж. (1988). Когнитивная нагрузка во время решения задач: влияние на обучение.  <em>Когнитивная наука</em>, 12(2), 257–285.</li>
   </ul>
 
   <div class="book">
-    <strong>The row count is too high and every row looks unique when you print the head.</strong>
-    <p><em>Python for Analysts</em> is 203 pages, duplicated and drop_duplicates read argument by argument, including which copy you are about to keep.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/python-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=python-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-pandas-duplicates'})">Python for Analysts, $19 &rarr;</a>
+    <strong>Количество строк слишком велико, и при печати заголовка каждая строка выглядит уникально.</strong>
+    <p><em>Python для аналитиков</em>  составляет 203 страницы, дублированные и drop_duplications читаются аргумент за аргументом, включая то, какую копию вы собираетесь сохранить.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/python-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=python-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-pandas-duplicates'})">Python для аналитиков, 19 $ →</a>
   </div>
 
   <div class="cta">
-    <strong>Practice on a table with duplicates planted in it.</strong>
-    <p style="margin:6px 0 0">The <a href="../../python/">Python Kit</a> gives you the repetitions: exact copies, shared keys and case variants in the same frame, plus flash cards on what each <code>keep</code> returns and a mock exam that asks for the row count before you run the drop. You now own the method; the kit is the practice. Nothing to install, no account needed.</p>
-    <a class="btn" href="../../python/">Open the Python Kit →</a>
+    <strong>Потренируйтесь на столе с установленными на нем дубликатами.</strong>
+    <p style="margin:6px 0 0">The <a href="../../python/">Комплект Python</a>  дает вам повторы: точные копии, общие ключи и варианты корпуса в одном кадре, а также карточки с информацией о том, что каждый  <code>keep</code>  возвраты и пробный экзамен, на котором запрашивается количество строк, прежде чем запускать удаление. Теперь вы владеете методом; комплект - это практика. Ничего устанавливать, учетная запись не требуется.</p>
+    <a class="btn" href="../../python/">Откройте комплект Python →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> · <a href="../excel-remove-duplicates/">Remove Duplicates in Excel</a> · <a href="../sql-find-duplicates/">Find Duplicates in SQL</a> · <a href="../pandas-merge/">pandas merge</a> · <a href="../pandas-groupby/">pandas groupby</a> · <a href="../pandas-read-csv/">pandas read_csv</a> · <a href="../pandas-fillna-dropna/">Missing Values in pandas</a> · <a href="../entity-resolution/">Entity Resolution</a> · <a href="../../python/">Python Kit</a> · <a href="../excel-clean-messy-data/">Clean Messy Data</a> · <a href="../sql-reconciliation/">Reconcile Two Tables</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../projects/">Portfolio Projects</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../excel-remove-duplicates/">Удалить дубликаты в Excel</a> · <a href="../sql-find-duplicates/">Найти дубликаты в SQL</a> · <a href="../pandas-merge/">панды сливаются</a> · <a href="../pandas-groupby/">панды группируются</a> · <a href="../pandas-read-csv/">панды read_csv</a> · <a href="../pandas-fillna-dropna/">Отсутствующие значения в пандах</a> · <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../../python/">Комплект Python</a> · <a href="../excel-clean-messy-data/">Очистите беспорядочные данные</a> · <a href="../sql-reconciliation/">Согласовать две таблицы</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../projects/">Портфельные проекты</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

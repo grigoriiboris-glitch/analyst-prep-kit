@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>matplotlib Basics for Analysts: Figure, Axes, and Six Lines &mdash; Analyst Prep Kit</title>
-<meta name="description" content="Figure and axes, one plot call, and four lines of labelling. Why the object-oriented form is worth learning first, the defaults to change once, and how to save a chart somebody can paste into a document.">
+<title>Основы matplotlib для аналитиков: рисунок, оси и шесть линий — комплект подготовки аналитика</title>
+<meta name="description" content="Рисунок и оси, один вызов графика и четыре строки маркировки. Почему стоит сначала изучить объектно-ориентированную форму, настройки по умолчанию, которые можно изменить один раз, и как сохранить диаграмму, которую кто-то может вставить в документ.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/matplotlib-basics-for-analysts/">
-<meta property="og:title" content="Charts in Python Without the Cargo Cult: The Six Lines That Matter">
-<meta property="og:description" content="fig, ax = plt.subplots() and five more lines. The object form, and why it scales.">
+<meta property="og:title" content="Диаграммы на Python без культа карго: шесть важных линий">
+<meta property="og:description" content="fig, ax = plt.subplots() и еще пять строк. Форма объекта и почему она масштабируется.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/matplotlib-basics-for-analysts/">
 <meta name="twitter:card" content="summary_large_image">
@@ -164,17 +164,17 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../../python/">Python Kit</a></p>
-  <h1>Charts in Python Without the Cargo Cult: The Six Lines That Matter</h1>
-  <p class="meta">Michael Nocito &middot; Updated August 2026 &middot; Every number on this page was worked before it was published</p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../../python/">Комплект Python</a></p>
+  <h1>Диаграммы на Python без культа карго: шесть важных линий</h1>
+  <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Все числа на этой странице были обработаны до их публикации.</p>
 
-  <p>Most matplotlib code is copied, and most of it is copied from a state-machine style that works for one chart and stops making sense with two. Six lines cover almost everything an analyst needs, and they are worth typing from memory.</p>
+  <p>Большая часть кода matplotlib копируется, и большая часть его копируется из стиля конечного автомата, который работает для одной диаграммы и теряет смысл для двух. Шесть строк охватывают практически все, что нужно аналитику, и их стоит набирать по памяти.</p>
 
-  <p>What you do: make a figure and axes, plot onto the axes, label everything, save with a bounding box.</p>
+  <p>Что вы делаете: создаёте фигуру и оси, строите график по осям, маркируете всё, сохраняете в ограничивающей рамке.</p>
 
-  <p><strong>The short version.</strong> <code>fig</code> is the page, <code>ax</code> is the chart on it. Call methods on <code>ax</code>.</p>
+  <p><strong>Краткая версия.</strong> <code>fig</code>  это страница,  <code>ax</code>  это диаграмма на нем. Вызов методов включен  <code>ax</code>.</p>
 
-  <h2>The six lines</h2>
+  <h2>Шесть линий</h2>
   <pre><code>import matplotlib.pyplot as plt
 
 fig, ax = plt.subplots(figsize=(8, 4.5))
@@ -183,9 +183,9 @@ ax.set_title('East sells most, West sells least')
 ax.set_ylabel('Revenue')
 ax.spines[['top', 'right']].set_visible(False)
 fig.savefig('revenue.png', dpi=200, bbox_inches='tight')</code></pre>
-  <p>That is a chart somebody can paste into a document without apologising for it. Line by line: a figure of a sensible aspect ratio, one plot call, a title that says the finding, a unit on the axis, two borders removed, and a save that does not clip the labels.</p>
+  <p>Это диаграмма, которую кто-то может вставить в документ, не извиняясь за это. Построчно: фигура с разумным соотношением сторон, один вызов графика, заголовок, в котором говорится о находке, единица измерения на оси, две удаленные границы и сохранение, в котором метки не обрезаются.</p>
 
-  <h2>Why the object form</h2>
+  <h2>Почему форма объекта</h2>
   <pre><code># state machine: acts on whichever axes is current
 plt.plot(x, y)
 plt.title('...')
@@ -194,10 +194,10 @@ plt.title('...')
 fig, ax = plt.subplots()
 ax.plot(x, y)
 ax.set_title('...')</code></pre>
-  <p>With one chart the two are equivalent. With two, the state-machine version depends on which axes is current at that moment, which is decided by the order of the calls and by anything pandas did on the way. The object form has no ambiguity, and it is what every larger example eventually uses anyway.</p>
-  <p>Note the naming: the pyplot function is <code>title</code>, the axes method is <code>set_title</code>. That <code>set_</code> prefix trips people up when converting old code.</p>
+  <p>В одной диаграмме они эквивалентны. При использовании двух версия конечного автомата зависит от того, какие оси активны в данный момент, что определяется порядком вызовов и всем, что панды делали в пути. Форма объекта не имеет двусмысленности, и именно ее в конечном итоге использует каждый более крупный пример.</p>
+  <p>Обратите внимание на имя: функция pyplot  <code>title</code>, метод осей  <code>set_title</code>. Что  <code>set_</code>  Префикс сбивает людей с толку при конвертации старого кода.</p>
 
-  <h2>Several charts</h2>
+  <h2>Несколько графиков</h2>
   <pre><code>fig, axes = plt.subplots(1, 2, figsize=(11, 4), sharey=True)
 
 axes[0].bar(jan.index, jan.values)
@@ -208,77 +208,77 @@ axes[1].set_title('February')
 
 fig.suptitle('January outsold February by more than two to one')
 fig.tight_layout()</code></pre>
-  <p><code>sharey=True</code> is the important argument. Two charts side by side with different y scales invite exactly the comparison they cannot support, which is the small-multiples version of the problem in <a href="../dual-axis-charts/">dual axis charts</a>.</p>
+  <p><code>sharey=True</code>  это важный аргумент. Две диаграммы, расположенные рядом, с разными масштабами по оси y, вызывают именно то сравнение, которое они не могут поддержать, а это версия проблемы с малыми кратными.  <a href="../dual-axis-charts/">Двухосевые диаграммы</a>.</p>
 
-  <h2>Plotting from pandas</h2>
+  <h2>Заговор от панд</h2>
   <pre><code>totals = df.groupby('region')['amount'].sum().sort_values()
 
 fig, ax = plt.subplots(figsize=(7, 4))
 totals.plot(kind='barh', ax=ax, color='#0E7490')
 ax.set_xlabel('Revenue')
 ax.set_title('East is 3 times West')</code></pre>
-  <p>Passing <code>ax=ax</code> is what keeps you in control: pandas draws onto your axes and you keep every labelling method. Sorting before plotting is the other half, since a chart in alphabetical order asks the reader to do the ranking themselves.</p>
+  <p>Passing <code>ax=ax</code>  это то, что позволяет вам контролировать ситуацию: pandas рисует на ваших осях, а вы сохраняете все методы маркировки. Сортировка перед построением графика — это вторая половина, поскольку диаграмма в алфавитном порядке предлагает читателю самому выполнить ранжирование.</p>
 
-  <h2>The defaults worth changing once</h2>
+  <h2>Значения по умолчанию, которые стоит изменить один раз</h2>
   <table>
-    <tr><th>Default</th><th>Change to</th><th>Why</th></tr>
-    <tr><td>Box on all four sides</td><td>Remove top and right</td><td>Less ink, same information</td></tr>
-    <tr><td>Small default font</td><td>11 or 12</td><td>Charts get pasted and shrunk</td></tr>
-    <tr><td>No thousands separator</td><td>A comma formatter</td><td>1200000 is unreadable</td></tr>
-    <tr><td>Default figure size</td><td>8 x 4.5 for a slide</td><td>Matches a widescreen layout</td></tr>
-    <tr><td>Ten-colour cycle</td><td>One colour, or two</td><td>Colour should mean something</td></tr>
+    <tr><th>Default</th><th>Изменить на</th><th>Why</th></tr>
+    <tr><td>Коробка со всех четырех сторон</td><td>Удалить верхнюю и правую часть</td><td>Меньше чернил, та же информация</td></tr>
+    <tr><td>Маленький шрифт по умолчанию</td><td>11 или 12</td><td>Диаграммы вставляются и сжимаются</td></tr>
+    <tr><td>Нет разделителя тысяч</td><td>Средство форматирования запятых</td><td>1200000 не читается</td></tr>
+    <tr><td>Размер фигуры по умолчанию</td><td>8 х 4,5 для слайда</td><td>Соответствует широкоэкранному макету</td></tr>
+    <tr><td>Десятицветный цикл</td><td>Один цвет или два</td><td>Цвет должен что-то означать</td></tr>
   </table>
   <pre><code>ax.yaxis.set_major_formatter(
     plt.matplotlib.ticker.StrMethodFormatter('{x:,.0f}'))
 
 plt.rcParams.update({'font.size': 11, 'axes.spines.top': False,
                      'axes.spines.right': False, 'figure.dpi': 110})</code></pre>
-  <p>Put the <code>rcParams</code> block at the top of your notebook template and every chart in the file inherits it, which is how a set of charts starts looking like one set rather than nine.</p>
+  <p>Положите  <code>rcParams</code>  блок в верхней части шаблона записной книжки, и каждая диаграмма в файле наследует его, поэтому набор диаграмм начинает выглядеть как один набор, а не как девять.</p>
 
-  <h2>Labelling the bars</h2>
+  <h2>Маркировка полосок</h2>
   <pre><code>bars = ax.bar(totals.index, totals.values, color='#0E7490')
 ax.bar_label(bars, fmt='{:,.0f}', padding=3)
 ax.get_yaxis().set_visible(False)</code></pre>
-  <p>Once every bar carries its number, the axis is redundant ink and can go. That is often the cleanest chart on a slide: labelled bars, a title stating the finding, and nothing else.</p>
+  <p>Как только каждая полоса будет иметь свой номер, ось станет ненужной и ее можно будет использовать. Часто это самая чистая диаграмма на слайде: столбцы с пометками, заголовок, подтверждающий результат, и ничего больше.</p>
 
   <h2>Saving</h2>
   <pre><code>fig.savefig('chart.png', dpi=200, bbox_inches='tight')
 fig.savefig('chart.svg', bbox_inches='tight')   # scales, for print</code></pre>
-  <p><code>dpi=200</code> for anything that will be looked at, <code>bbox_inches='tight'</code> always. SVG when the chart will be resized, since it stays sharp. And close figures in a loop with <code>plt.close(fig)</code>, or a long-running script accumulates them in memory.</p>
+  <p><code>dpi=200</code>  для всего, что будет рассматриваться,  <code>bbox_inches='tight'</code>  всегда. SVG, когда размер диаграммы будет изменен, поскольку она остается четкой. И замыкаем фигуры в петлю с помощью  <code>plt.close(fig)</code>, или длительный скрипт накапливает их в памяти.</p>
 
-  <h2>How to apply this to your own work</h2>
+  <h2>Как применить это в своей работе</h2>
   <ol>
-    <li>Convert one existing chart from <code>plt.</code> calls to the <code>fig, ax</code> form. It is a mechanical change and it makes the next one easier.</li>
-    <li>Put a <code>rcParams</code> block at the top of your template today.</li>
-    <li>Give every chart a title that states the finding, not the contents.</li>
-    <li>Sort before plotting, unless the categories have a natural order.</li>
-    <li>Save with <code>bbox_inches="tight"</code> and check the file rather than the notebook preview.</li>
+    <li>Преобразование одной существующей диаграммы из  <code>plt.</code>  звонки в  <code>fig, ax</code>  форма. Это механическое изменение, и оно облегчает следующее.</li>
+    <li>Поставьте  <code>rcParams</code>  блок в верхней части вашего шаблона сегодня.</li>
+    <li>Дайте каждой диаграмме название, отражающее результат, а не содержание.</li>
+    <li>Перед построением графика выполните сортировку, если только категории не имеют естественного порядка.</li>
+    <li>Сохранить с  <code>bbox_inches="tight"</code>  и проверьте файл, а не предварительный просмотр записной книжки.</li>
   </ol>
 
-  <h2>The one habit to keep</h2>
-  <p>Write the title first. It settles what the chart is for, and it often reveals that the chart you were about to draw was not the one that shows it.</p>
+  <h2>Единственная привычка, которую нужно сохранить</h2>
+  <p>Сначала напишите заголовок. Он определяет, для чего предназначена диаграмма, и часто обнаруживает, что диаграмма, которую вы собирались нарисовать, была не той, которая ее показывает.</p>
 
-  <p>Would your last Python chart survive being pasted into a document with no explanation?</p>
+  <p>Выживет ли ваша последняя диаграмма Python, если ее вставить в документ без объяснения причин?</p>
 
-  <div class="note"><strong>Written from the library as it ships.</strong> The <code>set_</code> prefixed axes methods, <code>bar_label</code>, <code>StrMethodFormatter</code> and <code>bbox_inches</code> are all current matplotlib.</div>
+  <div class="note"><strong>Написано из библиотеки в процессе доставки.</strong> The <code>set_</code>  методы префиксных осей,  <code>bar_label</code>, <code>StrMethodFormatter</code> and <code>bbox_inches</code>  все текущие matplotlib.</div>
 
   <div class="book">
-    <strong>A chart with no title and a default axis is a chart that has to be explained out loud.</strong>
-    <p><em>Charts and Visualization</em> is the chart-choosing book: what each shape can carry, what it quietly distorts, and how to label it so the reader reaches your finding without being told.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/charts-and-visualization?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=charts-and-visualization" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-matplotlib-basics-for-analysts'})">Charts and Visualization, $19 &rarr;</a>
+    <strong>Диаграмма без заголовка и осью по умолчанию — это диаграмма, которую нужно объяснять вслух.</strong>
+    <p><em>Диаграммы и визуализация</em>  — это книга по выбору карт: что может нести каждая фигура, что она незаметно искажает и как обозначить ее, чтобы читатель мог прийти к вашему выводу без каких-либо указаний.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/charts-and-visualization?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=charts-and-visualization" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-matplotlib-basics-for-analysts'})">Диаграммы и визуализация, 19 $ →</a>
   </div>
 
   <div class="cta">
-    <strong>The chart choice matters more than the library.</strong>
-    <p style="margin:6px 0 0"><a href="../choose-the-right-chart/">Choosing the right chart</a> and <a href="../chart-titles-that-say-the-finding/">chart titles</a> apply whatever you draw with. The <a href="../../python/">Python Kit</a> covers the pandas side.</p>
-    <a class="btn" href="../choose-the-right-chart/">Read Choose the Right Chart &rarr;</a>
+    <strong>Выбор диаграммы имеет большее значение, чем библиотека.</strong>
+    <p style="margin:6px 0 0"><a href="../choose-the-right-chart/">Выбор правильного графика</a> and <a href="../chart-titles-that-say-the-finding/">названия диаграмм</a>  примените все, что вы рисуете.  <a href="../../python/">Комплект Python</a>  закрывает сторону панды.</p>
+    <a class="btn" href="../choose-the-right-chart/">Читать «Выберите правильный график» →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../choose-the-right-chart/">Choose the Right Chart</a> &middot; <a href="../chart-titles-that-say-the-finding/">Chart Titles</a> &middot; <a href="../chart-axis-start-at-zero/">Should the Axis Start at Zero</a> &middot; <a href="../pandas-groupby/">pandas groupby</a> &middot; <a href="../how-charts-mislead/">How Charts Mislead</a> &middot; <a href="../../python/">Python Kit</a>
-    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../choose-the-right-chart/">Выберите правильный график</a> &middot; <a href="../chart-titles-that-say-the-finding/">названия диаграмм</a> &middot; <a href="../chart-axis-start-at-zero/">Должна ли ось начинаться с нуля</a> &middot; <a href="../pandas-groupby/">панды группируются</a> &middot; <a href="../how-charts-mislead/">Как графики вводят в заблуждение</a> &middot; <a href="../../python/">Комплект Python</a>
+    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

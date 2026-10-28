@@ -1,6 +1,6 @@
 ﻿<!doctype html>
 <html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Data-Driven Thresholds: How Analysts Pick Cutoffs They Can Defend — Analyst Prep Kit</title>
-<meta name="description" content="Every analysis needs cutoffs — minimum reviews, minimum votes, 'active user' definitions. Beginner guide to choosing thresholds from the data instead of guessing: distribution first, price the candidates, defend the pick. Includes the small-sample trap that ruins ratio rankings.">
+<title>Пороговые значения, основанные на данных: как аналитики выбирают пороговые значения, которые они могут защитить — комплект для подготовки аналитиков</title>
+<meta name="description" content="Для каждого анализа необходимы ограничения — минимум отзывов, минимум голосов, определения «активных пользователей». Руководство для начинающих по выбору пороговых значений на основе данных вместо угадывания: сначала распределение, оценка кандидатов, защита выбора. Включает в себя ловушку маленькой выборки, которая разрушает рейтинги коэффициентов.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/data-driven-thresholds/">
-<meta property="og:title" content="Data-Driven Thresholds: How Analysts Pick Cutoffs They Can Defend">
-<meta property="og:description" content="'Why that number?' is the question every threshold must survive. The measure-price-defend method, plus the most dangerous equation in statistics.">
+<meta property="og:title" content="Пороги, основанные на данных: как аналитики выбирают пороговые значения, которые они могут защитить">
+<meta property="og:description" content="— Почему именно этот номер? – вот вопрос, который должен пережить каждый порог. Метод измерения-цены-защиты плюс самое опасное уравнение в статистике.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/data-driven-thresholds.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/data-driven-thresholds/">
@@ -129,80 +129,80 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../../sql/">SQL Kit</a></p>
-  <h1>Data-Driven Thresholds: Picking Cutoffs You Can Defend</h1>
-  <p class="meta">Because "why that number?" is always the first question · Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Updated <time datetime="2026-07-30">July 30, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../../sql/">SQL-комплект</a></p>
+  <h1>Пороговые значения, управляемые данными: выбор пороговых значений, которые можно защитить</h1>
+  <p class="meta">Потому что «почему это число?» всегда первый вопрос · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Обновлено  <time datetime="2026-07-30">30 июля 2026 г.</time></p>
 
-  <p>Every real analysis runs into the same quiet decision, over and over: <strong>where do you draw the line?</strong> How many reviews before a rating is trustworthy? How many purchases before a customer counts as "active"? How many chart appearances before an artist counts as "known"? These cutoffs shape every result downstream — and the difference between an amateur and a professional is not which number they pick. It's whether they can <em>defend</em> it. This guide covers the method, the classic statistical trap that makes floors mandatory, and worked examples from open projects.</p>
+  <p>Каждый настоящий анализ снова и снова приводит к одному и тому же тихому решению:  <strong>где вы проводите черту?</strong>  Сколько отзывов, прежде чем оценка будет заслуживающей доверия? Сколько покупок прежде, чем клиент будет считаться «активным»? Сколько появлений в чартах прежде, чем артист будет считаться «известным»? Эти ограничения формируют каждый результат в дальнейшем — и разница между любителем и профессионалом не в том, какое число они выбирают. Вопрос в том, смогут ли они  <em>defend</em>  это. В этом руководстве рассматривается метод, классическая статистическая ловушка, которая делает минимальные уровни обязательными, а также рабочие примеры из открытых проектов.</p>
 
   <div class="toc">
-    <strong>What's here</strong>
+    <strong>Что здесь</strong>
     <ol>
-      <li>The two ways to pick a number</li>
-      <li>The method: measure, price, defend, record</li>
-      <li>A worked example with real numbers</li>
-      <li>The small-sample trap (the most dangerous equation)</li>
-      <li>Why your gut can't be trusted with this</li>
+      <li>Два способа выбрать номер</li>
+      <li>Метод: измерить, оценить, защитить, записать.</li>
+      <li>Проработанный пример с действительными числами</li>
+      <li>Ловушка малой выборки (самое опасное уравнение)</li>
+      <li>Почему вашей интуиции нельзя доверять это</li>
       <li>References</li>
     </ol>
   </div>
 
-  <h2>The two ways to pick a number</h2>
-  <p>Method one: it feels right. "Let's say 100 reviews minimum." Round number, sounds reasonable, took four seconds. Method two: ask the data. Measure how the values actually distribute, count what each candidate cutoff keeps and discards, then choose the one whose meaning, said out loud, matches what you're trying to capture. Method one survives until the first person asks "why 100?" Method two <em>is</em> the answer to that question.</p>
-  <div class="note"><strong>The test of a good threshold:</strong> you can say it out loud with a reason attached, and the reason references the data. "5+ charted songs, because the measured distribution shows 57% of artists chart exactly once — 5+ means the industry demonstrably came back to this artist across a career." Not "5 felt right."</div>
+  <h2>Два способа выбрать номер</h2>
+  <p>Способ первый: кажется, что это правильно. «Скажем, минимум 100 отзывов». Круглый номер, звучит разумно, занял четыре секунды. Способ второй: запросить данные. Измерьте, как на самом деле распределяются значения, посчитайте, что сохраняет и отбрасывает каждый кандидат, затем выберите тот, значение которого, произнесенное вслух, соответствует тому, что вы пытаетесь уловить. Первый метод действует до тех пор, пока первый человек не спросит: «Почему 100?» Способ второй  <em>is</em>  ответ на этот вопрос.</p>
+  <div class="note"><strong>Тест хорошего порога:</strong>  вы можете произнести это вслух, указав причину, и причина ссылается на данные. «5+ песен попали в чарты, потому что измеренное распределение показывает, что 57% артистов попадают в чарты ровно один раз — 5+ означает, что индустрия явно вернулась к этому исполнителю на протяжении всей карьеры». Не «5 кажется правильным».</div>
 
-  <h2>The method: measure, price, defend, record</h2>
+  <h2>Метод: измерить, оценить, защитить, записать.</h2>
   <table>
-    <tr><th>Step</th><th>What you do</th><th>The query shape</th></tr>
-    <tr><td>1. Measure</td><td>Map the distribution before proposing anything: how many entities sit at each value?</td><td>GROUP BY the count — a "distribution of a count," built with a GROUP BY on top of a GROUP BY</td></tr>
-    <tr><td>2. Price</td><td>For each plausible cutoff, count the survivors. A threshold is a decision about how much data to keep; see the bill first.</td><td>One query, several <code>SUM(value &gt;= candidate)</code> columns side by side</td></tr>
-    <tr><td>3. Defend</td><td>Choose the cutoff whose everyday meaning matches the concept you're defining. That concept needs a written definition of its own first: <a href="../defining-metrics/">how to turn a fuzzy question into something measurable</a>.</td><td>No query — a sentence you could say to a skeptical stakeholder</td></tr>
-    <tr><td>4. Record</td><td>Keep the rejected candidates' numbers in the file so a reader can disagree intelligently. This is the same habit as <a href="../documenting-data-limitations/">writing down what the data cannot tell you</a>.</td><td>A comment block above the query that uses the chosen number</td></tr>
+    <tr><th>Step</th><th>Что вы делаете</th><th>Форма запроса</th></tr>
+    <tr><td>1. Измерьте</td><td>Прежде чем что-либо предлагать, составьте карту распределения: сколько сущностей соответствует каждому значению?</td><td>GROUP BY счетчик — «распределение счетчика», построенное с помощью GROUP BY поверх GROUP BY.</td></tr>
+    <tr><td>2. Цена</td><td>Для каждого правдоподобного отсечения подсчитайте выживших. Порог — это решение о том, сколько данных следует хранить; сначала посмотрите законопроект.</td><td>Один запрос, несколько  <code>SUM(value &gt;= candidate)</code>  столбцы рядом</td></tr>
+    <tr><td>3. Защитить</td><td>Выберите отсечение, повседневное значение которого соответствует концепции, которую вы определяете. Эта концепция сначала нуждается в собственном письменном определении:  <a href="../defining-metrics/">как превратить нечеткий вопрос во что-то измеримое</a>.</td><td>Никаких вопросов — предложение, которое вы могли бы сказать скептически настроенному заинтересованному лицу.</td></tr>
+    <tr><td>4. Запись</td><td>Сохраните номера отклоненных кандидатов в файле, чтобы читатель мог разумно не согласиться. Это та же привычка, что и  <a href="../documenting-data-limitations/">записывайте то, о чем данные не могут вам сказать</a>.</td><td>Блок комментариев над запросом, использующим выбранный номер.</td></tr>
   </table>
 
   <div class="step">
-    <h2>A worked example with real numbers</h2>
-    <p>A project analyzing 68 years of Billboard chart history needed to define a "known artist" — someone radio demonstrably knows, as opposed to a one-time visitor. Watch the method run:</p>
-    <p><strong>Measure.</strong> Grouping artists by how many songs each charted revealed the distribution's shape: <strong>57% of all charting artists charted exactly one song.</strong> The chart is mostly brief visitors, so "known" clearly sits above 1 — but where?</p>
-    <p><strong>Price.</strong> One query put three candidate cutoffs side by side: artists with 3+ charted songs — 2,596 survive; with 5+ — 1,570; with 10+ — 740.</p>
-    <p><strong>Defend.</strong> The pick was 5+. That is strict enough to mean the industry returned to this artist repeatedly across a career (3+ can be one lucky album). It is wide enough to leave a meaningful population to analyze (10+ narrows to chart fixtures). There was even an operational reason: the next phase called a web API once per known artist, so the survivor count was also the size of a data pull.</p>
-    <p><strong>Record.</strong> All three candidates' numbers stayed in the project's SQL file, in the comment block above the query that builds the roster. Anyone who thinks 10+ was the better call can see exactly what that choice would have cost.</p>
-    <p>The same pattern runs through the <a href="https://github.com/michaelnocito/steam-hidden-gems">Steam Hidden Gems</a> and <a href="https://github.com/michaelnocito/streaming-hidden-gems">Streaming Hidden Gems</a> projects. Each derives its "enough reviews / enough votes" floor from the measured distribution. The rejected alternatives are documented in the README.</p>
+    <h2>Проработанный пример с действительными числами</h2>
+    <p>Проекту, анализирующему 68-летнюю историю чартов Billboard, необходимо было определить «известного артиста» — человека, которого явно знает радио, а не одноразового посетителя. Посмотрите, как выполняется метод:</p>
+    <p><strong>Мера.</strong>  Группировка исполнителей по количеству песен, попавших в чарты, выявила форму распределения:  <strong>57% всех артистов, попавших в чарты, поместили в чарты ровно одну песню.</strong>  Диаграмма в основном посещается кратковременно, поэтому «известный» явно находится выше 1 — но где?</p>
+    <p><strong>Цена.</strong>  В одном запросе три отобранных кандидата оказались рядом: артисты с тремя+ песнями в чартах — 2596 выжили; с 5+ — 1570; при 10+ — 740.</p>
+    <p><strong>Защищать.</strong>  Оценка была 5+. Это достаточно строго, чтобы означать, что индустрия неоднократно возвращалась к этому артисту на протяжении всей карьеры (альбом 3+ может быть одним счастливым альбомом). Он достаточно широк, чтобы оставить для анализа значимую совокупность (10+ сужается до диаграммы). Была даже оперативная причина: на следующем этапе вызывался веб-API один раз для каждого известного исполнителя, поэтому количество выживших также было равно размеру извлечения данных.</p>
+    <p><strong>Записывать.</strong>  Номера всех трех кандидатов остались в SQL-файле проекта, в блоке комментариев над запросом, формирующим список. Любой, кто считает, что 10+ был лучшим решением, может точно увидеть, чего бы стоил этот выбор.</p>
+    <p>Та же самая картина проходит через  <a href="https://github.com/michaelnocito/steam-hidden-gems">Скрытые сокровища Steam</a> and <a href="https://github.com/michaelnocito/streaming-hidden-gems">Потоковое вещание «Скрытые жемчужины»</a>  проекты. Каждый из них получает минимальный уровень «достаточно отзывов / достаточно голосов» на основе измеренного распределения. Отклоненные альтернативы задокументированы в README.</p>
   </div>
 
-  <h2>The small-sample trap (the most dangerous equation)</h2>
-  <p>One family of thresholds isn't optional at all: <strong>minimum-denominator floors under any ratio or average.</strong> Here's why. Rank songs by average plays per listener and the top of the list won't be the most beloved songs. It will be tracks with 40 listeners who happen to replay obsessively. Rank schools by test scores and the top performers will be tiny schools. So will the bottom performers. This is not bad luck; it's arithmetic: <strong>the smaller the sample, the wilder its averages swing</strong>. Variability shrinks only with the square root of sample size, a result Abraham de Moivre proved in 1730. Statistician Howard Wainer called it "the most dangerous equation", because ignoring it keeps producing expensive real-world mistakes. His lead example is a foundation that spent billions promoting small schools. It had noticed they dominated the top of performance rankings, without noticing they dominated the <em>bottom</em> too (Wainer, 2007).</p>
-  <p>The consequence for analysts is blunt: <strong>every ranking built on a ratio or average needs a minimum-denominator floor, chosen from the measured distribution of denominators.</strong> A ratio over 40 people is an anecdote; the same ratio over 100,000 people is a finding. Getting that denominator right is its own small trap: <a href="../sql-count-function/">what COUNT actually counts</a>. No cleverness in the numerator can rescue a starving denominator.</p>
+  <h2>Ловушка малой выборки (самое опасное уравнение)</h2>
+  <p>Одно семейство порогов вовсе не является обязательным:  <strong>Минимальные уровни знаменателя при любом коэффициенте или среднем значении.</strong>  Вот почему. Ранжируйте песни по среднему числу прослушиваний на одного слушателя, и в верхней части списка не будут самые любимые песни. Это будут треки с 40 слушателями, которые будут одержимо переслушивать. Ранжируйте школы по результатам тестов, и лучшие результаты окажутся в маленьких школах. То же самое произойдет и с худшими исполнителями. Это не невезение; это арифметика:  <strong>чем меньше выборка, тем сильнее колеблются ее средние значения</strong>. Изменчивость уменьшается только с квадратным корнем из размера выборки, и этот результат доказал Абрахам де Муавр в 1730 году. Статистик Говард Вайнер назвал это «самым опасным уравнением», потому что игнорирование его приводит к дорогостоящим реальным ошибкам. Его главный пример — фонд, который потратил миллиарды на поддержку маленьких школ. Он заметил, что они доминируют на вершине рейтинга производительности, не замечая, что они доминируют в рейтинге.  <em>bottom</em>  тоже (Вайнер, 2007).</p>
+  <p>Последствия для аналитиков очевидны:  <strong>Для каждого рейтинга, построенного на основе отношения или среднего значения, необходим нижний предел минимального знаменателя, выбираемый из измеренного распределения знаменателей.</strong>  Соотношение более 40 человек — это анекдот; такое же соотношение для более чем 100 000 человек является результатом. Правильное определение этого знаменателя — это отдельная маленькая ловушка:  <a href="../sql-count-function/">что COUNT на самом деле имеет значение</a>. Никакая хитрость в числителе не спасет голодающий знаменатель.</p>
 
-  <h2>Why your gut can't be trusted with this</h2>
+  <h2>Почему вашей интуиции нельзя доверять это</h2>
   <p>You might hope intuition could stand in for measurement. The research says the opposite: people — including trained scientists — systematically expect small samples to behave like big ones. Tversky and Kahneman documented the bias in 1971. Even professional researchers made confident judgments from sample sizes that couldn't support them. They named the bias "belief in the law of small numbers" (Tversky &amp; Kahneman, 1971). Your intuition genuinely cannot feel the difference between a ratio resting on 40 people and one resting on 40,000. The fix isn't better intuition; it's the four-step method above, which replaces feel with counting at every point where feel would fail.</p>
 
   <div class="cta">
-    <strong>Practice the queries this method runs on.</strong>
-    <p style="margin:6px 0 0">Distribution-building (GROUP BY on a GROUP BY), survivor-pricing (SUM of comparisons), and HAVING-based cutoffs are all core moves in the <a href="../../sql/">SQL Kit</a>. The <a href="../../stats/">Statistics Kit</a> covers distributions and variability from the ground up.</p>
-    <a class="btn" href="../../sql/">Open the SQL Kit →</a>
+    <strong>Попрактикуйтесь в запросах, которые выполняет этот метод.</strong>
+    <p style="margin:6px 0 0">Построение дистрибуции (GROUP BY в GROUP BY), ценообразование по выживанию (СУММА сравнений) и ограничения на основе HAVING — все это основные шаги в  <a href="../../sql/">SQL-комплект</a>.  <a href="../../stats/">Статистический комплект</a>  охватывает распределение и изменчивость с нуля.</p>
+    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
   </div>
 
     <div class="book">
-    <strong>You can do the work once somebody tells you what the work is. A vague question is the part that stalls you.</strong>
-    <p><em>Thinking Like an Analyst</em> is 64 pages on the judgment half of the job: defining a metric, telling a report from an analysis, exploring data before you trust it, and saying out loud what your data cannot tell you.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/thinking-like-an-analyst?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=thinking-like-an-analyst" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-data-driven-thresholds'})">Thinking Like an Analyst, $19 &rarr;</a>
+    <strong>Вы можете выполнять работу, как только кто-то скажет вам, в чем она заключается. Расплывчатый вопрос — это та часть, которая вас останавливает.</strong>
+    <p><em>Думать как аналитик</em>  Это 64 страницы, посвященные половине работы: определение показателя, составление отчета по результатам анализа, изучение данных, прежде чем вы им поверите, и высказывание вслух того, о чем ваши данные не могут вам сказать.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/thinking-like-an-analyst?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=thinking-like-an-analyst" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-data-driven-thresholds'})">Думать как аналитик, 19 $ →</a>
   </div>
 
 <h2>References</h2>
   <ol class="refs">
-    <li>Wainer, H. (2007). The most dangerous equation. <em>American Scientist, 95</em>(3), 249–256.</li>
-    <li>Tversky, A., &amp; Kahneman, D. (1971). Belief in the law of small numbers. <em>Psychological Bulletin, 76</em>(2), 105–110. doi:10.1037/h0031322</li>
-    <li>Tukey, J. W. (1977). <em>Exploratory Data Analysis.</em> Addison-Wesley. (The look-first tradition the Measure step belongs to.)</li>
+    <li>Вайнер, Х. (2007). Самое опасное уравнение.  <em>Американский учёный, 95 лет.</em>(3), 249–256.</li>
+    <li>Тверски А. и Канеман Д. (1971). Вера в закон малых чисел.  <em>Психологический вестник, 76</em>(2), 105–110. дои: 10.1037/h0031322</li>
+    <li>Тьюки, JW (1977).  <em>Исследовательский анализ данных.</em>  Аддисон-Уэсли. (Традиция «смотри сначала», к которой принадлежит шаг «Измерение».)</li>
   </ol>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../sql-ctes/">SQL CTEs</a> · <a href="../sql-window-functions/">Window Functions</a> · <a href="../tableau-relationships/">Tableau Relationships</a> · <a href="../tableau-sets/">Tableau Sets</a> · <a href="../what-is-data-analysis/">What Is Data Analysis?</a> · <a href="../sql-teaching-comments/">Commenting SQL</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../entity-resolution/">Entity Resolution</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../set-up-a-sql-database/">Set Up a SQL Database</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../git-for-analysts/">Git for Analysts</a> · <a href="../sql-case-expression/">SQL CASE Expression</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../sql-joins/">SQL JOINs</a> &middot; <a href="../sql-count-function/">COUNT in SQL</a> · <a href="../sql-aliasing/">SQL Aliases</a> &middot; <a href="../../sql/">SQL Kit</a> · <a href="../../projects/">Portfolio Projects</a>
+    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-ctes/">SQL CTE</a> · <a href="../sql-window-functions/">Оконные функции</a> · <a href="../tableau-relationships/">Табличные отношения</a> · <a href="../tableau-sets/">Наборы таблиц</a> · <a href="../what-is-data-analysis/">Что такое анализ данных?</a> · <a href="../sql-teaching-comments/">Комментирование SQL</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../git-for-analysts/">Git для аналитиков</a> · <a href="../sql-case-expression/">SQL-выражение CASE</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> &middot; <a href="../sql-count-function/">СЧЕТ в SQL</a> · <a href="../sql-aliasing/">SQL-псевдонимы</a> &middot; <a href="../../sql/">SQL-комплект</a> · <a href="../../projects/">Портфельные проекты</a>
     
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

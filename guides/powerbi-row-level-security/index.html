@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Row-Level Security in Power BI: Who Gets Filtered and Who Does Not — Analyst Prep Kit</title>
-<meta name="description" content="RLS only restricts users with the Viewer role. Workspace Admins, Members and Contributors see every row, by design. Two roles is a union rather than an intersection. Worked on sixteen orders with the arithmetic printed.">
+<title>Безопасность на уровне строк в Power BI: кого фильтруют, а кого нет — комплект для подготовки аналитика</title>
+<meta name="description" content="RLS ограничивает пользователей только ролью просмотра. Администраторы, участники и участники рабочей области видят каждую строку по задумке. Две роли — это союз, а не пересечение. Работал над шестнадцатью заказами с напечатанной арифметикой.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/powerbi-row-level-security/">
-<meta property="og:title" content="Row-Level Security in Power BI: Who Gets Filtered and Who Does Not">
-<meta property="og:description" content="A role is a filter that returns TRUE or FALSE for every row. Whether it binds you depends on your workspace role, not on the filter. An East manager who is a workspace Member reads 9,890 where 3,040 was intended.">
+<meta property="og:title" content="Безопасность на уровне строк в Power BI: кто фильтруется, а кто нет">
+<meta property="og:description" content="Роль — это фильтр, который возвращает TRUE или FALSE для каждой строки. Связывает ли он вас, зависит от вашей роли в рабочей области, а не от фильтра. Восточный менеджер, являющийся членом рабочей области, читает 9890, тогда как предполагалось 3040.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/powerbi-row-level-security.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/powerbi-row-level-security/">
@@ -134,18 +134,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../powerbi/">Power BI Kit</a> · <a href="../">All guides</a></p>
-  <h1>Row-Level Security in Power BI: Who Gets Filtered and Who Does Not</h1>
-  <p class="meta">The filter is the easy half. Who it binds is the half that goes wrong · Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-10">August 10, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../powerbi/">Комплект Power BI</a> · <a href="../">Все руководства</a></p>
+  <h1>Безопасность на уровне строк в Power BI: кто фильтруется, а кто нет</h1>
+  <p class="meta">Фильтр – это легкая половина. Кого оно связывает, та половина, что идет не так · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-10">10 августа 2026 г.</time></p>
 
-  <p>By the end of this page you can set up row-level security, and, more usefully, predict what any given person will actually see before they open the report. You will know the one setting that switches the whole thing off without any warning, why adding somebody to a second role gives them more data rather than less, and what the built-in test proves and what it quietly does not. It takes about twenty-five minutes. Every number below is printed next to the arithmetic that produced it.</p>
+  <p>В конце этой страницы вы можете настроить безопасность на уровне строк и, что более полезно, предсказать, что на самом деле увидит тот или иной человек, прежде чем он откроет отчет. Вы узнаете одну настройку, которая отключает все это без всякого предупреждения, почему добавление кого-то ко второй роли дает ему больше данных, а не меньше, и что встроенный тест доказывает, а что незаметно нет. Это занимает около двадцати пяти минут. Каждое число ниже напечатано рядом с арифметикой, которая его произвела.</p>
 
-  <p>Here is the move. You write a rule in Power BI Desktop under <strong>Modeling &rsaquo; Manage roles</strong>, something like <code>[Region] = "East"</code>. You publish. Then you go to the Power BI Service, open the semantic model's <strong>Security</strong> page, and add people to that role. Two tools, two steps, and skipping the second one is the most common reason RLS appears to do nothing.</p>
+  <p>Вот ход. Вы пишете правило в Power BI Desktop в разделе  <strong>Моделирование › Управление ролями</strong>, что-то вроде  <code>[Region] = "East"</code>. Вы публикуете. Затем вы заходите в службу Power BI, открываете файл семантической модели.  <strong>Security</strong>  странице и добавьте людей в эту роль. Два инструмента, два шага и пропуск второго — самая распространенная причина, по которой RLS ничего не делает.</p>
 
-  <p>The short version: a role is a filter that answers TRUE or FALSE for every row, and rows that answer FALSE are removed. Whether it binds a particular person depends on their workspace role, not on the filter.</p>
+  <p>Краткая версия: роль — это фильтр, который отвечает ИСТИНА или ЛОЖЬ для каждой строки, а строки, отвечающие ЛОЖЬ, удаляются. Связывает ли он конкретного человека, зависит от его роли в рабочей области, а не от фильтра.</p>
 
-  <p>That second sentence is where almost all the damage lives, so it gets the picture.</p>
+  <p>Во втором предложении находится почти весь ущерб, так что картина понятна.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 400" role="img" aria-labelledby="rlsTitle rlsDesc" xmlns="http://www.w3.org/2000/svg">
@@ -201,31 +201,31 @@
         </marker>
       </defs>
     </svg>
-    <figcaption>Sixteen rows, one role, one rule. The route through the funnel is what a Viewer gets. Anyone with edit rights on the model takes the other route, and the rule never runs for them.</figcaption>
+    <figcaption>Шестнадцать рядов, одна роль, одно правило. Маршрут по воронке — это то, что получает зритель. Любой, у кого есть права на редактирование модели, выбирает другой путь, и для них правило никогда не работает.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>What you'll learn</strong>
+    <strong>Что вы узнаете</strong>
     <ol>
-      <li>The fork: can this person edit the model, or only read it?</li>
-      <li>What a role actually is</li>
-      <li>Two tools, two steps: where roles live and where people do</li>
-      <li>The failure: the East manager who sees 9,890</li>
-      <li>Two roles is a union, not an intersection</li>
-      <li>Dynamic RLS, and the typo that opens the whole table</li>
-      <li>What View As proves, and what it does not</li>
-      <li>Four things RLS does not do</li>
-      <li>The full before and after</li>
-      <li>Edge cases that return the wrong rows quietly</li>
-      <li>Why this works</li>
-      <li>Using this on your own model</li>
-      <li>The whole thing on one screen</li>
+      <li>Развилка: может ли этот человек редактировать модель или только читать ее?</li>
+      <li>Какая на самом деле роль</li>
+      <li>Два инструмента, два шага: где живут роли и где работают люди</li>
+      <li>Провал: тренер Востока, увидевший 9890</li>
+      <li>Две роли — это союз, а не пересечение</li>
+      <li>Динамический RLS и опечатка, открывающая всю таблицу</li>
+      <li>Что View As доказывает, а что нет</li>
+      <li>Четыре вещи, которые не делает RLS</li>
+      <li>Полное до и после</li>
+      <li>Краевые случаи, которые спокойно возвращают неправильные строки</li>
+      <li>Почему это работает</li>
+      <li>Использование этого на вашей собственной модели</li>
+      <li>Все на одном экране</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Every number on this page is checkable.</strong> It runs on the sixteen-order fixture used across these Power BI guides, and every total is printed beside its arithmetic. Every behavior described is quoted from Microsoft's own documentation in the "why this works" section rather than inferred, because this is the one topic on the site where being approximately right is the same as being wrong.</div>
+  <div class="note"><strong>Каждое число на этой странице можно проверить.</strong>  Он работает на основе приспособления шестнадцати порядков, используемого в этих руководствах Power BI, и каждая сумма печатается рядом с ее арифметикой. Каждое описанное поведение цитируется из собственной документации Microsoft в разделе «почему это работает», а не предполагается, потому что это единственная тема на сайте, где быть примерно правым — то же самое, что быть неправильным.</div>
 
-  <p><strong>Orders</strong>, the fact table, with revenue already worked out per line. Sixteen rows, four regions.</p>
+  <p><strong>Orders</strong>, таблица фактов с уже рассчитанным доходом по каждой строке. Шестнадцать рядов, четыре региона.</p>
 
   <table>
     <tr><th>OrderID</th><th>Region</th><th>Product</th><th>Units</th><th>Revenue</th></tr>
@@ -247,7 +247,7 @@
     <tr><td>1016</td><td>West</td><td>Desk</td><td>2</td><td>440</td></tr>
   </table>
 
-  <p>Four regional totals, and they are the four numbers the rest of the page checks against.</p>
+  <p>Четыре региональных итога, и это четыре числа, по которым сверяется остальная часть страницы.</p>
 
   <table>
     <tr><th>Region</th><th>Orders</th><th>Revenue</th><th>Arithmetic</th></tr>
@@ -259,124 +259,124 @@
   </table>
 
   <div class="step">
-    <h2>1. The fork: can this person edit the model, or only read it?</h2>
+    <h2>1. Развилка: может ли этот человек редактировать модель или только читать?</h2>
 
-    <p>Before the explanation, one question worth answering from memory. Think of the last Power BI report you shared with somebody. Say whether that person could open the underlying model and change a measure, or whether they could only look at what you built.</p>
+    <p>Перед объяснением один вопрос, на который стоит ответить по памяти. Вспомните последний отчет Power BI, которым вы с кем-то поделились. Скажите, может ли этот человек открыть базовую модель и изменить показатель или он может только посмотреть на то, что вы построили.</p>
 
-    <p>That question, not the rule you wrote, decides whether row-level security does anything at all. There are two answers.</p>
+    <p>Этот вопрос, а не правило, которое вы написали, решает, делает ли вообще что-либо безопасность на уровне строк. Есть два ответа.</p>
 
-    <p><strong>Answer one: they can only read.</strong> Their workspace role is Viewer, or they got the report through a published app. If that is true, every rule you wrote runs against every query they make, and they see only the rows their role permits.</p>
+    <p><strong>Ответ один: они умеют только читать.</strong>  Их роль в рабочей области — «Просмотрщик», или они получили отчет через опубликованное приложение. Если это правда, каждое написанное вами правило применяется к каждому запросу, который они делают, и они видят только те строки, которые разрешены их ролью.</p>
 
-    <p><strong>Answer two: they can edit.</strong> Their workspace role is Admin, Member or Contributor. If that is true, row-level security does not apply to them at all. Not partially, not with a warning. They see every row in the model, and the report gives them no sign that a rule exists.</p>
+    <p><strong>Ответ второй: они могут редактировать.</strong>  Их роль в рабочей области — администратор, участник или участник. Если это правда, безопасность на уровне строк к ним вообще не применяется. Не частично, не с предупреждением. Они видят каждую строку модели, и отчет не дает им никаких признаков существования правила.</p>
 
-    <p>What decides between them is a dropdown in the workspace access panel, which is usually set by whoever added the person, often months earlier, and usually not by whoever wrote the security rule. That gap between the two decisions is where this fails.</p>
+    <p>Выбор между ними решает раскрывающийся список на панели доступа к рабочему пространству, который обычно устанавливается тем, кто добавил человека, часто несколько месяцев назад, а не тем, кто написал правило безопасности. Именно в этом разрыве между двумя решениями это и не получается.</p>
 
-    <p>It matters because the failure is silent on both sides. The person seeing too much has no idea, and the person who built the model tested it and watched it work.</p>
+    <p>Это важно, потому что о неудаче молчат обе стороны. Человек, видящий слишком много, понятия не имеет, а человек, создавший модель, тестировал ее и наблюдал, как она работает.</p>
   </div>
 
   <div class="step">
-    <h2>2. What a role actually is</h2>
+    <h2>2. Что на самом деле представляет собой роль</h2>
 
-    <p>A role is a name plus one or more filters, and each filter is attached to a table. The filter is a DAX expression that gets asked about every single row and has to answer TRUE or FALSE. Microsoft's wording is worth having exactly: "A DAX filter evaluates TRUE/FALSE for each row. Only rows that return TRUE are visible. Everything else is completely removed."</p>
+    <p>Роль — это имя плюс один или несколько фильтров, каждый из которых прикреплен к таблице. Фильтр представляет собой выражение DAX, которое запрашивается о каждой отдельной строке и должно отвечать ИСТИНА или ЛОЖЬ. Формулировка Microsoft заслуживает внимания: «Фильтр DAX оценивает TRUE/FALSE для каждой строки. Видны только строки, которые возвращают TRUE. Все остальное полностью удаляется».</p>
 
-    <p>Completely removed is the part to hold on to. This is not a report filter that a user can clear, and it is not a default someone can override in the Filters pane. The rows are gone before the visual is drawn.</p>
+    <p>Полностью удалена та часть, за которую нужно держаться. Это не фильтр отчета, который может очистить пользователь, и это не фильтр по умолчанию, который можно переопределить на панели «Фильтры». Строки исчезают до того, как визуальный элемент будет нарисован.</p>
 
-    <p>The simplest useful rule, typed into the DAX editor under Modeling &rsaquo; Manage roles, is a comparison:</p>
+    <p>Самое простое полезное правило, введенное в редакторе DAX в разделе «Моделирование › Управление ролями», — это сравнение:</p>
 
     <pre><code>[Region] = "East"</code></pre>
 
-    <p>Say out loud what that returns for order 1004, which is a North lamp. FALSE, so the row is dropped. Order 1013 is an East lamp, so TRUE, so the row stays. Sixteen questions, four answers of TRUE, and the model an East role member queries has four rows in Orders and totals 3,040.</p>
+    <p>Скажите вслух, что это за заказ 1004 — лампа Севера. ЛОЖЬ, поэтому строка удаляется. Заказ 1013 — это восточная лампа, поэтому ИСТИНА, поэтому ряд остается. Шестнадцать вопросов, четыре ответа типа «ИСТИНА», а модель, которую запрашивает участник роли «Восток», имеет четыре строки в разделе «Заказы» и общее количество 3040.</p>
 
-    <p>One naming rule that catches people, and it is documented rather than folklore: a role name cannot contain a comma. <code>London,ParisRole</code> is rejected.</p>
+    <p>Одно правило именования, которое цепляет людей, и оно документировано, а не фольклорно: имя роли не может содержать запятую.  <code>London,ParisRole</code>  отклонено.</p>
 
-    <p>Filters land on one table and then travel. RLS filters propagate through the model's relationships the same way any other filter does, which is why it is usually better to put the rule on a small dimension table and let it flow to the fact table. That is one more argument for a proper <a href="../powerbi-star-schema/">star schema</a>, and Microsoft's guidance says so directly: "it's often more efficient to enforce RLS filters on dimension tables, and not fact tables."</p>
+    <p>Фильтры приземляются на один стол и затем перемещаются. Фильтры RLS распространяются через отношения модели так же, как и любой другой фильтр, поэтому обычно лучше поместить правило в небольшую таблицу измерений и позволить ему перейти в таблицу фактов. Это еще один аргумент в пользу правильного  <a href="../powerbi-star-schema/">Схема звезды</a>, и руководство Microsoft прямо говорит об этом: «часто более эффективно применять фильтры RLS к таблицам измерений, а не к таблицам фактов».</p>
   </div>
 
   <div class="step">
-    <h2>3. Two tools, two steps: where roles live and where people do</h2>
+    <h2>3. Два инструмента, два шага: где живут роли и где работают люди</h2>
 
-    <p>This trips up more exam candidates than any other part of the topic, and the reason is that the job is split across two different products.</p>
+    <p>Это сбивает с толку больше кандидатов на экзамен, чем любая другая часть темы, и причина в том, что работа разделена на два разных продукта.</p>
 
     <table>
-      <tr><th>Step</th><th>Where</th><th>What you do</th></tr>
-      <tr><td>1. Define the role</td><td>Power BI Desktop</td><td>Modeling &rsaquo; Manage roles. Name it, pick a table, write the DAX filter.</td></tr>
-      <tr><td>2. Publish</td><td>Desktop to the Service</td><td>The role definitions travel with the model. The membership does not, because it does not exist yet.</td></tr>
-      <tr><td>3. Assign people</td><td>Power BI Service</td><td>Semantic model &rsaquo; Security. Add users or security groups to each role.</td></tr>
-      <tr><td>4. Validate</td><td>Either</td><td>View As in Desktop, or Test as role in the Service.</td></tr>
+      <tr><th>Step</th><th>Where</th><th>Что вы делаете</th></tr>
+      <tr><td>1. Определите роль</td><td>Рабочий стол Power BI</td><td>Моделирование › Управление ролями. Назовите ее, выберите таблицу, напишите фильтр DAX.</td></tr>
+      <tr><td>2. Опубликовать</td><td>Рабочий стол в сервис</td><td>Определения ролей перемещаются вместе с моделью. Членства нет, потому что оно еще не существует.</td></tr>
+      <tr><td>3. Назначьте людей</td><td>Служба Power BI</td><td>Семантическая модель › Безопасность. Добавьте пользователей или группы безопасности к каждой роли.</td></tr>
+      <tr><td>4. Подтвердить</td><td>Either</td><td>Просмотреть как на рабочем столе или протестировать как роль в службе.</td></tr>
     </table>
 
-    <p>You cannot assign users to a role in Desktop. The option is not hidden or buried, it is not there, because Desktop has no idea who is in your organization. And the Security page in the Service only appears for models that already have roles defined, so a model with no roles gives you nothing to click and no explanation.</p>
+    <p>Вы не можете назначать пользователям роли в Desktop. Эта опция не скрыта и не скрыта, ее нет, поскольку Desktop не знает, кто работает в вашей организации. А страница «Безопасность» в Службе отображается только для моделей, для которых уже определены роли, поэтому модель без ролей не дает вам ничего нажимать и не дает никаких объяснений.</p>
 
-    <p>Two smaller facts that come up. Only the semantic model's owner or a workspace admin can add members to roles. And Microsoft 365 groups cannot be used for role membership at all; security groups, distribution groups and mail-enabled groups can.</p>
+    <p>Два небольших факта, которые всплывают. Добавлять участников в роли может только владелец семантической модели или администратор рабочей области. А группы Microsoft 365 вообще нельзя использовать для членства в ролях; группы безопасности, группы рассылки и группы с включенной поддержкой почты могут.</p>
 
-    <p>Anyone who has published a model but not assigned anybody gets the outcome that looks like a bug and is not. A user in no role at all typically sees nothing rather than everything, because the rule is enforced and no role permits any row.</p>
+    <p>Любой, кто опубликовал модель, но никому не назначил ее, получает результат, который выглядит как ошибка, но таковой не является. Пользователь, не имеющий никакой роли, обычно видит ничего, а не все, поскольку правило применяется, и ни одна роль не разрешает какую-либо строку.</p>
   </div>
 
   <div class="step">
-    <h2>4. The failure: the East manager who sees 9,890</h2>
+    <h2>4. Провал: менеджер Востока, увидевший 9890</h2>
 
-    <p>Here it is worked end to end, and it is the version that actually happens.</p>
+    <p>Здесь это проработано от начала до конца, и именно такая версия и происходит на самом деле.</p>
 
-    <p>Priya runs the East region. You build the model, write <code>[Region] = "East"</code> into a role called East, publish it, add Priya to the role in the Service, and test it. The test passes: four orders, 3,040.</p>
+    <p>Прия управляет Восточным регионом. Вы строите модель, пишите  <code>[Region] = "East"</code>  в роль Восток, опубликуйте ее, добавьте Прию к роли в Сервисе и протестируйте ее. Тест пройден: четыре заказа, 3040.</p>
 
-    <p>Some weeks earlier, though, Priya was added to the workspace so she could open the other three reports the team keeps there. She was given <strong>Member</strong>. Nobody connected the two decisions, because they were made by different people for different reasons on different days.</p>
+    <p>Однако несколькими неделями ранее в рабочую область была добавлена ​​Прия, чтобы она могла открыть три других отчета, которые команда хранит там. Ей дали  <strong>Member</strong>. Никто не связывал эти два решения, потому что они были приняты разными людьми по разным причинам в разные дни.</p>
 
-    <p>Priya opens her regional card. It reads <strong>9,890</strong>.</p>
+    <p>Прия открывает свою региональную карточку. Он читает  <strong>9,890</strong>.</p>
 
     <table>
-      <tr><th>What was intended</th><th>What she sees</th><th>Gap</th></tr>
-      <tr><td>3,040, the four East orders</td><td>9,890, all sixteen orders</td><td>6,850 (9,890 &minus; 3,040)</td></tr>
+      <tr><th>Что было задумано</th><th>Что она видит</th><th>Gap</th></tr>
+      <tr><td>3040, четыре Восточных ордена</td><td>9890, все шестнадцать заказов</td><td>6,850 (9,890 &minus; 3,040)</td></tr>
     </table>
 
-    <p>Before reading on, say why the report gives her no clue. The rule is still there, the role is still assigned, and she is still a member of it.</p>
+    <p>Прежде чем читать дальше, скажите, почему отчет не дает ей ни малейшего понятия. Правило по-прежнему существует, роль по-прежнему назначена, и она по-прежнему является его участником.</p>
 
-    <p>Because there is nothing to show. RLS does not grey anything out or add a banner. It removes rows before the query returns, so a report with no rows removed is identical to a report that never had a rule. Priya's card is not displaying an error. It is displaying the correct total for the rows she was given, and she was given all of them.</p>
+    <p>Потому что показывать нечего. RLS ничего не выделяет серым и не добавляет баннер. Он удаляет строки до возврата запроса, поэтому отчет без удаленных строк идентичен отчету, в котором никогда не было правила. На карте Прии не отображается ошибка. Он отображает правильную сумму для строк, которые ей дали, и ей были даны все из них.</p>
 
-    <p>The fix is one dropdown, and it is not in the model. In the workspace access panel, change Priya from Member to <strong>Viewer</strong>. She keeps the reports, loses nothing she uses, and the rule starts running. If she needs to build her own reports on top of the model, give her Viewer plus Build permission on the semantic model, because RLS still applies to Viewers who have Build. Microsoft states that case explicitly, including for Analyze in Excel.</p>
+    <p>Исправление — это один раскрывающийся список, которого нет в модели. На панели доступа к рабочей области измените Priya с Member на  <strong>Viewer</strong>. Она сохраняет отчеты, не теряет ничего из того, что использует, и правило начинает действовать. Если ей нужно построить свои собственные отчеты на основе модели, дайте ей разрешение «Просмотр плюс сборка» для семантической модели, поскольку RLS по-прежнему применяется к средствам просмотра, у которых есть «Сборка». Microsoft прямо заявляет об этом, в том числе для анализа в Excel.</p>
 
-    <p>Now picture this on a workspace you actually own. Open the access list and read the roles rather than the names. Say out loud how many people on it could edit, and whether every one of them is supposed to see every row. That count is the real scope of your security rule.</p>
+    <p>А теперь представьте это на рабочем месте, которым вы действительно владеете. Откройте список доступа и прочитайте роли, а не имена. Скажите вслух, сколько человек могут редактировать текст и каждый ли из них должен видеть каждую строку. Это количество и есть реальная область действия вашего правила безопасности.</p>
   </div>
 
   <div class="step">
-    <h2>5. Two roles is a union, not an intersection</h2>
+    <h2>5. Две роли — это союз, а не пересечение</h2>
 
-    <p>Before the explanation, a prediction. Somebody is in a role that permits East, and you also add them to a role that permits lamps. Say whether they end up seeing East lamps only, or something larger.</p>
+    <p>Прежде чем объяснение, предсказание. Кто-то находится в роли, которая разрешает Восток, и вы также добавляете его в роль, которая разрешает лампы. Скажите, увидят ли они в конечном итоге только восточные лампы или что-то большее.</p>
 
-    <p>Something larger, and it is the answer most people get wrong because every other permission system they have used behaves the other way.</p>
+    <p>Что-то большее, и это ответ, который большинство людей ошибаются, потому что любая другая система разрешений, которую они использовали, ведет себя по-другому.</p>
 
-    <p>Microsoft's guidance is unambiguous: "When a report user is assigned to multiple roles, RLS filters become additive. It means report users can see table rows that represent the union of those filters." And the sentence right after it is the one to memorize, because it names the assumption being broken: "unlike permissions applied to SQL Server database objects (and other permission models), the 'once denied always denied' principle doesn't apply."</p>
+    <p>Рекомендации Microsoft однозначны: «Когда пользователю отчета назначено несколько ролей, фильтры RLS становятся аддитивными. Это означает, что пользователи отчета могут видеть строки таблицы, которые представляют собой объединение этих фильтров». А предложение сразу после него следует запомнить, поскольку оно указывает на нарушение допущения: «в отличие от разрешений, применяемых к объектам базы данных SQL Server (и других моделей разрешений), принцип «однажды отклонено, всегда запрещено» не применяется».</p>
 
-    <p>Worked on the fixture. The East role permits orders 1003, 1006, 1010 and 1013. A Lamps role permits every lamp order, which is 1004, 1008, 1009 and 1013.</p>
+    <p>Работал над приборкой. Роль «Восток» разрешает заказы 1003, 1006, 1010 и 1013. Роль «Лампы» разрешает каждый заказ лампы, то есть 1004, 1008, 1009 и 1013.</p>
 
     <table>
-      <tr><th>What you get</th><th>Orders</th><th>Revenue</th><th>Arithmetic</th></tr>
-      <tr><td>East role alone</td><td>1003, 1006, 1010, 1013</td><td>3,040</td><td>660 + 680 + 1,100 + 600</td></tr>
-      <tr><td>Lamps role alone</td><td>1004, 1008, 1009, 1013</td><td>1,600</td><td>240 + 480 + 280 + 600</td></tr>
-      <tr><td>What people expect from both</td><td>1013</td><td>600</td><td>The one East lamp</td></tr>
-      <tr><td><strong>What both actually give</strong></td><td><strong>seven orders</strong></td><td><strong>4,040</strong></td><td>660 + 240 + 680 + 480 + 280 + 1,100 + 600</td></tr>
+      <tr><th>Что вы получаете</th><th>Orders</th><th>Revenue</th><th>Arithmetic</th></tr>
+      <tr><td>Восточная роль одна</td><td>1003, 1006, 1010, 1013</td><td>3,040</td><td>660 + 680 + 1,100 + 600</td></tr>
+      <tr><td>Роль ламп одна</td><td>1004, 1008, 1009, 1013</td><td>1,600</td><td>240 + 480 + 280 + 600</td></tr>
+      <tr><td>Чего люди ожидают от обоих</td><td>1013</td><td>600</td><td>Одна восточная лампа</td></tr>
+      <tr><td><strong>Что на самом деле дают оба</strong></td><td><strong>семь заказов</strong></td><td><strong>4,040</strong></td><td>660 + 240 + 680 + 480 + 280 + 1,100 + 600</td></tr>
     </table>
 
-    <p>Expected 600, delivered 4,040, and 4,040 minus 600 = 3,440 of rows nobody meant to hand over. Adding a second role widened the access, which is the opposite of what "adding a restriction" sounds like.</p>
+    <p>Ожидалось 600, доставлено 4040, и 4040 минус 600 = 3440 строк, которые никто не собирался передавать. Добавление второй роли расширило доступ, что противоположно тому, как звучит «добавление ограничения».</p>
 
-    <p>Microsoft's own illustration of this is starker than mine and worth keeping in your head as the extreme case. A Workers role restricts a Payroll table with the rule <code>FALSE()</code>, so it returns no rows at all. A Managers role uses <code>TRUE()</code>, so it returns everything. Somebody who maps to both roles sees the entire Payroll table. The deny does not win. There is no deny.</p>
+    <p>Собственная иллюстрация этого Microsoft более яркая, чем моя, и ее стоит держать в голове как крайний случай. Роль Workers ограничивает таблицу расчета заработной платы правилом  <code>FALSE()</code>, поэтому он вообще не возвращает строк. Роль менеджеров использует  <code>TRUE()</code>, поэтому он возвращает все. Тот, кто сопоставляет обе роли, видит всю таблицу заработной платы. Отрицание не побеждает. Нет никаких отрицаний.</p>
 
-    <p>The fix is a design rule rather than a setting: <strong>one person, one role</strong>. If a person needs East and lamps together, build a single role that carries both filters, one on each table, so both conditions apply at once. Microsoft's guidance recommends exactly this, and the reason it gives is worth noting: a user can end up in a second role indirectly, through a security group, without anybody deciding to put them there.</p>
+    <p>Исправление — это правило дизайна, а не настройка:  <strong>один человек, одна роль</strong>. Если человеку нужен Восток и лампы вместе, создайте единую роль, которая несет в себе оба фильтра, по одному на каждом столе, чтобы оба условия применялись одновременно. Руководство Microsoft рекомендует именно это, и стоит отметить причину, по которой оно приводится: пользователь может получить вторую роль косвенно, через группу безопасности, и никто не решит поместить его туда.</p>
   </div>
 
   <div class="step">
-    <h2>6. Dynamic RLS, and the typo that opens the whole table</h2>
+    <h2>6. Динамический СБН и опечатка, открывающая всю таблицу</h2>
 
-    <p>Writing one role per region does not scale past a handful. Dynamic RLS is one role for everybody, where the rule compares a column to whoever is signed in.</p>
+    <p>Написание одной роли для каждого региона не выходит за рамки нескольких. Динамический RLS — это одна роль для всех, где правило сравнивает столбец со всеми, кто вошел в систему.</p>
 
-    <p>You need a small mapping table, one row per person, with their sign-in address and what they are allowed to see. Then the rule goes on that table:</p>
+    <p>Вам понадобится небольшая таблица сопоставления, по одной строке на каждого человека, с указанием их адреса для входа и того, что им разрешено видеть. Тогда к этой таблице применяется правило:</p>
 
     <pre><code>[UserEmail] = USERPRINCIPALNAME()</code></pre>
 
-    <p>USERPRINCIPALNAME takes no arguments and returns the user principal name at connection time, which looks like an email address. The filter lands on the mapping table, the mapping table is related to the region, and the filter travels down that relationship to Orders. One role, one rule, and adding a new manager becomes a row in a table rather than a change to the model.</p>
+    <p>USERPRINCIPALNAME не принимает аргументов и возвращает имя участника-пользователя во время подключения, которое выглядит как адрес электронной почты. Фильтр попадает в таблицу сопоставления, таблица сопоставления связана с регионом, а фильтр перемещается вниз по этой связи к заказам. Одна роль, одно правило, и добавление нового менеджера становится строкой в ​​таблице, а не изменением модели.</p>
 
-    <p>There is an older function, USERNAME, and the difference is a real trap rather than trivia. In Power BI Desktop, USERNAME returns <code>DOMAIN\User</code>. In the Power BI Service, USERNAME and USERPRINCIPALNAME both return the user principal name. So a rule built and tested against a domain-style value in Desktop can behave differently once published. Use USERPRINCIPALNAME and store matching values in the mapping table.</p>
+    <p>Существует более старая функция USERNAME, и эта разница — настоящая ловушка, а не мелочь. В Power BI Desktop USERNAME возвращает  <code>DOMAIN\User</code>. В службе Power BI USERNAME и USERPRINCIPALNAME возвращают имя участника-пользователя. Таким образом, правило, созданное и протестированное со значением доменного типа в Desktop, после публикации может вести себя по-другому. Используйте USERPRINCIPALNAME и сохраните соответствующие значения в таблице сопоставления.</p>
 
-    <p>Now the part worth the whole section. This pattern, which reads perfectly sensibly, hands over the entire table to a typo:</p>
+    <p>Теперь часть стоит целый раздел. Этот шаблон, который читается совершенно разумно, приводит к опечатке во всей таблице:</p>
 
     <pre><code>IF (
     USERNAME () = "Worker",
@@ -384,7 +384,7 @@
     TRUE ()
 )</code></pre>
 
-    <p>Workers see internal rows. Everybody else, meaning managers, sees everything. But "everybody else" is not a list of managers. It is every value that is not exactly the string <code>Worker</code>, so <code>Wrker</code> falls into the else branch and returns TRUE for every row. Microsoft's guidance uses this exact example, and its fix is to test for each expected value and make the fall-through deny:</p>
+    <p>Рабочие видят внутренние ряды. Все остальные, то есть менеджеры, все видят. Но «все остальные» — это не список менеджеров. Это каждое значение, которое не является строкой.  <code>Worker</code>, так  <code>Wrker</code>  попадает в ветку else и возвращает TRUE для каждой строки. В руководстве Microsoft используется именно этот пример, и его исправление состоит в том, чтобы проверить каждое ожидаемое значение и запретить провал:</p>
 
     <pre><code>IF (
     USERNAME () = "Worker",
@@ -396,154 +396,154 @@
     )
 )</code></pre>
 
-    <p>The habit underneath it: in a security rule, the last branch is the one that runs when you have not thought of the case. Make it return nothing.</p>
+    <p>За этим стоит привычка: в правиле безопасности последняя ветвь — это та, которая запускается, когда вы об этом не подумали. Заставьте его ничего не возвращать.</p>
   </div>
 
   <div class="step">
-    <h2>7. What View As proves, and what it does not</h2>
+    <h2>7. Что доказывает точка зрения, а что нет</h2>
 
-    <p>Desktop has View As on the Modeling ribbon, and the Service has Test as role on the model's Security page. Both are genuinely useful and both prove less than people think.</p>
+    <p>На рабочем столе на ленте «Моделирование» есть «Просмотр как», а на странице «Безопасность» модели у службы есть роль «Тестировать как». Оба действительно полезны, и оба доказывают меньше, чем думают люди.</p>
 
-    <p>What they prove: your DAX filter is valid, it lands on the table you meant, and it propagates through the relationships you expect. That is most of the work, and testing every role this way is not optional.</p>
+    <p>Что они доказывают: ваш фильтр DAX действителен, он попадает в таблицу, которую вы имели в виду, и распространяется через ожидаемые вами отношения. Это большая часть работы, и тестирование каждой роли таким образом не является обязательным.</p>
 
-    <p>What they do not prove, and this is documented rather than folklore:</p>
+    <p>Чего они не доказывают, и это документально, а не фольклорно:</p>
 
     <ul>
-      <li><strong>They cannot tell you a person's workspace role.</strong> The whole failure in section 4 is invisible to both tools, because both simulate the rule and neither simulates the bypass.</li>
-      <li><strong>For dynamic RLS, the test uses your own identity.</strong> USERPRINCIPALNAME returns your sign-in name, not the one you are trying to simulate. So a passing test tells you the rule works for you.</li>
-      <li><strong>Not every surface is covered.</strong> Test as role does not work for paginated reports, and it does not validate Q&amp;A visuals, Quick insights or Copilot. It also does not work for DirectQuery models with single sign-on.</li>
+      <li><strong>Они не могут сказать вам роль человека на рабочем месте.</strong>  Вся ошибка в разделе 4 невидима для обоих инструментов, поскольку оба имитируют правило, и ни один из них не имитирует обход.</li>
+      <li><strong>Для динамического RLS тест использует вашу собственную личность.</strong>  USERPRINCIPALNAME возвращает ваше имя для входа, а не то, которое вы пытаетесь имитировать. Итак, прохождение теста покажет вам, что правило работает для вас.</li>
+      <li><strong>Не каждая поверхность покрыта.</strong>  Тестирование в качестве роли не работает для отчетов с разбивкой на страницы и не проверяет визуальные элементы вопросов и ответов, Quick Insights или Copilot. Это также не работает для моделей DirectQuery с единым входом.</li>
     </ul>
 
-    <p>The test that closes the gap is unglamorous and takes two minutes: put a card on the report showing <code>USERPRINCIPALNAME()</code>, publish, and have one real person in each audience open it and tell you what it says next to their totals. Microsoft's troubleshooting guidance suggests the same measure, named something like "Who Am I". A real user's session is the only thing that exercises both halves at once.</p>
+    <p>Тест, который восполняет пробел, непривлекательный и занимает две минуты: поместите в отчет карточку, показывающую  <code>USERPRINCIPALNAME()</code>, опубликуйте и попросите одного реального человека из каждой аудитории открыть его и рассказать вам, что там написано рядом с их итоговыми данными. Руководство Microsoft по устранению неполадок предлагает ту же меру, названную примерно так: «Кто я». Настоящая сессия пользователя — единственное, что тренирует обе половины одновременно.</p>
   </div>
 
   <div class="step">
-    <h2>8. Four things RLS does not do</h2>
+    <h2>8. Четыре вещи, которых не делает RLS</h2>
 
-    <p>Each of these is somebody's disappointed afternoon.</p>
+    <p>Каждый из этих дней — чей-то разочарованный день.</p>
 
-    <p><strong>It does not hide columns or measures.</strong> Microsoft is direct about it: RLS "filters table rows. They can't be configured to restrict access to model objects, including tables, columns, or measures." If a person can see a row, they can see every column on that row, salary included. The feature for hiding a column is object-level security, and it is separate.</p>
+    <p><strong>Он не скрывает столбцы или меры.</strong>  Microsoft прямо говорит об этом: RLS «фильтрует строки таблицы. Их нельзя настроить для ограничения доступа к объектам модели, включая таблицы, столбцы или меры». Если человек видит строку, он может видеть каждый столбец в этой строке, включая зарплату. Функция скрытия столбца — это безопасность на уровне объекта, и она является отдельной.</p>
 
-    <p><strong>It does not let people see a total without the detail.</strong> Asked whether RLS can hide detailed rows while still showing them in a summary, the answer is no: you secure rows, and users can see either the details or the summary of what they have. Getting a company-wide total next to a personal one needs a separate summary table built for that purpose, not a cleverer rule.</p>
+    <p><strong>Это не позволяет людям видеть общую картину без деталей.</strong>  На вопрос, может ли RLS скрыть подробные строки, одновременно отображая их в сводке, ответ будет отрицательным: вы защищаете строки, и пользователи могут видеть либо подробные сведения, либо сводку того, что у них есть. Для того, чтобы получить общекорпоративный результат рядом с личным, нужна отдельная сводная таблица, созданная для этой цели, а не более умное правило.</p>
 
-    <p><strong>It cannot be overridden by DAX, in either direction.</strong> This one cuts both ways and is worth knowing. No measure can escape RLS, and Microsoft goes further: a DAX expression "can't even determine that RLS is enforced". So there is no writing a smarter measure to work around it, and equally no accidentally punching a hole in it with ALL or REMOVEFILTERS. If you want the mechanics of what a measure can and cannot see, that is <a href="../powerbi-calculate/">CALCULATE and filter context</a>.</p>
+    <p><strong>Он не может быть переопределен DAX ни в каком направлении.</strong>  Это касается обоих путей, и его стоит знать. Ни одна мера не может обойти RLS, и Microsoft идет еще дальше: выражение DAX «даже не может определить, что RLS применяется». Таким образом, невозможно написать более разумную меру, чтобы обойти эту проблему, и в равной степени нельзя случайно проделать в ней дыру с помощью ВСЕХ или УДАЛЕННЫХ ФИЛЬТРОВ. Если вам нужна механика того, что может и не может видеть мера, то это  <a href="../powerbi-calculate/">РАСЧЕТ и фильтрация контекста</a>.</p>
 
-    <p><strong>It does not follow the model everywhere.</strong> Live connections to Analysis Services enforce security in that model rather than in Power BI, and the Security option does not even appear. Publish to web does not work with RLS at all. Service principals cannot be added to a role, so an app authenticating that way is not filtered by one.</p>
+    <p><strong>Модель не везде следует этой модели.</strong>  Живые подключения к службам Analysis Services обеспечивают безопасность в этой модели, а не в Power BI, а параметр «Безопасность» даже не отображается. Публикация в Интернете вообще не работает с RLS. Субъекты-службы не могут быть добавлены в роль, поэтому приложение, проверяющее подлинность таким образом, не фильтруется по ним.</p>
   </div>
 
-  <h2>The full before and after</h2>
+  <h2>Полное до и после</h2>
 
-  <p>Same model, same rule, same person. One dropdown apart.</p>
+  <p>Та же модель, те же правила, тот же человек. Один раскрывающийся список отдельно.</p>
 
   <table>
-    <tr><th></th><th>Before: Priya is a workspace Member</th><th>After: Priya is a Viewer</th></tr>
-    <tr><td>Role exists in the model</td><td>Yes</td><td>Yes</td></tr>
-    <tr><td>Priya is assigned to it</td><td>Yes</td><td>Yes</td></tr>
-    <tr><td>View As in Desktop</td><td>Passes, shows 3,040</td><td>Passes, shows 3,040</td></tr>
-    <tr><td>Test as role in the Service</td><td>Passes, shows 3,040</td><td>Passes, shows 3,040</td></tr>
-    <tr><td>What Priya actually sees</td><td>9,890, all sixteen orders</td><td>3,040, her four orders</td></tr>
-    <tr><td>Can she still open the reports</td><td>Yes</td><td>Yes</td></tr>
-    <tr><td>Can she still build her own</td><td>Yes</td><td>Yes, with Build permission, still filtered</td></tr>
-    <tr><td>Anything on screen that says so</td><td>No</td><td>No</td></tr>
+    <tr><th></th><th>Раньше: Прия — участница рабочей области</th><th>После: Прия — зритель</th></tr>
+    <tr><td>Роль существует в модели</td><td>Yes</td><td>Yes</td></tr>
+    <tr><td>Прия назначена на это</td><td>Yes</td><td>Yes</td></tr>
+    <tr><td>Просмотреть как на рабочем столе</td><td>Проходит, показывает 3040</td><td>Проходит, показывает 3040</td></tr>
+    <tr><td>Тест как роль в Сервисе</td><td>Проходит, показывает 3040</td><td>Проходит, показывает 3040</td></tr>
+    <tr><td>Что на самом деле видит Прия</td><td>9890, все шестнадцать заказов</td><td>3040, ее четыре заказа</td></tr>
+    <tr><td>Может ли она по-прежнему открывать отчеты?</td><td>Yes</td><td>Yes</td></tr>
+    <tr><td>Сможет ли она построить свою собственную?</td><td>Yes</td><td>Да, с разрешением на сборку, по-прежнему фильтруется</td></tr>
+    <tr><td>Все, что на экране говорит об этом</td><td>No</td><td>No</td></tr>
   </table>
 
-  <p>The last two lines are the point of the page. Every test you can run from your own desk passes in both columns.</p>
+  <p>Последние две строки — это точка страницы. Каждый тест, который вы можете запустить со своего стола, проходит в обоих столбцах.</p>
 
-  <h2>Edge cases that return the wrong rows quietly</h2>
+  <h2>Краевые случаи, которые спокойно возвращают неправильные строки</h2>
 
-  <p>These produce data rather than an error, which is the only kind that matters here.</p>
+  <p>Они выдают данные, а не ошибку, которая здесь является единственной, которая имеет значение.</p>
 
   <ul>
-    <li><strong>An inactive relationship.</strong> RLS filters only travel along active relationships. A model with a second, inactive date relationship will not carry the security filter down it, so a visual built on that path can show rows the role never permitted.</li>
-    <li><strong>A bi-directional relationship you assumed was enough.</strong> Security filtering runs one way by default, whether or not the relationship itself is bi-directional. Propagating security both ways is a separate checkbox on the relationship, "Apply security filter in both directions", and it is off until you tick it.</li>
-    <li><strong>A user in a security group you forgot about.</strong> The second role does not have to be assigned deliberately. Group membership puts people into roles, roles are additive, and the resulting access is the union.</li>
-    <li><strong>A changed name.</strong> Dynamic RLS matches a stored string against a live sign-in name. Somebody's account changes and their row stops matching, so they abruptly see nothing, and it looks like an outage rather than a mapping problem.</li>
-    <li><strong>An import model whose source already has security.</strong> Importing does not bring the source's security rules with it: on import you must define RLS in Power BI. With DirectQuery the source's own rules apply, which is a genuinely different arrangement to reason about.</li>
-    <li><strong>A calculated column doing the filtering job.</strong> Rules belong in the role. Building the same logic into a column and hoping it filters is a category error, and which of the two you should be writing is decided in <a href="../powerbi-measures-vs-columns/">calculated column vs measure</a>.</li>
+    <li><strong>Неактивные отношения.</strong>  Фильтры RLS перемещаются только по активным связям. Модель со второй, неактивной связью дат не будет переносить фильтр безопасности, поэтому визуальный элемент, построенный на этом пути, может отображать строки, которые роль никогда не разрешала.</li>
+    <li><strong>Двунаправленных отношений, как вы предполагали, было достаточно.</strong>  Фильтрация безопасности по умолчанию выполняется в одном направлении, независимо от того, является ли сама связь двунаправленной. Распространение безопасности в обоих направлениях — это отдельный флажок в отношении «Применить фильтр безопасности в обоих направлениях», и он отключен, пока вы не отметите его.</li>
+    <li><strong>Пользователь в группе безопасности, о которой вы забыли.</strong>  Вторую роль не обязательно отводить намеренно. Членство в группе распределяет людей по ролям, роли аддитивны, а результирующий доступ — это союз.</li>
+    <li><strong>Измененное имя.</strong>  Динамический RLS сопоставляет сохраненную строку с действующим именем для входа. У кого-то учетная запись меняется, и его строка перестает совпадать, поэтому он внезапно ничего не видит, и это похоже на сбой, а не на проблему с отображением.</li>
+    <li><strong>Модель импорта, источник которой уже защищен.</strong>  При импорте не применяются правила безопасности источника: при импорте необходимо определить RLS в Power BI. При использовании DirectQuery применяются собственные правила источника, что представляет собой совершенно другую схему, о которой стоит рассуждать.</li>
+    <li><strong>Вычисляемый столбец, выполняющий фильтрацию.</strong>  Правила принадлежат роли. Встраивание одной и той же логики в столбец и надежда на то, что она отфильтрует, является ошибкой категории, и какой из двух вариантов вам следует писать, решается в  <a href="../powerbi-measures-vs-columns/">вычисляемый столбец и мера</a>.</li>
   </ul>
 
-  <h2>Why this works</h2>
+  <h2>Почему это работает</h2>
 
-  <p>The design reason for the bypass is defensible once you say it plainly: people who can edit the model can already see the data, because editing a model means reading it. A Contributor can open the semantic model, write their own measure and read any number in it. Filtering their report while leaving the model open to them would be a lock on a door with no wall attached. Microsoft states the boundary in one line: "RLS only restricts data access for users with Viewer permissions. It doesn't apply to workspace Admin, Member, or Contributor roles."</p>
+  <p>Причина создания обхода оправдана, если сказать это прямо: люди, которые могут редактировать модель, уже могут видеть данные, потому что редактирование модели означает ее чтение. Участник может открыть семантическую модель, написать собственную меру и прочитать в ней любое число. Фильтрация их отчета, оставляя модель открытой для них, была бы замком на двери без прикрепленной стены. Microsoft указывает границу в одной строке: «RLS ограничивает доступ к данным только для пользователей с разрешениями просмотра. Это не применяется к ролям администратора, участника или участника рабочей области».</p>
 
-  <p>So the control is real, and its scope is a workspace role. That makes this an instance of the oldest rule in the field. Saltzer and Schroeder set out eight design principles for protecting information, and the one this page keeps running into is least privilege: every user should operate with the smallest set of privileges the job needs (Saltzer &amp; Schroeder, 1975, <em>Proceedings of the IEEE</em>, 63(9), 1278&ndash;1308). Priya was given edit rights so she could read four reports. The extra privilege was not the point of the decision and it silently outranked the security rule.</p>
+  <p>Таким образом, элемент управления является реальным, а его областью действия является роль рабочей области. Это делает это примером старейшего правила в этой области. Зальцер и Шредер изложили восемь принципов проектирования защиты информации, и на этой странице постоянно встречается принцип минимальных привилегий: каждый пользователь должен работать с наименьшим набором привилегий, необходимых для его работы (Saltzer &amp; Schroeder, 1975,  <em>Труды IEEE</em>, 63(9), 1278–1308). Прие были предоставлены права редактирования, чтобы она могла прочитать четыре отчета. Дополнительные привилегии не были целью решения и молчаливо превосходили правило безопасности.</p>
 
-  <p>Their other principle worth naming here is fail-safe defaults: base access on permission rather than exclusion, so the default outcome is no access. That is exactly the shape of the additive-roles behavior. A rule returning FALSE grants nothing; it does not deny. Union it with a rule that grants everything and everything is what you get, which is why the fix is one role per person rather than a carefully layered stack of them.</p>
+  <p>Другой их принцип, который стоит упомянуть здесь, — это отказоустойчивые настройки по умолчанию: доступ основан на разрешении, а не на исключении, поэтому результатом по умолчанию является отсутствие доступа. Именно такова форма поведения аддитивных ролей. Правило, возвращающее FALSE, ничего не дает; оно не отрицает. Объедините это с правилом, которое предоставляет все, и вы получаете все, поэтому исправлением является одна роль на человека, а не тщательно слоистая их стопка.</p>
 
-  <p>One note on the cheat sheet below. It is built to be covered and recalled rather than read, because testing yourself on material transfers to new situations better than restudying it, which matters here since you will be applying this to workspaces that look nothing like the one above (Butler, 2010, <em>Journal of Experimental Psychology: Learning, Memory, and Cognition</em>, 36(5), 1118&ndash;1133).</p>
+  <p>Одно замечание в шпаргалке ниже. Он создан для того, чтобы его просматривали и вспоминали, а не читали, потому что тестирование переноса материала в новые ситуации лучше, чем его повторное изучение, что здесь важно, поскольку вы будете применять его к рабочим пространствам, которые совсем не похожи на приведенные выше (Батлер, 2010,  <em>Журнал экспериментальной психологии: обучение, память и познание</em>, 36(5), 1118&ndash;1133).</p>
 
-  <h2>Using this on your own model</h2>
+  <h2>Использование этого на вашей собственной модели</h2>
 
-  <p>Auditing every role in an inherited tenant is miserable and you will stop at the second workspace. Do this instead, in order.</p>
+  <p>Аудит каждой роли в унаследованном клиенте утомителен, и вы остановитесь на втором рабочем пространстве. Вместо этого сделайте это по порядку.</p>
 
   <ol>
-    <li><strong>Open the workspace access list before you open the model.</strong> Read the roles, not the names. Everyone listed as Admin, Member or Contributor sees every row, whatever your rules say. That list is the answer to "who can see everything", and it takes thirty seconds.</li>
-    <li><strong>Move every consumer to Viewer.</strong> If somebody needs to build on the model, Viewer plus Build permission does that and stays filtered. Editing rights are for people who edit.</li>
-    <li><strong>Count roles per person, not people per role.</strong> Anybody in two roles is getting the union. Expand the security groups, because that is where the second role hides.</li>
-    <li><strong>Read the last branch of every dynamic rule.</strong> If the fall-through is TRUE, an unexpected sign-in name returns the whole table. Make it FALSE and test with a value you know is wrong.</li>
-    <li><strong>Publish a "Who am I" card.</strong> One card with <code>USERPRINCIPALNAME()</code> next to the totals, and one real person from each audience telling you what it says. This is the only test that covers the workspace role and the rule at the same time.</li>
-    <li><strong>Write down who each role is for.</strong> One sentence per role, stored with the model. Roles outlive the person who wrote them, and a role nobody can explain is a role nobody will dare remove.</li>
+    <li><strong>Прежде чем открыть модель, откройте список доступа к рабочей области.</strong>  Читайте роли, а не имена. Все, кто указан как администратор, участник или участник, видят каждую строку, что бы ни гласили ваши правила. Этот список является ответом на вопрос «кто может видеть все», и он занимает тридцать секунд.</li>
+    <li><strong>Переместите каждого потребителя в Viewer.</strong>  Если кому-то нужно построить модель, это можно сделать с помощью разрешения «Просмотр плюс сборка», которое останется отфильтрованным. Права на редактирование принадлежат людям, которые редактируют.</li>
+    <li><strong>Считайте роли на человека, а не людей на роль.</strong>  Любой, кто выполняет две роли, получает профсоюз. Расширьте группы безопасности, потому что именно там скрывается вторая роль.</li>
+    <li><strong>Прочтите последнюю ветвь каждого динамического правила.</strong>  Если значение TRUE, неожиданное имя для входа возвращает всю таблицу. Сделайте его FALSE и проверьте значение, которое, как вы знаете, неверно.</li>
+    <li><strong>Опубликуйте карточку «Кто я».</strong>  Одна карта с  <code>USERPRINCIPALNAME()</code>  рядом с итоговыми данными, и один реальный человек из каждой аудитории рассказывает вам, что там написано. Это единственный тест, который одновременно охватывает роль рабочей области и правило.</li>
+    <li><strong>Запишите, для кого предназначена каждая роль.</strong>  Одно предложение на роль, хранящееся вместе с моделью. Роли переживают человека, который их написал, а роль, которую никто не может объяснить, — это роль, которую никто не посмеет удалить.</li>
   </ol>
 
-  <p>If you have paper nearby, one optional sketch makes the additive rule stick. Draw two overlapping circles, label one East and one Lamps, and shade the small piece where they overlap. That is what most people expect two roles to give. Now shade both whole circles. That is what two roles actually give. You will not get this one wrong again.</p>
+  <p>Если у вас под рукой есть бумага, один дополнительный эскиз заставит правило сложения работать. Нарисуйте два перекрывающихся круга, назовите один «Восток» и один «Лампы» и заштрихуйте небольшой участок в месте их перекрытия. Именно это большинство людей ожидают от двух ролей. Теперь заштрихуйте оба целых круга. Вот что на самом деле дают две роли. Вы больше не ошибетесь.</p>
 
-  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: Power BI, SQL, Excel, and the working habits around them.</div>
+  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: Power BI, SQL, Excel и связанные с ними рабочие привычки.</div>
 
-  <h2>The whole thing on one screen</h2>
+  <h2>Все на одном экране</h2>
 
-  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
+  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
 
   <table>
-    <tr><th>Thing</th><th>What it does</th></tr>
-    <tr><td>What a role is</td><td>A DAX filter asked of every row. TRUE stays, FALSE is removed completely.</td></tr>
-    <tr><td>Where roles are defined</td><td>Power BI Desktop, Modeling &rsaquo; Manage roles.</td></tr>
-    <tr><td>Where members are assigned</td><td>The Power BI Service, semantic model &rsaquo; Security. Never in Desktop.</td></tr>
-    <tr><td>Who RLS applies to</td><td>Viewers, and app consumers. That is the whole list.</td></tr>
-    <tr><td>Who it does not apply to</td><td>Workspace Admin, Member and Contributor. By design, with no warning.</td></tr>
-    <tr><td>Viewer plus Build</td><td>Still filtered, including through Analyze in Excel.</td></tr>
-    <tr><td>Two roles</td><td>A union. More data, not less. "Once denied always denied" does not apply.</td></tr>
-    <tr><td>The design rule</td><td>One person, one role. Put both filters in the same role instead.</td></tr>
-    <tr><td>A user in no role</td><td>Usually sees nothing, because no role permits any row.</td></tr>
-    <tr><td>Static rule</td><td><code>[Region] = "East"</code></td></tr>
-    <tr><td>Dynamic rule</td><td><code>[UserEmail] = USERPRINCIPALNAME()</code>, against a mapping table.</td></tr>
-    <tr><td>USERNAME vs USERPRINCIPALNAME</td><td>In Desktop USERNAME gives DOMAIN\User. In the Service both give the UPN.</td></tr>
-    <tr><td>The dangerous else</td><td>A fall-through of TRUE hands the table to any typo. End on FALSE.</td></tr>
-    <tr><td>What View As proves</td><td>The rule and its propagation. Not the workspace role, not another person's identity.</td></tr>
-    <tr><td>Filter propagation</td><td>Active relationships only. Security both ways is a separate checkbox.</td></tr>
-    <tr><td>Where to put the rule</td><td>On the dimension table, and let it flow to the fact table.</td></tr>
-    <tr><td>What RLS cannot hide</td><td>Columns and measures. That is object-level security.</td></tr>
-    <tr><td>Role names</td><td>No commas allowed.</td></tr>
+    <tr><th>Thing</th><th>Что он делает</th></tr>
+    <tr><td>Что такое роль</td><td>Фильтр DAX запрашивает каждую строку. TRUE остается, FALSE полностью удаляется.</td></tr>
+    <tr><td>Где определены роли</td><td>Power BI Desktop, Моделирование › Управление ролями.</td></tr>
+    <tr><td>Где назначаются члены</td><td>Служба Power BI, семантическая модель › Безопасность. Никогда на рабочем столе.</td></tr>
+    <tr><td>На кого распространяется RLS</td><td>Зрители и потребители приложений. Вот и весь список.</td></tr>
+    <tr><td>Кого это не касается</td><td>Администратор рабочей области, участник и участник. Специально, без предупреждения.</td></tr>
+    <tr><td>Просмотр плюс сборка</td><td>Еще фильтруется, в том числе через Анализ в Excel.</td></tr>
+    <tr><td>Две роли</td><td>Союз. Больше данных, а не меньше. «Однажды отказано всегда отказано» не применяется.</td></tr>
+    <tr><td>Правило дизайна</td><td>Один человек, одна роль. Вместо этого поместите оба фильтра в одну и ту же роль.</td></tr>
+    <tr><td>Пользователь без роли</td><td>Обычно ничего не видит, потому что ни одна роль не разрешает ни одной строки.</td></tr>
+    <tr><td>Статическое правило</td><td><code>[Region] = "East"</code></td></tr>
+    <tr><td>Динамическое правило</td><td><code>[UserEmail] = USERPRINCIPALNAME()</code>, против таблицы сопоставления.</td></tr>
+    <tr><td>USERNAME vs USERPRINCIPALNAME</td><td>В Desktop USERNAME дает DOMAIN\User. В Сервисе оба дают UPN.</td></tr>
+    <tr><td>Опасное еще</td><td>Если значение TRUE отсутствует, таблица будет обнаружена при любой опечатке. Конец на ЛОЖЬ.</td></tr>
+    <tr><td>Какой взгляд доказывает</td><td>Правило и его распространение. Ни роль на рабочем месте, ни личность другого человека.</td></tr>
+    <tr><td>Распространение фильтра</td><td>Только активные отношения. Безопасность в обе стороны — это отдельный флажок.</td></tr>
+    <tr><td>Где поставить правило</td><td>В таблице измерений и пусть она перетекает в таблицу фактов.</td></tr>
+    <tr><td>Что РЛС не может скрыть</td><td>Столбцы и меры. Это безопасность на уровне объекта.</td></tr>
+    <tr><td>Имена ролей</td><td>Запятые не допускаются.</td></tr>
   </table>
 
-  <div class="note"><strong>The one habit to keep.</strong> Read the workspace access list before you trust the rule. Anyone on it above Viewer sees every row, and no amount of correct DAX changes that. It is the first thing to check and the last thing anyone thinks of, and it takes thirty seconds.</div>
+  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Прежде чем доверять правилу, прочтите список доступа к рабочей области. Любой, кто находится над Viewer, видит каждую строку, и никакие правильные DAX этого не изменят. Это первое, что нужно проверить, и последнее, о чем кто-либо думает, и это занимает тридцать секунд.</div>
 
-  <p>One last thought, and I would genuinely like other people's answers. The version of this I found hardest to explain afterwards was a model where the rules were perfect and three people had been added to the workspace as Contributors during a handover, for two weeks, eighteen months earlier. Nobody had taken them out and nobody had noticed, because nothing about the reports looked different. What is the longest one of these has been open in a tenant you inherited?</p>
+  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Версия этого, которую мне было труднее всего объяснить впоследствии, представляла собой модель, в которой правила были совершенны, и три человека были добавлены в рабочее пространство в качестве участников во время передачи управления в течение двух недель, восемнадцать месяцев назад. Их никто не вынимал и никто не заметил, потому что в отчетах ничего не отличалось. Какой из них был открыт дольше всего в арендаторе, который вы унаследовали?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Saltzer, J. H., &amp; Schroeder, M. D. (1975). The protection of information in computer systems. <em>Proceedings of the IEEE</em>, 63(9), 1278&ndash;1308.</li>
-    <li>Butler, A. C. (2010). Repeated testing produces superior transfer of learning relative to repeated studying. <em>Journal of Experimental Psychology: Learning, Memory, and Cognition</em>, 36(5), 1118&ndash;1133.</li>
-    <li>Microsoft. Row-level security (RLS) with Power BI, and Row-level security (RLS) guidance in Power BI Desktop, and USERPRINCIPALNAME function (DAX). Microsoft Learn. All quotations above are taken from these pages.</li>
+    <li>Зальцер, Дж. Х., и Шредер, доктор медицинских наук (1975). Защита информации в компьютерных системах.  <em>Труды IEEE</em>, 63(9), 1278&ndash;1308.</li>
+    <li>Батлер, AC (2010). Повторное тестирование обеспечивает лучшую передачу знаний по сравнению с повторным обучением.  <em>Журнал экспериментальной психологии: обучение, память и познание</em>, 36(5), 1118&ndash;1133.</li>
+    <li>Майкрософт. Безопасность на уровне строк (RLS) с Power BI, руководство по безопасности на уровне строк (RLS) в Power BI Desktop и функция USERPRINCIPALNAME (DAX). Microsoft Learn. Все приведенные выше цитаты взяты с этих страниц.</li>
   </ul>
 
   <div class="book">
-    <strong>The rule is written, the test passes, and you still cannot say out loud which of the eleven people in that workspace can see everything.</strong>
-    <p><em>Power BI for Analysts</em> is 187 pages, the model built one decision at a time, with the sharing and permission steps that decide whether any of it holds, and practice questions that print the answer and the reason it is right.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/power-bi-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=power-bi-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-powerbi-row-level-security'})">Power BI for Analysts, $19 &rarr;</a>
+    <strong>Правило написано, тест пройден, а вы все еще не можете сказать вслух, кто из одиннадцати человек в этом рабочем пространстве может все видеть.</strong>
+    <p><em>Power BI для аналитиков</em>  состоит из 187 страниц, модель строит одно решение за раз, с этапами совместного использования и разрешения, которые решают, является ли какое-либо из них верным, и практическими вопросами, которые печатают ответ и причину, по которой он правильный.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/power-bi-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=power-bi-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-powerbi-row-level-security'})">Power BI для аналитиков, 19 долларов США →</a>
   </div>
 
   <div class="cta">
-    <strong>Practice this where the wrong answer looks like the right one.</strong>
-    <p style="margin:6px 0 0">The <a href="../../powerbi/">Power BI Kit</a> gives you the repetitions: rules that pass every test and filter nobody, roles that stack into a union, and questions that ask who can see the row rather than how to write the DAX. You now own the method; the kit is the practice. Nothing to install, no account needed.</p>
-    <a class="btn" href="../../powerbi/">Open the Power BI Kit →</a>
+    <strong>Практикуйте это там, где неправильный ответ выглядит как правильный.</strong>
+    <p style="margin:6px 0 0">The <a href="../../powerbi/">Комплект Power BI</a>  дает вам повторения: правила, которые проходят все тесты и никого не фильтруют, роли, которые складываются в объединение, и вопросы, которые спрашивают, кто может видеть строку, а не как написать DAX. Теперь вы владеете методом; комплект - это практика. Ничего устанавливать, учетная запись не требуется.</p>
+    <a class="btn" href="../../powerbi/">Откройте комплект Power BI →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> · <a href="../powerbi-star-schema/">Star Schema in Power BI</a> · <a href="../powerbi-calculate/">CALCULATE and Filter Context</a> · <a href="../powerbi-sum-vs-sumx/">SUM vs SUMX in DAX</a> · <a href="../powerbi-measures-vs-columns/">Columns vs Measures in Power BI</a> · <a href="../powerbi-time-intelligence/">DAX Time Intelligence</a> · <a href="../powerbi-switch-true/">SWITCH TRUE for Segmentation</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../powerbi/">Power BI Kit</a> · <a href="../../projects/">Portfolio Projects</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../powerbi-star-schema/">Схема «звезда» в Power BI</a> · <a href="../powerbi-calculate/">РАСЧЕТ и фильтрация контекста</a> · <a href="../powerbi-sum-vs-sumx/">SUM против SUMX в DAX</a> · <a href="../powerbi-measures-vs-columns/">Столбцы и меры в Power BI</a> · <a href="../powerbi-time-intelligence/">DAX Временная аналитика</a> · <a href="../powerbi-switch-true/">ПЕРЕКЛЮЧИТЕ TRUE для сегментации</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../powerbi/">Комплект Power BI</a> · <a href="../../projects/">Портфельные проекты</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

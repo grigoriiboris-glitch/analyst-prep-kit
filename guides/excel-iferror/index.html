@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>How to Use IFERROR in Excel, and What It Quietly Hides — Analyst Prep Kit</title>
-<meta name="description" content="IFERROR catches every error, not just the one you meant. The syntax, the choice between 0 and blank, IFNA, and a worked case where hiding four rows moved a margin from 38.6% to 47.5%.">
+<title>Как использовать ЕСЛИОШИБКА в Excel и что она незаметно скрывает — комплект для подготовки аналитика</title>
+<meta name="description" content="ЕСЛИОШИБКА улавливает каждую ошибку, а не только ту, которую вы имели в виду. Синтаксис, выбор между 0 и пробелом, IFNA и проработанный случай, когда скрытие четырех строк увеличило запас с 38,6% до 47,5%.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-iferror/">
-<meta property="og:title" content="How to Use IFERROR in Excel, and What It Quietly Hides">
-<meta property="og:description" content="The syntax, the choice between 0 and blank, IFNA's narrower net, and a worked case where hiding four unmatched rows moved a reported margin from 38.6% to 47.5%.">
+<meta property="og:title" content="Как использовать ЕСЛИОШИБКА в Excel и что она скрывает">
+<meta property="og:description" content="Синтаксис, выбор между 0 и пустым, более узкая сеть IFNA и проработанный случай, когда сокрытие четырех несовпадающих строк увеличило заявленную маржу с 38,6% до 47,5%.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/excel-iferror.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-iferror/">
@@ -134,18 +134,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../excel/">Excel Kit</a> · <a href="../">All guides</a></p>
-  <h1>How to Use IFERROR in Excel, and What It Quietly Hides</h1>
-  <p class="meta">The syntax in one line, then the decision the syntax does not make for you · Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-08">August 8, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../excel/">Excel комплект</a> · <a href="../">Все руководства</a></p>
+  <h1>Как использовать ЕСЛИОШИБКА в Excel и что она скрывает</h1>
+  <p class="meta">Синтаксис в одной строке, затем синтаксис не принимает решения за вас · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-08">8 августа 2026 г.</time></p>
 
-  <p>By the end of this page you can stop one broken cell from poisoning a whole total, choose deliberately between showing a zero, a blank or a label, and know exactly which errors you just made invisible. It is about twenty-five minutes, and every number and error message below came out of Excel rather than out of memory.</p>
+  <p>К концу этой страницы вы сможете не дать одной сломанной ячейке отравить всю сумму, сознательно выбирать между отображением нуля, пробела или метки и точно знать, какие ошибки вы только что сделали невидимыми. Прошло около двадцати пяти минут, и все числа и сообщения об ошибках, приведенные ниже, возникли из Excel, а не из памяти.</p>
 
-  <p>Here is what to do today. Before you wrap anything in IFERROR, count what you are about to hide: put <code>=SUMPRODUCT(--ISNA(C2:C500))</code> next to the column and read the number. If it is zero, you did not need IFERROR. If it is not zero, that number is a fact about your data, and it belongs somewhere a reader can see it.</p>
+  <p>Вот чем заняться сегодня. Прежде чем обернуть что-либо в ЕСЛИОШИБКА, посчитайте, что вы собираетесь скрыть: поместите  <code>=SUMPRODUCT(--ISNA(C2:C500))</code>  рядом с столбцом и прочитайте число. Если оно равно нулю, вам не нужен ЕСЛИОШИБКА. Если оно не равно нулю, это число является фактом о ваших данных и принадлежит тому месту, где читатель может его увидеть.</p>
 
-  <p>The short version: <code>IFERROR(something, what_to_show_instead)</code> runs the something, and if it comes back as any error at all, shows your replacement instead. The catch is in the words "any error at all".</p>
+  <p>Краткая версия:  <code>IFERROR(something, what_to_show_instead)</code>  запускает что-то, и если оно вообще выдает какую-либо ошибку, вместо этого показывает вашу замену. Подвох в словах «вообще любая ошибка».</p>
 
-  <p>That is the idea the rest of the page hangs from, so it gets the picture.</p>
+  <p>Это идея, на которой держится остальная часть страницы, поэтому она имеет представление.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 286" role="img" aria-labelledby="ieTitle ieDesc" xmlns="http://www.w3.org/2000/svg">
@@ -184,193 +184,193 @@
         <text x="428" y="239" font-size="16" fill="#09090B" text-anchor="end">0</text>
       </g>
     </svg>
-    <figcaption>Six different problems go in. One plain, unremarkable value comes out, and nothing about it says which of the six produced it. That is the feature and the whole risk in one picture.</figcaption>
+    <figcaption>Возникает шесть разных задач. Получается одно простое, ничем не примечательное значение, и ничто в нем не говорит о том, какая из шести его создала. Вот особенность и весь риск в одной картинке.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>What you'll learn</strong>
+    <strong>Что вы узнаете</strong>
     <ol>
-      <li>What an error is, and the seven you will meet</li>
-      <li>The syntax, and where the formula goes</li>
-      <li>What to put in the second argument: 0, blank, or a word</li>
-      <li>The four rows that vanished, worked end to end</li>
-      <li>Count the errors before you hide them</li>
-      <li>IFNA: the narrower net</li>
-      <li>The old ISERROR pattern, and why IFERROR replaced it</li>
-      <li>Where the wrapper goes: at the edge, not in the middle</li>
-      <li>The full before and after</li>
-      <li>Edge cases that break error handling quietly</li>
-      <li>Why this works</li>
-      <li>Using this on your own project</li>
-      <li>The whole thing on one screen</li>
+      <li>Что за ошибка, и семерку ты встретишь</li>
+      <li>Синтаксис и местонахождение формулы</li>
+      <li>Что поставить во второй аргумент: 0, пробел или слово</li>
+      <li>Четыре исчезнувших ряда работали последовательно</li>
+      <li>Подсчитайте ошибки, прежде чем скрывать их</li>
+      <li>IFNA: более узкая сеть</li>
+      <li>Старый паттерн ЕСЛИОШИБКА и почему его заменили ЕСЛИОШИБКА</li>
+      <li>Куда идет обертка: по краю, а не посередине</li>
+      <li>Полное до и после</li>
+      <li>Крайние случаи, которые незаметно нарушают обработку ошибок</li>
+      <li>Почему это работает</li>
+      <li>Использование этого в вашем собственном проекте</li>
+      <li>Все на одном экране</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Every result on this page is real.</strong> Each error value below was produced by writing a formula that causes it, and the worked case at the centre of the page was run in Excel on the sixteen-row orders table used across this whole set of guides.</div>
+  <div class="note"><strong>Каждый результат на этой странице реален.</strong>  Каждое значение ошибки, приведенное ниже, было получено путем написания формулы, которая ее вызывает, а рабочий случай в центре страницы был выполнен в Excel в таблице заказов из шестнадцати строк, используемой во всем этом наборе руководств.</div>
 
   <div class="step">
-    <h2>1. What an error is, and the seven you will meet</h2>
+    <h2>1. Что такое ошибка, и семерку ты встретишь</h2>
 
-    <p>An Excel error is not a crash and it is not a warning. It is a <em>value</em>, in the same way that 42 and "Tuesday" are values. It sits in the cell, it flows into anything that reads that cell, and one of it in a range is enough to turn a total into an error too.</p>
+    <p>Ошибка Excel — это не сбой и не предупреждение. Это  <em>value</em>, точно так же, как 42 и «Вторник» являются значениями. Он находится в ячейке, перетекает во все, что читает эту ячейку, и одного из них в диапазоне достаточно, чтобы превратить сумму в ошибку.</p>
 
-    <p>Each one names a different problem, and reading the name is usually faster than debugging. Here are the seven you will actually meet, each produced by running a formula that causes it.</p>
+    <p>Каждый из них называет свою проблему, и чтение названия обычно происходит быстрее, чем отладка. Вот семь, которые вы действительно встретите, каждый из которых создается в результате применения формулы, которая его вызывает.</p>
 
     <table>
-      <tr><th>Error</th><th>What Excel is telling you</th><th>A formula that produces it</th></tr>
-      <tr><td><code>#DIV/0!</code></td><td>Divided by zero or by an empty cell.</td><td><code>=1/0</code></td></tr>
-      <tr><td><code>#N/A</code></td><td>A lookup found nothing. Not available.</td><td><code>=MATCH("Sofa",Products[Product],0)</code></td></tr>
-      <tr><td><code>#VALUE!</code></td><td>Wrong type of thing. Text where a number belongs.</td><td><code>="a"+1</code></td></tr>
-      <tr><td><code>#NAME?</code></td><td>Excel does not recognise a name. Usually a typo or a missing function.</td><td><code>=NotAFunction(1)</code></td></tr>
-      <tr><td><code>#NUM!</code></td><td>A number the maths cannot produce.</td><td><code>=SQRT(-1)</code></td></tr>
-      <tr><td><code>#NULL!</code></td><td>Two ranges that were asked to overlap and do not.</td><td><code>=SUM(A1:A5 C1:C5)</code></td></tr>
-      <tr><td><code>#REF!</code></td><td>The cell this pointed at no longer exists.</td><td>Delete a column a formula referred to</td></tr>
+      <tr><th>Error</th><th>Что вам говорит Excel</th><th>Формула, которая его производит</th></tr>
+      <tr><td><code>#DIV/0!</code></td><td>Делится на ноль или на пустую ячейку.</td><td><code>=1/0</code></td></tr>
+      <tr><td><code>#N/A</code></td><td>Поиск ничего не нашел. Нет в наличии.</td><td><code>=MATCH("Sofa",Products[Product],0)</code></td></tr>
+      <tr><td><code>#VALUE!</code></td><td>Неправильный тип вещей. Текст, которому принадлежит число.</td><td><code>="a"+1</code></td></tr>
+      <tr><td><code>#NAME?</code></td><td>Excel не распознает имя. Обычно опечатка или отсутствующая функция.</td><td><code>=NotAFunction(1)</code></td></tr>
+      <tr><td><code>#NUM!</code></td><td>Число, которое математика не может получить.</td><td><code>=SQRT(-1)</code></td></tr>
+      <tr><td><code>#NULL!</code></td><td>Два диапазона, которые просили перекрываться, так и не сделали этого.</td><td><code>=SUM(A1:A5 C1:C5)</code></td></tr>
+      <tr><td><code>#REF!</code></td><td>Ячейка, на которую указывает этот элемент, больше не существует.</td><td>Удалить столбец, на который ссылается формула</td></tr>
     </table>
 
-    <p>Before reading on, pick out which one of those seven is a statement about your <em>data</em> and which are statements about your <em>formula</em>. That split is the whole argument of this page.</p>
+    <p>Прежде чем читать дальше, выберите, какое из этих семи утверждений о вашем  <em>data</em>  и какие утверждения о вашем  <em>formula</em>. В этом расколе и состоит весь аргумент этой страницы.</p>
 
-    <p>Only <code>#N/A</code> is really about the data: it says a key you looked for is not in the list, which may be perfectly normal. The other six say the formula is asking for something impossible. <code>#REF!</code> in particular means the formula is now broken in a way that will never fix itself. Those are not the same kind of news, and a tool that treats them the same is a tool to use carefully.</p>
+    <p>Only <code>#N/A</code>  на самом деле речь идет о данных: там говорится, что ключа, который вы искали, нет в списке, что может быть совершенно нормальным. Остальные шесть говорят, что формула требует чего-то невозможного.  <code>#REF!</code>  в частности, означает, что формула теперь нарушена таким образом, что никогда не исправится. Это разные новости, и инструмент, который обрабатывает их одинаково, нужно использовать осторожно.</p>
   </div>
 
   <div class="step">
-    <h2>2. The syntax, and where the formula goes</h2>
+    <h2>2. Синтаксис и местонахождение формулы</h2>
 
-    <p>Two arguments. The thing you want, and what to show if the thing you want comes back as an error.</p>
+    <p>Два аргумента. То, что вы хотите, и что показывать, если то, что вы хотите, возвращается с ошибкой.</p>
 
     <pre><code>=IFERROR( your_formula , what_to_show_instead )</code></pre>
 
-    <p>So a lookup that might miss becomes:</p>
+    <p>Таким образом, поиск, который может пропустить, становится:</p>
 
     <pre><code>=IFERROR(INDEX(Costs[Cost], MATCH([@Product], Costs[Product], 0)), 0)</code></pre>
 
-    <p>Excel runs the inner formula once. If the answer is any value at all, you get that answer. If the answer is one of the seven errors above, you get your replacement. There is no third case.</p>
+    <p>Excel запускает внутреннюю формулу один раз. Если ответ вообще имеет какое-либо значение, вы получите этот ответ. Если ответом будет одна из семи ошибок выше, вы получите замену. Третьего случая не существует.</p>
 
-    <p>One detail worth having straight: IFERROR does not fix anything. The lookup still failed. The division by zero still happened. All that changed is what is printed in the cell, and everything downstream now reads your replacement as if it were a real measurement.</p>
+    <p>Стоит уточнить одну деталь: ЕСЛИОШИБКА ничего не исправляет. Поиск по-прежнему не удался. Деление на ноль все же произошло. Изменилось только то, что напечатано в ячейке, и все последующие теперь считывают вашу замену, как если бы это было настоящее измерение.</p>
   </div>
 
   <div class="step">
-    <h2>3. What to put in the second argument: 0, blank, or a word</h2>
+    <h2>3. Что поставить во второй аргумент: 0, пробел или слово</h2>
 
-    <p>Before the explanation: twelve cost lookups succeed and four fail. Filling the four failures with 0 and filling them with <code>""</code> both look like tidying up. Say whether you would expect the column's average to come out the same either way.</p>
+    <p>Перед пояснением: двенадцать поисков стоимости завершились успешно, а четыре — неудачно. Заполнение четырех неудач 0 и заполнение их  <code>""</code>  оба выглядят как уборка. Скажите, ожидаете ли вы, что среднее значение по столбцу в любом случае будет одинаковым.</p>
 
-    <p>It does not. Both were run on the same twelve values, which total 1,240.</p>
+    <p>Это не так. Оба были рассчитаны на одни и те же двенадцать значений, всего 1240.</p>
 
     <pre><code>=AVERAGE(  filled with 0  )        77.5
 =AVERAGE( filled with "" )        103.3333</code></pre>
 
-    <p>Filling with 0 gives Excel sixteen numbers, so it divides 1,240 by 16 and gets 77.5. Filling with <code>""</code> gives Excel twelve numbers and four pieces of text, and AVERAGE skips text, so it divides 1,240 by 12 and gets 103.33. Neither is a rounding difference. They are answers to two different questions, and the wrapper you typed chose which question got asked.</p>
+    <p>Заполнение 0 дает Excel шестнадцать чисел, поэтому он делит 1240 на 16 и получает 77,5. Наполнение  <code>""</code>  дает Excel двенадцать чисел и четыре фрагмента текста, а СРЗНАЧ пропускает текст, поэтому он делит 1240 на 12 и получает 103,33. Также нет разницы в округлении. Это ответы на два разных вопроса, и введенная вами оболочка выбирает, какой вопрос будет задан.</p>
 
-    <p>There is a further wrinkle in <code>""</code> worth knowing, because it catches people who test for emptiness. A cell holding <code>""</code> is not empty; it holds a piece of text that happens to have no characters. Run in Excel on such a cell:</p>
+    <p>Есть еще одна морщинка  <code>""</code>  стоит знать, потому что он ловит людей, которые проверяют пустоту. Ячейка холдинга  <code>""</code>  не пуст; он содержит фрагмент текста, в котором нет символов. Запустите в Excel такую ​​ячейку:</p>
 
     <pre><code>=ISBLANK(the cell)      FALSE
 =COUNT(the column)      12
 =COUNTA(the column)     16</code></pre>
 
-    <p>COUNT counts numbers, so it says 12. COUNTA counts anything that is not empty, and since <code>""</code> is not empty it says 16. If a "count of records" on your sheet looks too high by exactly the number of failed lookups, this is why.</p>
+    <p>COUNT считает числа, поэтому он говорит 12. COUNTA считает все, что не пусто, и поскольку  <code>""</code>  не пусто, там написано 16. Если «количество записей» на вашем листе выглядит слишком большим ровно на количество неудачных поисков, вот почему.</p>
 
-    <p>So, the three choices and what each one is actually claiming.</p>
+    <p>Итак, три варианта и то, что на самом деле утверждает каждый из них.</p>
 
     <table>
-      <tr><th>Replacement</th><th>What it says</th><th>Use it when</th></tr>
-      <tr><td><code>0</code></td><td>The measured value is zero.</td><td>Zero really is the right answer, for example no sales in a period.</td></tr>
-      <tr><td><code>""</code></td><td>Nothing to show here.</td><td>Sums must ignore it and the sheet is being read by a person, not fed onward.</td></tr>
-      <tr><td><code>"Not found"</code></td><td>We looked and there was no match.</td><td>Almost always the best answer during the work, because it is the truth and it is impossible to overlook.</td></tr>
+      <tr><th>Replacement</th><th>Что там написано</th><th>Используйте его, когда</th></tr>
+      <tr><td><code>0</code></td><td>Измеренное значение равно нулю.</td><td>Ноль действительно является правильным ответом, например, отсутствие продаж за определенный период.</td></tr>
+      <tr><td><code>""</code></td><td>Здесь нечего показывать.</td><td>Суммы должны игнорировать это, и лист читается человеком, а не передается дальше.</td></tr>
+      <tr><td><code>"Not found"</code></td><td>Мы посмотрели, и совпадения не было.</td><td>Практически всегда лучший ответ при работе, потому что это правда и ее невозможно не заметить.</td></tr>
     </table>
 
-    <p>The rule underneath is short: never replace an error with a number unless that number is a measurement you would defend. A zero that means "we do not know" gets averaged, charted and summed exactly like a zero that means "none", and nobody downstream can tell them apart.</p>
+    <p>Приведенное ниже правило короткое: никогда не заменяйте ошибку числом, если только это число не является показателем, который вы бы защищали. Ноль, который означает «мы не знаем», усредняется, отображается на графике и суммируется точно так же, как ноль, который означает «нет», и никто на последующих этапах не может их отличить.</p>
   </div>
 
   <div class="step">
-    <h2>4. The four rows that vanished, worked end to end</h2>
+    <h2>4. Четыре исчезнувших ряда провязаны встык.</h2>
 
-    <p>Here is the whole risk as a single worked case, on the sixteen-row orders table used across this set of guides. Total revenue is 9,890 and there are three products: desks, chairs and lamps.</p>
+    <p>Вот весь риск в виде одного проработанного случая в таблице заказов из шестнадцати строк, используемой в этом наборе руководств. Общий доход составляет 9890, есть три продукта: столы, стулья и лампы.</p>
 
-    <p>A cost list arrives from the finance system. It has desks and chairs on it. Lamps are missing, because lamps were set up in a different category last quarter and nobody mentioned it. So the cost lookup succeeds on twelve rows and returns <code>#N/A</code> on four. Wrapped the usual way:</p>
+    <p>Список затрат поступает из финансовой системы. Там стоят столы и стулья. Лампы отсутствуют, потому что в прошлом квартале лампы были поставлены в другую категорию, и об этом никто не упомянул. Таким образом, поиск стоимости завершается успешно в двенадцати строках и возвращает результат.  <code>#N/A</code>  на четверых. Завернуто обычным способом:</p>
 
     <pre><code>=IFERROR(INDEX(CostList[Cost], MATCH([@Product], CostList[Product], 0)), 0)</code></pre>
 
-    <p>The sheet now looks completely clean. Not one error message anywhere. Here is what it reports, next to what is true.</p>
+    <p>Теперь лист выглядит совершенно чистым. Нигде ни одного сообщения об ошибке. Вот что он сообщает, рядом с правдой.</p>
 
     <table>
-      <tr><th>Figure</th><th>What the sheet says</th><th>What is true</th></tr>
-      <tr><td>Cost of goods</td><td>5,196</td><td>6,076</td></tr>
-      <tr><td>Gross profit</td><td>4,694</td><td>3,814</td></tr>
-      <tr><td>Gross margin</td><td>47.5%</td><td>38.6%</td></tr>
-      <tr><td>Rows with no cost</td><td>not shown anywhere</td><td>4 of 16</td></tr>
-      <tr><td>Units with no cost</td><td>not shown anywhere</td><td>40 of 101</td></tr>
+      <tr><th>Figure</th><th>Что написано в листе</th><th>Что правда</th></tr>
+      <tr><td>Стоимость товара</td><td>5,196</td><td>6,076</td></tr>
+      <tr><td>Валовая прибыль</td><td>4,694</td><td>3,814</td></tr>
+      <tr><td>Валовая прибыль</td><td>47.5%</td><td>38.6%</td></tr>
+      <tr><td>Ряды без затрат</td><td>нигде не показано</td><td>4 из 16</td></tr>
+      <tr><td>Единицы без стоимости</td><td>нигде не показано</td><td>40 из 101</td></tr>
     </table>
 
-    <p>Check the gap by hand: the missing lamp cost is 40 units at 22 each, which is 880, and 6,076 − 880 = 5,196. That single unstated 880 moves the reported margin by nearly nine percentage points, and it moves it in the flattering direction, which is the direction nobody questions.</p>
+    <p>Проверьте пробел вручную: стоимость недостающих ламп равна 40 единицам по 22 штуки, что равно 880, а 6076 − 880 = 5196. Этот единственный неуказанный показатель 880 увеличивает заявленную маржу почти на девять процентных пунктов, и это сдвигает ее в благоприятном направлении, в котором никто не подвергает сомнению.</p>
 
-    <p>Notice that every individual number on that sheet is arithmetically correct. The sum really is the sum of what is there. Nothing needs to be miscalculated for a report to be wrong; it is enough for something to be missing and for the missingness to be invisible. Without the IFERROR, the total would have shown <code>#N/A</code> and somebody would have asked why within a minute.</p>
+    <p>Обратите внимание, что каждое отдельное число на этом листе является арифметически правильным. Сумма на самом деле является суммой того, что есть. Чтобы отчет был неправильным, не должно быть никаких ошибок в расчетах; достаточно, чтобы чего-то не хватало и чтобы отсутствие было невидимым. Без ЕСЛИОШИБКИ общая сумма показала бы  <code>#N/A</code>  и кто-нибудь через минуту спросил бы, почему.</p>
 
-    <p>Now picture your own most-forwarded workbook. If four of its rows silently failed a lookup this month, which number on the summary tab would move, and would anyone be able to tell from looking at it?</p>
+    <p>Теперь представьте себе свою самую популярную рабочую книгу. Если в этом месяце четыре его строки молча провалили поиск, какое число на вкладке сводки переместится, и сможет ли кто-нибудь это определить, глядя на него?</p>
   </div>
 
   <div class="step">
-    <h2>5. Count the errors before you hide them</h2>
+    <h2>5. Подсчитайте ошибки, прежде чем скрывать их</h2>
 
-    <p>The fix is not to leave errors on the page forever. It is to make the count of them a number you deliberately produce and read.</p>
+    <p>Исправление состоит в том, чтобы не оставлять ошибки на странице навсегда. Это значит сделать их числом, которое вы намеренно производите и читаете.</p>
 
     <pre><code>=SUMPRODUCT(--ISNA(C2:C17))     4      unmatched lookups
 =COUNT(C2:C17)                  12     rows that got a value
 =SUM(C2:C17)                    #N/A   the whole total, poisoned by one</code></pre>
 
-    <p>That last line is worth sitting with. A single error in a range makes SUM return an error. People experience that as Excel being obstructive, and it is the most useful thing Excel does here: it refuses to add up a column it cannot fully see, and it refuses loudly. IFERROR does not solve that problem, it silences the alarm attached to it.</p>
+    <p>Эта последняя строка стоит того, чтобы с ней посидеть. Единственная ошибка в диапазоне приводит к тому, что SUM возвращает ошибку. Люди воспринимают это как помехи в работе Excel, и это самое полезное, что делает Excel: он отказывается складывать столбец, который не может видеть полностью, и отказывается громко. ЕСЛИОШИБКА не решает эту проблему, а отключает связанный с ней сигнал тревоги.</p>
 
-    <p>So the working order is: count first, understand what the misses are, decide what they mean, and only then choose what to display. If the four unmatched rows are genuinely nothing, a zero is honest. If they are lamps that cost 880, a zero is a false statement about the business. The formula cannot tell the difference; you can.</p>
+    <p>Итак, порядок работы такой: сначала посчитайте, поймите, что такое промахи, решите, что они означают, и только потом выбирайте, что отображать. Если четыре несовпадающие строки на самом деле ничего не представляют, то ноль является честным. Если это лампы стоимостью 880, ноль — это ложное утверждение о бизнесе. Формула не может обнаружить разницу; ты можешь.</p>
 
-    <p>When the misses are real and you have to ship anyway, the count belongs in writing beside the result, not just in your head. That is a habit with its own page: <a href="../documenting-data-limitations/">documenting data limitations</a> covers how to say "4 of 16 orders have no cost on file, covering 40 units" without turning the report into an apology.</p>
+    <p>Когда промахи реальны и вам все равно приходится отправлять товар, подсчет ведется в письменном виде рядом с результатом, а не только в вашей голове. Это привычка со своей страницей:  <a href="../documenting-data-limitations/">Документирование ограничений данных</a>  рассказывает о том, как сказать «4 из 16 заказов не имеют стоимости, охватывающих 40 единиц», не превращая отчет в извинения.</p>
   </div>
 
   <div class="step">
-    <h2>6. IFNA: the narrower net</h2>
+    <h2>6. IFNA: более узкая сеть</h2>
 
-    <p>Before the explanation: you wrap a lookup column in IFERROR to hide the unmatched keys. A month later somebody deletes a column and one of those formulas breaks with <code>#REF!</code>. Say what appears on your sheet.</p>
+    <p>Перед объяснением: вы помещаете столбец поиска в ЕСЛИОШИБКА, чтобы скрыть несовпадающие ключи. Месяц спустя кто-то удалил столбец, и одна из этих формул перестала работать.  <code>#REF!</code>. Скажите, что изображено на вашем листе.</p>
 
-    <p>Your replacement value. The broken formula looks exactly like an ordinary unmatched key. Here is the run.</p>
+    <p>Ваша восстановительная стоимость. Сломанная формула выглядит точно так же, как обычный непарный ключ. Вот и бег.</p>
 
     <pre><code>=IFERROR(#REF! * 2, "hidden")     hidden
 =IFNA(   #REF! * 2, "hidden")     #REF!</code></pre>
 
-    <p><code>IFNA</code> takes the same two arguments and catches <strong>only</strong> <code>#N/A</code>. Everything else passes straight through and stays visible. On a lookup that is the right instrument almost every time, because <code>#N/A</code> is the one error a lookup is entitled to produce. A <code>#REF!</code>, a <code>#VALUE!</code> or a <code>#NAME?</code> coming out of a lookup means something is broken, and you want to be told.</p>
+    <p><code>IFNA</code>  принимает те же два аргумента и ловит  <strong>only</strong> <code>#N/A</code>. Все остальное проходит насквозь и остается видимым. При поиске почти всегда это правильный инструмент, потому что  <code>#N/A</code>  это единственная ошибка, которую может произвести поиск. А  <code>#REF!</code>, а  <code>#VALUE!</code>  или  <code>#NAME?</code>  выход из поиска означает, что что-то сломано, и вы хотите, чтобы вам об этом сказали.</p>
 
-    <p>Both still hide the unmatched key itself, which is the case you meant to handle:</p>
+    <p>Оба по-прежнему скрывают сам несовпадающий ключ, и это именно тот случай, который вы хотели обработать:</p>
 
     <pre><code>=IFERROR(MATCH("Sofa", Products[Product], 0), "hidden")     hidden
 =IFNA(   MATCH("Sofa", Products[Product], 0), "hidden")     hidden</code></pre>
 
-    <p>So the choice is simple. On anything that is a lookup, reach for IFNA. Keep IFERROR for the cases where the error genuinely is expected and is not <code>#N/A</code>, the commonest being a division whose denominator can legitimately be zero.</p>
+    <p>Так что выбор прост. Во всем, что является поиском, используйте IFNA. Сохраняйте ЕСЛИОШИБКА для случаев, когда ошибка действительно ожидается, а не возникает.  <code>#N/A</code>, самым распространенным из которых является деление, знаменатель которого может законно равняться нулю.</p>
 
-    <p>That division case deserves its own sentence, because zero and unknown are different there too. <code>=IFERROR(A2/B2, 0)</code> on a month with no orders reports a conversion rate of 0%, which reads as "we converted nobody" rather than "there was nobody to convert". If that distinction matters to your reader, say so: <code>=IF(B2=0, "no orders", A2/B2)</code> costs the same to type and cannot be misread.</p>
+    <p>Этот случай деления заслуживает отдельного приговора, потому что ноль и неизвестное здесь тоже различны.  <code>=IFERROR(A2/B2, 0)</code>  за месяц без заказов коэффициент конверсии составляет 0%, что означает «мы никого не конвертировали», а не «некого было конвертировать». Если это различие важно для вашего читателя, так и скажите:  <code>=IF(B2=0, "no orders", A2/B2)</code>  ввод стоит одинаково и не может быть неправильно прочитан.</p>
   </div>
 
   <div class="step">
-    <h2>7. The old ISERROR pattern, and why IFERROR replaced it</h2>
+    <h2>7. Старый паттерн ЕСЛИОШИБКА и почему его заменили ЕСЛИОШИБКА</h2>
 
-    <p>You will meet this shape in inherited workbooks, and it is worth being able to read.</p>
+    <p>Эту форму вы встретите в унаследованных рабочих тетрадях, и ее стоит уметь читать.</p>
 
     <pre><code>=IF(ISERROR(VLOOKUP(A2,Costs,2,FALSE)), 0, VLOOKUP(A2,Costs,2,FALSE))</code></pre>
 
-    <p>It does the same job the long way round. The lookup is written twice: once to test whether it fails, once to produce the answer when it does not. That is worse on three counts. It is twice as much to read. Excel computes the lookup twice rather than once, which is invisible on a hundred rows and noticeable on fifty thousand. And any future edit has to be made in two places, so the two copies drift apart and the sheet starts testing one formula and returning another.</p>
+    <p>В целом он выполняет ту же самую работу. Поиск записывается дважды: один раз, чтобы проверить, не сработал ли он, и один раз, чтобы получить ответ, если это не так. Это хуже по трем пунктам. Читать в два раза больше. Excel выполняет поиск дважды, а не один раз, что незаметно для ста строк и заметно для пятидесяти тысяч. И любое будущее редактирование должно производиться в двух местах, поэтому две копии расходятся, и лист начинает проверять одну формулу и возвращать другую.</p>
 
     <pre><code>=IFERROR(VLOOKUP(A2,Costs,2,FALSE), 0)</code></pre>
 
-    <p>Same behaviour, one copy of the lookup. When you find the old pattern, this replacement is safe and mechanical. The relatives <code>ISERR</code>, <code>ISNA</code> and <code>IFERROR</code> all still have their uses, but <code>ISNA</code> earns its keep in a counting formula, as in section five, rather than wrapped around the thing it is testing.</p>
+    <p>То же поведение, одна копия поиска. Когда вы найдете старый образец, эта замена будет безопасной и механической. Родственники  <code>ISERR</code>, <code>ISNA</code> and <code>IFERROR</code>  все еще имеют свое применение, но  <code>ISNA</code>  зарабатывает себе на жизнь в формуле подсчета, как в пятом разделе, а не обертывается вокруг того, что он тестирует.</p>
   </div>
 
   <div class="step">
-    <h2>8. Where the wrapper goes: at the edge, not in the middle</h2>
+    <h2>8. Куда идет обертка: по краю, а не посередине</h2>
 
-    <p>A wrapper is a decision about presentation, so it belongs where the sheet is presented, not in the middle of a calculation chain.</p>
+    <p>Обертка — это решение о представлении, поэтому она находится там, где представлен лист, а не в середине цепочки вычислений.</p>
 
-    <p>Put IFERROR around the last step and the intermediate columns stay honest. You can still see which rows failed, you can still count them, and only the final display column is smoothed. Put it around an early step instead and the failure is converted into a plausible number at row level, then carried through every subsequent column, and by the time anyone looks there is nothing left to find.</p>
+    <p>Поместите ЕСЛИОШИБКА вокруг последнего шага, и промежуточные столбцы останутся честными. Вы по-прежнему можете видеть, какие строки не удалось выполнить, их по-прежнему можно подсчитать, и сглаживается только последний столбец отображения. Вместо этого поместите его на ранний шаг, и ошибка преобразуется в правдоподобное число на уровне строки, затем переносится на каждый последующий столбец, и к тому времени, когда кто-нибудь начнет искать, уже нечего будет найти.</p>
 
-    <p>There is a related habit worth adopting from the same instinct: keep a small check block on any sheet that matters, off to one side, holding the row count, the error count and the total, all as formulas. Then a broken lookup shows up as a number that moved rather than as a colour nobody noticed. <a href="../excel-check-your-work/">Checking your work before anyone else does</a> is the fuller version of that idea.</p>
+    <p>Существует схожая привычка, которую стоит перенять из того же инстинкта: держите небольшой блок-чек на любом важном листе, в стороне, в стороне, сохраняя количество строк, количество ошибок и общее количество — все в виде формул. Тогда неверный поиск отображается в виде числа, которое переместилось, а не в виде цвета, который никто не заметил.  <a href="../excel-check-your-work/">проверять свою работу, прежде чем это сделает кто-то другой</a>  является более полной версией этой идеи.</p>
   </div>
 
-  <h2>The full before and after</h2>
+  <h2>Полное до и после</h2>
 
-  <p>Same lookup, same missing lamps, same sixteen rows.</p>
+  <p>Тот же поиск, те же недостающие лампы, те же шестнадцать рядов.</p>
 
   <h3>Before</h3>
   <pre><code>=IFERROR(INDEX(CostList[Cost], MATCH([@Product], CostList[Product], 0)), 0)
@@ -378,7 +378,7 @@
 Cost of goods    5,196
 Gross profit     4,694
 Gross margin     47.5%</code></pre>
-  <p>A clean sheet with no errors on it, reporting a margin that is 8.9 percentage points too high, with nothing anywhere to indicate that four rows are unpriced.</p>
+  <p>Чистый лист без ошибок, в котором указана маржа на 8,9 процентных пункта выше, и нигде нет ничего, что указывало бы на то, что цены в четырех строках не указаны.</p>
 
   <h3>After</h3>
   <pre><code># the lookup column, honest about a miss
@@ -388,105 +388,105 @@ Gross margin     47.5%</code></pre>
 Rows                =COUNTA(Orders[OrderID])          16
 Rows with no cost   =COUNTIF(D2:D17,"no cost on file")  4
 Units with no cost  =SUMIFS(...)                       40</code></pre>
-  <p>Now the sheet says what it knows. The lookup still does not crash the page, because the unmatched rows carry a label rather than an error. The count is a number on the sheet rather than a fact in somebody's head. And the margin is not published until the four rows are either priced or explicitly excluded, which is a decision a person makes rather than a side effect of a wrapper.</p>
+  <p>Теперь лист говорит то, что знает. Поиск по-прежнему не приводит к сбою страницы, поскольку несовпадающие строки содержат метку, а не ошибку. Число — это число на листе, а не факт в чьей-то голове. И маржа не публикуется до тех пор, пока четыре строки не будут оценены или явно исключены, что является решением, которое принимает человек, а не побочным эффектом оболочки.</p>
 
-  <p>The claim underneath, and it is the whole reason to care: <strong>hiding four of sixteen rows moved the reported gross margin from 38.6% to 47.5%, and every individual number on the sheet was arithmetically correct the entire time.</strong></p>
+  <p>Претензия ниже, и это единственная причина для беспокойства:  <strong>скрытие четырех из шестнадцати строк увеличило заявленную валовую прибыль с 38,6% до 47,5%, и каждое отдельное число на листе все время было арифметически правильным.</strong></p>
 
   <div class="step">
-    <h2>Edge cases that break error handling quietly</h2>
+    <h2>Крайние случаи, которые незаметно нарушают обработку ошибок</h2>
 
-    <p>Six that each cost somebody an afternoon.</p>
+    <p>Шесть, каждая из которых стоила кому-то дня.</p>
 
-    <p><strong>IFERROR around the whole formula when only one part can fail.</strong> Wrapping <code>A2*VLOOKUP(...)</code> means a text value in A2 also gets hidden. Wrap the part that is allowed to fail, not the sentence it sits in.</p>
+    <p><strong>ЕСЛИОШИБКА по всей формуле, когда только одна часть может дать сбой.</strong> Wrapping <code>A2*VLOOKUP(...)</code>  означает, что текстовое значение в A2 также будет скрыто. Оберните ту часть, которая может выйти из строя, а не предложение, в котором она находится.</p>
 
-    <p><strong>Zero-filled errors inside an average.</strong> A mean over a column where failures became zeros is dragged toward zero by exactly the failures you could not see. This is the same problem NULLs cause in a database, and <a href="../sql-null/">the SQL version of it</a> is worth reading because the mechanism is identical.</p>
+    <p><strong>Ошибки с заполнением нулями внутри среднего значения.</strong>  Среднее значение в столбце, где отказы стали нулями, перетягивается к нулю именно из-за тех отказов, которые вы не могли видеть. Это та же проблема, которую вызывают NULL в базе данных, и  <a href="../sql-null/">его SQL-версия</a>  стоит прочитать, потому что механизм идентичен.</p>
 
-    <p><strong><code>""</code> counted as a record.</strong> COUNTA and many pivot counts treat an empty string as present. Row counts come out right by luck and wrong by a few whenever the failure rate changes.</p>
+    <p><strong><code>""</code>  считается рекордом.</strong>  COUNTA и многие сводные счетчики рассматривают пустую строку как присутствующую. Количество строк оказывается верным по счастливой случайности и неправильным на несколько раз всякий раз, когда меняется частота неудач.</p>
 
-    <p><strong>An IFERROR that has outlived its reason.</strong> Somebody wrapped a formula in 2023 because of a one-off import problem. The wrapper is still there and is now hiding a real failure that started in June. If you cannot say what error a wrapper exists to catch, it should not be there.</p>
+    <p><strong>ЕСЛИОШИБКА, которая изжила свою причину.</strong>  Кто-то свернул формулу в 2023 году из-за разовой проблемы с импортом. Обертка все еще на месте и теперь скрывает настоящий провал, начавшийся в июне. Если вы не можете сказать, какую ошибку должна перехватывать оболочка, ее там не должно быть.</p>
 
-    <p><strong>Errors inside conditional formatting and charts.</strong> A hidden error becomes a zero-height bar or an uncoloured cell, both of which read as a genuine low value. The chart is the last place you want a silent substitution.</p>
+    <p><strong>Ошибки внутри условного форматирования и диаграмм.</strong>  Скрытая ошибка становится полосой нулевой высоты или неокрашенной ячейкой, и то и другое считывается как действительно низкое значение. График — последнее место, где вам нужна молчаливая замена.</p>
 
-    <p><strong>IFERROR on a spilled array.</strong> Wrapping a dynamic array function returns the replacement for the entire spill rather than cell by cell, so one bad row can blank out the whole result. Check what the wrapper covers before you trust it.</p>
+    <p><strong>ЕСЛИОШИБКА в развернутом массиве.</strong>  Обертывание функции динамического массива возвращает замену всего сброса, а не ячейки за ячейкой, поэтому одна неверная строка может стереть весь результат. Прежде чем доверять этому, проверьте, что скрывается под оберткой.</p>
   </div>
 
-  <h2>Why this works</h2>
+  <h2>Почему это работает</h2>
 
-  <p>The core distinction on this page is older than Excel and was worked out carefully in database theory: a value that is missing is not a value that is zero, and a system that conflates them will produce arithmetic that is locally correct and globally wrong. Codd's extension of the relational model made the case that missing information needs its own marker, precisely so that aggregates can decline to include what they do not know instead of quietly assuming it away (Codd, 1979, <em>ACM Transactions on Database Systems</em>, 4(4), 397–434). Excel's <code>#N/A</code> is that marker, and its habit of poisoning a SUM is the feature, not the bug: it is the aggregate refusing to answer a question it cannot fully answer. IFERROR removes the marker. Everything on this page follows from that one sentence.</p>
+  <p>Основное различие на этой странице старше Excel и было тщательно разработано в теории баз данных: отсутствующее значение не является значением, равным нулю, и система, которая их объединяет, выдает арифметические действия, которые являются локально правильными и глобально неправильными. Расширение реляционной модели, предложенное Коддом, показало, что недостающая информация нуждается в своем собственном маркере именно для того, чтобы агрегаты могли отказываться включать в себя то, чего они не знают, вместо того, чтобы спокойно предполагать это (Codd, 1979,  <em>Транзакции ACM в системах баз данных</em>, 4(4), 397–434). Excel  <code>#N/A</code>  это тот самый маркер, и его привычка искажать СУММУ — это особенность, а не ошибка: это агрегат, отказывающийся отвечать на вопрос, на который он не может ответить полностью. ЕСЛИОШИБКА удаляет маркер. Все на этой странице следует из этого одного предложения.</p>
 
-  <p>The reason it matters more in a spreadsheet than in a database is that spreadsheets are audited by eye. Field studies of operational workbooks have found errors to be common rather than exceptional, and the ones that survive review are consistently the ones that produce plausible output rather than visible breakage (Panko, 1998, <em>Journal of End User Computing</em>, 10(2), 15–21). An error message is the cheapest audit tool a spreadsheet has, because it is the only part of the sheet that draws attention to itself. Trading it for a tidy-looking zero is trading the one thing that was working.</p>
+  <p>Причина, по которой это имеет большее значение в электронной таблице, чем в базе данных, заключается в том, что электронные таблицы проверяются на глаз. Полевые исследования рабочих журналов показали, что ошибки являются скорее обычными, чем исключительными, и те, которые выдерживают проверку, неизменно дают правдоподобные результаты, а не видимые нарушения (Панко, 1998,  <em>Журнал вычислений для конечных пользователей</em>, 10(2), 15–21). Сообщение об ошибке — самый дешевый инструмент аудита электронной таблицы, поскольку это единственная часть таблицы, которая привлекает к себе внимание. Обменять его на аккуратный ноль — значит обменять то единственное, что работало.</p>
 
-  <p>There is also a reason this page kept asking you to commit to an answer before showing one. Prompting a reader to generate something themselves, a prediction, an explanation, a comparison, produces better retention than the same material read straight through, and it is one of a small number of study techniques that survive meta-analysis (Fiorella &amp; Mayer, 2016, <em>Educational Psychology Review</em>, 28(4), 717–741). The 77.5 against 103.33 sticks because you were asked whether they would differ before you saw that they did.</p>
+  <p>Есть также причина, по которой эта страница постоянно просит вас дать ответ, прежде чем показывать его. Побуждение читателя к созданию чего-то самостоятельно, предсказанию, объяснению, сравнению обеспечивает лучшее запоминание, чем тот же материал, прочитанный целиком, и это один из небольшого числа методов обучения, которые выдерживают метаанализ (Fiorella &amp; Mayer, 2016,  <em>Обзор педагогической психологии</em>, 28(4), 717–741). 77,5 против 103,33 верны, потому что вас спросили, будут ли они отличаться, прежде чем вы это увидели.</p>
 
-  <h2>Using this on your own project</h2>
+  <h2>Использование этого в вашем собственном проекте</h2>
 
-  <p>Auditing every wrapper in an inherited workbook is miserable and you will stop at the third sheet. Do this instead, in order.</p>
+  <p>Аудит каждой обертки в унаследованной книге утомителен, и вы остановитесь на третьем листе. Вместо этого сделайте это по порядку.</p>
 
   <ol>
-    <li><strong>Find them.</strong> Ctrl+F, search for <code>IFERROR</code>, tick "Look in: Formulas". The list you get back is your work queue.</li>
-    <li><strong>For each one, ask what error it exists to catch.</strong> If you cannot name it, that wrapper is hiding something unknown, and it goes to the top of the list.</li>
-    <li><strong>Count before you hide.</strong> <code>=SUMPRODUCT(--ISNA(range))</code> beside the column. Do this before deciding anything.</li>
-    <li><strong>Swap IFERROR for IFNA on every lookup</strong>, so a broken formula stops disguising itself as a missing key.</li>
-    <li><strong>Replace zero-fills with a label</strong> while you are working, and only convert to a number at the very end if a number is genuinely the truth.</li>
-    <li><strong>Put the error count on the sheet</strong>, in a check block with the row count and the total, so the next surprise is a number that moved rather than a thing nobody saw.</li>
+    <li><strong>Найдите их.</strong>  Ctrl+F, найти  <code>IFERROR</code>ставим галочку «Посмотреть в: Формулы». Список, который вы получите обратно, — это ваша рабочая очередь.</li>
+    <li><strong>Для каждого из них спросите, какую ошибку необходимо уловить.</strong>  Если вы не можете назвать его, значит, эта оболочка скрывает что-то неизвестное и перемещается в начало списка.</li>
+    <li><strong>Посчитайте, прежде чем прятаться.</strong> <code>=SUMPRODUCT(--ISNA(range))</code>  рядом с колонной. Сделайте это, прежде чем что-либо решить.</li>
+    <li><strong>Замените IFERROR на IFNA при каждом поиске.</strong>, поэтому неработающая формула перестает маскироваться под отсутствующий ключ.</li>
+    <li><strong>Заменить заполнение нулями меткой</strong>  пока вы работаете, и конвертируйте в число только в самом конце, если число действительно соответствует истине.</li>
+    <li><strong>Запишите количество ошибок на листе</strong>, в блоке проверки с количеством строк и суммой, поэтому следующим сюрпризом будет число, которое переместилось, а не то, что никто не видел.</li>
   </ol>
 
-  <p>If you have paper nearby, one optional sketch is worth five minutes. Draw your own lookup column as a strip of cells, mark the failures with a cross, and then write next to it the one number your report actually publishes. Draw an arrow from the crosses to that number. If you cannot draw the arrow, the failures are not reaching the summary, and that is the case where hiding them is fine.</p>
+  <p>Если у вас под рукой есть бумага, один дополнительный эскиз стоит пяти минут. Нарисуйте свой собственный столбец поиска в виде полосы ячеек, отметьте неудачи крестиком, а затем напишите рядом с ним одно число, которое фактически публикует ваш отчет. Нарисуйте стрелку от крестиков к этому числу. Если вы не можете нарисовать стрелку, сбои не попадают в сводку, и в этом случае их можно скрыть.</p>
 
-  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: Excel, SQL, Python, and the working habits around them.</div>
+  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: Excel, SQL, Python и связанные с ними методы работы.</div>
 
-  <h2>The whole thing on one screen</h2>
+  <h2>Все на одном экране</h2>
 
-  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
+  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
 
   <table>
-    <tr><th>Thing</th><th>What it does</th></tr>
-    <tr><td><code>IFERROR(x, y)</code></td><td>Shows y if x returns any error at all. Runs x once.</td></tr>
-    <tr><td><code>IFNA(x, y)</code></td><td>Shows y only for <code>#N/A</code>. Everything else stays visible.</td></tr>
-    <tr><td>Which to use on a lookup</td><td>IFNA. <code>#N/A</code> is the only error a lookup is entitled to.</td></tr>
-    <tr><td><code>#N/A</code></td><td>A statement about your data: the key is not there.</td></tr>
-    <tr><td><code>#REF!</code></td><td>A statement about your formula: it is broken and will not recover.</td></tr>
-    <tr><td>Errors and SUM</td><td>One error in the range makes the total an error. That is the alarm.</td></tr>
-    <tr><td>Fill with <code>0</code></td><td>Claims the value is zero. Drags averages and totals.</td></tr>
-    <tr><td>Fill with <code>""</code></td><td>Text, not empty. Skipped by AVERAGE and COUNT, counted by COUNTA.</td></tr>
-    <tr><td>Fill with a word</td><td>Truthful and impossible to overlook. The default while working.</td></tr>
-    <tr><td>Count the misses</td><td><code>=SUMPRODUCT(--ISNA(range))</code>.</td></tr>
-    <tr><td>Where to wrap</td><td>The final display step, never an intermediate calculation.</td></tr>
-    <tr><td>What to wrap</td><td>Only the part that is allowed to fail.</td></tr>
-    <tr><td>The old pattern</td><td><code>IF(ISERROR(x),y,x)</code> computes x twice. Replace with IFERROR.</td></tr>
-    <tr><td>Division by zero</td><td><code>IF(denominator=0,"no orders",a/b)</code> beats hiding it as 0%.</td></tr>
-    <tr><td>The check block</td><td>Row count, error count, total. Three formulas, always visible.</td></tr>
+    <tr><th>Thing</th><th>Что он делает</th></tr>
+    <tr><td><code>IFERROR(x, y)</code></td><td>Показывает y, если x вообще возвращает какую-либо ошибку. Запускается x один раз.</td></tr>
+    <tr><td><code>IFNA(x, y)</code></td><td>Показывает y только для  <code>#N/A</code>. Все остальное остается видимым.</td></tr>
+    <tr><td>Что использовать при поиске</td><td>IFNA. <code>#N/A</code>  это единственная ошибка, на которую имеет право поиск.</td></tr>
+    <tr><td><code>#N/A</code></td><td>Заявление по поводу ваших данных: ключа нет.</td></tr>
+    <tr><td><code>#REF!</code></td><td>Высказывание о вашей формуле: она сломана и не восстановится.</td></tr>
+    <tr><td>Ошибки и СУММА</td><td>Одна ошибка в диапазоне приводит к тому, что итоговая сумма становится ошибкой. Это тревога.</td></tr>
+    <tr><td>Заполните  <code>0</code></td><td>Утверждает, что значение равно нулю. Перетаскивает средние и итоговые значения.</td></tr>
+    <tr><td>Заполните  <code>""</code></td><td>Текст, не пустой. Пропущено AVERAGE и COUNT, подсчитано COUNTA.</td></tr>
+    <tr><td>Заполните словом</td><td>Правдиво и невозможно не заметить. По умолчанию во время работы.</td></tr>
+    <tr><td>Подсчитайте промахи</td><td><code>=SUMPRODUCT(--ISNA(range))</code>.</td></tr>
+    <tr><td>Куда завернуть</td><td>Последний этап отображения, а не промежуточный расчет.</td></tr>
+    <tr><td>Что завернуть</td><td>Только та часть, которая может выйти из строя.</td></tr>
+    <tr><td>Старый шаблон</td><td><code>IF(ISERROR(x),y,x)</code>  вычисляет x дважды. Замените на ЕСЛИОШИБКА.</td></tr>
+    <tr><td>Деление на ноль</td><td><code>IF(denominator=0,"no orders",a/b)</code>  лучше скрывать это как 0%.</td></tr>
+    <tr><td>Контрольный блок</td><td>Количество строк, количество ошибок, общее количество. Три формулы, всегда видимые.</td></tr>
   </table>
 
-  <div class="note"><strong>The one habit to keep.</strong> Count the errors before you hide them, and put the count on the sheet. A wrapper you added after reading a number is a presentation choice; a wrapper you added instead of reading the number is a decision you did not know you were making. If a formula breaks in a way this page does not cover, there is a general <a href="../technical-tenacity/">diagnosis loop for being stuck</a>.</div>
+  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Подсчитайте ошибки, прежде чем скрыть их, и запишите их на лист. Обертка, которую вы добавили после прочтения числа, — это выбор презентации; обертка, которую вы добавили вместо чтения номера, — это решение, о котором вы не подозревали. Если формула нарушается таким образом, который не описан на этой странице, существует общая  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>.</div>
 
-  <p>One last thought, and I would genuinely like other people's answers. The worst one I have met was an IFERROR wrapped around a currency conversion, so a missing rate became zero, and a whole region's revenue was reported as nil for two months while every subtotal on the page added up perfectly. What has an IFERROR hidden from you, and what finally made you look?</p>
+  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Худшим из тех, что я встречал, было IFERROR, связанное с конвертацией валюты, поэтому недостающая ставка становилась нулевой, а доход всего региона в течение двух месяцев отображался как нулевой, в то время как все промежуточные итоги на странице складывались идеально. Что скрыло от вас ЕСЛИОШИБКА и что, наконец, заставило вас взглянуть?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Codd, E. F. (1979). Extending the database relational model to capture more meaning. <em>ACM Transactions on Database Systems</em>, 4(4), 397–434.</li>
-    <li>Panko, R. R. (1998). What we know about spreadsheet errors. <em>Journal of End User Computing</em>, 10(2), 15–21.</li>
-    <li>Fiorella, L., &amp; Mayer, R. E. (2016). Eight ways to promote generative learning. <em>Educational Psychology Review</em>, 28(4), 717–741.</li>
+    <li>Кодд, EF (1979). Расширение реляционной модели базы данных для более глубокого понимания.  <em>Транзакции ACM в системах баз данных</em>, 4(4), 397–434.</li>
+    <li>Панко, Р.Р. (1998). Что мы знаем об ошибках в электронных таблицах.  <em>Журнал вычислений для конечных пользователей</em>, 10(2), 15–21.</li>
+    <li>Фиорелла Л. и Майер Р.Э. (2016). Восемь способов продвижения генеративного обучения.  <em>Обзор педагогической психологии</em>, 28(4), 717–741.</li>
   </ul>
 
   <div class="book">
-    <strong>You wrapped it in IFERROR and the error went quiet, which is not the same as gone.</strong>
-    <p><em>Excel for Analysts</em> is 378 pages, error handling written out so you hide the errors you understand and keep the ones you do not.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-iferror'})">Excel for Analysts, $19 &rarr;</a>
+    <strong>Вы завернули его в ЕСЛИОШИБКА, и ошибка исчезла, что не то же самое, что исчезло.</strong>
+    <p><em>Excel для аналитиков</em>  состоит из 378 страниц, в нем прописана обработка ошибок, поэтому вы можете скрыть ошибки, которые понимаете, и сохранить те, которые вам неизвестны.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-iferror'})">Excel для аналитиков, 19 долларов США →</a>
   </div>
 
   <div class="cta">
-    <strong>Practice error handling on data that actually breaks.</strong>
-    <p style="margin:6px 0 0">The <a href="../../excel/">Excel Kit</a> gives you the repetitions: lookup exercises with deliberately incomplete reference tables, flash cards on exactly the IFERROR-against-IFNA and zero-against-blank decisions from this page, and a mock exam that asks what a total will say before you press Enter. You now own the method; the kit is the practice. Nothing to install, no account needed.</p>
-    <a class="btn" href="../../excel/">Open the Excel Kit →</a>
+    <strong>Практикуйте обработку ошибок на данных, которые на самом деле не работают.</strong>
+    <p style="margin:6px 0 0">The <a href="../../excel/">Excel комплект</a> gives you the repetitions: lookup exercises with deliberately incomplete reference tables, flash cards on exactly the IFERROR-against-IFNA and zero-against-blank decisions from this page, and a mock exam that asks what a total will say before you press Enter. You now own the method; the kit is the practice. Nothing to install, no account needed.</p>
+    <a class="btn" href="../../excel/">Откройте набор Excel →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> · <a href="../excel-index-match/">INDEX MATCH vs VLOOKUP</a> · <a href="../excel-absolute-vs-relative-references/">Absolute vs Relative References</a> · <a href="../vlookup-vs-xlookup/">VLOOKUP vs XLOOKUP</a> · <a href="../excel-pivot-tables/">Make a Pivot Table</a> · <a href="../excel-check-your-work/">Check Your Work</a> · <a href="../excel-name-your-data/">Name Your Data</a> · <a href="../excel-sumifs/">SUMIFS and COUNTIFS</a> · <a href="../excel-if-family/">The IF Family</a> · <a href="../budget-vs-actual-variance/">Budget vs Actual Variance</a> · <a href="../../excel/">Excel Kit</a> · <a href="../sql-null/">NULL in SQL</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../sql-find-duplicates/">Find Duplicates in SQL</a> · <a href="../pandas-groupby/">pandas groupby</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../report-vs-analysis/">Report vs Analysis</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../projects/">Portfolio Projects</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../excel-index-match/">ИНДЕКСНОЕ СООТВЕТСТВИЕ против ВПР</a> · <a href="../excel-absolute-vs-relative-references/">Абсолютные и относительные ссылки</a> · <a href="../vlookup-vs-xlookup/">ВПР против XLOOKUP</a> · <a href="../excel-pivot-tables/">Создайте сводную таблицу</a> · <a href="../excel-check-your-work/">Проверьте свою работу</a> · <a href="../excel-name-your-data/">Назовите свои данные</a> · <a href="../excel-sumifs/">СУММИФЫ и СЧЁТЕЛИ</a> · <a href="../excel-if-family/">Семья ИФ</a> · <a href="../budget-vs-actual-variance/">Бюджет и фактическое отклонение</a> · <a href="../../excel/">Excel комплект</a> · <a href="../sql-null/">NULL в SQL</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../sql-find-duplicates/">Найти дубликаты в SQL</a> · <a href="../pandas-groupby/">панды группируются</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../report-vs-analysis/">Отчет против анализа</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../projects/">Портфельные проекты</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

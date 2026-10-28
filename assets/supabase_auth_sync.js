@@ -615,7 +615,7 @@ if (typeof window !== 'undefined') {
   if (!framed) return;
   document.documentElement.classList.add('apk-framed');
   const st = document.createElement('style');
-  st.textContent = '.apk-framed #loginBtn,.apk-framed #logoutBtn,.apk-framed #userEmail,.apk-framed [title="Back to all kits"]{display:none !important}';
+  st.textContent = ".apk-framed #loginBtn,.apk-framed #logoutBtn,.apk-framed #userEmail,.apk-framed [title=\"Вернуться ко всем наборам\"]{display:none !important}";
   document.head.appendChild(st);
 })();
 

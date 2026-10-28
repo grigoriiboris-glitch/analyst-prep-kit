@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Budget vs Actual Variance Analysis: The Sign Trap and the Percent Trap — Analyst Prep Kit</title>
-<meta name="description" content="Variance is actual minus budget, but +$11,800 on a cost line is unfavorable. The F/U convention, the two percent traps, and a worked Excel build with SUMIFS.">
+<title>Анализ бюджетных и фактических отклонений: ловушка знаков и ловушка процентов — комплект для подготовки аналитика</title>
+<meta name="description" content="Фактическое отклонение представляет собой минус бюджет, но +11 800 долларов США к строке затрат является неблагоприятным. Соглашение F/U, двухпроцентные ловушки и работающая сборка Excel с SUMIFS.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/budget-vs-actual-variance/">
-<meta property="og:title" content="Budget vs Actual Variance Analysis: The Sign Trap and the Percent Trap">
-<meta property="og:description" content="The same plus sign means good news on a revenue line and bad news on a cost line. Why analysts label F and U instead of trusting the sign, and why a 43.8% variance can matter less than a 2.5% one.">
+<meta property="og:title" content="Анализ бюджетных и фактических отклонений: ловушка знаков и ловушка процентов">
+<meta property="og:description" content="Один и тот же знак плюса означает хорошие новости по линии доходов и плохие новости по линии затрат. Почему аналитики маркируют F и U вместо того, чтобы доверять знаку, и почему отклонение в 43,8% может иметь меньшее значение, чем отклонение в 2,5%.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/budget-vs-actual-variance.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/budget-vs-actual-variance/">
@@ -134,18 +134,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../excel/">Excel Kit</a> · <a href="../">All guides</a></p>
-  <h1>Budget vs Actual Variance Analysis: The Sign Trap and the Percent Trap</h1>
-  <p class="meta">Actual minus budget, and why the sign means opposite things two rows apart · Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-07">August 7, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../excel/">Excel комплект</a> · <a href="../">Все руководства</a></p>
+  <h1>Анализ бюджетных и фактических отклонений: ловушка знаков и ловушка процентов</h1>
+  <p class="meta">Фактический бюджет минус, и почему знак означает противоположные вещи, находящиеся в двух рядах друг от друга · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-07">7 августа 2026 г.</time></p>
 
-  <p>By the end of this page you can read a budget vs actual table without being fooled by it, and build one in Excel that does not fool anyone else. You will know the variance formula, why analysts write F and U instead of trusting plus and minus, the two ways percent variance lies, and how to say the whole table in one sentence. It is about twenty minutes.</p>
+  <p>К концу этой страницы вы сможете прочитать таблицу сравнения бюджета и фактических данных, не обманываясь ею, и построить такую ​​таблицу в Excel, которая не обманет никого другого. Вы узнаете формулу дисперсии, почему аналитики пишут F и U вместо того, чтобы доверять плюсу и минусу, в чем состоит процентная дисперсия и как выразить всю таблицу в одном предложении. Это около двадцати минут.</p>
 
-  <p>Here is what to actually do today. Open the last variance table you were sent and find its biggest percentage. Then find its biggest dollar amount. If they are different rows, and they usually are, you now know which row deserved the attention, and it is probably not the one that got it.</p>
+  <p>Вот чем на самом деле заняться сегодня. Откройте последнюю таблицу отклонений, которую вам прислали, и найдите ее наибольший процент. Затем найдите его самую большую сумму в долларах. Если это разные строки, а это обычно так, теперь вы знаете, какая строка заслуживает внимания, и, вероятно, это не та, которая его получила.</p>
 
-  <p>The short version: variance is actual minus budget. On a revenue line, positive is good. On a cost line, positive is bad. So analysts label every line F for favorable or U for unfavorable, rank by dollars, and flag by percent.</p>
+  <p>Вкратце: отклонение — это факт минус бюджет. С точки зрения доходов, позитив – это хорошо. С точки зрения затрат положительное – это плохо. Поэтому аналитики обозначают каждую строку F как благоприятную или U как неблагоприятную, ранжируют по долларам и отмечают процентами.</p>
 
-  <p>The sign flip is the trap people fall into first, so it gets the picture.</p>
+  <p>Переворот знака — это ловушка, в которую люди попадают в первую очередь, поэтому картина становится понятнее.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 300" role="img" aria-labelledby="bvaTitle bvaDesc" xmlns="http://www.w3.org/2000/svg">
@@ -178,98 +178,98 @@
         <text x="662" y="118" font-size="20" font-weight="700" fill="#B45309">U ✕</text>
       </g>
     </svg>
-    <figcaption>Two identical overshoots above the dashed budget line. On revenue the extra is favorable; on cost the same shape is unfavorable. The sign alone cannot tell you which one you are looking at.</figcaption>
+    <figcaption>Два одинаковых превышения над пунктирной бюджетной линией. По доходам дополнительная выгода; по стоимости такая же форма невыгодна. Сам по себе знак не может сказать вам, на кого вы смотрите.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>What you'll learn</strong>
+    <strong>Что вы узнаете</strong>
     <ol>
-      <li>The variance formula, and the sign trap</li>
-      <li>The worked table, labeled F and U</li>
-      <li>Percent variance, and its two traps</li>
-      <li>Set a materiality floor before you read</li>
-      <li>Build it in Excel with SUMIFS</li>
-      <li>The full before and after</li>
-      <li>Present it: the variance walk and the one-sentence claim</li>
-      <li>Edge cases that flip meanings in real reports</li>
-      <li>Why this works</li>
-      <li>Using this on your own project</li>
-      <li>The whole thing on one screen</li>
+      <li>Формула дисперсии и ловушка знака</li>
+      <li>Обработанный стол с маркировкой F и U.</li>
+      <li>Процентная дисперсия и две ее ловушки</li>
+      <li>Прежде чем читать, установите минимальный уровень существенности</li>
+      <li>Создайте его в Excel с помощью SUMIFS.</li>
+      <li>Полное до и после</li>
+      <li>Представьте это: обход дисперсии и утверждение, состоящее из одного предложения.</li>
+      <li>Крайние случаи, меняющие значения в реальных отчетах</li>
+      <li>Почему это работает</li>
+      <li>Использование этого в вашем собственном проекте</li>
+      <li>Все на одном экране</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Every number on this page is verified.</strong> The worked example is a small department's month, eight lines, shown in full below. Every variance, percentage, subtotal, and walk step was computed in a script before it went on the page, so you can check any cell by hand and it will agree.</div>
+  <div class="note"><strong>Каждый номер на этой странице проверен.</strong>  Проработанный пример — месяц небольшого отдела, восемь строк, полностью показанный ниже. Каждое отклонение, процент, промежуточный итог и шаг обхода вычислялись в сценарии до того, как они появлялись на странице, поэтому вы можете проверить любую ячейку вручную, и она согласится.</div>
 
   <div class="step">
-    <h2>1. The variance formula, and the sign trap</h2>
+    <h2>1. Формула дисперсии и ловушка знака</h2>
 
-    <p>Before the explanation: two lines both came in over budget, revenue by $12,400 and contractor spend by $11,800. One of those is good news. Say which, and say what told you.</p>
+    <p>Перед пояснением: обе строки превысили бюджет: выручка на 12 400 долларов США и расходы подрядчиков на 11 800 долларов США. Одна из них – хорошие новости. Скажи что и скажи то, что тебе сказало.</p>
 
-    <p>Variance is actual minus budget. Budget is the number you planned, actual is the number that happened, and the variance is the gap between them, with a direction. Revenue budgeted at $250,000 that came in at $262,400 has a variance of positive $12,400. Contractor spend budgeted at $20,000 that came in at $31,800 has a variance of positive $11,800.</p>
+    <p>Отклонение представляет собой фактическое значение минус бюджет. Бюджет — это запланированное вами число, фактическое — это число, которое произошло, а отклонение — это разрыв между ними с указанием направления. Доход, заложенный в бюджет в размере 250 000 долларов США и составивший 262 400 долларов США, имеет положительную разницу в 12 400 долларов США. Расходы подрядчика, заложенные в бюджет в размере 20 000 долларов США, которые составили 31 800 долларов США, имеют положительную разницу в 11 800 долларов США.</p>
 
-    <p>Same formula, same plus sign, opposite meanings. More revenue than planned is good. More spending than planned is bad. The sign only tells you the direction of the miss; the line type tells you whether that direction helped. This is why finance teams do not trust the sign. They add a column that states the verdict directly: F for favorable, meaning the miss helped profit, and U for unfavorable, meaning it hurt profit. The rule in one breath: on revenue lines, over budget is F. On cost lines, over budget is U.</p>
+    <p>Та же формула, тот же знак плюса, противоположные значения. Больше дохода, чем планировалось, это хорошо. Больше расходов, чем планировалось, — это плохо. Знак только указывает вам направление промаха; тип линии сообщает вам, помогло ли это направление. Вот почему финансовые команды не доверяют этому знаку. Они добавляют столбец, в котором прямо указывается вердикт: F означает благоприятный, что означает, что промах помог прибыли, и U означает неблагоприятный, что означает, что он повредил прибыли. Правило на одном дыхании: по статьям доходов превышение бюджета — F. По строкам затрат превышение бюджета — U.</p>
 
-    <p>Some shops flip the formula to budget minus actual so that positive always means favorable on cost lines. That works until someone merges two workbooks with opposite conventions. The F/U label survives both conventions, which is exactly why it exists. Write the formula you used in a cell comment or a header note, and label F/U regardless.</p>
+    <p>Некоторые магазины меняют формулу на бюджет минус фактические расходы, так что положительный результат всегда означает благоприятный с точки зрения затрат. Это работает до тех пор, пока кто-нибудь не объединит две книги с противоположными соглашениями. Этикетка F/U выдерживает обе конвенции, и именно поэтому она существует. Напишите формулу, которую вы использовали, в комментарии к ячейке или примечании к заголовку и независимо от этого пометьте F/U.</p>
   </div>
 
   <div class="step">
-    <h2>2. The worked table, labeled F and U</h2>
+    <h2>2. Обработанный стол с маркировкой F и U.</h2>
 
-    <p>Here is the department. Two revenue lines, six cost lines. Variance is actual minus budget throughout, percent is variance divided by budget, and the F/U column applies the rule from section one.</p>
+    <p>Вот кафедра. Две строки доходов, шесть строк затрат. Отклонение — это фактическое значение минус бюджет, процент — это отклонение, разделенное на бюджет, а в столбце F/U применяется правило из первого раздела.</p>
 
     <table>
-      <tr><th>Line</th><th>Type</th><th>Budget</th><th>Actual</th><th>Variance</th><th>Variance %</th><th>F/U</th></tr>
-      <tr><td>Product revenue</td><td>Revenue</td><td>250,000</td><td>262,400</td><td>+12,400</td><td>+5.0%</td><td>F</td></tr>
-      <tr><td>Services revenue</td><td>Revenue</td><td>60,000</td><td>54,200</td><td>-5,800</td><td>-9.7%</td><td>U</td></tr>
+      <tr><th>Line</th><th>Type</th><th>Budget</th><th>Actual</th><th>Variance</th><th>Отклонение %</th><th>F/U</th></tr>
+      <tr><td>Доход от продукта</td><td>Revenue</td><td>250,000</td><td>262,400</td><td>+12,400</td><td>+5.0%</td><td>F</td></tr>
+      <tr><td>Доход от услуг</td><td>Revenue</td><td>60,000</td><td>54,200</td><td>-5,800</td><td>-9.7%</td><td>U</td></tr>
       <tr><td>Salaries</td><td>Cost</td><td>140,000</td><td>143,500</td><td>+3,500</td><td>+2.5%</td><td>U</td></tr>
       <tr><td>Contractors</td><td>Cost</td><td>20,000</td><td>31,800</td><td>+11,800</td><td>+59.0%</td><td>U</td></tr>
       <tr><td>Software</td><td>Cost</td><td>12,000</td><td>11,400</td><td>-600</td><td>-5.0%</td><td>F</td></tr>
       <tr><td>Travel</td><td>Cost</td><td>3,000</td><td>5,900</td><td>+2,900</td><td>+96.7%</td><td>U</td></tr>
-      <tr><td>Office supplies</td><td>Cost</td><td>800</td><td>1,150</td><td>+350</td><td>+43.8%</td><td>U</td></tr>
+      <tr><td>Канцелярские товары</td><td>Cost</td><td>800</td><td>1,150</td><td>+350</td><td>+43.8%</td><td>U</td></tr>
       <tr><td>Marketing</td><td>Cost</td><td>25,000</td><td>24,100</td><td>-900</td><td>-3.6%</td><td>F</td></tr>
     </table>
 
-    <p>Check one row by hand to trust the rest. Contractors: 31,800 minus 20,000 is 11,800 over, and 11,800 divided by 20,000 is 0.59, which is 59.0%. It is a cost line, over budget, so U.</p>
+    <p>Проверьте одну строку вручную, чтобы доверять остальным. Подрядчики: 31 800 минус 20 000 — это больше 11 800, а 11 800 разделить на 20 000 — 0,59, что составляет 59,0%. Это линия затрат, превышающая бюджет, поэтому U.</p>
 
-    <p>The totals: revenue came in at $316,600 against a $310,000 budget, favorable by $6,600. Costs came in at $217,850 against $200,800, unfavorable by $17,050. Net, the department planned to contribute $109,200 and actually contributed $98,750, which is $10,450 short of plan.</p>
+    <p>Итоги: доход составил 316 600 долларов США при бюджете в 310 000 долларов США, что благоприятно на 6 600 долларов США. Затраты составили 217 850 долларов против 200 800 долларов, что меньше 17 050 долларов. В целом департамент планировал внести 109 200 долларов США, а фактически внес 98 750 долларов США, что на 10 450 долларов меньше плана.</p>
 
-    <p>Say why the same plus sign produced an F on the first row and a U on the third row, in your own words, before moving on. If you can say it, the rest of this page is bookkeeping.</p>
+    <p>Прежде чем двигаться дальше, скажите своими словами, почему один и тот же знак «плюс» образовал букву «F» в первой строке и букву «U» в третьей строке. Если можно так выразиться, остальная часть этой страницы — это бухгалтерия.</p>
   </div>
 
   <div class="step">
-    <h2>3. Percent variance, and its two traps</h2>
+    <h2>3. Процентная дисперсия и две ее ловушки</h2>
 
-    <p>Before the explanation: in the table above, Travel is off by 96.7% and Salaries by 2.5%. Which one costs the company more money?</p>
+    <p>Перед пояснением: в таблице выше «Путешествия» отключены на 96,7%, а «Зарплаты» — на 2,5%. Какой из них стоит компании больше денег?</p>
 
-    <p>Percent variance is the variance divided by the budget. It answers "how far off the plan was this line, relative to its own size," and it makes lines of different sizes comparable. It also has two reliable failure modes.</p>
+    <p>Процентное отклонение — это отклонение, деленное на бюджет. Он отвечает на вопрос: «насколько далеко от плана находилась эта линия по отношению к ее собственному размеру» и делает линии разных размеров сопоставимыми. Он также имеет два надежных режима отказа.</p>
 
-    <p><strong>Trap one: a zero or tiny budget makes the percent meaningless.</strong> Divide by a budget of zero and the formula errors, or worse, someone hardcodes it to show a number. Divide by a tiny budget and you get a giant percent from pocket change: Office supplies here is 43.8% over, and the entire miss is $350. A percent with a small denominator is a loud noise about a small thing.</p>
+    <p><strong>Ловушка первая: нулевой или крошечный бюджет делает процент бессмысленным.</strong>  Разделите бюджет на ноль, и в формуле возникнут ошибки или, что еще хуже, кто-то жестко запрограммирует ее, чтобы показать число. Разделите на крошечный бюджет, и вы получите гигантский процент от карманных расходов: канцелярские товары здесь израсходованы на 43,8%, а вся недоплата составляет 350 долларов. Процент с маленьким знаменателем – это громкий шум по поводу мелочи.</p>
 
-    <p><strong>Trap two: percent and dollars rank the lines in different orders, and the percent order is the wrong one to act on.</strong> Salaries is off by just 2.5%, the second-smallest percent among the misses, yet that 2.5% is $3,500, which is ten times the office supplies miss. Money is spent in dollars, not in percents. So the working habit is: rank by dollars, flag by percent. Dollar order tells you where the money went. The percent flag tells you which lines drifted furthest from their own plan, which is a control question rather than a money question. Both are worth knowing. Only one decides what you investigate first.</p>
+    <p><strong>Ловушка вторая: проценты и доллары ранжируют строки в разном порядке, а процентный порядок — неправильный.</strong>  Заработная плата снижается всего на 2,5%, это второй по величине процент среди промахов, однако эти 2,5% составляют 3500 долларов, что в десять раз превышает сумму пропажи канцелярских товаров. Деньги тратятся в долларах, а не в процентах. Итак, рабочая привычка такая: ранжируйте по долларам, отмечайте по процентам. Долларовый ордер сообщает вам, куда пошли деньги. Флаг процента показывает, какие линии больше всего отклонились от своего плана, и это скорее контрольный вопрос, чем вопрос денег. Оба стоит знать. Только один решает, что исследовать в первую очередь.</p>
 
-    <p>Ranked by absolute dollars, this table reads: Product revenue +12,400 F, Contractors +11,800 U, Services revenue -5,800 U, Salaries +3,500 U, Travel +2,900 U, then everything under a thousand. Contractors is the story. It is second in dollars and second in percent, the only line that is loud on both measures.</p>
+    <p>В этой таблице, в абсолютном выражении в долларах, указано: Доход от продукции +12 400 Е, Подрядчики +11 800 Е, Доход от услуг -5 800 Е, Заработная плата +3 500 Е, Командировки +2 900 Е, затем все, что меньше тысячи. Подрядчики - это история. Это второе место в долларах и второе в процентах, единственная линия, которая является громкой по обоим показателям.</p>
   </div>
 
   <div class="step">
-    <h2>4. Set a materiality floor before you read</h2>
+    <h2>4. Прежде чем читать, установите минимальный уровень существенности</h2>
 
-    <p>Before the explanation: how big does a variance have to be before you say its name in the review meeting? If you do not have a number, the table decides for you.</p>
+    <p>Прежде чем объяснить: насколько большим должно быть отклонение, прежде чем вы произнесете его название на обзорном совещании? Если у вас нет номера, таблица решает за вас.</p>
 
-    <p>A materiality floor is a threshold you set before reading the table: below this many dollars, or below this percent, a variance is noise and gets no airtime. The habit that matters is the word "before." Decide the floor first, then read. If you read first, the interesting-looking rows will pull your floor down to wherever they happen to sit, and every month's floor will be different.</p>
+    <p>Минимальный уровень существенности — это порог, который вы устанавливаете перед чтением таблицы: ниже этого количества долларов или ниже этого процента отклонение является шумом и не получает эфирного времени. Привычка, которая имеет значение, — это слово «раньше». Сначала определитесь с полом, а потом читайте. Если вы прочтете первыми, интересные на вид строки сместят ваш этаж туда, где они находятся, и каждый месяц пол будет разным.</p>
 
-    <p>A common shape is a two-part test: flag a line only if it is off by more than a dollar floor AND more than a percent floor. For this department, $2,000 and 5% would flag Contractors, Services revenue, and Travel, while letting Salaries pass as within tolerance and silencing Office supplies entirely. Whether those are the right floors is a judgement about this department, not arithmetic, and the floor itself should come from the data rather than from taste. <a href="../data-driven-thresholds/">Choosing thresholds from the data</a> is the full method: pick it, write down why, and check the read survives a nearby choice.</p>
+    <p>Обычная форма представляет собой тест, состоящий из двух частей: помечайте линию только в том случае, если она отклоняется более чем на один доллар И более чем на процент. Для этого отдела 2000 долларов и 5% будут обозначать подрядчиков, доходы от услуг и командировки, в то же время позволяя зарплатам считаться допустимыми и полностью замалчивая канцелярские товары. Правильные ли это минимальные значения — это суждение об этом отделе, а не арифметика, а сам нижний предел должен основываться на данных, а не на вкусе.  <a href="../data-driven-thresholds/">Выбор порогов из данных</a>  это полный метод: выберите его, запишите причину и проверьте, сохраняется ли чтение при ближайшем выборе.</p>
 
-    <p>Write the floor into the workbook where readers can see it. "Lines within $2,000 and 5% of plan are not discussed" is one sentence, and it converts your silence about small rows from an omission into a policy.</p>
+    <p>Запишите слово в рабочую тетрадь, чтобы читатели могли его увидеть. «Строки в пределах 2000 долларов и 5% от плана не обсуждаются» — это одно предложение, и оно превращает ваше молчание по поводу небольших споров из упущения в политику.</p>
   </div>
 
   <div class="step">
-    <h2>5. Build it in Excel with SUMIFS</h2>
+    <h2>5. Создайте его в Excel с помощью SUMIFS.</h2>
 
-    <p>Before the explanation: your actuals arrive as hundreds of individual transactions, and your budget is eight tidy lines. What has to happen to the transactions before the two can sit in one table?</p>
+    <p>Перед пояснением: ваши фактические данные поступают в виде сотен отдельных транзакций, а ваш бюджет состоит из восьми аккуратных строк. Что должно произойти с транзакциями, прежде чем они смогут оказаться в одном столе?</p>
 
-    <p>They have to be summed per line. That is the whole build: the budget table supplies the rows, and <code>SUMIFS</code> pulls each line's actual total out of the transaction pile. <code>SUMIFS</code> adds up one column wherever another column matches a condition, and the <a href="../excel-sumifs/">SUMIFS guide</a> covers the function itself in depth.</p>
+    <p>Их необходимо суммировать по строкам. Вот и вся сборка: таблица бюджета предоставляет строки, а  <code>SUMIFS</code>  извлекает фактическую сумму каждой строки из стопки транзакций.  <code>SUMIFS</code>  добавляет один столбец, если другой столбец соответствует условию, а  <a href="../excel-sumifs/">Руководство СУМИФС</a>  подробно описывает саму функцию.</p>
 
-    <p>Set up two Excel tables. One named <code>Actuals</code> with the raw transactions, columns Line, Month, Amount. One named <code>Report</code> with columns Line, Type, Budget, and the formulas. Then, in the Report table:</p>
+    <p>Настройте две таблицы Excel. Один по имени  <code>Actuals</code>  с необработанными транзакциями, столбцы Строка, Месяц, Сумма. Один по имени  <code>Report</code>  со столбцами «Строка», «Тип», «Бюджет» и формулами. Затем в таблице отчета:</p>
 
     <pre><code>Actual      =SUMIFS(Actuals[Amount], Actuals[Line], [@Line])
 Variance    =[@Actual]-[@Budget]
@@ -278,138 +278,138 @@ F/U         =IF([@Type]="Revenue",
                IF([@Variance]&gt;=0, "F", "U"),
                IF([@Variance]&gt;0, "U", "F"))</code></pre>
 
-    <p>The <code>IF([@Budget]=0, "")</code> wrapper is trap one from section three, handled at build time: a line with no budget shows a blank percent instead of an error or a fake number. The F/U formula is the sign rule made mechanical, so the verdict column can never disagree with the convention.</p>
+    <p>The <code>IF([@Budget]=0, "")</code>  оболочка — это ловушка номер один из третьего раздела, обрабатываемая во время сборки: строка без бюджета показывает пустой процент вместо ошибки или поддельного числа. Формула F/U представляет собой механическое правило знаков, поэтому столбец вердиктов никогда не может противоречить соглашению.</p>
 
-    <p>Verify the machinery once with a line you can add in your head. The Contractors actuals in this example are three monthly invoices: 9,800 plus 10,400 plus 11,600, which is 31,800, exactly what the SUMIFS returns and what the worked table shows. Salaries is 47,800 plus 47,800 plus 47,900, which is 143,500. One hand-check per build catches a mis-pointed range, and a mis-pointed range is the most common way a variance report is wrong.</p>
+    <p>Проверьте оборудование один раз с помощью строки, которую вы можете добавить в уме. Фактические данные Подрядчика в этом примере представляют собой три ежемесячных счета: 9 800 плюс 10 400 плюс 11 600, что составляет 31 800, то есть именно то, что возвращает SUMIFS и что показывает обработанная таблица. Зарплата 47 800 плюс 47 800 плюс 47 900, то есть 143 500. Одна ручная проверка каждой сборки выявляет неправильно указанный диапазон, а неправильно указанный диапазон является наиболее распространенной причиной неправильного отчета об отклонениях.</p>
 
     <p>Picture running this build on your own cost center's transactions. Which line would you hand-check, and do you already know a month where SUMIFS would surprise you? That suspicion is worth chasing; it is usually a naming mismatch between the transaction labels and the budget lines.</p>
   </div>
 
   <div class="step">
-    <h2>6. The full before and after</h2>
+    <h2>6. Полное до и после</h2>
 
-    <p>Same eight lines, same numbers, two tables.</p>
+    <p>Те же восемь строк, те же числа, две таблицы.</p>
 
     <h3>Before</h3>
-    <p>Budget, actual, variance. Sorted by percent, no F/U, no floor. Travel tops the table at 96.7%, Office supplies sits second at 43.8%, and the reader's eye spends its first ten seconds on $3,250 of combined misses. Salaries, off by more than both of those together, sits sixth of eight. And a director skimming the variance column sees +12,400 and +11,800 as the same kind of number, when one grew the business and the other blew a plan by half.</p>
+    <p>Бюджет, факт, отклонение. Сортировка по процентам, без F/U, без пола. Путешествия возглавляют таблицу с 96,7%, канцелярские товары занимают второе место с 43,8%, а взгляд читателя тратит первые десять секунд на совокупные промахи на сумму 3250 долларов. Заработная плата, которая ниже, чем обе эти суммы вместе взятые, находится на шестом месте из восьми. А директор, просматривающий столбец отклонений, видит +12 400 и +11 800 как одни и те же числа, когда один увеличил бизнес, а другой сорвал план вдвое.</p>
 
     <h3>After</h3>
     <table>
-      <tr><th>Line</th><th>Type</th><th>Budget</th><th>Actual</th><th>Variance</th><th>Variance %</th><th>F/U</th><th>Flag</th></tr>
-      <tr><td>Product revenue</td><td>Revenue</td><td>250,000</td><td>262,400</td><td>+12,400</td><td>+5.0%</td><td>F</td><td>flag</td></tr>
+      <tr><th>Line</th><th>Type</th><th>Budget</th><th>Actual</th><th>Variance</th><th>Отклонение %</th><th>F/U</th><th>Flag</th></tr>
+      <tr><td>Доход от продукта</td><td>Revenue</td><td>250,000</td><td>262,400</td><td>+12,400</td><td>+5.0%</td><td>F</td><td>flag</td></tr>
       <tr><td>Contractors</td><td>Cost</td><td>20,000</td><td>31,800</td><td>+11,800</td><td>+59.0%</td><td>U</td><td>flag</td></tr>
-      <tr><td>Services revenue</td><td>Revenue</td><td>60,000</td><td>54,200</td><td>-5,800</td><td>-9.7%</td><td>U</td><td>flag</td></tr>
+      <tr><td>Доход от услуг</td><td>Revenue</td><td>60,000</td><td>54,200</td><td>-5,800</td><td>-9.7%</td><td>U</td><td>flag</td></tr>
       <tr><td>Salaries</td><td>Cost</td><td>140,000</td><td>143,500</td><td>+3,500</td><td>+2.5%</td><td>U</td><td></td></tr>
       <tr><td>Travel</td><td>Cost</td><td>3,000</td><td>5,900</td><td>+2,900</td><td>+96.7%</td><td>U</td><td>flag</td></tr>
       <tr><td>Marketing</td><td>Cost</td><td>25,000</td><td>24,100</td><td>-900</td><td>-3.6%</td><td>F</td><td></td></tr>
       <tr><td>Software</td><td>Cost</td><td>12,000</td><td>11,400</td><td>-600</td><td>-5.0%</td><td>F</td><td></td></tr>
-      <tr><td>Office supplies</td><td>Cost</td><td>800</td><td>1,150</td><td>+350</td><td>+43.8%</td><td>U</td><td></td></tr>
+      <tr><td>Канцелярские товары</td><td>Cost</td><td>800</td><td>1,150</td><td>+350</td><td>+43.8%</td><td>U</td><td></td></tr>
     </table>
 
-    <p>Sorted by absolute dollars, verdict labeled on every line, and a flag column applying the stated floor: off by more than $2,000 and more than 5%. The same information now reads in the order the money moved. Contractors surfaces immediately as the problem, Product revenue as the offsetting good news, and Office supplies drops to the bottom where its $350 belongs, still visible, no longer shouting.</p>
+    <p>Сортировка по абсолютным значениям в долларах, вердикт указан в каждой строке, а столбец с флажком соответствует указанному минимальному значению: скидка более 2000 долларов США и более 5%. Та же информация теперь читается в порядке перемещения денег. Подрядчики сразу же всплывают на поверхность, как только возникает проблема, доходы от продукции компенсируют хорошие новости, а канцелярские товары падают на дно, где и должны быть 350 долларов, все еще видимые, уже не кричащие.</p>
   </div>
 
   <div class="step">
-    <h2>7. Present it: the variance walk and the one-sentence claim</h2>
+    <h2>7. Представьте это: обход дисперсии и утверждение из одного предложения.</h2>
 
-    <p>Before the explanation: your director has thirty seconds. What is the one sentence this table earns?</p>
+    <p>До пояснения: у вашего режиссера тридцать секунд. Какое одно предложение заслуживает эта таблица?</p>
 
     <p>The walk first, because it is how finance audiences expect to travel from plan to result. A variance walk starts at the budgeted total, adds or subtracts the largest variances in order of size, and lands exactly on the actual. In one paragraph, this department's walk: we planned to contribute $109,200; product revenue added 12,400; contractor overruns took back 11,800; the services shortfall took 5,800 more; salaries, travel, and small items netted out another 5,250 against us; and we landed at $98,750. Every step is a labeled cause, the steps sum exactly, and drawn as a chart this paragraph is a waterfall: floating bars stepping from the budget column down or up to the actual column.</p>
 
-    <p>Then the claim. A variance report is not eight rows; it is one sentence with a number, backed by eight rows: "We missed plan by $10,450, and contractor spend at 159% of budget is the driver." That is a claim someone can act on, question, or own. Sending the table alone makes the reader do the analysis you were asked to do, and the difference between shipping rows and shipping a claim is the whole subject of <a href="../report-vs-analysis/">report vs analysis</a>.</p>
+    <p>Потом претензия. Отчет об отклонениях состоит не из восьми строк; это одно предложение с числом, подкрепленное восемью строками: «Мы пропустили план на 10 450 долларов, и движущей силой являются расходы подрядчика на уровне 159% бюджета». Это утверждение, на основании которого кто-то может действовать, подвергать сомнению или владеть им. Отправка одной только таблицы заставляет читателя выполнить анализ, который вас просили, а разница между строками доставки и доставкой претензии является предметом всей статьи.  <a href="../report-vs-analysis/">Отчет против анализа</a>.</p>
   </div>
 
   <div class="step">
-    <h2>8. Edge cases that flip meanings in real reports</h2>
+    <h2>8. Крайние случаи, которые меняют смысл в реальных отчетах</h2>
 
-    <p>Before the explanation: a cost line comes in 40% under budget. The F/U formula stamps it favorable. Name a reason it might be the worst news in the table.</p>
+    <p>Перед пояснением: статья расходов на 40% ниже бюджета. Формула F/U делает это благоприятным. Назовите причину, по которой это может быть худшая новость в таблице.</p>
 
-    <p><strong>Underspend is not automatically good.</strong> The hiring you budgeted and did not do, the maintenance that got deferred, the campaign that never launched: each prints as F and each may be a plan failing to happen. F and U describe the effect on this period's profit, nothing more. Read big favorable cost variances with the same suspicion as big unfavorable ones.</p>
+    <p><strong>Недорасходы не являются автоматически хорошими.</strong>  Найм персонала, который вы заложили в бюджет, но не выполнили, техническое обслуживание, которое было отложено, кампания, которая так и не была начата: все это отмечено буквой F, и каждое из них может быть планом, который не осуществился. F и U описывают влияние на прибыль этого периода, не более того. Рассматривайте большие благоприятные отклонения затрат с таким же подозрением, как и большие неблагоприятные.</p>
 
-    <p><strong>Timing masquerades as performance.</strong> An invoice that slipped from June into July makes June favorable and July unfavorable, and both are illusions. Before escalating any single-month variance, check the year-to-date column; timing noise cancels there while real drift accumulates.</p>
+    <p><strong>Тайминг маскируется под производительность.</strong> An invoice that slipped from June into July makes June favorable and July unfavorable, and both are illusions. Before escalating any single-month variance, check the year-to-date column; timing noise cancels there while real drift accumulates.</p>
 
-    <p><strong>The convention flips between shops.</strong> Actual minus budget here; budget minus actual elsewhere, so that positive means favorable everywhere. Neither is wrong. A workbook that does not state which one it uses is wrong. One header note fixes it forever.</p>
+    <p><strong>Конвенция меняется между магазинами.</strong>  Здесь фактический минус бюджет; бюджет минус фактический где-либо еще, так что положительный означает благоприятный везде. Ни то, ни другое не является неправильным. Книга, в которой не указано, какую из них она использует, является неправильной. Одна заметка в заголовке исправит это навсегда.</p>
 
-    <p><strong>Mixed signs hide inside totals.</strong> The two revenue lines net to +6,600 F, which quietly contains a $5,800 services shortfall. Every subtotal you present should be openable back into its lines, because someone in the meeting will ask, and because the netted number genuinely conceals a U.</p>
+    <p><strong>Внутри итогов скрываются смешанные знаки.</strong>  Две строки доходов в сумме составляют +6600 F, что спокойно скрывает дефицит услуг в размере 5800 долларов. Каждый промежуточный итог, который вы представляете, должен открываться обратно в свои строки, потому что кто-то на собрании спросит об этом, и потому что итоговое число действительно скрывает букву U.</p>
 
-    <p><strong>Zero-budget lines need words, not percents.</strong> Spending that had no budget line at all is a different conversation from an overrun, and it deserves a sentence ("$4,000 of unbudgeted legal fees") rather than a blank or an error in the percent column.</p>
+    <p><strong>Для линий с нулевым бюджетом нужны слова, а не проценты.</strong>  Расходы, которые вообще не имели бюджетной статьи, — это совсем другое дело, чем перерасход, и они заслуживают предложения («4000 долларов США не предусмотренных в бюджете судебных издержек»), а не пробела или ошибки в столбце процентов.</p>
   </div>
 
-  <h2>Why this works</h2>
+  <h2>Почему это работает</h2>
 
-  <p>Ranking by dollars and drawing the walk as a waterfall are both bets on how human perception actually performs, and the bet has evidence behind it. Cleveland and McGill measured which visual comparisons people judge accurately, and position along a common scale beat nearly everything else (Cleveland &amp; McGill, 1984, <em>Journal of the American Statistical Association</em>, 79(387), 531–554). A dollar-sorted table puts the decision-relevant quantity in a common column where those accurate judgements can happen, instead of asking readers to mentally rescale eight percentages with eight different denominators.</p>
+  <p>Ранжирование в долларах и изображение прогулки в виде водопада — это ставки на то, как на самом деле работает человеческое восприятие, и эта ставка имеет под собой доказательства. Кливленд и МакГилл измерили, какие визуальные сравнения люди оценивают точно, и положение по общей шкале превосходило почти все остальные (Cleveland &amp; McGill, 1984,  <em>Журнал Американской статистической ассоциации</em>, 79(387), 531–554). Таблица, отсортированная по доллару, помещает значимые для принятия решения величины в общий столбец, где могут быть сделаны эти точные суждения, вместо того, чтобы просить читателей мысленно перемасштабировать восемь процентов с восемью разными знаменателями.</p>
 
-  <p>The prequestions under each heading are not a quirk. Attempting an answer before receiving one improves learning of exactly that material, an effect that holds across dozens of studies of self-explanation prompts (Bisra, Liu, Nesbit, Salimi, &amp; Winne, 2018, <em>Educational Psychology Review</em>, 30(3), 703–725). Guessing whether Travel or Salaries costs more before section three answered it is why the dollars-over-percents rule will still be with you next quarter. The same logic says the cheat sheet below works best covered, as retrieval practice rather than rereading (Roediger &amp; Karpicke, 2006, <em>Psychological Science</em>, 17(3), 249–255).</p>
+  <p>Предварительные вопросы под каждым заголовком не являются причудой. Попытка ответить до его получения улучшает усвоение именно этого материала, и этот эффект наблюдается в десятках исследований подсказок к самообъяснению (Бисра, Лю, Несбит, Салими и Винн, 2018,  <em>Обзор педагогической психологии</em>, 30(3), 703–725). Догадавшись, что расходы на командировки или зарплату выше, прежде чем ответить на вопрос в третьем разделе, вы поймете, почему в следующем квартале правило «долларов больше процентов» все еще будет действовать для вас. По той же логике, приведенная ниже шпаргалка лучше всего подходит для практики поиска, а не для перечитывания (Roediger &amp; Karpicke, 2006,  <em>Психологическая наука</em>, 17(3), 249–255).</p>
 
-  <h2>Using this on your own project</h2>
+  <h2>Использование этого в вашем собственном проекте</h2>
 
-  <p>Rebuilding every variance report you have inherited is miserable, and the older ones have defenders. Do this instead, in order.</p>
+  <p>Пересоздание каждого унаследованного вами отчета об отклонениях является утомительным занятием, а у более старых есть защитники. Вместо этого сделайте это по порядку.</p>
 
   <ol>
-    <li><strong>Add the F/U column to the report you own</strong>, using the formula from section five. It is one column and it ends every sign argument in the room.</li>
-    <li><strong>State the convention in a header note</strong>: "Variance = actual minus budget." One line, permanent.</li>
-    <li><strong>Re-sort by absolute dollar variance.</strong> If the current sort is alphabetical or by percent, this single change re-aims the meeting.</li>
-    <li><strong>Write the materiality floor above the table</strong> and add the flag column that applies it. Agree the floor with the report's owner before the next cycle, not during it.</li>
-    <li><strong>Hand-check one SUMIFS line per month</strong> against its raw transactions. Rotate which line. This is five minutes and it is your audit trail.</li>
-    <li><strong>End every cycle with the one-sentence claim</strong> at the top of the email, above the table, with the driver named.</li>
+    <li><strong>Добавьте столбец F/U в принадлежащий вам отчет.</strong>, используя формулу из пятого раздела. Это один столбец, и он завершает все аргументы знаков в комнате.</li>
+    <li><strong>Укажите соглашение в заголовке</strong>: «Отклонение = факт минус бюджет». Одна линия, постоянная.</li>
+    <li><strong>Повторная сортировка по абсолютному отклонению в долларах.</strong>  Если текущая сортировка осуществляется по алфавиту или по процентам, это единственное изменение перенацеливает собрание.</li>
+    <li><strong>Напишите нижний предел существенности над таблицей.</strong>  и добавьте столбец флага, который его применяет. Согласуйте слово с владельцем отчета перед следующим циклом, а не во время него.</li>
+    <li><strong>Ручная проверка одной строки SUMIFS в месяц.</strong>  против своих необработанных транзакций. Повернуть какую строку. Это пять минут, и это ваш контрольный журнал.</li>
+    <li><strong>Завершайте каждый цикл утверждением, состоящим из одного предложения.</strong>  вверху письма, над таблицей, с именем водителя.</li>
   </ol>
 
-  <p>If you have paper nearby, one optional drawing locks the core idea in. Draw the two-panel figure from this page from memory: two bar pairs, one labeled revenue, one labeled cost, the same overshoot shaded on each, and mark which overshoot is F and which is U. If your labels come out reversed, the page is still open.</p>
+  <p>Если у вас под рукой есть бумага, один дополнительный рисунок зафиксирует основную идею. Нарисуйте по памяти фигуру из двух панелей на этой странице: две пары столбцов, одну с надписью «Доход», одну с надписью «Затраты», одинаковое превышение, заштрихованное на каждой, и отметьте, какое превышение — F, а какое — U. Если ваши метки перевернуты, страница все еще открыта.</p>
 
-  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: Excel, SQL, Tableau, and the working habits around them.</div>
+  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: Excel, SQL, Tableau и связанные с ними рабочие привычки.</div>
 
-  <h2>The whole thing on one screen</h2>
+  <h2>Все на одном экране</h2>
 
-  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
+  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
 
   <table>
-    <tr><th>Concept</th><th>What it is</th></tr>
-    <tr><td>Variance</td><td>Actual minus budget. Direction and size of the miss.</td></tr>
-    <tr><td>The sign trap</td><td>Positive is good on revenue lines and bad on cost lines.</td></tr>
-    <tr><td>F / U</td><td>Favorable or unfavorable to profit. The verdict, stated instead of inferred.</td></tr>
-    <tr><td>The F/U rule</td><td>Revenue over budget is F. Cost over budget is U. Under budget flips each.</td></tr>
-    <tr><td>Percent variance</td><td>Variance divided by budget. The miss relative to the line's own size.</td></tr>
-    <tr><td>Percent trap one</td><td>Zero or tiny budgets make giant, meaningless percents. Guard the division.</td></tr>
-    <tr><td>Percent trap two</td><td>Percent order and dollar order disagree. 2.5% of Salaries beat 43.8% of supplies.</td></tr>
-    <tr><td>The working habit</td><td>Rank by dollars, flag by percent.</td></tr>
-    <tr><td>Materiality floor</td><td>The dollar-and-percent threshold set BEFORE reading, and written on the report.</td></tr>
-    <tr><td>The Excel core</td><td>SUMIFS pulls each line's actual from transactions into the budget table.</td></tr>
-    <tr><td>The build check</td><td>Hand-add one line's transactions and match the SUMIFS. Every build, once.</td></tr>
-    <tr><td>Variance walk</td><td>Budget, then the biggest drivers in order, landing exactly on actual. A waterfall.</td></tr>
-    <tr><td>The deliverable</td><td>One claim sentence with a number and a named driver, above the table.</td></tr>
-    <tr><td>Favorable underspend</td><td>Sometimes a plan that failed to happen. Read big F costs with suspicion.</td></tr>
-    <tr><td>Timing vs performance</td><td>Slipped invoices fake one bad month and one good one. Check year to date.</td></tr>
+    <tr><th>Concept</th><th>Что это такое</th></tr>
+    <tr><td>Variance</td><td>Фактически минус бюджет. Направление и размер промаха.</td></tr>
+    <tr><td>Знаковая ловушка</td><td>Положительный результат хорош для линий доходов и плох для линий затрат.</td></tr>
+    <tr><td>F / U</td><td>Благоприятно или неблагоприятно для получения прибыли. Вердикт, высказанный, а не предполагаемый.</td></tr>
+    <tr><td>Правило Ф/У</td><td>Доходы сверх бюджета — это F. Затраты сверх бюджета — U. Недостаток бюджета переворачивается.</td></tr>
+    <tr><td>Процентная дисперсия</td><td>Отклонение, разделенное на бюджет. Промах относительно собственного размера линии.</td></tr>
+    <tr><td>Процентная ловушка один</td><td>Нулевые или крошечные бюджеты приносят гигантские бессмысленные проценты. Охранять дивизию.</td></tr>
+    <tr><td>Процентная ловушка номер два</td><td>Процентный порядок и порядок доллара не совпадают. 2,5% зарплат превышают 43,8% поставок.</td></tr>
+    <tr><td>Рабочая привычка</td><td>Рейтинг в долларах, флаг в процентах.</td></tr>
+    <tr><td>Минимальный уровень существенности</td><td>Порог в долларах и процентах устанавливается ДО считывания и записывается в отчете.</td></tr>
+    <tr><td>Ядро Excel</td><td>SUMIFS переносит фактические данные каждой строки из транзакций в таблицу бюджета.</td></tr>
+    <tr><td>Проверка сборки</td><td>Вручную добавьте транзакции по одной строке и сопоставьте SUMIFS. Каждая сборка один раз.</td></tr>
+    <tr><td>Дисперсионная прогулка</td><td>Бюджет, затем самые большие драйверы в порядке, приземляются точно по факту. Водопад.</td></tr>
+    <tr><td>Результат</td><td>Одно претензионное предложение с номером и именем водителя над таблицей.</td></tr>
+    <tr><td>Благоприятный недорасход</td><td>Иногда план, который не сбылся. Читайте большие затраты F с подозрением.</td></tr>
+    <tr><td>Время против производительности</td><td>Подсунутые счета-фактуры фальшивые: один плохой месяц, другой хороший. Проверьте год до настоящего времени.</td></tr>
   </table>
 
-  <div class="note"><strong>The one habit to keep.</strong> If you take nothing else from this page, rank every variance table by dollars and label every line F or U before anyone else reads it. The most expensive miss in the table is routinely hiding behind the smallest percent. If a workbook fights back in a way this page does not cover, there is a general <a href="../technical-tenacity/">diagnosis loop for being stuck</a>.</div>
+  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Если вы больше ничего не извлекаете из этой страницы, проранжируйте каждую таблицу отклонений по долларам и пометьте каждую строку F или U, прежде чем ее прочтет кто-нибудь еще. Самый дорогой промах в таблице привычно скрывается за наименьшим процентом. Если рабочая книга дает отпор таким образом, который не описан на этой странице, существует общая  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>.</div>
 
-  <p>One last thought, and I would genuinely like other people's answers. The first variance table I ever presented was sorted by percent, and the meeting spent eight of its ten minutes on a line worth a few hundred dollars. What is the smallest line item that has ever eaten a whole meeting you were in, and did anyone ever say the dollar amount out loud?</p>
+  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Первая таблица отклонений, которую я когда-либо представлял, была отсортирована по процентам, и восемь из десяти минут совещания потратили на линию стоимостью в несколько сотен долларов. Какая наименьшая позиция когда-либо занимала всю встречу, на которой вы присутствовали, и произносил ли кто-нибудь когда-нибудь сумму в долларах вслух?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Cleveland, W. S., &amp; McGill, R. (1984). Graphical perception: Theory, experimentation, and application to the development of graphical methods. <em>Journal of the American Statistical Association</em>, 79(387), 531–554.</li>
-    <li>Bisra, K., Liu, Q., Nesbit, J. C., Salimi, F., &amp; Winne, P. H. (2018). Inducing self-explanation: A meta-analysis. <em>Educational Psychology Review</em>, 30(3), 703–725.</li>
-    <li>Roediger, H. L., &amp; Karpicke, J. D. (2006). Test-enhanced learning: Taking memory tests improves long-term retention. <em>Psychological Science</em>, 17(3), 249–255.</li>
+    <li>Кливленд, У.С., и МакГилл, Р. (1984). Графическое восприятие: теория, эксперименты и применение к разработке графических методов.  <em>Журнал Американской статистической ассоциации</em>, 79(387), 531–554.</li>
+    <li>Бисра К., Лю К., Несбит Дж. К., Салими Ф. и Винн П. Х. (2018). Побуждение к самообъяснению: метаанализ.  <em>Обзор педагогической психологии</em>, 30(3), 703–725.</li>
+    <li>Рёдигер, Х.Л., и Карпике, Дж.Д. (2006). Улучшенное обучение с помощью тестов: прохождение тестов на память улучшает долгосрочное запоминание.  <em>Психологическая наука</em>, 17(3), 249–255.</li>
   </ul>
 
   <div class="book">
-    <strong>The variance column is correct and nobody can tell which rows matter.</strong>
-    <p><em>Excel for Analysts</em> is 378 pages, variance built so the sign, the size and the share all say the same thing.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-budget-vs-actual-variance'})">Excel for Analysts, $19 &rarr;</a>
+    <strong>Столбец отклонений правильный, и никто не может сказать, какие строки имеют значение.</strong>
+    <p><em>Excel для аналитиков</em>  составляет 378 страниц, дисперсия построена таким образом, что знак, размер и доля говорят об одном и том же.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-budget-vs-actual-variance'})">Excel для аналитиков, 19 долларов США →</a>
   </div>
 
   <div class="cta">
-    <strong>Practice the build with a workbook in front of you.</strong>
-    <p style="margin:6px 0 0">The <a href="../../excel/">Excel Kit</a> has a Financial Analysis unit that works through budget vs actual hands-on: the SUMIFS pull, the variance columns, and reading the result like an analyst. Worked examples, flash cards, and a mock exam sit alongside it. Nothing to install, no account needed.</p>
-    <a class="btn" href="../../excel/">Open the Excel Kit →</a>
+    <strong>Попрактикуйтесь в сборке, держа перед собой рабочую тетрадь.</strong>
+    <p style="margin:6px 0 0">The <a href="../../excel/">Excel комплект</a>  есть подразделение финансового анализа, которое практически сравнивает бюджет и фактические данные: вытягивание SUMIFS, столбцы отклонений и чтение результатов как аналитик. Рядом с ним лежат рабочие примеры, карточки и пробный экзамен. Ничего устанавливать, учетная запись не требуется.</p>
+    <a class="btn" href="../../excel/">Откройте набор Excel →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> · <a href="../excel-sumifs/">Excel SUMIFS</a> · <a href="../excel-absolute-vs-relative-references/">Absolute vs Relative References</a> · <a href="../vlookup-vs-xlookup/">VLOOKUP vs XLOOKUP</a> · <a href="../excel-dashboard-build-order/">Excel Dashboard Build Order</a> · <a href="../excel-label-rows-before-charting/">Label Rows Before Charting</a> · <a href="../data-driven-thresholds/">Data-Driven Thresholds</a> · <a href="../report-vs-analysis/">Report vs Analysis</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../build-a-risk-index/">Build a Risk Index</a> · <a href="../sql-month-over-month/">Month-over-Month Growth in SQL</a> · <a href="../choose-the-right-chart/">Choose the Right Chart</a> · <a href="../correlation-vs-causation/">Correlation vs Causation</a> · <a href="../powerbi-measures-vs-columns/">Power BI Measures vs Columns</a> · <a href="../what-is-data-analysis/">What Is Data Analysis?</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../operations-analytics-foundations/">Operations Analytics</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../git-for-analysts/">Git for Analysts</a> · <a href="../choose-your-analyst-role/">Choose Your Analyst Role</a> · <a href="../../excel/">Excel Kit</a> · <a href="../../forecasting/">Forecasting Kit</a> · <a href="../../projects/">Portfolio Projects</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../excel-sumifs/">Excel СУММИФС</a> · <a href="../excel-absolute-vs-relative-references/">Абсолютные и относительные ссылки</a> · <a href="../vlookup-vs-xlookup/">ВПР против XLOOKUP</a> · <a href="../excel-dashboard-build-order/">Порядок построения панели мониторинга Excel</a> · <a href="../excel-label-rows-before-charting/">Пометьте строки перед построением диаграммы</a> · <a href="../data-driven-thresholds/">Пороги, управляемые данными</a> · <a href="../report-vs-analysis/">Отчет против анализа</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../build-a-risk-index/">Создайте индекс риска</a> · <a href="../sql-month-over-month/">Месячный рост SQL</a> · <a href="../choose-the-right-chart/">Выберите правильный график</a> · <a href="../correlation-vs-causation/">Корреляция против причинно-следственной связи</a> · <a href="../powerbi-measures-vs-columns/">Меры Power BI против столбцов</a> · <a href="../what-is-data-analysis/">Что такое анализ данных?</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../operations-analytics-foundations/">Операционная аналитика</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../git-for-analysts/">Git для аналитиков</a> · <a href="../choose-your-analyst-role/">Выберите роль аналитика</a> · <a href="../../excel/">Excel комплект</a> · <a href="../../forecasting/">Комплект прогнозирования</a> · <a href="../../projects/">Портфельные проекты</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

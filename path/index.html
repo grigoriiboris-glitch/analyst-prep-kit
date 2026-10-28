@@ -1,7 +1,7 @@
 <!doctype html>
-<html lang="en" data-theme="light" data-course-theme="tool">
+<html lang="ru" data-theme="light" data-course-theme="tool" data-static-ru="true">
 <head>
-<script src="../assets/ru-localization-boot.js"></script>
+
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -28,12 +28,12 @@
 </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Path &middot; Unit 1 round &mdash; Analyst Prep Kit</title>
+<title>Путь · Блок 1, раунд — Подготовительный комплект для аналитика</title>
 <!-- A distinct favicon and a title that does not start with "SQL". Run 007b: this tab and
      the lesson tab it opens were indistinguishable in a tab strip, which is half of why
      nobody came back. -->
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230E7490'/%3E%3Cpath d='M10 8h7a5 5 0 0 1 0 10h-3v6h-4z' fill='%23fff'/%3E%3C/svg%3E">
-<meta name="description" content="One round of the SQL path: type four queries against a real database, write the same four again with the query covered up, read what each new piece of SQL does and which jobs use it, then see your score.">
+<meta name="description" content="Один раунд пути SQL: введите четыре запроса к реальной базе данных, напишите те же четыре снова, закрыв запрос, прочитайте, что делает каждая новая часть SQL и какие задания ее используют, затем посмотрите свой результат.">
 <meta name="robots" content="noindex">
 <link rel="stylesheet" href="../assets/sqled/sqled.css">
 <!--
@@ -432,10 +432,10 @@ ont-weight:600;
 <body>
 
 <div class="shell">
-  <p class="crumb"><a href="../">&larr; Analyst Prep Kit</a> &middot; <a href="../sql/">SQL Kit</a> &middot; <a href="../drill/">SQL Drill</a></p>
-  <h1>SQL Path &middot; Unit 1</h1>
-  <p class="lead">Type four queries, write them again from memory, then see what you did and what it scored. About fifteen minutes.</p>
-  <p class="desktop-note"><strong>Made for a desktop.</strong> The queries get long, and a keyboard makes this a lot better.</p>
+  <p class="crumb"><a href="../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql/">SQL-комплект</a> &middot; <a href="../drill/">SQL-детализация</a></p>
+  <h1>Путь SQL · Глава 1</h1>
+  <p class="lead">Наберите четыре запроса, запишите их еще раз по памяти, затем посмотрите, что вы сделали и какой результат. Около пятнадцати минут.</p>
+  <p class="desktop-note"><strong>Сделано для десктопа.</strong>  Запросы становятся длинными, и клавиатура делает это намного лучше.</p>
 
   <!-- Only on a return visit. The round remembers where you were, which is right, but it
        used to do it silently: you landed in the middle with green ticks on steps you had
@@ -443,7 +443,7 @@ ont-weight:600;
        finished. Say it, and offer the way back to the start. -->
   <div class="resume" id="resume" hidden>
     <p id="resume-line"></p>
-    <button id="restart">Start the round over</button>
+    <button id="restart">Начать раунд заново</button>
   </div>
 
   <div class="stepper" id="stepper"></div>
@@ -456,7 +456,7 @@ ont-weight:600;
    <div id="t-work">
     <div class="drillbar">
       <span class="rung" id="rung">Loading</span>
-      <p class="adds" id="adds">Starting the SQL engine.</p>
+      <p class="adds" id="adds">Запуск механизма SQL.</p>
     </div>
 
     <div class="pile" id="pile" hidden></div>
@@ -464,9 +464,9 @@ ont-weight:600;
     <div class="work">
       <div class="pane">
         <div class="panehead">
-          <h2 id="qhead">Type this query</h2>
+          <h2 id="qhead">Введите этот запрос</h2>
           <button class="copy" id="copy-q">Copy</button>
-          <span class="note" id="covernote" hidden>Covered up &middot; a miss uncovers more</span>
+          <span class="note" id="covernote" hidden>Скрыто · промах открывает больше</span>
         </div>
         <p class="question" id="question"></p>
         <!-- The columns the answer has to bring back. The check compares the whole table,
@@ -474,25 +474,25 @@ ont-weight:600;
         <p class="wants" id="wants"></p>
         <!-- Recall only. Nobody types into a blank editor while they think the page is
              waiting to catch them out. Say what the deal is before the first try. -->
-        <p class="tryline" id="tryline" hidden>Just try whatever you remember. We help you
-          with every try, and each one uncovers more of the query.</p>
+        <p class="tryline" id="tryline" hidden>Просто попробуйте все, что помните. Мы помогаем вам
+          с каждой попыткой, и каждая раскрывает больше деталей запроса.</p>
         <pre id="query"></pre>
         <p class="why" id="why"></p>
       </div>
 
       <div class="pane">
         <div class="panehead">
-          <h2>Your editor</h2>
-          <span class="note">Ctrl+Enter runs &middot; Ctrl+Space lists tables and columns</span>
+          <h2>Ваш редактор</h2>
+          <span class="note">Ctrl+Enter запускает · Ctrl+Пробел выводит список таблиц и столбцов</span>
         </div>
         <textarea id="sql" spellcheck="false" autocapitalize="off" autocomplete="off"
-                  autocorrect="off" placeholder="Type the query here."></textarea>
+                  autocorrect="off" placeholder="Введите запрос здесь."></textarea>
         <div class="runbar">
-          <p class="predict"><b>Before you run it:</b> <span id="pretext"></span></p>
+          <p class="predict"><b>Прежде чем запустить его:</b> <span id="pretext"></span></p>
           <button class="go" id="run">Run</button>
           <!-- Not "pass", because it does not pass. It comes back this round or the next
                one, and saying so up front is fairer than letting someone use it as an exit. -->
-          <button id="skip" hidden>Come back to this one</button>
+          <button id="skip" hidden>Вернись к этому</button>
         </div>
       </div>
     </div>
@@ -501,14 +501,14 @@ ont-weight:600;
          rather than beside it, so it never pushes the panes around. -->
     <details class="db" id="db">
       <summary>
-        <span class="dbt">The database</span>
-        <span class="dbh" id="dbhint">Table and column names &middot; click one to type it</span>
+        <span class="dbt">База данных</span>
+        <span class="dbh" id="dbhint">Имена таблиц и столбцов · щелкните один, чтобы ввести его</span>
       </summary>
       <div id="schema" class="schema-grid"></div>
     </details>
 
     <div class="output">
-      <div id="verdict" class="hint" aria-live="polite">Run your query and the rows appear here.</div>
+      <div id="verdict" class="hint" aria-live="polite">Запустите запрос, и здесь появятся строки.</div>
       <div id="out"></div>
       <!-- Moving on lives BELOW the rows, never above them. Real Test run 007: with the
            forward button above the result table, color and motion said "go forward" while
@@ -516,9 +516,9 @@ ont-weight:600;
            through without reading one. Run stays up beside the editor because that is
            where the typing hand already is. -->
       <div class="actions">
-        <button id="back">&larr; Back</button>
-        <button class="fwd" id="next">Next query &rarr;</button>
-        <button class="fwd go" id="to-lesson" hidden>Now write them covered up &rarr;</button>
+        <button id="back">← Назад</button>
+        <button class="fwd" id="next">Следующий запрос →</button>
+        <button class="fwd go" id="to-lesson" hidden>А теперь напишите их закрытыми →</button>
       </div>
     </div>
    </div>
@@ -533,11 +533,11 @@ ont-weight:600;
        good and too long for a round whose point is reps. Content is LAP.concepts. -->
   <section id="s-concepts" hidden>
     <div class="card">
-      <h2>What you just did</h2>
-      <p class="sub">One block per new piece of SQL the four queries introduced. What the
-        words do, why your query worked, and where you will actually meet it.</p>
+      <h2>Что ты только что сделал</h2>
+      <p class="sub">Один блок на каждую новую часть SQL, введенную в четырех запросах. Что
+        слова, почему ваш запрос сработал и где вы на самом деле его встретите.</p>
       <div id="concept-list"></div>
-      <p style="margin:16px 0 0"><button class="go" id="to-done">See your score</button></p>
+      <p style="margin:16px 0 0"><button class="go" id="to-done">Посмотреть свой результат</button></p>
     </div>
   </section>
 
@@ -547,13 +547,13 @@ ont-weight:600;
        run has something to beat. No streaks and no timers: those are things to game. -->
   <section id="s-done" hidden>
     <div class="card">
-      <h2>Your score</h2>
+      <h2>Ваш результат</h2>
       <p class="scorebig" id="score-now"></p>
       <p class="sub" id="score-line"></p>
       <div class="scores">
-        <div class="scorebox"><span>This run</span><b id="s-this">0</b></div>
+        <div class="scorebox"><span>Этот пробег</span><b id="s-this">0</b></div>
         <div class="scorebox"><span>Best</span><b id="s-best">0</b></div>
-        <div class="scorebox"><span>Last run</span><b id="s-last">0</b></div>
+        <div class="scorebox"><span>Последний запуск</span><b id="s-last">0</b></div>
       </div>
       <table class="ba" id="score-table"></table>
     </div>
@@ -561,11 +561,11 @@ ont-weight:600;
     <!-- Every action button here keeps the learner in the round. Mike's rule, 2026-08-01:
          content may link out; an action button may not. -->
     <div class="card ck">
-      <h2>Go again</h2>
-      <p class="sub" id="ck-line">The only way the score moves is another run.</p>
+      <h2>Иди еще раз</h2>
+      <p class="sub" id="ck-line">Единственный способ изменить счет - это еще одна попытка.</p>
       <div class="ckrow">
-        <button class="go" id="again">Run it again</button>
-        <button id="again-blind">Straight to writing them covered up</button>
+        <button class="go" id="again">Запустите его еще раз</button>
+        <button id="again-blind">Прямо писать их прикрытыми.</button>
       </div>
     </div>
   </section>
@@ -582,11 +582,12 @@ ont-weight:600;
     <div class="body" id="win-body"></div>
     <footer>
       <button class="go" id="win-go">Continue</button>
-      <button class="dismiss" id="win-stay">Stay on this screen</button>
+      <button class="dismiss" id="win-stay">Оставайтесь на этом экране</button>
       <!-- Only on the orientation popup. Shown once, and the learner decides whether it is
            ever shown again. -->
       <label class="never" id="win-never" hidden>
-        <input type="checkbox" id="win-never-box"> Do not show this again
+        <input type="checkbox" id="win-never-box">  Не показывать это снова
+      
       </label>
     </footer>
   </div>
@@ -595,7 +596,7 @@ ont-weight:600;
 <div id="celebrate-overlay" aria-hidden="true"></div>
 <div id="toast" role="status" aria-live="polite"></div>
 
-<div id="directive"><p id="directive-text">Read the six lines, then click Start typing.</p></div>
+<div id="directive"><p id="directive-text">Прочтите шесть строк, затем нажмите «Начать ввод».</p></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/sql-wasm.js"></script>
 <script src="../assets/sqled/sqled.js"></script>
@@ -1067,19 +1068,19 @@ function run(){
     // query against a reference query, because the reference query is under the covers.
     if(inRecall()) return missRecall('<span class="no">That query did not run.</span> ' + guess,
       '<span class="hint">The database reported: ' + esc(msg) + '</span>',
-      {title: 'That query did not run', lead: guess,
+      {title: "Этот запрос не выполнялся", lead: guess,
        body: '<p class="note">The database reported: ' + esc(msg) + '</p>'});
     $('verdict').className = '';
     $('verdict').innerHTML = '<span class="no">That query did not run.</span> ' + guess +
       '<br><span class="hint">The database reported: ' + esc(msg) + '</span>';
-    $('directive-text').textContent = 'Fix your query, then click Run under the editor.';
+    $('directive-text').textContent = "Исправьте запрос, затем нажмите «Выполнить» под редактором.";
     winPopup({
       cue: 'Read what went wrong',
       tone: 'no',
-      title: 'That query did not run',
+      title: "Этот запрос не выполнялся",
       lead: guess,
       body: '<p class="note">The database reported: ' + esc(msg) + '</p>',
-      label: 'Try again',
+      label: "Попробуй ещё раз",
       onContinue: () => ed.focus(),
       toast: false,
       pieces: 0
@@ -1100,17 +1101,17 @@ function run(){
   if(got !== want){
     // Wrong on the typing pass gets the same popup too. The reference query is on screen
     // here, so the repair is a line-by-line comparison rather than a hint.
-    $('directive-text').textContent = 'Fix your query, then click Run under the editor.';
+    $('directive-text').textContent = "Исправьте запрос, затем нажмите «Выполнить» под редактором.";
     winPopup({
       cue: 'Read what came back',
       tone: 'no',
-      title: 'Not the same rows',
+      title: "Не те же строки",
       lead: 'You got ' + got + (got === 1 ? ' row' : ' rows') + '; the query on the left returns ' +
         want + '. ' + (got > want ? 'Something is not being filtered out.'
                                   : 'Something is filtering too much.'),
       body: '<p class="note">Read your query against the one on the left, one line at a ' +
         'time. What came back:</p>' + table(res),
-      label: 'Try again',
+      label: "Попробуй ещё раз",
       onContinue: () => ed.focus(),
       toast: false,
       pieces: 0
@@ -1296,7 +1297,7 @@ function judgeRecall(res){
         : 'You got there with some of the query on screen. It scores less, and it still counts.',
       body: didAndMatters(LAP.drills[idx]) +
         '<p class="note">What your query returned:</p>' + table(res),
-      label: 'Next →',
+      label: "Далее →",
       onContinue: () => $('next').click(),
       toast: unaided ? '✓ From memory' : '✓ Answered',
       pieces: unaided ? 20 : 8
@@ -1321,7 +1322,7 @@ function judgeRecall(res){
     diff = 'Same shape, different contents. The values or the sort order are not matching.';
   }
   missRecall('<span class="no">Not the same table.</span> ' + diff, null, {
-    title: 'Not the same table',
+    title: "Не тот стол",
     lead: diff,
     // Their rows, not the answer's. Seeing what they actually asked for is the repair.
     body: '<p class="note">What your query returned:</p>' + table(res)
@@ -1346,7 +1347,7 @@ function missRecall(html, footnote, opts){
   // must never sit between the explanation and the help.
   $('verdict').innerHTML = html + ' ' + helped + (footnote ? '<br>' + footnote : '');
   // "the left pane" is a build word and a sighted-only instruction. Say what to read.
-  $('directive-text').textContent = 'Read the uncovered query, fix yours, then click Run under the editor.';
+  $('directive-text').textContent = "Прочтите непокрытый запрос, исправьте свой, затем нажмите «Выполнить» под редактором.";
   paintPile();
   remember();
   // Same popup as a right answer, so a wrong one is not the quiet outcome. It carries what
@@ -1357,7 +1358,7 @@ function missRecall(html, footnote, opts){
     title: (opts && opts.title) || 'Not the same table',
     lead: (opts && opts.lead) || '',
     body: '<p class="note">' + helped + '</p>' + ((opts && opts.body) || ''),
-    label: 'Try again',
+    label: "Попробуй ещё раз",
     onContinue: () => ed.focus(),
     toast: false,
     pieces: 0
@@ -1511,13 +1512,13 @@ function maybeIntro(){
   if(off === 'off') return;
   winPopup({
     tone: 'plain',
-    title: 'How this works',
+    title: "Как это работает",
     lead: 'One round of SQL, about fifteen minutes.',
     body: '<p class="note"><b>The pane on the left is what to type:</b> the question, what ' +
       'the answer has to bring back, and the query itself. <b>The pane on the right is ' +
       'where you type it</b>, on a real database of 500 songs. Press Run and you get real ' +
       'rows back.</p>' + runOrderHtml(),
-    label: 'Start typing',
+    label: "Начните печатать",
     onContinue: () => ed.focus(),
     never: INTRO_KEY,
     toast: false,

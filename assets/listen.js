@@ -239,7 +239,7 @@
     bar.className = 'listen-bar';
     bar.hidden = true;
     bar.setAttribute('role', 'group');
-    bar.setAttribute('aria-label', 'Listening controls');
+    bar.setAttribute('aria-label', "Элементы управления прослушиванием");
     bar.innerHTML =
       '<button type="button" data-act="prev" aria-label="Previous paragraph">◀◀</button>' +
       '<button type="button" data-act="play" class="listen-play" aria-label="Pause">❙❙</button>' +

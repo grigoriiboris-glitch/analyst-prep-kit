@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="ru" data-theme="light" data-static-ru="true">
 <head>
-<script src="../assets/ru-localization-boot.js"></script>
+
   <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
   <script>
     (function () {
@@ -28,9 +28,9 @@
   </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Databricks Lakehouse Fundamentals Prep · Analyst Prep Kit</title>
+<title>Подготовка к основам Databricks Lakehouse · Подготовительный комплект для аналитика</title>
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/databricks-cert/">
-<meta name="description" content="Prep for the Databricks Accredited Lakehouse Platform Fundamentals exam. An area-by-area study guide of the lakehouse, Delta Lake, Unity Catalog and Databricks SQL, built from the official docs, plus a 40-question practice exam.">
+<meta name="description" content="Подготовка к экзамену по основам платформы Lakehouse, аккредитованному Databricks. Подробное руководство по озерному домику, озеру Дельта, каталогу Unity и Databricks SQL, созданное на основе официальной документации, а также практический экзамен из 40 вопросов.">
 <link rel="stylesheet" href="../assets/grain/grain.css">
 <link rel="stylesheet" href="../assets/grain/zinc-sky.css"><!-- Zinc & Sky palette rollout -->
 <style>
@@ -251,14 +251,14 @@ footer{margin-top:50px;padding-top:24px;border-top:1px solid var(--border);text-
 </head>
 <body>
 <nav>
-  <button class="nav-btn" onclick="window.location='../index.html'" title="Back to all kits">← All Kits</button>
-  <span class="nav-title"><span class="logo-mark"><i data-lucide="badge-check"></i></span>Databricks Fundamentals Prep</span>
+  <button class="nav-btn" onclick="window.location='../index.html'" title="Вернуться ко всем комплектам">← Все комплекты</button>
+  <span class="nav-title"><span class="logo-mark"><i data-lucide="badge-check"></i></span>Подготовка к основам Databricks</span>
   <button class="nav-btn" id="navHome" onclick="setView('home')">Home</button>
-  <button class="nav-btn" id="navStudy" onclick="setView('study')">Study Guide</button>
-  <button class="nav-btn" id="navExam" onclick="setView('exam')">Practice Exam</button>
+  <button class="nav-btn" id="navStudy" onclick="setView('study')">Учебное руководство</button>
+  <button class="nav-btn" id="navExam" onclick="setView('exam')">Практический экзамен</button>
   <button class="nav-btn" id="navResults" onclick="setView('results')" style="display:none">Results</button>
   <div class="nav-spacer"></div>
-  <button class="nav-btn" onclick="resetAll()" title="Reset progress"><i data-lucide="rotate-ccw"></i>Reset</button>
+  <button class="nav-btn" onclick="resetAll()" title="Сбросить прогресс"><i data-lucide="rotate-ccw"></i>Reset</button>
   <button class="nav-btn" onclick="toggleTheme()"><span id="themeIcon"><i data-lucide="sun"></i></span></button>
 </nav>
 
@@ -299,8 +299,8 @@ async function hintCall(prompt, targetId){
   if(!el) return;
   const key = getCoachKey();
   el.classList.add('show');
-  if(!key){ el.textContent = 'Add your Anthropic API key on the home page under Hints to turn hints on.'; return; }
-  el.textContent = 'Thinking…';
+  if(!key){ el.textContent = "Добавьте свой ключ Anthropic API на главной странице в разделе «Подсказки», чтобы включить подсказки."; return; }
+  el.textContent = "Думая…";
   try{
     const res = await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
@@ -310,7 +310,7 @@ async function hintCall(prompt, targetId){
     const data = await res.json();
     if(!res.ok){ el.textContent = data?.error?.message || 'Request refused. Check your key.'; return; }
     el.textContent = data.content?.[0]?.text || 'No response. Check your key.';
-  } catch(e){ el.textContent = 'Request failed. Check your key and your connection.'; }
+  } catch(e){ el.textContent = "Запрос не выполнен. Проверьте свой ключ и соединение."; }
 }
 const TUTOR_ROLE = `You are a plain-spoken Databricks tutor helping someone study for the Databricks Accredited Lakehouse Platform Fundamentals exam (also called Databricks Fundamentals). That exam is a concept exam with no code: what a lakehouse is versus a data warehouse or data lake, the medallion architecture, the control plane and compute plane, Delta Lake (ACID, time travel, schema enforcement, Parquet plus a transaction log), Apache Spark and Photon, Unity Catalog (catalog.schema.table, privileges, lineage, audit, sharing), Databricks SQL, SQL warehouses, AI/BI dashboards, Genie, notebooks, Lakeflow Jobs and pipelines, MLflow, and which persona uses which tool.`;
 function hintStudy(key, i){
@@ -345,20 +345,20 @@ In 3 sentences at most, say what they were probably confusing, then give one pla
    Databricks lists the topics for this exam but does NOT publish weights.
    The four areas and the percentages below are OUR study allocation, and the page says so. */
 const DOMAIN_INFO = {
-  d1:{label:'Area 1', name:'Lakehouse concepts', weight:30, color:'var(--c-d1)',
-      hint:'Warehouse vs lake vs lakehouse, medallion bronze/silver/gold, open formats, storage and compute apart, control plane vs compute plane, the three clouds.',
+  d1:{label:"Зона 1", name:'Lakehouse concepts', weight:30, color:'var(--c-d1)',
+      hint:"Склад против озера против дома у озера, медальон бронзовый/серебряный/золотой, открытые форматы, хранилище и вычисления отдельно, плоскость управления против плоскости вычислений, три облака.",
       docPath:'https://docs.databricks.com/aws/en/lakehouse/',
       docLabel:'What is a data lakehouse? (Databricks docs)'},
-  d2:{label:'Area 2', name:'Delta Lake and Apache Spark', weight:25, color:'var(--c-d2)',
-      hint:'Parquet plus a transaction log, ACID, time travel, schema enforcement and evolution, Spark as the engine, Photon, Lakeflow pipelines.',
+  d2:{label:"Зона 2", name:'Delta Lake and Apache Spark', weight:25, color:'var(--c-d2)',
+      hint:"Parquet плюс журнал транзакций, ACID, путешествия во времени, принудительное применение и эволюция схемы, Spark как движок, Photon, конвейеры Lakeflow.",
       docPath:'https://docs.databricks.com/aws/en/delta/',
       docLabel:'What is Delta Lake? (Databricks docs)'},
-  d3:{label:'Area 3', name:'Unity Catalog and governance', weight:20, color:'var(--c-d3)',
-      hint:'Metastore, catalog.schema.table, privileges, lineage, audit, Catalog Explorer, OpenSharing.',
+  d3:{label:"Зона 3", name:'Unity Catalog and governance', weight:20, color:'var(--c-d3)',
+      hint:"Metastore, каталог.схема.таблица, привилегии, происхождение, аудит, обозреватель каталогов, OpenSharing.",
       docPath:'https://docs.databricks.com/aws/en/data-governance/unity-catalog/',
       docLabel:'What is Unity Catalog? (Databricks docs)'},
-  d4:{label:'Area 4', name:'Databricks SQL, workflows and personas', weight:25, color:'var(--c-d4)',
-      hint:'SQL warehouses, AI/BI dashboards, Genie, notebooks, Lakeflow Jobs, MLflow, Partner Connect, who uses what.',
+  d4:{label:"Зона 4", name:'Databricks SQL, workflows and personas', weight:25, color:'var(--c-d4)',
+      hint:"Хранилища SQL, информационные панели AI/BI, Genie, блокноты, задания Lakeflow, MLflow, Partner Connect — кто что использует.",
       docPath:'https://docs.databricks.com/aws/en/sql/',
       docLabel:'What is Databricks SQL? (Databricks docs)'}
 };
@@ -366,7 +366,7 @@ const DOMAIN_ORDER = ['d1','d2','d3','d4'];
 
 /* ============== STUDY GUIDE ============== */
 const STUDY = [
-  {key:'d1', title:'Lakehouse concepts: warehouse, lake, lakehouse, planes',
+  {key:'d1', title:"Концепции домика у озера: склад, озеро, домик у озера, самолеты.",
     must:[
       `<strong>The one-line definition.</strong> Databricks docs say a data lakehouse is "a data management system that combines the benefits of data lakes and data warehouses." If a question asks what a lakehouse <em>is</em>, that sentence is the answer.`,
       `<strong>What a data warehouse is good at, and what it costs.</strong> Warehouses are built for BI and SQL reporting. Their weak spots are proprietary formats, expensive ETL to load them, and poor support for machine learning on raw or unstructured data.`,
@@ -396,7 +396,7 @@ const STUDY = [
       <span style="padding:5px 11px;border-radius:6px;background:#b8860b;color:#fff"><b>Gold</b> aggregated, business-ready</span>
     </div><div style="color:var(--dim);font-size:12px;margin-top:7px">Medallion architecture. Each layer is a better copy of the one before it.</div>`},
 
-  {key:'d2', title:'Delta Lake and Apache Spark',
+  {key:'d2', title:"Озеро Дельта и Искра Апач",
     must:[
       `<strong>Delta Lake is the storage layer.</strong> The docs call it "the optimized storage layer that provides the foundation for tables in a lakehouse on Databricks." It is open source.`,
       `<strong>Under the hood it is Parquet plus a log.</strong> Delta Lake "extends Parquet data files with a file-based transaction log for ACID transactions and scalable metadata handling." Data files are ordinary Parquet. The log is what makes them a table.`,
@@ -426,7 +426,7 @@ const STUDY = [
       <div style="border:1px solid var(--accent);border-radius:6px;padding:8px 12px;background:var(--surf);flex:1;min-width:150px"><b style="color:var(--accent)">Delta table</b><div style="color:var(--dim);font-size:12px">ACID, time travel, schema</div></div>
     </div>`},
 
-  {key:'d3', title:'Unity Catalog and governance',
+  {key:'d3', title:"Каталог Unity и управление",
     must:[
       `<strong>Unity Catalog is the governance layer for data and AI.</strong> The docs say it "operates beneath every data and AI interaction in your workspaces automatically." One place to manage access, lineage, audit and discovery across workspaces.`,
       `<strong>It is on by default</strong> for workspaces created after 8 November 2023. New accounts get it without setup. The older per-workspace Hive metastore is the legacy option.`,
@@ -458,7 +458,7 @@ const STUDY = [
       <span style="padding:5px 10px;border-radius:6px;background:var(--surf);border:1px solid var(--border)"><b style="color:var(--accent)">table</b></span>
     </div><div style="color:var(--dim);font-size:12px;margin-top:7px">The three-level namespace. Example: <code>sales.finance.invoices</code>. Grants inherit downward.</div>`},
 
-  {key:'d4', title:'Databricks SQL, workflows and personas',
+  {key:'d4', title:"Databricks SQL, рабочие процессы и персоны",
     must:[
       `<strong>Databricks SQL is the warehouse experience on the lakehouse.</strong> The docs say it "runs directly on your data lake, supports ANSI SQL with Delta Lake extensions" and lets you build a data warehouse "without moving your data."`,
       `<strong>A SQL warehouse is the compute for SQL.</strong> Definition from the docs: "a compute resource that lets you query and explore data on Databricks." Three types: serverless, pro and classic.`,
@@ -495,19 +495,19 @@ const STUDY = [
 const QUESTIONS = [
   /* ---------- AREA 1 · Lakehouse concepts (12) ---------- */
   {id:'q1', domain:'d1', type:'mc', q:`Which statement best describes a data lakehouse?`,
-    choices:[`A data warehouse that has been moved to the cloud`, `A data management system that combines the benefits of data lakes and data warehouses`, `A data lake that has a SQL query engine attached`, `A managed database service offered by a cloud provider`],
+    choices:[`Хранилище данных, перенесенное в облако`, `Система управления данными, сочетающая в себе преимущества озер данных и хранилищ данных.`, `Озеро данных, к которому подключен механизм запросов SQL.`, `Услуга управляемой базы данных, предлагаемая облачным провайдером.`],
     correct:1,
     explain:`That is the Databricks definition word for word. The lakehouse keeps the open, low-cost storage of a lake and adds the transactions, performance and governance of a warehouse.`},
   {id:'q2', domain:'d1', type:'ms', q:`Which are weaknesses of a traditional data warehouse that the lakehouse is designed to fix? <em>Choose all that apply.</em>`,
-    choices:[`Proprietary storage formats`, `Poor support for machine learning on raw or unstructured data`, `Inability to run SQL`, `Costly ETL to load data before it can be used`],
+    choices:[`Собственные форматы хранения`, `Плохая поддержка машинного обучения на необработанных или неструктурированных данных.`, `Невозможность запуска SQL`, `Дорогостоящий ETL для загрузки данных перед их использованием.`],
     correct:[0,1,3],
     explain:`Warehouses are excellent at SQL. Their problems are proprietary formats, weak ML support and the expensive ETL pipelines needed to feed them.`},
   {id:'q3', domain:'d1', type:'mc', q:`A company stores raw files cheaply in cloud object storage but has no transactions, no schema control and poor data quality. What do they have?`,
-    choices:[`A data warehouse`, `A data lake`, `A lakehouse`, `A medallion architecture`],
+    choices:[`Хранилище данных`, `Озеро данных`, `Дом у озера`, `Медальонная архитектура`],
     correct:1,
     explain:`Cheap raw storage without reliability or governance is the classic data lake. Adding Delta Lake and Unity Catalog is what turns it into a lakehouse.`},
   {id:'q4', domain:'d1', type:'ms', q:`Which three technologies does Databricks name as the foundation of its lakehouse? <em>Choose all that apply.</em>`,
-    choices:[`Apache Spark`, `Delta Lake`, `Unity Catalog`, `Hadoop MapReduce`],
+    choices:[`Апач Спарк`, `Дельта озера`, `Каталог Unity`, `Hadoop MapReduce`],
     correct:[0,1,2],
     explain:`Spark for compute, Delta Lake for ACID transactions and schema enforcement, Unity Catalog for governance and lineage. MapReduce is not part of it.`},
   {id:'q5', domain:'d1', type:'mc', q:`In the medallion architecture, which layer holds raw data exactly as it arrived, with minimal validation?`,
@@ -515,149 +515,149 @@ const QUESTIONS = [
     correct:0,
     explain:`Bronze is raw ingestion and the single source of truth for reprocessing. Silver is cleaned and validated. Gold is aggregated and business-ready. There is no platinum layer in the Databricks docs.`},
   {id:'q6', domain:'d1', type:'mc', q:`A finance dashboard needs monthly revenue by region, already aggregated and modelled. Which medallion layer should it read from?`,
-    choices:[`Bronze`, `Silver`, `Gold`, `Any layer, they are equivalent`],
+    choices:[`Bronze`, `Silver`, `Gold`, `Любой слой, они эквивалентны`],
     correct:2,
     explain:`Gold tables are the aggregated, domain-specific, business-aligned layer built for dashboards and reports. Silver is clean but still detailed. Bronze is raw.`},
   {id:'q7', domain:'d1', type:'mc', q:`Deduplication, schema enforcement and null handling are the main work of which medallion layer?`,
-    choices:[`Bronze`, `Silver`, `Gold`, `The control plane`],
+    choices:[`Bronze`, `Silver`, `Gold`, `Плоскость управления`],
     correct:1,
     explain:`Silver is the cleaning and validation layer. Its output is a trustworthy, detailed version of the bronze data that analysts and data scientists can work from.`},
   {id:'q8', domain:'d1', type:'mc', q:`Where is the Databricks control plane located?`,
-    choices:[`In your cloud account, next to your data`, `In the Databricks account`, `On the user's laptop`, `Inside each SQL warehouse`],
+    choices:[`В вашем облачном аккаунте рядом с вашими данными`, `В учетной записи Databricks`, `На ноутбуке пользователя`, `Внутри каждого хранилища SQL`],
     correct:1,
     explain:`The docs are explicit: the control plane "is located in the Databricks account, not your cloud account." It holds the backend services such as the web app and job scheduling.`},
   {id:'q9', domain:'d1', type:'mc', q:`With <em>classic</em> compute, where does the compute plane run?`,
-    choices:[`In the Databricks account`, `In your own cloud account`, `Split evenly between the two`, `On Databricks-owned hardware in a data centre`],
+    choices:[`В учетной записи Databricks`, `В вашем собственном облачном аккаунте`, `Разделить поровну между двумя`, `На оборудовании, принадлежащем Databricks, в центре обработки данных`],
     correct:1,
     explain:`Classic compute runs in the customer's cloud account. Serverless compute is the variant that runs in the Databricks account. Either way, that is where your data is processed.`},
   {id:'q10', domain:'d1', type:'mc', q:`What does "separation of storage and compute" let a lakehouse do?`,
-    choices:[`Keep all data in memory permanently`, `Scale and pay for processing independently of the data stored`, `Avoid using cloud object storage`, `Run without a cloud provider`],
+    choices:[`Постоянно храните все данные в памяти`, `Масштабируйте и платите за обработку независимо от хранящихся данных`, `Избегайте использования облачного объектного хранилища`, `Работайте без облачного провайдера`],
     correct:1,
     explain:`Data sits in cloud object storage. Compute is spun up and down on its own. You can have a petabyte stored with no compute running, or a huge cluster against a small table.`},
   {id:'q11', domain:'d1', type:'mc', q:`Which describes the relationship between Databricks and cloud providers?`,
-    choices:[`Databricks is itself a cloud provider that competes with AWS`, `Databricks runs on AWS, Microsoft Azure and Google Cloud and uses their storage`, `Databricks runs only on its own private servers`, `Databricks runs only on AWS`],
+    choices:[`Databricks сама является облачным провайдером, конкурирующим с AWS.`, `Databricks работает на AWS, Microsoft Azure и Google Cloud и использует их хранилище.`, `Databricks работает только на собственных частных серверах.`, `Databricks работает только на AWS`],
     correct:1,
     explain:`Databricks is a platform deployed inside one of the three major clouds. Your data stays in that cloud's object storage and the control plane is run by Databricks.`},
   {id:'q12', domain:'d1', type:'mc', q:`Why do open formats such as Parquet matter to the lakehouse?`,
-    choices:[`They compress better than any proprietary format`, `Other tools and engines can read the same data without lock-in`, `They are required by cloud providers`, `They remove the need for governance`],
+    choices:[`Они сжимают лучше, чем любой проприетарный формат.`, `Другие инструменты и механизмы могут читать те же данные без привязки.`, `Они необходимы облачным провайдерам`, `Они устраняют необходимость в управлении`],
     correct:1,
     explain:`Open formats mean pandas, PyTorch, BI tools and other query engines can read the files directly. That is the lock-in problem of proprietary warehouse formats, solved.`},
 
   /* ---------- AREA 2 · Delta Lake and Apache Spark (10) ---------- */
   {id:'q13', domain:'d2', type:'mc', q:`What does Delta Lake add to Parquet files to make them a reliable table?`,
-    choices:[`A new binary file format that replaces Parquet`, `A file-based transaction log`, `A relational database server`, `Compression`],
+    choices:[`Новый формат двоичных файлов, заменяющий Parquet.`, `Файловый журнал транзакций`, `Сервер реляционной базы данных`, `Compression`],
     correct:1,
     explain:`The data files stay Parquet. Delta Lake adds a file-based transaction log for ACID transactions and scalable metadata handling. That log is the source of versioning and time travel.`},
   {id:'q14', domain:'d2', type:'mc', q:`A new table is created on Databricks with no format specified. What format is it?`,
-    choices:[`CSV`, `Plain Parquet`, `Delta Lake`, `ORC`],
+    choices:[`CSV`, `Однотонный паркет`, `Дельта озера`, `ORC`],
     correct:2,
     explain:`"Unless otherwise specified, all tables on Databricks are Delta Lake tables."`},
   {id:'q15', domain:'d2', type:'mc', q:`Two jobs write to the same Delta table at the same time. What guarantees that readers never see a half-finished write?`,
-    choices:[`Schema evolution`, `ACID transactions`, `Photon`, `Partner Connect`],
+    choices:[`Эволюция схемы`, `ACID-транзакции`, `Photon`, `Партнерское соединение`],
     correct:1,
     explain:`ACID transactions mean each write fully commits or does not happen at all, and readers see a consistent table version throughout.`},
   {id:'q16', domain:'d2', type:'mc', q:`An analyst needs to see what a Delta table looked like yesterday before a bad update ran. Which feature does that?`,
-    choices:[`Time travel with <code>TIMESTAMP AS OF</code> or <code>VERSION AS OF</code>`, `Lineage in Unity Catalog`, `Photon`, `Partner Connect`],
+    choices:[`Путешествие во времени с <code>ВРЕМЕННАЯ МЕТКА НА ОТ</code> or <code>ВЕРСИЯ ОТ</code>`, `Lineage в каталоге Unity`, `Photon`, `Партнерское соединение`],
     correct:0,
     explain:`Every write is a new version in the transaction log, so you can query an earlier version by version number or timestamp. <code>DESCRIBE HISTORY</code> lists the versions.`},
   {id:'q17', domain:'d2', type:'mc', q:`By default, roughly how far back does Databricks say you should rely on time travel?`,
-    choices:[`24 hours`, `7 days`, `1 year`, `Forever`],
+    choices:[`24 часа`, `7 дней`, `1 год`, `Forever`],
     correct:1,
     explain:`Deleted data files are kept 7 days by default and the log 30 days. You need both, so the docs say to use only the past 7 days unless you raise both retention settings. Table history is not a backup.`},
   {id:'q18', domain:'d2', type:'mc', q:`A write contains a column with the wrong data type and Delta Lake rejects it. Which feature did that?`,
-    choices:[`Schema evolution`, `Schema enforcement`, `Time travel`, `Medallion architecture`],
+    choices:[`Эволюция схемы`, `Применение схемы`, `Путешествие во времени`, `Медальонная архитектура`],
     correct:1,
     explain:`Delta Lake validates schema on write. Mismatched data is refused instead of silently corrupting the table. Schema evolution is the opt-in feature that lets new columns in on purpose.`},
   {id:'q19', domain:'d2', type:'mc', q:`What is Apache Spark's role in Databricks?`,
-    choices:[`The storage format for tables`, `The governance layer`, `The engine that powers compute clusters and SQL warehouses`, `A dashboard tool`],
+    choices:[`Формат хранения таблиц`, `Уровень управления`, `Механизм, который поддерживает вычислительные кластеры и хранилища SQL.`, `Инструмент приборной панели`],
     correct:2,
     explain:`The docs say Spark "is the technology powering compute clusters and SQL warehouses in Databricks." Delta Lake is storage. Unity Catalog is governance.`},
   {id:'q20', domain:'d2', type:'mc', q:`What is Photon?`,
-    choices:[`A vectorized query engine written in C++ that speeds up SQL and DataFrame workloads`, `A new file format`, `The Databricks notebook editor`, `An orchestration tool for jobs`],
+    choices:[`Механизм векторизованных запросов, написанный на C++, который ускоряет рабочие нагрузки SQL и DataFrame.`, `Новый формат файла`, `Редактор блокнотов Databricks`, `Инструмент оркестрации заданий`],
     correct:0,
     explain:`Photon is the Databricks-native vectorized engine that replaces the JVM execution layer and processes data in batches of thousands of rows. It is on by default on serverless compute and SQL warehouses.`},
   {id:'q21', domain:'d2', type:'mc', q:`Which product was previously called Delta Live Tables?`,
-    choices:[`Delta Lake`, `Lakeflow pipelines`, `Unity Catalog`, `Photon`],
+    choices:[`Дельта озера`, `Трубопроводы озерного стока`, `Каталог Unity`, `Photon`],
     correct:1,
     explain:`Lakeflow pipelines, the declarative pipeline tool that builds streaming tables and materialized views, was called Delta Live Tables. Delta Lake is the storage format and is a different thing.`},
   {id:'q22', domain:'d2', type:'ms', q:`Which are true of Lakeflow pipelines? <em>Choose all that apply.</em>`,
-    choices:[`You declare the tables you want in SQL or Python and the platform manages dependencies`, `They support both batch and streaming`, `They replace Delta Lake as the table format`, `Their core objects are streaming tables and materialized views`],
+    choices:[`Вы объявляете нужные таблицы в SQL или Python, а платформа управляет зависимостями.`, `Они поддерживают как пакетную, так и потоковую передачу.`, `Они заменяют Delta Lake в качестве формата таблицы.`, `Их основными объектами являются потоковые таблицы и материализованные представления.`],
     correct:[0,1,3],
     explain:`Pipelines are declarative, handle batch and streaming, and produce streaming tables and materialized views. They write Delta tables; they do not replace the format.`},
 
   /* ---------- AREA 3 · Unity Catalog and governance (8) ---------- */
   {id:'q23', domain:'d3', type:'mc', q:`What is Unity Catalog?`,
-    choices:[`A BI dashboard product`, `The unified governance layer for data and AI assets across workspaces`, `The default compute type`, `A file format`],
+    choices:[`Продукт информационной панели BI`, `Единый уровень управления данными и ресурсами ИИ в рабочих пространствах.`, `Тип вычислений по умолчанию`, `Формат файла`],
     correct:1,
     explain:`Unity Catalog manages access, lineage, audit, discovery and sharing for tables, files, functions and models, and it sits beneath every data and AI interaction in the workspace.`},
   {id:'q24', domain:'d3', type:'mc', q:`In the name <code>sales.finance.invoices</code>, what is <code>finance</code>?`,
-    choices:[`The metastore`, `The catalog`, `The schema`, `The table`],
+    choices:[`Метастор`, `Каталог`, `Схема`, `Стол`],
     correct:2,
     explain:`The three-level namespace is catalog.schema.table. <code>sales</code> is the catalog, <code>finance</code> is the schema (also called a database), <code>invoices</code> is the table.`},
   {id:'q25', domain:'d3', type:'mc', q:`What is the top-level container for metadata and permissions in Unity Catalog?`,
-    choices:[`The workspace`, `The metastore`, `The schema`, `The SQL warehouse`],
+    choices:[`Рабочее пространство`, `Метастор`, `Схема`, `Хранилище SQL`],
     correct:1,
     explain:`The metastore sits at the account level above catalogs. Storage credentials, external locations and connections are also defined directly on the metastore.`},
   {id:'q26', domain:'d3', type:'mc', q:`An auditor asks which users read a sensitive table last month. Which Unity Catalog feature answers that?`,
-    choices:[`Lineage`, `Audit logs`, `Time travel`, `Catalog Explorer`],
+    choices:[`Lineage`, `Журналы аудита`, `Путешествие во времени`, `Проводник каталогов`],
     correct:1,
     explain:`Audit logs record data access and system activity. Lineage shows how data flows between assets, which is a different question.`},
   {id:'q27', domain:'d3', type:'mc', q:`A dashboard shows a wrong number and you need to trace which source tables fed it. Which feature?`,
-    choices:[`Lineage`, `Audit logs`, `OpenSharing`, `Photon`],
+    choices:[`Lineage`, `Журналы аудита`, `OpenSharing`, `Photon`],
     correct:0,
     explain:`Unity Catalog automatically tracks how data and AI assets flow and connect, from source data through to models and dashboards. That upstream trace is lineage.`},
   {id:'q28', domain:'d3', type:'mc', q:`How does Unity Catalog govern non-tabular files such as images and PDFs?`,
-    choices:[`It cannot govern files`, `Through volumes`, `Through SQL warehouses`, `Through notebooks`],
+    choices:[`Он не может управлять файлами`, `Через тома`, `Через хранилища SQL`, `Через блокноты`],
     correct:1,
     explain:`Volumes are the Unity Catalog securable for files. They can be managed or external, like tables, and get the same grants and audit.`},
   {id:'q29', domain:'d3', type:'ms', q:`Which are true of OpenSharing (formerly Delta Sharing)? <em>Choose all that apply.</em>`,
-    choices:[`It is based on an open protocol`, `The recipient does not have to use Databricks`, `It copies the data into the recipient's storage`, `A provider shares, a recipient receives, and a share is the read-only collection of assets`],
+    choices:[`Он основан на открытом протоколе.`, `Получателю не обязательно использовать Databricks.`, `Он копирует данные в хранилище получателя.`, `Поставщик делится, получатель получает, а доля — это коллекция ресурсов, доступная только для чтения.`],
     correct:[0,1,3],
     explain:`OpenSharing shares live data without replication. Open sharing mode works for Spark, pandas, Power BI and other tools via tokens. Databricks-to-Databricks mode needs no tokens.`},
   {id:'q30', domain:'d3', type:'mc', q:`Users should find tables by browsing and searching, reading descriptions and checking lineage. Which UI is built for that?`,
-    choices:[`The SQL editor`, `Catalog Explorer`, `Partner Connect`, `The jobs page`],
+    choices:[`Редактор SQL`, `Проводник каталогов`, `Партнерское соединение`, `Страница вакансий`],
     correct:1,
     explain:`Catalog Explorer is the Databricks UI for discovering and managing the objects registered in Unity Catalog.`},
 
   /* ---------- AREA 4 · Databricks SQL, workflows and personas (10) ---------- */
   {id:'q31', domain:'d4', type:'mc', q:`What is a SQL warehouse in Databricks?`,
-    choices:[`A separate database you copy data into`, `A compute resource that lets you query and explore data on Databricks`, `A storage format`, `A type of notebook`],
+    choices:[`Отдельная база данных, в которую вы копируете данные.`, `Вычислительный ресурс, позволяющий запрашивать и исследовать данные в Databricks.`, `Формат хранения`, `Тип блокнота`],
     correct:1,
     explain:`That is the docs definition. The warehouse is compute. The data stays in the same Delta tables in cloud storage that notebooks and jobs read.`},
   {id:'q32', domain:'d4', type:'ms', q:`Which are benefits Databricks lists for serverless SQL warehouses? <em>Choose all that apply.</em>`,
-    choices:[`Instant, elastic compute with no waiting for infrastructure`, `Databricks handles patching, upgrades and capacity`, `They run inside your own cloud account`, `Lower total cost of ownership from less idle time`],
+    choices:[`Мгновенные и эластичные вычисления без ожидания инфраструктуры.`, `Databricks занимается исправлениями, обновлениями и емкостью`, `Они работают внутри вашей собственной облачной учетной записи.`, `Снижение совокупной стоимости владения за счет меньшего времени простоя`],
     correct:[0,1,3],
     explain:`Serverless runs in the Databricks account, not yours. Pro and classic are the ones in your cloud account. The three listed benefits are straight from the docs.`},
   {id:'q33', domain:'d4', type:'mc', q:`A business user wants to type "what were sales by region last quarter" and get an answer from governed data. Which feature?`,
-    choices:[`Genie`, `Lakeflow Jobs`, `MLflow`, `Partner Connect`],
+    choices:[`Genie`, `Лейкфлоу Вакансии`, `MLflow`, `Партнерское соединение`],
     correct:0,
     explain:`Genie (marketed earlier as AI/BI Genie) answers natural-language questions grounded in your data and governed through Unity Catalog.`},
   {id:'q34', domain:'d4', type:'mc', q:`Which statement about AI/BI dashboards is true?`,
-    choices:[`They require exporting data to a third-party BI tool`, `A published dashboard can be shared with people in the Databricks account even without workspace access`, `They only display notebook output`, `They cannot be built from SQL queries`],
+    choices:[`Они требуют экспорта данных в сторонний инструмент BI.`, `Опубликованной информационной панелью можно поделиться с людьми в учетной записи Databricks даже без доступа к рабочей области.`, `Они отображают только вывод ноутбука`, `Их нельзя построить из SQL-запросов.`],
     correct:1,
     explain:`AI/BI dashboards are built from datasets defined on tables, views or queries, then published. Sharing works at the workspace and account level.`},
   {id:'q35', domain:'d4', type:'mc', q:`Which Databricks product schedules and orchestrates tasks such as notebooks, pipelines and SQL queries in a workflow?`,
-    choices:[`Lakeflow Jobs`, `Delta Lake`, `Catalog Explorer`, `Photon`],
+    choices:[`Лейкфлоу Вакансии`, `Дельта озера`, `Проводник каталогов`, `Photon`],
     correct:0,
     explain:`Lakeflow Jobs (called Workflows in older material) runs tasks on time-based or event-based triggers with dependencies between them.`},
   {id:'q36', domain:'d4', type:'mc', q:`Which is an example of an <em>event-based</em> job trigger?`,
-    choices:[`Run every day at 2 AM`, `Run when new files arrive in cloud storage`, `Run every Monday`, `Run once on creation`],
+    choices:[`Бегайте каждый день в 2 часа ночи`, `Запускаться при поступлении новых файлов в облачное хранилище`, `Запускайте каждый понедельник`, `Запустить один раз при создании`],
     correct:1,
     explain:`Time-based triggers follow a clock. Event-based triggers react to something happening, such as new data landing in storage.`},
   {id:'q37', domain:'d4', type:'mc', q:`Which tool tracks experiments, packages models and manages a model registry?`,
-    choices:[`MLflow`, `Databricks SQL`, `Lakeflow Connect`, `OpenSharing`],
+    choices:[`MLflow`, `Блоки данных SQL`, `Лейкфлоу Коннект`, `OpenSharing`],
     correct:0,
     explain:`MLflow is the open source ML lifecycle platform. On Databricks, the managed version adds model serving and a registry in Unity Catalog.`},
   {id:'q38', domain:'d4', type:'mc', q:`Which persona most typically spends the day in Databricks SQL, the SQL editor and dashboards?`,
-    choices:[`Data engineer`, `Data analyst`, `ML engineer`, `Platform administrator`],
+    choices:[`Дата-инженер`, `Аналитик данных`, `инженер машинного обучения`, `Администратор платформы`],
     correct:1,
     explain:`Analysts live in Databricks SQL. Engineers build with Lakeflow and notebooks. Scientists and ML engineers work in notebooks and MLflow.`},
   {id:'q39', domain:'d4', type:'mc', q:`Which languages can be used together in a single Databricks notebook?`,
-    choices:[`Python only`, `Python, SQL, Scala and R`, `SQL only`, `Java and C++`],
+    choices:[`только Python`, `Python, SQL, Scala и R`, `только SQL`, `Ява и С++`],
     correct:1,
     explain:`Notebooks support Python, SQL, Scala and R with real-time co-authoring, versioning and built-in visualizations.`},
   {id:'q40', domain:'d4', type:'mc', q:`What does Partner Connect do?`,
-    choices:[`Shares data with external organizations`, `Lets you create trial accounts with select partner tools and connects your workspace to them from the Databricks UI`, `Connects two Databricks workspaces`, `Manages cloud provider billing`],
+    choices:[`Делится данными с внешними организациями`, `Позволяет создавать пробные учетные записи с помощью выбранных партнерских инструментов и подключает к ним ваше рабочее пространство из пользовательского интерфейса Databricks.`, `Соединяет два рабочих пространства Databricks.`, `Управляет выставлением счетов поставщикам облачных услуг.`],
     correct:1,
     explain:`Partner Connect provisions the SQL warehouse and credentials and hands them to the partner tool, so you can try BI, ingestion and other partner products on your lakehouse data. Sharing with outside organizations is OpenSharing.`}
 ];
@@ -680,7 +680,7 @@ function render(){
 }
 
 function setView(v, opts){
-  if(v === 'results' && !state.submitted){ toast('Finish and submit the exam to see results.'); return; }
+  if(v === 'results' && !state.submitted){ toast("Завершите и отправьте экзамен, чтобы увидеть результаты."); return; }
   state.view = v;
   save();
   render();
@@ -846,7 +846,7 @@ function rateConf(id,lvl){
 }
 function needsReviewCount(){ return Object.values(state.conf).filter(v=>v==='low'||v==='mid').length; }
 function toggleReviewFilter(){
-  if(!state.reviewFilter && needsReviewCount()===0){ toast('Rate a concept "Not yet" or "Almost" first, then filter to just those.'); return; }
+  if(!state.reviewFilter && needsReviewCount()===0){ toast("Сначала оцените концепцию «Еще нет» или «Почти», а затем отфильтруйте только их."); return; }
   state.reviewFilter = !state.reviewFilter;
   save(); render();
 }
@@ -886,7 +886,7 @@ function syncTimerLoop(){
     }
     if(left <= 0){
       clearInterval(timerInterval);
-      toast("Pacing drill over. Exam submitted.");
+      toast("Упражнение по темпу завершено. Экзамен сдан.");
       submitExam(true);
     }
   }, 500);
@@ -1087,7 +1087,7 @@ function submitExam(auto){
   if(state.submitted) return;
   const answered = Object.keys(state.answers).length;
   if(!auto && answered < QUESTIONS.length){
-    if(!confirm(`You've answered ${answered} of ${QUESTIONS.length}. Unanswered questions count as wrong, like the real exam. Submit anyway?`)) return;
+    if(!confirm(`Вы ответили ${answered} of ${QUESTIONS.length}. Вопросы без ответа считаются неправильными, как и настоящий экзамен. Все равно отправить?`)) return;
   }
   state.submitted = true;
   state.qIdx = 0;
@@ -1113,10 +1113,10 @@ const PASS_PCT = 80;
 const READY_PCT = 88; // our recommendation, NOT Databricks'. Margin for a harder question set
 
 function verdictFor(pct){
-  if(pct >= READY_PCT) return {label:'Clear of the 80% line with room to spare. Book it.', tone:'good'};
-  if(pct >= PASS_PCT) return {label:'Over the 80% line, but thin. Close your weakest area, then book it.', tone:'warn'};
-  if(pct >= 65) return {label:'Under the line. It is usually the look-alike pairs costing you. Work the study guide, then retake this.', tone:'warn'};
-  return {label:'Cold start. Watch the free Databricks course, read all four areas, then retake this.', tone:'bad'};
+  if(pct >= READY_PCT) return {label:"Вдали от линии 80%, есть свободное место. Забронируйте это.", tone:'good'};
+  if(pct >= PASS_PCT) return {label:"За чертой 80%, но тонкий. Закройте самое слабое место, а затем забронируйте его.", tone:'warn'};
+  if(pct >= 65) return {label:"Под чертой. Обычно вам обходятся похожие пары. Поработайте над учебным пособием, а затем пересдайте это.", tone:'warn'};
+  return {label:"Холодный старт. Посмотрите бесплатный курс Databricks, прочитайте все четыре раздела, а затем повторите его.", tone:'bad'};
 }
 
 function renderResults(){
@@ -1165,7 +1165,7 @@ function renderResults(){
 }
 
 function retake(){
-  if(!confirm('Clear your answers and retake the practice exam?')) return;
+  if(!confirm("Очистить свои ответы и пересдать пробный экзамен?")) return;
   state.answers = {};
   state.submitted = false;
   state.examStart = null;
@@ -1181,15 +1181,15 @@ function attachFooter(app){
   const f = document.createElement('footer');
   f.innerHTML = `
     <div class="footer-links">
-      <a href="../sql-cert/">SQL Prep Kit</a>
-      <a href="../tableau-cert/">Tableau Cert Prep</a>
-      <a href="../powerbi-cert/">Power BI Cert Prep</a>
-      <a href="../excel-cert/">Excel Cert Prep</a>
-      <a href="https://www.databricks.com/learn/certification/lakehouse-platform-fundamentals" target="_blank" rel="noopener">Official accreditation page</a>
-      <a href="https://www.databricks.com/learn/training/lakehouse-fundamentals" target="_blank" rel="noopener">Free Databricks course</a>
-      <a href="../">← All Kits</a>
+      <a href="../sql-cert/">Комплект подготовки SQL</a>
+      <a href="../tableau-cert/">Подготовка к сертификату Tableau</a>
+      <a href="../powerbi-cert/">Подготовка сертификата Power BI</a>
+      <a href="../excel-cert/">Подготовка сертификата Excel</a>
+      <a href="https://www.databricks.com/learn/certification/lakehouse-platform-fundamentals" target="_blank" rel="noopener">Официальная страница аккредитации</a>
+      <a href="https://www.databricks.com/learn/training/lakehouse-fundamentals" target="_blank" rel="noopener">Бесплатный курс Databricks</a>
+      <a href="../">← Все комплекты</a>
     </div>
-    Part of the <a href="../">Analyst Prep Kit</a> · Progress saved locally · Not affiliated with Databricks. Always check the official accreditation page for current format and policies
+    Часть <a href="../">Подготовительный комплект для аналитика</a> · Прогресс сохраняется локально · Не связан с Databricks. Всегда проверяйте официальную страницу аккредитации на предмет текущего формата и политики.
   `;
   app.appendChild(f);
 }
@@ -1210,7 +1210,7 @@ function toggleTheme(){
 })();
 
 function resetAll(){
-  if(!confirm('Clear all answers and reset the exam + study guide?')) return;
+  if(!confirm("Удалить все ответы и сбросить экзамен + учебное пособие?")) return;
   localStorage.removeItem(STORE);
   location.reload();
 }
@@ -1266,13 +1266,13 @@ function grainRefreshIcons(){
 .apk-about h3:first-child{margin-top:0}
 </style>
 <section class="apk-about">
-  <h3>Related guides</h3>
+  <h3>Полезные руководства</h3>
   <ul>
-    <li><a href="../guides/sql-foundations/">SQL foundations</a></li>
-    <li><a href="../azure-data-cert/">DP-900 Azure Data Fundamentals prep</a></li>
-    <li><a href="../guides/set-up-a-sql-database/">Set up a SQL database</a></li>
+    <li><a href="../guides/sql-foundations/">Основы SQL</a></li>
+    <li><a href="../azure-data-cert/">DP-900 Подготовка к основам данных Azure</a></li>
+    <li><a href="../guides/set-up-a-sql-database/">Настройте базу данных SQL</a></li>
   </ul>
-  <p><a href="../guides/">Browse all guides</a> · <a href="../">All kits</a></p>
+  <p><a href="../guides/">Просмотреть все руководства</a> · <a href="../">Все комплекты</a></p>
 </section>
 <!-- APK:KIT-SEO:END -->
 <script src="../assets/datacraft-economy.js"></script>

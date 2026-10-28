@@ -29,8 +29,8 @@ const LADDER = {
 
   { adds: 'Look at what the old system is handing over',
     q: 'Who is in the old customer system, and what state are their accounts in?',
-    why: 'The base shape, and the number every drill after it is measured against.',
-    guide: { href: '../guides/migration-profiling/', label: 'Read: profiling the old system' },
+    why: "Базовая форма и номер каждого сверла после него.",
+    guide: { href: '../guides/migration-profiling/', label: "Читайте: профилирование старой системы" },
     header:
 `-- Purpose: The full customer list coming out of the legacy system before cutover
 -- Source:  legacy_customer, one row = one customer in the old system`,
@@ -42,8 +42,8 @@ FROM legacy_customer;`,
 
   { adds: 'Match them to the new system with an INNER JOIN',
     q: 'Which customers made it across into the new system?',
-    why: 'INNER JOIN keeps only the rows that matched on both sides. That is exactly the question "who landed".',
-    guide: { href: '../guides/sql-joins/', label: 'Read: how INNER JOIN works' },
+    why: "INNER JOIN сохраняет только те строки, которые совпали с обеих сторон. Именно в этом и заключается вопрос «кто приземлился».",
+    guide: { href: '../guides/sql-joins/', label: "Читайте: как работает INNER JOIN" },
     header:
 `-- Purpose: Legacy customers that have a matching record in the new system
 -- Source:  legacy_customer joined to new_customer, one row = one migrated customer
@@ -57,8 +57,8 @@ JOIN new_customer AS n ON n.legacy_id = c.legacy_id;`,
 
   { adds: 'Keep everyone with a LEFT JOIN',
     q: 'What does the same list look like if nobody is allowed to disappear?',
-    why: 'LEFT JOIN keeps every row from the left table whether it matched or not. The unmatched ones come back with NULL on the right.',
-    guide: { href: '../guides/sql-joins/', label: 'Read: LEFT JOIN and NULLs' },
+    why: "LEFT JOIN сохраняет каждую строку из левой таблицы, независимо от того, совпала она или нет. Несовпадающие значения возвращаются с NULL справа.",
+    guide: { href: '../guides/sql-joins/', label: "Читайте: LEFT JOIN и NULL." },
     header:
 `-- Purpose: Every legacy customer, with the new system record beside it where there is one
 -- Source:  legacy_customer joined to new_customer, one row = one legacy customer
@@ -72,8 +72,8 @@ LEFT JOIN new_customer AS n ON n.legacy_id = c.legacy_id;`,
 
   { adds: 'Filter down to the ones that did not make it',
     q: 'Who failed to migrate?',
-    why: 'LEFT JOIN plus IS NULL on the right side is the miss list. This one pattern is most of a reconciliation job.',
-    guide: { href: '../guides/migration-dry-run/', label: 'Read: reconciling a load' },
+    why: "LEFT JOIN плюс IS NULL справа — это список промахов. Этот шаблон по большей части представляет собой работу по примирению.",
+    guide: { href: '../guides/migration-dry-run/', label: "Читайте: согласование нагрузки" },
     header:
 `-- Purpose: Legacy customers with no record in the new system after the load
 -- Source:  legacy_customer joined to new_customer, one row = one missing customer
@@ -88,8 +88,8 @@ WHERE n.new_id IS NULL;`,
 
   { adds: 'Report the reconciliation as one line',
     q: 'How many went in, how many landed, how many are missing?',
-    why: 'COUNT(*) counts rows, COUNT(column) skips NULLs. Put them side by side on a LEFT JOIN and you have a reconciliation.',
-    guide: { href: '../guides/sql-count-function/', label: 'Read: COUNT(*) against COUNT(column)' },
+    why: "COUNT(*) подсчитывает строки, COUNT(столбец) пропускает NULL. Поместите их рядом в LEFT JOIN, и вы получите согласование.",
+    guide: { href: '../guides/sql-count-function/', label: "Читать: COUNT(*) против COUNT(столбец)" },
     header:
 `-- Purpose: Cutover reconciliation counts for the customer table
 -- Source:  legacy_customer joined to new_customer, one row = the whole load
@@ -105,8 +105,8 @@ LEFT JOIN new_customer AS n ON n.legacy_id = c.legacy_id;`,
 
   { adds: 'The wrong join. Add support history and watch the count break',
     q: 'Same customer list, with how they last contacted support. What could go wrong?',
-    why: 'Nothing errors here. The join is valid SQL and the answer is wrong, because contact_note holds several rows per customer and every one of them multiplies its customer.',
-    guide: { href: '../guides/sql-joins/', label: 'Read: joins that multiply rows' },
+    why: "Здесь нет никаких ошибок. Соединение является допустимым SQL, и ответ неправильный, поскольку contact_note содержит несколько строк для каждого клиента, и каждая из них умножает своего клиента.",
+    guide: { href: '../guides/sql-joins/', label: "Читайте: соединения, умножающие строки" },
     header:
 `-- Purpose: Legacy customers with their support contact channel
 -- Source:  legacy_customer joined to new_customer and contact_note
@@ -121,8 +121,8 @@ LEFT JOIN contact_note AS t ON t.legacy_id = c.legacy_id;`,
 
   { adds: 'The fix. Put the grain back',
     q: 'The same question, asked so the answer is one row per customer again.',
-    why: 'The join type was never the bug. Joining to a table that holds several rows per customer is what moved the grain, so you collapse it back with GROUP BY. Check that the count is 40 again.',
-    guide: { href: '../guides/sql-group-by-having/', label: 'Read: collapsing rows with GROUP BY' },
+    why: "Тип соединения никогда не был ошибкой. Присоединение к таблице, которая содержит несколько строк на каждого клиента, — это то, что сдвинуло зернистость, поэтому вы сворачиваете ее обратно с помощью GROUP BY. Убедитесь, что счет снова равен 40.",
+    guide: { href: '../guides/sql-group-by-having/', label: "Читайте: свертывание строк с помощью GROUP BY." },
     header:
 `-- Purpose: Legacy customers with a count of their support contacts
 -- Source:  legacy_customer joined to new_customer and contact_note, one row = one legacy customer
@@ -138,8 +138,8 @@ GROUP BY c.legacy_id, c.customer_name, n.new_id;`,
 
   { adds: 'Aggregate first, then join',
     q: 'What is each customer worth, and how many orders are they bringing over?',
-    why: 'The other way to survive a one to many table: total it in a CTE first, so what you join to is already one row per customer. This is the habit that stops the last drill happening by accident.',
-    guide: { href: '../guides/sql-ctes/', label: 'Read: aggregating in a CTE first' },
+    why: "Другой способ выжить в таблице «один ко многим»: сначала суммировать ее в CTE, чтобы вы присоединялись к одной строке на каждого клиента. Это привычка, которая предотвращает случайное выполнение последнего упражнения.",
+    guide: { href: '../guides/sql-ctes/', label: "Читать: сначала агрегировать в CTE" },
     header:
 `-- Purpose: Every legacy customer with their order count and lifetime value
 -- Source:  legacy_customer joined to new_customer and a per customer order total
@@ -161,8 +161,8 @@ LEFT JOIN order_totals AS o ON o.legacy_id = c.legacy_id;`,
 
   { adds: 'Turn the question around with a RIGHT JOIN',
     q: 'Are there records in the new system that the old system never had?',
-    why: 'RIGHT JOIN keeps every row from the table on the right. It is a LEFT JOIN with the tables the other way round, and it is how you catch records the migration invented.',
-    guide: { href: '../guides/sql-joins/', label: 'Read: RIGHT and the other direction' },
+    why: "RIGHT JOIN сохраняет каждую строку из таблицы справа. Это LEFT JOIN с таблицами наоборот, и именно так вы перехватываете записи, изобретенные миграцией.",
+    guide: { href: '../guides/sql-joins/', label: "Читайте: НАПРАВО и в другую сторону." },
     header:
 `-- Purpose: New system customer records with no matching legacy record
 -- Source:  legacy_customer joined to new_customer, one row = one unexplained new record
@@ -177,8 +177,8 @@ WHERE c.legacy_id IS NULL;`,
 
   { adds: 'Show both failures at once with a FULL OUTER JOIN',
     q: 'Can I hand my lead one table that covers every mismatch in both directions?',
-    why: 'FULL OUTER JOIN keeps everything from both sides. With a CASE on top it becomes the single status table a migration lead actually asks for.',
-    guide: { href: '../guides/sql-case-expression/', label: 'Read: labelling rows with CASE' },
+    why: "FULL OUTER JOIN сохраняет все с обеих сторон. С CASE наверху она становится единственной таблицей состояния, которую действительно запрашивает руководитель миграции.",
+    guide: { href: '../guides/sql-case-expression/', label: "Читайте: маркировка строк с помощью CASE" },
     header:
 `-- Purpose: Every customer record on either side of the migration, tagged with its outcome
 -- Source:  legacy_customer joined to new_customer, one row = one customer on either side
@@ -197,8 +197,8 @@ ORDER BY outcome, c.legacy_id;`,
 
   { adds: 'Build a complete grid with a CROSS JOIN',
     q: 'What does the cutover plan look like with every region in every wave, including the empty ones?',
-    why: 'CROSS JOIN pairs every row on the left with every row on the right. Used on purpose it is how you build a reporting grid with no missing cells.',
-    guide: { href: '../guides/sql-joins/', label: 'Read: CROSS JOIN on purpose' },
+    why: "CROSS JOIN соединяет каждую строку слева с каждой строкой справа. При специальном использовании вы строите сетку отчетов без пропущенных ячеек.",
+    guide: { href: '../guides/sql-joins/', label: "Читайте: CROSS JOIN намеренно" },
     header:
 `-- Purpose: The full region by wave grid for the cutover plan, empty cells included
 -- Source:  the distinct regions crossed with migration_wave, one row = one region in one wave
@@ -213,8 +213,8 @@ ORDER BY r.region, w.wave_no;`,
 
   { adds: 'Join a table to itself to find duplicates',
     q: 'Is the same person in the old export twice under two different ids?',
-    why: 'A self join compares a table to itself. Matching on email and keeping only the higher id gives each duplicate pair once instead of twice.',
-    guide: { href: '../guides/entity-resolution/', label: 'Read: finding duplicate records' },
+    why: "Самосоединение сравнивает таблицу с самой собой. Сопоставление по электронной почте и сохранение только более высокого идентификатора дает каждую повторяющуюся пару один раз, а не дважды.",
+    guide: { href: '../guides/entity-resolution/', label: "Читайте: поиск повторяющихся записей" },
     header:
 `-- Purpose: Customers entered twice in the legacy export under two ids
 -- Source:  legacy_customer joined to itself on email, one row = one duplicate pair
@@ -228,8 +228,8 @@ JOIN legacy_customer AS b ON b.email = a.email AND b.legacy_id > a.legacy_id;`,
 
   { adds: 'Finish on the number the meeting is about',
     q: 'Which region lost the most, and what is the missing revenue worth?',
-    why: 'The payoff. A LEFT JOIN reconciliation, an aggregate joined at the right grain, and a CASE that turns the misses into money. This is the query that goes in the status email.',
-    guide: { href: '../guides/defining-metrics/', label: 'Read: the number a meeting is about' },
+    why: "Расплата. Согласование LEFT JOIN, агрегат, объединенный в правильном зерне, и CASE, который превращает промахи в деньги. Это запрос, который отправляется в электронное письмо со статусом.",
+    guide: { href: '../guides/defining-metrics/', label: "Читать: число, о котором идет встреча" },
     header:
 `-- Purpose: Migration success rate and unmigrated revenue by region
 -- Source:  recon, one row = one region

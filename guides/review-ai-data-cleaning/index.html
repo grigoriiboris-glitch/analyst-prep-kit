@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>How to Review an AI Data Cleaning Script &mdash; Analyst Prep Kit</title>
-<meta name="description" content="Cleaning code deletes rows, fills blanks and rewrites categories, and every one of those is a decision about the truth. The six operations to look for, what each one hides, and the before-and-after counts that make the damage visible.">
+<title>Как просмотреть сценарий очистки данных ИИ — комплект для подготовки аналитика</title>
+<meta name="description" content="Код очистки удаляет строки, заполняет пробелы и перезаписывает категории, и каждое из этих действий является решением об истине. Шесть операций, которые нужно искать, что скрывает каждая из них, а также подсчеты «до» и «после», которые делают ущерб видимым.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/review-ai-data-cleaning/">
-<meta property="og:title" content="Reviewing a Cleaning Script Before It Touches Your Data">
-<meta property="og:description" content="dropna, fillna, replace, astype, drop_duplicates, clip. What each one quietly decides for you.">
+<meta property="og:title" content="Проверка сценария очистки до того, как он затронет ваши данные">
+<meta property="og:description" content="dropna, fillna, replace, astype, drop_duulates, клип. Что каждый за тебя тихо решит.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/review-ai-data-cleaning/">
 <meta name="twitter:card" content="summary_large_image">
@@ -164,18 +164,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../../guides/">All Guides</a></p>
-  <h1>Reviewing a Cleaning Script Before It Touches Your Data</h1>
-  <p class="meta">Michael Nocito &middot; Updated August 2026 &middot; Every number on this page was worked before it was published</p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../../guides/">Все руководства</a></p>
+  <h1>Проверка сценария очистки до того, как он затронет ваши данные</h1>
+  <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Все числа на этой странице были обработаны до их публикации.</p>
 
-  <p>A cleaning script is a list of decisions about what your data means, written as code. Drop these rows. Treat this blank as a zero. Assume these two spellings are the same company. Every one of those is defensible in some situation and wrong in others, and none of them raises an error.</p>
+  <p>Сценарий очистки — это список решений о том, что означают ваши данные, записанный в виде кода. Отбросьте эти строки. Считайте этот пробел нулем. Предположим, что эти два написания относятся к одной и той же компании. Каждый из них оправдан в одной ситуации и неправ в другой, и ни один из них не приводит к ошибке.</p>
 
-  <p>What you do: for each operation, record what it changed and decide whether it is a fact or an assumption. Assumptions go in the write-up.</p>
+  <p>Что вы делаете: для каждой операции записывайте, что она изменила, и решайте, факт это или предположение. Предположения идут в описании.</p>
 
-  <p><strong>The short version.</strong> Print the counts before and after. The counts are the review.</p>
+  <p><strong>Краткая версия.</strong>  Выведите значения до и после. Подсчеты - это обзор.</p>
 
-  <h2>The measurement harness</h2>
-  <p>Before reviewing any step, add this around the script. Four lines, and they turn a silent transformation into an auditable one:</p>
+  <h2>Измерительный жгут</h2>
+  <p>Прежде чем просматривать какой-либо шаг, добавьте это в сценарий. Четыре строки, и они превращают молчаливое преобразование в проверяемое:</p>
   <pre><code>def snapshot(df, label):
     print(label, 'rows', len(df))
     print(df.isna().sum())
@@ -184,84 +184,84 @@
 snapshot(raw, 'before')
 clean = clean_it(raw)
 snapshot(clean, 'after')</code></pre>
-  <p>If the row count moved, something was dropped. If a null count went to zero, something was filled. If the distinct id count moved, identities were merged or split. Those three numbers describe most of what a cleaning script does.</p>
+  <p>Если количество строк изменилось, что-то было удалено. Если нулевой счетчик обращался к нулю, что-то было заполнено. Если количество уникальных идентификаторов изменилось, идентификаторы были объединены или разделены. Эти три числа описывают большую часть того, что делает сценарий очистки.</p>
 
-  <h2>The six operations, and what each one decides</h2>
-  <h3>1. dropna</h3>
+  <h2>Шесть операций и то, что решает каждая из них</h2>
+  <h3>1. водянка</h3>
   <pre><code>df = df.dropna()          # every column, any null, row gone</code></pre>
-  <p>The version with no arguments is the one to challenge. It drops a row if <em>any</em> column is null, including columns your analysis never uses. On a wide table that can remove most of the data. Check the count, then narrow it: <code>dropna(subset=['amount'])</code> at least states which column mattered.</p>
-  <p>The deeper question is what missing means. Missing at random is a nuisance. Missing because a field is only filled for one type of customer is a group being deleted, and the analysis afterwards is about a different population than the one you were asked about.</p>
+  <p>Оспорить следует версию без аргументов. Он удаляет строку, если  <em>any</em>  Столбец имеет значение NULL, включая столбцы, которые ваш анализ никогда не использует. На широкой таблице, из которой можно удалить большую часть данных. Проверьте количество, затем сузьте его:  <code>dropna(subset=['amount'])</code>  по крайней мере, указано, какой столбец имеет значение.</p>
+  <p>Более глубокий вопрос заключается в том, что означает отсутствие. Промахнуться случайно – неприятность. Отсутствие, поскольку поле заполнено только для одного типа клиентов, означает удаление группы, и последующий анализ касается другой группы населения, чем та, о которой вас спрашивали.</p>
 
-  <h3>2. fillna</h3>
+  <h3>2. чувствовать</h3>
   <pre><code>df['amount'] = df['amount'].fillna(0)</code></pre>
-  <p>This creates data. A zero will be summed, averaged and plotted exactly like a measured zero, and nothing downstream can tell them apart. Fill with 0 only when missing means none. If missing means not recorded, leave it and let the aggregation skip it, or fill with a sentinel and record the count.</p>
-  <p>Median and mean fills carry the same warning with a friendlier face: they shrink variance and pull every group toward the middle, so any spread measure computed afterwards is understated.</p>
+  <p>Это создает данные. Нуль будет суммирован, усреднен и отображен на графике точно так же, как измеренный ноль, и ничто в дальнейшем не сможет отличить их друг от друга. Заполняйте 0 только в том случае, если отсутствие означает отсутствие. Если «отсутствует» означает «не записано», оставьте это значение и позвольте агрегации пропустить его или заполните дозорным и запишите количество.</p>
+  <p>Медианное и среднее заполнения несут одно и то же предупреждение, но с более дружелюбным лицом: они уменьшают дисперсию и смещают каждую группу к середине, поэтому любая вычисленная впоследствии мера разброса занижена.</p>
 
-  <h3>3. replace and category mapping</h3>
+  <h3>3. замена и сопоставление категорий</h3>
   <pre><code>df['region'] = df['region'].replace({'Nrth': 'North', 'N': 'North'})</code></pre>
-  <p>Each mapping is a claim that two labels mean the same thing. Usually true, occasionally not: <code>N</code> might be North, or it might be New, or it might be a system default. Ask where the mapping came from. If the answer is that it was inferred from similarity, it needs checking against a real reference list. That is the subject of <a href="../entity-resolution/">entity resolution</a>.</p>
-  <p>Print the value counts before and after. A category that goes from 900 rows to 4,000 is either a good merge or a bad one, and the number is what starts the conversation.</p>
+  <p>Каждое сопоставление — это утверждение, что две метки означают одно и то же. Обычно верно, иногда нет:  <code>N</code>  это может быть «Север», «Новый» или «Системное значение по умолчанию». Спросите, откуда взялось картографирование. Если ответ заключается в том, что он был получен на основе сходства, его необходимо сверить с реальным списком литературы. Это предмет  <a href="../entity-resolution/">Разрешение объекта</a>.</p>
+  <p>Выведите значения счетчиков до и после. Категория, в которой количество строк увеличивается от 900 до 4000, является либо хорошим, либо плохим слиянием, а именно с числа начинается разговор.</p>
 
-  <h3>4. Type casts</h3>
+  <h3>4. Приведение типов</h3>
   <pre><code>df['id'] = df['id'].astype(int)
 df['date'] = pd.to_datetime(df['date'])</code></pre>
-  <p>Casting an ID to a number destroys leading zeros permanently, and any ID longer than 15 digits loses precision. Date parsing without an explicit format guesses, and the classic failure is a day-first file read as month-first, which silently swaps 3 March and 1 April style values while raising nothing on the days above 12.</p>
+  <p>Приведение идентификатора к числу безвозвратно уничтожает ведущие нули, а любой идентификатор, длина которого превышает 15 цифр, теряет точность. Синтаксический анализ даты без явного угадывания формата, и классическая ошибка — это файл с первым днем, читаемый как первый с месяца, который автоматически меняет местами значения стиля 3 марта и 1 апреля, ничего не вызывая в дни, превышающие 12.</p>
   <pre><code>pd.to_datetime(df['date'], format='%d/%m/%Y', errors='raise')</code></pre>
-  <p><code>errors='coerce'</code> is worth a careful look wherever you see it: it turns unparseable dates into nulls, which the next <code>dropna</code> then deletes. Two innocent-looking lines, and the rows with the odd date format are gone.</p>
+  <p><code>errors='coerce'</code>  стоит внимательно посмотреть, где бы вы его ни увидели: он превращает неразбираемые даты в нули, которые в следующем  <code>dropna</code>  потом удаляет. Две невинно выглядящие строки и строки с нечетным форматом даты исчезли.</p>
 
-  <h3>5. drop_duplicates</h3>
+  <h3>5. удалить_дубликаты</h3>
   <pre><code>df = df.drop_duplicates(subset=['customer_id'], keep='first')</code></pre>
-  <p>Which one is first depends entirely on the sort order, and if the frame was not sorted deliberately, the row that survives is arbitrary. If the duplicates differ in any column, you have chosen a value at random. Sort explicitly by the column that decides, usually a timestamp, and say in the write-up that the latest record wins.</p>
+  <p>Какой из них будет первым, полностью зависит от порядка сортировки, и если кадр не был отсортирован намеренно, выживающая строка будет произвольной. Если дубликаты различаются в каком-либо столбце, вы выбрали случайное значение. Выполните явную сортировку по решающему столбцу (обычно это временная метка) и укажите в записи, что побеждает последняя запись.</p>
 
-  <h3>6. Clipping and outlier removal</h3>
+  <h3>6. Отсечение и удаление выбросов</h3>
   <pre><code>df = df[df['amount'] &lt; df['amount'].quantile(0.99)]</code></pre>
-  <p>This removes the top one percent by construction, whether or not those rows are errors. On revenue data the top one percent is often the customers that matter most. Removing an outlier is only legitimate when you can say what makes it wrong, not merely that it is large. See <a href="../percentiles-iqr-outliers/">percentiles and the outlier rule</a>.</p>
+  <p>Это удаляет верхний один процент по конструкции, независимо от того, являются ли эти строки ошибками. Согласно данным о доходах, верхний процент часто представляет собой наиболее значимых клиентов. Удаление выброса законно только тогда, когда вы можете сказать, что делает его неправильным, а не просто то, что он большой. Видеть  <a href="../percentiles-iqr-outliers/">процентили и правило выбросов</a>.</p>
 
-  <div class="note"><strong>The order of operations matters as much as the operations.</strong> Deduplicating before filtering gives a different answer from filtering before deduplicating, whenever the filter can remove one of a pair. Ask why the steps are in the order they are in.</div>
+  <div class="note"><strong>Порядок операций имеет такое же значение, как и сами операции.</strong>  Дедупликация перед фильтрацией дает другой ответ, чем фильтрация перед дедупликацией, если фильтр может удалить один из пары. Спросите, почему шаги расположены именно в таком порядке.</div>
 
-  <h2>The review, as a table you fill in</h2>
+  <h2>Обзор в виде таблицы, которую вы заполняете</h2>
   <table>
-    <tr><th>Step</th><th>Rows before</th><th>Rows after</th><th>Fact or assumption</th><th>Goes in the write-up?</th></tr>
-    <tr><td>dropna(subset=amount)</td><td>41,208</td><td>40,955</td><td>Assumption</td><td>Yes, 253 rows</td></tr>
-    <tr><td>replace region spellings</td><td>40,955</td><td>40,955</td><td>Assumption</td><td>Yes, list the mappings</td></tr>
-    <tr><td>drop_duplicates on order_id</td><td>40,955</td><td>40,901</td><td>Fact, if ids are unique by design</td><td>Yes, 54 rows</td></tr>
-    <tr><td>cast date</td><td>40,901</td><td>40,901</td><td>Fact, format was explicit</td><td>No</td></tr>
+    <tr><th>Step</th><th>Строки перед</th><th>Строки после</th><th>Факт или предположение</th><th>Входит в рецензию?</th></tr>
+    <tr><td>dropna(подмножество=количество)</td><td>41,208</td><td>40,955</td><td>Assumption</td><td>Да, 253 строки</td></tr>
+    <tr><td>заменить написание региона</td><td>40,955</td><td>40,955</td><td>Assumption</td><td>Да, перечислите сопоставления</td></tr>
+    <tr><td>drop_duplications по order_id</td><td>40,955</td><td>40,901</td><td>Факт, если идентификаторы уникальны по своей природе</td><td>Да, 54 ряда</td></tr>
+    <tr><td>дата актерского состава</td><td>40,901</td><td>40,901</td><td>Фактически, формат был явным</td><td>No</td></tr>
   </table>
-  <p>Four rows of table, and the analysis now has a provenance section instead of a claim that the data was cleaned.</p>
+  <p>Четыре строки таблицы, и в анализе теперь есть раздел о происхождении вместо заявления о том, что данные были очищены.</p>
 
-  <h2>How to apply this to your own work</h2>
+  <h2>Как применить это в своей работе</h2>
   <ol>
-    <li>Add the snapshot function to every cleaning script you run, including short ones.</li>
-    <li>Never accept a bare <code>dropna()</code>. Ask which column mattered and how many rows it cost.</li>
-    <li>Challenge every <code>fillna(0)</code> with the question: does missing mean none here?</li>
-    <li>Give every date parse an explicit format, and treat <code>errors='coerce'</code> as something to justify.</li>
-    <li>Publish the before-and-after counts alongside the result. It is the cheapest credibility you will ever buy.</li>
+    <li>Добавьте функцию моментального снимка в каждый запускаемый вами скрипт очистки, включая короткие.</li>
+    <li>Никогда не принимайте голого  <code>dropna()</code>. Спросите, какой столбец имел значение и сколько строк он стоил.</li>
+    <li>Бросьте вызов каждому  <code>fillna(0)</code>  с вопросом: здесь отсутствие означает отсутствие?</li>
+    <li>Дайте каждому анализу даты явный формат и обработайте  <code>errors='coerce'</code>  как что-то, чтобы оправдать.</li>
+    <li>Опубликуйте подсчеты «до» и «после» рядом с результатом. Это самое дешевое доверие, которое вы когда-либо купите.</li>
   </ol>
 
-  <h2>The one habit to keep</h2>
-  <p>Keep the raw file. Cleaning should always be a script that runs from an untouched source, never an edit to the only copy. That single rule means every decision on this page is reversible, which is what makes reviewing them worth doing.</p>
+  <h2>Единственная привычка, которую нужно сохранить</h2>
+  <p>Сохраните необработанный файл. Очистка всегда должна представлять собой сценарий, запускаемый из нетронутого источника, а не редактирование единственной копии. Это единственное правило означает, что каждое решение на этой странице является обратимым, поэтому их стоит просмотреть.</p>
 
-  <p>Could you re-run your last cleaning script from the original file today and get the same output?</p>
+  <p>Не могли бы вы сегодня повторно запустить последний сценарий очистки из исходного файла и получить тот же результат?</p>
 
-  <div class="note"><strong>The counts in the review table are illustrative.</strong> The point is the shape of the table: four columns, one row per operation, and a decision recorded against each.</div>
+  <div class="note"><strong>Показатели в обзорной таблице носят иллюстративный характер.</strong>  Дело в форме таблицы: четыре столбца, по одной строке на операцию и по каждому записано решение.</div>
 
   <div class="book">
-    <strong>Cleaning is not tidying. Every step is a judgement about what the data means.</strong>
-    <p><em>Python for Analysts</em> is a working analyst pandas book: read a file, fix its types, group it, join it, and check the answer before anyone else sees it.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/python-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=python-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-review-ai-data-cleaning'})">Python for Analysts, $19 &rarr;</a>
+    <strong>Уборка – это не уборка. Каждый шаг — это суждение о том, что означают данные.</strong>
+    <p><em>Python для аналитиков</em>  — это рабочая книга по аналитике панд: прочитайте файл, исправьте его типы, сгруппируйте его, присоединитесь к нему и проверьте ответ, прежде чем его увидит кто-либо еще.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/python-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=python-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-review-ai-data-cleaning'})">Python для аналитиков, 19 $ →</a>
   </div>
 
   <div class="cta">
-    <strong>The counts are the review.</strong>
-    <p style="margin:6px 0 0"><a href="../pandas-fillna-dropna/">fillna and dropna</a> covers the missing-value decisions in detail, <a href="../pandas-duplicates/">drop_duplicates</a> the deduplication ones, and <a href="../documenting-data-limitations/">documenting data limitations</a> is where the results belong.</p>
-    <a class="btn" href="../pandas-fillna-dropna/">Read fillna and dropna &rarr;</a>
+    <strong>Подсчеты - это обзор.</strong>
+    <p style="margin:6px 0 0"><a href="../pandas-fillna-dropna/">Филна и Дропна</a>  подробно описывает решения по недостающим значениям,  <a href="../pandas-duplicates/">drop_duplicates</a>  дедупликационные, и  <a href="../documenting-data-limitations/">Документирование ограничений данных</a>  здесь принадлежат результаты.</p>
+    <a class="btn" href="../pandas-fillna-dropna/">Читать филна и дропна →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../pandas-fillna-dropna/">fillna and dropna</a> &middot; <a href="../pandas-duplicates/">Dropping Duplicates</a> &middot; <a href="../documenting-data-limitations/">Documenting Data Limitations</a> &middot; <a href="../data-quality-checks/">Data Quality Checks</a> &middot; <a href="../verify-ai-agent-work/">Verify AI Agent Work</a> &middot; <a href="../../python/">Python Kit</a>
-    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../pandas-fillna-dropna/">Филна и Дропна</a> &middot; <a href="../pandas-duplicates/">Удаление дубликатов</a> &middot; <a href="../documenting-data-limitations/">Документирование ограничений данных</a> &middot; <a href="../data-quality-checks/">Проверки качества данных</a> &middot; <a href="../verify-ai-agent-work/">Проверка работы AI-агента</a> &middot; <a href="../../python/">Комплект Python</a>
+    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

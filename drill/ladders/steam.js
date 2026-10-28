@@ -23,8 +23,8 @@ const LADDER = {
 
   { adds: 'List the games somebody could afford',
     q: 'Which well reviewed games cost twenty dollars or less?',
-    why: 'The base shape: named columns with a filter. Price is the easiest of the three bars to reason about, so it goes first.',
-    guide: { href: '../guides/sql-foundations/', label: 'Read: SELECT, FROM and WHERE' },
+    why: "Базовая форма: именованные столбцы с фильтром. Цена – это самый простой из трех баров для размышлений, поэтому она идет первой.",
+    guide: { href: '../guides/sql-foundations/', label: "Читайте: ВЫБРАТЬ, ОТКУДА и ГДЕ" },
     header:
 `-- Purpose: List the games at $20 or less, with their rating and review count
 -- Source:  steam_games, one row = one game with 2,000+ reviews`,
@@ -37,8 +37,8 @@ WHERE price <= 20;`,
 
   { adds: 'Put the best reviewed on top',
     q: 'Which of those games do players rate highest?',
-    why: 'Sort by the rating rather than the price. The filter has not changed, so the row count cannot either.',
-    guide: { href: '../guides/sql-foundations/', label: 'Read: sorting with ORDER BY' },
+    why: "Сортируйте по рейтингу, а не по цене. Фильтр не изменился, поэтому количество строк тоже не изменится.",
+    guide: { href: '../guides/sql-foundations/', label: "Читайте: сортировка с помощью ORDER BY" },
     header:
 `-- Purpose: Rank the affordable games by how positive their reviews are
 -- Source:  steam_games, one row = one game with 2,000+ reviews`,
@@ -52,8 +52,8 @@ ORDER BY pct_positive DESC;`,
 
   { adds: 'Cut it to a shortlist',
     q: 'What are the fifteen best reviewed cheap games?',
-    why: 'Cut the list to the length a person would actually read. Fifteen is the shape this analysis ships as.',
-    guide: { href: '../guides/sql-foundations/', label: 'Read: LIMIT and top-N lists' },
+    why: "Сократите список до такой длины, которую человек действительно сможет прочитать. Пятнадцать — это форма, в которой представлен этот анализ.",
+    guide: { href: '../guides/sql-foundations/', label: "Читайте: LIMIT и списки Top-N" },
     header:
 `-- Purpose: Top 15 affordable games by review rating
 -- Source:  steam_games, one row = one game with 2,000+ reviews`,
@@ -68,8 +68,8 @@ LIMIT 15;`,
 
   { adds: 'Count what you are starting from',
     q: 'How many games are in this table?',
-    why: 'COUNT(*) counts rows. This is 4,892, not all of Steam: it is every game with at least 2,000 reviews, which is where the hidden gem definition begins.',
-    guide: { href: '../guides/sql-count-function/', label: 'Read: COUNT and what it counts' },
+    why: "COUNT(*) подсчитывает строки. Это 4892, а не весь Steam: это каждая игра, имеющая не менее 2000 обзоров, и именно здесь начинается определение скрытой жемчужины.",
+    guide: { href: '../guides/sql-count-function/', label: "Читайте: COUNT и что это значит" },
     header:
 `-- Purpose: The size of the pool the hidden-gem definition starts from
 -- Source:  steam_games, one row = one game with 2,000+ reviews`,
@@ -81,8 +81,8 @@ FROM steam_games;`,
 
   { adds: 'Apply the first bar: genuinely loved',
     q: 'How many of them are rated 95% positive or better?',
-    why: 'The first real cut. A count with a WHERE on it is how you size a rule before you trust it.',
-    guide: { href: '../guides/sql-funnel-analysis/', label: 'Read: counting down a funnel' },
+    why: "Первый настоящий разрез. Счетчик с WHERE определяет размер правила, прежде чем ему доверять.",
+    guide: { href: '../guides/sql-funnel-analysis/', label: "Читайте: обратный отсчет воронки" },
     header:
 `-- Purpose: Step 1 of the funnel, games rated 95%+ positive
 -- Source:  steam_games, one row = one game with 2,000+ reviews`,
@@ -95,8 +95,8 @@ WHERE pct_positive >= 95;`,
 
   { adds: 'Stack a second condition on it',
     q: 'How many of those are also twenty dollars or less?',
-    why: 'AND stacks conditions. Every row has to satisfy both, so the count can only fall or stay level, never rise.',
-    guide: { href: '../guides/sql-foundations/', label: 'Read: AND, OR and stacking filters' },
+    why: "И складывает условия. Каждая строка должна удовлетворять обоим требованиям, поэтому счетчик может только падать или оставаться на одном уровне, но никогда не увеличиваться.",
+    guide: { href: '../guides/sql-foundations/', label: "Читайте: И, ИЛИ и фильтры сложения." },
     header:
 `-- Purpose: Step 2 of the funnel, loved AND affordable
 -- Source:  steam_games, one row = one game with 2,000+ reviews`,
@@ -110,8 +110,8 @@ WHERE pct_positive >= 95
 
   { adds: 'Apply the last bar and land on the answer',
     q: 'How many loved, cheap games does almost nobody own?',
-    why: 'The third condition is the one that makes a gem hidden. This number is the whole project: 175 games out of a catalog of 125,855.',
-    guide: { href: '../guides/sql-funnel-analysis/', label: 'Read: where a funnel actually drops' },
+    why: "Третье условие — это то, которое скрывает драгоценный камень. В этом количестве весь проект: 175 игр из каталога в 125 855.",
+    guide: { href: '../guides/sql-funnel-analysis/', label: "Читайте: где на самом деле опускается воронка" },
     header:
 `-- Purpose: The hidden gems: loved, affordable, and barely owned
 -- Source:  steam_games, one row = one game with 2,000+ reviews
@@ -127,8 +127,8 @@ WHERE pct_positive >= 95
 
   { adds: 'Split the answer by genre',
     q: 'What kind of game is a hidden gem, usually?',
-    why: 'GROUP BY turns one number into one row per genre. The same filter, described rather than counted.',
-    guide: { href: '../guides/sql-group-by-having/', label: 'Read: GROUP BY without a fake answer' },
+    why: "GROUP BY превращает одно число в одну строку для каждого жанра. Тот же фильтр, но описанный, а не посчитанный.",
+    guide: { href: '../guides/sql-group-by-having/', label: "Читать: GROUP BY без поддельного ответа" },
     header:
 `-- Purpose: Which genres the 175 hidden gems fall into
 -- Source:  steam_games, one row = one game with 2,000+ reviews`,
@@ -143,8 +143,8 @@ ORDER BY gems DESC;`,
 
   { adds: 'Drop the genres with barely any',
     q: 'Which genres have a real cluster of gems, not one or two?',
-    why: 'HAVING filters groups after they are built. WHERE cannot do this, because no single game has a count of 26.',
-    guide: { href: '../guides/sql-group-by-having/', label: 'Read: why HAVING is not WHERE' },
+    why: "HAVING фильтрует группы после их создания. WHERE не может этого сделать, потому что ни в одной игре нет счёта 26.",
+    guide: { href: '../guides/sql-group-by-having/', label: "Читайте: почему ИМЕТЬ НЕ ГДЕ" },
     header:
 `-- Purpose: Genres with at least 10 hidden gems, and what they cost on average
 -- Source:  steam_games, one row = one game with 2,000+ reviews`,
@@ -160,8 +160,8 @@ ORDER BY gems DESC;`,
 
   { adds: 'Count the ones that qualify inside each group',
     q: 'Which genre is most likely to hide a gem?',
-    why: 'The filter moves inside the aggregate. SUM of a CASE counts only the rows that match, while COUNT(*) still counts them all, so both numbers sit on one row and you can compare them.',
-    guide: { href: '../guides/sql-segment-with-case/', label: 'Read: counting a subset with CASE' },
+    why: "Фильтр перемещается внутри агрегата. SUM в CASE учитывает только совпадающие строки, а COUNT(*) по-прежнему считает их все, поэтому оба числа располагаются в одной строке, и вы можете их сравнить.",
+    guide: { href: '../guides/sql-segment-with-case/', label: "Читайте: подсчет подмножества с помощью CASE" },
     header:
 `-- Purpose: Hidden-gem rate by genre: how many qualify out of how many there are
 -- Source:  steam_games, one row = one game with 2,000+ reviews`,
@@ -178,8 +178,8 @@ ORDER BY gems DESC;`,
 
   { adds: 'Measure it against the whole catalog',
     q: 'What share of Steam is a hidden gem?',
-    why: 'The catalog total is not in this table, because 125,855 games will not fit in a browser. catalog_totals carries the real counts on one row, and CROSS JOIN attaches that row to the result so you can divide by it.',
-    guide: { href: '../guides/sql-joins/', label: 'Read: joining a totals row onto a result' },
+    why: "Всего каталога в этой таблице нет, потому что 125 855 игр не поместятся в браузере. Catalog_totals содержит реальные значения в одной строке, а CROSS JOIN присоединяет эту строку к результату, чтобы вы могли разделить на нее.",
+    guide: { href: '../guides/sql-joins/', label: "Читать: присоединение строки итогов к результату" },
     header:
 `-- Purpose: The 175 gems as a share of the full Steam catalog
 -- Source:  steam_games, one row = one game with 2,000+ reviews
@@ -196,8 +196,8 @@ WHERE g.pct_positive >= 95 AND g.price <= 20 AND g.est_owners_mid <= 200000;`,
 
   { adds: 'Show the gap the whole project is about',
     q: 'How much smaller is a hidden gem audience?',
-    why: 'CASE puts every game into one of two buckets, so the gems and everything else are averaged side by side. The gap is the finding: these games are loved just as hard and played by a fraction of the people.',
-    guide: { href: '../guides/sql-case-expression/', label: 'Read: CASE, building a column that is not there' },
+    why: "CASE помещает каждую игру в одну из двух групп, поэтому драгоценные камни и все остальное усредняются рядом. Разрыв — это открытие: эти игры так же сильно любят, и в них играет небольшая часть людей.",
+    guide: { href: '../guides/sql-case-expression/', label: "Читайте: CASE, построение столбца, которого нет" },
     header:
 `-- Purpose: Average audience size, hidden gems against everything else
 -- Source:  steam_games, one row = one game with 2,000+ reviews`,
@@ -213,8 +213,8 @@ GROUP BY bucket;`,
 
   { adds: 'Finish on the list the project ships',
     q: 'So what should somebody actually play?',
-    why: 'Everything from the last twelve drills in one query, ending on names instead of counts. This is the shortlist the public site is built from.',
-    guide: { href: '../guides/sql-teaching-comments/', label: 'Read: commenting a query you will hand over' },
+    why: "Все из последних двенадцати детализации в одном запросе, заканчивающееся именами, а не подсчетами. Это короткий список, на основе которого создается общедоступный сайт.",
+    guide: { href: '../guides/sql-teaching-comments/', label: "Читать: комментируя запрос, который вы сдадите" },
     header:
 `-- Purpose: The top 15 hidden gems by rating, the shortlist the site leads with
 -- Source:  steam_games, one row = one game with 2,000+ reviews

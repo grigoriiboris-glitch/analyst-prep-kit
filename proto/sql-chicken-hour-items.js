@@ -199,16 +199,16 @@ const CARD_DRILLS = {
 "FULL OUTER JOIN":{tries:[
  {p:"All customers AND all customers_old, matched where possible.",sql:"SELECT c.id AS cur_id, co.id AS old_id FROM customers c FULL OUTER JOIN customers_old co ON c.id = co.id;"},
  {p:"Filter that to mismatches only — rows missing on either side.",sql:"SELECT c.id AS cur_id, co.id AS old_id FROM customers c FULL OUTER JOIN customers_old co ON c.id = co.id WHERE c.id IS NULL OR co.id IS NULL;"}]},
-"CURDATE()":{note:"CURDATE() is MySQL. This lab runs SQLite, where the equivalent is <code>date('now')</code> — practice the idea with SQLite's spelling.",tries:[
+"CURDATE()":{note:"CURDATE() — это MySQL. В этой лабораторной работе используется SQLite, эквивалент которого: <code>дата('сейчас')</code> — попрактикуйтесь в написании этой идеи в SQLite.",tries:[
  {p:"Today's date (SQLite spelling).",sql:"SELECT date('now') AS today;"},
  {p:"Sales made before today (all of them — data is from 2024).",sql:"SELECT COUNT(*) FROM sales WHERE sale_date < date('now');"}]},
-"DATE_SUB(date, INTERVAL n unit)":{note:"DATE_SUB is MySQL. SQLite uses date modifiers: <code>date('now','-30 day')</code>.",tries:[
+"DATE_SUB(date, INTERVAL n unit)":{note:"DATE_SUB — это MySQL. SQLite использует модификаторы даты: <code>date('сейчас','-30 дней')</code>.",tries:[
  {p:"The date 30 days ago.",sql:"SELECT date('now','-30 day') AS thirty_days_ago;"},
  {p:"Sales in the 90 days after 2024-03-01 (date + modifier on a literal).",sql:"SELECT COUNT(*) FROM sales WHERE sale_date >= '2024-03-01' AND sale_date < date('2024-03-01','+90 day');"}]},
-"DATE_FORMAT(date, format)":{note:"DATE_FORMAT is MySQL. SQLite uses <code>strftime(format, date)</code> — %Y-%m gives '2024-03'.",tries:[
+"DATE_FORMAT(date, format)":{note:"DATE_FORMAT — это MySQL. SQLite использует <code>strftime(формат, дата)</code> — %Y-%m дает «2024-03».",tries:[
  {p:"Each sale's month as '2024-03' style.",sql:"SELECT sale_date, strftime('%Y-%m', sale_date) AS month FROM sales;"},
  {p:"Revenue per month — the #1 analyst date pattern.",sql:"SELECT strftime('%Y-%m', sale_date) AS month, SUM(amount) AS revenue FROM sales GROUP BY month ORDER BY month;"}]},
-"DATEDIFF(date1, date2)":{note:"DATEDIFF is MySQL. SQLite: subtract julianday() values to get days between dates.",tries:[
+"DATEDIFF(date1, date2)":{note:"DATEDIFF — это MySQL. SQLite: вычтите значения julianday(), чтобы получить количество дней между датами.",tries:[
  {p:"Days between Jan 1 and Jun 30, 2024.",sql:"SELECT julianday('2024-06-30') - julianday('2024-01-01') AS days_between;"},
  {p:"Days since each customer's first purchase, relative to 2024-07-01.",sql:"SELECT customer_id, CAST(julianday('2024-07-01') - julianday(MIN(sale_date)) AS INTEGER) AS days_since_first FROM sales GROUP BY customer_id;"}]},
 "Index":{tries:[

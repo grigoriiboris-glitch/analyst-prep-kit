@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Connect Power BI to a SQL Database: Import vs DirectQuery &mdash; Analyst Prep Kit</title>
-<meta name="description" content="The connection dialog asks one question that decides everything afterwards. What Import and DirectQuery each mean for refresh, speed and DAX, the credentials that work on your laptop and not in the Service, and the gateway.">
+<title>Подключение Power BI к базе данных SQL: импорт и DirectQuery — комплект подготовки аналитика</title>
+<meta name="description" content="Диалог подключения задает один вопрос, который решает все потом. Что каждый из импорта и DirectQuery означает для обновления, скорости и DAX, учетных данных, которые работают на вашем ноутбуке, а не в Службе, и шлюзе.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/connect-power-bi-to-a-database/">
-<meta property="og:title" content="Connecting Power BI to a Database: Import or DirectQuery, and What Breaks Later">
-<meta property="og:description" content="Import or DirectQuery is not a preference. It decides refresh, speed and which DAX you can write.">
+<meta property="og:title" content="Подключение Power BI к базе данных: импорт или DirectQuery и что сломается позже">
+<meta property="og:description" content="Импорт или DirectQuery не являются предпочтительными. Он определяет обновление, скорость и какой DAX вы можете написать.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/connect-power-bi-to-a-database/">
 <meta name="twitter:card" content="summary_large_image">
@@ -164,101 +164,101 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../../powerbi/">Power BI Kit</a></p>
-  <h1>Connecting Power BI to a Database: Import or DirectQuery, and What Breaks Later</h1>
-  <p class="meta">Michael Nocito &middot; Updated August 2026 &middot; Every number on this page was worked before it was published</p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../../powerbi/">Комплект Power BI</a></p>
+  <h1>Подключение Power BI к базе данных: импорт или DirectQuery и что сломается позже</h1>
+  <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Все числа на этой странице были обработаны до их публикации.</p>
 
-  <p>Get Data, SQL Server, type the server name, and then a dialog asks whether you want Import or DirectQuery. It looks like a technical detail. It decides how fast your report is, how fresh the data is, which DAX you are allowed to write, and what happens when you publish.</p>
+  <p>Получите данные, SQL Server, введите имя сервера, а затем диалоговое окно спросит, хотите ли вы импортировать или DirectQuery. Это похоже на техническую деталь. Он решает, насколько быстр ваш отчет, насколько свежи данные, какой DAX вам разрешено писать и что произойдет при публикации.</p>
 
-  <p>What you do: choose Import unless a specific requirement forbids it, connect to views rather than to hand-written SQL, and set up the gateway before you promise anybody a refresh.</p>
+  <p>Что вы делаете: выберите «Импорт», если это не запрещено конкретными требованиями, подключитесь к представлениям, а не к рукописному SQL, и настройте шлюз, прежде чем обещать кому-либо обновление.</p>
 
-  <p><strong>The short version.</strong> Import copies the data. DirectQuery borrows it, every click.</p>
+  <p><strong>Краткая версия.</strong>  Импорт копирует данные. DirectQuery заимствует его при каждом щелчке мыши.</p>
 
-  <h2>The two modes</h2>
+  <h2>Два режима</h2>
   <table>
     <tr><th></th><th>Import</th><th>DirectQuery</th></tr>
-    <tr><td>Where the data lives</td><td>In the model file</td><td>In the source</td></tr>
-    <tr><td>Speed</td><td>Fast, in-memory and compressed</td><td>As fast as the source, per interaction</td></tr>
-    <tr><td>Freshness</td><td>As of the last refresh</td><td>Current</td></tr>
-    <tr><td>Size limits</td><td>Bounded by the model size limit</td><td>Effectively none</td></tr>
-    <tr><td>DAX available</td><td>All of it</td><td>A restricted set</td></tr>
-    <tr><td>Load on the database</td><td>Once per refresh</td><td>Every visual, every filter</td></tr>
-    <tr><td>Works offline</td><td>Yes</td><td>No</td></tr>
+    <tr><td>Где живут данные</td><td>В файле модели</td><td>В источнике</td></tr>
+    <tr><td>Speed</td><td>Быстрый, в памяти и со сжатием</td><td>Так же быстро, как источник, за взаимодействие</td></tr>
+    <tr><td>Freshness</td><td>На момент последнего обновления</td><td>Current</td></tr>
+    <tr><td>Ограничения по размеру</td><td>Ограничено ограничением размера модели</td><td>Фактически нет</td></tr>
+    <tr><td>DAX доступен</td><td>Все это</td><td>Ограниченный набор</td></tr>
+    <tr><td>Загрузить в базу данных</td><td>Один раз за обновление</td><td>Каждый визуальный элемент, каждый фильтр</td></tr>
+    <tr><td>Работает офлайн</td><td>Yes</td><td>No</td></tr>
   </table>
-  <p>The DAX restriction is the one people meet last and mind most. Several time intelligence and table functions are unavailable or slow in DirectQuery, so a measure that works in a demo file fails in the real report.</p>
+  <p>Ограничение DAX — это то, с чем люди сталкиваются в последнюю очередь и о котором больше всего думают. Некоторые функции временной аналитики и табличные функции недоступны или работают медленно в DirectQuery, поэтому мера, которая работает в демонстрационном файле, не работает в реальном отчете.</p>
 
-  <h3>Choose DirectQuery when</h3>
+  <h3>Выбирайте DirectQuery, когда</h3>
   <ol>
-    <li>The data genuinely must be current to the minute, and somebody can name the decision that requires it.</li>
-    <li>The table is far too large to import, and pre-aggregating is not possible.</li>
-    <li>A security rule says the data may not be copied out of the source system.</li>
+    <li>Данные действительно должны быть актуальными с точностью до минуты, и кто-то может назвать решение, которое этого требует.</li>
+    <li>Таблица слишком велика для импорта, и предварительное агрегирование невозможно.</li>
+    <li>Правило безопасности гласит, что данные нельзя копировать из исходной системы.</li>
   </ol>
-  <p>Those are the three. "It feels more real time" is not one, and it costs the audience several seconds on every click.</p>
-  <p>Composite models let you mix the two: import the dimensions, DirectQuery the very large fact table. That is the right answer more often than either mode alone, and it is worth knowing before you commit a whole report to DirectQuery.</p>
+  <p>Это трое. «Это кажется более реальным» — это не так, и каждый клик стоит аудитории несколько секунд.</p>
+  <p>Составные модели позволяют сочетать их: импортировать измерения, а DirectQuery — очень большую таблицу фактов. Это правильный ответ чаще, чем любой из этих режимов по отдельности, и об этом стоит знать, прежде чем отправлять весь отчет в DirectQuery.</p>
 
-  <h2>Connecting well</h2>
+  <h2>Хорошее соединение</h2>
   <ol>
-    <li><strong>Connect to views, not to raw tables,</strong> where you can. A view is a contract: the database owner can change the underlying tables without breaking your report.</li>
-    <li><strong>Do not paste SQL into the connector</strong> unless you must. Native SQL blocks query folding, so every later Power Query step is done locally instead of by the database. See <a href="../powerbi-refresh-errors/">refresh errors</a> for what that costs.</li>
-    <li><strong>Select only the columns you need.</strong> Model size is driven by columns and their cardinality far more than by rows, and a high-cardinality text column such as a free-text note can dominate the file.</li>
-    <li><strong>Filter early,</strong> in the source or the first query step, so folding pushes it back to the database.</li>
-    <li><strong>Use a parameter for the server and database names,</strong> so moving from test to production is one edit rather than twelve.</li>
+    <li><strong>Подключайтесь к представлениям, а не к необработанным таблицам,</strong>  где вы можете. Представление — это контракт: владелец базы данных может изменять базовые таблицы, не нарушая при этом ваш отчет.</li>
+    <li><strong>Не вставляйте SQL в коннектор</strong>  если только вы не должны. Собственный SQL блокирует свертывание запроса, поэтому каждый последующий шаг Power Query выполняется локально, а не в базе данных. Видеть  <a href="../powerbi-refresh-errors/">ошибки обновления</a>  сколько это стоит.</li>
+    <li><strong>Выберите только те столбцы, которые вам нужны.</strong>  Размер модели определяется столбцами и их мощностью в гораздо большей степени, чем строками, а текстовый столбец с высокой мощностью, такой как примечание с произвольным текстом, может доминировать в файле.</li>
+    <li><strong>Фильтровать заранее,</strong>  в источнике или на первом этапе запроса, поэтому свертывание возвращает его в базу данных.</li>
+    <li><strong>Используйте параметр для имен сервера и базы данных,</strong>  поэтому переход от тестирования к производству — это одно редактирование, а не двенадцать.</li>
   </ol>
 
-  <div class="note"><strong>Check that folding survives.</strong> Right click the last step in Power Query and look at View Native Query. If it is available, the database is doing the work. If it is greyed out, folding broke at or before that step, and everything after it is being processed on your machine, row by row.</div>
+  <div class="note"><strong>Убедитесь, что складывание сохранилось.</strong>  Щелкните правой кнопкой мыши последний шаг в Power Query и посмотрите View Native Query. Если она доступна, база данных выполняет всю работу. Если он выделен серым цветом, значит, фальцовка прервалась на этом этапе или раньше, и все, что происходит после него, обрабатывается на вашей машине ряд за рядом.</div>
 
-  <h2>Credentials, and the gateway</h2>
+  <h2>Учетные данные и шлюз</h2>
   <p>This is where most published reports fail. Desktop uses your Windows or database credentials on your machine; the Service has its own separate credential store and no route into your network.</p>
   <ol>
-    <li>Publish the report.</li>
-    <li>In the Service, open the dataset settings and set Data source credentials.</li>
-    <li>For any source inside your network, install the on-premises data gateway on a machine that stays on.</li>
-    <li>Map the data source in the gateway configuration, matching the server and database names exactly as they appear in the file. A mismatch here is the usual cause of a gateway that is installed and still not used.</li>
-    <li>Set the refresh schedule, and turn on failure notifications.</li>
+    <li>Опубликуйте отчет.</li>
+    <li>В Сервисе откройте настройки набора данных и задайте учетные данные источника данных.</li>
+    <li>Для любого источника внутри вашей сети установите локальный шлюз данных на машине, которая остается включенной.</li>
+    <li>Сопоставьте источник данных в конфигурации шлюза, сопоставив имена сервера и базы данных точно так, как они указаны в файле. Несоответствие здесь является обычной причиной того, что шлюз установлен и до сих пор не используется.</li>
+    <li>Установите расписание обновления и включите уведомления об ошибках.</li>
   </ol>
-  <p>A gateway on a personal laptop works and will fail every time the laptop sleeps. If the report matters, the gateway belongs on a server.</p>
+  <p>Шлюз на личном ноутбуке работает и выходит из строя каждый раз, когда ноутбук переходит в режим сна. Если отчет имеет значение, шлюз принадлежит серверу.</p>
 
   <h2>Security</h2>
   <ul>
-    <li>Use a read-only account for reporting. A report has no reason to be able to write.</li>
-    <li>Prefer a service account over a personal one, or the report breaks when somebody leaves.</li>
-    <li>Remember that an imported model contains the data. Anyone with access to the report file has the rows, whatever the source system permits.</li>
-    <li>Row-level security is applied in the model, not in the source, unless you deliberately pass the user identity through. See <a href="../powerbi-row-level-security/">row-level security</a>.</li>
+    <li>Для создания отчетов используйте учетную запись, доступную только для чтения. Отчет не имеет оснований писать.</li>
+    <li>Предпочитайте сервисную учетную запись личной, иначе отчет прервется, когда кто-то уйдет.</li>
+    <li>Помните, что импортированная модель содержит данные. Строки есть у любого, у кого есть доступ к файлу отчета, независимо от того, что разрешает исходная система.</li>
+    <li>Безопасность на уровне строк применяется в модели, а не в источнике, если только вы намеренно не передаете идентификатор пользователя. Видеть  <a href="../powerbi-row-level-security/">безопасность на уровне строк</a>.</li>
   </ul>
 
-  <h2>How to apply this to your own work</h2>
+  <h2>Как применить это в своей работе</h2>
   <ol>
-    <li>Check the storage mode on your current report. It is shown in the status bar at the bottom right.</li>
-    <li>If it is DirectQuery, ask which of the three reasons applies. If none does, test an Import version and compare the click response.</li>
-    <li>Ask your database owner for views rather than table access, and explain that it lets them refactor safely.</li>
-    <li>Remove columns you do not use and watch the file size fall.</li>
-    <li>Set up the gateway and credentials before promising a refresh schedule, not after the first failure email.</li>
+    <li>Проверьте режим хранения текущего отчета. Он отображается в строке состояния справа внизу.</li>
+    <li>Если это DirectQuery, спросите, какая из трех причин применима. Если этого не происходит, протестируйте версию импорта и сравните реакцию на нажатие.</li>
+    <li>Попросите владельца базы данных предоставить представления, а не доступ к таблицам, и объясните, что это позволяет им безопасно выполнять рефакторинг.</li>
+    <li>Удалите столбцы, которые вы не используете, и наблюдайте, как размер файла уменьшается.</li>
+    <li>Настройте шлюз и учетные данные до того, как обещать график обновления, а не после первого сообщения об ошибке.</li>
   </ol>
 
-  <h2>The one habit to keep</h2>
-  <p>Ask where the query will run. That single question explains report speed, refresh failures, database load and half the DAX restrictions, and it is the question the connection dialog was really asking.</p>
+  <h2>Единственная привычка, которую нужно сохранить</h2>
+  <p>Спросите, где будет выполняться запрос. Этот единственный вопрос объясняет скорость отчетов, сбои обновления, загрузку базы данных и половину ограничений DAX, и именно этот вопрос действительно задавался в диалоговом окне подключения.</p>
 
-  <p>Do you know which mode your most-used report is in?</p>
+  <p>Знаете ли вы, в каком режиме находится ваш наиболее часто используемый отчет?</p>
 
-  <div class="note"><strong>Written from the tools as they ship.</strong> Storage mode in the status bar, View Native Query, composite models, the on-premises data gateway and Service credential settings are all current Power BI features.</div>
+  <div class="note"><strong>Написано с помощью инструментов по мере их доставки.</strong>  Режим хранения в строке состояния, просмотр собственного запроса, составные модели, локальный шлюз данных и настройки учетных данных службы — все это текущие функции Power BI.</div>
 
   <div class="book">
-    <strong>Choosing the storage mode is the biggest decision in the connection dialog and the one nobody explains.</strong>
-    <p><em>Power BI for Analysts</em> is 187 pages that take filter context apart one modifier at a time, so a measure stops being a guess about what Power BI was filtering when it ran.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/power-bi-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=power-bi-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-connect-power-bi-to-a-database'})">Power BI for Analysts, $19 &rarr;</a>
+    <strong>Выбор режима хранения — самое важное решение в диалоговом окне подключения, которое никто не объясняет.</strong>
+    <p><em>Power BI для аналитиков</em>  — это 187 страниц, которые разделяют контекст фильтра по одному модификатору за раз, поэтому показатель перестает быть догадкой о том, что фильтровал Power BI при запуске.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/power-bi-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=power-bi-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-connect-power-bi-to-a-database'})">Power BI для аналитиков, 19 долларов США →</a>
   </div>
 
   <div class="cta">
-    <strong>Get the model right and the report is easy.</strong>
-    <p style="margin:6px 0 0"><a href="../powerbi-star-schema/">The star schema</a> covers the shape to build, and <a href="../powerbi-refresh-errors/">refresh errors</a> covers what goes wrong later. The <a href="../../powerbi/">Power BI Kit</a> has the drills.</p>
-    <a class="btn" href="../powerbi-star-schema/">Read The Star Schema &rarr;</a>
+    <strong>Правильно сформулируйте модель, и отчет станет простым.</strong>
+    <p style="margin:6px 0 0"><a href="../powerbi-star-schema/">Звездная схема</a>  покрывает форму для построения, и  <a href="../powerbi-refresh-errors/">ошибки обновления</a>  рассказывает о том, что пойдет не так позже.  <a href="../../powerbi/">Комплект Power BI</a>  есть дрели.</p>
+    <a class="btn" href="../powerbi-star-schema/">Читать Звездную схему →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../powerbi-refresh-errors/">Refresh Errors</a> &middot; <a href="../powerbi-star-schema/">Star Schema</a> &middot; <a href="../import-a-csv-into-power-bi/">Import a CSV</a> &middot; <a href="../database-setup-for-analysts/">Database Setup</a> &middot; <a href="../connect-excel-to-a-database/">Connect Excel to a Database</a> &middot; <a href="../../powerbi/">Power BI Kit</a>
-    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../powerbi-refresh-errors/">ошибки обновления</a> &middot; <a href="../powerbi-star-schema/">Схема звезды</a> &middot; <a href="../import-a-csv-into-power-bi/">Импортировать CSV-файл</a> &middot; <a href="../database-setup-for-analysts/">Настройка базы данных</a> &middot; <a href="../connect-excel-to-a-database/">Подключите Excel к базе данных</a> &middot; <a href="../../powerbi/">Комплект Power BI</a>
+    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

@@ -49,10 +49,10 @@
   var CROSS = [
     { kits: { sql: 'tp54avpj', 'sql-dry-run': 'tp54avpj' },
       cls: 'apk-eco-pack', ev: 'comment_system_click',
-      label: 'The SQL Comment System' },
+      label: "Система комментариев SQL" },
     { kits: { sql: 'uhy9o948', 'sql-dry-run': 'uhy9o948', excel: '1ifxmp5y' },
       cls: 'apk-eco-os', ev: 'analyst_os_click',
-      label: 'The Data Analyst OS' }
+      label: "ОС Data Analyst" }
   ];
 
   var packLink = CROSS.filter(function (c) { return c.kits[kit]; }).map(function (c) {
@@ -99,69 +99,69 @@
      ---------------------------------------------------------- */
   var BOOKS = {
     excel: {
-      slug: 'excel-for-analysts', title: 'Excel for Analysts', price: '$19', pages: 378,
+      slug: 'excel-for-analysts', title: "Excel для аналитиков", price: '$19', pages: 378,
       hook: 'You can build the pivot. The stall comes when the Grand Total does not match the source column and nothing on screen says why.',
-      what: 'every formula read argument by argument in plain words, with practice questions that print the answer and the reason it is right'
+      what: "каждая формула читается аргумент за аргументом простыми словами, с практическими вопросами, которые печатают ответ и причину, по которой она правильна."
     },
     sql: {
-      slug: 'sql-for-analysts', title: 'SQL for Analysts', price: '$19', pages: 458,
+      slug: 'sql-for-analysts', title: "SQL для аналитиков", price: '$19', pages: 458,
       hook: 'You can write a SELECT. The stall comes when somebody says join those and tell me why the totals moved.',
-      what: 'every query read line by line in plain words, with practice questions that print the answer and the reason it is right'
+      what: "каждый запрос читается построчно простыми словами, с практическими вопросами, в которых печатается ответ и причина, по которой он правильный."
     },
     tableau: {
-      slug: 'tableau-for-analysts', title: 'Tableau for Analysts', price: '$19', pages: 128,
+      slug: 'tableau-for-analysts', title: "Таблица для аналитиков", price: '$19', pages: 128,
       hook: 'The chart draws itself. The stall comes when two sheets on the same data show two different totals.',
-      what: 'relationships, level of detail and table calculations worked through one decision at a time'
+      what: "отношения, уровень детализации и табличные расчеты обрабатывались по одному решению за раз"
     },
     python: {
-      slug: 'python-for-analysts', title: 'Python for Analysts', price: '$19', pages: 203,
+      slug: 'python-for-analysts', title: "Python для аналитиков", price: '$19', pages: 203,
       hook: 'The notebook runs clean. The stall comes when a merge quietly doubles your row count and the code never complains.',
-      what: 'pandas read line by line in plain words, with the checks that catch a bad join before it reaches a chart'
+      what: "панды читают построчно простыми словами, используя проверки, которые обнаруживают плохое соединение до того, как оно достигнет диаграммы."
     },
     powerbi: {
-      slug: 'power-bi-for-analysts', title: 'Power BI for Analysts', price: '$19', pages: 187,
+      slug: 'power-bi-for-analysts', title: "Power BI для аналитиков", price: '$19', pages: 187,
       hook: 'The visual loads. The stall comes when the measure and the column give two different numbers for the same thing.',
-      what: 'DAX, the star schema and filter context explained in the order the questions actually arrive'
+      what: "DAX, звездообразная схема и контекст фильтра, объясненные в том порядке, в котором вопросы фактически поступают."
     },
     stats: {
-      slug: 'statistics-for-analysts', title: 'Statistics for Analysts', price: '$19', pages: 123,
+      slug: 'statistics-for-analysts', title: "Статистика для аналитиков", price: '$19', pages: 123,
       hook: 'You have the two averages. The stall comes when somebody asks whether the gap between them is real.',
-      what: 'spread, p-values, confidence intervals and A/B tests written for people who have to present the answer'
+      what: "разброс, значения p, доверительные интервалы и A/B-тесты, написанные для людей, которым нужно дать ответ."
     },
     forecasting: {
-      slug: 'forecasting-for-analysts', title: 'Forecasting for Analysts', price: '$12', pages: 43,
+      slug: 'forecasting-for-analysts', title: "Прогнозирование для аналитиков", price: '$12', pages: 43,
       hook: 'The line goes up. The stall comes when somebody asks how far ahead you are willing to say that out loud.',
-      what: 'moving averages, seasonality and forecast accuracy, including how to state what the number cannot tell you'
+      what: "скользящие средние, сезонность и точность прогнозов, в том числе как указать то, о чем цифры не могут вам сказать"
     },
     'chart-literacy': {
-      slug: 'charts-and-visualization', title: 'Charts and Visualization', price: '$12', pages: 42,
+      slug: 'charts-and-visualization', title: "Диаграммы и визуализация", price: '$12', pages: 42,
       hook: 'The chart is accurate and still reads wrong to the room.',
-      what: 'picking the mark, ordering the bars and cutting the axis, with the misleads shown side by side'
+      what: "выбор отметки, упорядочивание стержней и обрезка оси, при этом ошибки отображаются рядом"
     },
     viz: {
-      slug: 'charts-and-visualization', title: 'Charts and Visualization', price: '$12', pages: 42,
+      slug: 'charts-and-visualization', title: "Диаграммы и визуализация", price: '$12', pages: 42,
       hook: 'The chart is accurate and still reads wrong to the room.',
-      what: 'picking the mark, ordering the bars and cutting the axis, with the misleads shown side by side'
+      what: "выбор отметки, упорядочивание стержней и обрезка оси, при этом ошибки отображаются рядом"
     },
     interview: {
-      slug: 'thinking-like-an-analyst', title: 'Thinking Like an Analyst', price: '$19', pages: 64,
+      slug: 'thinking-like-an-analyst', title: "Думать как аналитик", price: '$19', pages: 64,
       hook: 'You know the work. The interview asks you to say it out loud in ninety seconds.',
-      what: 'the reasoning behind the answer, so you can talk through a problem instead of reciting a formula'
+      what: "обоснование ответа, чтобы вы могли обсудить проблему, а не повторять формулу"
     },
     projects: {
-      slug: 'thinking-like-an-analyst', title: 'Thinking Like an Analyst', price: '$19', pages: 64,
+      slug: 'thinking-like-an-analyst', title: "Думать как аналитик", price: '$19', pages: 64,
       hook: 'A finished project is not the same as a project you can explain.',
-      what: 'how an analyst frames a question, checks their own work and writes up what the numbers do not settle'
+      what: "как аналитик формулирует вопрос, проверяет свою работу и записывает то, что не решают цифры"
     },
     path: {
-      slug: 'thinking-like-an-analyst', title: 'Thinking Like an Analyst', price: '$19', pages: 64,
+      slug: 'thinking-like-an-analyst', title: "Думать как аналитик", price: '$19', pages: 64,
       hook: 'Tools are the easy half. The other half is knowing which question you are answering.',
-      what: 'how an analyst frames a question, checks their own work and writes up what the numbers do not settle'
+      what: "как аналитик формулирует вопрос, проверяет свою работу и записывает то, что не решают цифры"
     },
     guides: {
-      slug: 'thinking-like-an-analyst', title: 'Thinking Like an Analyst', price: '$19', pages: 64,
+      slug: 'thinking-like-an-analyst', title: "Думать как аналитик", price: '$19', pages: 64,
       hook: 'Every guide here answers one question. The habit underneath them is the same one.',
-      what: 'how an analyst frames a question, checks their own work and writes up what the numbers do not settle'
+      what: "как аналитик формулирует вопрос, проверяет свою работу и записывает то, что не решают цифры"
     }
   };
 

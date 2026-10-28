@@ -19,8 +19,8 @@ const LADDER = {
 
   { adds: 'List the customers who can leave any month',
     q: 'Which customers are on a month to month contract, and what do they pay?',
-    why: 'The base shape: named columns with a filter. Month to month means the customer can walk at the end of any month.',
-    guide: { href: '../guides/sql-foundations/', label: 'Read: SELECT, FROM and WHERE' },
+    why: "Базовая форма: именованные столбцы с фильтром. Из месяца в месяц означает, что клиент может ходить в конце любого месяца.",
+    guide: { href: '../guides/sql-foundations/', label: "Читайте: ВЫБРАТЬ, ОТКУДА и ГДЕ" },
     header:
 `-- Purpose: List the month-to-month customers with what they pay and whether they left
 -- Source:  telco_customers, one row = one customer`,
@@ -33,8 +33,8 @@ WHERE contract = 'Month-to-month';`,
 
   { adds: 'Put the biggest bill on top',
     q: 'Which month to month customers pay the most?',
-    why: 'Sort the rows so the biggest bill is on top. The filter has not changed, so the row count cannot either.',
-    guide: { href: '../guides/sql-foundations/', label: 'Read: sorting with ORDER BY' },
+    why: "Отсортируйте строки так, чтобы самая большая купюра оказалась сверху. Фильтр не изменился, поэтому количество строк тоже не изменится.",
+    guide: { href: '../guides/sql-foundations/', label: "Читайте: сортировка с помощью ORDER BY" },
     header:
 `-- Purpose: Rank the month-to-month customers by monthly bill, largest first
 -- Source:  telco_customers, one row = one customer`,
@@ -48,8 +48,8 @@ ORDER BY monthly_charges DESC;`,
 
   { adds: 'Cut it to a top ten',
     q: 'What are the ten biggest bills on a month to month contract?',
-    why: 'Cut the list to a top ten, which is what a ranking usually ships as.',
-    guide: { href: '../guides/sql-foundations/', label: 'Read: LIMIT and top-N lists' },
+    why: "Сократите список до первой десятки, как это обычно и составляет рейтинг.",
+    guide: { href: '../guides/sql-foundations/', label: "Читайте: LIMIT и списки Top-N" },
     header:
 `-- Purpose: Top 10 month-to-month customers by monthly bill
 -- Source:  telco_customers, one row = one customer`,
@@ -64,8 +64,8 @@ LIMIT 10;`,
 
   { adds: 'Count the whole base instead of listing it',
     q: 'How many customers are there in total?',
-    why: 'COUNT(*) counts rows. Dropping the filter puts every customer back, and one number comes back instead of a list.',
-    guide: { href: '../guides/sql-count-function/', label: 'Read: COUNT and what it counts' },
+    why: "COUNT(*) подсчитывает строки. Удаление фильтра возвращает каждого клиента, и вместо списка возвращается один номер.",
+    guide: { href: '../guides/sql-count-function/', label: "Читайте: COUNT и что это значит" },
     header:
 `-- Purpose: Total customers in the base
 -- Source:  telco_customers, one row = one customer`,
@@ -77,8 +77,8 @@ FROM telco_customers;`,
 
   { adds: 'Count each group separately',
     q: 'How big is each customer group?',
-    why: 'GROUP BY splits the count into one row per persona. A persona here is just a tenure bucket with a name on it.',
-    guide: { href: '../guides/sql-group-by-having/', label: 'Read: GROUP BY without a fake answer' },
+    why: "GROUP BY разбивает счетчик на одну строку для каждого человека. Персона здесь — это просто ведро с именем на нем.",
+    guide: { href: '../guides/sql-group-by-having/', label: "Читать: GROUP BY без поддельного ответа" },
     header:
 `-- Purpose: Customer count per persona
 -- Source:  telco_customers, one row = one customer`,
@@ -92,8 +92,8 @@ ORDER BY customers DESC;`,
 
   { adds: 'Turn a 1 and 0 column into a churn rate',
     q: 'What share of each group left?',
-    why: 'churned is 1 when the customer left and 0 when they stayed. The average of 1s and 0s is the share who left, and multiplying by 100 makes it a percentage. This is the whole trick behind almost every rate you will write.',
-    guide: { href: '../guides/sql-group-by-having/', label: 'Read: aggregates inside a group' },
+    why: "churned — это 1, когда клиент ушел, и 0, когда он остался. Среднее значение единиц и нулей — это доля ушедших, а умножение на 100 дает процент. В этом весь секрет почти каждой ставки, которую вы напишете.",
+    guide: { href: '../guides/sql-group-by-having/', label: "Читайте: агрегирует внутри группы" },
     header:
 `-- Purpose: Churn rate per persona, as a percentage
 -- Source:  telco_customers, one row = one customer
@@ -110,8 +110,8 @@ ORDER BY churn_rate DESC;`,
 
   { adds: 'Keep only the groups above a line',
     q: 'Which groups churn at more than 25%?',
-    why: 'HAVING filters groups after they are built. WHERE could not do this, because there is no such thing as a single customer with a 28% churn rate.',
-    guide: { href: '../guides/sql-group-by-having/', label: 'Read: why HAVING is not WHERE' },
+    why: "HAVING фильтрует группы после их создания. WHERE не смог этого сделать, потому что не бывает ни одного клиента с оттоком 28%.",
+    guide: { href: '../guides/sql-group-by-having/', label: "Читайте: почему ИМЕТЬ НЕ ГДЕ" },
     header:
 `-- Purpose: Personas churning above 25%, the ones worth a retention play
 -- Source:  telco_customers, one row = one customer`,
@@ -128,8 +128,8 @@ ORDER BY churn_rate DESC;`,
 
   { adds: 'Ask the same question about contracts',
     q: 'Does the contract someone signed change how often they leave?',
-    why: 'Same aggregate, a different grouping column. This is the mechanism behind the persona gap, and it is a bigger spread than the personas themselves.',
-    guide: { href: '../guides/sql-group-by-having/', label: 'Read: choosing what to group by' },
+    why: "Тот же агрегат, другой столбец группировки. Это механизм, лежащий в основе разрыва между личностями, и он более широк, чем сами личности.",
+    guide: { href: '../guides/sql-group-by-having/', label: "Читайте: выбор того, по чему группировать" },
     header:
 `-- Purpose: Churn rate by contract type
 -- Source:  telco_customers, one row = one customer`,
@@ -145,8 +145,8 @@ ORDER BY churn_rate DESC;`,
 
   { adds: 'Bring in a column from the other table',
     q: 'What tenure range does each persona actually cover?',
-    why: 'The persona name says nothing about how long that is. personas holds the range and the lifecycle order, and a JOIN puts them beside the numbers.',
-    guide: { href: '../guides/sql-joins/', label: 'Read: JOINs and what they match on' },
+    why: "Имя персонажа ничего не говорит о том, насколько это долго. personas хранит диапазон и порядок жизненного цикла, а JOIN помещает их рядом с числами.",
+    guide: { href: '../guides/sql-joins/', label: "Читайте: JOIN и что им соответствует." },
     header:
 `-- Purpose: Churn rate per persona, labelled with its tenure range, in lifecycle order
 -- Source:  telco_customers, one row = one customer
@@ -165,8 +165,8 @@ ORDER BY p.lifecycle_order;`,
 
   { adds: 'Write your own buckets',
     q: 'Is this really a first year problem?',
-    why: 'CASE builds a column that is not in the table. Two buckets instead of four, and the answer gets blunter: the first year against everything after it.',
-    guide: { href: '../guides/sql-case-expression/', label: 'Read: CASE, building a column that is not there' },
+    why: "CASE создает столбец, которого нет в таблице. Два ведра вместо четырех, и ответ становится более грубым: первый год против всего последующего.",
+    guide: { href: '../guides/sql-case-expression/', label: "Читайте: CASE, построение столбца, которого нет" },
     header:
 `-- Purpose: Churn in the first year against churn after it
 -- Source:  telco_customers, one row = one customer`,
@@ -182,8 +182,8 @@ ORDER BY churn_rate DESC;`,
 
   { adds: 'Put three numbers beside each other',
     q: 'Are the customers who leave the cheap ones?',
-    why: 'Three aggregates in one query. The answer is no, and the reason is in the third column: they pay nearly full price and buy almost nothing else.',
-    guide: { href: '../guides/sql-aliasing/', label: 'Read: naming your columns with AS' },
+    why: "Три агрегата в одном запросе. Ответ — нет, и причина в третьей колонке: они платят почти полную цену и больше ничего не покупают.",
+    guide: { href: '../guides/sql-aliasing/', label: "Читать: присвоение имен столбцам с помощью AS" },
     header:
 `-- Purpose: What each persona pays, what they buy, and how often they leave
 -- Source:  telco_customers, one row = one customer`,
@@ -200,8 +200,8 @@ ORDER BY churn_rate DESC;`,
 
   { adds: 'Finish on the table the project leads with',
     q: 'Who is leaving, and what makes them different?',
-    why: 'Everything from the last eleven drills in one query. This is the table the published analysis is built on, and you have just written it.',
-    guide: { href: '../guides/sql-teaching-comments/', label: 'Read: commenting a query you will hand over' },
+    why: "Все из последних одиннадцати тренировок в одном запросе. Это таблица, на которой построен опубликованный анализ, и вы только что ее написали.",
+    guide: { href: '../guides/sql-teaching-comments/', label: "Читать: комментируя запрос, который вы сдадите" },
     header:
 `-- Purpose: The persona summary the churn analysis leads with
 -- Source:  telco_customers, one row = one customer

@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Two-Way Lookup in Excel: INDEX MATCH MATCH and XLOOKUP Nested &mdash; Analyst Prep Kit</title>
-<meta name="description" content="A grid with regions down the side and months across the top, and you need the cell where they meet. Three ways to write it, why INDEX with two MATCHes survives inserted rows, and the trap in using it on a report nobody controls.">
+<title>Двусторонний поиск в Excel: INDEX MATCH MATCH и XLOOKUP Nested — комплект для подготовки аналитика</title>
+<meta name="description" content="Сетка с регионами сбоку и месяцами вверху, и вам нужна ячейка, в которой они встречаются. Три способа его написания, почему ИНДЕКС с двумя MATCH сохраняется во вставленных строках и ловушка его использования в отчете, который никто не контролирует.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-two-way-lookup/">
-<meta property="og:title" content="Two-Way Lookup: Finding a Value by Row and Column at Once">
-<meta property="og:description" content="Region down the side, month across the top. Three ways to get the cell where they meet.">
+<meta property="og:title" content="Двусторонний поиск: поиск значения одновременно по строке и столбцу">
+<meta property="og:description" content="Регион внизу, месяц вверху. Три способа попасть в клетку, где они встречаются.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-two-way-lookup/">
 <meta name="twitter:card" content="summary_large_image">
@@ -164,17 +164,17 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../../excel/">Excel Kit</a></p>
-  <h1>Two-Way Lookup: Finding a Value by Row and Column at Once</h1>
-  <p class="meta">Michael Nocito &middot; Updated August 2026 &middot; Every number on this page was worked before it was published</p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../../excel/">Excel комплект</a></p>
+  <h1>Двусторонний поиск: поиск значения одновременно по строке и столбцу</h1>
+  <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Все числа на этой странице были обработаны до их публикации.</p>
 
-  <p>Regions down the left, months across the top, numbers in the middle. Somebody wants the value for South in March, and they want it to keep working when a region is added.</p>
+  <p>Регионы внизу слева, месяцы вверху, цифры посередине. Кому-то нужно значение для Юга в марте, и они хотят, чтобы оно продолжало работать при добавлении региона.</p>
 
-  <p>What you do: <code>INDEX</code> with two <code>MATCH</code>es. It is the version that survives edits to the grid, and it is the one worth committing to muscle memory.</p>
+  <p>Что вы делаете:  <code>INDEX</code>  с двумя  <code>MATCH</code>эс. Это та версия, которая выдерживает изменения в сетке, и именно ее стоит сохранить в мышечной памяти.</p>
 
-  <p><strong>The short version.</strong> One MATCH for the row, one for the column, INDEX returns where they cross.</p>
+  <p><strong>Краткая версия.</strong>  Одно ПОИСКПОЗ для строки, одно для столбца, ИНДЕКС возвращает место их пересечения.</p>
 
-  <h2>The grid</h2>
+  <h2>Сетка</h2>
   <table>
     <tr><th></th><th>Jan</th><th>Feb</th><th>Mar</th><th>Apr</th></tr>
     <tr><td>North</td><td>10,200</td><td>10,900</td><td>11,400</td><td>10,700</td></tr>
@@ -182,80 +182,80 @@
     <tr><td>East</td><td>11,800</td><td>11,200</td><td>12,000</td><td>11,650</td></tr>
     <tr><td>West</td><td>5,900</td><td>6,400</td><td>6,100</td><td>6,800</td></tr>
   </table>
-  <p>Say the labels are in A2:A5, the months in B1:E1 and the numbers in B2:E5. South and Mar should return 7,600.</p>
+  <p>Допустим, метки находятся в формате A2:A5, месяцы — в формате B1:E1, а числа — в формате B2:E5. Юг и Мар должны вернуть 7600 человек.</p>
 
-  <h2>The three ways to write it</h2>
-  <h3>INDEX with two MATCHes, the one to learn</h3>
+  <h2>Три способа написать это</h2>
+  <h3>ИНДЕКС с двумя МАТЧАМИ, тот, который нужно выучить</h3>
   <pre><code>=INDEX($B$2:$E$5,
         MATCH($G$1, $A$2:$A$5, 0),
         MATCH($G$2, $B$1:$E$1, 0))</code></pre>
-  <p>G1 holds the region, G2 the month. The first <code>MATCH</code> returns 2 for South, the second returns 3 for Mar, and <code>INDEX</code> returns the value at row 2, column 3 of the grid, which is 7,600. Both zeros mean exact match, and both are essential.</p>
-  <p>Insert a region or reorder the months and the formula still works, because nothing about the position is written into it.</p>
+  <p>G1 содержит регион, G2 — месяц. Первый  <code>MATCH</code>  возвращает 2 для юга, второй возвращает 3 для марта и  <code>INDEX</code>  возвращает значение в строке 2 столбца 3 сетки, равное 7600. Оба нуля означают точное совпадение, и оба они существенны.</p>
+  <p>Вставьте регион или измените порядок месяцев, и формула по-прежнему будет работать, потому что в ней ничего о позиции не написано.</p>
 
-  <h3>Nested XLOOKUP, if you have it</h3>
+  <h3>Вложенный XLOOKUP, если он у вас есть.</h3>
   <pre><code>=XLOOKUP($G$1, $A$2:$A$5,
          XLOOKUP($G$2, $B$1:$E$1, $B$2:$E$5))</code></pre>
-  <p>The inner lookup returns the whole March column as an array, and the outer one picks South's row out of it. Shorter to read, and it only runs on Microsoft 365 and Excel 2021 and later. See <a href="../xlookup-not-available/">XLOOKUP is not available</a> before you put it in a shared file.</p>
+  <p>Внутренний поиск возвращает весь мартовский столбец в виде массива, а внешний выбирает из него строку Юга. Коротко читать, и он работает только в Microsoft 365 и Excel 2021 и более поздних версиях. Видеть  <a href="../xlookup-not-available/">XLOOKUP недоступен.</a>  прежде чем поместить его в общий файл.</p>
 
-  <h3>SUMIFS, when the data is long</h3>
+  <h3>SUMIFS, когда данные длинные</h3>
   <pre><code>=SUMIFS(Data[Amount], Data[Region], $G$1, Data[Month], $G$2)</code></pre>
-  <p>This is the version to want. It needs the data in a long shape, one row per region and month, and in exchange it handles duplicates by summing them, returns 0 rather than an error for a missing combination, and lets you add a third or fourth condition without changing the shape of the formula.</p>
+  <p>Это та версия, которая вам нужна. Ему нужны данные в длинной форме, по одной строке на регион и месяц, и взамен он обрабатывает дубликаты, суммируя их, возвращает 0, а не ошибку для отсутствующей комбинации, и позволяет добавлять третье или четвертое условие без изменения формы формулы.</p>
 
-  <div class="note"><strong>The honest recommendation.</strong> If you own the data, unpivot the grid with <a href="../excel-power-query/">Power Query</a> and use <code>SUMIFS</code>. Two-way lookups exist mostly because somebody was handed a grid they were not allowed to change. That is a real situation, which is why the rest of this page exists.</div>
+  <div class="note"><strong>Честная рекомендация.</strong>  Если вы являетесь владельцем данных, отмените поворот сетки с помощью  <a href="../excel-power-query/">Power Query</a>  и использовать  <code>SUMIFS</code>. Двусторонний поиск существует в основном потому, что кому-то дали сетку, которую ему не разрешили изменить. Это реальная ситуация, поэтому и существует остальная часть этой страницы.</div>
 
-  <h2>The traps</h2>
+  <h2>Ловушки</h2>
   <table>
     <tr><th>Trap</th><th>Symptom</th><th>Fix</th></tr>
-    <tr><td>Grid range does not align with the header ranges</td><td>Off-by-one values, no error</td><td>Grid rows must match the label range exactly</td></tr>
-    <tr><td>Missing the 0 in MATCH</td><td>Wrong value, silently</td><td>Type the 0 every time</td></tr>
-    <tr><td>Ranges not locked</td><td>Errors appearing lower down</td><td>F4 on every range, or use table names</td></tr>
-    <tr><td>Merged header cells</td><td>MATCH finds nothing</td><td>Unmerge. Merged cells break most functions.</td></tr>
-    <tr><td>Duplicate row labels</td><td>Silently returns the first</td><td>Use SUMIFS, which adds them up</td></tr>
-    <tr><td>Header stored as text, key as a date</td><td>#N/A on every column</td><td>Make both the same type</td></tr>
+    <tr><td>Диапазон сетки не совпадает с диапазонами заголовков.</td><td>Значения с отклонением на единицу, без ошибок</td><td>Строки сетки должны точно соответствовать диапазону меток.</td></tr>
+    <tr><td>Пропущен 0 в МАТЧЕ</td><td>Неправильное значение, молча</td><td>Введите 0 каждый раз</td></tr>
+    <tr><td>Диапазоны не заблокированы</td><td>Ошибки появляются ниже</td><td>F4 в каждом диапазоне или используйте имена таблиц.</td></tr>
+    <tr><td>Объединенные ячейки заголовка</td><td>ПОИСКПОЗ ничего не находит</td><td>Разъединить. Объединенные ячейки нарушают большинство функций.</td></tr>
+    <tr><td>Дублирующиеся метки строк</td><td>Молча возвращает первый</td><td>Используйте SUMIFS, который суммирует их.</td></tr>
+    <tr><td>Заголовок хранится в виде текста, ключ — в виде даты.</td><td>#Н/Д в каждом столбце</td><td>Сделайте оба одинакового типа</td></tr>
   </table>
-  <p>The last one bites on month headers constantly. A header typed as <code>Mar</code> is text, and a cell holding a real date formatted as <code>Mar</code> is a number. They look identical and never match. Test with <code>=ISTEXT(B1)</code>.</p>
+  <p>Последний постоянно кусает заголовки месяцев. Заголовок, набранный как  <code>Mar</code>  — это текст, а ячейка, содержащая реальную дату в формате  <code>Mar</code>  это число. Они выглядят одинаково и никогда не совпадают. Тест с  <code>=ISTEXT(B1)</code>.</p>
 
-  <h2>Making it a real interface</h2>
+  <h2>Создание настоящего интерфейса</h2>
   <ol>
-    <li>Put the two keys in labelled cells at the top, not inside the formula.</li>
-    <li>Give both cells a data validation list drawn from the headers, so a typo becomes impossible. See <a href="../excel-data-validation/">data validation</a>.</li>
-    <li>Add a not-found message: <code>=IFERROR(the formula, "no such combination")</code>, once you know why it would fail.</li>
-    <li>Colour the two input cells differently from everything else. Inputs and outputs looking the same is how a reported number gets typed over.</li>
+    <li>Поместите два ключа в помеченные ячейки вверху, а не внутри формулы.</li>
+    <li>Дайте обеим ячейкам список проверки данных, взятый из заголовков, чтобы опечатка стала невозможной. Видеть  <a href="../excel-data-validation/">Проверка данных</a>.</li>
+    <li>Добавьте сообщение о ненайденном:  <code>=IFERROR(the formula, "no such combination")</code>, как только вы узнаете, почему это потерпит неудачу.</li>
+    <li>Раскрасьте две входные ячейки иначе, чем все остальное. Входные и выходные данные, выглядящие одинаково, - это то, как набирается сообщаемое число.</li>
   </ol>
 
-  <h2>How to apply this to your own work</h2>
+  <h2>Как применить это в своей работе</h2>
   <ol>
-    <li>Find the grids in your workbooks and ask which ones you are allowed to reshape. Reshape those.</li>
-    <li>For the rest, replace any hard-coded column numbers with <code>MATCH</code>, and note how many formulas that immunises against an inserted column.</li>
-    <li>Check every header row for merged cells and for text-against-date mismatches.</li>
-    <li>Move lookup keys into labelled input cells with validation lists.</li>
-    <li>Where duplicates are possible, use <code>SUMIFS</code> rather than a lookup, so two matching rows produce a sum instead of a silent first-match.</li>
+    <li>Найдите сетки в своих рабочих тетрадях и спросите, форму каких из них вам разрешено изменить. Измените их форму.</li>
+    <li>В остальном замените все жестко закодированные номера столбцов на  <code>MATCH</code>и обратите внимание, сколько формул иммунизируется против вставленного столбца.</li>
+    <li>Проверьте каждую строку заголовка на наличие объединенных ячеек и несоответствий текста и даты.</li>
+    <li>Переместите ключи поиска в помеченные ячейки ввода со списками проверки.</li>
+    <li>Если возможны дубликаты, используйте  <code>SUMIFS</code>  а не поиск, поэтому две совпадающие строки создают сумму вместо молчаливого первого совпадения.</li>
   </ol>
 
-  <h2>The one habit to keep</h2>
-  <p>Ask whether the grid is a shape for reading or a shape for storing. Grids are excellent to look at and poor to compute from, and most two-way lookup problems are really a storage shape that should have been long.</p>
+  <h2>Единственная привычка, которую нужно сохранить</h2>
+  <p>Спросите, является ли сетка формой для чтения или формой для хранения. Сетки удобны для просмотра и плохи для вычислений, и большинство задач двустороннего поиска на самом деле представляют собой форму хранения, которая должна была быть длинной.</p>
 
-  <p>How many of your formulas contain a column number typed by hand?</p>
+  <p>Сколько ваших формул содержат номера столбцов, введенные вручную?</p>
 
-  <div class="note"><strong>Every number here was worked before it was published.</strong> South and Mar is row 2, column 3 of the grid, which is 7,600.</div>
+  <div class="note"><strong>Каждый номер здесь был обработан до того, как был опубликован.</strong>  Юг и Мар — это вторая строка, третий столбец сетки, то есть 7600.</div>
 
   <div class="book">
-    <strong>A grid is a shape for reading, not a shape for calculating from.</strong>
-    <p><em>Excel for Analysts</em> is 378 pages that read every formula and dialog one at a time, so the workbook stops being a place where numbers appear and becomes one you can check.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-two-way-lookup'})">Excel for Analysts, $19 &rarr;</a>
+    <strong>Сетка — это форма для чтения, а не форма для вычислений.</strong>
+    <p><em>Excel для аналитиков</em>  состоит из 378 страниц, на которых каждая формула и диалог читаются по одному, поэтому книга перестает быть местом, где появляются числа, и становится тем местом, которое вы можете проверить.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-two-way-lookup'})">Excel для аналитиков, 19 долларов США →</a>
   </div>
 
   <div class="cta">
-    <strong>The better answer is usually to unpivot the grid.</strong>
-    <p style="margin:6px 0 0"><a href="../excel-power-query/">Power Query</a> turns a grid into a long table in two clicks, after which a normal <code>SUMIFS</code> does the job. <a href="../excel-index-match/">INDEX MATCH</a> covers the one-way version.</p>
-    <a class="btn" href="../excel-power-query/">Read Power Query &rarr;</a>
+    <strong>Лучшим ответом обычно является разворот сетки.</strong>
+    <p style="margin:6px 0 0"><a href="../excel-power-query/">Power Query</a>  превращает сетку в длинную таблицу в два клика, после чего обычная  <code>SUMIFS</code>  делает свою работу.  <a href="../excel-index-match/">ИНДЕКСНОЕ СОВПАДЕНИЕ</a>  охватывает одностороннюю версию.</p>
+    <a class="btn" href="../excel-power-query/">Читать Power Query →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../excel-index-match/">INDEX MATCH</a> &middot; <a href="../vlookup-vs-xlookup/">VLOOKUP vs XLOOKUP</a> &middot; <a href="../excel-power-query/">Power Query</a> &middot; <a href="../excel-sumifs/">SUMIFS</a> &middot; <a href="../lookup-returns-na/">When a Lookup Returns #N/A</a> &middot; <a href="../../excel/">Excel Kit</a>
-    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../excel-index-match/">ИНДЕКСНОЕ СОВПАДЕНИЕ</a> &middot; <a href="../vlookup-vs-xlookup/">ВПР против XLOOKUP</a> &middot; <a href="../excel-power-query/">Power Query</a> &middot; <a href="../excel-sumifs/">SUMIFS</a> &middot; <a href="../lookup-returns-na/">Когда поиск возвращает #N/A</a> &middot; <a href="../../excel/">Excel комплект</a>
+    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

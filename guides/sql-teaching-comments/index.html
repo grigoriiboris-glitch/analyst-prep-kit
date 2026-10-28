@@ -1,6 +1,6 @@
 ﻿<!doctype html>
 <html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>How to Comment SQL So It Teaches: A Format You Can Copy &mdash; Analyst Prep Kit</title>
-<meta name="description" content="A copy-ready format for commenting SQL: a boxed WHY header, a clause-by-clause read-out-loud block, and a clean query body. Full before and after, and why it works.">
+<title>Как комментировать SQL для обучения: формат, который можно скопировать — комплект для подготовки аналитика</title>
+<meta name="description" content="Готовый к копированию формат комментариев SQL: упакованный заголовок WHY, блок для чтения по каждому предложению и чистое тело запроса. Полное до и после, и почему это работает.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-teaching-comments/">
-<meta property="og:title" content="How to Comment SQL So It Teaches">
-<meta property="og:description" content="Most SQL comments restate the code. This format explains why the question exists and lets a beginner read the query out loud like a sentence. Complete, with a full before and after.">
+<meta property="og:title" content="Как комментировать SQL, чтобы он обучал">
+<meta property="og:description" content="Большинство комментариев SQL повторяют код. Этот формат объясняет, почему существует вопрос, и позволяет новичку прочитать его вслух, как предложение. В сборе, с полным до и после.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/sql-teaching-comments.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-teaching-comments/">
@@ -133,43 +133,43 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../sql/">SQL Kit</a></p>
-  <h1>How to Comment SQL So It Teaches</h1>
-  <p class="meta">A complete SQL commenting format, used verbatim in three published portfolio projects · Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Updated <time datetime="2026-08-07">August 7, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-комплект</a></p>
+  <h1>Как комментировать SQL, чтобы он обучал</h1>
+  <p class="meta">Полный формат комментариев SQL, дословно используемый в трех опубликованных проектах портфолио. · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Обновлено  <time datetime="2026-08-07">7 августа 2026 г.</time></p>
 
-  <p>This guide gives you a complete format for commenting SQL, one that teaches a reader instead of repeating the code back to them. It was built across three published portfolio projects, including one on a 125,000-row Steam dataset, and it is used word for word in those repositories, which you can <a href="#in-use">read in full further down</a>. The whole thing is here. Copy it, change it, make it yours.</p>
+  <p>В этом руководстве представлен полный формат комментариев SQL, который обучает читателя, а не повторяет ему код. Он был создан на основе трех опубликованных проектов портфолио, в том числе одного из набора данных Steam, состоящего из 125 000 строк, и используется слово в слово в тех репозиториях, которые вы можете  <a href="#in-use">читайте полностью ниже</a>. Все это здесь. Скопируйте, измените, сделайте своим.</p>
 
-  <div class="note"><strong>The short version.</strong> A boxed <strong>WHY</strong> header above every query, then a read-out-loud block that paraphrases each clause in order, then a completely clean query. The teaching sits above the code, never inside it.</div>
+  <div class="note"><strong>Краткая версия.</strong>  В штучной упаковке  <strong>WHY</strong>  заголовок над каждым запросом, затем блок чтения вслух, который перефразирует каждое предложение по порядку, а затем совершенно чистый запрос. Учение находится над кодексом, а не внутри него.</div>
 
-  <p>If what you actually came for is the syntax, it is two marks and it takes ten seconds. <code>--</code> hides the rest of one line. <code>/*</code> opens a block that stays hidden until <code>*/</code> closes it, across as many lines as you like. Both work the same in every major database.</p>
+  <p>Если вы на самом деле пришли за синтаксисом, то это две оценки и занимает десять секунд.  <code>--</code>  скрывает остальную часть одной строки.  <code>/*</code>  открывает блок, который остается скрытым до тех пор, пока  <code>*/</code>  закрывает его по любому количеству строк. Оба работают одинаково в каждой крупной базе данных.</p>
   <pre><code>-- this hides the rest of this line
 
 /* this hides
    everything until the closing mark */</code></pre>
-  <p>That is all of the syntax. The traps around it, including the two ways commenting out a line quietly breaks a query, are in <a href="../sql-comments/">how to comment in SQL</a>. This page is about the harder question underneath it: what to put in the comment once you have one.</p>
+  <p>Вот и весь синтаксис. Ловушки вокруг этого, в том числе два способа, с помощью которых комментирование строки незаметно прерывает запрос, находятся в затруднительном положении.  <a href="../sql-comments/">Как комментировать в SQL</a>. Эта страница посвящена более сложному вопросу: что оставить в комментарии, если он у вас есть.</p>
 
-  <p>The format exists because of a specific limit. A comment can only be worth reading if it carries something the code does not already say. <code>-- filter to active customers</code> next to <code>WHERE status = 'active'</code> carries nothing. The one thing a reader cannot recover from the code is <em>why anyone asked this question in the first place</em>, and that is usually the part left out.</p>
+  <p>Формат существует из-за определенного ограничения. Комментарий стоит прочитать только в том случае, если он содержит что-то, чего еще не сказано в коде.  <code>-- filter to active customers</code>  рядом с  <code>WHERE status = 'active'</code>  ничего не несет. Единственное, что читатель не может восстановить из кода, это  <em>почему кто-то вообще задал этот вопрос</em>, и эта часть обычно не учитывается.</p>
 
   <div class="toc">
-    <strong>What's here</strong>
+    <strong>Что здесь</strong>
     <ol>
-      <li>Why the usual comments fail</li>
-      <li>Part 1: the boxed WHY header</li>
-      <li>Part 2: the read-out-loud block</li>
-      <li>Part 3: sub-bullets for every calculation</li>
-      <li>Part 4: the clean query</li>
-      <li>The full before and after</li>
-      <li>Standing conventions that keep it readable</li>
-      <li>Why this works</li>
-      <li>See it in use: three published projects</li>
-      <li>Using it on your own portfolio project</li>
-      <li>A cheat sheet</li>
+      <li>Почему обычные комментарии не работают</li>
+      <li>Часть 1: заголовок «ПОЧЕМУ» в рамке</li>
+      <li>Часть 2: блок чтения вслух</li>
+      <li>Часть 3: подпункты для каждого расчета</li>
+      <li>Часть 4: чистый запрос</li>
+      <li>Полное до и после</li>
+      <li>Постоянные соглашения, которые делают его читабельным</li>
+      <li>Почему это работает</li>
+      <li>Посмотрите, как это работает: три опубликованных проекта</li>
+      <li>Использование его в вашем собственном проекте портфолио</li>
+      <li>Шпаргалка</li>
     </ol>
   </div>
 
-  <h2>Why the usual comments fail</h2>
-  <p>Here is what most people write, and what most AI assistants hand you when you ask for commented SQL. Read the comment on it, then read the code, and ask what the comment told you that the code did not. Hold your answer, because the gap you just noticed is the entire subject of this guide.</p>
+  <h2>Почему обычные комментарии не работают</h2>
+  <p>Вот что пишет большинство людей и что большинство помощников ИИ вручают вам, когда вы просите прокомментированный SQL. Прочтите комментарий к нему, затем прочитайте код и спросите, что в комментарии вам сказано такого, чего нет в коде. Придержите свой ответ, потому что пробел, который вы только что заметили, и является темой этого руководства.</p>
   <pre><code>-- Get top rated games with at least 500 reviews
 SELECT Name, Positive, Negative,
        ROUND(CAST(Positive AS REAL) / (Positive + Negative) * 100, 1) AS pct_positive -- calc percentage
@@ -178,17 +178,17 @@ WHERE (Positive + Negative) >= 500 -- filter small samples
 ORDER BY pct_positive DESC, Positive DESC
 LIMIT 25;</code></pre>
 
-  <p>Three problems, and they compound:</p>
+  <p>Три проблемы, и они усугубляются:</p>
   <ul>
-    <li><strong>The comments restate the code.</strong> "filter small samples" next to a <code>WHERE</code> clause that visibly filters small samples teaches nobody anything.</li>
-    <li><strong>The interesting decision is invisible.</strong> Why 500 and not 50 or 5,000? Why rank on percentage rather than raw count? Those are the analyst judgments. They are the only part a reader cannot reconstruct, and they are the part left out.</li>
-    <li><strong>The inline comments crowd the code.</strong> Trailing comments push lines long, break alignment, and make the query harder to read than it would have been with no comments at all.</li>
+    <li><strong>Комментарии повторяют код.</strong>  «фильтровать небольшие образцы» рядом с  <code>WHERE</code>  Пункт, который явно фильтрует небольшие выборки, никого ничему не учит.</li>
+    <li><strong>Интересное решение незаметно.</strong>  Почему 500, а не 50 или 5000? Зачем ранжировать по проценту, а не по чистому подсчету? Это суждения аналитиков. Это единственная часть, которую читатель не может восстановить, и именно они остаются в стороне.</li>
+    <li><strong>Встроенные комментарии заполняют код.</strong>  Завершающие комментарии удлиняют строки, нарушают выравнивание и усложняют чтение запроса, чем это было бы без комментариев вообще.</li>
   </ul>
 
-  <p>The format below inverts all three. The reasoning goes on top, the paraphrase goes on top, and the query stays clean.</p>
+  <p>Формат ниже инвертирует все три. Рассуждение идет сверху, перефразирование идет сверху, а вопрос остается чистым.</p>
 
-  <h2>Part 1: the boxed WHY header</h2>
-  <p>Every query gets a full-width box containing a short step name and a <code>WHY</code> line. The WHY explains the analytical or business reason the question exists. It does not describe what the SQL does.</p>
+  <h2>Часть 1: заголовок «ПОЧЕМУ» в рамке</h2>
+  <p>Каждый запрос получает поле полной ширины, содержащее короткое имя шага и  <code>WHY</code>  линия. ПОЧЕМУ объясняет аналитическую или деловую причину существования вопроса. Он не описывает, что делает SQL.</p>
   <pre><code>-- ============================================================
 -- STEP 4: Each game's positive review PERCENTAGE (quality)
 -- WHY: Raw counts favor popular games; a hidden gem is about how
@@ -198,35 +198,35 @@ LIMIT 25;</code></pre>
 --      reviewed games above equally-rated smaller ones.
 -- ============================================================</code></pre>
 
-  <p>The test for a good WHY: delete the query underneath it. Does the header still tell a reader what problem was being solved and what tradeoff was chosen? If yes, it is doing its job. If it collapses into "this selects some games," rewrite it.</p>
+  <p>Проверка правильности ПОЧЕМУ: удалите запрос под ним. Сообщает ли заголовок читателю, какая проблема решалась и какой компромисс был выбран? Если да, то он делает свою работу. Если он сворачивается в «это выбирает некоторые игры», перепишите его.</p>
 
-  <div class="note"><strong>This is the part that matters most in a portfolio.</strong> Anyone reviewing your work can see that you can write a <code>WHERE</code> clause. What they are actually trying to find out is whether you know why you wrote that particular one. The WHY header is where you show it.</div>
+  <div class="note"><strong>Это самая важная часть портфолио.</strong>  Любой, кто просматривает вашу работу, увидит, что вы можете написать  <code>WHERE</code>  пункт. На самом деле они пытаются выяснить, знаете ли вы, почему написали именно это. Заголовок «ПОЧЕМУ» — это то место, где вы его показываете.</div>
 
-  <h2>Part 2: the read-out-loud block</h2>
-  <p>Directly under the header, one comment line per SQL clause, in the exact order the clauses appear in the query, each line starting with that clause keyword. A beginner should be able to read the block top to bottom and have it land as a sentence.</p>
+  <h2>Часть 2: блок чтения вслух</h2>
+  <p>Непосредственно под заголовком, одна строка комментария для каждого предложения SQL, в точном порядке, в котором предложения появляются в запросе, каждая строка начинается с этого ключевого слова предложения. Новичок должен уметь читать блок сверху вниз и воспринимать его как предложение.</p>
   <pre><code>--SELECT Name, Positive, Negative, and a CALCULATED % positive column:
 --FROM the games_raw table
 --WHERE the game has at least 500 total reviews
 --ORDER BY pct_positive DESC, then Positive DESC (tiebreaker)
 --LIMIT the first 25 rows</code></pre>
 
-  <p>Two rules make this work, and both are easy to break by accident:</p>
+  <p>Этому способствуют два правила, и оба легко случайно нарушить:</p>
   <ul>
-    <li><strong>Match the query's clause order exactly.</strong> If the query goes SELECT, FROM, WHERE, GROUP BY, HAVING, ORDER BY, LIMIT, the block goes in that order too. The reader is learning to map the paraphrase onto the code by position.</li>
-    <li><strong>Paraphrase, do not translate word for word.</strong> "WHERE the game has at least 500 total reviews" is a paraphrase. "WHERE Positive plus Negative is greater than or equal to 500" is a word-for-word translation. It teaches nothing, because it is the same sentence the code already said.</li>
+    <li><strong>Точно соблюдайте порядок предложений запроса.</strong>  Если запрос имеет следующий вид: SELECT, FROM, WHERE, GROUP BY, HAVING, ORDER BY, LIMIT, блок также выполняется в этом порядке. Читатель учится отображать парафраз на код по позициям.</li>
+    <li><strong>Перефразируя, не переводите слово в слово.</strong>  «ГДЕ у игры не менее 500 обзоров» — это перефраз. «WHERE Positive plus Negative больше или равно 500» — это дословный перевод. Это ничему не учит, потому что это то же самое предложение, которое уже было сказано в кодексе.</li>
   </ul>
 
-  <p>Notice the block uses <code>--</code> with no space. That is deliberate. It visually separates the tight teaching block from the spaced-out box header above it. The two then read as distinct layers rather than one wall of comments.</p>
+  <p>Обратите внимание, что блок использует  <code>--</code>  без места. Это намеренно. Он визуально отделяет плотный обучающий блок от расположенного над ним заголовка поля. Затем они читаются как отдельные слои, а не как одна стена комментариев.</p>
 
-  <h2>Part 3: sub-bullets for every calculation</h2>
-  <p>Any function or calculated column gets indented sub-bullets under its <code>--SELECT</code> line, one per piece, in the order a person reads them:</p>
+  <h2>Часть 3: подпункты для каждого расчета</h2>
+  <p>Любая функция или вычисляемый столбец получает подпункты с отступом.  <code>--SELECT</code>  строка, по одной на штуку, в том порядке, в котором человек их читает:</p>
   <pre><code>--SELECT Name, Positive, Negative, and a CALCULATED % positive column:
 --   Positive / (Positive + Negative) * 100  =  % of reviews that are positive
 --   CAST(... AS REAL) = treat as a decimal so division keeps decimals
 --   ROUND(..., 1)     = round to 1 decimal place
 --   AS pct_positive   = name (alias) the new column</code></pre>
 
-  <p>For a nested calculation, explain it inside-out, innermost function first. Take <code>ROUND(100.0 * SUM(CASE WHEN status = 'churned' THEN 1 ELSE 0 END) / COUNT(*), 2)</code>:</p>
+  <p>Для вложенного вычисления сначала объясните его внутреннюю функцию. Брать  <code>ROUND(100.0 * SUM(CASE WHEN status = 'churned' THEN 1 ELSE 0 END) / COUNT(*), 2)</code>:</p>
   <pre><code>--SELECT the churn rate as a percentage:
 --   CASE WHEN status = 'churned' THEN 1 ELSE 0 END = mark each churned row with a 1
 --   SUM(...)        = add the 1s, which counts the churned customers
@@ -234,10 +234,10 @@ LIMIT 25;</code></pre>
 --   100.0 * ...     = turn the fraction into a percentage (the .0 forces decimal math)
 --   ROUND(..., 2)   = round to 2 decimal places</code></pre>
 
-  <p>That inside-out order matters. It is the order the database evaluates it and the order a person has to unpack it to understand it. Explaining from the outside in produces a description nobody can follow.</p>
+  <p>Этот порядок наизнанку имеет значение. Это порядок, в котором база данных ее оценивает, и порядок, в котором человек должен ее распаковать, чтобы понять. Объяснение извне дает описание, которому никто не может следовать.</p>
 
-  <h2>Part 4: the clean query</h2>
-  <p>The SQL itself carries no comments at all. None. Every explanation lives in the block above.</p>
+  <h2>Часть 4: чистый запрос</h2>
+  <p>Сам SQL вообще не содержит комментариев. Никто. Каждое объяснение находится в блоке выше.</p>
   <pre><code>SELECT Name, Positive, Negative,
        ROUND(CAST(Positive AS REAL) / (Positive + Negative) * 100, 1) AS pct_positive
 FROM games_raw
@@ -245,10 +245,10 @@ WHERE (Positive + Negative) >= 500
 ORDER BY pct_positive DESC, Positive DESC
 LIMIT 25;</code></pre>
 
-  <p>This is the rule people resist, and it is the one that makes the format work. Once the teaching lives in a fixed place above the query, the query becomes something you can read as code. You can copy it without stripping comments, and hand it to a colleague without apology. The separation is the feature.</p>
+  <p>Это правило, которому люди сопротивляются, и именно оно заставляет формат работать. Как только обучение находится в фиксированном месте над запросом, запрос становится чем-то, что вы можете прочитать как код. Вы можете скопировать его, не удаляя комментариев, и без извинений передать коллеге. Разделение – это особенность.</p>
 
-  <h2>The full before and after</h2>
-  <p>Same query, same result set, both versions correct. The difference is what a reader walks away with.</p>
+  <h2>Полное до и после</h2>
+  <p>Тот же запрос, тот же набор результатов, обе версии верны. Разница в том, с чем уходит читатель.</p>
 
   <h3>Before</h3>
   <pre><code>-- Get top rated games with at least 500 reviews
@@ -284,126 +284,126 @@ WHERE (Positive + Negative) >= 500
 ORDER BY pct_positive DESC, Positive DESC
 LIMIT 25;</code></pre>
 
-  <p>The WHY makes it a portfolio piece. The read-out-loud block makes it a lesson. The clean query makes it professional.</p>
+  <p>ПОЧЕМУ делает это частью портфолио. Блок чтения вслух превращает это в урок. Чистый запрос делает его профессиональным.</p>
 
-  <h2>Standing conventions that keep it readable</h2>
-  <p>The four parts are the format. These conventions are what stop a long <code>.sql</code> file from turning into a wall of repeated explanation.</p>
+  <h2>Постоянные соглашения, которые делают его читабельным</h2>
+  <p>Четыре части — это формат. Эти условности - это то, что останавливает долгое  <code>.sql</code>  чтобы файл не превратился в стену повторяющихся объяснений.</p>
 
   <div class="step">
-    <h2>Teach a function about three times, then stop</h2>
-    <p>The first few times <code>ROUND</code> or <code>CAST</code> appears in a file, give it a sub-bullet. After that, drop it. A reader who has seen it three times has it, and re-explaining insults them. This fading is deliberate, and it is the single change that keeps long files from becoming exhausting.</p>
+    <h2>Научите функцию примерно три раза, затем остановитесь.</h2>
+    <p>Первые несколько раз  <code>ROUND</code> or <code>CAST</code>  появляется в файле, дайте ему подпункт. После этого отбросьте это. У читателя, который видел это трижды, оно есть, и повторное объяснение оскорбляет его. Это затухание намеренно, и это единственное изменение, которое не позволяет длинным файлам утомляться.</p>
   </div>
 
   <div class="step">
-    <h2>Keep a keyword glossary box at the top of the file</h2>
-    <p>Open each <code>.sql</code> file with a boxed "SQL FUNCTIONS &amp; KEYWORDS USED" list, and add to it as new keywords appear. It gives a reader one place to look, and it lets you fade explanations in the body without stranding anyone.</p>
+    <h2>Держите поле глоссария ключевых слов в верхней части файла.</h2>
+    <p>Откройте каждый  <code>.sql</code>  файл с коробочным списком «ИСПОЛЬЗУЕМЫЕ ФУНКЦИИ SQL И КЛЮЧЕВЫЕ СЛОВА» и добавляйте его по мере появления новых ключевых слов. Это дает читателю одно место для поиска и позволяет затухать объяснения в теле, никого не запутывая.</p>
   </div>
 
   <div class="step">
-    <h2>Give big-picture sections their own boxes</h2>
-    <p>Same box width as the query headers. Use it for the things that are not queries: the data-quality story, how the noise was filtered, scope and limitations, how results were validated. These are what turn a file of queries into a document with an argument.</p>
+    <h2>Разместите общие разделы в отдельных блоках</h2>
+    <p>Ширина поля такая же, как и у заголовков запросов. Используйте его для вещей, которые не являются запросами: история качества данных, то, как фильтровался шум, объем и ограничения, как проверялись результаты. Именно они превращают файл запросов в документ с аргументом.</p>
   </div>
 
   <div class="step">
-    <h2>Document the data's defects openly</h2>
-    <p>If a column is 6% NULL, if a join match rate is 82%, if the snapshot is a year old, write it into a box rather than leaving it out. Stating limitations is not an admission of weakness. It is most of what separates an analyst from someone who ran a query. The <a href="../documenting-data-limitations/">Documenting Data Limitations</a> guide goes deeper on this.</p>
+    <h2>Открыто документируйте дефекты данных</h2>
+    <p>Если столбец равен 6% NULL, если коэффициент совпадения соединения составляет 82%, если моментальному снимку уже год, запишите его в поле, а не оставляйте его. Заявление об ограничениях не является признанием слабости. Это большая часть того, что отличает аналитика от человека, который выполнил запрос.  <a href="../documenting-data-limitations/">Документирование ограничений данных</a>  руководство идет более глубоко на этом.</p>
   </div>
 
   <div class="step">
-    <h2>Keep the voice calm and beginner-facing</h2>
-    <p>Everyday words. No jargon you have not introduced. Write for the version of you that did not know this yet, because that is who reads it, including future you at 11pm six months from now.</p>
+    <h2>Сохраняйте голос спокойным и обращенным к новичку</h2>
+    <p>Повседневные слова. Никакого жаргона вы не привнесли. Напишите для той версии, которая еще этого не знала, потому что именно она ее прочитает, включая вас в 23:00 через шесть месяцев.</p>
   </div>
 
-  <h2>Why this works</h2>
-  <p>The format is not just tidiness. Two well-established findings are doing the work.</p>
+  <h2>Почему это работает</h2>
+  <p>Формат – это не просто порядок. Два хорошо известных открытия делают свою работу.</p>
 
-  <p>The first is the <strong>self-explanation effect</strong>. Some learners explain worked examples to themselves as they read. They understand and transfer the material considerably better than learners who just read it (Chi, Bassok, Lewis, Reimann &amp; Glaser, 1989, <em>Cognitive Science</em> 13(2), 145–182). The read-out-loud block is a self-explanation you can rehearse. When you write it yourself, you are forced to say what each clause does. The gaps in your understanding surface immediately, which is exactly when they are cheapest to fix.</p>
+  <p>Первое - это  <strong>эффект самообъяснения</strong>. Некоторые учащиеся объясняют себе проработанные примеры во время чтения. Они понимают и передают материал значительно лучше, чем учащиеся, которые его только что прочитали (Chi, Bassok, Lewis, Reimann &amp; Glaser, 1989,  <em>Когнитивная наука</em>  13(2), 145–182). Блок чтения вслух — это объяснение самого себя, которое вы можете репетировать. Когда вы пишете это сами, вы вынуждены говорить, что делает каждое предложение. Пробелы в вашем понимании всплывают сразу же, и именно тогда их проще всего исправить.</p>
 
-  <p>The second is the <strong>generation effect</strong>. Material you produce yourself is remembered better than material you merely read (Slamecka &amp; Graf, 1978, <em>Journal of Experimental Psychology: Human Learning and Memory</em> 4(6), 592–604). This is the argument for writing the block yourself on your own queries rather than only reading other people's. It is also why a good study drill on commented SQL is to hide the query, read only the comment block, and rebuild the SQL from it.</p>
+  <p>Второе - это  <strong>эффект генерации</strong>. Материал, который вы создаете сами, запоминается лучше, чем материал, который вы просто читаете (Slamecka &amp; Graf, 1978,  <em>Журнал экспериментальной психологии: человеческое обучение и память</em>  4(6), 592–604). Это аргумент в пользу того, чтобы самому писать блок по своим запросам, а не только читать чужие. Именно поэтому хорошее исследование SQL с комментариями состоит в том, чтобы скрыть запрос, прочитать только блок комментариев и перестроить SQL на его основе.</p>
 
-  <p>The WHY header is doing something different and simpler: it stores the decision. Six months later the code still shows what you did, but only the header remembers why you chose 500 rather than 50. That is the piece that is genuinely lost otherwise.</p>
+  <p>Заголовок WHY делает что-то другое и более простое: он сохраняет решение. Шесть месяцев спустя код все еще показывает, что вы сделали, но только заголовок помнит, почему вы выбрали 500, а не 50. В противном случае эта часть действительно будет потеряна.</p>
 
-  <h2 id="in-use">See it in use: three published projects</h2>
-  <p>The format is not a proposal. It runs end to end in three public repositories, on three different datasets, and every query in them is commented this way. Each screenshot below is a real block from the file, and each links to the exact lines on GitHub so you can read the rest around it.</p>
+  <h2 id="in-use">Посмотрите, как это работает: три опубликованных проекта</h2>
+  <p>Формат не является предложением. Он работает в трех общедоступных репозиториях с тремя разными наборами данных, и каждый запрос в них комментируется таким образом. Каждый скриншот ниже представляет собой настоящий блок из файла, и каждый ссылается на точные строки на GitHub, чтобы вы могли прочитать все остальное.</p>
 
-  <h3>1. Steam Hidden Gems</h3>
-  <p>About 125,000 games from the Steam catalog, narrowed to the 175 that are highly rated and still small. Two files: <a href="https://github.com/michaelnocito/steam-hidden-gems/blob/main/queries/hidden_gems.sql" target="_blank" rel="noopener">hidden_gems.sql</a> is the 8-step hunt, and <a href="https://github.com/michaelnocito/steam-hidden-gems/blob/main/queries/hidden_gems_joins.sql" target="_blank" rel="noopener">hidden_gems_joins.sql</a> adds 10 more steps on joins, aggregation and views. The written rules for the format live in that repo too, as <a href="https://github.com/michaelnocito/steam-hidden-gems/blob/main/queries/COMMENT_STYLE.md" target="_blank" rel="noopener">COMMENT_STYLE.md</a>.</p>
+  <h3>1. Скрытые сокровища Steam</h3>
+  <p>Около 125 000 игр из каталога Steam, суженных до 175, которые имеют высокий рейтинг и все еще малы. Два файла:  <a href="https://github.com/michaelnocito/steam-hidden-gems/blob/main/queries/hidden_gems.sql" target="_blank" rel="noopener">скрытые_гемс.sql</a>  это 8-шаговая охота, и  <a href="https://github.com/michaelnocito/steam-hidden-gems/blob/main/queries/hidden_gems_joins.sql" target="_blank" rel="noopener">Hidden_gems_joins.sql</a>  добавляет еще 10 шагов по соединениям, агрегированию и представлениям. Письменные правила формата также находятся в этом репозитории, так как  <a href="https://github.com/michaelnocito/steam-hidden-gems/blob/main/queries/COMMENT_STYLE.md" target="_blank" rel="noopener">COMMENT_STYLE.md</a>.</p>
   <figure>
-    <a href="https://github.com/michaelnocito/steam-hidden-gems/blob/main/queries/hidden_gems.sql#L277-L299" target="_blank" rel="noopener"><img src="steam-hidden-gems.png" width="2200" height="1204" loading="lazy" decoding="async" alt="Step 5 of hidden_gems.sql in the steam-hidden-gems repository. A boxed header gives the step name, a WHY paragraph, and a RESULTS ladder listing five candidate thresholds and how many games each one returned. Below it a read-out-loud block paraphrases SELECT, FROM and WHERE, then the query itself runs clean with no inline comments."></a>
-    <figcaption>Steam Hidden Gems, Step 5. The header does something the code cannot: it records the four thresholds that were tried and rejected before 175 games was the answer. Click through to read the file.</figcaption>
+    <a href="https://github.com/michaelnocito/steam-hidden-gems/blob/main/queries/hidden_gems.sql#L277-L299" target="_blank" rel="noopener"><img src="steam-hidden-gems.png" width="2200" height="1204" loading="lazy" decoding="async" alt="Шаг 5 файлаhidden_gems.sql в репозитории Steam-hidden-gems. Заголовок в рамке содержит название шага, параграф «ПОЧЕМУ» и лестницу «РЕЗУЛЬТАТЫ», в которой перечислены пять пороговых значений кандидатов и количество игр, возвращенных каждым из них. Под ним блок чтения вслух перефразирует SELECT, FROM и WHERE, после чего сам запрос выполняется чисто, без встроенных комментариев."></a>
+    <figcaption>Скрытые жемчужины Steam, шаг 5. Заголовок делает то, что код не может: он записывает четыре пороговых значения, которые были опробованы и отклонены до того, как ответом стало 175 игр. Нажмите, чтобы прочитать файл.</figcaption>
   </figure>
 
-  <h3>2. Streaming Hidden Gems</h3>
-  <p>The same hunt run on IMDb's full catalog, 751,802 movies down to 581 gems, joining <code>title_basics</code> to <code>title_ratings</code>. Eleven steps in <a href="https://github.com/michaelnocito/streaming-hidden-gems/blob/main/queries/hidden_gems.sql" target="_blank" rel="noopener">hidden_gems.sql</a>. The results are browsable at <a href="https://michaelnocito.github.io/streaming-hidden-gems-list/" target="_blank" rel="noopener">the live list</a>.</p>
+  <h3>2. Трансляция скрытых сокровищ</h3>
+  <p>Та же самая охота ведется по полному каталогу IMDb: от 751 802 фильмов до 581 драгоценного камня.  <code>title_basics</code> to <code>title_ratings</code>. Одиннадцать шагов вперед  <a href="https://github.com/michaelnocito/streaming-hidden-gems/blob/main/queries/hidden_gems.sql" target="_blank" rel="noopener">скрытые_гемс.sql</a>. Результаты доступны для просмотра на  <a href="https://michaelnocito.github.io/streaming-hidden-gems-list/" target="_blank" rel="noopener">живой список</a>.</p>
   <figure>
-    <a href="https://github.com/michaelnocito/streaming-hidden-gems/blob/main/queries/hidden_gems.sql#L457-L480" target="_blank" rel="noopener"><img src="streaming-hidden-gems.png" width="2200" height="1248" loading="lazy" decoding="async" alt="Step 9 of hidden_gems.sql in the streaming-hidden-gems repository. The boxed header explains why one known record is checked by hand against IMDb and states the expected values in advance. The clean query follows, and a RESULT note underneath records what came back."></a>
-    <figcaption>Streaming Hidden Gems, Step 9. The header states the expected answer before the query runs, which is what makes it a validation step instead of a lookup. The RESULT note underneath is where the finding gets stored.</figcaption>
+    <a href="https://github.com/michaelnocito/streaming-hidden-gems/blob/main/queries/hidden_gems.sql#L457-L480" target="_blank" rel="noopener"><img src="streaming-hidden-gems.png" width="2200" height="1248" loading="lazy" decoding="async" alt="Шаг 9 файла Hidden_gems.sql в репозитории Streaming-Hidden-Gems. Заголовок в рамке объясняет, почему одна известная запись проверяется вручную по IMDb, и заранее указывает ожидаемые значения. Далее следует чистый запрос, а в примечании РЕЗУЛЬТАТ внизу записано, что получено."></a>
+    <figcaption>Потоковая передача скрытых сокровищ, шаг 9. В заголовке указывается ожидаемый ответ перед выполнением запроса, что делает его этапом проверки, а не поиска. В примечании РЕЗУЛЬТАТ внизу сохраняются результаты.</figcaption>
   </figure>
 
-  <h3>3. Music Hidden Gems</h3>
-  <p>The biggest of the three, 48 steps over 68 years of Billboard Hot 100 history joined to Last.fm listening data. <a href="https://github.com/michaelnocito/music-hidden-gems/blob/main/queries/hidden_gems.sql" target="_blank" rel="noopener">hidden_gems.sql</a> runs past 2,000 lines and is still readable top to bottom, which is the real test of the fading rule. The top 500 are at <a href="https://michaelnocito.github.io/music-hidden-gems-list/" target="_blank" rel="noopener">the live list</a>.</p>
+  <h3>3. Музыка: скрытые жемчужины</h3>
+  <p>Самый большой из трех, 48 шагов за 68 лет истории Billboard Hot 100, добавлен к данным прослушивания Last.fm.  <a href="https://github.com/michaelnocito/music-hidden-gems/blob/main/queries/hidden_gems.sql" target="_blank" rel="noopener">скрытые_гемс.sql</a>  превышает 2000 строк и по-прежнему читается сверху вниз, что является настоящим испытанием правила затухания. Топ-500 находятся на  <a href="https://michaelnocito.github.io/music-hidden-gems-list/" target="_blank" rel="noopener">живой список</a>.</p>
   <figure>
-    <a href="https://github.com/michaelnocito/music-hidden-gems/blob/main/queries/hidden_gems.sql#L790-L820" target="_blank" rel="noopener"><img src="music-hidden-gems.png" width="2200" height="1556" loading="lazy" decoding="async" alt="Step 13 of hidden_gems.sql in the music-hidden-gems repository. The boxed header lists three candidate cutoffs with a defensible reading for each, the counts they produce, and a DECISION line choosing five. The read-out-loud block uses starred sub-bullets for each SUM before the clean query."></a>
-    <figcaption>Music Hidden Gems, Step 13. Three candidate cutoffs, the count each one keeps, and the decision, all above a six-line query. Six months later this is the only record of why the number is five.</figcaption>
+    <a href="https://github.com/michaelnocito/music-hidden-gems/blob/main/queries/hidden_gems.sql#L790-L820" target="_blank" rel="noopener"><img src="music-hidden-gems.png" width="2200" height="1556" loading="lazy" decoding="async" alt="Шаг 13 файла Hidden_gems.sql в репозитории music-hidden-gems. В заголовке в рамке перечислены три возможных пороговых значения с обоснованным показанием для каждого, количество подсчетов, которые они производят, и строка РЕШЕНИЯ, в которой выбирается пять. Блок чтения вслух использует помеченные звездочками подпункты для каждой суммы перед чистым запросом."></a>
+    <figcaption>Музыка «Скрытые жемчужины», шаг 13. Три кандидата, подсчет каждого из них и решение — все это над запросом из шести строк. Шесть месяцев спустя это единственная запись о том, почему число равно пяти.</figcaption>
   </figure>
 
-  <p>One thing worth noticing across all three: the query bodies are short. Most are under ten lines. The comments are long because the thinking is the hard part, and the thinking is what a reader came for.</p>
+  <p>Во всех трех случаях стоит отметить одну вещь: тела запросов короткие. Большинство из них занимают менее десяти строк. Комментарии длинные, потому что думать — это самая сложная часть, а думать — это то, за чем пришел читатель.</p>
 
-  <h2>Using it on your own portfolio project</h2>
-  <p>Bring a query of your own to mind, one you wrote more than a month ago. Can you say why you chose that filter, or that threshold? If the reason is gone, that is what a WHY header would have kept, and it is why this is worth the afternoon.</p>
-  <p>Retrofitting a whole project at once is miserable and you will abandon it. Do this instead:</p>
+  <h2>Использование его в вашем собственном проекте портфолио</h2>
+  <p>Вспомните собственный вопрос, который вы написали больше месяца назад. Можете ли вы сказать, почему вы выбрали этот фильтр или этот порог? Если причина исчезла, заголовок «ПОЧЕМУ» должен был сохраниться, и именно поэтому об этом стоит поговорить во второй половине дня.</p>
+  <p>Модернизировать сразу целый проект — это уныло, и вы от него забросите. Вместо этого сделайте это:</p>
   <ol>
-    <li><strong>Start with the headers only.</strong> Go through your existing <code>.sql</code> file and add just the boxed WHY above each query. Nothing else. This alone captures the reasoning you will otherwise forget, and it takes an afternoon.</li>
-    <li><strong>Add read-out-loud blocks to the three hardest queries.</strong> Not all of them. The ones with a window function, a nested CASE, or a join you had to think about. Those are where a reader gets lost.</li>
-    <li><strong>Strip the inline comments as you go.</strong> Every time you add a block above a query, delete the trailing comments inside it. The query gets shorter and better looking immediately, which is the reward that keeps you going.</li>
-    <li><strong>Add the glossary box last</strong>, once you can see which keywords actually recur.</li>
+    <li><strong>Начинайте только с заголовков.</strong>  Пройдитесь по существующим  <code>.sql</code>  и добавьте только слово «ПОЧЕМУ» в рамке над каждым запросом. Ничего больше. Уже одно это отражает рассуждения, которые вы иначе забудете, и это займет целый день.</li>
+    <li><strong>Добавьте блоки чтения вслух к трем самым сложным запросам.</strong>  Не все из них. Те, у которых есть оконная функция, вложенный CASE или соединение, о которых вам нужно было подумать. Вот где читатель теряется.</li>
+    <li><strong>Удалите встроенные комментарии по ходу дела.</strong>  Каждый раз, когда вы добавляете блок над запросом, удаляйте конечные комментарии внутри него. Запрос сразу становится короче и лучше выглядит, что является наградой, которая поддерживает вас.</li>
+    <li><strong>Добавляйте словарь в последнюю очередь.</strong>, как только вы увидите, какие ключевые слова действительно повторяются.</li>
   </ol>
 
-  <p>If you are starting a project rather than fixing one, write the WHY header <em>before</em> you write the query. Committing to why you are asking the question tends to change the question, usually for the better.</p>
+  <p>Если вы начинаете проект, а не исправляете его, напишите заголовок «ПОЧЕМУ?»  <em>before</em>  ты пишешь запрос. Принятие решения о том, почему вы задаете вопрос, обычно меняет вопрос, обычно к лучшему.</p>
 
-  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: SQL, Tableau, data migration, and the working habits around them.</div>
+  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: SQL, Tableau, миграция данных и связанные с ними рабочие привычки.</div>
 
-  <h2>A cheat sheet</h2>
+  <h2>Шпаргалка</h2>
   <table>
-    <tr><th>Part</th><th>What goes in it</th><th>The test</th></tr>
-    <tr><td>Boxed WHY header</td><td>Step name, plus the analytical reason the question exists</td><td>Delete the query. Does the header still explain the problem?</td></tr>
-    <tr><td>Read-out-loud block</td><td>One line per clause, in the query's clause order</td><td>Can a beginner read it top to bottom as a sentence?</td></tr>
-    <tr><td>Sub-bullets</td><td>Every function or calculation, explained inside-out</td><td>Is each piece named and given a purpose?</td></tr>
-    <tr><td>The query</td><td>Nothing but SQL</td><td>Zero comment characters inside the query body.</td></tr>
-    <tr><td>Glossary box</td><td>Every keyword used in the file</td><td>Can a reader look up anything faded from the body?</td></tr>
-    <tr><td>Limitations box</td><td>NULL rates, match rates, snapshot dates, scope</td><td>Would a skeptic find a surprise you did not mention?</td></tr>
+    <tr><th>Part</th><th>Что в нем происходит</th><th>Тест</th></tr>
+    <tr><td>Заголовок ПОЧЕМУ в штучной упаковке</td><td>Название шага и аналитическая причина возникновения вопроса.</td><td>Удалите запрос. Заголовок еще объясняет проблему?</td></tr>
+    <tr><td>Блок чтения вслух</td><td>Одна строка на предложение в порядке предложений запроса.</td><td>Может ли новичок прочитать его сверху вниз как предложение?</td></tr>
+    <tr><td>Sub-bullets</td><td>Каждая функция или расчет объяснены изнутри</td><td>Имеет ли каждая деталь название и назначение?</td></tr>
+    <tr><td>Запрос</td><td>Ничего, кроме SQL</td><td>Нулевые символы комментариев внутри тела запроса.</td></tr>
+    <tr><td>Глоссарий</td><td>Каждое ключевое слово, используемое в файле</td><td>Может ли читатель найти что-нибудь, выцветшее из тела?</td></tr>
+    <tr><td>Поле ограничений</td><td>NULL-ставки, коэффициенты совпадений, даты моментальных снимков, область действия</td><td>Найдет ли скептик сюрприз, о котором вы не упомянули?</td></tr>
   </table>
 
-  <div class="note"><strong>The one habit to keep.</strong> If you adopt nothing else from this page, write the WHY header. The clause paraphrase helps a beginner and the clean query helps a reviewer, but the WHY is the only part that stores something no one can reconstruct from the code later.</div>
+  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Если вы не принимаете ничего другого с этой страницы, напишите заголовок «ПОЧЕМУ». Перефразирование предложения помогает новичку, а чистый запрос помогает рецензенту, но WHY — единственная часть, в которой хранится то, что никто не сможет позже восстановить из кода.</div>
 
   <div class="cta">
-    <strong>Practice the SQL itself.</strong>
-    <p style="margin:6px 0 0">The <a href="../../sql/">SQL Kit</a> teaches the core of analyst SQL with worked examples, live JOIN and Aggregation labs you run in the browser, flash cards, and a mock exam. Nothing to install, no account needed.</p>
-    <a class="btn" href="../../sql/">Open the SQL Kit →</a>
+    <strong>Практикуйте сам SQL.</strong>
+    <p style="margin:6px 0 0">The <a href="../../sql/">SQL-комплект</a>  обучает основам аналитического SQL с помощью проработанных примеров, живых лабораторных занятий по JOIN и агрегации, которые вы запускаете в браузере, обучающих карточек и пробного экзамена. Ничего устанавливать, учетная запись не требуется.</p>
+    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
   </div>
 
   <div class="book">
-    <strong>This guide hands you the format. Getting every query to actually carry it is the harder part.</strong>
-    <p><em>The SQL Comment System</em> is the two-mode standard, a 12-point scoring rubric, and an agent for Claude or ChatGPT that applies both to the queries you actually write.</p>
-    <a class="booklink" href="https://gumroad.com/u/gcru1opi" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','comment_system_click',{kit:'guide-sql-teaching-comments'})">The SQL Comment System, $29 &rarr;</a>
+    <strong>Это руководство предоставит вам формат. Сложнее всего заставить каждый запрос действительно выполнять его.</strong>
+    <p><em>Система комментариев SQL</em>  — это двухрежимный стандарт, 12-балльная критерий оценки и агент для Claude или ChatGPT, который применяет оба режима к запросам, которые вы фактически пишете.</p>
+    <a class="booklink" href="https://gumroad.com/u/gcru1opi" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','comment_system_click',{kit:'guide-sql-teaching-comments'})">Система комментариев SQL, 29 долларов США →</a>
   </div>
 
-  <p class="disclose">Want the wider skill rather than the one habit? <em>SQL for Analysts</em> reads queries line by line in plain words, which is the same habit these comments are written in. <a href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-teaching-comments'})">SQL for Analysts, $19 &rarr;</a></p>
+  <p class="disclose">Хотите более широкий навык, а не одну привычку?  <em>SQL для аналитиков</em>  читает запросы построчно простыми словами, и это та же привычка, по которой написаны эти комментарии.  <a href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-teaching-comments'})">SQL для аналитиков, 19 $ →</a></p>
 
-  <p class="disclose"><em>The SQL Comment System</em> and <em>SQL for Analysts</em> are both mine, so buying either pays me directly. Nothing else on this page is sponsored or paid for, and the commenting format above is yours to keep either way.</p>
+  <p class="disclose"><em>Система комментариев SQL</em> and <em>SQL для аналитиков</em>  оба мои, поэтому покупка любого из них приносит мне прямую прибыль. Ничто другое на этой странице не спонсируется и не оплачивается, и приведенный выше формат комментариев остается за вами в любом случае.</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Chi, M. T. H., Bassok, M., Lewis, M. W., Reimann, P., &amp; Glaser, R. (1989). Self-explanations: How students study and use examples in learning to solve problems. <em>Cognitive Science</em>, 13(2), 145–182.</li>
-    <li>Slamecka, N. J., &amp; Graf, P. (1978). The generation effect: Delineation of a phenomenon. <em>Journal of Experimental Psychology: Human Learning and Memory</em>, 4(6), 592–604.</li>
+    <li>Чи, М.Т.Х., Бассок, М., Льюис, М.В., Рейманн, П. и Глейзер, Р. (1989). Самообъяснения: как учащиеся изучают и используют примеры при обучении решению проблем.  <em>Когнитивная наука</em>, 13(2), 145–182.</li>
+    <li>Сламецка, Нью-Джерси, и Граф, П. (1978). Эффект генерации: Очертание явления.  <em>Журнал экспериментальной психологии: человеческое обучение и память</em>, 4(6), 592–604.</li>
   </ul>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> &middot; <a href="../sql-comments/">How to Comment in SQL</a> · <a href="../sql-foundations/">SQL Foundations</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../sql-ctes/">SQL CTEs</a> · <a href="../sql-window-functions/">Window Functions</a> · <a href="../tableau-relationships/">Tableau Relationships</a> · <a href="../tableau-sets/">Tableau Sets</a> · <a href="../../drill/">SQL Drill</a> · <a href="../what-is-data-analysis/">What Is Data Analysis?</a> · <a href="../sql-joins/">SQL JOINs</a> &middot; <a href="../verify-ai-agent-work/">Verify AI Agent Work</a> &middot; <a href="../sql-count-function/">COUNT in SQL</a> · <a href="../sql-case-expression/">The CASE Expression</a> · <a href="../set-up-a-sql-database/">Set Up a SQL Database</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../git-for-analysts/">Git for Analysts</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../data-driven-thresholds/">Data-Driven Thresholds</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../entity-resolution/">Entity Resolution</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../sql-aliasing/">SQL Aliases</a> &middot; <a href="../../sql/">SQL Kit</a> · <a href="../../projects/">Portfolio Projects</a>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql-comments/">Как комментировать в SQL</a> · <a href="../sql-foundations/">Основы SQL</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-ctes/">SQL CTE</a> · <a href="../sql-window-functions/">Оконные функции</a> · <a href="../tableau-relationships/">Табличные отношения</a> · <a href="../tableau-sets/">Наборы таблиц</a> · <a href="../../drill/">SQL-детализация</a> · <a href="../what-is-data-analysis/">Что такое анализ данных?</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> &middot; <a href="../verify-ai-agent-work/">Проверка работы AI-агента</a> &middot; <a href="../sql-count-function/">СЧЕТ в SQL</a> · <a href="../sql-case-expression/">Выражение CASE</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../git-for-analysts/">Git для аналитиков</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../data-driven-thresholds/">Пороги, управляемые данными</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../sql-aliasing/">SQL-псевдонимы</a> &middot; <a href="../../sql/">SQL-комплект</a> · <a href="../../projects/">Портфельные проекты</a>
     
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

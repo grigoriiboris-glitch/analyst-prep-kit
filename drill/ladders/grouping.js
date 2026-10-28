@@ -17,8 +17,8 @@ const LADDER = {
 
   { adds: 'Look at the raw rows first',
     q: 'What does one row of this table actually look like?',
-    why: 'Every grouping question starts here. One row is one track, and that is the grain you are about to change.',
-    guide: { href: '../guides/sql-foundations/', label: 'Read: tables, rows and grain' },
+    why: "Каждый вопрос по группировке начинается здесь. Один ряд — это одна дорожка, и именно эту зернистость вы собираетесь изменить.",
+    guide: { href: '../guides/sql-foundations/', label: "Читать: таблицы, строки и зерно" },
     header:
 `-- Purpose: Look at the raw grain before grouping anything
 -- Source:  gem_page, one row = one curated gem track`,
@@ -30,8 +30,8 @@ FROM gem_page;`,
 
   { adds: 'Collapse the rows into groups',
     q: 'How many tracks are in each genre?',
-    why: 'This is the whole idea. Every row with the same genre becomes one row, and COUNT(*) runs inside each group.',
-    guide: { href: '../guides/sql-group-by-having/', label: 'Read: what GROUP BY does to your rows' },
+    why: "В этом вся идея. Каждая строка одного и того же жанра становится одной строкой, и COUNT(*) выполняется внутри каждой группы.",
+    guide: { href: '../guides/sql-group-by-having/', label: "Читайте: что GROUP BY делает с вашими строками" },
     header:
 `-- Purpose: Count the gem tracks in each genre
 -- Source:  gem_page, one row = one curated gem track
@@ -45,8 +45,8 @@ GROUP BY genre;`,
 
   { adds: 'Sort it, which GROUP BY did not do',
     q: 'Which genre has the most tracks?',
-    why: 'GROUP BY changed how many rows came back. It did not put them in any useful order. That is a different clause.',
-    guide: { href: '../guides/sql-foundations/', label: 'Read: sorting with ORDER BY' },
+    why: "GROUP BY изменил количество возвращаемых строк. Это не привело их в какой-либо полезный порядок. Это другой пункт.",
+    guide: { href: '../guides/sql-foundations/', label: "Читайте: сортировка с помощью ORDER BY" },
     header:
 `-- Purpose: Rank the genres by how many gem tracks each one holds
 -- Source:  gem_page, one row = one curated gem track`,
@@ -60,8 +60,8 @@ ORDER BY tracks DESC;`,
 
   { adds: 'Drop the tiny genres with HAVING',
     q: 'Which genres have more than 20 tracks?',
-    why: 'HAVING filters groups, after the grouping has happened. It is the only place a COUNT can be used as a filter.',
-    guide: { href: '../guides/sql-group-by-having/', label: 'Read: why this cannot be a WHERE' },
+    why: "HAVING фильтрует группы после того, как группировка произошла. Это единственное место, где COUNT можно использовать в качестве фильтра.",
+    guide: { href: '../guides/sql-group-by-having/', label: "Читайте: почему это не может быть ГДЕ" },
     header:
 `-- Purpose: Keep only the genres large enough to say anything about
 -- Source:  gem_page, one row = one curated gem track
@@ -77,8 +77,8 @@ ORDER BY tracks DESC;`,
 
   { adds: 'Add a WHERE, and watch it do a different job',
     q: 'Same question, but ignoring tracks almost nobody has heard.',
-    why: 'Now both filters are in one query. WHERE threw away 109 individual tracks before grouping. HAVING still throws away whole genres after it.',
-    guide: { href: '../guides/sql-group-by-having/', label: 'Read: WHERE and HAVING side by side' },
+    why: "Теперь оба фильтра находятся в одном запросе. ГДЕ перед группировкой выбросил 109 отдельных треков. HAVING до сих пор отбрасывает после себя целые жанры.",
+    guide: { href: '../guides/sql-group-by-having/', label: "Читайте: ГДЕ и ИМЕЯ рядом" },
     header:
 `-- Purpose: Genre sizes, counting only tracks with a real audience
 -- Source:  gem_page, one row = one curated gem track
@@ -95,8 +95,8 @@ ORDER BY tracks DESC;`,
 
   { adds: 'Add up the audience',
     q: 'How big is each genre by total listeners, not just track count?',
-    why: 'A second aggregate in the same group. Counting rows and adding a column up are different questions about the same rows.',
-    guide: { href: '../guides/sql-foundations/', label: 'Read: the five aggregate functions' },
+    why: "Второй агрегат в той же группе. Подсчет строк и добавление столбца — это разные вопросы об одних и тех же строках.",
+    guide: { href: '../guides/sql-foundations/', label: "Читайте: пять агрегатных функций" },
     header:
 `-- Purpose: Genre sizes by both track count and total audience
 -- Source:  gem_page, one row = one curated gem track`,
@@ -114,8 +114,8 @@ ORDER BY tracks DESC;`,
 
   { adds: 'Turn the total into a per track average',
     q: 'Which genre has the biggest tracks, rather than the most of them?',
-    why: 'The rate version of the total. This is the count against rate question, in SQL.',
-    guide: { href: '../guides/operations-analytics-foundations/', label: 'Read: count against rate' },
+    why: "Тарифная версия итога. Это вопрос о счете против ставки в SQL.",
+    guide: { href: '../guides/operations-analytics-foundations/', label: "Читать: считать по ставке" },
     header:
 `-- Purpose: Genre sizes by count, total audience, and audience per track
 -- Source:  gem_page, one row = one curated gem track
@@ -135,8 +135,8 @@ ORDER BY tracks DESC;`,
 
   { adds: 'Count the artists, not the rows',
     q: 'How many different artists are behind each genre?',
-    why: 'COUNT(*) counts rows. COUNT(DISTINCT artist) counts things. An artist with six tracks is six rows and one artist.',
-    guide: { href: '../guides/sql-count-function/', label: 'Read: COUNT(*) against COUNT(DISTINCT)' },
+    why: "COUNT(*) подсчитывает строки. COUNT(DISTINCT Artist) считает вещи. Исполнитель с шестью треками — это шесть рядов и один исполнитель.",
+    guide: { href: '../guides/sql-count-function/', label: "Читать: COUNT(*) против COUNT(DISTINCT)" },
     header:
 `-- Purpose: Genre summary, separating how many tracks from how many artists
 -- Source:  gem_page, one row = one curated gem track
@@ -157,8 +157,8 @@ ORDER BY tracks DESC;`,
 
   { adds: 'Filter on a different aggregate',
     q: 'Which genres reach more than a million listeners?',
-    why: 'HAVING is not only for COUNT. It can filter on any aggregate, and swapping the test changes which groups survive.',
-    guide: { href: '../guides/sql-group-by-having/', label: 'Read: what HAVING can see' },
+    why: "ИМЕТЬ – это не только СЧИТАТЬ. Он может фильтровать любую совокупность и менять местами тесты, чтобы определить, какие группы выживут.",
+    guide: { href: '../guides/sql-group-by-having/', label: "Читайте: что могут видеть ИМЕЮЩИЕ" },
     header:
 `-- Purpose: Genres that reach a million listeners or more
 -- Source:  gem_page, one row = one curated gem track
@@ -179,8 +179,8 @@ ORDER BY total_listeners DESC;`,
 
   { adds: 'Give each genre its share of the whole',
     q: 'What share of the total audience does each genre hold?',
-    why: 'A total is hard to judge. A percentage of the whole is the number a person can actually act on.',
-    guide: { href: '../guides/report-vs-analysis/', label: 'Read: a number against a finding' },
+    why: "Итог сложно судить. Процент от целого числа — это число, в соответствии с которым человек действительно может действовать.",
+    guide: { href: '../guides/report-vs-analysis/', label: "Читать: число против находки" },
     header:
 `-- Purpose: Each genre's share of the total gem audience
 -- Source:  gem_page, one row = one curated gem track
@@ -203,8 +203,8 @@ ORDER BY total_listeners DESC;`,
 
   { adds: 'Add a second grouping column',
     q: 'How does each genre break down by decade?',
-    why: 'Every column you add to GROUP BY changes the grain again. One row per genre becomes one row per genre per decade.',
-    guide: { href: '../guides/sql-group-by-having/', label: 'Read: grouping on more than one column' },
+    why: "Каждый столбец, который вы добавляете в GROUP BY, снова меняет зернистость. Одна строка на жанр становится одной строкой на жанр за десятилетие.",
+    guide: { href: '../guides/sql-group-by-having/', label: "Читать: группировка по нескольким столбцам" },
     header:
 `-- Purpose: Genre and decade combinations that reach a million listeners
 -- Source:  gem_page, one row = one curated gem track
@@ -224,8 +224,8 @@ ORDER BY total_listeners DESC;`,
 
   { adds: 'Keep the grain, count the spread instead',
     q: 'Which genres are broad, and which are one moment in time?',
-    why: 'The finished answer. Back to one row per genre, with a count of how many decades each one spans, so breadth and size sit in the same table.',
-    guide: { href: '../guides/sql-group-by-having/', label: 'Read: the whole clause order' },
+    why: "Готовый ответ. Вернемся к одной строке для каждого жанра с указанием количества десятилетий, охватываемых каждым из них, поэтому ширина и размер находятся в одной таблице.",
+    guide: { href: '../guides/sql-group-by-having/', label: "Читать: весь порядок пунктов" },
     header:
 `-- Purpose: Genre summary for the collection: size, breadth, and share of audience
 -- Source:  gem_page, one row = one curated gem track

@@ -38,8 +38,8 @@ const LESSON_TEXT = [
     notes: 'Use <code>SELECT *</code> to grab every column — handy for exploration, but name columns explicitly in real queries.',
     viz: {
       columns: ['name', 'email'],
-      rows: [['Maya Chen', 'maya@co.com'], ['Jordan Lee', 'jordan@co.com'], ['Sam Rivera', 'sam@co.com'], ['Alex Kim', 'alex@co.com']],
-      caption: 'Two columns, one row per customer — exactly the columns you named in SELECT.'
+      rows: [['Maya Chen', 'maya@co.com'], ["Джордан Ли", 'jordan@co.com'], ["Сэм Ривера", 'sam@co.com'], ["Алекс Ким", 'alex@co.com']],
+      caption: "Два столбца, по одной строке на каждого клиента — именно те столбцы, которые вы указали в SELECT."
     },
     compare: 'The order is fixed: SELECT always leads, FROM always follows. Even though you think of the table first, the query names the columns before the source.',
     close: "You can pull any column from any table. Every query you'll ever write starts with exactly this.",
@@ -50,7 +50,7 @@ const LESSON_TEXT = [
     title: 'WHERE',
     sub: 'Filter rows by condition',
     story: "You can pull columns from a table. Your manager's first real question isn't 'show me everything' — it's 'show me just the West region.' WHERE is the filter: it checks a condition row by row and only returns the rows where it's true. SELECT tells SQL what to show; WHERE tells it which rows.",
-    intro: 'WHERE is like a guest list at the door — only the rows whose name is on it (the condition is true) get in. <code>WHERE</code> filters which rows come back. Only rows where the condition is TRUE are returned.',
+    intro: "WHERE — это как список гостей у двери — попадают только те строки, имя которых в нем указано (условие истинно). <code>WHERE</code> фильтрует, какие строки возвращаются. Возвращаются только строки, в которых условие имеет значение TRUE.",
     ral: {
       sql: "SELECT name\nFROM customers\nWHERE status = 'active';",
       say: "Give me the names of customers whose status is 'active'.",
@@ -64,8 +64,8 @@ const LESSON_TEXT = [
     notes: 'Common operators: <code>=</code> <code>!=</code> <code>&gt;</code> <code>&lt;</code> <code>BETWEEN</code> <code>LIKE</code> <code>IN</code>. Combine with <code>AND</code> / <code>OR</code>.',
     viz: {
       columns: ['name'],
-      rows: [['Maya Chen'], ['Jordan Lee'], ['Alex Kim']],
-      caption: "Only rows where status = 'active' survive the WHERE filter — Sam (inactive) and Taylor (pending) drop out."
+      rows: [['Maya Chen'], ["Джордан Ли"], ["Алекс Ким"]],
+      caption: "Только строки со статусом = «активный» выдерживают фильтр WHERE — Сэм (неактивный) и Тейлор (ожидающий) исключаются."
     },
     compare: 'WHERE goes after FROM, not before it. The clause order is always SELECT → FROM → WHERE → ORDER BY. Swapping WHERE and FROM is a syntax error.',
     close: 'You can filter to exactly the rows you need. WHERE is the single most-used clause in real analyst work.',
@@ -73,10 +73,10 @@ const LESSON_TEXT = [
   },
   {
     id: 104,
-    title: 'A Query Returns a Table; NULL = Unknown',
+    title: "Запрос возвращает таблицу; NULL = Неизвестно",
     sub: 'The output shape of every SQL query — and the special case of missing data.',
     story: "Keys connect the tables. One more idea before you query: SQL always returns a result set shaped like a table — even a single number is wrapped in a 1×1 table. And empty cells in a database aren't blank — they're NULL, which means 'unknown.' NULL is not zero and not empty string. It has its own comparison rules, and ignoring them causes silent wrong totals.",
-    intro: "Every SQL query returns a table — rows and columns, even if it's one row or one column. That's the contract. And when a value is missing or unknown, databases store NULL — a special sentinel meaning 'we don't know.' NULL is NOT zero. NULL is NOT an empty string. NULL doesn't equal NULL. Comparisons with NULL require <code>IS NULL</code> / <code>IS NOT NULL</code>, not <code>= NULL</code>.",
+    intro: "Каждый SQL-запрос возвращает таблицу — строки и столбцы, даже если это одна строка или один столбец. Это контракт. А когда значение отсутствует или неизвестно, базы данных сохраняют NULL — специальный сигнал, означающий «мы не знаем». NULL НЕ равен нулю. NULL НЕ является пустой строкой. NULL не равен NULL. Сравнения с NULL требуют <code>НУЛЕВЫЙ</code> / <code>НЕ НУЛЬ</code>, нет <code>= НУЛЬ</code>.",
     ral: {
       sql: 'SELECT name, revenue\nFROM orders\nWHERE region IS NULL;',
       say: 'Show me every order where the region is unknown (NULL).',
@@ -91,8 +91,8 @@ const LESSON_TEXT = [
     notes: 'COUNT(*) and COUNT(column) return different numbers when a column has NULLs. COUNT(*) counts every row; COUNT(revenue) skips rows where revenue is NULL. If your totals seem low, check for NULLs with SELECT COUNT(*) vs SELECT COUNT(revenue) — a difference tells you how many NULL rows there are.',
     viz: {
       columns: ['order_id', 'region', 'revenue', 'COUNT(*) sees this row?', 'COUNT(revenue) sees this?'],
-      rows: [['1001', 'West', '150', 'yes ✓', 'yes ✓'], ['1002', 'NULL', '200', 'yes ✓', 'yes ✓'], ['1003', 'East', 'NULL', 'yes ✓', 'no — NULL skipped']],
-      caption: "COUNT(*) counts all 3 rows. COUNT(revenue) counts only 2 (skips the NULL). COUNT(region) counts only 2 (skips the NULL row 1002). These distinctions change your totals silently if you're not expecting them."
+      rows: [['1001', 'West', '150', "да ✓", "да ✓"], ['1002', 'NULL', '200', "да ✓", "да ✓"], ['1003', 'East', 'NULL', "да ✓", "нет — NULL пропущен"]],
+      caption: "COUNT(*) подсчитывает все 3 строки. COUNT(доход) учитывает только 2 (пропускает NULL). COUNT(регион) учитывает только 2 (пропускает NULL-строку 1002). Эти различия незаметно меняют ваши итоги, если вы их не ожидаете."
     },
     compare: "IS NULL is the only correct test for missing values. The common mistake is writing = NULL — but NULL means 'unknown', so NULL = NULL evaluates to unknown (false), not true. IS NULL bypasses that.",
     close: 'You know what SQL returns and how NULL behaves — that prevents a whole class of silent wrong answers.',
@@ -100,10 +100,10 @@ const LESSON_TEXT = [
   },
   {
     id: 3,
-    title: 'ORDER BY & LIMIT',
+    title: "СОРТИРОВАТЬ ПО И ОГРАНИЧИТЬ",
     sub: 'Sort and cap your results',
     story: 'You can filter rows. Your manager wants the highest-revenue orders first, not whatever order the database stored them in. ORDER BY sorts the result — ASC for smallest to largest, DESC for largest to smallest. LIMIT caps how many rows come back. Two small clauses that make query output readable.',
-    intro: 'ORDER BY and LIMIT are like a leaderboard: sort everyone by score, then show just the top few. <code>ORDER BY</code> sorts results. <code>LIMIT</code> caps how many rows come back — essential for large tables.',
+    intro: "ORDER BY и LIMIT похожи на таблицу лидеров: отсортируйте всех по баллам, а затем отобразите только несколько лучших. <code>ЗАКАЗАТЬ ПО</code> сортирует результаты. <code>LIMIT</code> ограничивает количество возвращаемых строк — важно для больших таблиц.",
     ral: {
       sql: 'SELECT name, order_date\nFROM orders\nORDER BY order_date DESC\nLIMIT 5;',
       say: 'Give me the name and order date from orders, sorted by most recent first, and just the top 5 results.',
@@ -117,8 +117,8 @@ const LESSON_TEXT = [
     notes: '<code>ASC</code> (ascending, A→Z, 0→9) is the default. <code>DESC</code> reverses it. Always use LIMIT when exploring large data.',
     viz: {
       columns: ['name', 'order_date'],
-      rows: [['Maya Chen', '2026-05-30'], ['Alex Kim', '2026-05-28'], ['Jordan Lee', '2026-05-21'], ['Sam Rivera', '2026-05-14'], ['Maya Chen', '2026-05-02']],
-      caption: 'Sorted newest-first by order_date, then LIMIT caps it at the top 5 rows.'
+      rows: [['Maya Chen', '2026-05-30'], ["Алекс Ким", '2026-05-28'], ["Джордан Ли", '2026-05-21'], ["Сэм Ривера", '2026-05-14'], ['Maya Chen', '2026-05-02']],
+      caption: "Отсортировано по порядку_даты: сначала самые новые, затем LIMIT ограничивает их 5-ю верхними строками."
     },
     compare: "LIMIT must come after ORDER BY, not before it. The sort happens first, then the cap is applied. Swapping them would cap before sorting — you'd get a random 3 rows sorted, not the 3 most recent.",
     close: "You can sort results and cap them to a useful size. ORDER BY + LIMIT is behind every leaderboard, top-N report, and 'show me the latest' query.",

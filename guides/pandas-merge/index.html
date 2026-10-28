@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>pandas merge: Left Join, Inner Join, and the One That Doubled the Revenue — Analyst Prep Kit</title>
-<meta name="description" content="The four hows and the row counts they give, indicator to see which side each row came from, and one duplicate key that turned 16 rows and 9,890 into 23 rows and 14,950.">
+<title>pandas merge: левое соединение, внутреннее соединение и то, которое удвоило доход — комплект для подготовки аналитика</title>
+<meta name="description" content="Они дают четыре «хау» и количество рядов, индикатор, позволяющий увидеть, с какой стороны пришла каждая строка, и один дубликат ключа, который превратил 16 строк и 9890 в 23 строки и 14950.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/pandas-merge/">
-<meta property="og:title" content="pandas merge: Left Join, Inner Join, and the One That Doubled the Revenue">
-<meta property="og:description" content="One repeated key in a three-row lookup table took a merge from 16 rows to 23 and from 9,890 to 14,950. Plus indicator, validate, and the four hows compared on the same data.">
+<meta property="og:title" content="pandas merge: левое соединение, внутреннее соединение и то, которое удвоило доход">
+<meta property="og:description" content="Один повторяющийся ключ в справочной таблице из трех строк потребовал слияния с 16 строк до 23 и с 9890 до 14950. Плюс индикатор, проверка и четыре способа сравнения одних и тех же данных.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/pandas-merge.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/pandas-merge/">
@@ -134,18 +134,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../python/">Python Kit</a> · <a href="../">All guides</a></p>
-  <h1>pandas merge: Left Join, Inner Join, and the One That Doubled the Revenue</h1>
-  <p class="meta">Four hows, one row count, and the check that has to follow every merge · Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-08">August 8, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../python/">Комплект Python</a> · <a href="../">Все руководства</a></p>
+  <h1>pandas merge: левое соединение, внутреннее соединение и то, которое удвоило доход</h1>
+  <p class="meta">Четыре способа, одно количество строк и проверка, которая должна следовать за каждым слиянием. · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-08">8 августа 2026 г.</time></p>
 
-  <p>By the end of this page you can attach columns from one DataFrame to another on a shared key, choose the right <code>how</code> for the question, see at a glance which rows failed to match, and catch the failure that quietly inflates every total in the frame. It is about twenty-five minutes, and every output below was produced by running the code.</p>
+  <p>К концу этой страницы вы сможете прикрепить столбцы из одного DataFrame к другому по общему ключу, выберите правильный  <code>how</code>  для вопроса сразу посмотрите, какие строки не совпадают, и уловите ошибку, которая незаметно увеличивает каждую сумму в кадре. Это около двадцати пяти минут, и все приведенные ниже выходные данные были получены путем запуска кода.</p>
 
-  <p>Here is what to do today, on every merge you write. Print the row count immediately before and immediately after it. A left merge must not change the row count, and if it did, the right-hand table has the key more than once and your totals have just gone up.</p>
+  <p>Вот что делать сегодня при каждом написанном вами слиянии. Выведите количество строк непосредственно перед и сразу после него. Левое слияние не должно изменять количество строк, а если это произошло, то правая таблица имеет ключ более одного раза, и ваши итоговые значения только что увеличились.</p>
 
-  <p>The short version: <code>merge</code> pairs rows from two frames wherever their keys match, and the number of rows that come out depends on how many times each key appears on each side.</p>
+  <p>Краткая версия:  <code>merge</code>  объединяет строки из двух кадров, где их ключи совпадают, и количество получаемых строк зависит от того, сколько раз каждый ключ появляется на каждой стороне.</p>
 
-  <p>One key twice on the right is the idea, so it gets the picture.</p>
+  <p>Одна клавиша дважды справа — это идея, поэтому она получает картину.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 236" role="img" aria-labelledby="pmTitle pmDesc" xmlns="http://www.w3.org/2000/svg">
@@ -184,34 +184,34 @@
         <rect x="650" y="130" width="56" height="28" rx="6" fill="none" stroke="#B45309" stroke-width="2.4"/>
       </g>
     </svg>
-    <figcaption>One order goes in. The lookup table has its key twice, so the order is paired twice and comes out twice, carrying the same 880 both times. Nothing was added to the data; the total just went up.</figcaption>
+    <figcaption>Поступает один заказ. В таблице поиска есть ключ дважды, поэтому заказ дважды спаривается и дважды выходит, оба раза перенося один и тот же код 880. К данным ничего не было добавлено; общая сумма только что выросла.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>What you'll learn</strong>
+    <strong>Что вы узнаете</strong>
     <ol>
-      <li>merge in one line</li>
-      <li>The four hows, and the rows they give</li>
-      <li>indicator: which side did this row come from</li>
-      <li>The multiplication</li>
-      <li>validate: make the merge refuse</li>
-      <li>Column names that collide</li>
-      <li>Keys with different names, and different types</li>
-      <li>merge, join and concat</li>
-      <li>The full before and after</li>
-      <li>Edge cases that break a merge</li>
-      <li>Why this works</li>
-      <li>Using this on your own project</li>
-      <li>The whole thing on one screen</li>
+      <li>объединить в одну строку</li>
+      <li>Четыре «как» и строки, которые они дают</li>
+      <li>показатель: с какой стороны пришел этот ряд</li>
+      <li>Умножение</li>
+      <li>проверить: запретить слияние</li>
+      <li>Имена столбцов, которые конфликтуют</li>
+      <li>Ключи с разными именами и разными типами</li>
+      <li>объединить, объединить и объединить</li>
+      <li>Полное до и после</li>
+      <li>Пограничные случаи, нарушающие слияние</li>
+      <li>Почему это работает</li>
+      <li>Использование этого в вашем собственном проекте</li>
+      <li>Все на одном экране</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Every output on this page is real.</strong> Sixteen orders totalling 9,890 and a three-row product table, the same tables used across this whole set of guides, merged in pandas 3.0.2 with the results copied back. If you know <a href="../sql-joins/">SQL joins</a>, this is the same operation with different words, and the two failure modes are identical.</div>
+  <div class="note"><strong>Каждый вывод на этой странице реален.</strong>  Шестнадцать заказов на общую сумму 9890 и таблица продуктов из трех строк — те же таблицы, которые используются во всем этом наборе руководств, — объединены в pandas 3.0.2 с скопированными обратно результатами. Если ты знаешь  <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a>, это одна и та же операция с разными словами, и два режима отказа идентичны.</div>
 
   <div class="step">
-    <h2>1. merge in one line</h2>
+    <h2>1. объединить в одну строку</h2>
 
-    <p>Two frames, one shared column, one call.</p>
+    <p>Два кадра, один общий столбец, один вызов.</p>
 
     <pre><code>orders.merge(products, on="product", how="left")
 
@@ -223,42 +223,42 @@
 
 shape (16, 11)   revenue 9890</code></pre>
 
-    <p>Sixteen rows in, sixteen rows out, and the revenue is unchanged at 9,890. Two columns arrived, <code>category</code> and <code>cost</code>, attached to every order by matching the product name.</p>
+    <p>Шестнадцать строк на входе, шестнадцать строк на выходе, а доход не изменился и составил 9890. Две колонны прибыли,  <code>category</code> and <code>cost</code>, прикрепляется к каждому заказу путем сопоставления названия продукта.</p>
 
-    <p>Read the arguments as a sentence: take the orders, bring in the products, match on <code>product</code>, and keep every order whether or not it matches. That last part is <code>how</code>, and it is the argument that decides everything.</p>
+    <p>Прочтите аргументы как предложение: принимайте заказы, привозите продукцию, сопоставляйте.  <code>product</code>и сохраняйте каждый порядок, независимо от того, совпадает он или нет. Эта последняя часть  <code>how</code>, и именно аргумент решает всё.</p>
 
-    <p>Those two numbers, the row count and a total, are the whole check. Say them out loud before you run a merge and compare afterwards. Everything on this page is a way for one of them to change when you did not expect it to.</p>
+    <p>Эти два числа — количество строк и сумма — составляют всю проверку. Произнесите их вслух, прежде чем запускать слияние, а затем сравните. Все на этой странице — это способ измениться, когда вы этого не ожидали.</p>
   </div>
 
   <div class="step">
-    <h2>2. The four hows, and the rows they give</h2>
+    <h2>2. Четыре «как» и ряды, которые они дают</h2>
 
-    <p>Before the explanation: the product table is missing Lamp, and four of the sixteen orders are lamps. Predict the row count for each of the four hows.</p>
+    <p>Перед пояснением: в таблице товаров отсутствуют лампы, а четыре из шестнадцати заказов — лампы. Предскажите количество строк для каждого из четырех способов.</p>
 
     <pre><code>how=left    rows= 16   revenue=9890   missing cost=4
 how=inner   rows= 12   revenue=8290   missing cost=0
 how=right   rows= 12   revenue=8290   missing cost=0
 how=outer   rows= 16   revenue=9890   missing cost=4</code></pre>
 
-    <p>Four different answers to the same question, and the difference between the first two is 1,600 of revenue, which is the lamp business.</p>
+    <p>Четыре разных ответа на один и тот же вопрос, и разница между первыми двумя составляет 1600 доходов, то есть от лампового бизнеса.</p>
 
     <table>
-      <tr><th>how</th><th>Keeps</th><th>Use it when</th></tr>
-      <tr><td><code>left</code></td><td>Every row of the left frame, matched or not</td><td>Almost always. The left frame is your data and you are decorating it.</td></tr>
-      <tr><td><code>inner</code></td><td>Only rows that matched on both sides</td><td>You genuinely want the intersection, and you have checked what it drops.</td></tr>
-      <tr><td><code>right</code></td><td>Every row of the right frame</td><td>Rarely. Swap the frames and use left instead; it reads better.</td></tr>
-      <tr><td><code>outer</code></td><td>Everything from both sides</td><td>Reconciling two lists and needing to see what is on each side only.</td></tr>
+      <tr><th>how</th><th>Keeps</th><th>Используйте его, когда</th></tr>
+      <tr><td><code>left</code></td><td>Каждая строка левого кадра, совпадающая или нет</td><td>Почти всегда. Левый кадр — это ваши данные, и вы их украшаете.</td></tr>
+      <tr><td><code>inner</code></td><td>Только строки, совпадающие с обеих сторон</td><td>Вы искренне хотите перекрёсток и проверили, что он выпадет.</td></tr>
+      <tr><td><code>right</code></td><td>Каждая строка правого кадра</td><td>Редко. Поменяйте местами рамки и вместо этого используйте левую; оно читается лучше.</td></tr>
+      <tr><td><code>outer</code></td><td>Всё с обеих сторон</td><td>Согласование двух списков и необходимость посмотреть, что находится только на каждой стороне.</td></tr>
     </table>
 
-    <p><code>left</code> is the default choice for a reason: it cannot lose a row of your data. <code>inner</code> is the one that catches people, because it is the most natural-sounding thing to want and it deletes silently. Twelve rows came back where sixteen went in, no message appeared, and the four lamp orders are simply not in the result to be missed.</p>
+    <p><code>left</code>  это выбор по умолчанию по определенной причине: он не может потерять ни одной строки ваших данных.  <code>inner</code>  это то, что цепляет людей, потому что это самое естественное желание, и оно бесшумно удаляется. Двенадцать рядов вернулись туда, где было шестнадцать, никакого сообщения не появилось, и четыре заказа ламп просто невозможно пропустить.</p>
 
-    <p>The rule: <strong>if the row count went down, an inner join threw something away, and you have to know what.</strong></p>
+    <p>Правило:  <strong>если количество строк уменьшилось, внутреннее соединение что-то выбросило, и вы должны знать, что именно.</strong></p>
   </div>
 
   <div class="step">
-    <h2>3. indicator: which side did this row come from</h2>
+    <h2>3. показатель: с какой стороны пришел этот ряд</h2>
 
-    <p>One argument turns "some rows did not match" into a count you can read.</p>
+    <p>Один аргумент превращает «некоторые строки не совпали» в число, которое вы можете прочитать.</p>
 
     <pre><code>orders.merge(products_missing_lamp, on="product", how="outer", indicator=True)
 
@@ -267,40 +267,40 @@ both          12
 left_only      4
 right_only     0</code></pre>
 
-    <p>Twelve matched, four orders found no product, and no products went unused. Those three numbers are the shape of the join, and they take one keyword to get.</p>
+    <p>Двенадцать совпали, в четырех заказах не было обнаружено ни одного товара, и ни один товар не остался неиспользованным. Эти три числа представляют собой форму соединения, и для их получения требуется одно ключевое слово.</p>
 
-    <p>Use it while developing every merge and then take it out, or keep the column and filter on it, which is how you get the unmatched rows themselves rather than just their count:</p>
+    <p>Используйте его при разработке каждого слияния, а затем удалите его или сохраните столбец и отфильтруйте его. Таким образом вы получите сами несовпадающие строки, а не только их количество:</p>
 
     <pre><code>m = left.merge(right, on=key, how="outer", indicator=True)
 m[m["_merge"] == "left_only"]     # the rows that found no partner</code></pre>
 
-    <p><code>right_only</code> being non-zero is worth a look too. It means the lookup table has entries nothing uses, which is usually harmless and occasionally tells you the key is wrong: a lookup where nothing matches at all comes back as every row on one side and every row on the other.</p>
+    <p><code>right_only</code>  на ненулевое значение тоже стоит обратить внимание. Это означает, что в таблице поиска есть записи, которые никто не использует, что обычно безвредно и иногда сообщает вам, что ключ неправильный: поиск, в котором вообще ничего не совпадает, возвращается в виде каждой строки с одной стороны и каждой строки с другой.</p>
   </div>
 
   <div class="step">
-    <h2>4. The multiplication</h2>
+    <h2>4. Умножение</h2>
 
-    <p>Before the explanation: the product table gains a second row for Desk, identical to the first. It now has four rows instead of three. Predict what the merge returns.</p>
+    <p>Перед пояснением: в таблице продуктов появится вторая строка для «Стол», идентичная первой. Теперь у него четыре ряда вместо трех. Предскажите, что вернет слияние.</p>
 
     <pre><code>rows    16  ->  23
 revenue 9890 -> 14950
 desk rows  7 ->  14</code></pre>
 
-    <p>Seven extra rows and 5,060 of extra revenue, from adding one row to a lookup table. Nothing was added to the orders, and no order was changed.</p>
+    <p>Семь дополнительных строк и 5060 дополнительных доходов от добавления одной строки в таблицу поиска. К заказам ничего не добавлялось и ни один заказ не менялся.</p>
 
-    <p>The mechanism is exactly what the picture at the top shows. Seven orders are desks; each of them now matches two rows in the product table; each therefore comes out twice. Seven orders became fourteen rows, and every desk order's revenue is counted twice, which is 5,060 counted a second time.</p>
+    <p>Механизм именно такой, как на картинке вверху. Семь орденов — столы; каждый из них теперь соответствует двум строкам в таблице продуктов; поэтому каждый выходит дважды. Семь заказов превратились в четырнадцать рядов, и доход от каждого заказа на столе учитывается дважды, то есть 5060 учитываются во второй раз.</p>
 
-    <p>What makes this the most dangerous thing on the page is what does not happen. There is no error and no warning. The frame looks entirely normal, every individual value in it is correct, and any total computed afterwards is wrong in a way that is invisible unless you knew the row count before.</p>
+    <p>Самое опасное на странице то, что не происходит. Никаких ошибок и предупреждений нет. Фрейм выглядит совершенно нормально, каждое отдельное значение в нем правильное, а любое общее значение, вычисленное впоследствии, неверно, и это незаметно, если вы не знали заранее количество строк.</p>
 
-    <p>It is also completely ordinary in real data. A product table with one row per product and one per price change. A customer table with a row per address. A lookup that was appended to twice. Each of those is a reasonable table that is not one row per key, and merging to it multiplies.</p>
+    <p>Это также совершенно обычно в реальных данных. Таблица продуктов с одной строкой для каждого продукта и одной строкой для каждого изменения цены. Таблица клиентов со строкой на адрес. Поиск, который был добавлен дважды. Каждая из них представляет собой разумную таблицу, в которой нет одной строки на ключ, и слияние с ней умножается.</p>
 
-    <p>Say out loud what you would see if this happened on a merge inside a pipeline you did not write. A revenue figure a bit too high, no error anywhere, and every row you spot-check correct.</p>
+    <p>Произнесите вслух, что бы вы увидели, если бы это произошло при слиянии внутри конвейера, который вы не писали. Цифра дохода слишком завышена, нигде нет ошибок, и каждая строка, которую вы проверяете, верна.</p>
   </div>
 
   <div class="step">
-    <h2>5. validate: make the merge refuse</h2>
+    <h2>5. Подтвердите: откажитесь от слияния</h2>
 
-    <p>pandas will check the cardinality for you and raise rather than multiply.</p>
+    <p>pandas проверит мощность за вас и увеличит, а не умножит.</p>
 
     <pre><code>orders.merge(products, on="product", how="left", validate="m:1")
 # clean table: accepted
@@ -308,75 +308,75 @@ desk rows  7 ->  14</code></pre>
 orders.merge(products_with_duplicate_desk, on="product", how="left", validate="m:1")
 # MergeError: Merge keys are not unique in right dataset; not a many-to-one merge</code></pre>
 
-    <p>That is the single most valuable argument in this whole function and almost nobody uses it. <code>validate="m:1"</code> says: many rows on the left may match, but each key must appear at most once on the right. It is the assumption you are already making every time you attach a lookup, written down so the computer can enforce it.</p>
+    <p>Это единственный наиболее ценный аргумент во всей этой функции, и его почти никто не использует.  <code>validate="m:1"</code>  говорит: многие строки слева могут совпадать, но каждый ключ должен появляться не более одного раза справа. Это предположение, которое вы уже делаете каждый раз, когда прикрепляете поиск, записанное, чтобы компьютер мог его реализовать.</p>
 
     <table>
       <tr><th>validate</th><th>Means</th></tr>
-      <tr><td><code>"m:1"</code></td><td>Many left rows to one right row. Attaching a lookup. The common case.</td></tr>
-      <tr><td><code>"1:1"</code></td><td>Both sides unique. Joining two versions of the same record.</td></tr>
-      <tr><td><code>"1:m"</code></td><td>One left row to many right rows. Expanding a parent into its children.</td></tr>
-      <tr><td><code>"m:m"</code></td><td>No constraint. This is the default behaviour, and it multiplies.</td></tr>
+      <tr><td><code>"m:1"</code></td><td>От многих левых рядов к одному правому ряду. Прикрепляю поиск. Обычный случай.</td></tr>
+      <tr><td><code>"1:1"</code></td><td>Обе стороны уникальны. Объединение двух версий одной и той же записи.</td></tr>
+      <tr><td><code>"1:m"</code></td><td>От одного левого ряда до множества правых рядов. Расширение родителя на его дочерние элементы.</td></tr>
+      <tr><td><code>"m:m"</code></td><td>Никаких ограничений. Это поведение по умолчанию, и оно увеличивается.</td></tr>
     </table>
 
-    <p>Add it to every merge you write. It costs nine characters, it turns an invisible inflation into an exception at the moment it happens, and the exception names the side that is wrong.</p>
+    <p>Добавляйте его к каждому написанному вами слиянию. Оно стоит девять символов, превращает невидимую инфляцию в исключение в тот момент, когда оно происходит, и исключение называет сторону, которая неправа.</p>
   </div>
 
   <div class="step">
-    <h2>6. Column names that collide</h2>
+    <h2>6. Конфликтующие имена столбцов</h2>
 
-    <p>If both frames have a column with the same name, and it is not the key, pandas keeps both and renames them.</p>
+    <p>Если в обоих фреймах есть столбец с одинаковым именем, и он не является ключом, pandas сохраняет оба и переименовывает их.</p>
 
     <pre><code>['units_x', 'units_y']</code></pre>
 
-    <p><code>_x</code> is the left frame and <code>_y</code> is the right. That is a sensible default and a terrible thing to find in a script six months later, because nothing about <code>units_x</code> says which table it came from.</p>
+    <p><code>_x</code>  это левый кадр и  <code>_y</code>  это правильно. Это разумное значение по умолчанию, и ужасно обнаружить в сценарии шесть месяцев спустя, потому что ничего о  <code>units_x</code>  говорит, из какого стола оно взято.</p>
 
-    <p>Two better options. Set your own suffixes at the merge, which takes two seconds and reads correctly afterwards:</p>
+    <p>Два лучших варианта. Установите свои собственные суффиксы при слиянии, которое занимает две секунды и впоследствии читается правильно:</p>
 
     <pre><code>orders.merge(products, on="product", suffixes=("_order", "_catalogue"))</code></pre>
 
-    <p>Or, better still, drop or rename the columns you do not need before merging, so the collision never happens. A merge that brings in three columns you want is much easier to read than one that brings in fifteen and renames four of them.</p>
+    <p>Или, что еще лучше, удалите или переименуйте ненужные столбцы перед объединением, чтобы никогда не возникало коллизий. Слияние, которое добавляет три нужных вам столбца, гораздо легче читать, чем слияние, которое включает пятнадцать и переименовывает четыре из них.</p>
   </div>
 
   <div class="step">
-    <h2>7. Keys with different names, and different types</h2>
+    <h2>7. Ключи с разными именами и разными типами.</h2>
 
-    <p>When the key column is called something different on each side, name both.</p>
+    <p>Если ключевой столбец с каждой стороны называется по-разному, назовите оба.</p>
 
     <pre><code>orders.merge(catalogue, left_on="product", right_on="item", how="left")
 
 rows 16, and the result keeps both key columns: ['product', 'item']</code></pre>
 
-    <p>Note the second half. Both key columns survive into the result, holding identical values, so the frame has a redundant column. Drop it straight away, or the next person will wonder which one is authoritative.</p>
+    <p>Обратите внимание на вторую половину. Оба ключевых столбца сохраняются в результате, сохраняя одинаковые значения, поэтому в кадре имеется избыточный столбец. Немедленно отбросьте это, иначе следующий человек будет задаваться вопросом, кто из них авторитетнее.</p>
 
-    <p>Types are stricter, and pandas is better behaved here than most tools. Merging a text key to an integer key does not silently match nothing; it raises:</p>
+    <p>Типы более строгие, и pandas здесь ведет себя лучше, чем большинство инструментов. Слияние текстового ключа с целочисленным ключом ничего не означает молча; это повышает:</p>
 
     <pre><code>ValueError: You are trying to merge on string and int64 columns for key 'order_id'.</code></pre>
 
-    <p>That is genuinely good news, because the same mistake in a spreadsheet lookup produces <code>#N/A</code> on some rows and in SQL produces zero matches, both of which look like a data problem rather than a type problem. Here it stops you. Fix the types, usually by making both sides text if the key is an identifier, which is the argument in <a href="../pandas-read-csv/">how a CSV gets loaded</a>.</p>
+    <p>Это действительно хорошая новость, потому что та же ошибка при поиске в электронной таблице приводит к  <code>#N/A</code>  в некоторых строках и в SQL выдает нулевые совпадения, и оба эти явления выглядят скорее как проблема с данными, чем как проблема с типом. Вот это тебя останавливает. Исправьте типы, обычно делая обе стороны текстовыми, если ключ является идентификатором, который является аргументом в  <a href="../pandas-read-csv/">как загружается CSV</a>.</p>
 
-    <p>What is <em>not</em> caught is a difference in the values themselves: a trailing space, a different case, a code with a leading zero on one side only. Those merge cleanly and match nothing, and the tell is a suspiciously round number of unmatched rows in the <code>indicator</code> column.</p>
+    <p>Что такое  <em>not</em>  поймана разница в самих значениях: конечный пробел, другой регистр, код с ведущим нулем только с одной стороны. Они сливаются без ошибок и ничему не соответствуют, а признаком этого является подозрительно круглое количество несовпадающих строк в таблице.  <code>indicator</code>  столбец.</p>
   </div>
 
   <div class="step">
-    <h2>8. merge, join and concat</h2>
+    <h2>8. объединить, объединить и объединить</h2>
 
-    <p>Three functions people confuse, on different jobs.</p>
+    <p>Три функции, которые люди путают на разных работах.</p>
 
-    <p><strong><code>merge</code></strong> matches on columns. This is the one you want almost always, and everything above is about it.</p>
+    <p><strong><code>merge</code></strong>  совпадения по столбцам. Это то, что хочется почти всегда, и все выше об этом.</p>
 
-    <p><strong><code>join</code></strong> is a convenience method that matches on the <em>index</em> by default. It is shorter when your frames are genuinely indexed by the key, and a source of confusion when they are not, because it silently uses the index you forgot you had. If in doubt, use <code>merge</code> and name the columns.</p>
+    <p><strong><code>join</code></strong>  это удобный метод, который соответствует  <em>index</em>  по умолчанию. Он короче, когда ваши кадры действительно проиндексированы по ключу, и является источником путаницы, когда это не так, потому что он молча использует индекс, о котором вы забыли. Если есть сомнения, используйте  <code>merge</code>  и назовите столбцы.</p>
 
-    <p><strong><code>concat</code></strong> does not match anything. It stacks frames, either on top of each other, which is a union of rows, or side by side, which lines them up by index position and is almost never what you want. The check for a vertical <code>concat</code> is arithmetic: the result's row count must equal the sum of the inputs'.</p>
+    <p><strong><code>concat</code></strong>  ничему не соответствует. Он укладывает кадры либо друг на друга, что представляет собой объединение строк, либо рядом, что выравнивает их по позиции индекса, что почти никогда не является тем, что вам нужно. Проверка на вертикаль  <code>concat</code>  является арифметическим: количество строк результата должно равняться сумме входных данных.</p>
 
     <pre><code>pd.concat([jan, feb, mar], ignore_index=True)      # rows must add up
 orders.merge(products, on="product", how="left")   # rows must not change</code></pre>
 
-    <p>Picture the pipeline you maintain. How many merges are in it, and for how many of them do you know the expected row count?</p>
+    <p>Представьте себе конвейер, который вы поддерживаете. Сколько в нем слияний и для скольких из них вы знаете ожидаемое количество строк?</p>
   </div>
 
-  <h2>The full before and after</h2>
+  <h2>Полное до и после</h2>
 
-  <p>Same job: attach product costs to sixteen orders.</p>
+  <p>Та же работа: привязать стоимость продукции к шестнадцати заказам.</p>
 
   <h3>Before</h3>
   <pre><code>df = orders.merge(products, on="product")
@@ -384,7 +384,7 @@ orders.merge(products, on="product", how="left")   # rows must not change</code>
 # no how, so it defaults to inner
 # no validate, so a duplicate key would multiply
 # no row count check, so neither would be noticed</code></pre>
-  <p>Three defaults accepted without deciding. If the lookup ever loses a product, rows disappear. If it ever gains a duplicate, rows multiply. Both change the totals and neither says anything.</p>
+  <p>Три варианта по умолчанию приняты без принятия решения. Если при поиске когда-либо теряется продукт, строки исчезают. Если когда-либо появится дубликат, строки умножатся. Оба меняют итоги и ни один ничего не говорит.</p>
 
   <h3>After</h3>
   <pre><code>before = len(orders)                       # 16
@@ -401,107 +401,107 @@ assert len(df) == before, f"merge changed the row count: {before} -> {len(df)}"
 print(df["_merge"].value_counts())          # both 16, left_only 0
 print(df["cost"].isna().sum())              # 0 unmatched</code></pre>
 
-  <p>Row count asserted, cardinality enforced by pandas rather than by hope, unmatched rows counted rather than assumed, and only the three columns that are wanted brought across.</p>
+  <p>Подсчет строк подтвержден, кардинальность обеспечивается пандами, а не надеждой, несовпадающие строки подсчитываются, а не предполагаются, и передаются только три нужных столбца.</p>
 
-  <p>The claim, and it is why <code>validate</code> belongs on every merge: <strong>adding one duplicate row to a three-row lookup table took the result from 16 rows and 9,890 to 23 rows and 14,950, and produced no error, no warning, and no incorrect individual value anywhere in the frame.</strong></p>
+  <p>Претензия и вот почему  <code>validate</code>  принадлежит при каждом слиянии:  <strong>добавление одной повторяющейся строки в справочную таблицу из трех строк привело к увеличению числа строк с 16 строк и 9890 до 23 строк и 14 950, и при этом не возникло ни ошибок, ни предупреждений, ни неправильных отдельных значений где-либо в кадре.</strong></p>
 
   <div class="step">
-    <h2>Edge cases that break a merge</h2>
+    <h2>Пограничные случаи, нарушающие слияние</h2>
 
-    <p>Six worth knowing.</p>
+    <p>Шесть, которые стоит знать.</p>
 
-    <p><strong>Nulls in the key.</strong> By default pandas matches null to null, so every row with a missing key on the left pairs with every row with a missing key on the right, which is a multiplication waiting to happen. Drop or fill them before merging.</p>
+    <p><strong>Нули в ключе.</strong>  По умолчанию pandas сопоставляет нуль с нулем, поэтому каждая строка с отсутствующим ключом слева соединяется с каждой строкой с отсутствующим ключом справа, что представляет собой умножение, ожидающее своего выполнения. Удалите или заполните их перед объединением.</p>
 
-    <p><strong>Whitespace and case in the key.</strong> Merges cleanly, matches nothing, and shows up only in the <code>indicator</code> counts. Clean the key columns first, exactly as for any other join.</p>
+    <p><strong>Пробелы и регистр в ключе.</strong>  Сливается без ошибок, ничего не соответствует и отображается только в  <code>indicator</code>  имеет значение. Сначала очистите ключевые столбцы, как и при любом другом объединении.</p>
 
-    <p><strong>The index after a merge.</strong> <code>merge</code> discards the left frame's index and gives you a fresh one, so anything relying on the old index breaks quietly. Reset or reattach on purpose.</p>
+    <p><strong>Индекс после слияния.</strong> <code>merge</code>  отбрасывает индекс левого кадра и дает вам новый, поэтому все, что зависит от старого индекса, спокойно ломается. Сбросьте или повторно подключите специально.</p>
 
-    <p><strong>Merging in a loop.</strong> Repeatedly merging one frame into a growing result is slow and multiplies the risk of the multiplication happening once without being noticed. Build a list and merge once, or reduce over the list checking the count each time.</p>
+    <p><strong>Слияние в цикле.</strong>  Многократное объединение одного кадра в растущий результат происходит медленно и увеличивает риск того, что умножение произойдет один раз и останется незамеченным. Создайте список и объедините его один раз или сократите список, каждый раз проверяя счетчик.</p>
 
-    <p><strong>Memory.</strong> A merge produces a new frame with the columns of both, so joining two wide tables can be several times the size of either. Select the columns you need on the right before merging, not after.</p>
+    <p><strong>Память.</strong>  При слиянии создается новый фрейм со столбцами обоих, поэтому объединение двух широких таблиц может в несколько раз превышать размер каждой из них. Выберите нужные вам столбцы справа до объединения, а не после.</p>
 
-    <p><strong>Many-to-many on purpose.</strong> Sometimes it really is right, for instance expanding an order into its lines. Then say so with <code>validate="1:m"</code> and check the row count against the expected expansion, so the intended multiplication is documented and the unintended one still fails.</p>
+    <p><strong>Многие ко многим намеренно.</strong>  Иногда это действительно правильно, например, разложить заказ на строки. Тогда скажи это с  <code>validate="1:m"</code>  и сверить количество строк с ожидаемым расширением, чтобы запланированное умножение было задокументировано, а непреднамеренное все равно не удалось.</p>
   </div>
 
-  <h2>Why this works</h2>
+  <h2>Почему это работает</h2>
 
-  <p>The multiplication is not a pandas quirk, it is what matching means. A join pairs every row on one side with every row on the other whose key agrees, so the output size is decided by how many times each key occurs on each side rather than by how many rows either table has. In the relational model a key is precisely a column, or set of columns, whose value identifies a row uniquely, and joining on something that is not a key gives up that guarantee (Codd, 1970, <em>Communications of the ACM</em>, 13(6), 377–387). "One duplicate in the lookup table" is another way of saying the join column is not a key on that side, and once you say it that way the seven extra rows stop being surprising.</p>
+  <p>Умножение — это не причуда панд, это то, что означает сопоставление. Соединение соединяет каждую строку на одной стороне с каждой строкой на другой, ключ которой согласуется, поэтому размер вывода определяется тем, сколько раз каждый ключ встречается на каждой стороне, а не количеством строк в каждой таблице. В реляционной модели ключ — это именно столбец или набор столбцов, значение которых однозначно идентифицирует строку, и соединение с чем-то, что не является ключом, лишает этой гарантии (Codd, 1970,  <em>Коммуникации ACM</em>, 13(6), 377–387). «Один дубликат в таблице поиска» — это еще один способ сказать, что объединяемый столбец не является ключевым на этой стороне, и как только вы скажете это таким образом, семь дополнительных строк перестанут удивлять.</p>
 
-  <p>pandas deliberately mirrors that vocabulary rather than inventing its own, which is why <code>how</code> takes the same four words a database uses and why the behaviours match: the library was built to bring relational-style operations to in-memory tabular data in Python, so that people could do the joining and reshaping they were already doing in SQL without moving the data (McKinney, 2010, <em>Proceedings of the 9th Python in Science Conference</em>, 51–56). That is the useful part for an analyst: what you learn here transfers directly to <a href="../sql-joins/">joins in SQL</a>, including the two ways they go wrong.</p>
+  <p>pandas намеренно отражает этот словарь, а не изобретает свой собственный, поэтому  <code>how</code>  берет те же четыре слова, которые использует база данных, и объясняет, почему поведение совпадает: библиотека была создана для выполнения операций реляционного стиля с табличными данными в памяти в Python, чтобы люди могли выполнять соединения и изменения, которые они уже делали в SQL, без перемещения данных (McKinney, 2010,  <em>Материалы 9-й конференции «Питон в науке»</em>, 51–56). Это полезная часть для аналитика: то, что вы узнаете здесь, напрямую переносится на  <a href="../sql-joins/">объединяется в SQL</a>, включая два способа, которыми они идут не так.</p>
 
-  <p>One note on the questions asked before each answer on this page. Prompting yourself to produce a prediction before reading the result is one of a small number of study moves that reliably improves what you take away, and it works even when the prediction is wrong (Fiorella &amp; Mayer, 2016, <em>Educational Psychology Review</em>, 28(4), 717–741). The 23 sticks because you were asked to guess 16.</p>
+  <p>Одно примечание к вопросам, заданным перед каждым ответом на этой странице. Побуждение себя сделать прогноз до того, как прочитать результат, — это один из немногих шагов обучения, который надежно улучшает то, что вы извлекаете, и это работает, даже если прогноз неверен (Fiorella &amp; Mayer, 2016,  <em>Обзор педагогической психологии</em>, 28(4), 717–741). 23 палочки, потому что вас попросили угадать 16.</p>
 
-  <h2>Using this on your own project</h2>
+  <h2>Использование этого в вашем собственном проекте</h2>
 
-  <p>Auditing every merge in a codebase is a project. Do this instead, in order.</p>
+  <p>Аудит каждого слияния в базе кода — это проект. Вместо этого сделайте это по порядку.</p>
 
   <ol>
-    <li><strong>Find the merges with no <code>how</code></strong>. They are inner joins by default, and their authors usually meant left.</li>
-    <li><strong>Add <code>validate="m:1"</code> to every lookup merge.</strong> Nine characters, and the multiplication becomes an exception.</li>
-    <li><strong>Assert the row count</strong> around any left merge. One line, and it fails loudly at the moment of the mistake.</li>
-    <li><strong>Use <code>indicator=True</code> while developing</strong> and read the three counts before removing it.</li>
-    <li><strong>Select the right-hand columns before merging</strong>, so collisions and memory both stop being issues.</li>
-    <li><strong>Clean the key columns first</strong>, for case, whitespace and type, since none of those produce an error.</li>
+    <li><strong>Найдите слияния без  <code>how</code></strong>. По умолчанию это внутренние соединения, и их авторы обычно имели в виду левые.</li>
+    <li><strong>Add <code>validate="m:1"</code>  для каждого слияния поиска.</strong>  Девять символов, и умножение становится исключением.</li>
+    <li><strong>Утвердить количество строк</strong>  вокруг любого левого слияния. Одна строчка, и она громко проваливается в момент ошибки.</li>
+    <li><strong>Use <code>indicator=True</code>  развивая</strong>  и прочтите три пункта, прежде чем удалять его.</li>
+    <li><strong>Перед объединением выберите правые столбцы</strong>, поэтому коллизии и память перестают быть проблемами.</li>
+    <li><strong>Сначала очистите ключевые столбцы</strong>, например, пробелы и тип, поскольку ни один из них не приводит к ошибке.</li>
   </ol>
 
-  <p>If you have paper nearby, one optional sketch is worth five minutes. Write your two tables as two boxes, and beside each write how many times a single key value can appear in it: once, or more than once. Those two answers are the <code>validate</code> string, and most people find that writing them down surfaces a table they had assumed was one row per key and is not.</p>
+  <p>Если у вас под рукой есть бумага, один дополнительный эскиз стоит пяти минут. Запишите две таблицы в виде двух полей и рядом с каждой напишите, сколько раз в ней может появляться одно и то же значение ключа: один раз или несколько раз. Эти два ответа и есть  <code>validate</code>  строка, и большинство людей обнаруживают, что их запись приводит к появлению таблицы, которая, как они предполагали, содержала одну строку на ключ, но это не так.</p>
 
-  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>. The step after joining is usually summarising, which is <a href="../pandas-groupby/">pandas groupby</a>.</div>
+  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>. Шагом после присоединения обычно является подведение итогов, то есть  <a href="../pandas-groupby/">панды группируются</a>.</div>
 
-  <h2>The whole thing on one screen</h2>
+  <h2>Все на одном экране</h2>
 
-  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
+  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
 
   <table>
-    <tr><th>Thing</th><th>What it does</th></tr>
-    <tr><td><code>merge(on=, how=)</code></td><td>Pairs rows wherever the keys match.</td></tr>
-    <tr><td>The check</td><td>Row count and one total, before and after.</td></tr>
-    <tr><td><code>how="left"</code></td><td>Keeps every left row. The default choice.</td></tr>
-    <tr><td><code>how="inner"</code></td><td>Only matched rows. Deletes silently.</td></tr>
-    <tr><td><code>how="outer"</code></td><td>Everything from both sides. For reconciling.</td></tr>
-    <tr><td>Row count went down</td><td>An inner join dropped rows. Find out which.</td></tr>
-    <tr><td>Row count went up</td><td>The right-hand key is not unique. Totals are now inflated.</td></tr>
-    <tr><td><code>indicator=True</code></td><td>Adds <code>_merge</code>: both, left_only, right_only.</td></tr>
-    <tr><td><code>validate="m:1"</code></td><td>Raises if the right-hand key repeats. Use it every time.</td></tr>
-    <tr><td>Other validate values</td><td><code>1:1</code>, <code>1:m</code>, and <code>m:m</code> which is the unguarded default.</td></tr>
-    <tr><td>Colliding column names</td><td>Become <code>_x</code> and <code>_y</code>. Set <code>suffixes</code> or drop them first.</td></tr>
-    <tr><td>Different key names</td><td><code>left_on</code> and <code>right_on</code>. Both columns survive; drop one.</td></tr>
-    <tr><td>Different key types</td><td>Raises a ValueError. Better than matching nothing.</td></tr>
-    <tr><td>Different key values</td><td>Case, spaces, leading zeros. No error, no matches.</td></tr>
-    <tr><td>Nulls in the key</td><td>Match each other, which multiplies. Remove them first.</td></tr>
-    <tr><td><code>join</code></td><td>Matches on the index by default. Prefer merge and name the columns.</td></tr>
-    <tr><td><code>concat</code></td><td>Stacks rather than matches. Row counts must add up.</td></tr>
+    <tr><th>Thing</th><th>Что он делает</th></tr>
+    <tr><td><code>merge(on=, how=)</code></td><td>Пары строк, где совпадают ключи.</td></tr>
+    <tr><td>Чек</td><td>Количество строк и одна сумма до и после.</td></tr>
+    <tr><td><code>how="left"</code></td><td>Сохраняет каждую левую строку. Выбор по умолчанию.</td></tr>
+    <tr><td><code>how="inner"</code></td><td>Только совпадающие строки. Удаляет молча.</td></tr>
+    <tr><td><code>how="outer"</code></td><td>Всё с обеих сторон. Для примирения.</td></tr>
+    <tr><td>Количество строк уменьшилось</td><td>Внутреннее соединение удаляет строки. Узнайте какой.</td></tr>
+    <tr><td>Количество строк увеличилось</td><td>Правый ключ не уникален. Итоговые суммы теперь завышены.</td></tr>
+    <tr><td><code>indicator=True</code></td><td>Adds <code>_merge</code>: оба, только слева, только справа.</td></tr>
+    <tr><td><code>validate="m:1"</code></td><td>Повышается, если правая клавиша повторяется. Используйте его каждый раз.</td></tr>
+    <tr><td>Другие значения проверки</td><td><code>1:1</code>, <code>1:m</code>, и  <code>m:m</code>  что является незащищенным значением по умолчанию.</td></tr>
+    <tr><td>Столкновение имен столбцов</td><td>Become <code>_x</code> and <code>_y</code>. Набор  <code>suffixes</code>  или сначала бросьте их.</td></tr>
+    <tr><td>Различные названия клавиш</td><td><code>left_on</code> and <code>right_on</code>. Обе колонны сохранились; бросьте один.</td></tr>
+    <tr><td>Различные типы ключей</td><td>Вызывает ValueError. Это лучше, чем ничего не соответствовать.</td></tr>
+    <tr><td>Различные ключевые значения</td><td>Регистр, пробелы, ведущие нули. Ни ошибок, ни совпадений.</td></tr>
+    <tr><td>Нули в ключе</td><td>Соответствуйте друг другу, что умножается. Сначала удалите их.</td></tr>
+    <tr><td><code>join</code></td><td>По умолчанию соответствует индексу. Предпочитайте объединить и назвать столбцы.</td></tr>
+    <tr><td><code>concat</code></td><td>Стеки, а не совпадения. Количество строк должно суммироваться.</td></tr>
   </table>
 
-  <div class="note"><strong>The one habit to keep.</strong> Put <code>validate=</code> on every merge. It is the only thing on this page that turns the silent failure into a loud one at the moment it happens, and writing it forces you to state what you believe about the two tables, which is usually where the mistake actually is. If a merge misbehaves in a way this page does not cover, there is a general <a href="../technical-tenacity/">diagnosis loop for being stuck</a>.</div>
+  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong> Put <code>validate=</code>  при каждом слиянии. Это единственное, что на этой странице превращает молчаливый провал в громкий в тот момент, когда он происходит, и его написание заставляет вас заявить, что вы думаете о двух таблицах, и именно в этом обычно и заключается ошибка. Если слияние ведет себя не так, как описано на этой странице, существует общая ошибка.  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>.</div>
 
-  <p>One last thought, and I would genuinely like other people's answers. Mine was a price table that had gained one duplicate row during a data fix, so a monthly revenue figure came out about eight percent high for two months, and every single row anybody checked was correct. What has a join quietly multiplied for you?</p>
+  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. В моей таблице цен во время исправления данных появилась одна повторяющаяся строка, поэтому месячный доход за два месяца оказался выше восьми процентов, и каждая проверяемая строка была верной. Что для вас незаметно умножило объединение?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Codd, E. F. (1970). A relational model of data for large shared data banks. <em>Communications of the ACM</em>, 13(6), 377–387.</li>
-    <li>McKinney, W. (2010). Data structures for statistical computing in Python. <em>Proceedings of the 9th Python in Science Conference</em>, 51–56.</li>
-    <li>Fiorella, L., &amp; Mayer, R. E. (2016). Eight ways to promote generative learning. <em>Educational Psychology Review</em>, 28(4), 717–741.</li>
+    <li>Кодд, EF (1970). Реляционная модель данных для крупных общих банков данных.  <em>Коммуникации ACM</em>, 13(6), 377–387.</li>
+    <li>МакКинни, В. (2010). Структуры данных для статистических вычислений в Python.  <em>Материалы 9-й конференции «Питон в науке»</em>, 51–56.</li>
+    <li>Фиорелла Л. и Майер Р.Э. (2016). Восемь способов продвижения генеративного обучения.  <em>Обзор педагогической психологии</em>, 28(4), 717–741.</li>
   </ul>
 
   <div class="book">
-    <strong>The merge ran clean and your row count went up, which means something matched twice.</strong>
-    <p><em>Python for Analysts</em> is 203 pages, every join type read line by line, with the row counts printed before and after.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/python-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=python-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-pandas-merge'})">Python for Analysts, $19 &rarr;</a>
+    <strong>Слияние прошло успешно, и количество строк увеличилось, что означает, что что-то совпало дважды.</strong>
+    <p><em>Python для аналитиков</em>  составляет 203 страницы, каждый тип соединения читается построчно, с указанием количества строк до и после.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/python-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=python-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-pandas-merge'})">Python для аналитиков, 19 $ →</a>
   </div>
 
   <div class="cta">
-    <strong>Practice merges that go wrong on purpose.</strong>
-    <p style="margin:6px 0 0">The <a href="../../python/">Python Kit</a> gives you the repetitions: lookups with duplicate keys, missing keys and mismatched types, plus flash cards on which <code>how</code> keeps which rows and a mock exam that asks for the row count before you run the merge. You now own the method; the kit is the practice. Nothing to install, no account needed.</p>
-    <a class="btn" href="../../python/">Open the Python Kit →</a>
+    <strong>Практикуйте слияния, которые намеренно идут не так.</strong>
+    <p style="margin:6px 0 0">The <a href="../../python/">Комплект Python</a>  дает вам повторы: поиск повторяющихся ключей, отсутствующих ключей и несовпадающих типов, а также флеш-карточки, на которых  <code>how</code>  сохраняет список строк и проводит пробный экзамен, который запрашивает количество строк перед запуском слияния. Теперь вы владеете методом; комплект - это практика. Ничего устанавливать, учетная запись не требуется.</p>
+    <a class="btn" href="../../python/">Откройте комплект Python →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> · <a href="../sql-joins/">SQL JOINs</a> · <a href="../pandas-groupby/">pandas groupby</a> · <a href="../pandas-read-csv/">pandas read_csv</a> · <a href="../excel-index-match/">INDEX MATCH vs VLOOKUP</a> · <a href="../vlookup-vs-xlookup/">VLOOKUP vs XLOOKUP</a> · <a href="../sql-reconciliation/">Reconcile Two Tables</a> · <a href="../entity-resolution/">Entity Resolution</a> · <a href="../../python/">Python Kit</a> · <a href="../sql-and-python/">How SQL and Python Work Together</a> · <a href="../sql-null/">NULL in SQL</a> · <a href="../sql-find-duplicates/">Find Duplicates in SQL</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../projects/">Portfolio Projects</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../pandas-groupby/">панды группируются</a> · <a href="../pandas-read-csv/">панды read_csv</a> · <a href="../excel-index-match/">ИНДЕКСНОЕ СООТВЕТСТВИЕ против ВПР</a> · <a href="../vlookup-vs-xlookup/">ВПР против XLOOKUP</a> · <a href="../sql-reconciliation/">Согласовать две таблицы</a> · <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../../python/">Комплект Python</a> · <a href="../sql-and-python/">Как SQL и Python работают вместе</a> · <a href="../sql-null/">NULL в SQL</a> · <a href="../sql-find-duplicates/">Найти дубликаты в SQL</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../projects/">Портфельные проекты</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

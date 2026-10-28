@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>VLOOKUP or XLOOKUP Returns #N/A: Six Causes, in Order &mdash; Analyst Prep Kit</title>
-<meta name="description" content="You can see the value in the other table and the lookup insists it is not there. Trailing spaces, numbers stored as text, a stray non-breaking space, the wrong match mode, an unsorted approximate match, and a range that does not reach.">
+<title>Возвраты VLOOKUP или XLOOKUP #N/A: шесть причин по порядку — комплект для подготовки аналитика</title>
+<meta name="description" content="Вы можете увидеть значение в другой таблице, но поиск утверждает, что его там нет. Конечные пробелы, числа, хранящиеся в виде текста, случайный неразрывный пробел, неправильный режим сопоставления, неотсортированное приблизительное совпадение и недостижимый диапазон.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/lookup-returns-na/">
-<meta property="og:title" content="The Lookup Returns #N/A and the Value Is Right There: Six Causes">
-<meta property="og:description" content="Six reasons a lookup cannot find a value you can see, and the test that identifies each.">
+<meta property="og:title" content="Поиск возвращает #N/A, и значение находится прямо здесь: шесть причин">
+<meta property="og:description" content="Шесть причин, по которым поиск не может найти видимое значение, и тест, который определяет каждую из них.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/lookup-returns-na/">
 <meta name="twitter:card" content="summary_large_image">
@@ -164,93 +164,93 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../../excel/">Excel Kit</a></p>
-  <h1>The Lookup Returns #N/A and the Value Is Right There: Six Causes</h1>
-  <p class="meta">Michael Nocito &middot; Updated August 2026 &middot; Every number on this page was worked before it was published</p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../../excel/">Excel комплект</a></p>
+  <h1>Поиск возвращает #N/A, и значение находится прямо здесь: шесть причин</h1>
+  <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Все числа на этой странице были обработаны до их публикации.</p>
 
-  <p>The value is sitting in the other table. You can see it. The lookup says <code>#N/A</code>. This is the most reported problem in Excel, and it is almost always the same short list of causes, none of which is Excel being wrong.</p>
+  <p>Значение находится в другой таблице. Вы можете это увидеть. Поиск говорит  <code>#N/A</code>. Это самая распространенная проблема в Excel, и почти всегда это один и тот же краткий список причин, ни одна из которых не является ошибкой Excel.</p>
 
-  <p>What you do: run the equality test first. <code>=A2=B2</code> in a spare cell tells you in one second whether this is a data problem or a formula problem, and it splits the six causes into two groups.</p>
+  <p>Что вы делаете: сначала запустите тест на равенство.  <code>=A2=B2</code>  в запасной ячейке за одну секунду сообщит вам, является ли это проблемой данных или проблемой формулы, и разделит шесть причин на две группы.</p>
 
-  <p><strong>The short version.</strong> <code>#N/A</code> means not found. Your job is to find out what makes the two values different.</p>
+  <p><strong>Краткая версия.</strong> <code>#N/A</code>  значит не найден. Ваша задача — выяснить, что отличает эти две ценности.</p>
 
-  <h2>The two-minute diagnosis</h2>
+  <h2>Диагностика за две минуты</h2>
   <table>
-    <tr><th>Test</th><th>Formula</th><th>What it tells you</th></tr>
-    <tr><td>Do they match?</td><td><code>=A2=B2</code></td><td>FALSE on identical-looking text means hidden characters or type</td></tr>
-    <tr><td>Same length?</td><td><code>=LEN(A2)&amp;" / "&amp;LEN(B2)</code></td><td>A difference of 1 is nearly always a trailing space</td></tr>
-    <tr><td>Same type?</td><td><code>=ISTEXT(A2)&amp;" / "&amp;ISTEXT(B2)</code></td><td>One TRUE and one FALSE is the number-as-text case</td></tr>
-    <tr><td>What is the last character?</td><td><code>=CODE(RIGHT(A2,1))</code></td><td>32 is a space, 160 is a non-breaking space, 10 is a line feed</td></tr>
-    <tr><td>Is it in the list at all?</td><td><code>=COUNTIF(range,A2)</code></td><td>0 confirms not found, more than 1 means duplicates</td></tr>
+    <tr><th>Test</th><th>Formula</th><th>Что это вам говорит</th></tr>
+    <tr><td>Они совпадают?</td><td><code>=A2=B2</code></td><td>FALSE для идентичного текста означает скрытые символы или тип.</td></tr>
+    <tr><td>Такой же длины?</td><td><code>=LEN(A2)&amp;" / "&amp;LEN(B2)</code></td><td>Разница в 1 почти всегда является конечным пробелом.</td></tr>
+    <tr><td>Тот же тип?</td><td><code>=ISTEXT(A2)&amp;" / "&amp;ISTEXT(B2)</code></td><td>Одно ИСТИНА и одно ЛОЖЬ — это случай числа как текста.</td></tr>
+    <tr><td>Какой последний персонаж?</td><td><code>=CODE(RIGHT(A2,1))</code></td><td>32 — пробел, 160 — неразрывный пробел, 10 — перевод строки.</td></tr>
+    <tr><td>Он вообще есть в списке?</td><td><code>=COUNTIF(range,A2)</code></td><td>0 подтверждает, что не найдено, более 1 означает дубликаты.</td></tr>
   </table>
 
-  <h2>The six causes</h2>
-  <h3>1. Trailing or leading spaces</h3>
-  <p>By far the most common. <code>"North "</code> is not <code>"North"</code>. <code>LEN</code> shows 6 against 5. Fix the data with <code>TRIM</code> in a helper column, then paste values over the original. Fixing it in the formula, <code>=XLOOKUP(TRIM(A2),...)</code>, only cleans one side and leaves the underlying data still dirty for the next person.</p>
+  <h2>Шесть причин</h2>
+  <h3>1. Конечные или ведущие пробелы</h3>
+  <p>Безусловно, самый распространенный.  <code>"North "</code>  не  <code>"North"</code>. <code>LEN</code>  показывает 6 против 5. Зафиксируйте данные с помощью  <code>TRIM</code>  во вспомогательном столбце, затем вставьте значения поверх оригинала. Зафиксировав это в формуле,  <code>=XLOOKUP(TRIM(A2),...)</code>, очищает только одну сторону и оставляет базовые данные грязными для следующего человека.</p>
 
-  <h3>2. Non-breaking spaces from a web page or PDF</h3>
-  <p>Character 160 looks exactly like a space and <code>TRIM</code> does not remove it, because <code>TRIM</code> only handles character 32. This is the one that makes people think Excel is broken.</p>
+  <h3>2. Неразрывные пробелы с веб-страницы или PDF-файла.</h3>
+  <p>Символ 160 выглядит точно так же, как пробел и  <code>TRIM</code>  не удаляет его, потому что  <code>TRIM</code>  обрабатывает только символ 32. Именно из-за этого люди думают, что Excel не работает.</p>
   <pre><code>=TRIM(SUBSTITUTE(A2, CHAR(160), " "))</code></pre>
-  <p>Run that on both sides of the lookup whenever the data came from a browser, an email or a PDF.</p>
+  <p>Запускайте это с обеих сторон поиска всякий раз, когда данные поступают из браузера, электронной почты или PDF-файла.</p>
 
-  <h3>3. Numbers stored as text</h3>
-  <p>The lookup key is <code>1024</code> as a number and the table holds <code>"1024"</code> as text, or the reverse. They are not equal and never will be. The tell is alignment: text left-aligns, numbers right-align, in a column you have not manually aligned. There is often a small green triangle too.</p>
-  <p>Convert one side properly: select the column, Data, Text to Columns, then Finish. That re-parses every cell with no other change. Or multiply by 1 in a helper column. To make a formula survive both, try each in turn:</p>
+  <h3>3. Числа, хранящиеся в виде текста</h3>
+  <p>Ключ поиска  <code>1024</code>  как число, и таблица сохраняется  <code>"1024"</code>  как текст или наоборот. Они не равны и никогда не будут. Суть в выравнивании: текст выравнивается по левому краю, числа — по правому, в столбце, который вы не выравнивали вручную. Часто также присутствует небольшой зеленый треугольник.</p>
+  <p>Правильно преобразуйте одну сторону: выберите столбец, «Данные», «Текст в столбцы», затем «Готово». Это повторно анализирует каждую ячейку без каких-либо других изменений. Или умножьте на 1 во вспомогательном столбце. Чтобы формула выжила в обоих случаях, попробуйте каждую по очереди:</p>
   <pre><code>=IFERROR(INDEX(Names,MATCH(A2,Ids,0)),
          INDEX(Names,MATCH(TEXT(A2,"0"),Ids,0)))</code></pre>
 
-  <h3>4. The lookup range does not include the key column</h3>
-  <p>A <code>VLOOKUP</code> searches only the <strong>first</strong> column of the range it is given. If your key is in column C and the range starts at B, the key column is not being searched. <code>XLOOKUP</code> and <code>INDEX MATCH</code> do not have this problem because the lookup array is named separately, which is one of the strongest arguments for using them.</p>
+  <h3>4. Диапазон поиска не включает ключевой столбец.</h3>
+  <p>A <code>VLOOKUP</code>  ищет только  <strong>first</strong>  столбец заданного диапазона. Если ваш ключ находится в столбце C, а диапазон начинается с B, поиск в ключевом столбце не выполняется.  <code>XLOOKUP</code> and <code>INDEX MATCH</code>  у вас нет этой проблемы, поскольку массив поиска называется отдельно, что является одним из самых веских аргументов в пользу их использования.</p>
 
-  <h3>5. Approximate match on an unsorted list</h3>
-  <p>The fourth argument of <code>VLOOKUP</code> defaults to <code>TRUE</code>, which is approximate match, and approximate match on an unsorted list returns wrong answers and occasional <code>#N/A</code> in no predictable pattern. Always type the <code>FALSE</code>:</p>
+  <h3>5. Примерное совпадение в несортированном списке.</h3>
+  <p>Четвертый аргумент  <code>VLOOKUP</code>  по умолчанию  <code>TRUE</code>, что является приблизительным совпадением, а приблизительное совпадение в неотсортированном списке возвращает неправильные ответы и случайные  <code>#N/A</code>  по непредсказуемой схеме. Всегда вводите  <code>FALSE</code>:</p>
   <pre><code>=VLOOKUP(A2, Table, 3, FALSE)</code></pre>
-  <p>The equivalent slip in <code>XLOOKUP</code> is a fifth argument of <code>-1</code> or <code>1</code> where you wanted <code>0</code>.</p>
+  <p>Эквивалентное внесение  <code>XLOOKUP</code>  является пятым аргументом  <code>-1</code> or <code>1</code>  где ты хотел  <code>0</code>.</p>
 
-  <h3>6. Relative references sliding as you fill down</h3>
-  <p>The formula in row 2 looks at <code>$B$2:$D$400</code>, but the copy in row 300 is looking at <code>B300:D698</code> because the range was written without dollar signs. Rows at the top find their values and rows further down return <code>#N/A</code>, which is a distinctive pattern: the errors all appear together at the bottom.</p>
-  <p>Lock the range with F4, or convert the source to a table and use the table name, which never slides.</p>
+  <h3>6. Относительные ссылки перемещаются по мере заполнения.</h3>
+  <p>Формула во второй строке рассматривает  <code>$B$2:$D$400</code>, но копия в строке 300 смотрит на  <code>B300:D698</code>  потому что диапазон был написан без знаков доллара. Строки вверху находят свои значения, а строки ниже возвращаются.  <code>#N/A</code>, что является отличительной особенностью: все ошибки появляются вместе внизу.</p>
+  <p>Заблокируйте диапазон клавишей F4 или преобразуйте источник в таблицу и используйте имя таблицы, которое никогда не скользит.</p>
 
-  <div class="note"><strong>The pattern of the errors is a clue.</strong> All rows failing means the type or the range is wrong. Scattered failures mean dirty data on those keys. Failures only at the bottom mean an unlocked range. Failures only for new values mean the value genuinely is not there, which is a finding rather than a bug.</div>
+  <div class="note"><strong>Характер ошибок является подсказкой.</strong>  Ошибка всех строк означает, что тип или диапазон неправильный. Разрозненные сбои означают, что данные на этих ключах загрязнены. Провалы только внизу означают разблокированный диапазон. Сбои только для новых значений означают, что значения действительно нет, и это скорее обнаружение, чем ошибка.</div>
 
-  <h2>When #N/A is the correct answer</h2>
-  <p>Sometimes the key really is missing: a new customer, a discontinued product, a typo in the source system. That is information, and it should be reported rather than hidden. Handle it explicitly:</p>
+  <h2>Когда #Н/Д является правильным ответом</h2>
+  <p>Иногда ключ действительно отсутствует: новый клиент, снятый с производства продукт, опечатка в исходной системе. Это информация, и ее следует сообщать, а не скрывать. Обработайте это явно:</p>
   <pre><code>=XLOOKUP(A2, Ids, Names, "NOT IN MASTER")</code></pre>
-  <p>A visible label can be filtered, counted and sent back to whoever owns the data. A zero cannot, and it will be summed into a total by somebody who does not know it was a placeholder. That distinction is the whole argument in <a href="../excel-iferror/">IFERROR</a>.</p>
+  <p>Видимую метку можно отфильтровать, подсчитать и отправить обратно тому, кто владеет данными. Ноль не может быть суммирован в общую сумму кем-то, кто не знает, что это был заполнитель. В этом различении и состоит весь аргумент в  <a href="../excel-iferror/">IFERROR</a>.</p>
 
-  <h2>How to apply this to your own work</h2>
+  <h2>Как применить это в своей работе</h2>
   <ol>
-    <li>Put the equality test in a spare cell before you change anything. It saves the twenty minutes people spend rewriting a formula that was already correct.</li>
-    <li>Clean keys on import, not in formulas. <code>TRIM</code> plus the <code>CHAR(160)</code> substitution, once, on the way in.</li>
-    <li>Standardise key types at the source. Decide whether IDs are text or numbers and make every table agree.</li>
-    <li>Convert lookup sources to tables so ranges cannot slide.</li>
-    <li>Count your not-found rows and report the count. It is a data quality measure that somebody upstream can act on.</li>
+    <li>Прежде чем что-либо менять, поместите тест на равенство в запасную ячейку. Это экономит двадцать минут, которые люди тратят на переписывание уже правильной формулы.</li>
+    <li>Чистые ключи при импорте, а не в формулах.  <code>TRIM</code>  плюс  <code>CHAR(160)</code>  подмена, один раз, по пути.</li>
+    <li>Стандартизируйте типы ключей в источнике. Решите, являются ли идентификаторы текстом или числами, и согласуйте все таблицы.</li>
+    <li>Преобразуйте источники поиска в таблицы, чтобы диапазоны не могли смещаться.</li>
+    <li>Подсчитайте ненайденные строки и сообщите об этом. Это показатель качества данных, на основе которого может действовать кто-то из вышестоящих органов.</li>
   </ol>
 
-  <h2>The one habit to keep</h2>
-  <p>Never wrap an error you have not explained. <code>IFERROR</code> is a way of saying "I know why this fails and what should happen instead". Used before you know, it is a way of turning a question into a number.</p>
+  <h2>Единственная привычка, которую нужно сохранить</h2>
+  <p>Никогда не переносите ошибку, которую вы не объяснили.  <code>IFERROR</code>  это способ сказать: «Я знаю, почему это не удается и что должно произойти вместо этого». Используемый до того, как вы узнаете, это способ превратить вопрос в число.</p>
 
-  <p>How many of the zeros in your last report were really not-founds?</p>
+  <p>Сколько нулей в вашем последнем отчете действительно не были найдены?</p>
 
-  <div class="note"><strong>Every test here was run before it was published.</strong> CHAR(160) is the non-breaking space that TRIM leaves in place; CODE on the last character is what identifies it.</div>
+  <div class="note"><strong>Каждый тест здесь был проведен до его публикации.</strong>  CHAR(160) — это неразрывный пробел, который TRIM оставляет на месте; КОД последнего символа - это то, что его идентифицирует.</div>
 
   <div class="book">
-    <strong>#N/A means not found. It almost never means missing.</strong>
-    <p><em>Excel for Analysts</em> is 378 pages that read every formula and dialog one at a time, so the workbook stops being a place where numbers appear and becomes one you can check.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-lookup-returns-na'})">Excel for Analysts, $19 &rarr;</a>
+    <strong>#Н/Д означает, что не найдено. Это почти никогда не означает пропажи.</strong>
+    <p><em>Excel для аналитиков</em>  состоит из 378 страниц, на которых каждая формула и диалог читаются по одному, поэтому книга перестает быть местом, где появляются числа, и становится тем местом, которое вы можете проверить.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-lookup-returns-na'})">Excel для аналитиков, 19 долларов США →</a>
   </div>
 
   <div class="cta">
-    <strong>Diagnose the cause, do not wrap it in IFERROR.</strong>
-    <p style="margin:6px 0 0"><a href="../excel-iferror/">IFERROR</a> explains when hiding an error is right and when it is a cover-up, and <a href="../excel-clean-messy-data/">cleaning messy data</a> handles the invisible characters behind most of these. The <a href="../../excel/">Excel Kit</a> has the drills.</p>
-    <a class="btn" href="../excel-clean-messy-data/">Read Cleaning Messy Data &rarr;</a>
+    <strong>Выявите причину, не заключайте ее в ЕСЛИОШИБКА.</strong>
+    <p style="margin:6px 0 0"><a href="../excel-iferror/">IFERROR</a>  объясняет, когда правильно скрывать ошибку, а когда это сокрытие, и  <a href="../excel-clean-messy-data/">очистка запутанных данных</a>  обрабатывает невидимые символы, стоящие за большинством из них.  <a href="../../excel/">Excel комплект</a>  есть дрели.</p>
+    <a class="btn" href="../excel-clean-messy-data/">Читать Очистка запутанных данных →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../vlookup-vs-xlookup/">VLOOKUP vs XLOOKUP</a> &middot; <a href="../excel-index-match/">INDEX MATCH</a> &middot; <a href="../excel-iferror/">IFERROR</a> &middot; <a href="../excel-clean-messy-data/">Clean Messy Data</a> &middot; <a href="../excel-csv-import-leading-zeros/">Leading Zeros on Import</a> &middot; <a href="../../excel/">Excel Kit</a>
-    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../vlookup-vs-xlookup/">ВПР против XLOOKUP</a> &middot; <a href="../excel-index-match/">ИНДЕКСНОЕ СОВПАДЕНИЕ</a> &middot; <a href="../excel-iferror/">IFERROR</a> &middot; <a href="../excel-clean-messy-data/">Очистите беспорядочные данные</a> &middot; <a href="../excel-csv-import-leading-zeros/">ведущие нули при импорте</a> &middot; <a href="../../excel/">Excel комплект</a>
+    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

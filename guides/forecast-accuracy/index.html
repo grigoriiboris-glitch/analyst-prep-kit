@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Forecast Accuracy: MAE, RMSE, MAPE and the Month That Broke One of Them — Analyst Prep Kit</title>
-<meta name="description" content="Five measures on the same forecast. MAPE returns infinity because one month is zero, RMSE is nearly twice MAE, and MASE says the plan beat the naive baseline by half.">
+<title>Точность прогноза: MAE, RMSE, MAPE и месяц, который сломал один из них — комплект для подготовки аналитика</title>
+<meta name="description" content="Пять мер по одному и тому же прогнозу. MAPE возвращает бесконечность, потому что один месяц равен нулю, RMSE почти в два раза больше MAE, и MASE сообщает, что план вдвое превосходит наивный базовый уровень.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/forecast-accuracy/">
-<meta property="og:title" content="Forecast Accuracy: MAE, RMSE, MAPE and the Month That Broke One of Them">
-<meta property="og:description" content="Five measures on the same forecast. MAPE returns infinity because one month is zero, RMSE is nearly twice MAE, and MASE says the plan beat the naive baseline by half.">
+<meta property="og:title" content="Точность прогноза: MAE, RMSE, MAPE и месяц, который сломал один из них">
+<meta property="og:description" content="Пять мер по одному и тому же прогнозу. MAPE возвращает бесконечность, потому что один месяц равен нулю, RMSE почти в два раза больше MAE, и MASE сообщает, что план вдвое превосходит наивный базовый уровень.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/forecast-accuracy.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/forecast-accuracy/">
@@ -134,18 +134,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../forecasting/">Forecasting Kit</a> · <a href="../">All guides</a></p>
-  <h1>Forecast Accuracy: MAE, RMSE, MAPE and the Month That Broke One of Them</h1>
-  <p class="meta">Five ways to score the same forecast, and which one to report · Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-09">August 9, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../forecasting/">Комплект прогнозирования</a> · <a href="../">Все руководства</a></p>
+  <h1>Точность прогноза: MAE, RMSE, MAPE и месяц, который сломал один из них</h1>
+  <p class="meta">Пять способов получить одинаковый прогноз и о каком из них сообщить · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-09">9 августа 2026 г.</time></p>
 
-  <p>By the end of this page you can score a forecast five different ways, say what each measure rewards and punishes, and answer the only question that makes any of them meaningful: is this forecast better than doing nothing. On the five months below, the same forecast scores an average miss of 600, a root-mean-square miss of 1,084, and a percentage error of infinity.</p>
+  <p>К концу этой страницы вы сможете оценить прогноз пятью различными способами, сказать, что каждый из показателей вознаграждает и наказывает, и ответить на единственный вопрос, который делает любой из них значимым: лучше ли этот прогноз, чем ничего не делать. В течение пяти месяцев, указанных ниже, тот же прогноз имеет среднюю ошибку 600, среднеквадратическую ошибку 1084 и процентную ошибку, равную бесконечности.</p>
 
-  <p>Here is what to actually do today. Take your current forecast and compare it to the laziest possible alternative: last period's actual, repeated. If your forecast is not beating that, the sophistication is not earning its keep, and that comparison takes about two minutes to run.</p>
+  <p>Вот чем на самом деле заняться сегодня. Возьмите свой текущий прогноз и сравните его с самой ленивой альтернативой: фактическим, повторяющимся за последний период. Если ваш прогноз не превосходит этот показатель, сложность не оправдывает себя, и такое сравнение занимает около двух минут.</p>
 
-  <p>The short version: measure the error each period, then decide how to average them. Averaging the sizes gives MAE. Averaging the squares and taking the root gives RMSE, which punishes one big miss much harder. Averaging the percentages gives MAPE, which breaks whenever an actual is zero.</p>
+  <p>Краткая версия: измеряйте ошибки каждого периода, а затем решайте, как их усреднить. Усреднение размеров дает МАЭ. Усреднение квадратов и извлечение корня дает RMSE, что гораздо сложнее наказывает за один большой промах. Усреднение процентов дает MAPE, который прерывается всякий раз, когда фактическое значение равно нулю.</p>
 
-  <p>The difference between the first two is the whole reason both exist, and it is easier to see than to define, so it gets the picture.</p>
+  <p>Разница между первыми двумя — вот основная причина существования обоих, и ее легче увидеть, чем определить, так что картина становится понятной.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 236" role="img" aria-labelledby="faTitle faDesc" xmlns="http://www.w3.org/2000/svg">
@@ -172,33 +172,33 @@
         <line x1="110" y1="215" x2="620" y2="215" stroke="#A1A1AA" stroke-width="1.5"/>
       </g>
     </svg>
-    <figcaption>Two forecasts, both off by 400 in total across four periods. On the left it is four misses of 100 each; on the right it is one miss of 400 and three perfect periods. The bars are the same length, so MAE scores them identically at 100. The squares are what RMSE averages, and the one on the right is four times the area of the four on the left put together, so RMSE scores them 100 against 200.</figcaption>
+    <figcaption>Два прогноза, оба с отклонением на 400 в общей сложности за четыре периода. Слева — четыре промаха по 100 каждый; справа — один промах из 400 и три идеальных периода. Столбцы имеют одинаковую длину, поэтому MAE оценивает их одинаково — 100. Квадраты — это среднее значение RMSE, а квадрат справа в четыре раза превышает площадь четырех левых, вместе взятых, поэтому RMSE оценивает их 100 против 200.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>What you'll learn</strong>
+    <strong>Что вы узнаете</strong>
     <ol>
-      <li>The error, and the one that cancels itself out</li>
-      <li>MAE: the average miss, in your own units</li>
-      <li>RMSE: the one that hates a single big miss</li>
-      <li>MAPE, and the month that returns infinity</li>
-      <li>WAPE and sMAPE, the two usual repairs</li>
-      <li>MASE: better than doing nothing, or not</li>
-      <li>Which one to report, and to whom</li>
-      <li>The full before and after</li>
-      <li>Edge cases that catch people out</li>
-      <li>Why this works</li>
-      <li>Using this on your own work</li>
-      <li>The whole thing on one screen</li>
+      <li>Ошибка, и та, которая отменяет сама себя</li>
+      <li>MAE: средний промах, в ваших единицах.</li>
+      <li>RMSE: тот, кто ненавидит один большой промах</li>
+      <li>MAPE и месяц, возвращающий бесконечность</li>
+      <li>WAPE и sMAPE, два обычных ремонта</li>
+      <li>MASE: лучше, чем ничего не делать, или нет</li>
+      <li>Кому и кому сообщить</li>
+      <li>Полное до и после</li>
+      <li>Крайние случаи, которые застают людей врасплох</li>
+      <li>Почему это работает</li>
+      <li>Использование этого в своей работе</li>
+      <li>Все на одном экране</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Every number on this page is real.</strong> The same order table used across these guides, aggregated to five months. There are genuinely no April orders, and that is not a contrivance: it is the ordinary case of a period with no activity, and section four is about what it does. The companion page on building the forecast in the first place is <a href="../moving-averages/">moving averages</a>.</div>
+  <div class="note"><strong>Каждое число на этой странице является реальным.</strong>  В этих руководствах используется та же таблица заказов, агрегированная по пяти месяцам. Апрельских приказов на самом деле нет, и это не выдумка: это обычный случай периода бездействия, и четвертый раздел посвящен тому, что он делает. Сопутствующая страница по построению прогноза в первую очередь:  <a href="../moving-averages/">Скользящие средние</a>.</div>
 
-  <p>Here is the setup. The plan for the year was a flat 2,400 a month, set in advance. Here is what actually happened.</p>
+  <p>Вот установка. План на год составлял фиксированные 2400 в месяц, установленные заранее. Вот что произошло на самом деле.</p>
 
   <table>
-    <tr><th>Month</th><th>Actual</th><th>Forecast</th><th>Error (actual − forecast)</th><th>Absolute error</th></tr>
+    <tr><th>Month</th><th>Actual</th><th>Forecast</th><th>Ошибка (фактическая − прогноз)</th><th>Абсолютная ошибка</th></tr>
     <tr><td>January</td><td>2,630</td><td>2,400</td><td>+230</td><td>230</td></tr>
     <tr><td>February</td><td>2,245</td><td>2,400</td><td>−155</td><td>155</td></tr>
     <tr><td>March</td><td>2,585</td><td>2,400</td><td>+185</td><td>185</td></tr>
@@ -207,27 +207,27 @@
   </table>
 
   <div class="step">
-    <h2>1. The error, and the one that cancels itself out</h2>
+    <h2>1. Ошибка, и та, которая самоустраняется</h2>
 
-    <p>Before the arithmetic: add up the five errors in that last-but-one column, with their signs. Predict roughly what you will get, before reading on.</p>
+    <p>Перед арифметикой: сложите пять ошибок в предпоследнем столбце с их знаками. Прежде чем читать дальше, примерно спрогнозируйте, что вы получите.</p>
 
-    <p>You get −2,110, which divided by five is −422. That is the <strong>bias</strong>, or mean error, and it is a genuinely useful number that answers a different question from the rest of this page. It says whether you are systematically forecasting too high or too low. Ours is negative, so the plan ran above reality on average, mostly because of April.</p>
+    <p>Вы получаете -2110, которое, разделенное на пять, равно -422. Это  <strong>bias</strong>, или означает ошибку, и это действительно полезное число, которое отвечает на другой вопрос, отличный от остальной части этой страницы. В нем говорится, делаете ли вы систематические прогнозы слишком высокими или слишком низкими. У нас отрицательный результат, поэтому план в среднем оказался выше реальности, в основном из-за апреля.</p>
 
-    <p>What it cannot do is measure accuracy, because positive and negative errors cancel. A forecast that is 5,000 too high one month and 5,000 too low the next has a bias of zero and is not accurate. Every other measure on this page exists because of that cancellation, and each one deals with it differently: MAE takes the absolute value, RMSE squares.</p>
+    <p>Чего он не может сделать, так это измерить точность, поскольку положительные и отрицательные ошибки компенсируются. Прогноз, который на 5000 слишком высок в одном месяце и на 5000 слишком низок в следующем, имеет нулевое смещение и не является точным. Все остальные меры на этой странице существуют из-за этой отмены, и каждая из них обрабатывает ее по-своему: MAE принимает абсолютное значение, квадраты RMSE.</p>
 
-    <p>Report bias alongside accuracy, never instead of it. A forecast with low error and no bias is good. Low error with a consistent bias means you have a correctable offset, which is the cheapest improvement available to any forecast.</p>
+    <p>Сообщайте о предвзятости наряду с точностью, а не вместо нее. Прогноз с низкой ошибкой и отсутствием смещения – это хорошо. Низкая ошибка с постоянным смещением означает, что у вас есть корректируемое смещение, что является самым дешевым улучшением, доступным для любого прогноза.</p>
   </div>
 
   <div class="step">
-    <h2>2. MAE: the average miss, in your own units</h2>
+    <h2>2. МАЭ: средний промах, в собственных единицах.</h2>
 
-    <p>Before the calculation: take the five absolute errors, 230, 155, 185, 2,400 and 30, and average them in your head to the nearest hundred.</p>
+    <p>Перед расчетом: возьмите пять абсолютных ошибок: 230, 155, 185, 2400 и 30 и усредните их в уме с точностью до сотни.</p>
 
-    <p>(230 + 155 + 185 + 2,400 + 30) ÷ 5 = 3,000 ÷ 5 = <strong>600</strong>. The <strong>mean absolute error</strong> is the average size of a miss, ignoring direction. It is in dollars, so it can be read straight out: this forecast is off by about 600 a month.</p>
+    <p>(230 + 155 + 185 + 2,400 + 30) ÷ 5 = 3,000 ÷ 5 = <strong>600</strong>.  <strong>средняя абсолютная ошибка</strong>  — средний размер промаха без учета направления. Это в долларах, поэтому можно сразу прочитать: этот прогноз отличается примерно на 600 в месяц.</p>
 
-    <p>Say out loud what is misleading about that sentence, given the table above it. The forecast was off by 230, 155, 185 and 30 in four of the five months, and by 2,400 in one. Nothing was "off by 600" in any month. The average is being dragged by one period, exactly as the <a href="../mean-vs-median/">mean is dragged by an outlier</a>, and for the same reason.</p>
+    <p>Скажите вслух, что вводит в заблуждение в этом предложении, учитывая таблицу над ним. Прогноз отклонился на 230, 155, 185 и 30 за четыре из пяти месяцев и на 2400 за один. Ни в одном месяце ничего не было «отклонено на 600». Среднее значение затягивается на один период, точно так же, как  <a href="../mean-vs-median/">среднее значение перетаскивается выбросом</a>, и по той же причине.</p>
 
-    <p>MAE's advantages are real anyway. It is in the units people care about, every period counts equally, and it is the easiest measure to explain to somebody who does not want a statistics lesson. Its disadvantage is that you cannot compare it across products, regions or time periods with different scales. An MAE of 600 is excellent on a million-dollar line and catastrophic on a two-thousand-dollar one.</p>
+    <p>В любом случае преимущества MAE реальны. Это в единицах, которые волнуют людей, каждый период имеет одинаковое значение, и это самый простой показатель, который можно объяснить тому, кто не хочет изучать статистику. Его недостатком является то, что вы не можете сравнивать его по продуктам, регионам или периодам времени в разных масштабах. MAE, равный 600, превосходен для линии на миллион долларов и катастрофичен для линии на две тысячи долларов.</p>
 
     <pre><code>import numpy as np
 actual   = np.array([2630, 2245, 2585, 0, 2430], float)
@@ -239,65 +239,65 @@ bias = error.mean()                  # -422.0</code></pre>
   </div>
 
   <div class="step">
-    <h2>3. RMSE: the one that hates a single big miss</h2>
+    <h2>3. RMSE: тот, кто ненавидит один большой промах</h2>
 
-    <p>Before the number: same five errors. Square each, average the squares, take the square root. Predict whether the answer is above or below 600.</p>
+    <p>Перед номером: те же пять ошибок. Возведите каждое в квадрат, усредните квадраты, извлеките квадратный корень. Предскажите, будет ли ответ выше или ниже 600.</p>
 
-    <p>Well above: <strong>1,083.70</strong>. Squaring makes a 2,400 miss 256 times more expensive than a 150 miss, rather than 16 times, so the one bad month dominates completely.</p>
+    <p>Ну выше:  <strong>1,083.70</strong>. При возведении в квадрат промах в 2400 раз обходится в 256 раз дороже, чем в 150, а не в 16 раз, так что один неудачный месяц полностью доминирует.</p>
 
     <pre><code>rmse = np.sqrt((error ** 2).mean())  # 1083.70</code></pre>
 
-    <p>The picture at the top of this page is that fact with the numbers removed. Two forecasts, each 400 off in total across four periods. Four misses of 100 give MAE 100 and RMSE 100. One miss of 400 gives MAE 100 and RMSE 200. Identical by one measure, double by the other, and the difference is entirely about how the error was distributed.</p>
+    <p>На картинке вверху этой страницы изображен этот факт, за исключением удаленных цифр. Два прогноза, каждый с отклонением 400 в общей сложности за четыре периода. Четыре промаха из 100 дают MAE 100 и RMSE 100. Один промах из 400 дает MAE 100 и RMSE 200. По одному показателю они идентичны, по другому удваиваются, а разница полностью заключается в том, как распределялась ошибка.</p>
 
     <table>
-      <tr><th>Error pattern</th><th>Total error</th><th>MAE</th><th>RMSE</th></tr>
+      <tr><th>Шаблон ошибки</th><th>Общая ошибка</th><th>MAE</th><th>RMSE</th></tr>
       <tr><td>100, 100, 100, 100</td><td>400</td><td>100</td><td>100</td></tr>
       <tr><td>0, 0, 0, 400</td><td>400</td><td>100</td><td>200</td></tr>
     </table>
 
-    <p>Which behaviour is correct depends entirely on what a miss costs you. If being 400 wrong once is much worse than being 100 wrong four times, because it empties a warehouse or blows a budget, then RMSE is measuring what you care about and you should use it. If a miss costs proportionally, so four small misses hurt exactly as much as one big one, MAE is the honest measure and RMSE will make you over-fit to your worst month.</p>
+    <p>Какое поведение является правильным, полностью зависит от того, во что вам обойдется промах. Если один раз ошибиться на 400 гораздо хуже, чем ошибиться на 100 четыре раза, потому что это опустошит склад или уничтожит бюджет, то RMSE измеряет то, что вас волнует, и вам следует его использовать. Если стоимость промаха пропорциональна, поэтому четыре маленьких промаха причиняют ровно столько же вреда, сколько один большой, MAE — это честная мера, а RMSE заставит вас переоценить худший месяц.</p>
 
-    <p>RMSE is always at least as large as MAE, and the gap between them tells you how uneven your errors are. Ours are 600 and 1,083.70, a ratio of 1.8, which is a loud signal that one period is doing most of the damage. When MAE and RMSE are close, your errors are evenly spread.</p>
+    <p>RMSE всегда не меньше MAE, и разница между ними говорит о том, насколько неравномерны ваши ошибки. У нас 600 и 1083,70, соотношение 1,8, что является громким сигналом о том, что один период наносит наибольший ущерб. Когда MAE и RMSE близки, ваши ошибки распределяются равномерно.</p>
   </div>
 
   <div class="step">
-    <h2>4. MAPE, and the month that returns infinity</h2>
+    <h2>4. MAPE и месяц, возвращающий бесконечность</h2>
 
-    <p>Before the problem: MAPE divides each error by the actual value to get a percentage, then averages those. Look at the April row and say what happens, before reading on.</p>
+    <p>Перед проблемой: MAPE делит каждую ошибку на фактическое значение, чтобы получить процент, а затем усредняет их. Посмотрите на апрельский ряд и скажите, что произошло, прежде чем читать дальше.</p>
 
-    <p>April's actual is zero. 2,400 divided by 0 is not a number, so the average of the five percentages is not a number either. <strong>MAPE is infinite</strong>, and depending on your tool you will get <code>inf</code>, a division-by-zero error, or, worst of all, a silently skipped row and a plausible-looking answer.</p>
+    <p>Фактический показатель за апрель равен нулю. 2400, разделенное на 0, не является числом, поэтому среднее значение пяти процентов также не является числом.  <strong>MAPE бесконечен</strong>, и в зависимости от вашего инструмента вы получите  <code>inf</code>, ошибка деления на ноль или, что хуже всего, молча пропущенная строка и правдоподобный ответ.</p>
 
     <pre><code>ape = np.abs(error / actual)
 # array([0.0875, 0.0690, 0.0716, inf, 0.0123])
 ape.mean()     # inf</code></pre>
 
-    <p>This is not an edge case you can dismiss. Any period with no activity gives an actual of zero: a closed store, a product before launch, a channel that went quiet, a week the tracking broke. <strong>MAPE is undefined for exactly the periods you most want to understand.</strong></p>
+    <p>Это не крайний случай, который можно игнорировать. Любой период без активности дает фактическое нулевое значение: закрытый магазин, товар до запуска, канал замолчал, неделю трекинг сломался.  <strong>MAPE не определен именно для тех периодов, которые вам больше всего нужны.</strong></p>
 
-    <p>Excluding April, MAPE is 6.01 percent, and the four monthly percentage errors are 8.75, 6.90, 7.16 and 1.23. That number is genuinely informative about the four normal months, and reporting it as "MAPE 6 percent" without saying that a month was dropped is the kind of omission that gets found later.</p>
+    <p>Без учета апреля MAPE составляет 6,01 процента, а четыре месячные процентные ошибки составляют 8,75, 6,90, 7,16 и 1,23. Это число действительно информативно о четырех обычных месяцах, и указать его как «MAPE 6 процентов», не говоря уже о том, что месяц был исключен, — это своего рода упущение, которое обнаруживается позже.</p>
 
-    <p>MAPE has a second, quieter problem: it is asymmetric. Forecasting 200 when the actual is 100 gives an error of 100 percent. Forecasting 100 when the actual is 200 gives 50 percent. The same absolute miss, scored twice as harshly in one direction, which means optimizing for MAPE quietly pushes your forecasts low.</p>
+    <p>У MAPE есть вторая, более тихая проблема: он асимметричен. Прогнозирование значения 200, когда фактическое значение равно 100, дает ошибку в 100 процентов. Прогнозирование 100, когда фактическое значение равно 200, дает 50 процентов. Тот же самый абсолютный промах, засчитанный вдвое сильнее в одном направлении, что означает, что оптимизация для MAPE незаметно снижает ваши прогнозы.</p>
 
-    <p>None of that makes MAPE useless. It is unitless, so it compares across products and regions, and non-technical readers understand a percentage immediately. Use it when your actuals are comfortably away from zero, and reach for section five when they are not.</p>
+    <p>Ничто из этого не делает MAPE бесполезным. Он не имеет единиц измерения, поэтому сравнивается по продуктам и регионам, и читатели, не разбирающиеся в технических вопросах, сразу понимают процентное соотношение. Используйте его, когда ваши фактические значения достаточно далеки от нуля, и переходите к пятому разделу, когда это не так.</p>
   </div>
 
   <div class="step">
-    <h2>5. WAPE and sMAPE, the two usual repairs</h2>
+    <h2>5. WAPE и sMAPE, два обычных ремонта</h2>
 
-    <p>Before the fix: the problem with MAPE is dividing by each individual actual. Say what you would divide by instead, before reading on.</p>
+    <p>До исправления: проблема с MAPE при делении по каждому отдельному факту. Прежде чем читать дальше, скажите, на что вы бы разделили.</p>
 
-    <p>The total. <strong>WAPE</strong>, the weighted absolute percentage error, adds up all the absolute errors and divides by the sum of the actuals, dividing once instead of five times.</p>
+    <p>Итого.  <strong>WAPE</strong>, взвешенная абсолютная процентная ошибка, складывает все абсолютные ошибки и делится на сумму фактических значений, деля один раз вместо пяти.</p>
 
     <pre><code>wape = np.abs(error).sum() / actual.sum()
 # 3000 / 9890 = 0.3033  ->  30.33%</code></pre>
 
-    <p>April no longer breaks anything, because its zero contributes zero to the denominator rather than being a denominator of its own. And the result is naturally weighted by size, so a miss in a big month counts more than a miss in a small one, which is usually what you want. WAPE is my default whenever a percentage is required.</p>
+    <p>Апрель больше ничего не ломает, потому что его ноль вносит ноль в знаменатель, а не является собственным знаменателем. И результат, естественно, взвешивается по размеру, поэтому промах в большом месяце имеет большее значение, чем промах в маленьком, а это обычно то, что вам нужно. WAPE — это мой вариант по умолчанию, когда требуется процент.</p>
 
-    <p>Compare the two on the four normal months, where both work: MAPE 6.01 percent and WAPE 6.07 percent. Almost identical, because those months are all about the same size. The gap only opens when period sizes differ, and then WAPE is the one that reflects the business.</p>
+    <p>Сравните эти два показателя за четыре обычных месяца, где оба работают: MAPE 6,01 процента и WAPE 6,07 процента. Почти идентичны, потому что все эти месяцы примерно одинакового размера. Разрыв открывается только тогда, когда размеры периодов различаются, и тогда WAPE отражает бизнес.</p>
 
-    <p><strong>sMAPE</strong>, the symmetric version, divides by the average of the actual and the forecast rather than by the actual alone. That fixes the asymmetry and it does not really fix the zero problem: on our data it gives 44.90 percent, which is a strange-looking number driven by April scoring 200 percent, its maximum. sMAPE is common in forecasting competitions and I would not put it in front of a business reader without explaining it, which is usually a sign to use something else.</p>
+    <p><strong>sMAPE</strong>, симметричная версия, делит на среднее значение фактического и прогнозируемого значения, а не только на фактическое значение. Это исправляет асимметрию, но на самом деле не решает проблему нуля: по нашим данным это дает 44,90 процента, что является странным числом, обусловленным тем, что апрель набрал 200 процентов, свой максимум. sMAPE часто используется при прогнозировании соревнований, и я бы не стал предлагать его деловому читателю, не объяснив его, что обычно является знаком использования чего-то другого.</p>
 
     <table>
-      <tr><th>Measure</th><th>All five months</th><th>Four months, April removed</th></tr>
+      <tr><th>Measure</th><th>Все пять месяцев</th><th>Четыре месяца, апрель удален</th></tr>
       <tr><td>MAE</td><td>600.00</td><td>150.00</td></tr>
       <tr><td>RMSE</td><td>1,083.70</td><td>167.37</td></tr>
       <tr><td>Bias</td><td>−422.00</td><td>+72.50</td></tr>
@@ -306,60 +306,60 @@ ape.mean()     # inf</code></pre>
       <tr><td>sMAPE</td><td>44.90%</td><td>6.12%</td></tr>
     </table>
 
-    <p>Read the two columns side by side and the point of this page appears. Removing one month of five turns an average miss of 600 into 150, and turns a positive bias into a negative one. Neither column is dishonest. The one you publish is a decision about whether April is part of the thing you are forecasting, and it belongs in writing next to the number.</p>
+    <p>Прочтите две колонки рядом, и появится смысл этой страницы. Удаление одного месяца из пяти превращает среднее число промахов из 600 в 150, а положительную предвзятость превращает в отрицательную. Ни одна из колонок не является нечестной. То, что вы публикуете, — это решение о том, является ли апрель частью того, что вы прогнозируете, и оно должно быть записано рядом с числом.</p>
   </div>
 
   <div class="step">
-    <h2>6. MASE: better than doing nothing, or not</h2>
+    <h2>6. MASE: лучше, чем ничего не делать, или не делать</h2>
 
-    <p>Before the idea: an MAE of 600 is good or bad compared with what? Name the comparison you would want, before reading on.</p>
+    <p>Перед идеей: МАЭ 600 — это хорошо или плохо по сравнению с чем? Прежде чем читать дальше, назовите сравнение, которое вам нужно.</p>
 
-    <p>The comparison you want is against the effort-free alternative. The standard one is the <strong>naive forecast</strong>: predict that next month equals this month. Compute its error the same way, then divide.</p>
+    <p>Вам нужно сравнение с альтернативой, не требующей усилий. Стандартный – это  <strong>наивный прогноз</strong>: предсказать, что следующий месяц будет равен этому месяцу. Вычислите его ошибку таким же образом, затем разделите.</p>
 
     <pre><code>naive_mae = np.abs(np.diff(actual)).mean()   # 1435.0
 mase      = np.abs(error).mean() / naive_mae # 600 / 1435 = 0.418</code></pre>
 
-    <p>A <strong>MASE</strong> below 1 means you beat the naive forecast; above 1 means you did not. Ours is <strong>0.418</strong>, so the flat plan of 2,400 was about twice as accurate as guessing that each month repeats the last one. Here are both, scored the same way.</p>
+    <p>A <strong>MASE</strong>  значение ниже 1 означает, что вы превзошли наивный прогноз; выше 1 означает, что вы этого не сделали. Наш  <strong>0.418</strong>, поэтому фиксированный план в 2400 был примерно в два раза точнее, чем предположение о том, что каждый месяц повторяет предыдущий. Вот оба, забиты одинаково.</p>
 
     <table>
       <tr><th>Forecast</th><th>MAE</th><th>RMSE</th><th>Bias</th><th>MASE</th></tr>
-      <tr><td>Flat plan of 2,400</td><td>600.00</td><td>1,083.70</td><td>−422.00</td><td>0.418</td></tr>
-      <tr><td>Naive, last month repeated</td><td>1,174.00</td><td>1,604.24</td><td>−14.00</td><td>0.818</td></tr>
+      <tr><td>План квартиры 2400 кв.м.</td><td>600.00</td><td>1,083.70</td><td>−422.00</td><td>0.418</td></tr>
+      <tr><td>Наивный, в прошлом месяце повторился</td><td>1,174.00</td><td>1,604.24</td><td>−14.00</td><td>0.818</td></tr>
     </table>
 
-    <p>Both beat the in-sample naive baseline, and the flat plan beats it by more. Notice the naive forecast's bias of −14, nearly zero, which is a good illustration of why bias alone proves nothing: a forecast can be unbiased and still be wrong by 1,174 a month, because its errors cancel rather than being small.</p>
+    <p>Оба превосходят наивный базовый уровень в выборке, а плоский план превосходит его еще больше. Обратите внимание на смещение наивного прогноза, равное -14, почти нулевое, что является хорошей иллюстрацией того, почему само по себе смещение ничего не доказывает: прогноз может быть несмещенным и при этом ошибаться на 1174 раза в месяц, потому что его ошибки скорее компенсируются, чем малы.</p>
 
-    <p>MASE is unitless, works when actuals are zero, and is symmetric, which is why forecasting researchers reach for it. Its cost is that it is not intuitive: nobody in a business meeting knows what 0.418 means without the sentence attached. So report it as the sentence. "About twice as accurate as assuming next month repeats this one" is what it says.</p>
+    <p>MASE не имеет единиц измерения, работает, когда фактические значения равны нулю, и симметричен, поэтому исследователи прогнозирования обращаются к нему. Его цена в том, что он не интуитивен: никто на деловой встрече не знает, что означает 0,418, без приложенного предложения. Так что сообщите об этом как о приговоре. «Примерно в два раза точнее, чем если предположить, что в следующем месяце повторится то же самое», — вот что там говорится.</p>
 
-    <p>Now picture your own forecast, whatever produces it. If you scored it against last period repeated, would it win? That single comparison is worth more than any refinement to the model.</p>
+    <p>Теперь представьте себе свой собственный прогноз, независимо от того, что его дает. Если бы вы забили гол в повторе прошлого периода, выиграл бы он? Это единственное сравнение стоит больше, чем любое уточнение модели.</p>
   </div>
 
   <div class="step">
-    <h2>7. Which one to report, and to whom</h2>
+    <h2>7. Какому сообщать и кому</h2>
 
-    <p>Before the recommendation: you have six numbers describing one forecast. Decide which you would put on a slide, before reading mine.</p>
+    <p>Перед рекомендацией: у вас есть шесть цифр, описывающих один прогноз. Решите, что бы вы поместили на слайд, прежде чем читать мой.</p>
 
     <table>
-      <tr><th>Audience or purpose</th><th>Report</th><th>Because</th></tr>
-      <tr><td>An operations team acting on the number</td><td>MAE, plus bias</td><td>In their units, and it says which way you lean.</td></tr>
-      <tr><td>Big misses are disproportionately costly</td><td>RMSE</td><td>It prices one large miss the way the business does.</td></tr>
-      <tr><td>Comparing across products or regions</td><td>WAPE</td><td>Unitless, weighted by size, survives zeros.</td></tr>
-      <tr><td>Choosing between forecasting methods</td><td>MASE</td><td>Scale-free and anchored to the do-nothing baseline.</td></tr>
-      <tr><td>A non-technical summary</td><td>WAPE and bias, in words</td><td>"Off by about 6 percent, running slightly high."</td></tr>
+      <tr><th>Аудитория или цель</th><th>Report</th><th>Because</th></tr>
+      <tr><td>Оперативная группа, действующая по номеру</td><td>MAE, плюс смещение</td><td>В своих единицах, и это говорит о том, в какую сторону вы наклоняетесь.</td></tr>
+      <tr><td>Большие промахи обходятся непропорционально дорого</td><td>RMSE</td><td>Как и в бизнесе, это стоит одного большого промаха.</td></tr>
+      <tr><td>Сравнение продуктов или регионов</td><td>WAPE</td><td>Безразмерное, взвешенное по размеру, выдерживает нули.</td></tr>
+      <tr><td>Выбор между методами прогнозирования</td><td>MASE</td><td>Безмасштабный и привязанный к базовой линии бездействия.</td></tr>
+      <tr><td>Нетехническое резюме</td><td>WAPE и предвзятость, словами</td><td>«Снижение примерно на 6 процентов, немного выше».</td></tr>
     </table>
 
-    <p>My own default block is four numbers: MAE, bias, WAPE and MASE, with the period count and any excluded periods named. It takes one line, it covers the size of the error, its direction, its relative scale and whether the forecast is earning its keep.</p>
+    <p>Мой собственный блок по умолчанию состоит из четырех чисел: MAE, смещение, WAPE и MASE, с указанием количества периодов и названий всех исключенных периодов. Он занимает одну строку и отражает размер ошибки, ее направление, относительный масштаб и то, оправдывает ли прогноз свою эффективность.</p>
 
-    <p>The one thing to avoid is picking the measure after seeing the results. If MAPE looks bad and you switch to RMSE without saying so, you have chosen your grade. Decide the measure when you build the forecast, and write it down, for the same reason you decide an A/B test's metric in advance in <a href="../ab-testing-for-analysts/">A/B testing</a>.</p>
+    <p>Единственное, чего следует избегать, — это выбирать меру после просмотра результатов. Если MAPE выглядит плохо и вы переключаетесь на RMSE, не сказав об этом, значит, вы выбрали свою оценку. Определите меру при построении прогноза и запишите ее по той же причине, по которой вы заранее определяете метрику A/B-теста в  <a href="../ab-testing-for-analysts/">A/B-тестирование</a>.</p>
   </div>
 
-  <h2>The full before and after</h2>
+  <h2>Полное до и после</h2>
 
-  <p>Same forecast, same five months, two write-ups.</p>
+  <p>Тот же прогноз, те же пять месяцев, две рецензии.</p>
 
   <h3>Before</h3>
   <pre><code>Forecast accuracy: 94%.</code></pre>
-  <p>One number with no definition. It is presumably 100 minus a MAPE, computed on the four months where MAPE is defined, with April silently dropped by whichever tool produced it. Nobody can reproduce it, nobody knows how many periods it covers, and nothing says whether 94 percent is better than repeating last month's number.</p>
+  <p>Одна цифра без определения. Предположительно, это 100 минус MAPE, рассчитанное для четырех месяцев, в которых определяется MAPE, при этом апрель молча отбрасывается любым инструментом, создавшим его. Никто не может воспроизвести его, никто не знает, сколько периодов он охватывает, и ничто не говорит о том, лучше ли 94 процента, чем повторение показателя прошлого месяца.</p>
 
   <h3>After</h3>
   <pre><code>Flat plan of 2,400, scored on 5 months (Jan to May 2026).
@@ -372,106 +372,106 @@ mase      = np.abs(error).mean() / naive_mae # 600 / 1435 = 0.418</code></pre>
   April had no orders at all. Excluding it, MAE is 150 and WAPE 6.1%.
   Both figures are shown because whether April belongs in the forecast
   period is a business question, not a statistical one.</code></pre>
-  <p>Six lines, and every number is reproducible. The reader can see the size of the error, its direction, its scale, whether the forecast beat doing nothing, and precisely what April did to the arithmetic. The last sentence is the one that matters most, because it hands the judgement back to the person who can actually make it.</p>
+  <p>Шесть строк, и каждое число воспроизводимо. Читатель может увидеть размер ошибки, ее направление, масштаб, превосходит ли прогноз бездействие и что именно Эйприл сделал с арифметикой. Последнее предложение имеет наибольшее значение, поскольку оно возвращает решение тому, кто действительно может его вынести.</p>
 
   <div class="step">
-    <h2>Edge cases that catch people out</h2>
+    <h2>Крайние случаи, которые застают людей врасплох</h2>
 
-    <p>Six that each cost somebody a quarter.</p>
+    <p>Шесть, каждая из которых стоила кому-то четвертака.</p>
 
-    <p><strong>Zeros in the actuals.</strong> The headline case on this page. MAPE is undefined, and several tools will drop the row without telling you, producing a confident number computed on fewer periods than you think.</p>
+    <p><strong>Ноли в фактах.</strong>  Заголовок дела на этой странице. MAPE не определен, и некоторые инструменты удаляют строку, не сообщая вам об этом, создавая достоверное число, рассчитанное за меньшее количество периодов, чем вы думаете.</p>
 
-    <p><strong>Scoring on the data you fitted.</strong> A model tuned on the same months you then score it against will look excellent and will not be. Hold out periods the model never saw, or score forward as new actuals arrive.</p>
+    <p><strong>Оценка по подогнанным вами данным.</strong>  Модель, настроенная на те же месяцы, по которым вы затем оцениваете ее, будет выглядеть превосходно, но таковой не будет. Удерживайте периоды, которые модель никогда не видела, или продвигайтесь вперед по мере поступления новых фактических данных.</p>
 
-    <p><strong>Restated actuals.</strong> If last month's actual changes after a data correction, your recorded accuracy changes too. Store the forecast and the actual as they stood when the forecast was scored, with the date, or your accuracy history will quietly rewrite itself.</p>
+    <p><strong>Текущий пересчет</strong>  Если фактические данные за прошлый месяц изменились после исправления данных, ваша зафиксированная точность также изменится. Сохраняйте прогноз и фактические данные в том виде, в котором они были на момент составления прогноза, с указанием даты, иначе ваша история точности незаметно перепишется.</p>
 
-    <p><strong>Comparing MAPE across series with different sizes.</strong> A small-volume product will show a terrible MAPE for a tiny absolute miss. That is arithmetic, not performance, and it is why WAPE weighted by size is the fairer comparison.</p>
+    <p><strong>Сравнение MAPE серий разных размеров.</strong>  Продукт небольшого объема покажет ужасный MAPE при крошечном абсолютном промахе. Это арифметика, а не производительность, и именно поэтому WAPE, взвешенный по размеру, является более справедливым сравнением.</p>
 
-    <p><strong>Aggregating errors before measuring them.</strong> Forecast accuracy computed on a total is always better than accuracy computed per product and then combined, because errors cancel in the sum. Both numbers are real, and they answer different questions. Say which one you computed.</p>
+    <p><strong>Агрегирование ошибок перед их измерением.</strong>  Точность прогноза, рассчитанная на основе общей суммы, всегда лучше, чем точность, рассчитанная для каждого продукта, а затем объединенная, поскольку ошибки в сумме сокращаются. Оба числа реальны и отвечают на разные вопросы. Скажите, какой из них вы вычислили.</p>
 
-    <p><strong>One-period-ahead against many.</strong> A forecast scored one month ahead is a different task from one scored twelve months ahead, and comparing them is meaningless. State the horizon with the score, always.</p>
+    <p><strong>На один период вперед против многих.</strong>  Прогноз, сделанный на месяц вперед, — это совсем другая задача, чем прогноз, сделанный на двенадцать месяцев вперед, и сравнивать их бессмысленно. Всегда указывайте горизонт со счетом.</p>
   </div>
 
-  <h2>Why this works</h2>
+  <h2>Почему это работает</h2>
 
-  <p>The failures in sections four and five are not folklore. Hyndman and Koehler examined the standard accuracy measures against a set of properties any general-purpose measure ought to have, showed that percentage errors are undefined or infinite whenever an actual is zero and asymmetric otherwise, and that symmetric MAPE does not actually fix the asymmetry it is named for. They proposed the scaled error in section six as a measure that is defined in every case, unitless, and anchored to a naive baseline (Hyndman &amp; Koehler, 2006, <em>International Journal of Forecasting</em>, 22(4), 679–688). Our infinite MAPE is that argument reproduced on five months of real data.</p>
+  <p>Неудачи в четвертом и пятом разделах – это не фольклор. Гайндман и Келер исследовали стандартные меры точности на основе набора свойств, которыми должна обладать любая универсальная мера, и показали, что процентные ошибки неопределенны или бесконечны, когда фактическое значение равно нулю, и асимметричны в противном случае, и что симметричный MAPE фактически не устраняет асимметрию, в честь которой он назван. В шестом разделе они предложили масштабированную ошибку как меру, которая определяется в каждом случае, безразмерна и привязана к наивному базовому уровню (Hyndman &amp; Koehler, 2006,  <em>Международный журнал прогнозирования</em>, 22(4), 679–688). Наша бесконечная MAPE — это аргумент, воспроизведенный на реальных данных за пять месяцев.</p>
 
-  <p>Armstrong and Collopy compared error measures empirically across large collections of series and reached a similar conclusion from the other direction: measures based on relative or scaled errors are more reliable for choosing between methods than percentage errors, particularly on series with low or intermittent values (Armstrong &amp; Collopy, 1992, <em>International Journal of Forecasting</em>, 8(1), 69–80).</p>
+  <p>Армстронг и Коллопи эмпирически сравнили показатели ошибок в больших наборах рядов и пришли к аналогичному выводу с другой стороны: меры, основанные на относительных или масштабированных ошибках, более надежны для выбора между методами, чем процентные ошибки, особенно для рядов с низкими или прерывистыми значениями (Armstrong &amp; Collopy, 1992,  <em>Международный журнал прогнозирования</em>, 8(1), 69–80).</p>
 
-  <p>The habit of scoring against a naive baseline comes from the forecasting competitions, where it is standard practice and where the results have been consistently humbling. Across thousands of real series, elaborate methods frequently fail to beat simple ones out of sample, which is why "did it beat the naive forecast" is the first question rather than a footnote (Makridakis, Spiliotis, &amp; Assimakopoulos, 2020, <em>International Journal of Forecasting</em>, 36(1), 54–74).</p>
+  <p>Привычка забивать по наивным исходным данным пришла из соревнований по прогнозированию, где это является стандартной практикой и где результаты неизменно скромны. В тысячах реальных рядов сложные методы часто не могут превзойти простые методы из выборки, поэтому «превзошел ли он наивный прогноз» — это первый вопрос, а не сноска (Макридакис, Спилиотис и Ассимакопулос, 2020,  <em>Международный журнал прогнозирования</em>, 36(1), 54–74).</p>
 
-  <p>One note on why this page kept asking you to answer before showing you the answer. Attempting an answer before seeing the correct one reliably improves how well the correct one is retained, even when the attempt is wrong (Bisra, Liu, Nesbit, Salimi, &amp; Winne, 2018, <em>Educational Psychology Review</em>, 30(3), 703–725). The infinite MAPE sticks because you were asked to look at the April row and work out what would happen.</p>
+  <p>Одно замечание о том, почему эта страница продолжает просить вас ответить, прежде чем показать вам ответ. Попытка дать ответ до того, как вы увидите правильный, достоверно повышает, насколько хорошо сохраняется правильный ответ, даже если попытка неверна (Бисра, Лю, Несбит, Салими и Винн, 2018,  <em>Обзор педагогической психологии</em>, 30(3), 703–725). Бесконечный MAPE прижился, потому что вас попросили посмотреть на апрельский ряд и выяснить, что произойдет.</p>
 
-  <h2>Using this on your own work</h2>
+  <h2>Использование этого в своей работе</h2>
 
-  <p>Rebuilding your forecasting process is not an afternoon's work. Do this instead, in order.</p>
+  <p>Перестройка процесса прогнозирования — это не однодневная работа. Вместо этого сделайте это по порядку.</p>
 
   <ol>
-    <li><strong>Save the forecast.</strong> You cannot score what you did not record. A two-column table of period, forecast, and later the actual, is the whole infrastructure.</li>
-    <li><strong>Compute the naive baseline.</strong> Last period repeated. Score it the same way you score yours. This is the two-minute job that tells you whether anything else is worth doing.</li>
-    <li><strong>Check for zeros and near-zeros</strong> in the actuals before choosing a percentage measure. If any exist, use WAPE.</li>
-    <li><strong>Report four numbers:</strong> MAE, bias, WAPE and MASE, with the period count and the horizon.</li>
-    <li><strong>Write down excluded periods and why.</strong> Every exclusion is defensible and none of them is defensible silently.</li>
+    <li><strong>Сохраните прогноз.</strong>  Вы не можете забить то, что не записали. Двухколоночная таблица периода, прогноза, а затем и факта – это вся инфраструктура.</li>
+    <li><strong>Вычислите наивную базовую линию.</strong>  Последний период повторился. Оцените его так же, как и свой. Это двухминутная работа, которая скажет вам, стоит ли делать что-то еще.</li>
+    <li><strong>Проверка нулей и околонулевых значений</strong>  в фактических значениях, прежде чем выбрать процентную меру. Если они существуют, используйте WAPE.</li>
+    <li><strong>Сообщите четыре цифры:</strong>  MAE, смещение, WAPE и MASE, с количеством периодов и горизонтом.</li>
+    <li><strong>Запишите исключенные периоды и почему.</strong>  Каждое исключение оправдано, и ни одно из них не может быть оправдано молча.</li>
   </ol>
 
-  <p>If you have paper nearby, one optional drawing is worth five minutes. Draw your last few forecast errors as bars along a line, then draw a square on each one with the bar's length as its side. Seeing your worst period's square swallow all the others is what makes the MAE against RMSE choice a decision rather than a default.</p>
+  <p>Если у вас под рукой есть бумага, один дополнительный рисунок стоит пяти минут. Нарисуйте несколько последних ошибок прогноза в виде полосок вдоль линии, затем нарисуйте на каждой из них квадрат, указав длину полосы в качестве стороны. Видя, что квадрат вашего худшего периода поглотил все остальные, это то, что делает MAE против выбора RMSE решением, а не дефолтом.</p>
 
-  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: SQL, Python, Excel, statistics and the working habits around them.</div>
+  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: SQL, Python, Excel, статистика и методы работы с ними.</div>
 
-  <h2>The whole thing on one screen</h2>
+  <h2>Все на одном экране</h2>
 
-  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
+  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
 
   <table>
-    <tr><th>Measure</th><th>What it is, and what it does</th></tr>
-    <tr><td>Error</td><td>Actual minus forecast, with its sign. Ours: +230, −155, +185, −2,400, +30.</td></tr>
-    <tr><td>Bias (mean error)</td><td>−422 here. Says which way you lean. Cannot measure accuracy: errors cancel.</td></tr>
-    <tr><td>MAE</td><td>Average size of a miss. 600. In your units, every period equal.</td></tr>
-    <tr><td>RMSE</td><td>Root of the average squared error. 1,083.70. One big miss dominates.</td></tr>
-    <tr><td>MAE vs RMSE</td><td>Four misses of 100: both 100. One miss of 400: MAE 100, RMSE 200.</td></tr>
-    <tr><td>The ratio</td><td>RMSE ÷ MAE = 1.8 here. Far above 1 means one period is doing the damage.</td></tr>
-    <tr><td>MAPE</td><td>Average of per-period percentage errors. Undefined here: April's actual is zero.</td></tr>
-    <tr><td>MAPE's other flaw</td><td>Asymmetric. Over-forecasting is punished harder, so it pushes forecasts low.</td></tr>
-    <tr><td>WAPE</td><td>Total absolute error ÷ total actual. 30.3%. Survives zeros, weights by size.</td></tr>
-    <tr><td>sMAPE</td><td>Divides by the average of actual and forecast. 44.9%. Does not fix zeros.</td></tr>
-    <tr><td>MASE</td><td>Your MAE ÷ the naive forecast's MAE. 0.418. Below 1 means you beat doing nothing.</td></tr>
-    <tr><td>Naive forecast</td><td>Next period equals this period. The baseline everything must beat.</td></tr>
-    <tr><td>April removed</td><td>MAE 600 → 150, WAPE 30.3% → 6.1%, bias −422 → +72.5. Say which you published.</td></tr>
-    <tr><td>Holdout</td><td>Never score on the periods you fitted. Hold out, or score forward.</td></tr>
-    <tr><td>Horizon</td><td>One month ahead and twelve months ahead are different tasks. State it.</td></tr>
-    <tr><td>The default block</td><td>MAE, bias, WAPE, MASE, period count, exclusions. One line each.</td></tr>
+    <tr><th>Measure</th><th>Что это такое и что он делает</th></tr>
+    <tr><td>Error</td><td>Фактический минус прогноз со своим знаком. Наши: +230, −155, +185, −2400, +30.</td></tr>
+    <tr><td>Смещение (средняя ошибка)</td><td>−422 здесь. Говорит, в какую сторону ты наклоняешься. Невозможно измерить точность: ошибки аннулируются.</td></tr>
+    <tr><td>MAE</td><td>Средний размер промаха. 600. В ваших единицах каждый период равен.</td></tr>
+    <tr><td>RMSE</td><td>Корень среднеквадратичной ошибки. 1083,70. Доминирует один большой промах.</td></tr>
+    <tr><td>MAE против RMSE</td><td>Четыре промаха из 100: оба по 100. Один промах из 400: MAE 100, RMSE 200.</td></tr>
+    <tr><td>Соотношение</td><td>Здесь RMSE ÷ MAE = 1,8. Значение намного выше 1 означает, что один период наносит ущерб.</td></tr>
+    <tr><td>MAPE</td><td>Среднее процентное значение ошибок за период. Здесь не определено: фактическое значение за апрель равно нулю.</td></tr>
+    <tr><td>Другой недостаток MAPE</td><td>Асимметричный. За завышенные прогнозы наказывают жестче, поэтому прогнозы занижаются.</td></tr>
+    <tr><td>WAPE</td><td>Общая абсолютная ошибка ÷ общая фактическая. 30,3%. Выдерживает нули, вес по размеру.</td></tr>
+    <tr><td>sMAPE</td><td>Делится на среднее фактическое и прогнозируемое. 44,9%. Не исправляет нули.</td></tr>
+    <tr><td>MASE</td><td>Ваше MAE ÷ MAE наивного прогноза. 0,418. Ниже 1 означает, что вы лучше ничего не делаете.</td></tr>
+    <tr><td>наивный прогноз</td><td>Следующий период равен этому периоду. Базовый уровень все должен бить.</td></tr>
+    <tr><td>Апрель удален</td><td>MAE 600 → 150, WAPE 30,3% → 6,1%, смещение −422 → +72,5. Скажите, что вы опубликовали.</td></tr>
+    <tr><td>Holdout</td><td>Никогда не забивайте очки в те периоды, которые вам подошли. Держись или забивай вперед.</td></tr>
+    <tr><td>Horizon</td><td>На месяц вперед и на двенадцать месяцев вперед — разные задачи. Сформулируйте это.</td></tr>
+    <tr><td>Блок по умолчанию</td><td>MAE, смещение, WAPE, MASE, количество периодов, исключения. По одной строке каждый.</td></tr>
   </table>
 
-  <div class="note"><strong>The one habit to keep.</strong> Score every forecast against the naive baseline before you score it any other way. If it is not beating last period repeated, no accuracy measure will make it worth having. If a score breaks in a way this page does not cover, there is a general <a href="../technical-tenacity/">diagnosis loop for being stuck</a>.</div>
+  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Прежде чем оценивать его каким-либо другим способом, сравнивайте каждый прогноз с исходным базовым уровнем. Если он не повторяется в последнем периоде, никакие меры точности не сделают его стоящим. Если счет нарушается таким образом, который не описан на этой странице, существует общая ситуация.  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>.</div>
 
-  <p>One last thought, and I would genuinely like other people's answers. The first accuracy number I ever reported was a MAPE with the zero months silently dropped by the tool, and it made a mediocre forecast look excellent for two quarters. What is the accuracy figure in your reporting that nobody has ever recomputed by hand?</p>
+  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Первым показателем точности, который я когда-либо сообщал, был MAPE с нулевыми месяцами, которые инструмент молча выбрасывал, и благодаря этому посредственный прогноз на два квартала выглядел превосходным. Какова точность ваших отчетов, которую никто никогда не пересчитывал вручную?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Hyndman, R. J., &amp; Koehler, A. B. (2006). Another look at measures of forecast accuracy. <em>International Journal of Forecasting</em>, 22(4), 679–688.</li>
-    <li>Armstrong, J. S., &amp; Collopy, F. (1992). Error measures for generalizing about forecasting methods: Empirical comparisons. <em>International Journal of Forecasting</em>, 8(1), 69–80.</li>
-    <li>Makridakis, S., Spiliotis, E., &amp; Assimakopoulos, V. (2020). The M4 Competition: 100,000 time series and 61 forecasting methods. <em>International Journal of Forecasting</em>, 36(1), 54–74.</li>
-    <li>Bisra, K., Liu, Q., Nesbit, J. C., Salimi, F., &amp; Winne, P. H. (2018). Inducing self-explanation: A meta-analysis. <em>Educational Psychology Review</em>, 30(3), 703–725.</li>
+    <li>Гайндман Р.Дж. и Келер А.Б. (2006). Еще один взгляд на показатели точности прогнозов.  <em>Международный журнал прогнозирования</em>, 22(4), 679–688.</li>
+    <li>Армстронг Дж. С. и Коллопи Ф. (1992). Меры погрешности для обобщения методов прогнозирования: Эмпирические сравнения.  <em>Международный журнал прогнозирования</em>, 8(1), 69–80.</li>
+    <li>Макридакис С., Спилиотис Э. и Ассимакопулос В. (2020). Конкурс M4: 100 000 временных рядов и 61 метод прогнозирования.  <em>Международный журнал прогнозирования</em>, 36(1), 54–74.</li>
+    <li>Бисра К., Лю К., Несбит Дж. К., Салими Ф. и Винн П. Х. (2018). Побуждение к самообъяснению: метаанализ.  <em>Обзор педагогической психологии</em>, 30(3), 703–725.</li>
   </ul>
 
   <div class="book">
-    <strong>The forecast was close last month, and nobody has defined close.</strong>
-    <p><em>Forecasting for Analysts</em> is 43 pages, moving averages, seasonality and forecast accuracy, including how to state what the number cannot tell you.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/forecasting-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=forecasting-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-forecast-accuracy'})">Forecasting for Analysts, $12 &rarr;</a>
+    <strong>Прогноз был близким в прошлом месяце, и никто не определил близко.</strong>
+    <p><em>Прогнозирование для аналитиков</em>  состоит из 43 страниц, скользящих средних, сезонности и точности прогнозов, в том числе о том, как указать то, о чем цифры не могут вам сказать.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/forecasting-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=forecasting-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-forecast-accuracy'})">Прогнозирование для аналитиков, $12 →</a>
   </div>
 
   <div class="cta">
-    <strong>Practice this with a real forecast in front of you.</strong>
-    <p style="margin:6px 0 0">The <a href="../../forecasting/">Forecasting Kit</a> gives you the repetitions: forecasts to score, flash cards on which measure survives a zero and which punishes a single big miss, and questions that ask you to predict a score before you compute it. You now own the method; the kit is the practice. Nothing to install, no account needed.</p>
-    <a class="btn" href="../../forecasting/">Open the Forecasting Kit →</a>
+    <strong>Потренируйтесь в этом, имея перед собой реальный прогноз.</strong>
+    <p style="margin:6px 0 0">The <a href="../../forecasting/">Комплект прогнозирования</a>  дает вам повторения: прогнозы на счет, карточки, на которых показатель выдерживает ноль и который наказывает за один большой промах, а также вопросы, которые просят вас предсказать счет, прежде чем вы его подсчитаете. Теперь вы владеете методом; комплект - это практика. Ничего устанавливать, учетная запись не требуется.</p>
+    <a class="btn" href="../../forecasting/">Откройте Набор прогнозов →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> · <a href="../moving-averages/">Moving Averages</a> · <a href="../mean-vs-median/">Mean vs Median</a> · <a href="../standard-deviation/">Standard Deviation</a> · <a href="../confidence-intervals/">Confidence Intervals</a> · <a href="../ab-testing-for-analysts/">A/B Testing for Analysts</a> · <a href="../how-charts-mislead/">How Charts Mislead</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../sql-month-over-month/">Month-over-Month in SQL</a> · <a href="../excel-month-over-month/">Month-over-Month in Excel</a> · <a href="../pandas-pct-change-cumsum/">pandas pct_change and cumsum</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../forecasting/">Forecasting Kit</a> · <a href="../../projects/">Portfolio Projects</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../moving-averages/">Скользящие средние</a> · <a href="../mean-vs-median/">Среднее против медианы</a> · <a href="../standard-deviation/">Стандартное отклонение</a> · <a href="../confidence-intervals/">доверительные интервалы</a> · <a href="../ab-testing-for-analysts/">A/B-тестирование для аналитиков</a> · <a href="../how-charts-mislead/">Как графики вводят в заблуждение</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../sql-month-over-month/">Месяц за месяцем в SQL</a> · <a href="../excel-month-over-month/">Месяц за месяцем в Excel</a> · <a href="../pandas-pct-change-cumsum/">панды pct_change и cumsum</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../forecasting/">Комплект прогнозирования</a> · <a href="../../projects/">Портфельные проекты</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

@@ -15,8 +15,8 @@ const LADDER = {
 
   { adds: 'List the country tracks',
     q: 'Which country tracks are in the collection, and how big is each one?',
-    why: 'The base shape: named columns with a filter.',
-    guide: { href: '../guides/sql-foundations/', label: 'Read: SELECT, FROM and WHERE' },
+    why: "Базовая форма: именованные столбцы с фильтром.",
+    guide: { href: '../guides/sql-foundations/', label: "Читайте: ВЫБРАТЬ, ОТКУДА и ГДЕ" },
     header:
 `-- Purpose: List the country tracks in the gems collection with their audience size
 -- Source:  gem_page, one row = one curated gem track`,
@@ -29,8 +29,8 @@ WHERE genre = 'country';`,
 
   { adds: 'Put the biggest audience on top',
     q: 'Which country track has the most listeners?',
-    why: 'Sort the rows so the biggest audience is on top.',
-    guide: { href: '../guides/sql-foundations/', label: 'Read: sorting with ORDER BY' },
+    why: "Отсортируйте строки так, чтобы самая большая аудитория была сверху.",
+    guide: { href: '../guides/sql-foundations/', label: "Читайте: сортировка с помощью ORDER BY" },
     header:
 `-- Purpose: Rank the country gems by audience size, largest first
 -- Source:  gem_page, one row = one curated gem track`,
@@ -44,8 +44,8 @@ ORDER BY listeners DESC;`,
 
   { adds: 'Cut it to a top ten',
     q: 'What are the ten biggest country tracks?',
-    why: 'Cut the list to a top ten, which is what a ranking usually ships as.',
-    guide: { href: '../guides/sql-foundations/', label: 'Read: LIMIT and top-N lists' },
+    why: "Сократите список до первой десятки, как это обычно и составляет рейтинг.",
+    guide: { href: '../guides/sql-foundations/', label: "Читайте: LIMIT и списки Top-N" },
     header:
 `-- Purpose: Top 10 country gems by audience size for the country section
 -- Source:  gem_page, one row = one curated gem track`,
@@ -60,8 +60,8 @@ LIMIT 10;`,
 
   { adds: 'Count the tracks each artist has',
     q: 'Which country artists appear most often in the collection?',
-    why: 'GROUP BY, which collapses the rows to one per artist so you can count them.',
-    guide: { href: '../guides/sql-group-by-having/', label: 'Read: how GROUP BY works' },
+    why: "GROUP BY: сжимает строки до одной на каждого исполнителя, чтобы вы могли их посчитать.",
+    guide: { href: '../guides/sql-group-by-having/', label: "Читайте: как работает GROUP BY" },
     header:
 `-- Purpose: Which country artists have the most gem tracks in the collection
 -- Source:  gem_page, one row = one artist after grouping`,
@@ -77,8 +77,8 @@ LIMIT 10;`,
 
   { adds: 'Keep only the artists with more than one track',
     q: 'Which artists show up more than once, and how often?',
-    why: 'HAVING, which filters the groups after counting. The LIMIT comes off.',
-    guide: { href: '../guides/sql-group-by-having/', label: 'Read: WHERE against HAVING' },
+    why: "HAVING, который фильтрует группы после подсчета. ОГРАНИЧИТЕЛЬ сбрасывается.",
+    guide: { href: '../guides/sql-group-by-having/', label: "Читайте: ГДЕ против ИМЕТЬ" },
     header:
 `-- Purpose: Country artists with more than one gem track, ranked by track count
 -- Source:  gem_page, one row = one artist after grouping
@@ -95,8 +95,8 @@ ORDER BY tracks DESC, artist;`,
 
   { adds: 'Add up the audience for each artist',
     q: 'Which repeat artist has the biggest total audience?',
-    why: 'A second aggregate, so each artist reports total audience as well as track count.',
-    guide: { href: '../guides/sql-count-function/', label: 'Read: counting and summing' },
+    why: "Второй совокупный показатель, поэтому каждый исполнитель сообщает об общей аудитории, а также о количестве треков.",
+    guide: { href: '../guides/sql-count-function/', label: "Читать: счет и суммирование." },
     header:
 `-- Purpose: Repeat country artists ranked by the total audience across their gem tracks
 -- Source:  gem_page, one row = one artist after grouping
@@ -115,8 +115,8 @@ ORDER BY total_listeners DESC;`,
 
   { adds: 'Add how hard their fans replay them',
     q: 'Do the biggest artists also have the most loyal listeners?',
-    why: 'An average, rounded, so the column is readable in a report.',
-    guide: { href: '../guides/sql-group-by-having/', label: 'Read: averages in a grouped query' },
+    why: "Среднее, округленное, чтобы столбец можно было прочитать в отчете.",
+    guide: { href: '../guides/sql-group-by-having/', label: "Читайте: средние значения в сгруппированном запросе" },
     header:
 `-- Purpose: Repeat country artists with audience size and how hard their fans replay them
 -- Source:  gem_page, one row = one artist after grouping
@@ -136,8 +136,8 @@ ORDER BY total_listeners DESC;`,
 
   { adds: 'Bring in the decade each artist started',
     q: 'When did these artists first chart?',
-    why: 'A JOIN pulls the debut decade in from a second table.',
-    guide: { href: '../guides/sql-joins/', label: 'Read: joining a second table' },
+    why: "JOIN вытягивает дебютное десятилетие из второго стола.",
+    guide: { href: '../guides/sql-joins/', label: "Читать: присоединение ко второму столу" },
     header:
 `-- Purpose: Repeat country artists with the decade they first charted
 -- Source:  gem_page joined to artist_era, one row = one artist after grouping
@@ -158,8 +158,8 @@ ORDER BY total_listeners DESC;`,
 
   { adds: 'Ask the question by decade instead of by artist',
     q: 'Which decade of artists holds the biggest audience?',
-    why: 'Change the grain: group by decade instead of by artist.',
-    guide: { href: '../guides/defining-metrics/', label: 'Read: choosing the grain' },
+    why: "Измените зерно: группируйте по десятилетиям, а не по художникам.",
+    guide: { href: '../guides/defining-metrics/', label: "Читайте: выбираем зерно" },
     header:
 `-- Purpose: Which debut decades the country gem audience actually sits in
 -- Source:  gem_page joined to artist_era, one row = one debut decade
@@ -179,8 +179,8 @@ ORDER BY total_listeners DESC;`,
 
   { adds: 'Turn the totals into shares',
     q: 'What share of the country audience does each decade hold?',
-    why: 'Share of total, using a subquery for the denominator.',
-    guide: { href: '../guides/data-driven-thresholds/', label: 'Read: turning totals into shares' },
+    why: "Доля от общей суммы, с использованием подзапроса в качестве знаменателя.",
+    guide: { href: '../guides/data-driven-thresholds/', label: "Читайте: Превращение итогов в доли" },
     header:
 `-- Purpose: Share of the country gem audience held by each debut decade
 -- Source:  gem_page joined to artist_era, one row = one debut decade
@@ -202,8 +202,8 @@ ORDER BY total_listeners DESC;`,
 
   { adds: 'Name the set once so you stop repeating it',
     q: 'Same shares, written so a reviewer can follow it.',
-    why: 'A CTE, which names the filtered set once so the rest of the query stops repeating it.',
-    guide: { href: '../guides/sql-ctes/', label: 'Read: what a CTE is' },
+    why: "CTE, который присваивает отфильтрованному набору имя один раз, чтобы остальная часть запроса не повторяла его.",
+    guide: { href: '../guides/sql-ctes/', label: "Читайте: что такое CTE" },
     header:
 `-- Purpose: Share of the country gem audience by debut decade, built on a named set
 -- Source:  country_gems, one row = one country gem track with its artist's decade
@@ -229,8 +229,8 @@ ORDER BY total_listeners DESC;`,
 
   { adds: 'Bucket the decades into new and old',
     q: 'Which decades count as new artists, and which as catalog?',
-    why: 'CASE, which buckets the decades into two groups you can actually talk about.',
-    guide: { href: '../guides/sql-case-expression/', label: 'Read: CASE expressions' },
+    why: "CASE, в котором десятилетия разделены на две группы, о которых вы действительно можете говорить.",
+    guide: { href: '../guides/sql-case-expression/', label: "Читайте: выражения CASE." },
     header:
 `-- Purpose: Country gem audience by decade, tagged modern or catalog
 -- Source:  country_gems, one row = one country gem track with its artist's decade
@@ -258,8 +258,8 @@ ORDER BY total_listeners DESC;`,
 
   { adds: 'Finish on the two-row answer',
     q: 'Does the country audience sit with new artists or older ones?',
-    why: 'The payoff: group by the bucket, and the whole ladder collapses into two rows a manager can act on.',
-    guide: { href: '../guides/defining-metrics/', label: 'Read: the number a manager acts on' },
+    why: "Результат: группировка по корзинам, и вся лестница распадается на два ряда, по которым может действовать менеджер.",
+    guide: { href: '../guides/defining-metrics/', label: "Читайте: номер, по которому действует менеджер" },
     header:
 `-- Purpose: How the country gem audience splits between modern and catalog artists
 -- Source:  country_gems, one row = one era group

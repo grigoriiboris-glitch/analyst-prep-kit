@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>NULL in SQL: Why = NULL Finds Nothing and What to Write Instead — Analyst Prep Kit</title>
-<meta name="description" content="WHERE assignee = NULL returns 0 of 10 rows, every time. What NULL actually means, IS NULL, the NOT IN trap, COALESCE, and how NULLs quietly move your averages.">
+<title>NULL в SQL: Почему = NULL ничего не находит и что писать вместо этого — комплект подготовки аналитика</title>
+<meta name="description" content="WHERE назначенный = NULL каждый раз возвращает 0 из 10 строк. Что на самом деле означает NULL, ЕСТЬ NULL, НЕ В ловушке, COALESCE, и как NULL незаметно перемещают ваши средние значения.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-null/">
-<meta property="og:title" content="NULL in SQL: Why = NULL Finds Nothing and What to Write Instead">
-<meta property="og:description" content="NULL means unknown, not zero and not blank. That one definition explains why = NULL matches nothing, why a single NULL empties a NOT IN, and why your average just moved.">
+<meta property="og:title" content="NULL в SQL: Почему = NULL ничего не находит и что писать вместо этого">
+<meta property="og:description" content="NULL означает неизвестное, не ноль и не пустое значение. Это одно определение объясняет, почему = NULL ничему не соответствует, почему одиночный NULL очищает NOT IN и почему ваше среднее значение только что изменилось.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/sql-null.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-null/">
@@ -134,18 +134,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../sql/">SQL Kit</a> · <a href="../">All guides</a></p>
-  <h1>NULL in SQL: Why = NULL Finds Nothing and What to Write Instead</h1>
-  <p class="meta">NULL means unknown, and unknown breaks every yes-or-no question · Written to be listened to · Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-07">August 7, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../">Все руководства</a></p>
+  <h1>NULL в SQL: Почему = NULL ничего не находит и что писать вместо этого</h1>
+  <p class="meta">NULL означает «неизвестно», а «неизвестное» прерывает все вопросы, требующие ответа «да» или «нет» · Написано для прослушивания · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-07">7 августа 2026 г.</time></p>
 
-  <p>By the end of this page you can predict what any query does when it meets a missing value, which is the skill that separates "my query returned nothing and I don't know why" from a two-second fix. You will know why <code>= NULL</code> matches zero rows, why one NULL can empty an entire <code>NOT IN</code>, and how NULLs quietly move averages, counts, groups, and sort orders. It is about twenty minutes.</p>
+  <p>К концу этой страницы вы сможете предсказать, что сделает любой запрос, если он встретит пропущенное значение. Это навык, который отделяет «мой запрос ничего не дал, и я не знаю почему» от двухсекундного исправления. Вы будете знать, почему  <code>= NULL</code>  соответствует нулю строк, почему один NULL может очистить всю  <code>NOT IN</code>и как значения NULL незаметно перемещают средние значения, подсчеты, группы и порядок сортировки. Это около двадцати минут.</p>
 
-  <p>Here is what to actually do with it. Next time a filter returns fewer rows than you expected, ask one question first: does the column I am comparing have NULLs in it? Run <code>WHERE the_column IS NULL</code> and look. That one check explains most mystery row counts before any real debugging starts.</p>
+  <p>Вот что на самом деле с этим делать. В следующий раз, когда фильтр вернет меньше строк, чем вы ожидали, сначала задайте один вопрос: есть ли в сравниваемом столбце значения NULL? Бегать  <code>WHERE the_column IS NULL</code>  и посмотри. Эта одна проверка объясняет большинство загадочных чисел строк еще до начала реальной отладки.</p>
 
-  <p>The short version: NULL means unknown, not zero and not empty text. A comparison with unknown answers "unknown", and <code>WHERE</code> only keeps rows that answer "yes". So every NULL comparison silently drops rows.</p>
+  <p>Краткая версия: NULL означает неизвестное, а не ноль и не пустой текст. Сравнение с неизвестными отвечает «неизвестно», и  <code>WHERE</code>  сохраняет только те строки, которые отвечают «да». Таким образом, каждое сравнение NULL автоматически удаляет строки.</p>
 
-  <p>That yes-only gate is the one idea under everything on this page, so it gets the picture.</p>
+  <p>Эти ворота «только да» — единственная идея во всем, что есть на этой странице, поэтому картина понятна.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 300" role="img" aria-labelledby="nullTitle nullDesc" xmlns="http://www.w3.org/2000/svg">
@@ -195,28 +195,28 @@
         <text x="420" y="252" font-size="13" font-weight="700" fill="#B45309">unknown</text>
       </g>
     </svg>
-    <figcaption>A comparison can answer yes, no, or unknown. WHERE keeps only the yes rows, so a row whose comparison met a NULL is dropped exactly as if it had answered no.</figcaption>
+    <figcaption>Сравнение может дать ответ «да», «нет» или «неизвестно». WHERE сохраняет только строки «да», поэтому строка, сравнение которой соответствует NULL, отбрасывается точно так же, как если бы она ответила «нет».</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>What you'll learn</strong>
+    <strong>Что вы узнаете</strong>
     <ol>
-      <li>What NULL actually means, and why = NULL finds nothing</li>
-      <li>Three-valued logic in everyday words</li>
-      <li>The NOT IN trap: one NULL, zero rows</li>
-      <li>COALESCE for defaults, and when not to use it</li>
-      <li>How NULLs move your counts and averages</li>
-      <li>The full before and after</li>
-      <li>Edge cases: groups, joins, and sort order</li>
-      <li>Why this works</li>
-      <li>Using this on your own project</li>
-      <li>The whole thing on one screen</li>
+      <li>Что на самом деле означает NULL и почему = NULL ничего не находит</li>
+      <li>Трехзначная логика в повседневных словах</li>
+      <li>Ловушка NOT IN: один NULL, ноль строк.</li>
+      <li>COALESCE для значений по умолчанию и когда его не следует использовать</li>
+      <li>Как значения NULL изменяют ваши значения и средние значения</li>
+      <li>Полное до и после</li>
+      <li>Пограничные случаи: группы, соединения и порядок сортировки</li>
+      <li>Почему это работает</li>
+      <li>Использование этого в вашем собственном проекте</li>
+      <li>Все на одном экране</li>
     </ol>
   </div>
 
-  <div class="note"><strong>The worked example is real.</strong> Every number on this page comes from a 10-row support-tickets table with NULLs seeded on purpose, and every query was run against it in SQLite before its output was pasted here. The table is small enough to check by eye. If <code>SELECT</code> and <code>WHERE</code> are new, start with <a href="../sql-foundations/">SQL foundations</a> and come back.</div>
+  <div class="note"><strong>Проработанный пример реальный.</strong>  Каждое число на этой странице взято из 10-строчной таблицы заявок на поддержку, в которой намеренно засеяны NULL-значения, и каждый запрос выполнялся к нему в SQLite, прежде чем его выходные данные были вставлены сюда. Таблица достаточно маленькая, чтобы ее можно было проверить на глаз. Если  <code>SELECT</code> and <code>WHERE</code>  новые, начните с  <a href="../sql-foundations/">Основы SQL</a>  и вернись.</div>
 
-  <p>Here is the table. Ten tickets. Three are missing their close time, two are missing their region, and two have no assignee.</p>
+  <p>Вот таблица. Десять билетов. Троим не хватает времени, двум не хватает своего региона, а двое не имеют правопреемника.</p>
 
   <table>
     <tr><th>ticket_id</th><th>region</th><th>minutes_to_close</th><th>assignee</th></tr>
@@ -233,17 +233,17 @@
   </table>
 
   <div class="step">
-    <h2>1. What NULL actually means, and why = NULL finds nothing</h2>
+    <h2>1. Что на самом деле означает NULL и почему = NULL ничего не находит</h2>
 
-    <p>Before the explanation: two tickets in that table have no assignee. What do you expect this query to return?</p>
+    <p>Перед пояснением: два билета в этой таблице не имеют правопреемника. Что вы ожидаете вернуть от этого запроса?</p>
 
     <pre><code>SELECT * FROM tickets WHERE assignee = NULL;</code></pre>
 
-    <p>Zero rows. Not the two unassigned tickets. Zero, out of ten, every time, on every database. I ran it and got an empty result, and the reason is the definition of NULL itself.</p>
+    <p>Ноль строк. Не два неназначенных билета. Ноль из десяти, каждый раз, в каждой базе данных. Я запустил его и получил пустой результат, а причина в самом определении NULL.</p>
 
-    <p>NULL does not mean zero, and it does not mean empty text. NULL means unknown: this row has an assignee slot, and nobody has said what goes in it. So <code>assignee = NULL</code> asks "does this ticket's assignee equal an unknown value?", and the only honest answer is "I don't know". Even for ticket 4, where the assignee is itself NULL, the question is "does one unknown equal another unknown?", and the answer is still unknown. I ran <code>SELECT NULL = NULL</code> and the database returns NULL, not true.</p>
+    <p>NULL не означает ноль и не означает пустой текст. NULL означает неизвестно: в этой строке есть слот правопреемника, и никто не сказал, что в нем происходит. Так  <code>assignee = NULL</code>  спрашивает: «Соответствует ли правопреемник этого билета неизвестному значению?», и единственный честный ответ: «Я не знаю». Даже для билета 4, где правопреемник сам имеет значение NULL, возникает вопрос: «равно ли одно неизвестное другому неизвестному?», и ответ все еще неизвестен. я побежал  <code>SELECT NULL = NULL</code>  и база данных возвращает NULL, что неверно.</p>
 
-    <p>SQL therefore gives you a separate verb for the question you actually meant. <code>IS NULL</code> asks "is this value missing?", which is a question about the slot, not the value, so it has a real yes-or-no answer.</p>
+    <p>Таким образом, SQL дает вам отдельный глагол для вопроса, который вы на самом деле имели в виду.  <code>IS NULL</code>  спрашивает: «Это значение отсутствует?», Это вопрос о слоте, а не о значении, поэтому он имеет реальный ответ «да» или «нет».</p>
 
     <pre><code>SELECT * FROM tickets WHERE assignee IS NULL;</code></pre>
 
@@ -253,21 +253,21 @@
       <tr><td>7</td><td>West</td><td>NULL</td><td>NULL</td></tr>
     </table>
 
-    <p>There are the two unassigned tickets. <code>IS NOT NULL</code> is the mirror, and it returns the other 8 rows. The rule to keep: <code>=</code> and <code>&lt;&gt;</code> compare values, <code>IS NULL</code> and <code>IS NOT NULL</code> check for missing ones, and they are not interchangeable.</p>
+    <p>Есть два неназначенных билета.  <code>IS NOT NULL</code>  является зеркалом и возвращает остальные 8 строк. Правило, которое следует соблюдать:  <code>=</code> and <code>&lt;&gt;</code>  сравнить значения,  <code>IS NULL</code> and <code>IS NOT NULL</code>  проверьте наличие отсутствующих, они не взаимозаменяемы.</p>
   </div>
 
   <div class="step">
-    <h2>2. Three-valued logic in everyday words</h2>
+    <h2>2. Трехзначная логика в повседневных словах</h2>
 
-    <p>Before the explanation: the table has 10 tickets and 3 of them are assigned to Priya. How many rows does <code>WHERE assignee &lt;&gt; 'Priya'</code> return?</p>
+    <p>Перед пояснением: на столе 10 билетов и 3 из них принадлежат Прие. Сколько строк занимает  <code>WHERE assignee &lt;&gt; 'Priya'</code>  возвращаться?</p>
 
-    <p>Most people say seven. The database says five. I ran it: 5 rows.</p>
+    <p>Большинство людей говорят, что семь. В базе данных указано пять. Я пробежал: 5 рядов.</p>
 
-    <p>Here is the machinery, in everyday words. In most of life a question has two answers, yes or no. In SQL a comparison has three: yes, no, and unknown, where unknown is what you get whenever a NULL is involved. This is called three-valued logic, and the name matters less than the consequence: <code>WHERE</code> keeps only the rows that answer "yes". Rows that answer "no" are dropped, and rows that answer "unknown" are dropped too, silently, with no error and no warning.</p>
+    <p>Вот машина, простыми словами. В большинстве случаев на вопрос есть два ответа: да или нет. В SQL есть три сравнения: да, нет и неизвестно, где неизвестное — это то, что вы получаете всякий раз, когда используется NULL. Это называется трехзначной логикой, и имя имеет меньшее значение, чем последствия:  <code>WHERE</code>  сохраняет только те строки, которые отвечают «да». Строки с ответом «нет» удаляются, как и строки с ответом «неизвестно», автоматически, без ошибок и предупреждений.</p>
 
-    <p>So for <code>assignee &lt;&gt; 'Priya'</code>: five tickets answer yes (Marcus and Dana's), three answer no (Priya's), and tickets 4 and 7 answer unknown, because comparing NULL to 'Priya' has no honest answer. The unknowns vanish. Ten in, five out, and the two unassigned tickets are in neither the Priya pile nor the not-Priya pile.</p>
+    <p>Итак, для  <code>assignee &lt;&gt; 'Priya'</code>: пять билетов отвечают «да» (Маркуса и Даны), три отвечают «нет» (прии), а билеты 4 и 7 отвечают неизвестно, потому что сравнение NULL с «Прией» не дает честного ответа. Неизвестные исчезают. Десять вошли, пять вышли, а два неназначенных билета не находятся ни в стопке «Прия», ни в стопке «Не-прия».</p>
 
-    <p>Say out loud where tickets 4 and 7 went before reading on, because that sentence is the whole trick. They were not excluded for being Priya's. They were excluded for being unanswerable. When you truly mean "everyone except Priya, including unassigned", you have to say so.</p>
+    <p>Прежде чем читать дальше, скажите вслух, где находятся билеты 4 и 7, потому что в этом предложении и заключается вся хитрость. Они не были исключены из-за того, что принадлежали Прие. Они были исключены из-за отсутствия ответа. Когда вы действительно имеете в виду «всех, кроме Прии, включая неназначенных», вы должны так и сказать.</p>
 
     <pre><code>SELECT COUNT(*) AS n
 FROM tickets
@@ -276,18 +276,18 @@ WHERE assignee &lt;&gt; 'Priya' OR assignee IS NULL;
   </div>
 
   <div class="step">
-    <h2>3. The NOT IN trap: one NULL, zero rows</h2>
+    <h2>3. Ловушка NOT IN: один NULL, ноль строк.</h2>
 
-    <p>Before the explanation: you have a list of staff who close tickets, and you want tickets handled by anyone not on the list. The list has three entries: Priya, Marcus, and one NULL from a bad import. How many rows do you think come back?</p>
+    <p>Прежде чем объяснить: у вас есть список сотрудников, которые закрывают заявки, и вы хотите, чтобы заявки обрабатывал кто-то, кого нет в списке. В списке три записи: Priya, Marcus и одна NULL из-за неправильного импорта. Как вы думаете, сколько строк вернется?</p>
 
     <pre><code>SELECT * FROM tickets
 WHERE assignee NOT IN (SELECT name FROM closers);</code></pre>
 
-    <p>Zero rows. Not "the Dana tickets", not "everything but Priya and Marcus". Zero, and I ran it to confirm. This is the single nastiest NULL surprise in SQL, because the query looks completely reasonable and returns an empty set with no error.</p>
+    <p>Ноль строк. Не «билеты Даны», не «все, кроме Прии и Маркуса». Ноль, и я запустил его, чтобы подтвердить. Это самый неприятный NULL-сюрприз в SQL, поскольку запрос выглядит вполне разумным и возвращает пустой набор без ошибок.</p>
 
-    <p>The reason follows from step two. <code>NOT IN</code> unrolls into a chain of comparisons: <code>assignee &lt;&gt; 'Priya' AND assignee &lt;&gt; 'Marcus' AND assignee &lt;&gt; NULL</code>. That last comparison answers unknown for every row in the table. And a chain of ANDs can only answer yes if every link answers yes, so the best any row can do is unknown. No row answers yes, <code>WHERE</code> keeps only yes, and the result is empty. One NULL in the list poisons all ten rows.</p>
+    <p>Причина следует из второго шага.  <code>NOT IN</code>  разворачивается в цепочку сравнений:  <code>assignee &lt;&gt; 'Priya' AND assignee &lt;&gt; 'Marcus' AND assignee &lt;&gt; NULL</code>. Последнее сравнение дает неизвестный ответ для каждой строки таблицы. А цепочка операторов AND может ответить «да» только в том случае, если каждая ссылка отвечает «да», поэтому лучшее, что может сделать любая строка, неизвестно. Ни одна строка не отвечает да,  <code>WHERE</code>  сохраняет только да, а результат пустой. Один NULL в списке отравляет все десять строк.</p>
 
-    <p>Two fixes, both of which I ran. Screen the NULL out of the subquery, which returns the 2 Dana tickets:</p>
+    <p>Два исправления, оба я выполнил. Отфильтруйте NULL из подзапроса, который возвращает 2 билета Dana:</p>
 
     <pre><code>SELECT ticket_id, assignee
 FROM tickets
@@ -296,32 +296,32 @@ WHERE assignee NOT IN (
 );
 -- tickets 6 and 8, both Dana</code></pre>
 
-    <p>Or use <code>NOT EXISTS</code>, which checks "no matching row exists" one row at a time and is immune to the trap. It returned 4 rows on the same data: Dana's two tickets plus the two unassigned ones, because an unassigned ticket genuinely has no match in the list. The two fixes disagree about tickets 4 and 7, and neither is wrong. They answer different questions, so the fork is: should unassigned tickets count as "not on the list"? If yes, <code>NOT EXISTS</code> says what you mean. If no, the screened <code>NOT IN</code> does. What decides is the sentence you would say to a stakeholder, and it is worth writing that sentence into the query as a comment.</p>
+    <p>Или используйте  <code>NOT EXISTS</code>, который проверяет по одной строке «нет соответствующей строки» и невосприимчив к ловушке. Он вернул 4 строки одних и тех же данных: два билета Даны плюс два неназначенных, поскольку неназначенный билет действительно не имеет совпадений в списке. Эти два исправления расходятся во мнениях относительно билетов 4 и 7, и ни одно из них не является ошибочным. Они отвечают на разные вопросы, поэтому развилка такова: должны ли неназначенные билеты считаться «нет в списке»? Если да,  <code>NOT EXISTS</code>  говорит то, что вы имеете в виду. Если нет, экранированный  <code>NOT IN</code>  делает. Решающее значение имеет предложение, которое вы бы сказали заинтересованной стороне, и стоит вписать это предложение в запрос в качестве комментария.</p>
   </div>
 
   <div class="step">
-    <h2>4. COALESCE for defaults, and when not to use it</h2>
+    <h2>4. COALESCE для значений по умолчанию и когда его не следует использовать</h2>
 
-    <p>Before the explanation: your ticket report goes to a manager who keeps asking what the blank assignee cells mean. What would you like those cells to say instead?</p>
+    <p>Перед пояснением: отчет о вашей заявке поступает к менеджеру, который постоянно спрашивает, что означают пустые ячейки «правопреемник». Что бы вы хотели, чтобы эти клетки говорили вместо этого?</p>
 
-    <p><code>COALESCE</code> is the tool. It takes a list of values and returns the first one that is not NULL, which makes it a fill-in-the-blank function: <code>COALESCE(assignee, 'Unassigned')</code> means "the assignee, or the word Unassigned when there is none".</p>
+    <p><code>COALESCE</code>  это инструмент. Она принимает список значений и возвращает первое из них, отличное от NULL, что делает ее функцией заполнения пробелов:  <code>COALESCE(assignee, 'Unassigned')</code>  означает «правопреемник» или слово «Неназначенный», если его нет.</p>
 
     <pre><code>SELECT ticket_id,
        COALESCE(assignee, 'Unassigned') AS assignee_display
 FROM tickets
 ORDER BY ticket_id;</code></pre>
 
-    <p>I ran it: tickets 4 and 7 now read "Unassigned" and the other eight show their names unchanged. That is the honest use of <code>COALESCE</code>: labeling missingness so a reader can see it.</p>
+    <p>Я запустил его: на билетах 4 и 7 теперь написано «Не назначено», а имена остальных восьми показаны без изменений. Это честное использование  <code>COALESCE</code>: маркировка отсутствий, чтобы читатель мог их увидеть.</p>
 
-    <p>The dishonest use is papering over it. <code>COALESCE(minutes_to_close, 0)</code> makes the NULLs disappear into zeros, and a zero-minute close time is a claim, not a label: it says the ticket closed instantly, when the truth is nobody recorded it. Three of the ten tickets here have no close time. That is a 30% hole in the column, and a hole that size is a finding your reader deserves to hear about, not a formatting problem to smooth away. When you fill a value for display, say so in the report, and when the missingness is large, report it as its own line. <a href="../documenting-data-limitations/">Documenting data limitations</a> covers how to write that up without burying the analysis.</p>
+    <p>Нечестное использование скрывает это.  <code>COALESCE(minutes_to_close, 0)</code>  заставляет NULL превращаться в нули, а время закрытия в нулевую минуту — это утверждение, а не метка: оно говорит, что билет закрыт мгновенно, хотя на самом деле никто его не записал. Три из десяти билетов здесь не имеют близкого времени. Это 30%-ная дыра в столбце, и дыра такого размера — это открытие, о котором ваш читатель заслуживает услышать, а не проблема форматирования, которую нужно сгладить. Когда вы заполняете значение для отображения, укажите это в отчете, а если пропущенное значение велико, сообщите об этом как в отдельной строке.  <a href="../documenting-data-limitations/">Документирование ограничений данных</a>  рассказывает о том, как это написать, не скрывая анализ.</p>
   </div>
 
   <div class="step">
-    <h2>5. How NULLs move your counts and averages</h2>
+    <h2>5. Как значения NULL изменяют ваши значения и средние значения</h2>
 
-    <p>Before the explanation: <code>minutes_to_close</code> has seven real values and three NULLs. When you take <code>AVG(minutes_to_close)</code>, what number does the database divide by, ten or seven?</p>
+    <p>Перед объяснением:  <code>minutes_to_close</code>  имеет семь действительных значений и три NULL. Когда ты принимаешь  <code>AVG(minutes_to_close)</code>на какое число делит база данных: на десять или на семь?</p>
 
-    <p>Seven. Aggregate functions skip NULLs entirely: <code>SUM</code>, <code>AVG</code>, <code>MIN</code>, <code>MAX</code>, and <code>COUNT(column)</code> all act only on the rows where the value exists. I ran the numbers on the worked table.</p>
+    <p>Семь. Агрегатные функции полностью пропускают NULL:  <code>SUM</code>, <code>AVG</code>, <code>MIN</code>, <code>MAX</code>, и  <code>COUNT(column)</code>  все действуют только на те строки, где существует значение. Я пробежал числа по обработанной таблице.</p>
 
     <pre><code>SELECT COUNT(*)                    AS all_rows,
        COUNT(minutes_to_close)     AS with_minutes,
@@ -333,24 +333,24 @@ FROM tickets;</code></pre>
       <tr><td>10</td><td>7</td><td>62.1</td></tr>
     </table>
 
-    <p>The average is 435 divided by 7, which is 62.1 minutes. Force the NULLs to zero with <code>COALESCE</code> and the same column averages 43.5, because now it is 435 divided by 10. That is a 30% swing in a headline number from one decision about missing data, and neither number is automatically right. 62.1 is the average of the tickets whose close time was recorded. 43.5 pretends unrecorded means instant. The honest report states the first number and the hole: "62.1 minutes average, across the 7 of 10 tickets with a recorded close time".</p>
+    <p>Среднее значение составляет 435, разделенное на 7, что составляет 62,1 минуты. Принудительно обнулить NULL с помощью  <code>COALESCE</code>  и в том же столбце среднее значение составляет 43,5, потому что теперь это 435, разделенное на 10. Это 30-процентное колебание в цифре заголовка из-за одного решения о недостающих данных, и ни одно из чисел не является автоматически правильным. 62,1 — это среднее значение билетов, время закрытия которых было зафиксировано. 43.5 притворяется, что незаписано, значит мгновенно. В честном отчете указано первое число и дыра: «В среднем 62,1 минуты по 7 из 10 билетов с зафиксированным временем закрытия».</p>
 
-    <p><code>COUNT(*)</code> against <code>COUNT(column)</code> is the same skip in count form. <code>COUNT(*)</code> counts rows, 10 here. <code>COUNT(minutes_to_close)</code> counts non-NULL values, 7 here, and <code>COUNT(assignee)</code> gives 8. The gap between the two counts is your missing-data count, which makes this pair the fastest completeness check in SQL. The whole COUNT family, including <code>DISTINCT</code>, is in <a href="../sql-count-function/">COUNT in SQL</a>.</p>
+    <p><code>COUNT(*)</code> against <code>COUNT(column)</code>  это тот же пропуск в форме счета.  <code>COUNT(*)</code>  считает строки, здесь 10.  <code>COUNT(minutes_to_close)</code>  подсчитывает значения, отличные от NULL, здесь 7, и  <code>COUNT(assignee)</code>  дает 8. Разрыв между двумя значениями — это количество пропущенных данных, что делает эту пару самой быстрой проверкой полноты в SQL. Вся семья COUNT, включая  <code>DISTINCT</code>, находится в  <a href="../sql-count-function/">СЧЕТ в SQL</a>.</p>
 
-    <p>Now picture running <code>COUNT(*)</code> next to <code>COUNT(the_column)</code> on the most important numeric column in your own data. Do you know, right now, what the gap would be? Most people find out later than they wanted to.</p>
+    <p>Теперь картинка работает  <code>COUNT(*)</code>  рядом с  <code>COUNT(the_column)</code>  в самом важном числовом столбце ваших собственных данных. Знаете ли вы прямо сейчас, какой будет разрыв? Большинство людей узнают об этом позже, чем им хотелось бы.</p>
   </div>
 
   <div class="step">
-    <h2>6. The full before and after</h2>
+    <h2>6. Полное до и после</h2>
 
-    <p>Same table, same question: how fast does each region close tickets?</p>
+    <p>Та же таблица, тот же вопрос: как быстро каждый регион закрывает заявки?</p>
 
     <h3>Before</h3>
     <pre><code>SELECT region, AVG(minutes_to_close) AS avg_minutes
 FROM tickets
 GROUP BY region;</code></pre>
 
-    <p>Three quiet problems, no errors. The average silently skips the three unrecorded close times, so nobody can see how much data is behind each number. The two tickets with no region form their own blank-looking group with no explanation. And the reader has no way to tell any of this from the output.</p>
+    <p>Три тихие проблемы, никаких ошибок. Среднее значение молча пропускает три незарегистрированных момента закрытия, поэтому никто не может увидеть, какой объем данных стоит за каждым числом. Два билета без указания региона образуют отдельную пустую группу без каких-либо объяснений. И читатель не имеет возможности узнать об этом из вывода.</p>
 
     <h3>After</h3>
     <pre><code>-- ============================================================
@@ -370,100 +370,100 @@ SELECT COALESCE(region, 'No region')  AS region_display,
 FROM tickets
 GROUP BY region;</code></pre>
 
-    <p>The blank group now has a name, every average sits beside the count of values that produced it, and the missingness is visible instead of ambient. The comment format is the one from <a href="../sql-teaching-comments/">how to comment SQL so it teaches</a>. To get this shape into your fingers, <a href="../../drill/">type the query yourself</a> in the SQL Drill rather than pasting it.</p>
+    <p>Пустая группа теперь имеет имя, каждое среднее значение находится рядом с количеством значений, которые его создали, а отсутствие отображается вместо окружающего. Формат комментариев тот же, что и у  <a href="../sql-teaching-comments/">Как комментировать SQL, чтобы он обучал</a>. Чтобы передать эту форму пальцам,  <a href="../../drill/">введите запрос самостоятельно</a>  в SQL Drill, а не вставлять его.</p>
   </div>
 
   <div class="step">
-    <h2>7. Edge cases: groups, joins, and sort order</h2>
+    <h2>7. Пограничные случаи: группы, соединения и порядок сортировки</h2>
 
-    <p>Before the explanation: NULL never equals NULL, yet the two no-region tickets just landed in one group together. How can both of those be true?</p>
+    <p>Перед объяснением: NULL никогда не равен NULL, однако два билета без региона только что попали в одну группу вместе. Как и то, и другое может быть правдой?</p>
 
-    <p>Because different parts of SQL treat NULL differently, on purpose, and the seams are where surprises live. Four to know.</p>
+    <p>Потому что разные части SQL намеренно обрабатывают NULL по-разному, и в этих швах живут сюрпризы. Четыре, чтобы знать.</p>
 
-    <p><strong>GROUP BY puts all NULLs in one group.</strong> Grouping asks "which rows belong together?", and the standard answers that all missing values belong together, even though no two of them are equal. On the worked table, grouping by region returns West 4, East 4, and a NULL group of 2, which I ran to confirm. That blank-looking row is not a glitch. It is your missing-region count, and it is worth reading every time.</p>
+    <p><strong>GROUP BY помещает все NULL в одну группу.</strong>  При группировке задается вопрос «какие строки принадлежат друг другу?», а стандартный ответ отвечает, что все пропущенные значения принадлежат друг другу, даже если среди них нет двух одинаковых. В рабочей таблице группировка по регионам возвращает Запад 4, Восток 4 и группу NULL, равную 2, что я и проверил, чтобы подтвердить. Эта пустая на вид строка не является сбоем. Это ваш счетчик недостающих регионов, и его стоит читать каждый раз.</p>
 
-    <p><strong>LEFT JOIN manufactures NULLs.</strong> A LEFT JOIN keeps every row from the left table, and when a row finds no match on the right, the right-hand columns arrive as NULL. Joining tickets to a two-row regions lookup that only lists East, I ran it: the four East tickets get their manager, and the other six rows show NULL, covering both real West tickets with no lookup entry and tickets whose region was already missing. So a NULL after a join means "no match or missing key", and telling those apart takes an <code>IS NULL</code> check on the join key. <a href="../sql-joins/">SQL joins</a> walks the whole family.</p>
+    <p><strong>LEFT JOIN создает NULL.</strong>  LEFT JOIN сохраняет каждую строку из левой таблицы, а когда строка не находит совпадений в правой, правые столбцы получают значение NULL. Присоединив билеты к двухстрочному поиску регионов, в котором указан только Восток, я запустил его: четыре билета Востока получают своего менеджера, а остальные шесть строк показывают NULL, охватывая как настоящие билеты Запада без записи поиска, так и билеты, регион которых уже отсутствовал. Таким образом, NULL после соединения означает «нет совпадения или отсутствующий ключ», и их разделение требует  <code>IS NULL</code>  проверьте ключ соединения.  <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a>  гуляет всей семьей.</p>
 
-    <p><strong>ORDER BY has to put NULLs somewhere, and databases disagree.</strong> Sorting the worked table by <code>minutes_to_close</code> ascending in SQLite puts the three NULL rows first, before 15; descending puts them last. SQLite and SQL Server treat NULLs as smallest, PostgreSQL and Oracle treat them as largest, and PostgreSQL and Oracle accept an explicit <code>NULLS FIRST</code> or <code>NULLS LAST</code> to say what you mean. The portable habit: when a sorted report matters, state the placement, either with that clause or by sorting on <code>the_column IS NULL</code> first.</p>
+    <p><strong>ORDER BY должен где-то помещать NULL, а базы данных с этим не согласны.</strong>  Сортировка обработанной таблицы по  <code>minutes_to_close</code>  при возрастании в SQLite сначала помещаются три строки NULL, а затем 15; спуск ставит их на последнее место. SQLite и SQL Server рассматривают NULL как наименьшие, PostgreSQL и Oracle рассматривают их как самые большие, а PostgreSQL и Oracle принимают явные значения.  <code>NULLS FIRST</code> or <code>NULLS LAST</code>  сказать то, что вы имеете в виду. Переносимая привычка: когда отсортированный отчет имеет значение, укажите его место либо с помощью этого пункта, либо путем сортировки по  <code>the_column IS NULL</code>  первый.</p>
 
-    <p><strong>Empty text is not NULL, except where it is.</strong> An empty string is a known value: someone said "nothing", rather than nobody saying anything. Filters and counts treat the two differently on most databases, so a column can look blank while <code>IS NULL</code> finds nothing. Oracle is the famous exception, storing empty strings as NULL. When blanks behave strangely, check both: <code>WHERE col IS NULL OR col = ''</code>.</p>
+    <p><strong>Пустой текст не имеет значения NULL, за исключением случаев, когда он есть.</strong>  Пустая строка — это известное значение: кто-то сказал «ничего», а не никто ничего не сказал. В большинстве баз данных фильтры и счетчики обрабатывают эти два значения по-разному, поэтому столбец может выглядеть пустым, пока  <code>IS NULL</code>  ничего не находит. Oracle — известное исключение, сохраняющее пустые строки как NULL. Если пробелы ведут себя странно, проверьте оба:  <code>WHERE col IS NULL OR col = ''</code>.</p>
   </div>
 
-  <h2>Why this works</h2>
+  <h2>Почему это работает</h2>
 
-  <p>None of this is trivia to memorize item by item. It all falls out of one design decision: a relational database must represent "value not known" without inventing a fake value, and every operator must then answer honestly when it meets one. Codd's relational model introduced exactly that idea, missing information as a first-class state rather than a magic number like 0 or 999 (Codd, 1970, <em>Communications of the ACM</em>, 13(6), 377–387). Once "unknown" exists, three-valued logic is forced: a comparison with an unknown cannot honestly answer yes or no, so a third answer must exist, and every behavior on this page follows. <code>= NULL</code> is unknown, a chain of ANDs with one unknown link is at best unknown, and an aggregate over unknowns can only use the values it actually has.</p>
+  <p>Все это не пустяки для запоминания по пунктам. Все это вытекает из одного проектного решения: реляционная база данных должна представлять «неизвестное значение», не придумывая поддельное значение, и каждый оператор затем должен честно ответить, когда он встретит такое значение. Реляционная модель Кодда представила именно эту идею: отсутствие информации является первоклассным состоянием, а не магическим числом вроде 0 или 999 (Codd, 1970,  <em>Коммуникации ACM</em>, 13(6), 377–387). Как только «неизвестное» существует, применяется трехзначная логика: сравнение с неизвестным не может честно ответить «да» или «нет», поэтому должен существовать третий ответ, и отсюда следует все поведение на этой странице.  <code>= NULL</code>  неизвестен, цепочка операторов AND с одним неизвестным звеном в лучшем случае неизвестна, а агрегат по неизвестным может использовать только те значения, которые он действительно имеет.</p>
 
-  <p>The page also keeps asking you to commit to a row count before showing one, and that is deliberate. Generating an answer before seeing the correct one reliably improves retention, even when the guess is wrong (Bisra, Liu, Nesbit, Salimi, &amp; Winne, 2018, <em>Educational Psychology Review</em>, 30(3), 703–725), and retrieving beats rereading for keeping it (Roediger &amp; Karpicke, 2006, <em>Psychological Science</em>, 17(3), 249–255). Guessing seven and getting five is why <code>&lt;&gt;</code> dropping the unknowns will still be with you next month.</p>
+  <p>Страница также продолжает просить вас подтвердить количество строк, прежде чем показывать их, и это намеренно. Создание ответа до того, как вы увидите правильный, надежно улучшает удержание, даже если предположение неверно (Бисра, Лю, Несбит, Салими и Винн, 2018,  <em>Обзор педагогической психологии</em>, 30(3), 703–725) и получение битов, повторное чтение для их сохранения (Roediger &amp; Karpicke, 2006,  <em>Психологическая наука</em>, 17(3), 249–255). Угадать семь и получить пять, вот почему  <code>&lt;&gt;</code>  отбрасывание неизвестного все еще будет с вами в следующем месяце.</p>
 
-  <h2>Using this on your own project</h2>
+  <h2>Использование этого в вашем собственном проекте</h2>
 
-  <p>Auditing every query you own for NULL handling in one pass is miserable, and nobody finishes it. Do this instead, in order.</p>
+  <p>Аудит каждого вашего запроса на обработку NULL за один проход — утомительное занятие, и никто его не завершает. Вместо этого сделайте это по порядку.</p>
 
   <ol>
-    <li><strong>Profile one table: run <code>COUNT(*)</code> next to <code>COUNT(col)</code> for each column that matters.</strong> The gaps are your missing-data map, and most tables only have two or three columns worth worrying about.</li>
-    <li><strong>Search your saved queries for <code>NOT IN</code> with a subquery.</strong> Each one is either already screened with <code>IS NOT NULL</code> or is a zero-rows surprise waiting for the first NULL to arrive. Fix or convert to <code>NOT EXISTS</code>.</li>
-    <li><strong>Find every <code>&lt;&gt;</code> in a WHERE clause and ask whether the NULL rows belong in the answer.</strong> If they do, add <code>OR col IS NULL</code>. If they do not, leave it and move on.</li>
-    <li><strong>Put the count of values next to every average you publish.</strong> "62.1 across 7 of 10" is a different claim from "62.1", and the reader deserves to know which one you are making.</li>
-    <li><strong>Label displayed NULLs with <code>COALESCE</code>, and log filled ones.</strong> A default that changes arithmetic belongs in the limitations note, not just the query.</li>
+    <li><strong>Профиль одной таблицы: запустить  <code>COUNT(*)</code>  рядом с  <code>COUNT(col)</code>  для каждого важного столбца.</strong>  Пробелы — это ваша карта недостающих данных, и в большинстве таблиц есть только два или три столбца, о которых стоит беспокоиться.</li>
+    <li><strong>Найдите в сохраненных запросах  <code>NOT IN</code>  с подзапросом.</strong>  Каждый из них либо уже проверен  <code>IS NOT NULL</code>  или это сюрприз с нулевыми строками, ожидающий прибытия первого NULL. Исправьте или преобразуйте в  <code>NOT EXISTS</code>.</li>
+    <li><strong>Найдите каждого  <code>&lt;&gt;</code>  в предложении WHERE и спросите, принадлежат ли в ответе строки NULL.</strong>  Если да, добавьте  <code>OR col IS NULL</code>. Если нет, оставьте это и идите дальше.</li>
+    <li><strong>Укажите количество значений рядом с каждым публикуемым средним значением.</strong>  «62,1 по шкале 7 из 10» — это утверждение, отличное от «62,1», и читатель заслуживает знать, какое утверждение вы делаете.</li>
+    <li><strong>Метка отображает NULL с  <code>COALESCE</code>и заполненные журналом.</strong>  Значение по умолчанию, которое изменяет арифметику, относится к примечанию об ограничениях, а не только к запросу.</li>
   </ol>
 
-  <p>If you have paper nearby and five minutes, one optional drawing earns its space. Draw six rows heading toward a gate, mark two yes, two no, and two with question marks, and draw only the yes rows coming out the far side. Redrawing that from memory next week is a fair test of whether the yes-only gate is yours now.</p>
+  <p>Если у вас под рукой есть бумага и есть пять минут, один дополнительный рисунок занимает свое место. Нарисуйте шесть рядов, ведущих к воротам, отметьте два «да», два «нет» и два вопросительными знаками и нарисуйте только ряды «да», выходящие с дальней стороны. Перерисовка этого по памяти на следующей неделе станет честной проверкой того, принадлежат ли вам теперь ворота «только да».</p>
 
-  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: SQL, Tableau, data migration, and the working habits around them.</div>
+  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: SQL, Tableau, миграция данных и связанные с ними рабочие привычки.</div>
 
-  <h2>The whole thing on one screen</h2>
+  <h2>Все на одном экране</h2>
 
-  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
+  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
 
   <table>
-    <tr><th>Concept</th><th>What it does</th></tr>
-    <tr><td>NULL</td><td>Unknown. Not zero, not empty text. A slot nobody has filled.</td></tr>
-    <tr><td><code>= NULL</code></td><td>Answers unknown for every row, so it matches nothing. Ever.</td></tr>
-    <tr><td><code>IS NULL</code> / <code>IS NOT NULL</code></td><td>The real test for missing values. Asks about the slot, not the value.</td></tr>
-    <tr><td>Three-valued logic</td><td>Comparisons answer yes, no, or unknown. NULL always produces unknown.</td></tr>
-    <tr><td><code>WHERE</code></td><td>Keeps only yes rows. Unknown rows drop silently, same as no.</td></tr>
-    <tr><td><code>&lt;&gt; 'x'</code></td><td>Drops the NULL rows too. Add <code>OR col IS NULL</code> if they belong.</td></tr>
-    <tr><td><code>NOT IN</code> with a NULL in the list</td><td>Returns zero rows, no error. Screen the subquery or use <code>NOT EXISTS</code>.</td></tr>
-    <tr><td><code>NOT EXISTS</code></td><td>Immune to the trap, and counts NULL rows as non-matches. Decide if that is what you mean.</td></tr>
-    <tr><td><code>COALESCE(col, default)</code></td><td>First non-NULL value. Label missingness with it; do not silently rewrite numbers.</td></tr>
-    <tr><td><code>COUNT(*)</code> vs <code>COUNT(col)</code></td><td>Rows vs non-NULL values. The gap is your missing-data count.</td></tr>
-    <tr><td>Aggregates</td><td><code>SUM</code>, <code>AVG</code>, <code>MIN</code>, <code>MAX</code> skip NULLs. <code>AVG</code> divides by the values it kept.</td></tr>
-    <tr><td><code>NULL = NULL</code></td><td>Unknown, not true. No NULL ever equals another.</td></tr>
-    <tr><td><code>GROUP BY</code></td><td>Still puts all NULLs in one group. That group is your missing count.</td></tr>
-    <tr><td>LEFT JOIN</td><td>Unmatched rows arrive with NULLs in the right-hand columns.</td></tr>
-    <tr><td><code>ORDER BY</code></td><td>NULLs sort first or last depending on the database. Say <code>NULLS FIRST</code>/<code>LAST</code> where supported.</td></tr>
-    <tr><td>Empty string</td><td>A known value, distinct from NULL almost everywhere. Oracle stores it as NULL.</td></tr>
+    <tr><th>Concept</th><th>Что он делает</th></tr>
+    <tr><td>NULL</td><td>Неизвестный. Не ноль, не пустой текст. Место, которое никто не заполнил.</td></tr>
+    <tr><td><code>= NULL</code></td><td>Ответы неизвестны для каждой строки, поэтому она ничему не соответствует. Всегда.</td></tr>
+    <tr><td><code>IS NULL</code> / <code>IS NOT NULL</code></td><td>Настоящий тест на пропущенные значения. Спрашивает о слоте, а не о значении.</td></tr>
+    <tr><td>Трехзначная логика</td><td>Сравнения отвечают да, нет или неизвестно. NULL всегда выдает неизвестное.</td></tr>
+    <tr><td><code>WHERE</code></td><td>Сохраняет только строки «да». Неизвестные строки удаляются автоматически, так же, как и нет.</td></tr>
+    <tr><td><code>&lt;&gt; 'x'</code></td><td>Удаляет также NULL-строки. Добавлять  <code>OR col IS NULL</code>  если они принадлежат.</td></tr>
+    <tr><td><code>NOT IN</code>  с NULL в списке</td><td>Возвращает ноль строк, без ошибок. Просмотрите подзапрос или используйте  <code>NOT EXISTS</code>.</td></tr>
+    <tr><td><code>NOT EXISTS</code></td><td>Невосприимчив к ловушке и считает NULL-строки несовпадающими. Решите, это ли вы имеете в виду.</td></tr>
+    <tr><td><code>COALESCE(col, default)</code></td><td>Первое значение, отличное от NULL. Отметьте его отсутствие; не переписывайте молча цифры.</td></tr>
+    <tr><td><code>COUNT(*)</code> vs <code>COUNT(col)</code></td><td>Строки и значения, отличные от NULL. Разрыв — это количество недостающих данных.</td></tr>
+    <tr><td>Aggregates</td><td><code>SUM</code>, <code>AVG</code>, <code>MIN</code>, <code>MAX</code>  пропустить NULL.  <code>AVG</code>  делится на сохраненные значения.</td></tr>
+    <tr><td><code>NULL = NULL</code></td><td>Неизвестно, неправда. Ни один NULL никогда не равен другому.</td></tr>
+    <tr><td><code>GROUP BY</code></td><td>По-прежнему помещает все NULL в одну группу. Эта группа и есть ваш недостающий счет.</td></tr>
+    <tr><td>ЛЕВОЕ ПРИСОЕДИНЕНИЕ</td><td>Несовпадающие строки поступают с NULL в правых столбцах.</td></tr>
+    <tr><td><code>ORDER BY</code></td><td>NULL сортируются первыми или последними в зависимости от базы данных. Сказать  <code>NULLS FIRST</code>/<code>LAST</code>  где поддерживается.</td></tr>
+    <tr><td>Пустая строка</td><td>Известное значение, почти везде отличное от NULL. Oracle сохраняет его как NULL.</td></tr>
   </table>
 
-  <div class="note"><strong>The one habit to keep.</strong> If you take nothing else from this page, run <code>COUNT(*)</code> next to <code>COUNT(the_column)</code> before you trust any filter, join, or average on that column. The NULL failures on this page share one trait: no error message, just a wrong row count that looks like a result. If a query misbehaves in a way this page does not cover, there is a general <a href="../technical-tenacity/">diagnosis loop for being stuck</a>.</div>
+  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Если вы больше ничего не берете с этой страницы, запустите  <code>COUNT(*)</code>  рядом с  <code>COUNT(the_column)</code>  прежде чем доверять какому-либо фильтру, объединению или среднему значению в этом столбце. У NULL-ошибок на этой странице есть одна общая черта: нет сообщения об ошибке, просто неправильное количество строк, похожее на результат. Если запрос ведет себя не так, как описано на этой странице, существует общая ошибка.  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>.</div>
 
-  <p>One last thought, and I would genuinely like other people's answers. My worst NULL bug was a NOT IN that returned zero rows for a week, and the report it fed just said "no exceptions found", which everyone was happy to believe. What is the longest a NULL has quietly lied to you, and what finally gave it away?</p>
+  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Моей самой худшей NULL-ошибкой был NOT IN, который возвращал ноль строк в течение недели, а в отчете, который он подавал, просто говорилось: «Исключения не найдены», чему все были рады поверить. Как долго NULL тихо лгал вам и что в конце концов его выдало?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Codd, E. F. (1970). A relational model of data for large shared data banks. <em>Communications of the ACM</em>, 13(6), 377–387.</li>
-    <li>Bisra, K., Liu, Q., Nesbit, J. C., Salimi, F., &amp; Winne, P. H. (2018). Inducing self-explanation: A meta-analysis. <em>Educational Psychology Review</em>, 30(3), 703–725.</li>
-    <li>Roediger, H. L., &amp; Karpicke, J. D. (2006). Test-enhanced learning: Taking memory tests improves long-term retention. <em>Psychological Science</em>, 17(3), 249–255.</li>
+    <li>Кодд, EF (1970). Реляционная модель данных для крупных общих банков данных.  <em>Коммуникации ACM</em>, 13(6), 377–387.</li>
+    <li>Бисра К., Лю К., Несбит Дж. К., Салими Ф. и Винн П. Х. (2018). Побуждение к самообъяснению: метаанализ.  <em>Обзор педагогической психологии</em>, 30(3), 703–725.</li>
+    <li>Рёдигер, Х.Л., и Карпике, Дж.Д. (2006). Улучшенное обучение с помощью тестов: прохождение тестов на память улучшает долгосрочное запоминание.  <em>Психологическая наука</em>, 17(3), 249–255.</li>
   </ul>
 
   <div class="book">
-    <strong>The query nearly works, and the rows that vanished were the ones with nothing in that column.</strong>
-    <p><em>SQL for Analysts</em> is 458 pages, NULL taken apart case by case, because it is an absence of a value and not a value.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-null'})">SQL for Analysts, $19 &rarr;</a>
+    <strong>Запрос почти работает, и исчезли строки, в этом столбце ничего не было.</strong>
+    <p><em>SQL для аналитиков</em>  составляет 458 страниц, NULL разбирается в каждом конкретном случае, потому что это отсутствие значения, а не значение.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-null'})">SQL для аналитиков, 19 $ →</a>
   </div>
 
   <div class="cta">
-    <strong>Practice NULL handling with live queries in front of you.</strong>
-    <p style="margin:6px 0 0">The <a href="../../sql/">SQL Kit</a> runs SQLite in the browser, so you can seed a table with NULLs, run the trap queries, and watch the row counts change as you fix them. Worked examples, flash cards, and a mock exam sit alongside it. Nothing to install, no account needed.</p>
-    <a class="btn" href="../../sql/">Open the SQL Kit →</a>
+    <strong>Попрактикуйтесь в обработке NULL, используя живые запросы.</strong>
+    <p style="margin:6px 0 0">The <a href="../../sql/">SQL-комплект</a>  запускает SQLite в браузере, поэтому вы можете заполнять таблицу значениями NULL, запускать запросы-ловушки и наблюдать за изменением количества строк по мере их исправления. Рядом с ним лежат рабочие примеры, карточки и пробный экзамен. Ничего устанавливать, учетная запись не требуется.</p>
+    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> · <a href="../sql-find-duplicates/">Find Duplicate Rows</a> · <a href="../sql-count-function/">COUNT in SQL</a> · <a href="../sql-joins/">SQL JOINs</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../sql-case-expression/">The CASE Expression</a> · <a href="../sql-month-over-month/">Month-over-Month in SQL</a> · <a href="../sql-foundations/">SQL Foundations</a> · <a href="../sql-ctes/">SQL CTEs</a> · <a href="../sql-window-functions/">Window Functions</a> · <a href="../sql-aliasing/">SQL Aliases</a> · <a href="../sql-teaching-comments/">Comment SQL So It Teaches</a> · <a href="../../drill/">SQL Drill</a> · <a href="../set-up-a-sql-database/">Set Up a SQL Database</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../migration-profiling/">Migration Profiling</a> · <a href="../entity-resolution/">Entity Resolution</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../what-is-data-analysis/">What Is Data Analysis?</a> · <a href="../../sql/">SQL Kit</a> · <a href="../../projects/">Portfolio Projects</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../sql-find-duplicates/">Найти повторяющиеся строки</a> · <a href="../sql-count-function/">СЧЕТ в SQL</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-case-expression/">Выражение CASE</a> · <a href="../sql-month-over-month/">Месяц за месяцем в SQL</a> · <a href="../sql-foundations/">Основы SQL</a> · <a href="../sql-ctes/">SQL CTE</a> · <a href="../sql-window-functions/">Оконные функции</a> · <a href="../sql-aliasing/">SQL-псевдонимы</a> · <a href="../sql-teaching-comments/">Комментарий SQL, чтобы он научился</a> · <a href="../../drill/">SQL-детализация</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../migration-profiling/">Профилирование миграции</a> · <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../what-is-data-analysis/">Что такое анализ данных?</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../../projects/">Портфельные проекты</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

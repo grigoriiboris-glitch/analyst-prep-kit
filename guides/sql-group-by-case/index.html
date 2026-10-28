@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SQL GROUP BY CASE WHEN: Grouping by a Calculated Band &mdash; Analyst Prep Kit</title>
-<meta name="description" content="Group by a band you invent in the query, without adding a column to the table. Where the CASE goes, why repeating it in the GROUP BY is the safe form, and the band that vanishes because nothing landed in it.">
+<title>SQL GROUP BY CASE WHEN: группировка по расчетному диапазону — комплект подготовки аналитика</title>
+<meta name="description" content="Группировка по придуманному вами бэнду в запросе, без добавления столбца в таблицу. Куда идет CASE, почему повторение его в GROUP BY — безопасная форма, и полоса, которая исчезает, потому что в нее ничего не попало.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-group-by-case/">
-<meta property="og:title" content="GROUP BY with CASE: Grouping by a Rule Instead of a Column">
-<meta property="og:description" content="Eight orders grouped into three bands that exist only in the query. Where the CASE goes, and why.">
+<meta property="og:title" content="GROUP BY с CASE: группировка по правилу вместо столбца">
+<meta property="og:description" content="Восемь заказов сгруппированы в три бэнда, существующие только в запросе. Куда идет ДЕЛО и почему.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-group-by-case/">
 <meta name="twitter:card" content="summary_large_image">
@@ -164,24 +164,24 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../../sql/">SQL Kit</a></p>
-  <h1>GROUP BY with CASE: Grouping by a Rule Instead of a Column</h1>
-  <p class="meta">Michael Nocito &middot; Updated August 2026 &middot; Every query on this page was run before it was published</p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../../sql/">SQL-комплект</a></p>
+  <h1>GROUP BY с CASE: группировка по правилу вместо столбца</h1>
+  <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Каждый запрос на этой странице был выполнен до его публикации.</p>
 
-  <p>The table has an amount. The report wants small, medium and large. Nobody is going to add a band column to the source table, and they should not: the boundaries change more often than the data does.</p>
+  <p>В таблице указана сумма. В докладе говорится о малых, средних и крупных. Добавлять столбец бэнда в исходную таблицу никто не собирается, да и не должен: границы меняются чаще, чем данные.</p>
 
-  <p>What you do: write the rule as a <code>CASE</code> in the <code>SELECT</code>, and repeat it in the <code>GROUP BY</code>. The band exists for the length of the query and nowhere else.</p>
+  <p>Что вы делаете: напишите правило в виде  <code>CASE</code> В  <code>SELECT</code>и повторите это в  <code>GROUP BY</code>. Полоса существует на протяжении всего запроса и больше нигде.</p>
 
-  <p><strong>The short version.</strong> Group by the expression, not by the alias, and your query runs on every database.</p>
+  <p><strong>Краткая версия.</strong>  Группируйте по выражению, а не по псевдониму, и ваш запрос будет выполняться в каждой базе данных.</p>
 
-  <h2>The table</h2>
+  <h2>Стол</h2>
   <pre><code>CREATE TABLE orders(order_id INT, customer_id INT, amount INT, status TEXT);
 INSERT INTO orders VALUES
 (101,1,120,'shipped'),(102,1,80,'shipped'),(103,2,200,'cancelled'),
 (104,2,50,'shipped'),(105,3,300,'shipped'),(106,4,90,'pending'),
 (107,4,60,'shipped'),(108,5,150,'cancelled');</code></pre>
 
-  <h2>The query</h2>
+  <h2>Запрос</h2>
   <pre><code>SELECT CASE WHEN amount &gt;= 200 THEN 'large'
             WHEN amount &gt;= 100 THEN 'medium'
             ELSE 'small' END AS band,
@@ -198,17 +198,17 @@ ORDER BY total DESC;</code></pre>
     <tr><td>small</td><td>4</td><td>280</td></tr>
     <tr><td>medium</td><td>2</td><td>270</td></tr>
   </table>
-  <p>Two orders of 200 and 300 make large. Two of 120 and 150 make medium. The remaining four, 80, 50, 90 and 60, make small. Eight rows in, three rows out, and 500 + 280 + 270 = 1,050, which is the full table total. That addition is the check worth doing every time.</p>
+  <p>Два заказа по 200 и 300 штук — это большой размер. Двое из 120 и 150 — средние. Остальные четыре — 80, 50, 90 и 60 — малы. Восемь строк внутри, три строки снаружи, и 500 + 280 + 270 = 1050, что составляет общую сумму таблицы. Это дополнение стоит проверять каждый раз.</p>
 
-  <h2>Where the CASE can go, by database</h2>
+  <h2>Куда может идти CASE, по базе данных</h2>
   <table>
-    <tr><th>Form</th><th>Works on</th><th>Note</th></tr>
-    <tr><td>Repeat the expression in GROUP BY</td><td>Everything</td><td>Verbose, and portable</td></tr>
-    <tr><td><code>GROUP BY 1</code></td><td>Postgres, MySQL, SQLite, Snowflake, BigQuery</td><td>Short. Breaks silently if you reorder the SELECT.</td></tr>
-    <tr><td><code>GROUP BY band</code>, the alias</td><td>MySQL, Postgres</td><td>Not SQL Server or Oracle</td></tr>
-    <tr><td>A CTE that defines the band, then group it</td><td>Everything</td><td>Best for anything reused</td></tr>
+    <tr><th>Form</th><th>Работает над</th><th>Note</th></tr>
+    <tr><td>Повторите выражение в GROUP BY</td><td>Everything</td><td>Многословный и портативный</td></tr>
+    <tr><td><code>GROUP BY 1</code></td><td>Постгрес, MySQL, SQLite, Снежинка, BigQuery</td><td>Короткий. Бесшумно прерывается, если вы измените порядок SELECT.</td></tr>
+    <tr><td><code>GROUP BY band</code>, псевдоним</td><td>MySQL, Постгрес</td><td>Не SQL Server или Oracle</td></tr>
+    <tr><td>CTE, который определяет полосу, а затем группирует ее.</td><td>Everything</td><td>Лучше всего для всего, что используется повторно</td></tr>
   </table>
-  <p>The CTE version is the one to prefer as soon as the rule appears more than once:</p>
+  <p>Версия CTE является предпочтительной, если правило появляется более одного раза:</p>
   <pre><code>WITH banded AS (
   SELECT order_id, amount,
          CASE WHEN amount &gt;= 200 THEN 'large'
@@ -220,13 +220,13 @@ SELECT band, COUNT(*) AS orders, SUM(amount) AS total
 FROM banded
 GROUP BY band
 ORDER BY total DESC;</code></pre>
-  <p>The rule is written once, so it cannot drift between the <code>SELECT</code> and the <code>GROUP BY</code>. Two copies of a rule that must agree is exactly the kind of thing that gets half-edited six months later.</p>
+  <p>Правило пишется один раз, поэтому оно не может дрейфовать между  <code>SELECT</code>  и  <code>GROUP BY</code>. Две копии правила, которые должны согласовываться, — это именно то, что через шесть месяцев наполовину редактируют.</p>
 
-  <div class="note"><strong>The order of the WHENs decides the answer.</strong> <code>CASE</code> stops at the first match, so a 300 hits <code>&gt;= 200</code> and never sees the later branches. Reverse the two conditions and everything above 100 becomes medium, including the 300, with no error. That failure is worked in full in <a href="../sql-case-overlapping-conditions/">overlapping CASE conditions</a>.</div>
+  <div class="note"><strong>Порядок слов WHEN определяет ответ.</strong> <code>CASE</code>  останавливается на первом матче, поэтому 300 попаданий  <code>&gt;= 200</code>  и никогда не видит более поздние ветки. Поменяйте местами два условия, и все, что выше 100, станет средним, включая 300, без ошибок. Этот провал отработан в полной мере в  <a href="../sql-case-overlapping-conditions/">перекрывающиеся условия CASE</a>.</div>
 
-  <h2>The band that disappears</h2>
-  <p>Add a fourth band for anything at or above 500 and the query returns three rows, not four. <code>GROUP BY</code> reports the groups that exist in the data; a band nothing landed in produces no row rather than a zero.</p>
-  <p>For a report that must always show every band, supply the list and join to it:</p>
+  <h2>Группа, которая исчезает</h2>
+  <p>Добавьте четвертую полосу для всего, что имеет значение 500 или выше, и запрос вернет три строки, а не четыре.  <code>GROUP BY</code>  сообщает о группах, которые существуют в данных; полоса, в которую ничего не попало, не дает строки, а дает ноль.</p>
+  <p>Для отчета, в котором всегда должна отображаться каждая полоса, укажите список и присоединитесь к нему:</p>
   <pre><code>WITH bands(band, sort_order) AS (
   VALUES ('small',1), ('medium',2), ('large',3), ('huge',4)
 ),
@@ -245,19 +245,19 @@ FROM bands b
 LEFT JOIN banded x ON x.band = b.band
 GROUP BY b.band, b.sort_order
 ORDER BY b.sort_order;</code></pre>
-  <p>Now huge appears with 0 and 0. Note <code>COUNT(x.amount)</code> rather than <code>COUNT(*)</code>: after a LEFT JOIN the unmatched band still produces one row, and <code>COUNT(*)</code> would report 1 for a band containing nothing.</p>
+  <p>Теперь отображается огромный размер с 0 и 0. Примечание.  <code>COUNT(x.amount)</code>  скорее, чем  <code>COUNT(*)</code>: после LEFT JOIN несовпадающая полоса по-прежнему создает одну строку, и  <code>COUNT(*)</code>  сообщит 1 для полосы, ничего не содержащей.</p>
 
-  <h2>Sorting bands in a sensible order</h2>
-  <p>Alphabetical order puts large before medium before small, which is meaningless. Two ways to fix it:</p>
+  <h2>Сортировка полос в разумном порядке</h2>
+  <p>В алфавитном порядке большое ставится перед средним, а затем маленьким, что бессмысленно. Два способа исправить:</p>
   <pre><code>-- sort by a number, hide the number
 ORDER BY CASE WHEN amount &gt;= 200 THEN 3
               WHEN amount &gt;= 100 THEN 2
               ELSE 1 END DESC
 
 -- or carry a sort_order column alongside the band, as above</code></pre>
-  <p>The second is better in anything that gets reused, because the ordering rule lives next to the band definition rather than in a third copy of the same conditions.</p>
+  <p>Второе лучше во всем, что используется повторно, потому что правило упорядочивания находится рядом с определением полосы, а не в третьей копии тех же условий.</p>
 
-  <h2>Grouping by a rule and a column together</h2>
+  <h2>Группировка по правилу и столбцу вместе</h2>
   <pre><code>SELECT status,
        CASE WHEN amount &gt;= 200 THEN 'large'
             WHEN amount &gt;= 100 THEN 'medium'
@@ -269,41 +269,41 @@ GROUP BY status,
               WHEN amount &gt;= 100 THEN 'medium'
               ELSE 'small' END
 ORDER BY status, band;</code></pre>
-  <p>One row per combination that occurs. With three statuses and three bands there are nine possible rows and considerably fewer real ones, which is normal and worth stating on the report so nobody reads a missing combination as a zero.</p>
+  <p>Одна строка на каждую возникающую комбинацию. При трех статусах и трех полосах имеется девять возможных строк и значительно меньше реальных, что является нормальным и стоит указать в отчете, чтобы никто не считал недостающую комбинацию нулем.</p>
 
-  <h2>How to apply this to your own work</h2>
+  <h2>Как применить это в своей работе</h2>
   <ol>
-    <li>Check that your band totals sum to the ungrouped total. It is one extra query and it catches a missing <code>ELSE</code>.</li>
-    <li>Move any rule used more than once into a CTE, so there is a single definition.</li>
-    <li>Write the boundary policy in a comment: does a value equal to the boundary go up or down?</li>
-    <li>Decide whether empty bands must appear, and if so build the band list explicitly.</li>
-    <li>Give bands a deliberate sort order rather than accepting alphabetical.</li>
+    <li>Убедитесь, что итоговые суммы вашей группы соответствуют разгруппированной сумме. Это один дополнительный запрос, который улавливает недостающую информацию.  <code>ELSE</code>.</li>
+    <li>Переместите любое правило, использованное более одного раза, в CTE, чтобы было единое определение.</li>
+    <li>Напишите в комментарии политику границ: значение, равное границе, увеличивается или уменьшается?</li>
+    <li>Решите, должны ли появляться пустые полосы, и если да, то явно создайте список полос.</li>
+    <li>Предоставьте группам преднамеренный порядок сортировки, а не алфавитный.</li>
   </ol>
 
-  <h2>The one habit to keep</h2>
-  <p>Ask where the rule lives. A band written inside a query is invisible to everyone who does not read the query, so if the same rule appears in a spreadsheet and a dashboard as well, it will eventually disagree with itself. One definition, in one place, referenced everywhere.</p>
+  <h2>Единственная привычка, которую нужно сохранить</h2>
+  <p>Спросите, где живет это правило. Бэнд, написанный внутри запроса, невидим для всех, кто не читает запрос, поэтому, если одно и то же правило появится и в электронной таблице, и на информационной панели, оно в конечном итоге не будет согласовываться само с собой. Одно определение в одном месте, ссылки на него повсюду.</p>
 
-  <p>How many places in your reporting define what counts as a large order?</p>
+  <p>Сколько мест в вашей отчетности определяет, что считается крупным заказом?</p>
 
-  <div class="note"><strong>Every number here was run before it was published.</strong> Eight orders band into large 2 rows and 500, medium 2 rows and 270, small 4 rows and 280, and those three totals sum to the table total of 1,050.</div>
+  <div class="note"><strong>Каждый номер здесь был проведён до того, как был опубликован.</strong>  Восемь заказов группируются в большие 2 ряда и 500, средние 2 ряда и 270, маленькие 4 ряда и 280, и эти три суммы в сумме дают общую таблицу 1050.</div>
 
   <div class="book">
-    <strong>A grouping rule written in the query is a rule nobody outside the query can see.</strong>
-    <p><em>SQL for Analysts</em> is 458 pages that read queries line by line in everyday words, so a result that came back wrong has somewhere to be traced instead of being retyped until it looks better.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-group-by-case'})">SQL for Analysts, $19 &rarr;</a>
+    <strong>Правило группировки, записанное в запросе, — это правило, которое никто не видит за пределами запроса.</strong>
+    <p><em>SQL для аналитиков</em>  — это 458 страниц, которые считывают запросы построчно в повседневных словах, поэтому ошибочный результат нужно где-то отслеживать, а не перепечатывать, пока он не станет выглядеть лучше.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-group-by-case'})">SQL для аналитиков, 19 $ →</a>
   </div>
 
   <div class="cta">
-    <strong>Practise the grouping, not just the syntax.</strong>
-    <p style="margin:6px 0 0"><a href="../sql-group-by-having/">GROUP BY and HAVING</a> covers the basics, <a href="../sql-case-overlapping-conditions/">CASE with overlapping conditions</a> covers the order of the WHENs, and <a href="../../drill/">SQL Drill</a> gives you the reps.</p>
-    <a class="btn" href="../sql-group-by-having/">Read GROUP BY and HAVING &rarr;</a>
+    <strong>Практикуйте группировку, а не только синтаксис.</strong>
+    <p style="margin:6px 0 0"><a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a>  охватывает основы,  <a href="../sql-case-overlapping-conditions/">СЛУЧАЙ с перекрывающимися условиями</a>  охватывает порядок WHEN и  <a href="../../drill/">SQL-детализация</a>  дает вам повторения.</p>
+    <a class="btn" href="../sql-group-by-having/">Читать GROUP BY и HAVING →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../sql-group-by-having/">GROUP BY and HAVING</a> &middot; <a href="../sql-case-expression/">The CASE Expression</a> &middot; <a href="../sql-case-overlapping-conditions/">Overlapping CASE Conditions</a> &middot; <a href="../sql-count-case-when/">COUNT with CASE WHEN</a> &middot; <a href="../sql-segment-with-case/">Segmenting with CASE</a> &middot; <a href="../../drill/">SQL Drill</a> &middot; <a href="../../sql/">SQL Kit</a>
-    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> &middot; <a href="../sql-case-expression/">Выражение CASE</a> &middot; <a href="../sql-case-overlapping-conditions/">перекрывающиеся условия CASE</a> &middot; <a href="../sql-count-case-when/">СЧИТАТЬ с помощью CASE WHEN</a> &middot; <a href="../sql-segment-with-case/">Сегментация с помощью CASE</a> &middot; <a href="../../drill/">SQL-детализация</a> &middot; <a href="../../sql/">SQL-комплект</a>
+    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

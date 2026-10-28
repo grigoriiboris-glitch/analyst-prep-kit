@@ -7,7 +7,7 @@
 
 const LAP = {
   unit: 'Unit 1: First Queries',
-  lesson: 'SELECT, WHERE, ORDER BY, LIMIT',
+  lesson: "ВЫБРАТЬ, ГДЕ, ЗАКАЗАТЬ ПО, ОГРАНИЧИТЬ",
 
   // ── STEP 1: the primer ────────────────────────────────────────────────────
   // Six lines. Only what someone needs to type rung 1 without guessing.
@@ -38,7 +38,7 @@ const LAP = {
       q: 'What artists, tracks and audience sizes are in the collection?',
       given: ['The table is <code>gem_page</code>',
               'Every song in the table, nothing filtered out'],
-      why: 'The skeleton of every query you will ever write: SELECT the columns, FROM the table.',
+      why: "Скелет каждого запроса, который вы когда-либо напишете: ВЫБЕРИТЕ столбцы ИЗ таблицы.",
       // `did` and `matters` are what the celebration popup carries. What you just did, in
       // words, and why a working analyst cares. Not a restatement of the syntax.
       did: 'You pulled three named columns out of a table of 500 songs.',
@@ -53,7 +53,7 @@ FROM gem_page;`,
       q: 'Which of those songs are country?',
       given: ['The table is <code>gem_page</code>',
               "Country means the <code>genre</code> column is exactly <code>country</code>"],
-      why: 'WHERE filters rows. The single quotes are how SQL knows country is text, not a column name.',
+      why: "WHERE фильтрует строки. Одинарные кавычки позволяют SQL узнать, что страна — это текст, а не имя столбца.",
       did: 'You cut 500 songs down to the country ones, and the table told you how many there were.',
       matters: 'WHERE is the clause you will use more than any other. Almost every question anyone brings you is a filter wearing a business question: this region, this quarter, these customers.',
       sql:
@@ -69,7 +69,7 @@ WHERE genre = 'country';`,
               "Country means the <code>genre</code> column is exactly <code>country</code>",
               'Biggest means the most <code>listeners</code>, largest first',
               'Ten rows, no more'],
-      why: 'ORDER BY sorts what you already have, then LIMIT caps it. That order matters: cap first and you would cap before sorting. This is how every top-ten report you will ever ship is built.',
+      why: "ORDER BY сортирует то, что у вас уже есть, а затем LIMIT ограничивает это. Этот порядок имеет значение: сначала ограничение, и вы должны ограничить его перед сортировкой. Именно так строится каждый отчет о десятке лучших, который вы когда-либо публикуете.",
       did: 'You put the biggest audience on top and kept the first ten rows.',
       matters: 'Every top-ten report, every leaderboard and every "show me the latest" is this exact shape. The order of the two clauses is the part people get wrong: sort first, cap second, or you cap a pile of unsorted rows and ship the wrong ten.',
       sql:
@@ -96,7 +96,7 @@ LIMIT 10;`,
               // exist. Say plainly that these are names being created.
               '<code>total_rows</code> and <code>artists</code> are names you create with <code>AS</code>, not columns in the table',
               'Different artists means each artist counted once'],
-      why: 'A query always hands back a table, even when the answer is two numbers. Comparing the two tells you one artist can hold several songs.',
+      why: "Запрос всегда возвращает таблицу, даже если ответом являются два числа. Сравнивая их, вы поймете, что один исполнитель может записать несколько песен.",
       did: 'You got one row back holding two numbers: how many country songs there are, and how many different artists made them.',
       matters: 'Counting rows against counting distinct values is how you find out what one row of a table actually represents. Get that wrong and every number you report afterwards is wrong in a way nobody notices, because the query still runs.',
       sql:
@@ -158,8 +158,8 @@ WHERE genre = 'country';`,
   lessons: [
     { id: 1,   title: 'SELECT & FROM',                    sub: 'Pull columns from a table' },
     { id: 2,   title: 'WHERE',                            sub: 'Filter rows by condition' },
-    { id: 104, title: 'A Query Returns a Table; NULL = Unknown', sub: 'The shape that comes back, and what a blank cell really means' },
-    { id: 3,   title: 'ORDER BY & LIMIT',                 sub: 'Sort and cap your results' },
+    { id: 104, title: "Запрос возвращает таблицу; NULL = Неизвестно", sub: 'The shape that comes back, and what a blank cell really means' },
+    { id: 3,   title: "СОРТИРОВАТЬ ПО И ОГРАНИЧИТЬ",                 sub: 'Sort and cap your results' },
   ],
 
   // ── STEP 4: the mini quiz ─────────────────────────────────────────────────

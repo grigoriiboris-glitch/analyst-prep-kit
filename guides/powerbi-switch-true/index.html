@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SWITCH TRUE in DAX: Segmentation, and the Band That Never Appears — Analyst Prep Kit</title>
-<meta name="description" content="Three revenue bands holding 6, 6 and 4 orders. Write the conditions in the wrong order and one band collects twelve orders while another collects none, with no error anywhere.">
+<title>SWITCH TRUE в DAX: сегментация и полоса, которая никогда не появляется — комплект для подготовки аналитика</title>
+<meta name="description" content="Три полосы дохода с 6, 6 и 4 заказами. Напишите условия в неправильном порядке, и одна группа соберет двенадцать заказов, а другая не соберет ни одного, и нигде не будет ошибок.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/powerbi-switch-true/">
-<meta property="og:title" content="SWITCH TRUE in DAX: Segmentation, and the Band That Never Appears">
-<meta property="og:description" content="Three revenue bands holding 6, 6 and 4 orders. Write the conditions in the wrong order and one band collects twelve orders while another collects none, with no error anywhere.">
+<meta property="og:title" content="SWITCH TRUE в DAX: сегментация и полоса, которая никогда не появляется">
+<meta property="og:description" content="Три полосы дохода с 6, 6 и 4 заказами. Напишите условия в неправильном порядке, и одна группа соберет двенадцать заказов, а другая не соберет ни одного, и нигде не будет ошибок.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/powerbi-switch-true.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/powerbi-switch-true/">
@@ -134,18 +134,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../powerbi/">Power BI Kit</a> · <a href="../">All guides</a></p>
-  <h1>SWITCH TRUE in DAX: Segmentation, and the Band That Never Appears</h1>
-  <p class="meta">First match wins, so the order you write them in is the logic · Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-09">August 9, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../powerbi/">Комплект Power BI</a> · <a href="../">Все руководства</a></p>
+  <h1>SWITCH TRUE в DAX: сегментация и полоса, которая никогда не появляется</h1>
+  <p class="meta">Первый матч выигрывает, поэтому порядок, в котором вы их записываете, является логикой. · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-09">9 августа 2026 г.</time></p>
 
-  <p>By the end of this page you can replace any pile of nested IFs with one readable SWITCH, band a numeric column into segments that reconcile, and spot the ordering bug that silently sends twelve orders into a band meant for six. Our sixteen orders split 6, 6 and 4 across three revenue bands. Written in the wrong order the same three conditions give 0, 12 and 4, with no error anywhere.</p>
+  <p>К концу этой страницы вы сможете заменить любую кучу вложенных IF одним читаемым SWITCH, объединить числовой столбец в согласующиеся сегменты и обнаружить ошибку упорядочивания, которая автоматически отправляет двенадцать заказов в группу, рассчитанную на шесть. Наши шестнадцать заказов разделили 6, 6 и 4 на три диапазона доходов. Написанные в неправильном порядке одни и те же три условия дают 0, 12 и 4, нигде без ошибок.</p>
 
-  <p>Here is what to actually do today. Find any nested IF in your model that is more than two levels deep and rewrite it as <code>SWITCH(TRUE(), ...)</code>. Then read your conditions top to bottom and check that each one is more restrictive than the one below it. That second step takes ten seconds and is the whole safety check.</p>
+  <p>Вот чем на самом деле заняться сегодня. Найдите в вашей модели любое вложенное ЕСЛИ глубиной более двух уровней и перепишите его как  <code>SWITCH(TRUE(), ...)</code>. Затем прочитайте свои условия сверху вниз и убедитесь, что каждое из них является более строгим, чем то, что находится под ним. Этот второй шаг занимает десять секунд и представляет собой всю проверку безопасности.</p>
 
-  <p>The short version: SWITCH tests conditions in the order you wrote them and stops at the first one that is true. Everything below a condition that already matched is unreachable.</p>
+  <p>Краткая версия: SWITCH проверяет условия в том порядке, в котором вы их написали, и останавливается на первом истинном. Все, что ниже условия, которое уже соответствует, недостижимо.</p>
 
-  <p>First-match-wins is the entire behaviour, so it gets the picture.</p>
+  <p>Победы в первом матче – это все поведение, поэтому оно дает представление о картине.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 320" role="img" aria-labelledby="swTitle swDesc" xmlns="http://www.w3.org/2000/svg">
@@ -165,37 +165,37 @@
         <path d="M250 288 L510 288" stroke="#E4E7EA" stroke-width="7" stroke-linecap="round"/>
       </g>
     </svg>
-    <figcaption>A value falls through the conditions in the order you wrote them. The first condition is false, so it has a gap and the value drops through. The second is true, so it catches the value and returns its result. The two below are never tested, whatever they say, which is why a broad condition placed above a narrow one makes the narrow one unreachable.</figcaption>
+    <figcaption>Значение не соответствует условиям в том порядке, в котором вы их написали. Первое условие является ложным, поэтому в нем есть пробел, и значение выпадает. Второе верно, поэтому оно улавливает значение и возвращает результат. Два приведенных ниже условия никогда не проверяются, что бы там ни говорили, поэтому широкое условие, помещенное над узким, делает узкое недостижимым.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>What you'll learn</strong>
+    <strong>Что вы узнаете</strong>
     <ol>
-      <li>What nested IF costs you</li>
-      <li>SWITCH on a value, the simple form</li>
-      <li>SWITCH TRUE, for conditions instead of values</li>
-      <li>The ordering bug, on real numbers</li>
-      <li>Column or measure: where a segment lives</li>
-      <li>Banding on a measure, and the disconnected table</li>
-      <li>Data types, blanks, and the else branch</li>
-      <li>The full before and after</li>
-      <li>Edge cases that catch people out</li>
-      <li>Why this works</li>
-      <li>Using this on your own model</li>
-      <li>The whole thing on one screen</li>
+      <li>Сколько стоит вложенный IF</li>
+      <li>ПЕРЕКЛЮЧИТЕ значение, простая форма</li>
+      <li>SWITCH TRUE, для условий вместо значений</li>
+      <li>Ошибка заказа в действительных числах</li>
+      <li>Столбец или показатель: где живет сегмент</li>
+      <li>Бандинг по мере и отключенная таблица</li>
+      <li>Типы данных, пробелы и ветвь else</li>
+      <li>Полное до и после</li>
+      <li>Крайние случаи, которые застают людей врасплох</li>
+      <li>Почему это работает</li>
+      <li>Использование этого на вашей собственной модели</li>
+      <li>Все на одном экране</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Every number on this page is real, and every rule is documented.</strong> Sixteen orders, the same fixture used across these guides, totalling 9,890. The DAX behaviours quoted here come from Microsoft's SWITCH reference rather than from habit. The SQL twin of this page is <a href="../sql-segment-with-case/">segmenting with CASE</a>, which has the same first-match-wins rule and the same trap.</div>
+  <div class="note"><strong>Каждая цифра на этой странице реальна, и каждое правило задокументировано.</strong>  Шестнадцать заказов (один и тот же крепеж используется в этих направляющих), всего 9890 штук. Приведенное здесь поведение DAX взято из ссылки Microsoft SWITCH, а не из привычки. SQL-двойник этой страницы:  <a href="../sql-segment-with-case/">Сегментация с помощью CASE</a>, который имеет то же правило победы в первом матче и ту же ловушку.</div>
 
-  <p>Here are the sixteen order revenues, sorted, which is all this page needs.</p>
+  <p>Вот шестнадцать отсортированных доходов от заказов — это все, что нужно этой странице.</p>
 
   <pre><code>240  280  425  440  440  480  510  600  660  660  680  765  850  880  880  1100</code></pre>
 
   <div class="step">
-    <h2>1. What nested IF costs you</h2>
+    <h2>1. Сколько стоит вложенный IF</h2>
 
-    <p>Before the comparison: here is a three-band segmentation written with IF. Read it and say how confident you are that the thresholds are what you think they are.</p>
+    <p>Перед сравнением: вот трехполосная сегментация, записанная с помощью ПЧ. Прочтите его и скажите, насколько вы уверены в том, что пороговые значения соответствуют вашим представлениям.</p>
 
     <pre><code>Order Size =
 IF (
@@ -208,19 +208,19 @@ IF (
     )
 )</code></pre>
 
-    <p>It is correct, and it is already hard to read at three bands. At five bands it is five levels of indentation, the closing brackets pile up, and adding a band in the middle means re-nesting everything below it. The logic is fine; the shape is the problem.</p>
+    <p>Это правильно, и на трёх полосах уже трудно читать. При пяти полосах это пять уровней отступов, закрывающие скобки накапливаются, а добавление полосы посередине означает повторное вложение всего, что находится под ней. Логика в порядке; форма – это проблема.</p>
 
-    <p>SWITCH exists for this. Microsoft's reference describes it as evaluating "an expression against a list of values" and returning one of several results, and says plainly that it "can be used to avoid having multiple nested IF statements". Same logic, flat.</p>
+    <p>Для этого существует SWITCH. В справочнике Microsoft это описывается как оценка «выражения по списку значений» и возврат одного из нескольких результатов, и прямо говорится, что его «можно использовать, чтобы избежать наличия нескольких вложенных операторов IF». Та же логика, плоская.</p>
 
-    <p>There is a real cost to the nesting beyond readability. A nested IF hides the ordering of your conditions inside its structure, so the question "which condition is tested first" requires reading inwards. A SWITCH puts them in a list, top to bottom, and the order becomes something you can check by scanning down the left edge. Section four is why that matters.</p>
+    <p>За вложение, выходящее за пределы читабельности, приходится платить реальную цену. Вложенный IF скрывает порядок условий внутри своей структуры, поэтому вопрос «какое условие проверяется первым» требует предварительного чтения. ПЕРЕКЛЮЧАТЕЛЬ помещает их в список сверху вниз, и порядок становится тем, что вы можете проверить, просканировав левый край. Четвертый раздел объясняет, почему это важно.</p>
   </div>
 
   <div class="step">
-    <h2>2. SWITCH on a value, the simple form</h2>
+    <h2>2. ВКЛЮЧИТЕ значение, простая форма</h2>
 
-    <p>Before the syntax: you want to turn a month number into a month name. Predict how many arguments that takes, before reading on.</p>
+    <p>Перед синтаксисом: вы хотите превратить номер месяца в название месяца. Прежде чем читать дальше, предскажите, сколько аргументов потребуется.</p>
 
-    <p>The plain form of SWITCH takes an expression and then pairs of value and result, with an optional final catch-all.</p>
+    <p>Простая форма SWITCH принимает выражение, а затем пары значения и результата с необязательным окончательным обобщением.</p>
 
     <pre><code>SWITCH ( &lt;expression&gt;, &lt;value&gt;, &lt;result&gt; [, &lt;value&gt;, &lt;result&gt; ] … [, &lt;else&gt; ] )</code></pre>
 
@@ -233,19 +233,19 @@ SWITCH (
     "Unclassified"
 )</code></pre>
 
-    <p>Read it as a lookup: take the product, find it in the list, return what is beside it. The last argument on its own, with no value before it, is the <strong>else</strong>: what to return when nothing matched. Leave it out and Microsoft's reference is specific about what happens: "If none of the values match and else isn't specified, BLANK is returned."</p>
+    <p>Прочтите как поиск: возьмите товар, найдите его в списке, верните то, что рядом. Последний аргумент сам по себе, не имеющий перед ним никакого значения, — это  <strong>else</strong>: что возвращать, если ничего не найдено. Оставьте это, и в ссылке Microsoft будет подробно описано, что происходит: «Если ни одно из значений не совпадает, а остальное не указано, возвращается BLANK».</p>
 
-    <p>This form only does equality. It compares the expression to each value and looks for an exact match, so it cannot express "greater than 500". For that you need the form in the next section, which is the one you will use most.</p>
+    <p>Эта форма делает только равенство. Он сравнивает выражение с каждым значением и ищет точное совпадение, поэтому не может выразить «больше 500». Для этого вам понадобится форма в следующем разделе, которую вы будете использовать чаще всего.</p>
 
-    <p>A note on where this particular example belongs. Mapping products to categories is better done as a column on the Products table than as DAX at all, for the reasons in <a href="../powerbi-star-schema/">the star schema guide</a>. SWITCH is for logic that genuinely belongs in the model, not for a lookup table someone has not built yet.</p>
+    <p>Примечание о том, где находится этот конкретный пример. Сопоставление продуктов с категориями лучше выполнять в виде столбца таблицы «Продукты», чем вообще в виде DAX, по причинам, описанным в  <a href="../powerbi-star-schema/">руководство по звездообразной схеме</a>. SWITCH предназначен для логики, которая действительно принадлежит модели, а не для справочной таблицы, которую кто-то еще не построил.</p>
   </div>
 
   <div class="step">
-    <h2>3. SWITCH TRUE, for conditions instead of values</h2>
+    <h2>3. ПЕРЕКЛЮЧИТЕ TRUE для условий вместо значений.</h2>
 
-    <p>Before the trick: you want bands based on ranges, not exact matches. The first argument is an expression to compare against. Guess what you could put there to make comparisons work, before reading on.</p>
+    <p>Перед хитростью: вам нужны полосы, основанные на диапазонах, а не на точных совпадениях. Первый аргумент — это выражение для сравнения. Прежде чем читать дальше, угадайте, что вы могли бы поместить туда, чтобы сравнение работало.</p>
 
-    <p>Put <code>TRUE()</code>. Then each "value" position holds a condition, which evaluates to true or false, and SWITCH compares that to TRUE. The first condition that is true wins. Microsoft's reference names this pattern directly: "A common use of this function is to set the first parameter to TRUE."</p>
+    <p>Put <code>TRUE()</code>. Затем каждая позиция «значения» содержит условие, которое оценивается как true или false, и SWITCH сравнивает его с TRUE. Первое условие, которое является истинным, побеждает. В справочнике Microsoft прямо упоминается этот шаблон: «Обычно эта функция используется для установки первого параметра в значение TRUE».</p>
 
     <pre><code>Order Size =
 SWITCH (
@@ -255,29 +255,29 @@ SWITCH (
     "Large"
 )</code></pre>
 
-    <p>Flat, readable top to bottom, and each line says its own condition and its own answer. Adding a fourth band is one more line in the right place rather than another level of nesting.</p>
+    <p>Плоский, читаемый сверху вниз, и каждая строка говорит о своем условии и своем ответе. Добавление четвертого бэнда — это еще одна строка в нужном месте, а не еще один уровень вложенности.</p>
 
-    <p>Here is what it produces on our sixteen orders, as a calculated column, grouped up.</p>
+    <p>Вот что он выдает по нашим шестнадцати заказам в виде расчетного столбца, сгруппированного.</p>
 
     <table>
-      <tr><th>Order Size</th><th>Orders</th><th>Revenue</th><th>Share</th></tr>
-      <tr><td>Small, under 500</td><td>6</td><td>2,305</td><td>23.3%</td></tr>
-      <tr><td>Medium, 500 to 799</td><td>6</td><td>3,875</td><td>39.2%</td></tr>
-      <tr><td>Large, 800 and over</td><td>4</td><td>3,710</td><td>37.5%</td></tr>
+      <tr><th>Размер заказа</th><th>Orders</th><th>Revenue</th><th>Share</th></tr>
+      <tr><td>Маленький, до 500</td><td>6</td><td>2,305</td><td>23.3%</td></tr>
+      <tr><td>Средний, от 500 до 799</td><td>6</td><td>3,875</td><td>39.2%</td></tr>
+      <tr><td>Большой, 800 и более</td><td>4</td><td>3,710</td><td>37.5%</td></tr>
       <tr><td><strong>Total</strong></td><td><strong>16</strong></td><td><strong>9,890</strong></td><td><strong>100%</strong></td></tr>
     </table>
 
-    <p>Two checks worth running on any segmentation, and they take one glance. The counts add to 16, the row count you started with, so no order was dropped. And the revenue adds to 9,890, so no order was counted twice. A segmentation that fails either check has a gap or an overlap in its conditions.</p>
+    <p>При любой сегментации стоит провести две проверки, и они требуют одного взгляда. В сумме их количество составит 16 — количество строк, с которых вы начали, поэтому ни один заказ не был удален. А выручка составит 9890, так что ни один заказ не будет засчитан дважды. Сегментация, которая не прошла ни одну проверку, имеет пробел или перекрытие в своих условиях.</p>
 
-    <p>Say out loud why the "Medium" band's condition is written as <code>&lt; 800</code> rather than <code>&gt;= 500 &amp;&amp; &lt; 800</code>. It is because anything under 500 was already caught by the line above and never reaches this one. That is the whole economy of the pattern, and it is also exactly what makes the next section possible.</p>
+    <p>Скажите вслух, почему состояние полосы «Среднее» записано как  <code>&lt; 800</code>  скорее, чем  <code>&gt;= 500 &amp;&amp; &lt; 800</code>. Это потому, что все, что меньше 500, уже было перехвачено линией выше и никогда не достигнет этой. В этом вся экономика паттерна, и именно это делает возможным следующий раздел.</p>
   </div>
 
   <div class="step">
-    <h2>4. The ordering bug, on real numbers</h2>
+    <h2>4. Ошибка упорядочивания действительных чисел.</h2>
 
-    <p>Before the bug: swap the first two lines of that measure, so <code>&lt; 800</code> is tested before <code>&lt; 500</code>. Predict what happens to the Small band, before reading on.</p>
+    <p>До ошибки: поменяйте местами первые две строки этой меры, так что  <code>&lt; 800</code>  тестируется перед  <code>&lt; 500</code>. Прежде чем читать дальше, предскажите, что произойдет с Малой группой.</p>
 
-    <p>It gets nothing. Not an error, not a warning: zero rows, forever.</p>
+    <p>Оно ничего не получает. Не ошибка, не предупреждение: ноль строк, навсегда.</p>
 
     <pre><code>Order Size Broken =
 SWITCH (
@@ -288,49 +288,49 @@ SWITCH (
 )</code></pre>
 
     <table>
-      <tr><th>Order Size</th><th>Correct order</th><th>Swapped order</th></tr>
-      <tr><td>Small</td><td>6 orders, 2,305</td><td>0 orders, 0</td></tr>
-      <tr><td>Medium</td><td>6 orders, 3,875</td><td>12 orders, 6,180</td></tr>
-      <tr><td>Large</td><td>4 orders, 3,710</td><td>4 orders, 3,710</td></tr>
-      <tr><td><strong>Total</strong></td><td><strong>16 orders, 9,890</strong></td><td><strong>16 orders, 9,890</strong></td></tr>
+      <tr><th>Размер заказа</th><th>Правильный порядок</th><th>Обменённый заказ</th></tr>
+      <tr><td>Small</td><td>6 заказов, 2305</td><td>0 заказов, 0</td></tr>
+      <tr><td>Medium</td><td>6 заказов, 3875</td><td>12 заказов, 6 180</td></tr>
+      <tr><td>Large</td><td>4 заказа, 3710</td><td>4 заказа, 3710</td></tr>
+      <tr><td><strong>Total</strong></td><td><strong>16 заказов, 9 890</strong></td><td><strong>16 заказов, 9 890</strong></td></tr>
     </table>
 
-    <p>Look at the bottom row of the broken column. Sixteen orders, 9,890 in revenue. <strong>The reconciliation still passes.</strong> Nothing is missing and nothing is double-counted; the orders are simply in the wrong buckets. Both of the checks from the last section are satisfied by a segmentation that is completely wrong, which is exactly why this bug survives review.</p>
+    <p>Посмотрите на нижнюю строку сломанного столбца. Шестнадцать заказов, 9890 выручки.  <strong>Примирение все еще проходит.</strong> Nothing is missing and nothing is double-counted; the orders are simply in the wrong buckets. Both of the checks from the last section are satisfied by a segmentation that is completely wrong, which is exactly why this bug survives review.</p>
 
-    <p>Microsoft's reference states the rule and gives the same warning: "The order of conditions matters. As soon as one value matches, the corresponding result is returned, and other subsequent values aren't evaluated. Make sure the most restrictive values to be evaluated are specified before less restrictive values." The documentation's own example is the same shape as ours, with a note that its second result "is never returned".</p>
+    <p>В справочнике Microsoft указано это правило и содержится то же предупреждение: «Порядок условий имеет значение. Как только одно значение совпадает, соответствующий результат возвращается, а другие последующие значения не оцениваются. Убедитесь, что наиболее ограничительные значения, подлежащие оценке, указаны перед менее ограничительными значениями». Собственный пример документации имеет ту же форму, что и наш, с примечанием, что его второй результат «никогда не возвращается».</p>
 
-    <p>The check that catches it is not a reconciliation. It is one extra column: the smallest and largest actual value in each band.</p>
+    <p>Проверка, которая его ловит, не является примирением. Это один дополнительный столбец: наименьшее и наибольшее фактическое значение в каждом диапазоне.</p>
 
     <table>
-      <tr><th>Order Size</th><th>Orders</th><th>Smallest</th><th>Largest</th></tr>
+      <tr><th>Размер заказа</th><th>Orders</th><th>Smallest</th><th>Largest</th></tr>
       <tr><td>Small</td><td>6</td><td>240</td><td>480</td></tr>
       <tr><td>Medium</td><td>6</td><td>510</td><td>765</td></tr>
       <tr><td>Large</td><td>4</td><td>850</td><td>1,100</td></tr>
     </table>
 
-    <p>Now the bands can be read against their own definitions. Small tops out at 480, under the 500 threshold. Medium runs 510 to 765, inside its window. Large starts at 850. Run this once when you write a segmentation and the ordering bug cannot survive it.</p>
+    <p>Теперь полосы можно рассматривать в соответствии с их собственными определениями. Смолл достигает максимума в 480, ниже порога в 500. Medium работает с 510 по 765 внутри своего окна. Большой начинается с 850. Запустите это один раз, когда вы пишете сегментацию, и ошибка упорядочивания не может ее пережить.</p>
 
-    <p>Now picture your own longest SWITCH or nested IF. Scan its conditions from the top. Is each one narrower than the one below it, or did somebody add a band later without moving it?</p>
+    <p>Теперь представьте себе самый длинный SWITCH или вложенный ЕСЛИ. Сканируйте его условия сверху. Каждый из них уже, чем тот, что под ним, или кто-то добавил полосу позже, не перемещая ее?</p>
   </div>
 
   <div class="step">
-    <h2>5. Column or measure: where a segment lives</h2>
+    <h2>5. Столбец или показатель: где живет сегмент</h2>
 
-    <p>Before the decision: you want to slice a report by order size. Predict whether the SWITCH should be a calculated column or a measure, before reading on.</p>
+    <p>Прежде чем принять решение: вы хотите разбить отчет по размеру заказа. Прежде чем читать дальше, спрогнозируйте, будет ли SWITCH вычисляемым столбцом или мерой.</p>
 
     <p>A calculated column, and the reason is structural rather than a preference. Only a column can go on an axis, in a slicer, or on a legend, because those places need actual values stored in the model to build a list from. A measure produces one number inside whatever filters are already applied; it cannot supply the categories that would do the filtering.</p>
 
     <table>
-      <tr><th>You want to</th><th>Use</th><th>Why</th></tr>
-      <tr><td>Slice or group by the segment</td><td>Calculated column</td><td>Slicers and axes need stored values.</td></tr>
-      <tr><td>Show a label that depends on a filtered total</td><td>Measure</td><td>The answer changes with the visual's filters.</td></tr>
-      <tr><td>Colour a card by performance</td><td>Measure</td><td>Conditional formatting takes a measure.</td></tr>
-      <tr><td>Band a raw value that never changes</td><td>Calculated column</td><td>Computed once at refresh, cheap to filter on.</td></tr>
+      <tr><th>Вы хотите</th><th>Use</th><th>Why</th></tr>
+      <tr><td>Разрезать или сгруппировать по сегментам</td><td>Расчетный столбец</td><td>Срезам и осям нужны сохраненные значения.</td></tr>
+      <tr><td>Показать метку, которая зависит от отфильтрованного итога</td><td>Measure</td><td>Ответ меняется в зависимости от фильтров визуального элемента.</td></tr>
+      <tr><td>Раскрасьте карту по производительности</td><td>Measure</td><td>Условное форматирование принимает меру.</td></tr>
+      <tr><td>Группируйте необработанное значение, которое никогда не меняется</td><td>Расчетный столбец</td><td>Вычисляется один раз при обновлении, что упрощает фильтрацию.</td></tr>
     </table>
 
-    <p>The distinction is the same one covered from the other side in <a href="../powerbi-measures-vs-columns/">columns vs measures</a>, and it decides itself with one question: does the answer depend on what the viewer has filtered? Our order size does not. An order of 440 is small whatever the viewer clicks, so it is a column.</p>
+    <p>Различие такое же, как и с другой стороны.  <a href="../powerbi-measures-vs-columns/">Столбцы против мер</a>, и решается одним вопросом: зависит ли ответ от того, что отфильтровал зритель? Размер нашего заказа не имеет значения. Порядок 440 мал, независимо от того, нажимает ли зритель, поэтому это столбец.</p>
 
-    <p>Here is a segment that genuinely has to be a measure, because it depends on a filtered total rather than on one row.</p>
+    <p>Вот сегмент, который действительно должен быть мерой, поскольку он зависит от отфильтрованного итога, а не от одной строки.</p>
 
     <pre><code>Rep Tier =
 SWITCH (
@@ -341,25 +341,25 @@ SWITCH (
 )</code></pre>
 
     <table>
-      <tr><th>Rep</th><th>Total Revenue</th><th>Rep Tier</th></tr>
-      <tr><td>Priya Shah</td><td>3,040</td><td>Top</td></tr>
-      <tr><td>Owen Park</td><td>2,670</td><td>Middle</td></tr>
-      <tr><td>Dana Reyes</td><td>2,495</td><td>Middle</td></tr>
-      <tr><td>Sam Okafor</td><td>1,685</td><td>Building</td></tr>
-      <tr><td><strong>All reps</strong></td><td><strong>9,890</strong></td><td><strong>Top</strong></td></tr>
+      <tr><th>Rep</th><th>Общий доход</th><th>Уровень репутации</th></tr>
+      <tr><td>Прия Шах</td><td>3,040</td><td>Top</td></tr>
+      <tr><td>Оуэн Парк</td><td>2,670</td><td>Middle</td></tr>
+      <tr><td>Дана Рейес</td><td>2,495</td><td>Middle</td></tr>
+      <tr><td>Сэм Окафор</td><td>1,685</td><td>Building</td></tr>
+      <tr><td><strong>Все представители</strong></td><td><strong>9,890</strong></td><td><strong>Top</strong></td></tr>
     </table>
 
-    <p>Read the total row, because it is the thing that catches people. With no rep filter, <code>[Total Revenue]</code> is 9,890, which is over 3,000, so the measure says "Top". That is arithmetically correct and it is meaningless as a label for the whole company. Any measure that returns a category needs its total row thought about, and often suppressed with a check like <code>IF ( HASONEVALUE ( Reps[Rep] ), &lt;the switch&gt; )</code>.</p>
+    <p>Прочтите весь ряд, потому что это то, что цепляет людей. Без повторного фильтра,  <code>[Total Revenue]</code>  составляет 9890, что превышает 3000, поэтому в качестве меры указано «Верх». Это арифметически правильно и бессмысленно как ярлык для всей компании. Любая мера, возвращающая категорию, требует рассмотрения общей строки и часто подавляется с помощью проверки, например  <code>IF ( HASONEVALUE ( Reps[Rep] ), &lt;the switch&gt; )</code>.</p>
   </div>
 
   <div class="step">
-    <h2>6. Banding on a measure, and the disconnected table</h2>
+    <h2>6. Бандинг по мере и отключенный стол</h2>
 
-    <p>Before the problem: you want a bar chart with order-size bands on the axis, where the bands are based on a measure rather than a stored column. Say why the measure from the last section will not go on the axis.</p>
+    <p>Перед проблемой: вам нужна гистограмма с полосами размера заказа на оси, где полосы основаны на показателе, а не на сохраненном столбце. Скажите, почему мерка из последнего раздела не пойдет по оси.</p>
 
-    <p>Because a measure has nothing to put there. The axis needs a list of values, and a measure returns one value per cell, after the axis already exists. This is the standard wall people hit, and the standard solution has a name.</p>
+    <p>Потому что мерке там нечего поставить. Для оси требуется список значений, а мера возвращает одно значение на ячейку после того, как ось уже существует. Это стандартная стена, с которой сталкиваются люди, и у стандартного решения есть имя.</p>
 
-    <p>Build a small table of the bands themselves, with no relationship to anything. It is usually called a <strong>disconnected table</strong>, and it exists purely to supply values to an axis or a slicer.</p>
+    <p>Постройте небольшую таблицу самих групп, не имеющих ни к чему отношения. Обычно его называют  <strong>отключенная таблица</strong>, и он существует исключительно для передачи значений на ось или срез.</p>
 
     <pre><code>Bands =
 DATATABLE (
@@ -374,7 +374,7 @@ DATATABLE (
     }
 )</code></pre>
 
-    <p>Put <code>Bands[Band]</code> on the axis, sorted by <code>Bands[Sort]</code>, then write a measure that counts the orders falling inside whichever band's row it is currently sitting in.</p>
+    <p>Put <code>Bands[Band]</code>  на оси, отсортировано по  <code>Bands[Sort]</code>, затем напишите меру, которая подсчитывает заказы, попадающие в ту строку полосы, в которой она находится в данный момент.</p>
 
     <pre><code>Orders in Band =
 VAR Lo = MIN ( Bands[Min] )
@@ -387,32 +387,32 @@ RETURN
     )
 -- 6, 6, 4</code></pre>
 
-    <p>Two things make that work. The band table has no relationship, so its rows do not filter Orders on their own, and <code>MIN</code> and <code>MAX</code> read the current row's thresholds out of it. And <code>ALL(Orders[Revenue])</code> clears any existing revenue filter first, so each band counts against the whole column rather than against whatever the axis already restricted. That is the CALCULATE machinery from <a href="../powerbi-calculate/">the filter context guide</a> doing exactly what it was built for.</p>
+    <p>Две вещи помогают этому работать. Таблица диапазонов не имеет связи, поэтому ее строки не фильтруют заказы самостоятельно, а  <code>MIN</code> and <code>MAX</code>  прочитайте из него пороговые значения текущей строки. И  <code>ALL(Orders[Revenue])</code>  сначала очищает любой существующий фильтр дохода, поэтому каждая полоса учитывается по всему столбцу, а не по уже ограниченной оси. Это РАСЧЕТНАЯ техника от  <a href="../powerbi-calculate/">контекстное руководство фильтра</a>  делает именно то, для чего он был создан.</p>
 
-    <p>The payoff is that the thresholds now live in a table rather than in code. Change 500 to 600 in the band table and every visual updates, with no measure edited. Put the band table's rows in a slicer and the user can even pick their own.</p>
+    <p>Плюсом является то, что пороговые значения теперь живут в таблице, а не в коде. Измените значение с 500 на 600 в таблице диапазонов и каждое визуальное обновление без изменения меры. Поместите строки таблицы групп в срез, и пользователь сможет выбрать их самостоятельно.</p>
 
-    <p>Do not reach for this unless you need it. If the value being banded is a stored column that never changes, a calculated column is simpler, faster and easier for the next person to read.</p>
+    <p>Не обращайтесь к этому, если вам это не нужно. Если объединяемое значение представляет собой сохраненный столбец, который никогда не изменяется, вычисляемый столбец становится проще, быстрее и легче для чтения следующим человеком.</p>
   </div>
 
   <div class="step">
-    <h2>7. Data types, blanks, and the else branch</h2>
+    <h2>7. Типы данных, пробелы и ветка else</h2>
 
-    <p>Before the rules: you write a SWITCH where one result is a string and another is a number. Predict whether it runs.</p>
+    <p>Перед правилами: вы пишете ПЕРЕКЛЮЧАТЕЛЬ, где один результат — строка, а другой — число. Предскажите, запустится ли он.</p>
 
-    <p>It does not. Microsoft's reference is unambiguous: "All result expressions and the else expression must be of the same data type", and the page shows exactly this error, a SWITCH returning "Large" in one branch and 0.1 in another. It is a common accident when somebody adds a numeric fallback to a text segmentation.</p>
+    <p>Это не так. Ссылка Microsoft однозначна: «Все результирующие выражения и выражение else должны иметь один и тот же тип данных», и на странице отображается именно эта ошибка: SWITCH возвращает «Large» в одной ветви и 0,1 в другой. Это обычная случайность, когда кто-то добавляет числовой запасной вариант к сегментации текста.</p>
 
-    <p>Three more behaviours worth knowing before they cost you an afternoon.</p>
+    <p>Еще три поведения, которые стоит знать, прежде чем они будут стоить вам дня.</p>
 
-    <p><strong>No match and no else gives BLANK.</strong> Usually not what you want on a segmentation, because blank-labelled rows are hidden by many visuals and the orders inside them disappear from the report while still counting in the grand total. Always write an else, even if it says "Unclassified", because an explicit bucket you can see beats a silent one you cannot.</p>
+    <p><strong>Ни одно совпадение и никакое другое не дает ПУСТО.</strong>  Обычно это не то, что вам нужно для сегментации, поскольку строки с пустыми метками скрыты многими визуальными элементами, а заказы внутри них исчезают из отчета, хотя все еще учитываются в общем итоге. Всегда пишите else, даже если там написано «Неклассифицировано», потому что явный сегмент, который вы видите, лучше молчаливого, который вы не можете видеть.</p>
 
-    <p><strong>A blank input matches the wrong band.</strong> In DAX a blank compares as zero in a numeric comparison, so an order with no revenue satisfies <code>&lt; 500</code> and lands in Small. If blank means "unknown" rather than "zero", test for it first: put <code>ISBLANK(Orders[Revenue]), "Unknown"</code> as the very first condition, where its narrowness earns it the top spot.</p>
+    <p><strong>Пустой ввод соответствует неправильному диапазону.</strong>  В DAX пустое число при числовом сравнении сравнивается с нулем, поэтому заказ без дохода удовлетворяет требованиям.  <code>&lt; 500</code>  и приземляется в Смолл. Если пустое значение означает «неизвестно», а не «ноль», сначала проверьте его: поместите  <code>ISBLANK(Orders[Revenue]), "Unknown"</code>  как самое первое условие, где его узость приносит ему первое место.</p>
 
-    <p><strong>Conditions can combine.</strong> Each condition is an ordinary boolean expression, so <code>&amp;&amp;</code> and <code>||</code> work: <code>Orders[Revenue] &gt;= 800 &amp;&amp; RELATED ( Products[Category] ) = "Furniture", "Large furniture"</code>. Just remember that a compound condition is usually more restrictive, so it belongs above the simpler ones.</p>
+    <p><strong>Условия могут сочетаться.</strong>  Каждое условие представляет собой обычное логическое выражение, поэтому  <code>&amp;&amp;</code> and <code>||</code>  работа:  <code>Orders[Revenue] &gt;= 800 &amp;&amp; RELATED ( Products[Category] ) = "Furniture", "Large furniture"</code>. Просто помните, что сложное условие обычно более строгое, поэтому оно выше простых.</p>
   </div>
 
-  <h2>The full before and after</h2>
+  <h2>Полное до и после</h2>
 
-  <p>Same requirement both times: band orders by size and report revenue by band.</p>
+  <p>Оба раза одно и то же требование: заказы группы по размеру и отчет о доходах по группам.</p>
 
   <h3>Before</h3>
   <pre><code>Order Size =
@@ -422,7 +422,7 @@ IF ( Orders[Revenue] &lt; 800, "Medium",
 Medium   12 orders      6,180
 Large     4 orders      3,710
 Total    16 orders      9,890</code></pre>
-  <p>It runs, it reconciles, and it is wrong. Twelve orders are in a band meant for six, the Small band is empty and will stay empty however much data arrives, and the nesting makes the ordering hard to see. Nobody reviewing the totals would catch it.</p>
+  <p>Оно бежит, оно примиряется, и это неправильно. Двенадцать заказов находятся в группе, предназначенной для шести, малая группа пуста и останется пустой, сколько бы данных ни поступило, а вложенность затрудняет просмотр порядка. Никто, просматривающий итоги, этого не поймет.</p>
 
   <h3>After</h3>
   <pre><code>Order Size =
@@ -438,105 +438,105 @@ Small          6     2,305        240       480
 Medium         6     3,875        510       765
 Large          4     3,710        850     1,100
 Total         16     9,890        240     1,100</code></pre>
-  <p>Flat, ordered narrowest first, with an explicit bucket for missing values and a catch-all at the bottom. The two extra columns are the review: every band's actual range sits inside its own definition, so the ordering is verified rather than assumed. Adding a fourth band is one line, in the right place.</p>
+  <p>Плоский, упорядоченный сначала по узким, с явным сегментом для пропущенных значений и универсальным элементом внизу. Два дополнительных столбца представляют собой обзор: фактический диапазон каждой полосы находится внутри своего собственного определения, поэтому порядок скорее проверяется, чем предполагается. Добавление четвертой полосы — это одна строка, в нужном месте.</p>
 
   <div class="step">
-    <h2>Edge cases that catch people out</h2>
+    <h2>Крайние случаи, которые застают людей врасплох</h2>
 
-    <p>Six that each cost somebody an afternoon.</p>
+    <p>Шесть, каждая из которых стоила кому-то дня.</p>
 
-    <p><strong>Adding a band later without moving it.</strong> This is how the ordering bug actually happens in real models. Nobody writes the conditions backwards; somebody appends a narrower band at the bottom six months later. Re-read the whole list every time you add to it.</p>
+    <p><strong>Добавление группы позже без ее перемещения.</strong>  Вот как на самом деле происходит ошибка заказа в реальных моделях. Никто не записывает условия наоборот; кто-то добавляет более узкую полосу внизу шесть месяцев спустя. Перечитывайте весь список каждый раз, когда дополняете его.</p>
 
-    <p><strong>Overlapping thresholds.</strong> <code>&lt;= 500</code> then <code>&gt;= 500</code> puts 500 in the first band only, which is defensible and often not what was meant. Write bands as "under X" all the way down, so the boundaries cannot overlap by construction.</p>
+    <p><strong>Перекрытие порогов.</strong> <code>&lt;= 500</code> then <code>&gt;= 500</code>  помещает 500 только в первую полосу, что оправдано и часто не соответствует тому, что имелось в виду. Напишите полосы как «под X» до конца, чтобы границы не могли перекрываться по конструкции.</p>
 
-    <p><strong>Bands sorting alphabetically.</strong> Large, Medium, Small on the axis. Add a numeric sort column and set Sort by column, exactly as with month names.</p>
+    <p><strong>Сортировка групп по алфавиту.</strong>  Большой, Средний, Маленький по оси. Добавьте столбец числовой сортировки и установите сортировку по столбцу точно так же, как и в случае с названиями месяцев.</p>
 
-    <p><strong>Hard-coded thresholds in several measures.</strong> When 500 appears in four measures, changing it means finding all four. Either put it in the band table from section six, or in a single variable, and never in more than one place.</p>
+    <p><strong>Жестко запрограммированные пороговые значения для нескольких показателей.</strong>  Когда в четырех тактах появляется число 500, изменить его означает найти все четыре. Либо поместите его в таблицу диапазонов из шестого раздела, либо в одну переменную, но не более чем в одно место.</p>
 
-    <p><strong>SWITCH over a measure with no HASONEVALUE guard.</strong> The total row evaluates the measure with no filter, which almost always lands in the top band and labels the whole company "Top".</p>
+    <p><strong>ПЕРЕКЛЮЧИТЕ меру без защиты HASONEVALUE.</strong>  В итоговой строке оценивается показатель без фильтра, который почти всегда попадает в верхнюю полосу и помечает всю компанию как «Топ».</p>
 
-    <p><strong>Thresholds picked out of the air.</strong> 500 and 800 are round numbers, not findings. If the bands are meant to mean something, derive them from the distribution, which is what <a href="../data-driven-thresholds/">choosing thresholds from the data</a> and <a href="../percentiles-iqr-outliers/">percentiles</a> are for.</p>
+    <p><strong>Пороги взял из воздуха.</strong>  500 и 800 — круглые цифры, а не выводы. Если полосы должны что-то означать, извлеките их из распределения, а это и есть то, что нужно.  <a href="../data-driven-thresholds/">Выбор порогов из данных</a> and <a href="../percentiles-iqr-outliers/">percentiles</a>  предназначены для.</p>
   </div>
 
-  <h2>Why this works</h2>
+  <h2>Почему это работает</h2>
 
-  <p>First-match-wins is not a quirk of DAX. It is the standard semantics of a guarded conditional, shared by SQL's searched <code>CASE</code>, by <code>if/elif</code> chains in Python, and by pattern matching in most languages: conditions are ordered, evaluation stops at the first success, and everything below is unreachable. That shared behaviour is why <a href="../sql-segment-with-case/">the SQL version of this page</a> describes the identical bug with identical numbers, and why the habit of reading conditions narrowest-first transfers between every tool you will use.</p>
+  <p>Победы в первом матче — это не особенность DAX. Это стандартная семантика защищенного условного оператора, разделяемая поисковыми запросами SQL.  <code>CASE</code>, к  <code>if/elif</code>  цепочки в Python и сопоставление с образцом в большинстве языков: условия упорядочены, вычисление останавливается при первом успехе, а все, что ниже, недостижимо. Вот почему это общее поведение  <a href="../sql-segment-with-case/">SQL-версия этой страницы</a>  описывает идентичную ошибку с одинаковыми номерами и объясняет, почему привычка к чтению обусловливает передачу с самого узкого подхода между всеми инструментами, которые вы будете использовать.</p>
 
-  <p>The reason the bug survives review is worth naming separately, because it is about verification rather than syntax. The obvious checks on a segmentation are that the counts add up and the totals reconcile, and a mis-ordered SWITCH passes both. Reconciliation confirms that nothing was lost or duplicated; it says nothing about whether rows were assigned correctly. The check that does work is the one in section four: report each band's actual minimum and maximum and compare them to the band's own definition. That is a general principle worth carrying, since the same reasoning applies to any classification.</p>
+  <p>Причину, по которой ошибка выдерживает проверку, стоит назвать отдельно, поскольку речь идет о проверке, а не о синтаксисе. Очевидная проверка сегментации заключается в том, что счетчики суммируются и итоговые суммы согласуются, а неправильно упорядоченный SWITCH проходит и то, и другое. Сверка подтверждает, что ничего не потеряно и не продублировано; он ничего не говорит о том, правильно ли были назначены строки. Проверка, которая работает, описана в четвертом разделе: сообщите фактический минимум и максимум каждой полосы и сравните их с собственным определением полосы. Это общий принцип, который стоит принять во внимание, поскольку одни и те же рассуждения применимы к любому классификация.</p>
 
-  <p>Everything specific to DAX on this page is product behaviour, so the authority is Microsoft's own reference. The order-matters rule, the blank return when no value matches and no else is given, the same-data-type requirement, and the <code>SWITCH(TRUE())</code> pattern itself are all quoted above from the SWITCH page in the DAX reference.</p>
+  <p>Все, что относится к DAX на этой странице, относится к поведению продукта, поэтому авторитетным источником является собственная ссылка Microsoft. Правило порядка имеет значение, пустой возврат, когда ни одно значение не соответствует и ничего не указано, требование одинакового типа данных и  <code>SWITCH(TRUE())</code>  Все шаблоны цитируются выше на странице SWITCH в справочнике DAX.</p>
 
-  <p>One note on why this page kept asking you to predict before showing you the answer. Attempting an answer before seeing the correct one reliably improves how well the correct one is retained, even when the attempt is wrong (Bisra, Liu, Nesbit, Salimi, &amp; Winne, 2018, <em>Educational Psychology Review</em>, 30(3), 703–725). The empty Small band sticks because you were asked to predict it before seeing that the totals still reconcile.</p>
+  <p>Одно замечание о том, почему эта страница продолжает просить вас предсказать, прежде чем показать вам ответ. Попытка дать ответ до того, как вы увидите правильный, достоверно повышает, насколько хорошо сохраняется правильный ответ, даже если попытка неверна (Бисра, Лю, Несбит, Салими и Винн, 2018,  <em>Обзор педагогической психологии</em>, 30(3), 703–725). Пустой Малый диапазон остается, потому что вас попросили предсказать его, прежде чем вы увидите, что общие суммы все еще согласуются.</p>
 
-  <h2>Using this on your own model</h2>
+  <h2>Использование этого на вашей собственной модели</h2>
 
-  <p>Rewriting every conditional in an inherited model is miserable and you will stop at the fourth. Do this instead, in order.</p>
+  <p>Переписывать все условия в унаследованной модели — это ужасно, и вы остановитесь на четвертом. Вместо этого сделайте это по порядку.</p>
 
   <ol>
-    <li><strong>Find the deepest nested IF</strong> in your model and rewrite that one as <code>SWITCH(TRUE(), ...)</code>. It is the one most likely to be hiding a mis-ordered condition.</li>
-    <li><strong>Read the conditions top to bottom</strong> and check that each is narrower than the one below. This is the whole review.</li>
-    <li><strong>Add the min and max columns</strong> to any banded report once, and look at them. Then delete them if you like; you have already got what they were for.</li>
-    <li><strong>Write an explicit else</strong>, always, even if it says "Unclassified". A visible bucket beats a blank one.</li>
-    <li><strong>Add a sort column</strong> to any band that will appear on an axis, before somebody sees Large, Medium, Small.</li>
+    <li><strong>Найдите самое глубокое вложенное ЕСЛИ</strong>  в вашей модели и перепишите ее как  <code>SWITCH(TRUE(), ...)</code>. Скорее всего, именно он скрывает неправильно упорядоченное условие.</li>
+    <li><strong>Прочтите условия сверху вниз</strong>  и убедитесь, что каждый уже, чем тот, что ниже. Это весь обзор.</li>
+    <li><strong>Добавьте столбцы min и max.</strong>  к любому отчету с полосами один раз и посмотрите на них. Затем удалите их, если хотите; вы уже получили то, для чего они были.</li>
+    <li><strong>Напишите явное else</strong>, всегда, даже если написано «Несекретно». Видимое ведро лучше пустого.</li>
+    <li><strong>Добавить столбец сортировки</strong>  к любой полосе, которая появится на оси, прежде чем кто-нибудь увидит Большой, Средний, Маленький.</li>
   </ol>
 
-  <p>If you have paper nearby, one optional drawing is worth five minutes. Draw your own bands as a number line with the thresholds marked, then write your SWITCH conditions beside it in the order you wrote them. Anywhere the line is covered twice is an unreachable band, and it is much more obvious on paper than in code.</p>
+  <p>Если у вас под рукой есть бумага, один дополнительный рисунок стоит пяти минут. Нарисуйте свои собственные полосы в виде числовой линии с отмеченными пороговыми значениями, затем напишите рядом с ней условия ПЕРЕКЛЮЧЕНИЯ в том порядке, в котором вы их написали. Везде, где линия перекрыта дважды, это недоступная полоса, и на бумаге это гораздо более очевидно, чем в коде.</p>
 
-  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: SQL, Python, Excel, Power BI and the working habits around them.</div>
+  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: SQL, Python, Excel, Power BI и связанные с ними рабочие привычки.</div>
 
-  <h2>The whole thing on one screen</h2>
+  <h2>Все на одном экране</h2>
 
-  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
+  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
 
   <table>
-    <tr><th>Idea</th><th>What it means</th></tr>
-    <tr><td>SWITCH, plain form</td><td>Expression, then value and result pairs, then an optional else. Equality only.</td></tr>
-    <tr><td>SWITCH(TRUE())</td><td>Each value slot holds a condition. The documented way to replace nested IFs.</td></tr>
-    <tr><td>First match wins</td><td>Evaluation stops at the first true condition. Everything below is never tested.</td></tr>
-    <tr><td>Order the conditions</td><td>Most restrictive first. Documented, and the source of the bug.</td></tr>
-    <tr><td>The bug, on our data</td><td>Correct: 6 / 6 / 4. Swapped: 0 / 12 / 4. Both reconcile to 16 orders, 9,890.</td></tr>
-    <tr><td>The check that works</td><td>Report each band's smallest and largest value against its own definition.</td></tr>
-    <tr><td>The check that does not</td><td>Reconciling the totals. A mis-ordered SWITCH passes it.</td></tr>
-    <tr><td>Column or measure</td><td>Slicing or grouping needs a column. A filtered total needs a measure.</td></tr>
-    <tr><td>Measure on the total row</td><td>Unfiltered, so it usually lands in the top band. Guard with HASONEVALUE.</td></tr>
-    <tr><td>Disconnected table</td><td>A band table with no relationship, to put band names on an axis.</td></tr>
-    <tr><td>MIN and MAX in a band measure</td><td>Read the current band row's thresholds out of the disconnected table.</td></tr>
-    <tr><td>Same data type</td><td>All results and the else must match. Text and number together errors.</td></tr>
-    <tr><td>No else</td><td>Returns BLANK. Blank rows hide in visuals. Always write an else.</td></tr>
-    <tr><td>Blank input</td><td>Compares as zero, so it lands in the lowest band. Test ISBLANK first.</td></tr>
-    <tr><td>Combining conditions</td><td><code>&amp;&amp;</code> and <code>||</code> work. Compound conditions are narrower, so put them higher.</td></tr>
-    <tr><td>Sort order</td><td>Bands sort alphabetically without a numeric sort column.</td></tr>
+    <tr><th>Idea</th><th>Что это значит</th></tr>
+    <tr><td>ВЫКЛЮЧАТЕЛЬ простой формы</td><td>Выражение, затем пары значений и результатов, затем необязательное else. Только равенство.</td></tr>
+    <tr><td>ПЕРЕКЛЮЧАТЕЛЬ(ИСТИНА())</td><td>Каждый слот значения содержит условие. Документированный способ замены вложенных IF.</td></tr>
+    <tr><td>Победа в первом матче</td><td>Оценка останавливается при первом истинном условии. Все, что ниже, никогда не тестировалось.</td></tr>
+    <tr><td>Заказать условия</td><td>Сначала самые строгие. Задокументирован и источник ошибки.</td></tr>
+    <tr><td>Баг, по нашим данным</td><td>Правильно: 6/6/4. Поменяно местами: 0/12/4. Оба согласованы по 16 ордерам, 9890.</td></tr>
+    <tr><td>Проверка, которая работает</td><td>Укажите наименьшее и наибольшее значение каждой полосы в соответствии с ее собственным определением.</td></tr>
+    <tr><td>Чек, которого нет</td><td>Сверка итогов. Неправильно заказанный SWITCH пропускает его.</td></tr>
+    <tr><td>Столбец или мера</td><td>Для нарезки или группировки требуется столбец. Отфильтрованному итогу необходима мера.</td></tr>
+    <tr><td>Измерьте общий ряд</td><td>Нефильтрованный, поэтому обычно попадает в верхнюю полосу. Охрана с помощью HASONEVALUE.</td></tr>
+    <tr><td>отключенная таблица</td><td>Таблица групп без связей, в которой имена групп располагаются по оси.</td></tr>
+    <tr><td>МИН и МАКС в полосовой мере</td><td>Считайте пороговые значения текущей строки диапазона из отключенной таблицы.</td></tr>
+    <tr><td>Тот же тип данных</td><td>Все результаты и остальное должны совпадать. Напишите и пронумеруйте ошибки.</td></tr>
+    <tr><td>Больше нет</td><td>Возвращает ПУСТО. Пустые строки скрываются в визуальных элементах. Всегда пишите другое.</td></tr>
+    <tr><td>Пустой ввод</td><td>Сравнивается с нулем, поэтому попадает в самую нижнюю полосу. Сначала проверьте ISBLANK.</td></tr>
+    <tr><td>Объединение условий</td><td><code>&amp;&amp;</code> and <code>||</code>  работа. Сложные условия уже, поэтому ставьте их выше.</td></tr>
+    <tr><td>Порядок сортировки</td><td>Полосы сортируются в алфавитном порядке без числового столбца сортировки.</td></tr>
   </table>
 
-  <div class="note"><strong>The one habit to keep.</strong> Every time you write or edit a SWITCH, read the conditions from the top and check each is narrower than the one below, then print each band's actual minimum and maximum once. Reconciling the totals will not catch a mis-ordered band, and those two checks will. If a segmentation breaks in a way this page does not cover, there is a general <a href="../technical-tenacity/">diagnosis loop for being stuck</a>.</div>
+  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Каждый раз, когда вы пишете или редактируете SWITCH, читайте условия сверху и проверяйте, что каждое из них уже, чем приведенное ниже, а затем один раз выведите фактический минимум и максимум каждой полосы. Сверка итогов не выявит неправильно упорядоченную полосу, в отличие от этих двух проверок. Если сегментация нарушается таким образом, который не описан на этой странице, существует общая  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>.</div>
 
-  <p>One last thought, and I would genuinely like other people's answers. The first segmentation I shipped had an empty band for two months and nobody noticed, because the totals were right and an empty band just looks like a category nobody falls into. What is the segment in your reporting that has never had a row in it, and is that the data or the ordering?</p>
+  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Первая сегментация, которую я отправил, имела пустую полосу в течение двух месяцев, и никто этого не заметил, потому что итоги были правильными, а пустая полоса просто выглядела как категория, в которую никто не попадает. В каком сегменте вашего отчета никогда не было строк, и что это за данные или порядок?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Bisra, K., Liu, Q., Nesbit, J. C., Salimi, F., &amp; Winne, P. H. (2018). Inducing self-explanation: A meta-analysis. <em>Educational Psychology Review</em>, 30(3), 703–725.</li>
-    <li>Codd, E. F. (1970). A relational model of data for large shared data banks. <em>Communications of the ACM</em>, 13(6), 377–387.</li>
-    <li>Microsoft. <em>SWITCH function (DAX)</em>, DAX reference. The source of every quoted rule on this page: the order-of-conditions rule, the BLANK return when no value matches, the same-data-type requirement, and the SWITCH(TRUE()) pattern. Product documentation rather than peer-reviewed research, which is the correct authority for how a product behaves.</li>
+    <li>Бисра К., Лю К., Несбит Дж. К., Салими Ф. и Винн П. Х. (2018). Побуждение к самообъяснению: метаанализ.  <em>Обзор педагогической психологии</em>, 30(3), 703–725.</li>
+    <li>Кодд, EF (1970). Реляционная модель данных для крупных общих банков данных.  <em>Коммуникации ACM</em>, 13(6), 377–387.</li>
+    <li>Майкрософт.  <em>Функция ПЕРЕКЛЮЧЕНИЯ (DAX)</em>, ссылка на DAX. Источник каждого правила в кавычках на этой странице: правило порядка условий, возврат BLANK, если ни одно значение не соответствует, требование одинакового типа данных и шаблон SWITCH(TRUE()). Документация продукта, а не рецензируемые исследования, которые являются правильным источником информации о поведении продукта.</li>
   </ul>
 
   <div class="book">
-    <strong>The nested IF is six levels deep and nobody can see which branch fired.</strong>
-    <p><em>Power BI for Analysts</em> is 187 pages, SWITCH read branch by branch, so a banding rule is something a reader can check.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/power-bi-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=power-bi-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-powerbi-switch-true'})">Power BI for Analysts, $19 &rarr;</a>
+    <strong>Глубина вложенного IF составляет шесть уровней, и никто не может видеть, какая ветвь сработала.</strong>
+    <p><em>Power BI для аналитиков</em>  составляет 187 страниц, SWITCH читается по ветке, поэтому читатель может проверить правило группирования.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/power-bi-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=power-bi-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-powerbi-switch-true'})">Power BI для аналитиков, 19 долларов США →</a>
   </div>
 
   <div class="cta">
-    <strong>Practice this with a model in front of you.</strong>
-    <p style="margin:6px 0 0">The <a href="../../powerbi/">Power BI Kit</a> gives you the repetitions: segmentations to write and check, flash cards on the ordering rule and the blank return, and questions that ask you which band goes empty before you run it. You now own the method; the kit is the practice. Nothing to install, no account needed.</p>
-    <a class="btn" href="../../powerbi/">Open the Power BI Kit →</a>
+    <strong>Потренируйтесь в этом на модели перед собой.</strong>
+    <p style="margin:6px 0 0">The <a href="../../powerbi/">Комплект Power BI</a> gives you the repetitions: segmentations to write and check, flash cards on the ordering rule and the blank return, and questions that ask you which band goes empty before you run it. You now own the method; the kit is the practice. Nothing to install, no account needed.</p>
+    <a class="btn" href="../../powerbi/">Откройте комплект Power BI →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> · <a href="../powerbi-calculate/">CALCULATE and Filter Context</a> · <a href="../powerbi-star-schema/">Star Schema in Power BI</a> · <a href="../powerbi-time-intelligence/">DAX Time Intelligence</a> · <a href="../powerbi-measures-vs-columns/">Columns vs Measures in Power BI</a> · <a href="../powerbi-sum-vs-sumx/">SUM vs SUMX in DAX</a> · <a href="../powerbi-row-level-security/">Row-Level Security in Power BI</a> · <a href="../sql-segment-with-case/">Segmenting with CASE in SQL</a> · <a href="../excel-ifs-vs-nested-if/">IFS vs Nested IF in Excel</a> · <a href="../data-driven-thresholds/">Data-Driven Thresholds</a> · <a href="../percentiles-iqr-outliers/">Percentiles, IQR and Outliers</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../powerbi/">Power BI Kit</a> · <a href="../../projects/">Portfolio Projects</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../powerbi-calculate/">РАСЧЕТ и фильтрация контекста</a> · <a href="../powerbi-star-schema/">Схема «звезда» в Power BI</a> · <a href="../powerbi-time-intelligence/">DAX Временная аналитика</a> · <a href="../powerbi-measures-vs-columns/">Столбцы и меры в Power BI</a> · <a href="../powerbi-sum-vs-sumx/">SUM против SUMX в DAX</a> · <a href="../powerbi-row-level-security/">Безопасность на уровне строк в Power BI</a> · <a href="../sql-segment-with-case/">Сегментация с помощью CASE в SQL</a> · <a href="../excel-ifs-vs-nested-if/">IFS против вложенного IF в Excel</a> · <a href="../data-driven-thresholds/">Пороги, управляемые данными</a> · <a href="../percentiles-iqr-outliers/">Процентили, IQR и выбросы</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../powerbi/">Комплект Power BI</a> · <a href="../../projects/">Портфельные проекты</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

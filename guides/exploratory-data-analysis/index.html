@@ -1,6 +1,6 @@
 ﻿<!doctype html>
 <html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Why Exploratory Data Analysis Matters (Explained From First Principles) — Analyst Prep Kit</title>
-<meta name="description" content="What exploratory data analysis (EDA) is, why John Tukey invented it, how Anscombe's quartet and the Datasaurus Dozen prove summary statistics can lie, and what exploration looks like in real portfolio projects — explained for beginners.">
+<title>Почему важен исследовательский анализ данных (объяснение на основе основных принципов) — комплект для подготовки аналитика</title>
+<meta name="description" content="Что такое исследовательский анализ данных (EDA), почему Джон Тьюки изобрел его, как квартет Анскомба и «Дюжина датазавра» доказывают, что сводная статистика может лгать, и как исследование выглядит в реальных портфельных проектах — объяснено для новичков.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/exploratory-data-analysis/">
-<meta property="og:title" content="Why Exploratory Data Analysis Matters">
-<meta property="og:description" content="The detective phase of data work: why you must look at data before trusting it, backed by the classic research and shown on real projects.">
+<meta property="og:title" content="Почему важен исследовательский анализ данных">
+<meta property="og:description" content="Детективная фаза работы с данными: почему вы должны посмотреть на данные, прежде чем им доверять, подкрепленное классическими исследованиями и продемонстрированное на реальных проектах.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/exploratory-data-analysis.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/exploratory-data-analysis/">
@@ -130,159 +130,159 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../sql/">SQL Kit</a> · <a href="../../stats/">Statistics Kit</a></p>
-  <h1>Why Exploratory Data Analysis Matters</h1>
-  <p class="meta">What to look at before you compute anything, why it is not optional, and what it looks like on real projects · Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Updated <time datetime="2026-07-30">July 30, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../../stats/">Статистический комплект</a></p>
+  <h1>Почему важен исследовательский анализ данных</h1>
+  <p class="meta">На что следует обратить внимание, прежде чем что-либо вычислять, почему это не является обязательным и как это выглядит в реальных проектах · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Обновлено  <time datetime="2026-07-30">30 июля 2026 г.</time></p>
 
-  <p><strong>Exploratory data analysis</strong>, or EDA, is the habit of looking at your data before you compute anything from it. This guide covers what to look at, the research showing why it is not optional, and what it looks like on real projects you can open and read.</p>
+  <p><strong>Исследовательский анализ данных</strong>, или EDA, — это привычка просматривать данные, прежде чем что-либо на их основе вычислять. В этом руководстве рассказывается, на что следует обратить внимание, исследования показывают, почему это не является обязательным, и как это выглядит в реальных проектах, которые вы можете открыть и прочитать.</p>
 
-  <p>It exists to prevent one specific failure, and that failure has nothing to do with math. An analyst computes an answer from data they never looked at. The numbers come out precise, confident and wrong, because the data had a quirk nobody checked for.</p>
+  <p>Он существует для предотвращения одной конкретной ошибки, и эта ошибка не имеет ничего общего с математикой. Аналитик вычисляет ответ на основе данных, на которые он никогда не обращал внимания. Цифры получаются точными, уверенными и неверными, потому что в данных была одна особенность, которую никто не проверял.</p>
 
   <div class="toc">
-    <strong>What's here</strong>
+    <strong>Что здесь</strong>
     <ol>
-      <li>Detective work vs courtroom work</li>
-      <li>Where EDA came from (and why a famous statistician rebelled)</li>
-      <li>The proof that summaries lie: a quartet and a dinosaur</li>
-      <li>What exploration looks like in a real project</li>
-      <li>The habits, distilled</li>
-      <li>The honest limit: exploration finds suspects, not verdicts</li>
+      <li>Детективная работа vs работа в зале суда</li>
+      <li>Откуда взялась EDA (и почему взбунтовался известный статистик)</li>
+      <li>Доказательство лжи резюме: квартет и динозавр</li>
+      <li>Как выглядит разведка в реальном проекте</li>
+      <li>Привычки, очищенные</li>
+      <li>Честный предел: расследование находит подозреваемых, а не приговоры</li>
       <li>References</li>
     </ol>
   </div>
 
-  <h2>Detective work vs courtroom work</h2>
-  <p>Data work has two distinct modes, and mixing them up causes most analytical failure:</p>
+  <h2>Детективная работа vs работа в зале суда</h2>
+  <p>Работа с данными имеет два различных режима, и их смешение приводит к большинству аналитических ошибок:</p>
   <table>
-    <tr><th></th><th>Exploratory (detective)</th><th>Confirmatory (courtroom)</th></tr>
-    <tr><td><strong>Question</strong></td><td>"What is going on here?"</td><td>"Is this specific claim true?"</td></tr>
-    <tr><td><strong>Attitude</strong></td><td>Open, skeptical, curious</td><td>Formal, rule-bound, pre-committed</td></tr>
-    <tr><td><strong>Output</strong></td><td>Hypotheses, surprises, data-quality discoveries</td><td>Evidence for or against one hypothesis</td></tr>
+    <tr><th></th><th>Исследовательский (детектив)</th><th>Подтверждение (зал суда)</th></tr>
+    <tr><td><strong>Question</strong></td><td>«Что здесь происходит?»</td><td>«Правда ли это конкретное утверждение?»</td></tr>
+    <tr><td><strong>Attitude</strong></td><td>Открытый, скептический, любопытный</td><td>Формальный, связанный с правилами, заранее принятый на себя обязательства</td></tr>
+    <tr><td><strong>Output</strong></td><td>Гипотезы, сюрпризы, открытия качества данных</td><td>Доказательства за или против одной гипотезы</td></tr>
   </table>
-  <p>A detective does not walk into a crime scene with a verdict. They look at everything, notice what is odd, and form theories. The courtroom tests one theory formally, later.</p>
+  <p>Детектив не приходит на место преступления с приговором. Они смотрят на все, замечают странное и строят теории. Позже зал суда формально проверяет одну теорию.</p>
 
-  <p>Exploratory analysis is the crime-scene phase. Skip it and you are prosecuting a case you never investigated. The comparison is not a teaching device invented for beginners. John Tukey, who founded the field, framed exploratory work as detective work, and the literature has used the analogy ever since (Behrens, 1997).</p>
+  <p>Поисковый анализ – это этап осмотра места преступления. Пропустите это, и вы будете преследовать дело, которое никогда не расследовали. Сравнение — это не метод обучения, придуманный для новичков. Джон Тьюки, основатель этой области, определил исследовательскую работу как детективную работу, и с тех пор в литературе используется эта аналогия (Behrens, 1997).</p>
 
-  <h2>Where EDA came from (and why a famous statistician rebelled)</h2>
-  <p>In 1962, John Tukey published a 67-page argument called <em>The Future of Data Analysis</em> that scandalized his own field. He was a Princeton mathematician, and he also coined the words "bit" and "software".</p>
+  <h2>Откуда взялась EDA (и почему взбунтовался известный статистик)</h2>
+  <p>В 1962 году Джон Тьюки опубликовал 67-страничный аргумент под названием  <em>Будущее анализа данных</em>  это возмутило его собственную сферу деятельности. Он был математиком из Принстона и также придумал слова «бит» и «программное обеспечение».</p>
 
-  <p>Statistics, he argued, had become obsessed with the courtroom. Elegant formal tests, applied to questions someone had already decided to ask. Almost nobody was studying the harder, earlier problem: <em>how you work out what questions the data wants you to ask</em>. He proposed treating data analysis as its own empirical science, one that starts by looking (Tukey, 1962).</p>
-  <p>Fifteen years later his book <em>Exploratory Data Analysis</em> (1977) turned that argument into a toolkit: plots, summaries and residual-checking habits, all built to make the unexpected visible. Its most quoted line is the mission statement of the whole field:</p>
-  <blockquote>"The greatest value of a picture is when it forces us to notice what we never expected to see." (Tukey, 1977)</blockquote>
-  <p>Note what that sentence actually says. The payoff of looking is not confirming what you expected. It is being ambushed by what you did not. Every technique in EDA is a machine for manufacturing useful ambushes.</p>
+  <p>Статистика, утверждал он, стала одержима залом суда. Элегантные формальные тесты, применимые к вопросам, которые кто-то уже решил задать. Почти никто не изучал более сложную, более раннюю задачу:  <em>как вы определяете, какие вопросы данные хотят, чтобы вы задали</em>. Он предложил рассматривать анализ данных как отдельную эмпирическую науку, которая начинается с наблюдения (Tukey, 1962).</p>
+  <p>Пятнадцать лет спустя его книга  <em>Исследовательский анализ данных</em>  (1977) превратили этот аргумент в набор инструментов: графики, сводки и привычки проверки остатков, и все это создано для того, чтобы сделать неожиданное видимым. Наиболее цитируемая строка — это формулировка миссии всей области:</p>
+  <blockquote>«Самая большая ценность изображения — это то, что оно заставляет нас заметить то, чего мы никогда не ожидали увидеть». (Тьюки, 1977)</blockquote>
+  <p>Обратите внимание, что на самом деле говорится в этом предложении. Результатом поиска не является подтверждение того, что вы ожидали. Это засада того, чего вы не делали. Каждая техника в EDA — это машина для изготовления полезных засад.</p>
 
-  <h2>The proof that summaries lie: a quartet and a dinosaur</h2>
-  <p>Before the answer, put a number on your own confidence. Two datasets have the same average, the same spread and the same correlation. How similar do their shapes have to be? Very, somewhat, or not at all? Pick one.</p>
-  <p>Why is a table of averages not enough? In 1973, the statistician Francis Anscombe settled it with four small datasets, now called <strong>Anscombe's quartet</strong>. All four share nearly identical summary statistics. Same average of x, same average of y, same variance, same correlation of 0.816, same fitted trend line (Anscombe, 1973). By the numbers they are quadruplets. Graphed, they are strangers:</p>
+  <h2>Доказательство лжи резюме: квартет и динозавр</h2>
+  <p>Перед ответом поставьте цифру собственной уверенности. Два набора данных имеют одинаковое среднее значение, одинаковый разброс и одинаковую корреляцию. Насколько похожими должны быть их формы? Очень, немного или совсем нет? Выберите один.</p>
+  <p>Почему таблицы средних показателей недостаточно? В 1973 году статистик Фрэнсис Анскомб решил эту проблему с помощью четырех небольших наборов данных, которые теперь называются  <strong>квартет Анскомба</strong>. Все четверо имеют почти идентичную сводную статистику. То же среднее значение x, то же среднее значение y, та же дисперсия, та же корреляция 0,816, та же подобранная линия тренда (Anscombe, 1973). По цифрам они четверки. На графике они чужие:</p>
   <ul>
-    <li>One is a healthy, ordinary linear relationship, which is what the summary implies.</li>
-    <li>One is a smooth <em>curve</em>, so the linear trend line is simply the wrong model.</li>
-    <li>One is a perfect line except for a single outlier that dragged the trend off course.</li>
-    <li>One is no relationship at all: a vertical stack of points, plus one extreme value that <em>manufactured</em> the entire correlation.</li>
+    <li>Одна из них — это здоровая, обычная линейная связь, именно это и подразумевается в кратком изложении.</li>
+    <li>Один — гладкий  <em>curve</em>, поэтому линейная линия тренда — просто неправильная модель.</li>
+    <li>Одна из них представляет собой идеальную линию, за исключением одного выброса, который сбил тренд с курса.</li>
+    <li>В первом вообще нет никакой связи: вертикальная стопка точек плюс одно экстремальное значение, которое  <em>manufactured</em>  вся корреляция.</li>
   </ul>
-  <p>Four different realities, one identical scorecard. If your analysis stops at the scorecard, you cannot tell which reality you're in.</p>
-  <p>In 2017, Justin Matejka and George Fitzmaurice pushed the point to its comic extreme. They showed you can nudge a dataset's points into almost any picture, including a hand-drawn <em>Tyrannosaurus rex</em>. The mean, standard deviation and correlation stay identical to two decimal places.</p>
+  <p>Четыре разные реальности, одна идентичная система показателей. Если ваш анализ останавливается на системе показателей, вы не сможете определить, в какой реальности вы находитесь.</p>
+  <p>В 2017 году Джастин Матейка и Джордж Фицморис довели эту тему до комической крайности. Они показали, что можно совместить точки набора данных практически с любым изображением, включая нарисованное от руки.  <em>Тираннозавр Рекс</em>. Среднее значение, стандартное отклонение и корреляция остаются идентичными до двух десятичных знаков.</p>
 
-  <p>Their "Datasaurus Dozen" is twelve wildly different plots, among them a dinosaur, a star and concentric circles, all with matching summary statistics (Matejka &amp; Fitzmaurice, 2017). The lesson is Anscombe's, updated: <strong>never trust summary statistics alone. Always visualize.</strong></p>
+  <p>Их «Дюжина Датазавра» представляет собой двенадцать совершенно разных сюжетов, среди которых динозавр, звезда и концентрические круги, и все с соответствующей сводной статистикой (Матейка и Фитцморис, 2017). Урок Анскомба, обновленный:  <strong>никогда не доверяйте только сводной статистике. Всегда визуализируйте.</strong></p>
 
-  <h2>What exploration looks like in a real project</h2>
-  <p>The classics prove <em>why</em>; here is <em>what it looks like</em>, from open portfolio projects you can read end to end. None of this is glamorous. All of it changed the results.</p>
+  <h2>Как выглядит разведка в реальном проекте</h2>
+  <p>Классика доказывает  <em>why</em>; вот  <em>Как это выглядит</em>, из проектов открытого портфолио можно прочитать от начала до конца. Все это не гламурно. Все это изменило результаты.</p>
 
   <div class="step">
-    <h2>Peek before you trust: the phantom-column catch</h2>
-    <p>Rule one of EDA is simple: look at actual rows before you compute anything. Picture the last dataset you loaded. Did you look at the rows, or did you go straight to a count? Most people go straight to the count, and the next paragraph is what that costs.</p>
+    <h2>Взгляните, прежде чем поверить: подвох фантомной колонны</h2>
+    <p>Первое правило EDA простое: прежде чем что-либо вычислять, посмотрите на реальные строки. Представьте себе последний загруженный вами набор данных. Вы на ряды смотрели или сразу перешли к подсчету? Большинство людей сразу переходят к подсчету, и следующий абзац рассказывает, сколько это стоит.</p>
 
-  <p>In a project on Billboard chart history, the first look at the imported table showed two mystery columns the source file did not have, and song titles chopped in half. The cause was a wrong import setting. It had split every title containing a comma, like <em>"Let It Snow, Let It Snow, Let It Snow"</em>, across columns.</p>
+  <p>В проекте по истории чартов Billboard первый взгляд на импортированную таблицу показал два загадочных столбца, которых не было в исходном файле, а названия песен были обрезаны пополам. Причиной была неправильная настройка импорта. Он разделил каждый заголовок, содержащий запятую, например  <em>«Пусть идет снег, пусть идет снег, пусть идет снег»</em>, по столбцам.</p>
 
-  <p>Every count run on that import would have been silently wrong. Catching it cost one <code>SELECT * ... LIMIT 20</code> and thirty seconds of reading. The <a href="https://github.com/michaelnocito/streaming-hidden-gems">Streaming Hidden Gems project</a> hit the same class of problem from another direction: its "CSV" files turned out to be tab-separated with no quoting at all.</p>
+  <p>Любой подсчет этого импорта был бы заведомо ошибочным. Поймать его стоит одного  <code>SELECT * ... LIMIT 20</code>  и тридцать секунд чтения.  <a href="https://github.com/michaelnocito/streaming-hidden-gems">Трансляция проекта «Скрытые драгоценности»</a>  столкнулся с тем же классом проблем с другой стороны: его файлы «CSV» оказались разделены табуляцией и вообще не содержали кавычек.</p>
   </div>
 
   <div class="step">
-    <h2>Check the data against arithmetic it must obey</h2>
-    <p>Good exploration tests expectations the data has no excuse to fail. A chart that lists 100 songs a week must have a row count divisible by 100. Weeks times 100 must equal total rows, exactly.</p>
+    <h2>Сверьте данные с арифметикой, которой они должны подчиняться.</h2>
+    <p>Хорошие геологоразведочные работы подтверждают ожидания, что данные не могут быть оправданы. Таблица, в которой перечислены 100 песен за неделю, должна иметь количество строк, кратное 100. Недели, умноженные на 100, должны точно равняться общему количеству строк.</p>
 
-  <p>When a check like that passes, the import earns some trust. When it fails, you found a problem at the cheapest possible moment. The <a href="https://github.com/michaelnocito/steam-hidden-gems">Steam Hidden Gems</a> and <a href="https://github.com/michaelnocito/streaming-hidden-gems">Streaming Hidden Gems</a> projects both carry a "Validation" section showing these cross-checks, with totals reconciled two independent ways before any conclusion rested on them.</p>
+  <p>Когда подобная проверка проходит, импорт заслуживает некоторого доверия. Если он терпит неудачу, вы обнаружили проблему в самый дешевый момент.  <a href="https://github.com/michaelnocito/steam-hidden-gems">Скрытые сокровища Steam</a> and <a href="https://github.com/michaelnocito/streaming-hidden-gems">Потоковое вещание «Скрытые жемчужины»</a>  Оба проекта имеют раздел «Проверка», показывающий эти перекрестные проверки, при этом итоговые суммы согласовываются двумя независимыми способами, прежде чем на них будет сделан какой-либо вывод.</p>
   </div>
 
   <div class="step">
-    <h2>Interrogate the weird: why is a number stored as text?</h2>
-    <p>Exploration means treating oddities as leads rather than annoyances. In the Billboard data, a chart-position column imported as text instead of numbers.</p>
+    <h2>Задайте странный вопрос: почему число хранится в виде текста?</h2>
+    <p>Исследование означает относиться к странностям как к наводкам, а не как к раздражению. В данных Billboard столбец положения диаграммы импортируется в виде текста, а не чисел.</p>
 
-  <p>A detective does not shrug at that. The follow-up queries found the culprit: thousands of rows carrying the letters <code>'NA'</code>. They also turned up something else. "Debut week" was marked two different ways in different eras of the archive, so every later query had to speak both dialects. Miss that during exploration and every debut-related count afterwards is quietly wrong.</p>
+  <p>Детектив на это не пожимает плечами. Последующие запросы нашли виновника: тысячи строк, содержащих буквы.  <code>'NA'</code>. Они также обнаружили кое-что еще. «Дебютная неделя» в разные эпохи архива отмечалась по-разному, поэтому в каждом последующем запросе приходилось говорить на обоих диалектах. Упустить это во время исследования и каждый последующий подсчет, связанный с дебютом, совершенно неправильно.</p>
 
-  <p>That investigation pattern is hypothesis, targeted query, verdict, next hypothesis. It is walked through step by step in the <a href="../sql-case-expression/">SQL CASE expression guide</a>, where exploring a messy artist-credit column ends up dictating the cleaning rule.</p>
+  <p>Эта модель исследования такова: гипотеза, целевой запрос, вердикт, следующая гипотеза. Он проходится шаг за шагом в  <a href="../sql-case-expression/">Руководство по выражениям SQL CASE</a>, где изучение беспорядочной колонки об артистах в конечном итоге диктует правила уборки.</p>
   </div>
 
   <div class="step">
-    <h2>Let distributions choose your thresholds</h2>
-    <p>Analyzes constantly need cutoffs. How many reviews make a rating trustworthy? How many votes make a movie "known"?</p>
+    <h2>Позвольте дистрибутивам выбирать ваши пороговые значения</h2>
+    <p>Анализы постоянно требуют отсечек. Сколько отзывов делает рейтинг заслуживающим доверия? Сколько голосов делает фильм «известным»?</p>
 
-  <p>You can pick a round number from the gut, and the number will be indefensible. The exploratory move is to ask the data first. Plot or tabulate the distribution, find where the behavior actually changes, and pick a cutoff you can defend.</p>
+  <p>Вы можете выбрать круглое число на интуитивном уровне, и это число будет неоправданным. Исследовательский ход заключается в том, чтобы сначала запросить данные. Постройте график или сведите в таблицу распределение, найдите, где поведение действительно меняется, и выберите пороговое значение, которое вы сможете защитить.</p>
 
-  <p>Both gems projects do this in the open. <a href="https://github.com/michaelnocito/steam-hidden-gems">Steam Hidden Gems</a> takes its review-count floor from the measured distribution of review volumes. <a href="https://github.com/michaelnocito/streaming-hidden-gems">Streaming Hidden Gems</a> takes its vote-count band the same way, with the rejected alternatives written down. A threshold with a distribution behind it survives the question "why that number?"</p>
+  <p>Оба проекта драгоценных камней делают это открыто.  <a href="https://github.com/michaelnocito/steam-hidden-gems">Скрытые сокровища Steam</a>  Минимальное количество обзоров берется из измеренного распределения объемов обзоров.  <a href="https://github.com/michaelnocito/streaming-hidden-gems">Потоковое вещание «Скрытые жемчужины»</a>  таким же образом принимает свою полосу подсчета голосов, записывая отклоненные альтернативы. Порог с распределением за ним выдерживает вопрос «почему это число?»</p>
   </div>
 
   <div class="step">
-    <h2>Split the average before you report it</h2>
-    <p>One number for a whole population is usually four numbers wearing a trench coat.</p>
-    <p>Take the headline number below and guess before you read the split. A telecom company loses 26.5% of its customers. Are the newest customers or the oldest ones doing most of the leaving, and by how much? Commit to a rough figure, then compare it to what the data says.</p>
+    <h2>Разделите среднее значение, прежде чем сообщать об этом</h2>
+    <p>Одна цифра для всего населения обычно равна четырем номерам в плащах.</p>
+    <p>Возьмите номер заголовка ниже и угадайте, прежде чем читать раздел. Телекоммуникационная компания теряет 26,5% своих клиентов. Кто уходит больше всего — самые новые клиенты или самые старые и в каком объеме? Возьмите приблизительную цифру, а затем сравните ее с тем, что говорят данные.</p>
 
-  <p>A telecom churn analysis opens on 26.5% churn. That is true, and useless for deciding anything. Splitting the same customers by how long they had been subscribed changed the story completely. Customers in their first year churn at 47%. The loyal core churns at 10%. And 91% of that at-risk group sits on month-to-month contracts.</p>
+  <p>Анализ оттока телекоммуникационных компаний начинается с показателя оттока 26,5%. Это правда, и бесполезно для принятия каких-либо решений. Разделение одних и тех же клиентов по времени их подписки полностью изменило ситуацию. Клиенты в первый год оттока составляют 47%. Лояльное ядро ​​теряет 10%. И 91% представителей этой группы риска работают по ежемесячным контрактам.</p>
 
-  <p>So the company does not have a churn problem. It has a first-year problem, and that is a different budget line. The <a href="https://github.com/michaelnocito/telco-churn-analysis">Telco Churn project</a> shows the split-and-compare pass in pandas, from headline average to four personas to three recommendations.</p>
+  <p>Таким образом, у компании нет проблем с оттоком сотрудников. У него есть проблема первого года, и это другая статья бюджета.  <a href="https://github.com/michaelnocito/telco-churn-analysis">Проект Telco Churn</a>  показывает этап разделения и сравнения в пандах: от среднего значения заголовка до четырех персонажей и трех рекомендаций.</p>
 
-  <p>The habit to keep: before an average leaves your notebook, cut it by the two or three variables most likely to be hiding a different population inside it.</p>
+  <p>Сохраните привычку: прежде чем среднее значение покинет ваш блокнот, сократите его на две или три переменные, которые, скорее всего, скрывают внутри него другую совокупность.</p>
   </div>
 
-  <h2>The habits, distilled</h2>
+  <h2>Привычки, очищенные</h2>
   <table>
-    <tr><th>Habit</th><th>The move</th><th>What it catches</th></tr>
-    <tr><td>Look at rows</td><td><code>SELECT * ... LIMIT 20</code> before anything else</td><td>Import wrecks, swapped columns, mangled text</td></tr>
-    <tr><td>Count and reconcile</td><td>Row counts checked against arithmetic the data must obey</td><td>Silently dropped or duplicated rows</td></tr>
-    <tr><td>Profile every column</td><td>Distinct values, min/max, missing-value markers, type surprises</td><td>'NA' strings, two markers for one meaning, text-typed numbers</td></tr>
-    <tr><td>Visualize, don't summarize</td><td>Plot distributions and relationships before trusting averages</td><td>Everything Anscombe and the Datasaurus warned about</td></tr>
-    <tr><td>Chase oddities</td><td>Treat every "huh, weird" as a lead with a follow-up query</td><td>The era-stitched archives and duplicate entities real data is full of</td></tr>
-    <tr><td>Split every average</td><td>Cut the headline number by the variables likeliest to hide a different population</td><td>Averages that describe nobody, and the segment where the real problem lives</td></tr>
-    <tr><td>Derive thresholds</td><td>Cutoffs from measured distributions, never from vibes</td><td>Indefensible analysis choices</td></tr>
+    <tr><th>Habit</th><th>Движение</th><th>Что он ловит</th></tr>
+    <tr><td>Посмотрите на строки</td><td><code>SELECT * ... LIMIT 20</code>  прежде всего</td><td>Импорт обломков, замененные столбцы, искаженный текст</td></tr>
+    <tr><td>Посчитайте и сопоставьте</td><td>Количество строк проверяется на соответствие арифметическим данным, которым должны подчиняться данные.</td><td>Незаметно удаленные или дублированные строки</td></tr>
+    <tr><td>Профилируйте каждый столбец</td><td>Различные значения, мин/макс, маркеры пропущенных значений, тип-сюрпризы</td><td>Строки «NA», два маркера для одного значения, текстовые числа.</td></tr>
+    <tr><td>Визуализируйте, не обобщайте</td><td>Постройте распределения и отношения, прежде чем доверять средним значениям</td><td>Все, о чем предупреждали Анскомб и Датазавр</td></tr>
+    <tr><td>Погоня за странностями</td><td>Рассматривайте каждое «да, странно» как повод с последующим запросом.</td><td>Сшитые эпохой архивы и дубликаты реальных данных полны</td></tr>
+    <tr><td>Разделить каждое среднее значение</td><td>Сократите число заголовков на переменные, которые с большей вероятностью скроют другую совокупность.</td><td>Средние значения, которые никого не описывают, и сегмент, в котором существует настоящая проблема</td></tr>
+    <tr><td>Получение пороговых значений</td><td>Отсечки от измеренных распределений, а не от вибраций</td><td>Неоправданный выбор анализа</td></tr>
   </table>
 
-  <h2>The honest limit: exploration finds suspects, not verdicts</h2>
-  <p>One warning keeps EDA honest. When you explore freely you <em>will</em> find patterns, and some of them are pure coincidence. Look at data from enough angles and something eventually looks interesting.</p>
+  <h2>Честный предел: расследование находит подозреваемых, а не приговоры</h2>
+  <p>Одно предупреждение поможет сохранить честность EDA. Когда вы свободно исследуете, вы  <em>will</em>  находите закономерности, и некоторые из них являются чистым совпадением. Посмотрите на данные под разными углами, и в конечном итоге что-то покажется интересным.</p>
 
-  <p>The detective and courtroom split exists for exactly this. A pattern found during exploration is a <strong>suspect</strong>, not a conviction. It earns a hypothesis, and that hypothesis needs testing on evidence that did not generate it: fresh data, a held-out sample, or a formal test specified in advance.</p>
+  <p>Раскол между детективом и залом суда существует именно для этого. Образец, обнаруженный в ходе разведки, представляет собой  <strong>suspect</strong>, а не осуждение. Он создает гипотезу, и эта гипотеза нуждается в проверке на доказательствах, которые ее не породили: свежие данные, отложенная выборка или формальный тест, указанный заранее.</p>
 
-  <p>Treating an exploratory find as a proven fact is the analytical version of convicting the first person the detective interviewed. Explore boldly, conclude carefully. And whatever exploration turns up, the analysis has to account for it, which is covered in <a href="../documenting-data-limitations/">How Analysts Document Limitations</a>.</p>
+  <p>Расценивать исследовательскую находку как доказанный факт — это аналитическая версия осуждения первого человека, которого опросил детектив. Исследуйте смело, делайте выводы осторожно. И какое бы исследование ни обнаружилось, анализ должен это учитывать, что описано в  <a href="../documenting-data-limitations/">Как аналитики документируют ограничения</a>.</p>
 
   <div class="cta">
-    <strong>See it, then do it.</strong>
-    <p style="margin:6px 0 0">The <a href="../../sql/">SQL Kit</a> teaches the query skills every exploration above uses. The <a href="../../stats/">Statistics Kit</a> covers the distributions and correlations this guide leans on. The <a href="../../projects/">Portfolio Projects</a> page shows how to turn an explored dataset into a project worth showing an employer. They all run in your browser.</p>
-    <a class="btn" href="../../sql/">Open the SQL Kit →</a>
+    <strong>Увидь это, а затем сделай это.</strong>
+    <p style="margin:6px 0 0">The <a href="../../sql/">SQL-комплект</a>  обучает навыкам запроса, которые используются в каждом исследовании, приведенном выше.  <a href="../../stats/">Статистический комплект</a>  охватывает распределения и корреляции, на которые опирается это руководство.  <a href="../../projects/">Портфельные проекты</a>  На странице показано, как превратить изученный набор данных в проект, который стоит показать работодателю. Все они запускаются в вашем браузере.</p>
+    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
   </div>
 
     <div class="book">
-    <strong>You can do the work once somebody tells you what the work is. A vague question is the part that stalls you.</strong>
-    <p><em>Thinking Like an Analyst</em> is 64 pages on the judgment half of the job: defining a metric, telling a report from an analysis, exploring data before you trust it, and saying out loud what your data cannot tell you.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/thinking-like-an-analyst?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=thinking-like-an-analyst" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-exploratory-data-analysis'})">Thinking Like an Analyst, $19 &rarr;</a>
+    <strong>Вы можете выполнять работу, как только кто-то скажет вам, в чем она заключается. Расплывчатый вопрос — это та часть, которая вас останавливает.</strong>
+    <p><em>Думать как аналитик</em>  Это 64 страницы, посвященные половине работы: определение показателя, составление отчета по результатам анализа, изучение данных, прежде чем вы им поверите, и высказывание вслух того, о чем ваши данные не могут вам сказать.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/thinking-like-an-analyst?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=thinking-like-an-analyst" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-exploratory-data-analysis'})">Думать как аналитик, 19 $ →</a>
   </div>
-  <p style="font-size:13px;color:var(--muted);margin:14px 0 0;line-height:1.6">The same first look, every time, on data you have never seen. <em>The Data Analyst OS</em> makes that a command: a data QA workflow in Claude Code that profiles the table, flags the joins that will bite, and writes what it found. <a href="https://michaelnocito.gumroad.com/l/analyst-os?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=analyst-os" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','analyst_os_click',{kit:'guide-exploratory-data-analysis'})">The Data Analyst OS, $49 &rarr;</a></p>
+  <p style="font-size:13px;color:var(--muted);margin:14px 0 0;line-height:1.6">Каждый раз один и тот же первый взгляд на данные, которые вы никогда не видели.  <em>ОС Data Analyst</em>  делает это командой: рабочий процесс контроля качества данных в Claude Code, который профилирует таблицу, помечает соединения, которые будут кусаться, и записывает то, что он нашел.  <a href="https://michaelnocito.gumroad.com/l/analyst-os?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=analyst-os" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','analyst_os_click',{kit:'guide-exploratory-data-analysis'})">ОС Data Analyst, 49 долларов США →</a></p>
 
 
 <h2>References</h2>
   <ol class="refs">
-    <li>Tukey, J. W. (1962). The future of data analysis. <em>The Annals of Mathematical Statistics, 33</em>(1), 1–67. doi:10.1214/aoms/1177704711</li>
-    <li>Tukey, J. W. (1977). <em>Exploratory Data Analysis.</em> Addison-Wesley.</li>
-    <li>Anscombe, F. J. (1973). Graphs in statistical analysis. <em>The American Statistician, 27</em>(1), 17–21. doi:10.2307/2682899</li>
-    <li>Behrens, J. T. (1997). Principles and procedures of exploratory data analysis. <em>Psychological Methods, 2</em>(2), 131–160. doi:10.1037/1082-989X.2.2.131</li>
-    <li>Matejka, J., &amp; Fitzmaurice, G. (2017). Same stats, different graphs: Generating datasets with varied appearance and identical statistics through simulated annealing. <em>Proceedings of the 2017 CHI Conference on Human Factors in Computing Systems</em>, 1290–1294. ACM.</li>
+    <li>Тьюки, JW (1962). Будущее анализа данных.  <em>Анналы математической статистики, 33.</em>(1), 1–67. doi:10.1214/aoms/1177704711</li>
+    <li>Тьюки, JW (1977).  <em>Исследовательский анализ данных.</em>  Аддисон-Уэсли.</li>
+    <li>Анскомб, Ф.Дж. (1973). Графики в статистическом анализе.  <em>Американский статистик, 27 лет.</em>(1), 17–21. дои: 10.2307/2682899</li>
+    <li>Беренс, Дж. Т. (1997). Принципы и процедуры разведочного анализа данных.  <em>Психологические методы, 2</em>(2), 131–160. doi:10.1037/1082-989X.2.2.131</li>
+    <li>Матейка Дж. и Фицморис Г. (2017). Одна и та же статистика, разные графики: создание наборов данных с разным внешним видом и одинаковой статистикой посредством моделирования отжига.  <em>Материалы конференции CHI 2017 г. по человеческому фактору в вычислительных системах</em>, 1290–1294. АКМ.</li>
   </ol>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../sql-ctes/">SQL CTEs</a> · <a href="../sql-window-functions/">Window Functions</a> · <a href="../tableau-relationships/">Tableau Relationships</a> · <a href="../tableau-sets/">Tableau Sets</a> · <a href="../what-is-data-analysis/">What Is Data Analysis?</a> · <a href="../sql-teaching-comments/">Commenting SQL</a> · <a href="../set-up-a-sql-database/">Set Up a SQL Database</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../git-for-analysts/">Git for Analysts</a> · <a href="../sql-case-expression/">SQL CASE Expression</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../data-driven-thresholds/">Data-Driven Thresholds</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../entity-resolution/">Entity Resolution</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../sql-joins/">SQL JOINs</a> &middot; <a href="../sql-count-function/">COUNT in SQL</a> · <a href="../sql-aliasing/">SQL Aliases</a> &middot; <a href="../../sql/">SQL Kit</a> · <a href="../../projects/">Portfolio Projects</a>
+    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-ctes/">SQL CTE</a> · <a href="../sql-window-functions/">Оконные функции</a> · <a href="../tableau-relationships/">Табличные отношения</a> · <a href="../tableau-sets/">Наборы таблиц</a> · <a href="../what-is-data-analysis/">Что такое анализ данных?</a> · <a href="../sql-teaching-comments/">Комментирование SQL</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../git-for-analysts/">Git для аналитиков</a> · <a href="../sql-case-expression/">SQL-выражение CASE</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../data-driven-thresholds/">Пороги, управляемые данными</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> &middot; <a href="../sql-count-function/">СЧЕТ в SQL</a> · <a href="../sql-aliasing/">SQL-псевдонимы</a> &middot; <a href="../../sql/">SQL-комплект</a> · <a href="../../projects/">Портфельные проекты</a>
     
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

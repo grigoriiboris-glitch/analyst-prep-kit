@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Excel Removes Leading Zeros from Zip Codes: The CSV Import Fix — Analyst Prep Kit</title>
-<meta name="description" content="Why Excel turns 08053 into 8053, credit card numbers into scientific notation, and gene names into dates, and the import habit that stops all three: Data, From Text/CSV, column type Text. Real data loss that never shows an error.">
+<title>Excel удаляет ведущие нули из почтовых индексов: исправление импорта CSV — комплект для подготовки аналитика</title>
+<meta name="description" content="Почему Excel превращает 08053 в 8053, номера кредитных карт в научные обозначения, а имена генов в даты, а также привычка импорта, которая останавливает все три: данные, из текста/CSV, тип столбца текст. Реальная потеря данных, которая никогда не показывает ошибку.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-csv-import-leading-zeros/">
-<meta property="og:title" content="The Dialog That Quietly Deletes Your Zip Codes">
-<meta property="og:description" content="Excel decided 08053 was the number 8053. Nothing errored. The import habit that stops it takes ten seconds.">
+<meta property="og:title" content="Диалог, который незаметно удаляет ваши почтовые индексы">
+<meta property="og:description" content="Excel решил, что 08053 — это число 8053. Никаких ошибок не произошло. Привычка импортировать, останавливающая это, занимает десять секунд.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-csv-import-leading-zeros/">
 <meta name="twitter:card" content="summary_large_image">
@@ -106,146 +106,146 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../excel/">Excel Kit</a> · <a href="../excel-dashboard-build-order/">Article 0: the build order</a></p>
-  <h1>The Dialog That Quietly Deletes Your Zip Codes</h1>
-  <p class="meta">Article 4 of Excel for Business Analysts · One import decision, three kinds of silent data loss · Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-07">August 7, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../excel/">Excel комплект</a> · <a href="../excel-dashboard-build-order/">Статья 0: порядок сборки</a></p>
+  <h1>Диалог, который незаметно удаляет ваши почтовые индексы</h1>
+  <p class="meta">Статья 4 Excel для бизнес-аналитиков · Одно решение об импорте, три вида скрытой потери данных · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-07">7 августа 2026 г.</time></p>
 
-  <p>This article gives you the import habit that stops Excel from rewriting your data before you have even seen it: bring CSV files in through <strong>Data &gt; From Text/CSV</strong>, and set identifier columns to Text. Ten seconds, and it closes off three separate kinds of silent damage.</p>
+  <p>В этой статье вы узнаете о привычке импорта, которая не позволяет Excel перезаписывать данные еще до того, как вы их увидите: вставляйте файлы CSV через  <strong>Данные &gt; Из текста/CSV</strong>и установите для столбцов идентификатора значение Text. Десять секунд, и он закрывает три отдельных вида бесшумного урона.</p>
 
-  <p>The damage is real and specific. 08053 becomes 8053, which is no longer a New Jersey zip code. A sixteen-digit card number becomes 9.78E+15, which is no longer a number at all. And a value like SEPT1 becomes the first of September. None of these shows an error. All of them are data loss.</p>
+  <p>Ущерб реален и конкретен. 08053 становится 8053, который больше не является почтовым индексом Нью-Джерси. Шестнадцатизначный номер карты становится 9,78E+15, что вообще больше не является числом. А такое значение, как SEPT1, становится первым сентября. Ничто из этого не показывает ошибку. Все они являются потерей данных.</p>
 
-  <div class="note"><strong>The short version.</strong> Excel guesses what your data is during import, and it guesses wrong for anything that looks numeric but is really a label. Import through Data &gt; From Text/CSV and declare identifier columns as Text.</div>
+  <div class="note"><strong>Краткая версия.</strong>  Excel угадывает, что представляют собой ваши данные во время импорта, и ошибается в отношении всего, что выглядит числовым, но на самом деле является меткой. Импортируйте через «Данные» &gt; «Из текста/CSV» и объявите столбцы идентификаторов как «Текст».</div>
 
   <div class="toc">
-    <strong>What's here</strong>
+    <strong>Что здесь</strong>
     <ol>
-      <li>What Excel does to a CSV behind your back</li>
-      <li>The three casualties</li>
-      <li>Why it happens: number-shaped labels</li>
-      <li>The fix at import</li>
-      <li>When the damage is already done</li>
-      <li>Why this works</li>
-      <li>Run it on your own file</li>
-      <li>A cheat sheet</li>
+      <li>Что Excel делает с CSV за вашей спиной</li>
+      <li>Трое жертв</li>
+      <li>Почему это происходит: этикетки в форме цифр</li>
+      <li>Исправление при импорте</li>
+      <li>Когда ущерб уже нанесен</li>
+      <li>Почему это работает</li>
+      <li>Запустите его в своем файле</li>
+      <li>Шпаргалка</li>
     </ol>
   </div>
 
-  <h2>What Excel does to a CSV behind your back</h2>
-  <p>Predict this before the explanation: a CSV file contains the five characters 08053. You double-click the file and it opens in Excel. What is in the cell?</p>
-  <p>A CSV is plain text. It contains characters, not types. Something has to decide whether 08053 is a number or a piece of text, and when you open a CSV by double-clicking it, or through File &gt; Open, Excel decides alone, column by column, without asking you.</p>
-  <p>Its rule is simple: if a value parses as a number, it becomes a number. 08053 parses as 8053, so the zero is gone the moment the file opens. Not hidden. Gone. The cell holds the number 8053, and saving the file writes 8053 back over the original.</p>
-  <p>That is the trap's real shape: the destructive step is the most natural action in the world, double-clicking the file.</p>
+  <h2>Что Excel делает с CSV за вашей спиной</h2>
+  <p>Предскажите это до объяснения: файл CSV содержит пять символов 08053. Дважды щелкните файл, и он откроется в Excel. Что находится в клетке?</p>
+  <p>CSV — это обычный текст. Он содержит символы, а не типы. Что-то должно решить, является ли 08053 числом или фрагментом текста, и когда вы открываете CSV-файл, дважды щелкнув его или выбрав «Файл» &gt; «Открыть», Excel решает самостоятельно, столбец за столбцом, не спрашивая вас.</p>
+  <p>Его правило простое: если значение анализируется как число, оно становится числом. 08053 анализируется как 8053, поэтому ноль исчезает в момент открытия файла. Не скрыто. Ушел. В ячейке хранится число 8053, и при сохранении файла вместо оригинала записывается 8053.</p>
+  <p>Такова реальная форма ловушки: разрушительный шаг — самое естественное действие в мире — двойной щелчок по файлу.</p>
 
-  <h2>The three casualties</h2>
+  <h2>Трое жертв</h2>
   <table>
-    <tr><th>What the file said</th><th>What Excel made of it</th><th>What was lost</th></tr>
-    <tr><td>08053, 02134, 00501</td><td>8053, 2134, 501</td><td>Leading zeros. These are no longer valid zip codes, and joins against a proper zip list fail</td></tr>
-    <tr><td>9784563217890123</td><td>9.78456E+15</td><td>Precision. Excel keeps 15 digits, so the last digit becomes 0. The original number is unrecoverable</td></tr>
-    <tr><td>SEPT1, MARCH1, DEC1</td><td>1-Sep, 1-Mar, 1-Dec</td><td>The value itself. These were gene names, product codes, or building-room labels, and now they are dates</td></tr>
-    <tr><td>3-2</td><td>2-Mar</td><td>A size, a score, a version number, read as a date</td></tr>
+    <tr><th>Что сказал файл</th><th>Что из этого сделал Excel</th><th>Что было потеряно</th></tr>
+    <tr><td>08053, 02134, 00501</td><td>8053, 2134, 501</td><td>Ведущие нули. Они больше не являются действительными почтовыми индексами, и соединение с правильным почтовым списком не выполняется.</td></tr>
+    <tr><td>9784563217890123</td><td>9.78456E+15</td><td>Точность. Excel хранит 15 цифр, поэтому последняя цифра становится 0. Исходное число невозможно восстановить.</td></tr>
+    <tr><td>SEPT1, MARCH1, DEC1</td><td>1 сентября, 1 марта, 1 декабря</td><td>Сама ценность. Это были названия генов, коды продуктов или этикетки на строительных объектах, а теперь это даты.</td></tr>
+    <tr><td>3-2</td><td>2 марта</td><td>Размер, оценка, номер версии, читаемые как дата.</td></tr>
   </table>
-  <p>The third row is famous enough to have changed science. A 2016 survey of published genetics papers found roughly a fifth of them carried Excel-converted gene names in their supplementary data, SEPT2 turned into a date, identifiers turned into numbers (Ziemann, Eren &amp; El-Osta, 2016, <em>Genome Biology</em>, 17, 177). The damage was so widespread that the gene naming committee later renamed the genes. SEPT1 is now SEPTIN1 partly because of this dialog.</p>
-  <p>Say out loud which column in your own data is the vulnerable one. Zip code, account number, employee ID, SKU, phone number. Nearly every real dataset has at least one.</p>
+  <p>Третий ряд достаточно известен, чтобы изменить науку. Обзор опубликованных в 2016 году статей по генетике показал, что примерно пятая часть из них содержала в дополнительных данных имена генов, преобразованные в Excel, SEPT2 превратился в дату, идентификаторы превратились в числа (Ziemann, Eren &amp; El-Osta, 2016,  <em>Геномная биология</em>, 17, 177). Ущерб был настолько обширным, что комитет по названию генов позже переименовал гены. SEPT1 теперь стал SEPTIN1 отчасти из-за этого диалога.</p>
+  <p>Скажите вслух, какой столбец ваших данных является уязвимым. Почтовый индекс, номер счета, идентификатор сотрудника, артикул, номер телефона. Почти в каждом реальном наборе данных есть хотя бы один.</p>
 
-  <h2>Why it happens: number-shaped labels</h2>
-  <p>The root of all three casualties is one distinction, and it is the same one that runs through this whole series: some columns are labels wearing a number's clothes.</p>
-  <p>A zip code is not a quantity. You will never add two zip codes, average them, or ask which is larger. It is a name written in digits. The same is true of account numbers, phone numbers, SKUs and IDs. The test, one line: <strong>would adding two of these together mean anything?</strong> If no, the column is text, whatever it looks like.</p>
-  <p>Excel cannot run that test, because meaning is not in the file. It sees digits and does the numeric thing. The fix is not to blame the tool. The fix is to be the one who answers the question, at the only moment the question is asked: import.</p>
+  <h2>Почему это происходит: этикетки в форме цифр</h2>
+  <p>В основе всех трех жертв лежит одно различие, и оно одно и то же, которое проходит через всю эту серию: некоторые столбцы представляют собой этикетки, носящие одежду номеров.</p>
+  <p>Почтовый индекс не является количеством. Вы никогда не будете добавлять два почтовых индекса, усреднять их или спрашивать, какой из них больше. Это имя, написанное цифрами. То же самое касается номеров счетов, номеров телефонов, SKU и идентификаторов. Тест, одна строка:  <strong>будет ли сложение двух из них вместе что-нибудь означать?</strong>  Если нет, столбец представляет собой текст, как бы он ни выглядел.</p>
+  <p>Excel не может выполнить этот тест, поскольку в файле нет смысла. Он видит цифры и выполняет числовые операции. Исправление не виновато в инструменте. Исправление - это тот, кто отвечает на вопрос, в единственный момент, когда вопрос задается: импорт.</p>
 
-  <h2>The fix at import</h2>
+  <h2>Исправление при импорте</h2>
   <ol>
-    <li><strong>Do not double-click the CSV.</strong> Open a blank workbook instead.</li>
-    <li><strong>Ribbon: Data &gt; From Text/CSV.</strong> Pick the file. A preview appears, with Excel's guessed type at the top of each column.</li>
-    <li><strong>Click Transform Data.</strong> This opens Power Query, which is just the room where the import decisions get made visibly.</li>
-    <li><strong>Right-click the identifier column's header &gt; Change Type &gt; Text.</strong> If a Change Column Type prompt appears, choose Replace current. Do this for every number-shaped label: zip, ID, phone, SKU.</li>
-    <li><strong>Close &amp; Load.</strong> The data lands in the sheet as a Table, which is <a href="../excel-name-your-data/">step 1 of the build order</a> done for you. Name it and carry on.</li>
+    <li><strong>Не дважды щелкайте CSV-файл.</strong>  Вместо этого откройте пустую книгу.</li>
+    <li><strong>Лента: Данные &gt; Из текста/CSV.</strong>  Выберите файл. Появится предварительный просмотр с предполагаемым типом Excel вверху каждого столбца.</li>
+    <li><strong>Нажмите «Преобразовать данные».</strong>  Откроется Power Query, который представляет собой просто комнату, где решения об импорте принимаются визуально.</li>
+    <li><strong>Щелкните правой кнопкой мыши заголовок столбца идентификатора &gt; Изменить тип &gt; Текст.</strong>  Если появится запрос «Изменить тип столбца», выберите «Заменить текущий». Сделайте это для каждой числовой этикетки: почтовый индекс, идентификатор, номер телефона, артикул.</li>
+    <li><strong>Закрыть и загрузить.</strong>  Данные попадают на лист в виде таблицы, которая  <a href="../excel-name-your-data/">шаг 1 порядка сборки</a>  сделано для тебя. Назовите его и продолжайте.</li>
   </ol>
-  <p>While you are in the preview there is one more setting worth glancing at: File Origin. If the file came from another system and names or accents look wrong, set it to 65001: Unicode (UTF-8). That is a different failure with the same shape, and it gets its own article later in this series.</p>
-  <p>The whole detour costs under a minute, and it is the only moment the choice exists. After import there is no dialog to reopen. There is only cleanup.</p>
+  <p>Пока вы находитесь в предварительном просмотре, есть еще один параметр, на который стоит обратить внимание: «Происхождение файла». Если файл получен из другой системы и имена или акценты выглядят неправильно, установите для него значение 65001: Unicode (UTF-8). Это другая неудача той же формы, о которой будет отдельная статья позже в этой серии.</p>
+  <p>Весь обход занимает меньше минуты, и это единственный момент, когда существует выбор. После импорта диалоговое окно для повторного открытия отсутствует. Есть только уборка.</p>
 
-  <h2>When the damage is already done</h2>
-  <p>You received an xlsx where the zips are already 8053. The zeros are not hiding behind the display. The stored value is the number. Two honest options:</p>
-  <p><strong>Re-import from the source CSV if you still have it.</strong> This is the clean fix, and it is why you never overwrite the original file: keep the raw CSV, import into a copy. That habit belongs to the same family as <a href="../excel-check-your-work/">keeping your checks in the file</a>.</p>
-  <p><strong>Rebuild the zeros if the width is known.</strong> US zips are five digits, so <code>=TEXT([@Zip],"00000")</code> produces a text value padded back to five characters. This works only because zip codes have a fixed width. A trimmed account number of unknown length cannot be rebuilt, and a card number that went through scientific notation is gone for good. Rebuilding is a patch. The import habit is the fix.</p>
-  <p>One warning for the other direction: typing an apostrophe before a value, like <code>'08053</code>, keeps a single manual entry as text. It does not scale to a column, and it does nothing at import time. Treat it as a spot tool, not a strategy.</p>
+  <h2>Когда ущерб уже нанесен</h2>
+  <p>Вы получили xlsx, где zip уже 8053. Нули не прячутся за дисплеем. Сохраненное значение — это число. Два честных варианта:</p>
+  <p><strong>Повторно импортируйте из исходного CSV-файла, если он у вас еще есть.</strong>  Это чистое исправление, и именно поэтому вы никогда не перезаписываете исходный файл: сохраните необработанный CSV-файл, импортируйте в копию. Эта привычка принадлежит к тому же семейству, что и  <a href="../excel-check-your-work/">хранить ваши чеки в папке</a>.</p>
+  <p><strong>Восстановите нули, если ширина известна.</strong>  Индексы США пятизначные, поэтому  <code>=TEXT([@Zip],"00000")</code>  создает текстовое значение, дополненное пятью символами. Это работает только потому, что почтовые индексы имеют фиксированную ширину. Урезанный номер счета неизвестной длины не может быть восстановлен, а номер карты, прошедший экспоненциальную запись, исчезает навсегда. Ребилд - это патч. Привычка импортировать — это решение.</p>
+  <p>Одно предупреждение в другом направлении: ввод апострофа перед значением, например  <code>'08053</code>, сохраняет одну введенную вручную запись в виде текста. Он не масштабируется до столбца и ничего не делает во время импорта. Относитесь к этому как к точечному инструменту, а не как к стратегии.</p>
 
-  <h2>Why this works</h2>
-  <p>The general lesson under the specific trap: silent type conversion is a class of error that survives careful people, because it happens before attention starts. Ziemann and colleagues' finding was not about careless labs. About one in five published, peer-reviewed, checked-by-editors papers carried the damage (Ziemann, Eren &amp; El-Osta, 2016, <em>Genome Biology</em>, 17, 177). The authors of those papers looked at their data plenty. The conversion just happened earlier than looking.</p>
-  <p>That is why the countermeasure is positional, not attentional. You cannot spot-check your way out, because a converted value looks clean. You put one habit at the single door every file walks through, and the class of error stops existing in your files.</p>
+  <h2>Почему это работает</h2>
+  <p>Общий урок из конкретной ловушки: тихое преобразование типов — это класс ошибок, который выдерживает внимательный человек, потому что он происходит до того, как начинается внимание. Открытие Цимана и его коллег связано не с небрежной работой лабораторий. Примерно каждая пятая опубликованная, рецензируемая и проверенная редакторами статья несет ущерб (Ziemann, Eren &amp; El-Osta, 2016,  <em>Геномная биология</em>, 17, 177). Авторы этих статей тщательно изучили свои данные. Преобразование произошло раньше, чем просмотр.</p>
+  <p>Вот почему контрмера носит позиционный, а не концентрационный характер. Вы не можете выполнить выборочную проверку, потому что преобразованное значение выглядит чистым. Вы помещаете одну привычку в единственную дверь, через которую проходит каждый файл, и класс ошибок перестает существовать в ваших файлах.</p>
 
-  <h2>Run it on your own file</h2>
+  <h2>Запустите его в своем файле</h2>
   <ol>
-    <li><strong>Find your most recent CSV.</strong> Downloads folder, export from any system.</li>
-    <li><strong>Import it twice.</strong> Once by double-click, once through Data &gt; From Text/CSV with identifier columns set to Text.</li>
-    <li><strong>Compare the vulnerable column.</strong> If the two disagree, you have been shipping converted data and today is a good day to have found out.</li>
-    <li><strong>Keep the raw CSV read-only.</strong> Imports go into copies. The original is evidence.</li>
-    <li><strong>Add the check.</strong> One cell: <code>=MIN(LEN([@Zip]))</code> on a zip column should say 5. The moment it says 4, a zero has gone missing somewhere upstream. That is <a href="../excel-check-your-work/">article 2's habit</a> pointed at this article's trap.</li>
+    <li><strong>Найдите свой последний CSV-файл.</strong>  Папка Downloads, экспорт из любой системы.</li>
+    <li><strong>Импортируйте его дважды.</strong>  Один раз двойным щелчком мыши, один раз через «Данные» &gt; «Из текста/CSV» со столбцами идентификаторов, установленными на «Текст».</li>
+    <li><strong>Сравните уязвимый столбец.</strong>  Если они не согласны, вы отправляете преобразованные данные, и сегодня хороший день, чтобы это выяснить.</li>
+    <li><strong>Оставьте необработанный CSV-файл только для чтения.</strong>  Импорт переходит в копии. Оригинал является доказательством.</li>
+    <li><strong>Добавьте чек.</strong>  Одна ячейка:  <code>=MIN(LEN([@Zip]))</code>  в столбце zip должно быть написано 5. В тот момент, когда там написано 4, где-то вверху пропал ноль. То есть  <a href="../excel-check-your-work/">привычка статьи 2</a>  указал на ловушку этой статьи.</li>
   </ol>
 
   <div class="book">
-    <strong>The zip codes lost their leading zeros somewhere between the file and the sheet.</strong>
-    <p><em>Excel for Analysts</em> is 378 pages, text, numbers and the import settings that decide which one your ID column becomes, with practice questions that print the answer and the reason it is right.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-csv-import-leading-zeros'})">Excel for Analysts, $19 &rarr;</a>
+    <strong>Почтовые индексы потеряли ведущие нули где-то между файлом и листом.</strong>
+    <p><em>Excel для аналитиков</em>  это 378 страниц, текст, цифры и настройки импорта, которые определяют, каким будет ваш столбец идентификатора, с практическими вопросами, которые печатают ответ и причину, по которой он правильный.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-csv-import-leading-zeros'})">Excel для аналитиков, 19 долларов США →</a>
   </div>
 
   <div class="cta">
-    <strong>Get the reps on the formulas that catch this.</strong>
-    <p style="margin:6px 0 0">The <a href="../../excel/">Excel Kit</a> drills TEXT, LEN and the import-to-pivot workflow with worked examples and a mock exam. The habit is yours from this page. The kit is where it stops taking thought.</p>
-    <a class="btn" href="../../excel/" onclick="if(window.gtag)gtag('event','prompt_pack_click',{kit:'guide-excel-csv-import'})">Open the Excel Kit →</a>
+    <strong>Получите повторения по формулам, которые это улавливают.</strong>
+    <p style="margin:6px 0 0">The <a href="../../excel/">Excel комплект</a>  изучает ТЕКСТ, LEN и рабочий процесс импорта в сводку с помощью проработанных примеров и пробного экзамена. Привычка принадлежит вам с этой страницы. Комплект — это то место, где перестают думать.</p>
+    <a class="btn" href="../../excel/" onclick="if(window.gtag)gtag('event','prompt_pack_click',{kit:'guide-excel-csv-import'})">Откройте набор Excel →</a>
   </div>
 
-  <h2>A cheat sheet</h2>
+  <h2>Шпаргалка</h2>
   <table>
-    <tr><th>Situation</th><th>Do</th><th>Watch for</th></tr>
-    <tr><td>Opening any CSV</td><td>Data &gt; From Text/CSV, never double-click</td><td>Double-click converts before you see anything</td></tr>
-    <tr><td>Zip, ID, phone, SKU columns</td><td>Transform Data, column type Text</td><td>The test: would adding two together mean anything?</td></tr>
-    <tr><td>Accents or odd characters in the preview</td><td>File Origin: 65001 Unicode (UTF-8)</td><td>Same trap, different casualty. Covered in article 15</td></tr>
-    <tr><td>Zeros already stripped, width known</td><td><code>=TEXT([@Zip],"00000")</code></td><td>Only fixed-width values can be rebuilt</td></tr>
-    <tr><td>Long numbers showing as 9.78E+15</td><td>Recover from the source file</td><td>Excel kept 15 digits. The rest are zeros now</td></tr>
-    <tr><td>Guarding the column forever</td><td>A check cell: minimum LEN equals the expected width</td><td>Predict the value before you look, per article 2</td></tr>
+    <tr><th>Situation</th><th>Do</th><th>Следите за</th></tr>
+    <tr><td>Открытие любого CSV</td><td>Данные &gt; Из текста/CSV, никогда не щелкайте дважды.</td><td>Дважды щелкните конверсии, прежде чем что-либо увидите</td></tr>
+    <tr><td>Столбцы «Почтовый индекс», «Идентификатор», «Телефон», «Артикул»</td><td>Преобразование данных, тип столбца Текст</td><td>Тест: будет ли сложение двух вместе что-нибудь означать?</td></tr>
+    <tr><td>Акценты или нечетные символы в предварительном просмотре</td><td>Происхождение файла: 65001 Юникод (UTF-8).</td><td>Та же ловушка, другие жертвы. Описано в статье 15.</td></tr>
+    <tr><td>Нули уже удалены, ширина известна</td><td><code>=TEXT([@Zip],"00000")</code></td><td>Перестроить можно только значения фиксированной ширины.</td></tr>
+    <tr><td>Длинные числа отображаются как 9,78E+15.</td><td>Восстановить из исходного файла</td><td>Excel сохранил 15 цифр. Остальные теперь нули</td></tr>
+    <tr><td>На страже колонны навсегда</td><td>Контрольная ячейка: минимальная длина LEN равна ожидаемой ширине.</td><td>Предскажите ценность, прежде чем посмотреть, согласно статье 2</td></tr>
   </table>
 
-  <div class="note"><strong>The one habit to keep.</strong> CSVs come in through Data &gt; From Text/CSV, and every number-shaped label is declared Text at the door. The moment of import is the only moment the choice exists.</div>
+  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  CSV-файлы поступают через «Данные» &gt; «Из текста/CSV», и каждая цифровая метка объявляется «Текст у двери». Момент импорта — единственный момент, когда существует выбор.</div>
 
   <div class="series">
-    <strong>The series: Excel for Business Analysts.</strong>
-    <p style="margin:6px 0 8px">Every article comes out of one step of <a href="../excel-dashboard-build-order/">the same real build</a>, in build order. Links go live as each one publishes.</p>
+    <strong>Серия: Excel для бизнес-аналитиков.</strong>
+    <p style="margin:6px 0 8px">Каждая статья создается за один этап  <a href="../excel-dashboard-build-order/">та же настоящая сборка</a>, в порядке сборки. Ссылки активируются по мере публикации каждой из них.</p>
     <ol start="0">
-      <li value="0"><a href="../excel-dashboard-build-order/">Build a dashboard in this order: correct, then clear, then compelling</a></li>
-      <li><a href="../excel-label-rows-before-charting/">Label your rows before you chart them</a></li>
-      <li><a href="../excel-check-your-work/">Check your work before anyone else does</a></li>
-      <li><a href="../excel-name-your-data/">Name your data so your formulas stop breaking</a></li>
-      <li>The dialog that quietly deletes your zip codes (this article)</li>
-      <li><a href="../excel-pivot-table-question/">A pivot table is a question, not a report</a></li>
-      <li><a href="../excel-sum-of-id-trap/">Excel just summed your ID numbers and said nothing</a></li>
-      <li><a href="../excel-pivot-percentages/">Percentages are the whole story and Excel hides them</a></li>
-      <li><a href="../excel-custom-number-formats/">Show the unit without breaking the number</a></li>
-      <li><a href="../excel-pick-the-chart/">Pick the chart your number already decided</a></li>
-      <li><a href="../excel-chart-design-basics/">Chart design basics: take things away, then point</a></li>
-      <li><a href="../excel-if-family/">One row at a time, or all rows at once</a></li>
-      <li><a href="../excel-kpi-row/">Four numbers across the top do more than four charts</a></li>
-      <li><a href="../excel-sort-your-bars/">Sort your bar chart or it means nothing</a></li>
-      <li><a href="../excel-circular-findings/">The finding that was just your own definition</a></li>
-      <li><a href="../excel-character-encoding/">The names came in as gibberish and Excel said nothing</a></li>
-      <li><a href="../excel-slicers/">Make one control drive every chart on the page</a></li>
-      <li><a href="../excel-dashboard-claim/">Write the sentence your dashboard is arguing</a></li>
+      <li value="0"><a href="../excel-dashboard-build-order/">Создайте информационную панель в следующем порядке: правильно, затем ясно, затем убедительно.</a></li>
+      <li><a href="../excel-label-rows-before-charting/">Пометьте свои строки, прежде чем составлять их диаграмму.</a></li>
+      <li><a href="../excel-check-your-work/">Проверяйте свою работу, прежде чем это сделает кто-то другой</a></li>
+      <li><a href="../excel-name-your-data/">Назовите свои данные, чтобы ваши формулы перестали нарушаться</a></li>
+      <li>Диалоговое окно, которое незаметно удаляет ваши почтовые индексы (эта статья)</li>
+      <li><a href="../excel-pivot-table-question/">Сводная таблица — это вопрос, а не отчет</a></li>
+      <li><a href="../excel-sum-of-id-trap/">Excel просто суммировал ваши идентификационные номера и ничего не сказал.</a></li>
+      <li><a href="../excel-pivot-percentages/">Проценты — это вся история, а Excel их скрывает</a></li>
+      <li><a href="../excel-custom-number-formats/">Покажите единицу, не нарушая цифру</a></li>
+      <li><a href="../excel-pick-the-chart/">Выберите диаграмму, ваш номер уже определен</a></li>
+      <li><a href="../excel-chart-design-basics/">Основы проектирования диаграмм: уберите что-то, а затем укажите</a></li>
+      <li><a href="../excel-if-family/">По одной строке за раз или все строки сразу</a></li>
+      <li><a href="../excel-kpi-row/">Четыре числа сверху обозначают более четырех графиков.</a></li>
+      <li><a href="../excel-sort-your-bars/">Отсортируйте гистограмму, иначе это ничего не значит</a></li>
+      <li><a href="../excel-circular-findings/">Открытие, которое было всего лишь вашим собственным определением</a></li>
+      <li><a href="../excel-character-encoding/">Имена появились как тарабарщина, а Excel ничего не сказал</a></li>
+      <li><a href="../excel-slicers/">Сделайте по одному управляющему диску для каждой диаграммы на странице.</a></li>
+      <li><a href="../excel-dashboard-claim/">Напишите предложение, о котором спорит ваша панель мониторинга</a></li>
     </ol>
   </div>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Ziemann, M., Eren, Y., &amp; El-Osta, A. (2016). Gene name errors are widespread in the scientific literature. <em>Genome Biology</em>, 17, 177.</li>
+    <li>Циманн М., Эрен Ю. и Эль-Оста А. (2016). Ошибки в названиях генов широко распространены в научной литературе.  <em>Геномная биология</em>, 17, 177.</li>
   </ul>
 
-  <p>Your prediction from the top: did you say 8053? And which of your own columns are you going to re-import first?</p>
+  <p>Ваш прогноз сверху: вы сказали 8053? И какие из ваших собственных столбцов вы собираетесь реимпортировать в первую очередь?</p>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> · <a href="../excel-dashboard-build-order/">The Build Order (Article 0)</a> · <a href="../excel-absolute-vs-relative-references/">Absolute vs Relative References</a> · <a href="../excel-label-rows-before-charting/">Label Your Rows (Article 1)</a> · <a href="../excel-check-your-work/">Check Your Work (Article 2)</a> · <a href="../excel-name-your-data/">Name Your Data (Article 3)</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../migration-cleaning/">Migration Cleaning</a> · <a href="../entity-resolution/">Entity Resolution</a> · <a href="../what-is-data-analysis/">What Is Data Analysis?</a> · <a href="../../excel/">Excel Kit</a> · <a href="../../viz/">Viz Drill</a> · <a href="../../projects/">Portfolio Projects</a>
-    <a class="coffee" href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a>
+    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../excel-dashboard-build-order/">Порядок строительства (статья 0)</a> · <a href="../excel-absolute-vs-relative-references/">Абсолютные и относительные ссылки</a> · <a href="../excel-label-rows-before-charting/">Пометьте свои строки (статья 1)</a> · <a href="../excel-check-your-work/">Проверьте свою работу (статья 2)</a> · <a href="../excel-name-your-data/">Назовите свои данные (статья 3)</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../migration-cleaning/">Очистка миграции</a> · <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../what-is-data-analysis/">Что такое анализ данных?</a> · <a href="../../excel/">Excel комплект</a> · <a href="../../viz/">Виз Дрель</a> · <a href="../../projects/">Портфельные проекты</a>
+    <a class="coffee" href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

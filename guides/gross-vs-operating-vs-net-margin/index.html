@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gross vs Operating vs Net Margin: What Each One Tells You — Analyst Prep Kit</title>
-<meta name="description" content="Three margins from one income statement, each stripping out one more layer of cost. The SQL division that quietly returns 0, the averaged monthly margins that miss by 3.1 points, and how to read a margin against a benchmark.">
+<title>Валовая, операционная и чистая прибыль: что говорит каждый из них — комплект для подготовки аналитика</title>
+<meta name="description" content="Три прибыли из одного отчета о прибылях и убытках, каждая из которых исключает еще один уровень затрат. Подразделение SQL, которое незаметно возвращает 0, среднемесячную прибыль, отклоняющуюся на 3,1 пункта, и как считать разницу по сравнению с контрольным показателем.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/gross-vs-operating-vs-net-margin/">
-<meta property="og:title" content="Gross vs Operating vs Net Margin: What Each One Tells You">
-<meta property="og:description" content="Revenue grew 33.3% and net income grew 4.1%. Three margins say where the other 29 points went, in one query, if the division does not quietly return 0 first.">
+<meta property="og:title" content="Валовая, операционная и чистая прибыль: что вам говорит каждый из них">
+<meta property="og:description" content="Выручка выросла на 33,3%, а чистая прибыль выросла на 4,1%. Три поля говорят, куда пошли остальные 29 точек в одном запросе, если деление сначала не вернет 0.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/gross-vs-operating-vs-net-margin.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/gross-vs-operating-vs-net-margin/">
@@ -136,18 +136,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../sql/">SQL Kit</a> · <a href="../">All guides</a></p>
-  <h1>Gross vs Operating vs Net Margin: What Each One Tells You</h1>
-  <p class="meta">Three numbers from one income statement, and the layer of cost each one points at · About 20 minutes · Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-11">August 11, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../">Все руководства</a></p>
+  <h1>Валовая, операционная и чистая прибыль: что вам говорит каждый из них</h1>
+  <p class="meta">Три цифры из одного отчета о прибылях и убытках и уровень затрат, на который каждая указывает · Около 20 минут · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-11">11 августа 2026 г.</time></p>
 
-  <p>By the end of this page you can look at an income statement and say, in one sentence, which layer of the business is losing the money. You will know what each of the three margins measures, why they always step down in order, the SQL that computes all three in one pass, and the two ways that SQL quietly returns the wrong number.</p>
+  <p>К концу этой страницы вы можете просмотреть отчет о прибылях и убытках и в одном предложении сказать, какой уровень бизнеса теряет деньги. Вы узнаете, что измеряет каждое из трех полей, почему они всегда уменьшаются по порядку, SQL, который вычисляет все три за один проход, и два способа, которыми SQL незаметно возвращает неправильное число.</p>
 
-  <p>Try this before you read another word. Take any two periods of your company's numbers. Work out what percent revenue grew, then what percent profit grew. If profit grew slower, the business got bigger and kept less of each dollar, and the three margins tell you which layer ate the difference.</p>
+  <p>Попробуйте это, прежде чем прочитать еще одно слово. Возьмите любые два периода чисел вашей компании. Определите, на какой процент вырос доход, а затем на какой процент выросла прибыль. Если прибыль росла медленнее, бизнес становился больше и удерживал меньше каждого доллара, и три уровня прибыли подскажут вам, какой слой съел разницу.</p>
 
-  <p>In one line: a margin is a profit line divided by revenue. Each one subtracts one more layer of cost, so gross is always at least operating, and operating is always at least net.</p>
+  <p>В одной строке: маржа — это линия прибыли, разделенная на выручку. Каждый из них вычитает еще один уровень затрат, поэтому валовые всегда являются как минимум операционными, а операционные всегда как минимум чистыми.</p>
 
-  <p>The stepping-down is the whole shape of it, so it gets the picture.</p>
+  <p>Понижение – это вся суть, так что картина понятна.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 300" role="img" aria-labelledby="mgTitle mgDesc" xmlns="http://www.w3.org/2000/svg">
@@ -186,111 +186,111 @@
         <text x="712" y="236" font-size="13" fill="#52525B">14%</text>
       </g>
     </svg>
-    <figcaption>One dollar of revenue, drawn four times. Each row is what survives the hatched block beside it, so the percentages can only fall as you go down. These are the 2024 numbers worked through this page: 60 cents of gross profit per revenue dollar, 22 cents of operating income, 14 cents of net income.</figcaption>
+    <figcaption>Один доллар дохода, разыгранный четыре раза. Каждая строка — это то, что выдерживает заштрихованный блок рядом с ней, поэтому проценты могут падать только по мере вашего спуска. На этой странице представлены цифры за 2024 год: 60 центов валовой прибыли на доллар выручки, 22 цента операционного дохода, 14 центов чистой прибыли.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>What you'll learn</strong>
+    <strong>Что вы узнаете</strong>
     <ol>
-      <li>What a margin is, and why divide by revenue at all</li>
-      <li>The three margins, and the layer each one accuses</li>
-      <li>The worked income statement, two years side by side</li>
-      <li>The query, and the division that returns 0</li>
-      <li>Averaging monthly margins loses 3.1 points</li>
-      <li>Reading a margin: the four benchmarks</li>
-      <li>The full before and after</li>
-      <li>Edge cases that break the cascade</li>
-      <li>Why this works</li>
-      <li>Using this on your own numbers</li>
-      <li>The whole thing on one screen</li>
+      <li>Что такое маржа и зачем вообще делить на выручку</li>
+      <li>Три поля и слой, каждый из которых обвиняет</li>
+      <li>Отчет о прибылях и убытках за два года подряд</li>
+      <li>Запрос и деление, возвращающее 0</li>
+      <li>Среднемесячная маржа теряет 3,1 пункта</li>
+      <li>Чтение маржи: четыре показателя</li>
+      <li>Полное до и после</li>
+      <li>Пограничные случаи, нарушающие каскад</li>
+      <li>Почему это работает</li>
+      <li>Использование этого на ваших собственных номерах</li>
+      <li>Все на одном экране</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Every number on this page is verified, and you can check them.</strong> The worked example is one small company's two most recent years, shown in full below. Every margin, growth rate, subtotal and monthly figure was computed in SQLite and cross-checked in pandas before it went on the page, so you can check any cell by hand and it will agree.</div>
+  <div class="note"><strong>Каждый номер на этой странице проверен, и вы можете их проверить.</strong>  Проработанный пример представляет собой два последних года существования одной небольшой компании, полностью показанные ниже. Каждая маржа, темп роста, промежуточный итог и ежемесячный показатель были рассчитаны в SQLite и проверены в pandas перед тем, как они появятся на странице, поэтому вы можете проверить любую ячейку вручную, и все будет в порядке.</div>
 
   <div class="step">
-    <h2>1. What a margin is, and why divide by revenue at all</h2>
+    <h2>1. Что такое маржа и зачем вообще делить на выручку</h2>
 
-    <p>Two years of profit, $538,000 then $560,000. Say whether that company had a good year, and say what you would need to know to be sure.</p>
+    <p>Два года прибыли: 538 000 долларов, затем 560 000 долларов. Скажите, был ли у этой компании хороший год, и скажите, что вам нужно знать, чтобы быть в этом уверенным.</p>
 
-    <p>A margin is a profit line divided by revenue, written as a percent. That is the entire definition. If revenue is $4,000,000 and net income is $560,000, the net margin is 560,000 divided by 4,000,000, which is 0.14, which is 14%.</p>
+    <p>Маржа — это линия прибыли, разделенная на выручку, выраженная в процентах. Вот и все определение. Если выручка составляет 4 000 000 долларов США, а чистая прибыль — 560 000 долларов США, чистая прибыль равна 560 000, разделенному на 4 000 000, что составляет 0,14, что составляет 14%.</p>
 
-    <p>The reason to divide is that raw profit dollars cannot be compared to anything. A bigger year makes more profit almost automatically, so "profit went up" tells you the company got bigger, not that it got better. Dividing by revenue converts the number into cents kept per sales dollar, and cents kept per dollar can be compared to last year, to the plan, and to a competitor ten times the size.</p>
+    <p>Причина разделения заключается в том, что доллары чистой прибыли нельзя ни с чем сравнивать. Более крупный год приносит больше прибыли почти автоматически, поэтому «прибыль выросла» говорит о том, что компания стала больше, а не о том, что она стала лучше. Разделив на доход, вы получите количество удержанных центов на доллар продаж, а количество удержанных центов на доллар можно сравнить с прошлым годом, с планом и с десятикратным размером конкурента.</p>
 
-    <p>One warning about the word "kept," because it is doing less work than it sounds like. A margin of 14% does not mean 14 cents of every dollar is in the bank. It means 14 cents survived on paper, and paper and cash part company constantly. A customer who has not paid yet still counts as revenue and still counts as profit. A company can post its best margin ever and miss payroll in the same month. What a business can actually pay is a different question with different arithmetic, and it lives on the balance sheet rather than here: <a href="../liquidity-and-leverage-ratios/">the current ratio and the quick ratio</a> are the two numbers that answer it.</p>
+    <p>Одно предупреждение по поводу слова «сохранено», потому что оно выполняет меньше работы, чем кажется. Маржа в 14% не означает, что 14 центов с каждого доллара находятся в банке. Это значит, что 14 центов сохранились на бумаге, а бумага и наличность расходятся постоянно. Клиент, который еще не заплатил, по-прежнему считается доходом и прибылью. Компания может объявить о своей лучшей прибыли и не начислить заработную плату в одном и том же месяце. Сколько на самом деле может заплатить бизнес — это другой вопрос, с другой арифметикой, и он живет не здесь, а на балансе:  <a href="../liquidity-and-leverage-ratios/">коэффициент текущей ликвидности и коэффициент быстрой ликвидности</a>  это два числа, которые отвечают на него.</p>
 
-    <p>Here is the same idea in one line you can hold on to. Profit answers "how much did we make." A margin answers "how much of what came in did we keep, on paper." Those are different questions, and only the second one survives a change in size.</p>
+    <p>Вот та же идея в одной строке, за которую можно держаться. Прибыль отвечает: «Сколько мы заработали». Запас отвечает на вопрос: «Какую часть поступившего мы сохранили на бумаге?» Это разные вопросы, и только второй из них выдерживает изменение размера.</p>
   </div>
 
   <div class="step">
-    <h2>2. The three margins, and the layer each one accuses</h2>
+    <h2>2. Три поля и слой, каждый из которых обвиняет</h2>
 
-    <p>If a company's product sells profitably but the company loses money overall, which of the three margins would still look healthy?</p>
+    <p>Если продукт компании продается с прибылью, но в целом компания теряет деньги, какая из трех прибылей все равно будет выглядеть здоровой?</p>
 
-    <p>An income statement is a cascade. Revenue at the top, then costs subtract in layers, and each subtotal along the way is a profit line worth dividing by revenue. Three of those subtotals matter most.</p>
+    <p>Отчет о прибылях и убытках представляет собой каскад. Выручка вверху, затем затраты вычитаются по слоям, и каждый промежуточный итог на этом пути представляет собой линию прибыли, которую стоит разделить на выручку. Три из этих промежуточных итогов имеют наибольшее значение.</p>
 
-    <p><strong>Gross margin</strong> is gross profit divided by revenue, where gross profit is revenue minus cost of goods sold. Cost of goods sold is what it costs to make or deliver the thing you sold: materials, the people who build it, shipping. Gross margin is the product's own economics. It moves when you change your price or when your suppliers change theirs, and almost nothing else touches it.</p>
+    <p><strong>Валовая прибыль</strong>  представляет собой валовую прибыль, разделенную на выручку, где валовая прибыль равна выручке минус себестоимость реализованной продукции. Себестоимость проданных товаров — это стоимость изготовления или доставки проданной вами вещи: материалы, люди, которые ее строят, доставка. Валовая прибыль — это собственная экономика продукта. Он движется, когда вы меняете цену или когда ваши поставщики меняют свою, и почти ничего больше его не касается.</p>
 
-    <p><strong>Operating margin</strong> is operating income divided by revenue, where operating income is gross profit minus operating expense. Operating expense is the cost of running the company rather than making the product: sales salaries, rent, software, marketing, the finance team. Operating margin is the core business. It moves when overhead grows faster than sales.</p>
+    <p><strong>Операционная маржа</strong>  — операционный доход, разделенный на выручку, где операционный доход — это валовая прибыль минус операционные расходы. Операционные расходы — это затраты на управление компанией, а не на производство продукта: зарплата от продаж, аренда, программное обеспечение, маркетинг, финансовая команда. Операционная прибыль – это основной бизнес. Он движется, когда накладные расходы растут быстрее, чем продажи.</p>
 
-    <p><strong>Net margin</strong> is net income divided by revenue, and net income is what is left after everything, including interest on borrowed money and tax. Net margin moves on how much debt the company carries and what it pays the government, neither of which has much to do with how well the product sells.</p>
+    <p><strong>Чистая прибыль</strong>  чистый доход делится на доход, а чистый доход — это то, что остается после всего, включая проценты по заемным деньгам и налогам. Чистая прибыль зависит от того, сколько долгов несет компания и сколько она платит правительству, причем ни то, ни другое не имеет особого отношения к тому, насколько хорошо продается продукт.</p>
 
-    <p>So each margin removes one more layer, and that is why they always fall in the same order: gross is at least operating, and operating is at least net. When a company's product is profitable but the company is not, gross margin stays healthy and the collapse shows up below it. The margin that stops looking good is the layer that owes you an explanation.</p>
+    <p>Таким образом, каждая маржа удаляет еще один слой, и именно поэтому они всегда располагаются в одном и том же порядке: валовая прибыль — это как минимум операционная, а операционная — как минимум чистая. Когда продукт компании прибыльен, а сама компания нет, валовая прибыль остается здоровой, а под ней проявляется крах. Поля, которые перестают выглядеть хорошо, — это тот слой, который должен вам объяснить.</p>
   </div>
 
   <div class="step">
-    <h2>3. The worked income statement, two years side by side</h2>
+    <h2>3. Отчет о прибылях и убытках за два года подряд.</h2>
 
-    <p>Revenue is about to grow by a third. Guess whether net margin goes up or down, and write your guess down.</p>
+    <p>Выручка вырастет на треть. Угадайте, увеличится или уменьшится чистая прибыль, и запишите свое предположение.</p>
 
-    <p>Here is the company. It sells coffee equipment, it books everything in whole dollars, and these are its last two fiscal years.</p>
+    <p>Вот компания. Он продает кофейное оборудование, записывает все в долларах, и это его последние два финансовых года.</p>
 
     <div class="tw">
 
       <table>
       <tr><th>Line</th><th>2023</th><th>2024</th></tr>
       <tr><td>Revenue</td><td>3,000,000</td><td>4,000,000</td></tr>
-      <tr><td>Cost of goods sold</td><td>1,110,000</td><td>1,600,000</td></tr>
-      <tr><td><strong>Gross profit</strong></td><td><strong>1,890,000</strong></td><td><strong>2,400,000</strong></td></tr>
-      <tr><td>Operating expense</td><td>1,116,000</td><td>1,520,000</td></tr>
-      <tr><td><strong>Operating income</strong></td><td><strong>774,000</strong></td><td><strong>880,000</strong></td></tr>
+      <tr><td>Стоимость проданного товара</td><td>1,110,000</td><td>1,600,000</td></tr>
+      <tr><td><strong>Валовая прибыль</strong></td><td><strong>1,890,000</strong></td><td><strong>2,400,000</strong></td></tr>
+      <tr><td>Операционные расходы</td><td>1,116,000</td><td>1,520,000</td></tr>
+      <tr><td><strong>Операционная прибыль</strong></td><td><strong>774,000</strong></td><td><strong>880,000</strong></td></tr>
       <tr><td>Interest</td><td>60,000</td><td>120,000</td></tr>
       <tr><td>Tax</td><td>176,000</td><td>200,000</td></tr>
-      <tr><td><strong>Net income</strong></td><td><strong>538,000</strong></td><td><strong>560,000</strong></td></tr>
+      <tr><td><strong>Чистая прибыль</strong></td><td><strong>538,000</strong></td><td><strong>560,000</strong></td></tr>
     </table>
 
     </div>
 
-    <p>Check one column by hand to trust the rest. 2024: 4,000,000 minus 1,600,000 is 2,400,000 gross profit. Minus 1,520,000 of operating expense is 880,000. Minus 120,000 of interest and 200,000 of tax is 560,000.</p>
+    <p>Проверьте один столбец вручную, чтобы доверять остальным. 2024: 4 000 000 минус 1 600 000 — это 2 400 000 валовой прибыли. Минус 1 520 000 операционных расходов — 880 000. Минус 120 000 процентов и 200 000 налогов — 560 000.</p>
 
-    <p>Now the same two years as margins.</p>
+    <p>Теперь те же два года, что и маржа.</p>
 
     <div class="tw">
 
       <table>
       <tr><th>Margin</th><th>2023</th><th>2024</th><th>Change</th></tr>
-      <tr><td>Gross</td><td>63.0%</td><td>60.0%</td><td>-3.0 points</td></tr>
-      <tr><td>Operating</td><td>25.8%</td><td>22.0%</td><td>-3.8 points</td></tr>
-      <tr><td>Net</td><td>17.9%</td><td>14.0%</td><td>-3.9 points</td></tr>
+      <tr><td>Gross</td><td>63.0%</td><td>60.0%</td><td>-3,0 балла</td></tr>
+      <tr><td>Operating</td><td>25.8%</td><td>22.0%</td><td>-3,8 балла</td></tr>
+      <tr><td>Net</td><td>17.9%</td><td>14.0%</td><td>-3,9 балла</td></tr>
     </table>
 
     </div>
 
-    <p>Both tables describe the same two years. The first one says the company had its best year. The second one says the company had its worst year in a while. Revenue grew 33.3%, gross profit grew 27.0%, operating income grew 13.7%, and net income grew 4.1%. Every line went up, and every line went up slower than the one above it.</p>
+    <p>Обе таблицы описывают одни и те же два года. Первый говорит, что у компании был лучший год. Второй говорит, что у компании был худший год за последнее время. Выручка выросла на 33,3%, валовая прибыль выросла на 27,0%, операционная прибыль выросла на 13,7%, а чистая прибыль выросла на 4,1%. Каждая строка поднималась вверх, и каждая линия поднималась медленнее, чем та, что над ней.</p>
 
-    <p>The one sentence this table earns: <strong>the company grew a third bigger and now keeps 14.0 cents of every dollar instead of 17.9.</strong> Put the shortfall in dollars and it stops being abstract. At last year's net margin, $4,000,000 of revenue would have produced $717,333 of net income. It produced $560,000. The difference is $157,333, which is more than a quarter of the profit the company actually made.</p>
+    <p>Единственное предложение, которое заслуживает эта таблица:  <strong>компания выросла на треть и теперь получает 14,0 центов с каждого доллара вместо 17,9.</strong>  Поместите дефицит в доллары, и он перестанет быть абстрактным. При чистой прибыли прошлого года выручка в размере 4 000 000 долларов США принесла бы 717 333 доллара чистой прибыли. Это принесло 560 000 долларов. Разница составляет $157 333, что составляет более четверти фактической прибыли компании.</p>
 
-    <p>Say why net margin can fall while net income rises, in your own words, before reading on. If you can say it, the rest of this page is arithmetic.</p>
+    <p>Прежде чем читать дальше, скажите своими словами, почему чистая прибыль может упасть, а чистая прибыль вырасти. Если вы можете так выразиться, остальная часть этой страницы — арифметика.</p>
   </div>
 
   <div class="step">
-    <h2>4. The query, and the division that returns 0</h2>
+    <h2>4. Запрос и деление, возвращающее 0</h2>
 
-    <p>In SQL, <code>2400000 / 4000000</code> where both columns are whole numbers. What comes back?</p>
+    <p>В SQL,  <code>2400000 / 4000000</code>  где оба столбца представляют собой целые числа. Что возвращается?</p>
 
-    <p>Zero. Not 0.6. Most databases follow the rule that a whole number divided by a whole number is a whole number, so the 0.6 is thrown away and you get 0. Multiply that 0 by 100 afterwards and you get 0. The query runs, the column fills with zeros, and nothing anywhere says an error happened.</p>
+    <p>Ноль. Не 0,6. Большинство баз данных следуют правилу, согласно которому целое число, разделенное на целое число, является целым числом, поэтому 0,6 отбрасывается, и вы получаете 0. Затем умножьте это 0 на 100, и вы получите 0. Запрос выполняется, столбец заполняется нулями, и нигде ничего не говорит о том, что произошла ошибка.</p>
 
-    <p>The fix is to make one side of the division a decimal, and to do it <em>before</em> the division rather than after. Writing <code>100.0 *</code> at the front of the expression turns the whole calculation decimal from that point on.</p>
+    <p>Исправление состоит в том, чтобы сделать одну сторону деления десятичной и сделать это  <em>before</em>  разделение, а не после. Письмо  <code>100.0 *</code>  в начале выражения превращает все десятичное число вычислений с этой точки.</p>
 
     <pre><code>SELECT fiscal_year,
        ROUND(100.0 * (revenue - cogs) / revenue, 1)
@@ -302,36 +302,36 @@
 FROM income_statement
 ORDER BY fiscal_year;</code></pre>
 
-    <p>Run against the two years above, that returns 63.0 / 25.8 / 17.9 and 60.0 / 22.0 / 14.0. Here is the same expression written four ways, all on the 2024 row, so you can see exactly where the decimal has to sit.</p>
+    <p>Сравните с двумя годами, указанными выше, и получите 63,0/25,8/17,9 и 60,0/22,0/14,0. Вот одно и то же выражение, записанное четырьмя способами, все в строке 2024, чтобы вы могли точно видеть, где должна находиться десятичная дробь.</p>
 
     <div class="tw">
 
       <table>
-      <tr><th>What you write</th><th>What comes back</th><th>Right?</th></tr>
-      <tr><td><code>gross_profit / revenue * 100</code></td><td>0</td><td>No. The division happens first and rounds to 0.</td></tr>
-      <tr><td><code>100 * gross_profit / revenue</code></td><td>60</td><td>Right this time, wrong in general. It rounds the answer down to a whole percent.</td></tr>
-      <tr><td><code>100.0 * gross_profit / revenue</code></td><td>60.0</td><td>Yes.</td></tr>
-      <tr><td><code>ROUND(100.0 * gross_profit / revenue, 1)</code></td><td>60.0</td><td>Yes, and it stops the display carrying twelve decimal places.</td></tr>
+      <tr><th>Что ты пишешь</th><th>Что возвращается</th><th>Верно?</th></tr>
+      <tr><td><code>gross_profit / revenue * 100</code></td><td>0</td><td>Нет. Сначала происходит деление и округление до 0.</td></tr>
+      <tr><td><code>100 * gross_profit / revenue</code></td><td>60</td><td>Правильно на этот раз, неправильно в целом. Это округляет ответ до целого процента.</td></tr>
+      <tr><td><code>100.0 * gross_profit / revenue</code></td><td>60.0</td><td>Да.</td></tr>
+      <tr><td><code>ROUND(100.0 * gross_profit / revenue, 1)</code></td><td>60.0</td><td>Да, и это останавливает отображение двенадцати десятичных знаков.</td></tr>
     </table>
 
     </div>
 
-    <p>Row two is the one that catches people, because on this data it returns 60 and 60 is correct. It is correct by luck. Multiply first and the result is a whole number of percent, so 63.0% would come back as 63 and a genuine 22.4% would come back as 22. You would never see the missing four tenths. The wider version of this rule shows up in every growth calculation, and <a href="../sql-month-over-month/">month-over-month growth in SQL</a> works the same trap on a different formula.</p>
+    <p>Вторая строка привлекает людей, потому что по этим данным она возвращает 60, и 60 является правильным. Это правильно по счастливой случайности. Сначала умножьте, и результат будет целым числом процентов, поэтому 63,0% вернутся как 63, а настоящие 22,4% вернутся как 22. Вы никогда не увидите недостающих четырех десятых. Более широкая версия этого правила проявляется в каждом расчете экономического роста.  <a href="../sql-month-over-month/">Месячный рост SQL</a>  работает та же ловушка по другой формуле.</p>
 
-    <p>One more note on <code>ROUND</code>. It does not protect you from integer division, because by the time <code>ROUND</code> sees the value the 0 has already happened. <code>ROUND(0, 1)</code> is <code>0.0</code>, which looks like a decimal calculation and is not one.</p>
+    <p>Еще одно замечание по поводу  <code>ROUND</code>. Это не защитит вас от целочисленного деления, поскольку к тому времени  <code>ROUND</code>  видит значение, 0 уже произошло.  <code>ROUND(0, 1)</code> is <code>0.0</code>, который выглядит как десятичное вычисление и не является таковым.</p>
   </div>
 
   <div class="step">
-    <h2>5. Averaging monthly margins loses 3.1 points</h2>
+    <h2>5. Среднемесячная маржа теряет 3,1 пункта.</h2>
 
-    <p>You have twelve monthly operating margins. Somebody asks for the year's operating margin. Is averaging the twelve the right move?</p>
+    <p>У вас есть двенадцать ежемесячных операционных прибылей. Кто-то спрашивает годовую операционную маржу. Является ли усреднение двенадцати правильным ходом?</p>
 
-    <p>No, and here is the size of the mistake. This is the same 2024 as above, split into the twelve months it was made of. Cost of goods runs at 40% of each month's revenue, and operating expense is a fixed $110,000 base plus 5% of revenue, which is what a real cost structure looks like: some of it scales with sales and some of it arrives whether you sell anything or not.</p>
+    <p>Нет, и здесь размер ошибки. Это тот же 2024 год, что и выше, разделенный на двенадцать месяцев, из которых он был составлен. Себестоимость товаров составляет 40 % от ежемесячного дохода, а операционные расходы — это фиксированная базовая сумма в 110 000 долларов плюс 5 % от дохода. Именно так выглядит реальная структура затрат: часть из них увеличивается вместе с продажами, а часть — независимо от того, продаете вы что-нибудь или нет.</p>
 
     <div class="tw">
 
       <table>
-      <tr><th>Month</th><th>Revenue</th><th>Cost of goods</th><th>Operating expense</th><th>Operating income</th><th>Operating margin</th></tr>
+      <tr><th>Month</th><th>Revenue</th><th>Стоимость товара</th><th>Операционные расходы</th><th>Операционная прибыль</th><th>Операционная маржа</th></tr>
       <tr><td>2024-01</td><td>180,000</td><td>72,000</td><td>119,000</td><td>-11,000</td><td>-6.1%</td></tr>
       <tr><td>2024-02</td><td>195,000</td><td>78,000</td><td>119,750</td><td>-2,750</td><td>-1.4%</td></tr>
       <tr><td>2024-03</td><td>250,000</td><td>100,000</td><td>122,500</td><td>27,500</td><td>11.0%</td></tr>
@@ -348,7 +348,7 @@ ORDER BY fiscal_year;</code></pre>
 
     </div>
 
-    <p>Those twelve rows add to exactly the annual numbers: $4,000,000 of revenue, $1,600,000 of cost of goods, $1,520,000 of operating expense. Now the two ways to answer "what was our operating margin this year."</p>
+    <p>Эти двенадцать строк суммируют годовые цифры: 4 000 000 долларов дохода, 1 600 000 долларов себестоимости, 1 520 000 долларов операционных расходов. Теперь есть два способа ответить: «Какова была наша операционная прибыль в этом году».</p>
 
     <pre><code>-- Wrong. Averages twelve percentages as if each month were the same size.
 SELECT ROUND(AVG(100.0 * (revenue - cogs - operating_expense) / revenue), 1)
@@ -358,164 +358,164 @@ FROM monthly_pl;                                     -- 18.9
 SELECT ROUND(100.0 * SUM(revenue - cogs - operating_expense) / SUM(revenue), 1)
 FROM monthly_pl;                                     -- 22.0</code></pre>
 
-    <p>Three point one percentage points apart, from the same twelve rows. On $4,000,000 of revenue that gap is $124,000 of profit that the first query cannot see.</p>
+    <p>Разница в три целых один процентный пункт из тех же двенадцати строк. При доходе в 4 000 000 долларов этот разрыв составляет 124 000 долларов прибыли, которую первый запрос не может увидеть.</p>
 
-    <p>The reason is that January's revenue of $180,000 and December's $500,000 count equally in an average of percentages, and they are not equal amounts of business. January lost money, at an operating margin of -6.1%, on less than half the revenue of a good month. Averaging lets that small bad month push the answer down as hard as a large good month pushes it up.</p>
+    <p>Причина в том, что январский доход в 180 000 долларов и декабрьский доход в 500 000 долларов имеют одинаковое значение в среднем процентном отношении, и это не равные объемы бизнеса. Январь потерял деньги при операционной рентабельности -6,1%, что составляет менее половины выручки за хороший месяц. Усреднение позволяет этому маленькому плохому месяцу сдвинуть ответ вниз так же сильно, как большой хороший месяц подталкивает его вверх.</p>
 
-    <p>The rule that fixes it: <strong>add the money, then divide once.</strong> A margin is a ratio, and ratios are not averaged, they are recomputed on the totals. This is the same reasoning that makes a class's overall pass rate different from the average of each teacher's pass rate, and it is worth recognising by name, because it shows up whenever a rate is rolled up from parts of different sizes.</p>
+    <p>Правило, которое это исправляет:  <strong>сложите деньги, затем разделите один раз.</strong>  Маржа — это коэффициент, а коэффициенты не усредняются, а пересчитываются по итогам. Это та же самая причина, по которой общий балл успеваемости класса отличается от среднего показателя успеваемости каждого учителя, и его стоит назвать по имени, поскольку он проявляется всякий раз, когда показатель складывается из частей разного размера.</p>
 
-    <p>Picture running that <code>AVG</code> query on your own company's monthly figures. Do you have a January, a quiet month with the same fixed costs as a busy one? If you do, your averaged margin is already wrong, and it is wrong in the optimistic direction whenever the quiet months are the profitable ones.</p>
+    <p>Изображение запуска этого  <code>AVG</code>  запрос ежемесячных показателей вашей компании. У вас есть январь, тихий месяц с такими же постоянными расходами, как и напряженный? Если вы это сделаете, ваша средняя маржа уже будет неправильной, и она будет неверной в оптимистическом направлении, когда спокойные месяцы являются прибыльными.</p>
   </div>
 
   <div class="step">
-    <h2>6. Reading a margin: the four benchmarks</h2>
+    <h2>6. Чтение маржи: четыре показателя</h2>
 
-    <p>A company reports a 2% net margin. Good or bad?</p>
+    <p>Компания сообщает о чистой прибыли в размере 2%. Хорошо или плохо?</p>
 
-    <p>Unanswerable, and that is the point. Two percent is healthy for a grocery chain and alarming for a software company. A margin on its own is a number with no verdict attached, and it becomes an analysis only when you put it next to something. There are four somethings, and they answer different questions.</p>
+    <p>Невозможно ответить, и в этом вся суть. Два процента — это нормально для продуктовой сети и тревожно для компании-разработчика программного обеспечения. Маржа сама по себе представляет собой число без какого-либо вердикта, и она становится анализом только тогда, когда вы помещаете ее рядом с чем-то. Их четыре, и они отвечают на разные вопросы.</p>
 
-    <p><strong>Against its own past.</strong> Same company, earlier period. This is the one that always works, because the company is its own control: same products, same customers, same accounting. Our example gives 17.9% falling to 14.0%, and that comparison needs no outside information at all.</p>
+    <p><strong>Против собственного прошлого.</strong>  Та же компания, более ранний период. Это тот, который работает всегда, потому что компания — это свой контроль: та же продукция, те же клиенты, тот же учет. В нашем примере 17,9% снижается до 14,0%, и для этого сравнения вообще не требуется никакой внешней информации.</p>
 
-    <p><strong>Against the plan.</strong> The margin the budget assumed. A miss against plan is a different conversation from a fall against last year, because someone chose the plan number and can be asked why. <a href="../budget-vs-actual-variance/">Budget vs actual variance</a> is the full method for that comparison.</p>
+    <p><strong>Против плана.</strong>  Запас, предусмотренный бюджетом. Промах по плану — это совсем другой разговор, чем падение по сравнению с прошлым годом, потому что кто-то выбрал номер плана, и можно спросить, почему.  <a href="../budget-vs-actual-variance/">Бюджет и фактическое отклонение</a>  это полный метод для этого сравнения.</p>
 
-    <p><strong>Against the industry.</strong> Grocery retail runs on net margins of a few percent because it turns over enormous volume at tiny per-item profit. Packaged software can run above 20% because the cost of the next copy is close to nothing. A margin outside its industry's usual band is either a real advantage or an accounting difference, and it is worth finding out which before you present it.</p>
+    <p><strong>Против промышленности.</strong>  Розничная торговля продуктами питания имеет чистую прибыль в несколько процентов, потому что она оборачивает огромные объемы с крошечной прибылью на единицу товара. Пакетное программное обеспечение может работать выше 20%, поскольку стоимость следующей копии близка к нулю. Маржа за пределами обычного для отрасли диапазона является либо реальным преимуществом, либо учетной разницей, и стоит выяснить, что именно, прежде чем представлять ее.</p>
 
-    <p><strong>Against a specific peer.</strong> The most useful comparison, and the one that points at a cause. Take two companies with the same gross margin.</p>
+    <p><strong>Против конкретного сверстника.</strong>  Самое полезное сравнение, указывающее на причину. Возьмем две компании с одинаковой валовой прибылью.</p>
 
     <div class="tw">
 
       <table>
-      <tr><th>Company</th><th>Revenue</th><th>Gross margin</th><th>Operating margin</th><th>Net margin</th></tr>
+      <tr><th>Company</th><th>Revenue</th><th>Валовая прибыль</th><th>Операционная маржа</th><th>Чистая прибыль</th></tr>
       <tr><td>Ours</td><td>4,000,000</td><td>60.0%</td><td>22.0%</td><td>14.0%</td></tr>
       <tr><td>Peer</td><td>4,000,000</td><td>60.0%</td><td>29.0%</td><td>23.5%</td></tr>
     </table>
 
     </div>
 
-    <p>Identical products, as far as gross margin can tell. Nine and a half points apart at the bottom. The cascade says exactly where to look: the two companies spend $1,520,000 and $1,240,000 on operating expense, a $280,000 gap, and below that our interest and tax take $320,000 against their $220,000. Same product economics, more overhead, more debt. That is a finding, and it took no information beyond two income statements.</p>
+    <p>Идентичные продукты, насколько можно судить по валовой прибыли. Разница в девяти с половиной очках внизу. Каскад точно указывает, где искать: две компании тратят 1 520 000 и 1 240 000 долларов на операционные расходы, разрыв в 280 000 долларов, а ниже этой суммы наши проценты и налоги забирают 320 000 долларов против их 220 000 долларов. Экономика продукта та же, больше накладных расходов, больше долгов. Это вывод, и для этого не потребовалось никакой информации, кроме двух отчетов о прибылях и убытках.</p>
   </div>
 
   <div class="step">
-    <h2>7. The full before and after</h2>
+    <h2>7. Полное до и после</h2>
 
-    <p>Same company, same two years, two ways of reporting it.</p>
+    <p>Одна и та же компания, те же два года, два способа отчетности.</p>
 
     <h3>Before</h3>
-    <p>"Revenue up $1,000,000 to $4,000,000. Gross profit up $510,000. Net income up $22,000 to $560,000. A record year on every line." Every sentence is true. A reader gets no way to tell that the company is keeping less of what it earns, because nothing on the page is measured against anything. The $22,000 improvement even reads as good news, which is the part that costs you credibility three months later.</p>
+    <p>«Выручка выросла с 1 000 000 до 4 000 000 долларов. Валовая прибыль выросла на 510 000 долларов. Чистая прибыль выросла с 22 000 до 560 000 долларов. Рекордный год по всем статьям». Каждое предложение верно. Читатель не сможет сказать, что компания удерживает меньшую часть того, что зарабатывает, потому что ничто на странице не сравнивается ни с чем. Улучшение на 22 000 долларов даже воспринимается как хорошая новость, которая стоит вам доверия три месяца спустя.</p>
 
     <h3>After</h3>
     <div class="tw">
       <table>
       <tr><th>Measure</th><th>2023</th><th>2024</th><th>Read</th></tr>
       <tr><td>Revenue</td><td>3,000,000</td><td>4,000,000</td><td>+33.3%</td></tr>
-      <tr><td>Gross margin</td><td>63.0%</td><td>60.0%</td><td>-3.0 pts, pricing or input costs</td></tr>
-      <tr><td>Operating margin</td><td>25.8%</td><td>22.0%</td><td>-3.8 pts, overhead grew faster than sales</td></tr>
-      <tr><td>Net margin</td><td>17.9%</td><td>14.0%</td><td>-3.9 pts, interest doubled to 120,000</td></tr>
-      <tr><td>Net income</td><td>538,000</td><td>560,000</td><td>+4.1%, and $157,333 below last year's margin</td></tr>
+      <tr><td>Валовая прибыль</td><td>63.0%</td><td>60.0%</td><td>-3,0 балла, ценообразование или затраты на вводимые ресурсы</td></tr>
+      <tr><td>Операционная маржа</td><td>25.8%</td><td>22.0%</td><td>-3,8 п., накладные расходы росли быстрее, чем продажи</td></tr>
+      <tr><td>Чистая прибыль</td><td>17.9%</td><td>14.0%</td><td>-3,9 пункта, проценты увеличены вдвое до 120 000</td></tr>
+      <tr><td>Чистая прибыль</td><td>538,000</td><td>560,000</td><td>+4,1%, что на $157 333 ниже прошлогодней маржи.</td></tr>
     </table>
     </div>
 
-    <p>Same numbers, plus one division per row. The report now names three separate causes and sizes each one, and the last row converts the whole thing into the only unit a manager acts on, which is dollars. The claim on the top of the email writes itself: <strong>we grew 33.3% and net margin fell 3.9 points, which cost $157,333 against holding last year's rate.</strong></p>
+    <p>Те же числа, плюс одно деление на строку. В отчете теперь указаны три отдельные причины и размеры каждой из них, а последняя строка преобразует все это в единственную единицу, с которой действует менеджер, а именно в доллары. Претензия в верхней части электронного письма пишет сама себя:  <strong>мы выросли на 33,3%, а чистая маржа упала на 3,9 пункта, что составило 157 333 доллара по сравнению с прошлогодним показателем.</strong></p>
   </div>
 
   <div class="step">
-    <h2>8. Edge cases that break the cascade</h2>
+    <h2>8. Пограничные случаи, нарушающие каскад</h2>
 
-    <p>Net margin comes out higher than operating margin. Name something that could do that.</p>
+    <p>Чистая прибыль оказывается выше операционной. Назовите что-нибудь, что могло бы это сделать.</p>
 
-    <p><strong>A one-off gain below the line.</strong> Sell a building for $400,000 and net income becomes $960,000 on the same $4,000,000 of revenue. Net margin is 24.0% and operating margin is 22.0%, so the cascade is upside down. Nothing is broken. Money arrived from somewhere that is not the business, and next year it will not. Whenever net sits above operating, look for a sale, a legal settlement, or a tax credit, and say so in the same sentence as the number.</p>
+    <p><strong>Разовый выигрыш ниже линии.</strong>  Продайте здание за 400 000 долларов, и чистая прибыль составит 960 000 долларов при тех же 4 000 000 долларов дохода. Чистая маржа составляет 24,0%, а операционная маржа — 22,0%, поэтому каскад перевернут. Ничего не сломано. Деньги поступили откуда-то, что не является бизнесом, и в следующем году их не будет. Всякий раз, когда чистая прибыль превышает операционную, ищите продажу, юридическое урегулирование или налоговую льготу и скажите об этом в том же предложении, что и число.</p>
 
-    <p><strong>Cost of goods and operating expense are not defined the same way everywhere.</strong> Whether shipping, customer support, or the cloud bill sits above or below the gross-profit line is a choice each company makes. Two companies can have genuinely identical economics and gross margins eight points apart. That does not make either wrong, and it does make a gross-margin comparison between two companies weaker than it looks. The comparison inside one company across time is always the safer one.</p>
+    <p><strong>Себестоимость товаров и операционные расходы не везде определяются одинаково.</strong>  Каждая компания выбирает, будет ли доставка, поддержка клиентов или расходы на облачные технологии выше или ниже линии валовой прибыли. Две компании могут иметь действительно одинаковую экономику и валовую прибыль с разницей в восемь пунктов. Это не делает ни того, ни другого неправильным, но делает сравнение валовой прибыли между двумя компаниями более слабым, чем кажется. Сравнение внутри одной компании во времени всегда безопаснее.</p>
 
-    <p><strong>A negative revenue or a zero revenue makes the percent meaningless.</strong> A month with no sales divides by zero, and depending on the database that is an error or a null. Guard it: <code>CASE WHEN revenue &gt; 0 THEN 100.0 * profit / revenue END</code>. A blank is honest. A zero is a lie, because 0% margin means you broke even, not that you had no revenue.</p>
+    <p><strong>Отрицательный или нулевой доход делает процент бессмысленным.</strong>  Месяц без продаж делится на ноль, и в зависимости от базы данных это ошибка или ноль. Берегите это:  <code>CASE WHEN revenue &gt; 0 THEN 100.0 * profit / revenue END</code>. Бланк честный. Ноль — это ложь, потому что маржа 0% означает, что вы вышли на уровень безубыточности, а не то, что у вас не было дохода.</p>
 
-    <p><strong>Points are not percents, and mixing them up is common in writing.</strong> Net margin fell from 17.9% to 14.0%. That is a fall of 3.9 <em>percentage points</em>. It is also a fall of about 22% <em>of the margin</em>, because 3.9 is close to a fifth of 17.9. Both are true, they are wildly different numbers, and only one of them belongs in a sentence at a time. Say "points" when you mean the subtraction.</p>
+    <p><strong>Точки не являются процентами, и в письменной речи их часто путают.</strong>  Чистая маржа упала с 17,9% до 14,0%. Это падение на 3,9.  <em>процентные пункты</em>. Это также падение примерно на 22%.  <em>маржи</em>, потому что 3,9 близко к пятой части 17,9. Оба варианта верны, это совершенно разные числа, и только одно из них принадлежит к предложению в каждый конкретный момент времени. Когда вы имеете в виду вычитание, говорите «точки».</p>
 
-    <p><strong>Margins hide mix.</strong> A company selling two products at 80% and 40% gross margin has an overall gross margin somewhere in between, and that overall number moves whenever the sales mix moves, even if neither product changed at all. If your gross margin dropped and no price changed, check whether you simply sold more of the cheaper thing.</p>
+    <p><strong>Поля скрывают смесь.</strong>  Компания, продающая два продукта с валовой прибылью 80% и 40%, имеет общую валовую прибыль где-то посередине, и это общее число меняется всякий раз, когда меняется структура продаж, даже если ни один продукт не изменился вообще. Если ваша валовая прибыль упала, а цена не изменилась, проверьте, не продали ли вы просто больше более дешевой вещи.</p>
   </div>
 
-  <h2>Why this works</h2>
+  <h2>Почему это работает</h2>
 
-  <p>The rule in section five, add the money then divide once, is not a style preference. Combining groups of different sizes can reverse the direction of a rate, an effect first set out formally by Simpson (Simpson, 1951, <em>Journal of the Royal Statistical Society, Series B</em>, 13(2), 238–241) and traced to Yule half a century earlier. Blyth's later treatment gives the plainest statement of the danger: an association that holds in every subgroup can vanish or flip when the subgroups are pooled (Blyth, 1972, <em>Journal of the American Statistical Association</em>, 67(338), 364–366). Averaging twelve monthly margins pools twelve groups of very different sizes while pretending they are equal, which is exactly the condition those papers warn about, and the 3.1-point gap on this page is the mild version of it.</p>
+  <p>Правило пятого раздела: сложите деньги, а затем разделите один раз, не является стилевым предпочтением. Объединение групп разного размера может изменить направление скорости – эффект, впервые формально установленный Симпсоном (Simpson, 1951,  <em>Журнал Королевского статистического общества, серия B</em>, 13(2), 238–241) и восходит к Йолю полвека назад. Более поздняя трактовка Блита дает наиболее ясное изложение опасности: ассоциация, которая сохраняется в каждой подгруппе, может исчезнуть или перевернуться, когда подгруппы объединяются (Blyth, 1972,  <em>Журнал Американской статистической ассоциации</em>, 67(338), 364–366). Усреднение двенадцатимесячной маржи объединяет двенадцать групп очень разных размеров, притворяясь, что они равны, и это именно то условие, о котором предупреждают эти статьи, и разрыв в 3,1 пункта на этой странице является мягкой версией этого.</p>
 
-  <p>The question at the top of each section is not decoration. Attempting an answer before you are given one improves learning of that specific material, an effect measured across sixty-four studies of self-explanation prompts (Bisra, Liu, Nesbit, Salimi, &amp; Winne, 2018, <em>Educational Psychology Review</em>, 30(3), 703–725). Guessing what <code>2400000 / 4000000</code> returns before section four told you is why you will still remember it next month. The same evidence says the cheat sheet below works best covered up and recalled rather than reread (Roediger &amp; Karpicke, 2006, <em>Psychological Science</em>, 17(3), 249–255).</p>
+  <p>Вопрос вверху каждого раздела не является украшением. Попытка ответить до того, как вам дадут ответ, улучшает усвоение этого конкретного материала, и этот эффект измерен в шестидесяти четырех исследованиях подсказок к самообъяснению (Бисра, Лю, Несбит, Салими и Винн, 2018,  <em>Обзор педагогической психологии</em>, 30(3), 703–725). Угадай что  <code>2400000 / 4000000</code>  возвращается до того, как вам рассказал четвертый раздел, поэтому вы все равно будете помнить его в следующем месяце. Те же данные свидетельствуют о том, что приведенную ниже шпаргалку лучше всего скрыть и вспомнить, а не перечитывать (Roediger &amp; Karpicke, 2006,  <em>Психологическая наука</em>, 17(3), 249–255).</p>
 
-  <h2>Using this on your own numbers</h2>
+  <h2>Использование этого на ваших собственных номерах</h2>
 
-  <p>Retrofitting margins onto every report you have inherited is a slog, and the old ones have owners who like them. Do this instead, in order.</p>
+  <p>Модификация полей для каждого отчета, который вы унаследовали, — это утомительная работа, и у старых есть владельцы, которым они нравятся. Вместо этого сделайте это по порядку.</p>
 
   <ol>
-    <li><strong>Add three columns to the report you already own.</strong> Gross, operating and net margin next to the dollars. Three divisions, and the dollars stay exactly where they are so nobody has to relearn the page.</li>
-    <li><strong>Check the division is decimal.</strong> Run one row by hand. If a margin comes back as 0, 60 or 1, you have integer division, and section four has the fix.</li>
-    <li><strong>Put last year's margin in the next column.</strong> This is the comparison that always works and it needs no outside data.</li>
-    <li><strong>Search your codebase for <code>AVG(</code> next to a division.</strong> Every one of those is a rate being averaged, and each one needs checking against the sum-then-divide version. Fix the ones that disagree by more than a rounding step.</li>
-    <li><strong>Convert one margin change into dollars every cycle.</strong> Last year's rate times this year's revenue, minus this year's actual. That single number is what makes a manager act.</li>
-    <li><strong>Write the industry band down once, somewhere permanent.</strong> Your own sector's usual range, in a comment at the top of the query. Six months from now nobody will remember whether 14% was good.</li>
+    <li><strong>Добавьте три столбца в уже принадлежащий вам отчет.</strong>  Валовая, операционная и чистая прибыль в долларах. Три деления, и доллары останутся на своих местах, так что никому не придется заново учить страницу.</li>
+    <li><strong>Проверьте, что деление десятичное.</strong>  Выполните один ряд вручную. Если поле возвращается как 0, 60 или 1, у вас есть целочисленное деление, и в четвертом разделе есть исправление.</li>
+    <li><strong>Поместите прошлогоднюю маржу в следующий столбец.</strong>  Это сравнение всегда работает и не требует никаких внешних данных.</li>
+    <li><strong>Найдите в своей кодовой базе  <code>AVG(</code>  рядом с дивизией.</strong>  Каждый из них представляет собой усредненную скорость, и каждый из них необходимо сверить с версией «суммировать, а затем делить». Исправьте те, которые не совпадают, более чем на шаг округления.</li>
+    <li><strong>Конвертируйте одно изменение маржи в доллары за каждый цикл.</strong>  Прошлогодняя ставка умножается на выручку этого года минус фактический показатель этого года. Эта единственная цифра — то, что заставляет менеджера действовать.</li>
+    <li><strong>Запишите отраслевую группу один раз и где-нибудь навсегда.</strong>  Обычный диапазон вашего сектора в комментарии вверху запроса. Через полгода никто не вспомнит, были ли 14% хорошими.</li>
   </ol>
 
-  <p>If you have paper nearby, one optional drawing locks the core idea in. Draw the staircase from the top of this page from memory: four bars measured from the same left edge, each shorter than the one above, with the removed cost hatched beside it. Label the three layers you strip. If your bars come out the same length, or in the wrong order, the page is still open.</p>
+  <p>Если у вас под рукой есть бумага, один дополнительный рисунок зафиксирует основную идею. Нарисуйте по памяти лестницу вверху этой страницы: четыре стержня, измеренные от одного и того же левого края, каждый короче, чем предыдущий, рядом с ним заштрихована удаленная стоимость. Пометьте три слоя, которые вы снимаете. Если ваши полоски выходят одинаковой длины или в неправильном порядке, страница все равно будет открыта.</p>
 
-  <div class="note"><strong>This page is one of five.</strong> The Financial analysis set on the <a href="../">guides index</a> is this page plus <a href="../liquidity-and-leverage-ratios/">Current Ratio vs Quick Ratio</a>, <a href="../contribution-margin-break-even/">Contribution Margin and Break-Even</a>, <a href="../net-present-value-npv/">Net Present Value (NPV)</a> and <a href="../budget-vs-actual-variance/">Budget vs Actual Variance</a>. They share a worked company, so the numbers carry across. The index also holds every other how-to: SQL, Excel, Tableau, and the working habits around them.</div>
+  <div class="note"><strong>Эта страница одна из пяти.</strong>  Финансовый анализ, установленный на  <a href="../">индекс направляющих</a>  эта страница плюс  <a href="../liquidity-and-leverage-ratios/">Текущий коэффициент против коэффициента быстрой ликвидности</a>, <a href="../contribution-margin-break-even/">Маржа вклада и безубыточность</a>, <a href="../net-present-value-npv/">Чистая приведенная стоимость (NPV)</a> and <a href="../budget-vs-actual-variance/">Бюджет и фактическое отклонение</a>. У них одна работающая компания, поэтому цифры совпадают. В указателе также содержатся все остальные инструкции: SQL, Excel, Tableau и связанные с ними рабочие навыки.</div>
 
-  <h2>The whole thing on one screen</h2>
+  <h2>Все на одном экране</h2>
 
-  <p>Cover the right column and work down the left. Saying each answer out loud before you look is what makes it stick.</p>
+  <p>Закройте правую колонку и проработайте левую. Проговаривание каждого ответа вслух, прежде чем вы посмотрите, — вот что делает его запоминающимся.</p>
 
   <div class="tw">
 
     <table>
-    <tr><th>Concept</th><th>What it is</th></tr>
-    <tr><td>Margin</td><td>A profit line divided by revenue. Cents kept per sales dollar.</td></tr>
-    <tr><td>Kept, on paper</td><td>A 14% margin is not 14 cents in the bank. Unpaid customers still count as profit.</td></tr>
-    <tr><td>Why divide</td><td>Profit dollars grow with size. A margin survives a change in size.</td></tr>
-    <tr><td>Gross margin</td><td>(Revenue − cost of goods) ÷ revenue. The product's own economics.</td></tr>
-    <tr><td>Operating margin</td><td>Operating income ÷ revenue. The core business, before financing and tax.</td></tr>
-    <tr><td>Net margin</td><td>Net income ÷ revenue. What is left after absolutely everything.</td></tr>
-    <tr><td>The cascade rule</td><td>Gross ≥ operating ≥ net. Each strips one more layer of cost.</td></tr>
-    <tr><td>Reading the cascade</td><td>The first margin that stops looking healthy names the layer to investigate.</td></tr>
-    <tr><td>The integer trap</td><td>2400000 / 4000000 returns 0. Put <code>100.0 *</code> at the front, before the division.</td></tr>
-    <tr><td>Why ROUND does not help</td><td>The 0 already happened. ROUND(0, 1) is 0.0 and looks fine.</td></tr>
-    <tr><td>The averaging trap</td><td>AVG of twelve monthly margins gave 18.9%. The truth was 22.0%.</td></tr>
-    <tr><td>The rule that fixes it</td><td>Add the money, then divide once. SUM(profit) / SUM(revenue).</td></tr>
-    <tr><td>Four benchmarks</td><td>Its own past, the plan, the industry, a named peer.</td></tr>
-    <tr><td>Net above operating</td><td>Money arrived from outside the business. Find it and say so.</td></tr>
-    <tr><td>Points vs percent</td><td>17.9 to 14.0 is 3.9 points, and also about 22% of the margin. Pick one.</td></tr>
-    <tr><td>Mix</td><td>Selling more of the cheaper product moves the blended margin with no price change.</td></tr>
-    <tr><td>The deliverable</td><td>One sentence: the margin, the direction, and what it cost in dollars.</td></tr>
+    <tr><th>Concept</th><th>Что это такое</th></tr>
+    <tr><td>Margin</td><td>Линия прибыли, разделенная на выручку. Центы сохраняются за доллар продаж.</td></tr>
+    <tr><td>Сохранено на бумаге</td><td>Маржа в 14% — это не 14 центов в банке. Неоплаченные клиенты по-прежнему считаются прибылью.</td></tr>
+    <tr><td>Зачем делить</td><td>Доллары прибыли растут с размером. Маржа сохраняется при изменении размера.</td></tr>
+    <tr><td>Валовая прибыль</td><td>(Выручка − себестоимость товара) ÷ выручка. Собственная экономика продукта.</td></tr>
+    <tr><td>Операционная маржа</td><td>Операционная прибыль ÷ выручка. Основной бизнес до финансирования и налогообложения.</td></tr>
+    <tr><td>Чистая прибыль</td><td>Чистая прибыль ÷ выручка. То, что осталось после абсолютно всего.</td></tr>
+    <tr><td>Правило каскада</td><td>Валовая ≥ операционная ≥ чистая. Каждый из них снимает еще один уровень затрат.</td></tr>
+    <tr><td>Чтение каскада</td><td>Первое поле, которое перестает выглядеть здоровым, называет слой для исследования.</td></tr>
+    <tr><td>Целочисленная ловушка</td><td>2400000/4000000 возвращает 0. Ставим  <code>100.0 *</code>  на фронте, перед дивизией.</td></tr>
+    <tr><td>Почему РАУНД не помогает</td><td>0 уже случился. ROUND(0, 1) равен 0,0 и выглядит нормально.</td></tr>
+    <tr><td>Ловушка усреднения</td><td>AVG двенадцатимесячной маржи дал 18,9%. Правда была 22,0%.</td></tr>
+    <tr><td>Правило, которое это исправляет</td><td>Сложите деньги, затем разделите один раз. СУММ(прибыль) / СУММ(выручка).</td></tr>
+    <tr><td>Четыре ориентира</td><td>Свое прошлое, план, отрасль, названный коллега.</td></tr>
+    <tr><td>Чистая выше операционной</td><td>Деньги поступали извне. Найдите его и скажите об этом.</td></tr>
+    <tr><td>Баллы против процентов</td><td>От 17,9 до 14,0 — это 3,9 балла, а также около 22% разницы. Выберите один.</td></tr>
+    <tr><td>Mix</td><td>Продажа большего количества более дешевого продукта приводит к увеличению смешанной прибыли без изменения цены.</td></tr>
+    <tr><td>Результат</td><td>Одно предложение: маржа, направление и сколько это стоит в долларах.</td></tr>
   </table>
 
   </div>
 
-  <div class="note"><strong>The one habit to keep.</strong> One habit, if you keep only one. Never average a rate. Add the numerators, add the denominators, divide once. That one habit covers margins, conversion rates, defect rates, retention and every other percentage you will ever roll up. If a query fights back in a way this page does not cover, there is a general <a href="../technical-tenacity/">diagnosis loop for being stuck</a>.</div>
+  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Одна привычка, если вы сохраните только одну. Никогда не усредняйте ставку. Складываем числители, складываем знаменатели, делим один раз. Эта одна привычка охватывает маржу, коэффициенты конверсии, процент дефектов, удержание и любой другой процент, который вы когда-либо наберете. Если запрос дает отпор способом, не описанным на этой странице, существует общая  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>.</div>
 
-  <p>One last thought, and I would genuinely like other people's answers. The first margin I ever reported was averaged across months, and it was wrong by about three points for four straight quarters before anyone checked. Nobody caught it because it was in the right neighbourhood every single time. What is the wrongest number you have shipped that survived because it looked reasonable?</p>
+  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Первая маржа, о которой я когда-либо сообщал, была усреднена за несколько месяцев, и она ошибалась примерно на три пункта в течение четырех кварталов подряд, прежде чем кто-либо проверил. Никто его не поймал, потому что каждый раз он оказывался в нужном районе. Какое самое неправильное число, которое вы отправили, сохранилось, потому что оно выглядело разумным?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Simpson, E. H. (1951). The interpretation of interaction in contingency tables. <em>Journal of the Royal Statistical Society, Series B</em>, 13(2), 238–241.</li>
-    <li>Blyth, C. R. (1972). On Simpson's paradox and the sure-thing principle. <em>Journal of the American Statistical Association</em>, 67(338), 364–366.</li>
-    <li>Bisra, K., Liu, Q., Nesbit, J. C., Salimi, F., &amp; Winne, P. H. (2018). Inducing self-explanation: A meta-analysis. <em>Educational Psychology Review</em>, 30(3), 703–725.</li>
-    <li>Roediger, H. L., &amp; Karpicke, J. D. (2006). Test-enhanced learning: Taking memory tests improves long-term retention. <em>Psychological Science</em>, 17(3), 249–255.</li>
+    <li>Симпсон, Э. Х. (1951). Интерпретация взаимодействия в таблицах сопряженности.  <em>Журнал Королевского статистического общества, серия B</em>, 13(2), 238–241.</li>
+    <li>Блит, CR (1972). О парадоксе Симпсона и принципе уверенности.  <em>Журнал Американской статистической ассоциации</em>, 67(338), 364–366.</li>
+    <li>Бисра К., Лю К., Несбит Дж. К., Салими Ф. и Винн П. Х. (2018). Побуждение к самообъяснению: метаанализ.  <em>Обзор педагогической психологии</em>, 30(3), 703–725.</li>
+    <li>Рёдигер, Х.Л., и Карпике, Дж.Д. (2006). Улучшенное обучение с помощью тестов: прохождение тестов на память улучшает долгосрочное запоминание.  <em>Психологическая наука</em>, 17(3), 249–255.</li>
   </ul>
 
   <div class="book">
-    <strong>The margin column is full of zeros and the query did not error.</strong>
-    <p><em>SQL for Analysts</em> is 458 pages, including the arithmetic rules that decide whether a ratio comes back as 0, as 60, or as 60.0.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-gross-vs-operating-vs-net-margin'})">SQL for Analysts, $19 &rarr;</a>
+    <strong>Столбец полей полон нулей, и запрос не привел к ошибке.</strong>
+    <p><em>SQL для аналитиков</em>  составляет 458 страниц, включая арифметические правила, которые определяют, будет ли отношение возвращаться равным 0, 60 или 60,0.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-gross-vs-operating-vs-net-margin'})">SQL для аналитиков, 19 $ →</a>
   </div>
 
   <div class="cta">
-    <strong>Practice this with a query editor in front of you.</strong>
-    <p style="margin:6px 0 0">The <a href="../../sql/">SQL Kit</a> has a Financial Analysis unit that builds the P&amp;L from a ledger and then works these three margins on top of it. Worked examples, flash cards, and a mock exam sit alongside it. If you would rather type than read, <a href="../../drill/">SQL Drill</a> hands you one runnable query at a time. Nothing to install, no account needed.</p>
-    <a class="btn" href="../../sql/">Open the SQL Kit →</a>
+    <strong>Потренируйтесь в этом, используя редактор запросов.</strong>
+    <p style="margin:6px 0 0">The <a href="../../sql/">SQL-комплект</a>  имеет подразделение финансового анализа, которое строит отчеты о прибылях и убытках на основе бухгалтерской книги, а затем обрабатывает эти три показателя поверх нее. Рядом с ним лежат рабочие примеры, карточки и пробный экзамен. Если вы предпочитаете печатать, а не читать,  <a href="../../drill/">SQL-детализация</a>  передает вам один выполняемый запрос за раз. Ничего устанавливать, учетная запись не требуется.</p>
+    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> · <a href="../budget-vs-actual-variance/">Budget vs Actual Variance</a> · <a href="../liquidity-and-leverage-ratios/">Current Ratio vs Quick Ratio</a> · <a href="../contribution-margin-break-even/">Contribution Margin and Break-Even</a> · <a href="../net-present-value-npv/">Net Present Value (NPV)</a> · <a href="../sql-case-expression/">The SQL CASE Expression</a> · <a href="../sql-month-over-month/">Month-over-Month Growth in SQL</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../sql-null/">NULL in SQL</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../report-vs-analysis/">Report vs Analysis</a> · <a href="../mean-vs-median/">Mean vs Median</a> · <a href="../excel-pivot-percentages/">Pivot Table Percentages</a> · <a href="../data-driven-thresholds/">Data-Driven Thresholds</a> · <a href="../correlation-vs-causation/">Correlation vs Causation</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../what-is-data-analysis/">What Is Data Analysis?</a> · <a href="../../sql/">SQL Kit</a> · <a href="../../excel/">Excel Kit</a> · <a href="../../projects/">Portfolio Projects</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../budget-vs-actual-variance/">Бюджет и фактическое отклонение</a> · <a href="../liquidity-and-leverage-ratios/">Текущий коэффициент против коэффициента быстрой ликвидности</a> · <a href="../contribution-margin-break-even/">Маржа вклада и безубыточность</a> · <a href="../net-present-value-npv/">Чистая приведенная стоимость (NPV)</a> · <a href="../sql-case-expression/">Выражение SQL CASE</a> · <a href="../sql-month-over-month/">Месячный рост SQL</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-null/">NULL в SQL</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../report-vs-analysis/">Отчет против анализа</a> · <a href="../mean-vs-median/">Среднее против медианы</a> · <a href="../excel-pivot-percentages/">Сводная таблица процентов</a> · <a href="../data-driven-thresholds/">Пороги, управляемые данными</a> · <a href="../correlation-vs-causation/">Корреляция против причинно-следственной связи</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../what-is-data-analysis/">Что такое анализ данных?</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../../excel/">Excel комплект</a> · <a href="../../projects/">Портфельные проекты</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

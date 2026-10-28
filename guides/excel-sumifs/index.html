@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SUMIFS and COUNTIFS: Add Up Only the Rows That Match — Analyst Prep Kit</title>
-<meta name="description" content="How to sum only the rows that match your conditions, why SUMIF and SUMIFS put the sum range in opposite places, and the check that catches a wrong total before anyone else does. Every number verified on a 16-row table.">
+<title>СУММИФ и СЧЁТЕЛИ: сложите только совпадающие строки — комплект для подготовки аналитика</title>
+<meta name="description" content="Как суммировать только те строки, которые соответствуют вашим условиям, почему СУММЕСЛИ и СУММИФС помещают диапазон сумм в противоположные места, а также проверку, которая выявляет неправильную сумму раньше, чем это сделает кто-либо другой. Каждое число проверяется в таблице из 16 строк.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-sumifs/">
-<meta property="og:title" content="SUMIFS and COUNTIFS: Add Up Only the Rows That Match">
-<meta property="og:description" content="One formula that filters and sums in a single move, criteria pairs that stack as far as you need, and the argument-order trap that makes SUMIF and SUMIFS read backwards from each other.">
+<meta property="og:title" content="СУММИФ и СЧЁТЕСЛИ: сложите только те строки, которые совпадают.">
+<meta property="og:description" content="Одна формула, которая фильтрует и суммирует за один ход, пары критериев, которые складываются настолько, насколько вам нужно, и ловушка порядка аргументов, которая заставляет СУММЕСЛИ и СУММИФС считывать друг друга в обратном направлении.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/excel-sumifs.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-sumifs/">
@@ -134,18 +134,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../excel/">Excel Kit</a> · <a href="../">All guides</a></p>
-  <h1>SUMIFS and COUNTIFS: Add Up Only the Rows That Match</h1>
-  <p class="meta">Filter and sum in one formula, with as many conditions as you need · Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-07">August 7, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../excel/">Excel комплект</a> · <a href="../">Все руководства</a></p>
+  <h1>СУММИФ и СЧЁТЕСЛИ: сложите только те строки, которые совпадают.</h1>
+  <p class="meta">Фильтруйте и суммируйте в одной формуле с любым количеством условий. · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-07">7 августа 2026 г.</time></p>
 
-  <p>By the end of this page you can total, count, or average exactly the rows that match your conditions, stack as many conditions as you need, and check the answer against the raw data before anyone else sees it. It is about twenty minutes, and every number here is computed on the 16-row table shown below.</p>
+  <p>К концу этой страницы вы сможете суммировать, подсчитывать или усреднять именно те строки, которые соответствуют вашим условиям, складывать столько условий, сколько вам нужно, и сверять ответ с необработанными данными, прежде чем его увидит кто-либо еще. Это около двадцати минут, и каждое число здесь вычисляется по таблице из 16 строк, показанной ниже.</p>
 
-  <p>Here is what to actually do with it. The next time you filter a sheet, note a total from the status bar, and then undo the filter, write a SUMIFS instead. It is that whole loop, filter, read, undo, in one formula that stays on the sheet and updates itself.</p>
+  <p>Вот что на самом деле с этим делать. В следующий раз, когда вы будете фильтровать лист, запишите итоговую сумму в строке состояния, а затем отмените фильтр и вместо этого напишите СУММИФ. Это весь цикл, фильтрация, чтение и отмена в одной формуле, которая остается на листе и обновляется.</p>
 
-  <p>The short version: <code>SUMIFS</code> is a filter and a sum in one move. It takes the column to add first, then pairs of "look in this column, keep rows matching this". And use SUMIFS even for one condition, because SUMIF puts its arguments in a different order and the mix-up produces real wrong numbers.</p>
+  <p>Краткая версия:  <code>SUMIFS</code>  это фильтр и сумма за один ход. Сначала нужно добавить столбец, а затем пары «посмотрите в этом столбце, сохраните строки, соответствующие этому». И используйте SUMIFS даже для одного условия, потому что СУММЕСЛИ размещает свои аргументы в другом порядке, и путаница дает действительно неправильные числа.</p>
 
-  <p>One picture carries the idea. Rows pass through one gate per condition, and only the survivors get added.</p>
+  <p>Одна картинка несет в себе эту идею. Ряды проходят через одни ворота за каждое условие, и добавляются только выжившие.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 330" role="img" aria-labelledby="sfTitle sfDesc" xmlns="http://www.w3.org/2000/svg">
@@ -197,25 +197,25 @@
         <text x="40" y="309" font-size="13.5" fill="#09090B">Every condition is a gate. A row must pass all of them to be counted in the total.</text>
       </g>
     </svg>
-    <figcaption>Each criteria pair is a gate. Rows that pass every gate reach the sum, and nothing else does.</figcaption>
+    <figcaption>Каждая пара критериев является воротами. Строки, проходящие через все ворота, достигают суммы, и ничто другое не достигает этой суммы.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>What you'll learn</strong>
+    <strong>Что вы узнаете</strong>
     <ol>
-      <li>Filtering and summing in one formula</li>
-      <li>SUMIF against SUMIFS, and the argument-order trap</li>
-      <li>Writing criteria: text, numbers, comparisons, and cell references</li>
-      <li>COUNTIFS and AVERAGEIFS, same grammar</li>
-      <li>The full before and after</li>
-      <li>Edge cases: blanks, dates, and mismatched ranges</li>
-      <li>Why this works</li>
-      <li>Using this on your own workbook</li>
-      <li>The whole thing on one screen</li>
+      <li>Фильтрация и суммирование в одной формуле</li>
+      <li>SUMIF против SUMIFS и ловушка порядка аргументов</li>
+      <li>Критерии написания: текст, числа, сравнения и ссылки на ячейки.</li>
+      <li>СЧЁТЕСЛИ и СРЗНАЧЕСЛИ, одна и та же грамматика</li>
+      <li>Полное до и после</li>
+      <li>Пограничные случаи: пробелы, даты и несовпадающие диапазоны.</li>
+      <li>Почему это работает</li>
+      <li>Использование этого в своей книге</li>
+      <li>Все на одном экране</li>
     </ol>
   </div>
 
-  <div class="note"><strong>The worked example is small on purpose.</strong> Sixteen sales rows, four columns, sitting in A1 to D17: Region in column A, Month in B, Rep in C, Amount in D. Every result on this page was computed against this exact table, twice, by different methods. Row 17 has a blank region, and that blank is deliberate: it is the trap in section 6.</div>
+  <div class="note"><strong>Проработанный пример намеренно небольшой.</strong>  Шестнадцать строк продаж, четыре столбца, расположенные в столбце A1–D17: «Регион» в столбце A, «Месяц» в столбце «B», «Представитель» в C, «Количество» в D. Каждый результат на этой странице был рассчитан на основе этой точной таблицы дважды, разными методами. В строке 17 есть пустая область, и эта пустая область сделана намеренно: это ловушка в разделе 6.</div>
 
   <table>
     <tr><th>Region</th><th>Month</th><th>Rep</th><th>Amount</th></tr>
@@ -238,196 +238,196 @@
   </table>
 
   <div class="step">
-    <h2>1. Filtering and summing in one formula</h2>
+    <h2>1. Фильтрация и суммирование в одной формуле</h2>
 
-    <p>Before the explanation: how would you get February's East total from that table with no formula at all, just menus, and how many steps would it take?</p>
+    <p>Перед объяснением: как бы вы получили общее количество Востока за февраль из этой таблицы вообще без формулы, только с помощью меню, и сколько шагов для этого потребуется?</p>
 
-    <p>You would filter Region to East, filter Month to Feb, read the sum off the status bar, and undo both filters. Four steps, a number that lives nowhere, and a sheet you have temporarily broken for anyone else looking at it. Conditional aggregation is that same job as one formula: filter the rows and sum them in a single move, with the answer stored in a cell.</p>
+    <p>Вы можете отфильтровать регион по востоку, отфильтровать месяц по февралю, прочитать сумму в строке состояния и отменить оба фильтра. Четыре шага, число, которое нигде не живет, и лист, который вы временно сломали, чтобы кто-то еще на него посмотрел. Условное агрегирование — это та же работа, что и одна формула: фильтрация строк и суммирование их за один ход, при этом ответ сохраняется в ячейке.</p>
 
     <pre><code>=SUMIFS(D2:D17, A2:A17, "East", B2:B17, "Feb")   → 2,200</code></pre>
 
-    <p>Read it left to right. <strong>D2:D17</strong> is the column to add, and in SUMIFS it always comes first. Then come <strong>criteria pairs</strong>. A criteria pair is two arguments that travel together: a range to look in, and the condition rows must meet there. <code>A2:A17, "East"</code> is one pair, keep rows whose region is East. <code>B2:B17, "Feb"</code> is another, and rows must pass both. Two rows do, Ana's 1,480 and Ben's 720, and 1,480 + 720 = 2,200.</p>
+    <p>Прочитайте слева направо.  <strong>Д2:Д17</strong>  — это столбец, который нужно добавить, и в SUMIFS он всегда идет первым. Тогда приходи  <strong>пары критериев</strong>. Пара критериев — это два аргумента, которые передаются вместе: диапазон для поиска и строки условий, которые должны там совпадать.  <code>A2:A17, "East"</code>  это одна пара, сохраняйте строки, регион которых — Восток.  <code>B2:B17, "Feb"</code>  это другое, и строки должны проходить оба. Два ряда: 1480 Аны и 720 Бена, и 1480 + 720 = 2200.</p>
 
-    <p>Pairs stack as far as you need, up to 127 of them. Add <code>C2:C17, "Ana"</code> and the answer narrows to 1,480, just her February East sale. Every pair is another gate from the picture above, and the gates always combine as AND: all conditions, not any.</p>
+    <p>Пары складываются столько, сколько вам нужно, до 127 штук. Добавлять  <code>C2:C17, "Ana"</code>  и ответ сужается до 1480, это всего лишь ее февральская распродажа на Востоке. Каждая пара — это еще один вентиль с картинки выше, и вентили всегда объединяются по принципу «И»: все условия, а не любые.</p>
   </div>
 
   <div class="step">
-    <h2>2. SUMIF against SUMIFS, and the argument-order trap</h2>
+    <h2>2. СУММЕСЛИ против СУМИФС и ловушка порядка аргументов</h2>
 
-    <p>Before the explanation: SUMIF is the older, single-condition version. If you had designed it first, and later needed a multi-condition version, why might the sum column end up in a different position?</p>
+    <p>Перед пояснением: SUMIF — это более старая версия с одним условием. Если вы сначала разработали его, а позже понадобилась версия с несколькими условиями, почему столбец суммы может оказаться в другом положении?</p>
 
-    <p>Here is the trap in one pair of lines. Both of these return East's total, 5,480.</p>
+    <p>Вот ловушка в одной паре строк. Оба из них возвращают общее количество Востока - 5480.</p>
 
     <pre><code>=SUMIF(A2:A17, "East", D2:D17)          → 5,480  (sum range LAST)
 =SUMIFS(D2:D17, A2:A17, "East")         → 5,480  (sum range FIRST)</code></pre>
 
-    <p>SUMIF puts the sum range at the end, as its third argument. SUMIFS puts it at the beginning. The reason is the design history you just guessed at: SUMIF's shape was range, condition, then an optional "actually sum this other column". When Microsoft built SUMIFS, the sum range could no longer be optional or last, because the criteria pairs need open-ended room to stack behind it. So the two functions read backwards from each other, forever.</p>
+    <p>СУММЕСЛИ помещает диапазон сумм в конец в качестве третьего аргумента. SUMIFS ставит его в начало. Причина в истории проектирования, о которой вы только что догадались: форма СУММЕСЛИ представляла собой диапазон, условие, а затем необязательное «фактически суммировать этот другой столбец». Когда Microsoft создала SUMIFS, диапазон сумм больше не мог быть необязательным или последним, поскольку парам критериев требуется свободное пространство для размещения за ним. Таким образом, две функции читают друг друга в обратном направлении, навсегда.</p>
 
-    <p>Say out loud which argument comes first in each function before reading on. If you just hesitated, that hesitation is the trap: people switch between the two functions and feed ranges in the wrong slots, and Excel often cannot tell, because a region column and an amount column are both just ranges to it.</p>
+    <p>Прежде чем читать дальше, произнесите вслух, какой аргумент стоит первым в каждой функции. Если вы просто колебались, то это колебание — ловушка: люди переключаются между двумя функциями и вводят диапазоны не в тех слотах, а Excel часто не может этого сказать, потому что столбец региона и столбец количества для него являются всего лишь диапазонами.</p>
 
-    <p>My advice is to end the problem instead of managing it. Always write SUMIFS, even for one condition. It costs one extra letter, it handles every case SUMIF handles, and your workbooks end up with exactly one argument order in them. Same for COUNTIFS over COUNTIF and AVERAGEIFS over AVERAGEIF.</p>
+    <p>Мой совет — положить конец проблеме, а не управлять ею. Всегда пишите SUMIFS, даже для одного условия. Это стоит одну дополнительную букву, обрабатывает каждый случай, обрабатываемый SUMIF, и в конечном итоге в ваших книгах будет ровно один порядок аргументов. То же самое для COUNTIFS вместо COUNTIF и AVERAGEIFS вместо AVERAGEIF.</p>
   </div>
 
   <div class="step">
-    <h2>3. Writing criteria: text, numbers, comparisons, and cell references</h2>
+    <h2>3. Критерии написания: текст, числа, сравнения и ссылки на ячейки.</h2>
 
-    <p>Before the explanation: "East" needs quotes, and comparing against 1000 involves quotes too, but in a stranger place. Where do you think the quotes go in "amount is at least 1000"?</p>
+    <p>Перед пояснением: «Восток» нуждается в кавычках, и сравнение с 1000 тоже предполагает кавычки, но в другом месте. Как вы думаете, куда идут кавычки «сумма не менее 1000»?</p>
 
-    <p>Criteria come in three flavours, and the quoting rules are the whole difficulty.</p>
+    <p>Критерии бывают трех видов, и вся сложность заключается в правилах цитирования.</p>
 
-    <p><strong>Text criteria</strong> go in quotes: <code>"East"</code>, <code>"Feb"</code>, <code>"Ana"</code>. Matching ignores upper and lower case, so "east" works too.</p>
+    <p><strong>Текстовые критерии</strong>  в кавычках:  <code>"East"</code>, <code>"Feb"</code>, <code>"Ana"</code>. При сопоставлении игнорируются верхний и нижний регистр, поэтому «восток» тоже подойдет.</p>
 
-    <p><strong>Plain number criteria</strong> need no quotes. <code>=SUMIFS(D2:D17, D2:D17, 500)</code> would sum only rows whose amount is exactly 500, and here that is just Gil's row: 500.</p>
+    <p><strong>Простые числовые критерии</strong>  не надо кавычек.  <code>=SUMIFS(D2:D17, D2:D17, 500)</code>  будет суммировать только строки, сумма которых равна ровно 500, а здесь это только строка Гила: 500.</p>
 
-    <p><strong>Comparison criteria</strong> put the operator and the number together inside quotes, as one piece of text: <code>"&gt;=1000"</code>. That reads strangely the first time, but the whole comparison is handed over as a small instruction string.</p>
+    <p><strong>Критерии сравнения</strong>  поместите оператор и число в кавычки, как один фрагмент текста:  <code>"&gt;=1000"</code>. В первый раз это звучит странно, но все сравнение передается как небольшая строка инструкций.</p>
 
     <pre><code>=SUMIFS(D2:D17, D2:D17, "&gt;=1000")   → 10,610</code></pre>
 
-    <p>Eight of the sixteen rows are 1,000 or more, and 1200 + 1480 + 1130 + 1340 + 1610 + 1275 + 1520 + 1055 = 10,610. Criteria pairs also mix freely, so East rows of at least 1,000 is <code>=SUMIFS(D2:D17, A2:A17, "East", D2:D17, "&gt;=1000")</code>, which is 1200 + 1480 + 1130 = 3,810.</p>
+    <p>Восемь из шестнадцати строк содержат 1000 или более, а 1200 + 1480 + 1130 + 1340 + 1610 + 1275 + 1520 + 1055 = 10610. Пары критериев также свободно смешиваются, поэтому восточные строки, содержащие не менее 1000, являются  <code>=SUMIFS(D2:D17, A2:A17, "East", D2:D17, "&gt;=1000")</code>, что составляет 1200 + 1480 + 1130 = 3810.</p>
 
-    <p><strong>Referencing a cell inside a comparison</strong> is the one worth memorizing, because it is what makes a report adjustable. If the threshold 1000 sits in cell F1, you cannot write "&gt;=F1", because that would compare against the literal text F1. You glue the operator text to the cell's value with <code>&amp;</code>, the join symbol:</p>
+    <p><strong>Ссылка на ячейку внутри сравнения</strong>  стоит запомнить, потому что именно он делает отчет настраиваемым. Если порог 1000 находится в ячейке F1, вы не можете написать «&gt;=F1», потому что это будет сравниваться с буквальным текстом F1. Вы приклеиваете текст оператора к значению ячейки с помощью  <code>&amp;</code>, символ соединения:</p>
 
     <pre><code>=SUMIFS(D2:D17, D2:D17, "&gt;="&amp;F1)   → 10,610 when F1 holds 1000</code></pre>
 
-    <p>Now the reader changes F1 and every total on the sheet follows. Where that threshold number should come from is its own question, and <a href="../data-driven-thresholds/">choosing thresholds from the data</a> is the honest way to answer it.</p>
+    <p>Теперь читатель меняет F1 и следует каждая сумма на листе. Откуда взялось это пороговое число, это отдельный вопрос.  <a href="../data-driven-thresholds/">Выбор порогов из данных</a>  это честный способ ответить на него.</p>
   </div>
 
   <div class="step">
-    <h2>4. COUNTIFS and AVERAGEIFS, same grammar</h2>
+    <h2>4. СЧЁТЕСЛИ и СРЗНИЕ, одна и та же грамматика.</h2>
 
-    <p>Before the explanation: knowing SUMIFS, what do you expect COUNTIFS to take as its first argument, given that a count has no column to add?</p>
+    <p>Прежде чем объяснить: зная SUMIFS, что вы ожидаете от COUNTIFS в качестве своего первого аргумента, учитывая, что у счетчика нет столбца для добавления?</p>
 
-    <p>Nothing, is the answer. Counting needs no sum column, so COUNTIFS is criteria pairs only:</p>
+    <p>Ничего, вот ответ. Для подсчета не требуется столбец суммы, поэтому COUNTIFS — это только пары критериев:</p>
 
     <pre><code>=COUNTIFS(A2:A17, "East", B2:B17, "Feb")   → 2
 =COUNTIFS(B2:B17, "Feb")                   → 6</code></pre>
 
-    <p>Two East rows in February, six February rows overall, and you can confirm both by eye in the table above. COUNTIFS is also the audit tool for the rest of the family: before trusting any SUMIFS, ask COUNTIFS how many rows it stood on. A total of 2,200 means something different resting on 2 rows than on 200, which is the same small-sample honesty that <a href="../sql-group-by-having/">GROUP BY and HAVING</a> teaches on the SQL side.</p>
+    <p>Два восточных ряда в феврале, всего шесть февральских рядов, и оба вы можете проверить на глаз в таблице выше. COUNTIFS также является инструментом аудита для остальных членов семейства: прежде чем доверять какой-либо SUMIFS, спросите COUNTIFS, на скольких строках она находится. Общее число 2200 означает, что в двух строках находится нечто иное, чем в 200, что является той же честностью малой выборки, что и  <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a>  преподает на стороне SQL.</p>
 
-    <p>AVERAGEIFS is one paragraph because it is SUMIFS's grammar exactly: average column first, then criteria pairs. <code>=AVERAGEIFS(D2:D17, A2:A17, "West")</code> returns 1,215, which is West's five sales, 860 + 1340 + 990 + 1610 + 1275 = 6,075, divided by 5. The only extra thing to know: if no rows match, AVERAGEIFS shows a divide-by-zero error rather than a zero, and that error is it telling you the truth.</p>
+    <p>AVERAGEIFS представляет собой один абзац, потому что это в точности грамматика SUMIFS: сначала столбец среднего значения, затем пары критериев.  <code>=AVERAGEIFS(D2:D17, A2:A17, "West")</code>  возвращает 1215, что соответствует пяти продажам Уэста: 860 + 1340 + 990 + 1610 + 1275 = 6075, разделенным на 5. Единственное, что нужно знать: если ни одна строка не совпадает, СРЗНАЧЕСЛИ показывает ошибку деления на ноль, а не ноль, и эта ошибка говорит вам правду.</p>
   </div>
 
   <div class="step">
-    <h2>5. The full before and after</h2>
+    <h2>5. Полное до и после</h2>
 
-    <p>Same table, same question: what did each region sell in February?</p>
+    <p>Та же таблица, тот же вопрос: что продавали в феврале в каждом регионе?</p>
 
     <h3>Before</h3>
 
-    <p>The manual loop. Filter Region to East, filter Month to Feb, read 2,200 off the status bar, write it in another sheet by hand, undo, repeat for West, North, South. Four totals, sixteen menu actions, and the pasted numbers go stale the moment a row is added. The worst part is not the effort. It is that nothing connects the typed 2,200 back to the data, so nobody can check it later, including you.</p>
+    <p>Ручной цикл. Отфильтруйте регион по востоку, отфильтруйте месяц по февралю, прочитайте 2200 в строке состояния, запишите его на другом листе вручную, отмените, повторите для Запада, Севера, Юга. Четыре итога, шестнадцать действий меню и вставленные числа устаревают в момент добавления строки. Хуже всего не усилия. Дело в том, что ничто не связывает набранные 2200 с данными, поэтому никто не сможет их проверить позже, включая вас.</p>
 
     <h3>After</h3>
 
-    <p>A small summary block. Put the region names in F2 to F5, then one formula in G2, written once with dollar signs so it fills down:</p>
+    <p>Небольшой сводный блок. Поместите названия регионов в клавиши F2–F5, затем одну формулу в G2, записанную один раз со знаками доллара, чтобы она заполнялась:</p>
 
     <pre><code>=SUMIFS($D$2:$D$17, $A$2:$A$17, F2, $B$2:$B$17, "Feb")</code></pre>
 
     <table>
-      <tr><th>Region</th><th>Feb total</th></tr>
+      <tr><th>Region</th><th>Всего за февраль</th></tr>
       <tr><td>East</td><td>2,200</td></tr>
       <tr><td>West</td><td>2,600</td></tr>
       <tr><td>North</td><td>880</td></tr>
       <tr><td>South</td><td>0</td></tr>
     </table>
 
-    <p>Every number is live, every number is checkable, and the block updates itself when March lands. Two of these rows are also warnings, and that is the next section, because South's 0 and the missing 500 from Gil's blank-region row are both trying to tell you something. Picture building this exact block on your own sales data before you read on: which column is your region, which is your amount, and what would sit in F2?</p>
+    <p>Каждый номер активен, каждый номер можно проверить, и блок обновляется, когда наступает март. Две из этих строк также являются предупреждениями, и это следующий раздел, потому что 0 Юга и недостающие 500 из строки пустой области Гила пытаются вам что-то сказать. Представьте себе, что вы создаете этот точный блок на основе своих собственных данных о продажах, прежде чем читать дальше: в каком столбце указан ваш регион, какова ваша сумма и что будет находиться в F2?</p>
   </div>
 
   <div class="step">
-    <h2>6. Edge cases: blanks, dates, and mismatched ranges</h2>
+    <h2>6. Пограничные случаи: пробелы, даты и несовпадающие диапазоны.</h2>
 
-    <p>Before the explanation: add the four February totals above. You get 5,680. But summing every February row in the table gives 6,180. Where did 500 go?</p>
+    <p>Перед объяснением: добавьте приведенные выше четыре итоговых показателя за февраль. Вы получаете 5680. Но суммирование каждой февральской строки таблицы дает 6180. Куда пропали 500?</p>
 
-    <p><strong>Blanks fall out of every named group.</strong> That missing 500 is Gil's row, whose region cell is empty. It matches "East" no, "West" no, and so on, so it appears in no region's total, and no error says so. A region summary that silently omits rows is how a report disagrees with the ledger. The check is one formula: <code>=SUMIFS(D2:D17, A2:A17, "")</code> returns 500, the total sitting on blank regions. If that is not zero, you have unassigned rows to fix or to report as their own line.</p>
+    <p><strong>Из каждой названной группы выпадают пробелы.</strong>  Недостающие 500 — это строка Гила, ячейка региона которой пуста. Он соответствует «Восток» нет, «Запад» нет и т. д., поэтому он не отображается ни в одном регионе, и ни одна ошибка не указывает на это. Сводка по региону, в которой молча пропускаются строки, является причиной того, что отчет расходится с бухгалтерской книгой. Проверка представляет собой одну формулу:  <code>=SUMIFS(D2:D17, A2:A17, "")</code>  возвращает 500, общее количество находится в пустых регионах. Если это значение не равно нулю, у вас есть неназначенные строки, которые нужно исправить или сообщить как отдельную строку.</p>
 
-    <p><strong>A zero result has two meanings.</strong> South's February total is 0 because South has no February rows at all. A zero can mean "matched rows adding to zero" or "matched nothing". <code>=COUNTIFS(A2:A17, "South", B2:B17, "Feb")</code> returning 0 settles which one you have.</p>
+    <p><strong>Нулевой результат имеет два значения.</strong>  Общее количество данных South за февраль равно 0, поскольку у South вообще нет строк за февраль. Ноль может означать «совпадающие строки добавляются к нулю» или «ничего не соответствует».  <code>=COUNTIFS(A2:A17, "South", B2:B17, "Feb")</code>  возврат 0 определяет, какой из них у вас есть.</p>
 
-    <p><strong>Dates in criteria work best as brackets.</strong> Our Month column holds text, so "Feb" matches it directly. Real tables usually hold actual dates like 14-Feb-2026, and no single criterion matches "the whole month". The pattern is two criteria on the same column, a floor and a ceiling:</p>
+    <p><strong>Даты в критериях лучше всего работают в виде скобок.</strong>  Наш столбец «Месяц» содержит текст, поэтому «Февраль» напрямую соответствует ему. Реальные таблицы обычно содержат фактические даты, например 14 февраля 2026 г., и ни один критерий не соответствует «весь месяц». Узор – это два критерия на одной колонне, пол и потолок:</p>
 
     <pre><code>=SUMIFS(D2:D17, B2:B17, "&gt;="&amp;DATE(2026,2,1), B2:B17, "&lt;"&amp;DATE(2026,3,1))</code></pre>
 
-    <p>That reads: on or after February 1st, and before March 1st. Using <code>DATE(2026,2,1)</code> instead of typing "2/1/2026" sidesteps every regional date-format ambiguity. On our table, with the Month column as dates, that bracket would return February's full 6,180.</p>
+    <p>Там написано: 1 февраля или после этой даты, но до 1 марта. С использованием  <code>DATE(2026,2,1)</code>  вместо того, чтобы вводить «01.02.2026», можно обойти любую неоднозначность регионального формата даты. В нашей таблице, где столбец «Месяц» является датой, эта скобка вернет полные 6180 за февраль.</p>
 
-    <p><strong>All ranges must be the same size.</strong> If the sum range is D2:D17 and a criteria range is A2:A16, Excel shows #VALUE!. Annoying, but honest, and the fix is making every range cover the same rows. The quiet version of this mistake is a criteria range shifted by one row, D2:D17 against A3:A18, which is the same height and errors nowhere. Whole-column references, D:D against A:A, remove both risks on a simple sheet.</p>
+    <p><strong>Все диапазоны должны быть одинакового размера.</strong>  Если диапазон сумм — D2:D17, а диапазон критериев — A2:A16, Excel отображает #ЗНАЧ!. Раздражающе, но честно: исправление заключается в том, что каждый диапазон охватывает одни и те же строки. Скрытая версия этой ошибки — диапазон критериев, сдвинутый на одну строку, D2:D17 против A3:A18, который имеет ту же высоту и нигде не содержит ошибок. Ссылки на весь столбец, D:D против A:A, устраняют оба риска на простом листе.</p>
   </div>
 
-  <h2>Why this works</h2>
+  <h2>Почему это работает</h2>
 
-  <p>SUMIFS earns its keep because it makes a stated claim instead of a performed action. A filtered status-bar total is an action: it happened, you saw it, and no trace remains. A SUMIFS cell is a claim written down: these rows, these conditions, this total, checkable by anyone later. That is the same reason analysts keep SQL queries and <a href="../documenting-data-limitations/">documented limitations</a> rather than memories of what they clicked. The formula is the audit trail.</p>
+  <p>SUMIFS зарабатывает на жизнь, потому что вместо совершения действия делает заявленное утверждение. Отфильтрованное итоговое значение в строке состояния — это действие: оно произошло, вы это видели, и никаких следов не осталось. Ячейка SUMIFS — это записанное утверждение: эти строки, эти условия, эта сумма, которую любой может проверить позже. По этой же причине аналитики хранят SQL-запросы и  <a href="../documenting-data-limitations/">документированные ограничения</a>  а не воспоминания о том, что они нажали. Формула — это контрольный журнал.</p>
 
-  <p>The verify-it-twice habit this page keeps modelling has a statistical backbone too. Cleveland and McGill showed that people misjudge quantities read from visual displays in systematic, measurable ways (Cleveland &amp; McGill, 1984, <em>Journal of the American Statistical Association</em>, 79(387), 531–554). Eyeballing a filtered column is a perceptual judgement, and a formula is not, which is why the two disagreeing is so informative: when they differ, believe neither until you know why.</p>
+  <p>Привычка «проверять дважды», которую моделирует эта страница, также имеет статистическую основу. Кливленд и МакГилл показали, что люди систематически и измеримо неправильно оценивают величины, считываемые с помощью визуальных дисплеев (Cleveland &amp; McGill, 1984,  <em>Журнал Американской статистической ассоциации</em>, 79(387), 531–554). Взгляд на отфильтрованную колонку — это перцептивное суждение, а формула — нет, поэтому два несогласных так информативны: когда они расходятся, не верьте ни тому, ни другому, пока не поймете, почему.</p>
 
-  <p>And this page kept asking you to predict before it explained. Prompting a learner to generate an explanation before receiving one reliably improves understanding compared to reading alone, across more than sixty studies (Bisra, Liu, Nesbit, Salimi, &amp; Winne, 2018, <em>Educational Psychology Review</em>, 30(3), 703–725). Guessing where the quotes go in "&gt;=1000" is why the answer will still be there next week.</p>
+  <p>И эта страница продолжала просить вас предсказать, прежде чем она объяснила. По данным более чем шестидесяти исследований, предложение учащемуся придумать объяснение до его получения достоверно улучшает понимание по сравнению с чтением без него (Bisra, Liu, Nesbit, Salimi &amp; Winne, 2018,  <em>Обзор педагогической психологии</em>, 30(3), 703–725). Если догадаться, куда идут кавычки в «&gt;=1000», то на следующей неделе ответ все еще будет там.</p>
 
-  <h2>Using this on your own workbook</h2>
+  <h2>Использование этого в своей книге</h2>
 
-  <p>Rebuilding every hand-typed summary in an old workbook is miserable, and you will stop halfway. Do this instead, in order.</p>
+  <p>Восстанавливать каждое напечатанное от руки резюме в старой рабочей тетради — занятие ужасное, и вы остановитесь на полпути. Вместо этого сделайте это по порядку.</p>
 
   <ol>
-    <li><strong>Pick one summary you already report</strong>, a single number someone actually reads, and rebuild just that one as a SUMIFS.</li>
-    <li><strong>Verify it against a filter or a pivot table before you trust it.</strong> Filter the raw data to the same conditions and compare totals, or drop the data in a pivot and read the same cell. This is the answer-checks habit: a SUMIFS is a claim, and a claim gets checked once against an independent method before it ships. If the two disagree, the usual culprits are blanks, a shifted range, or a criterion matching text against numbers.</li>
-    <li><strong>Add the two audit formulas next to it.</strong> A COUNTIFS with the same criteria, so readers see how many rows the total stands on, and a blank-criteria SUMIFS, so unassigned rows cannot hide.</li>
-    <li><strong>Move thresholds and month choices into cells</strong>, referenced with the <code>"&gt;="&amp;F1</code> pattern, so the report adjusts without editing formulas.</li>
-    <li><strong>Convert the rest only as you touch them.</strong> A hand-typed number nobody reads is not the priority. The one in Friday's meeting is.</li>
+    <li><strong>Выберите одно резюме, о котором вы уже сообщили.</strong>, одно число, которое кто-то действительно читает, и перестроить только его как SUMIFS.</li>
+    <li><strong>Прежде чем доверять ему, сверьте его с фильтром или сводной таблицей.</strong>  Отфильтруйте необработанные данные по одинаковым условиям и сравните итоговые значения или поместите данные в сводную таблицу и прочитайте одну и ту же ячейку. Это привычка проверки ответов: SUMIFS — это заявка, а заявка проверяется один раз на соответствие независимому методу перед отправкой. Если они не совпадают, обычно виновниками являются пробелы, сдвинутый диапазон или критерий, сопоставляющий текст с числами.</li>
+    <li><strong>Добавьте рядом с ним две формулы аудита.</strong>  COUNTIFS с теми же критериями, чтобы читатели могли видеть, на скольких строках находится итоговая сумма, и SUMIFS с пустыми критериями, чтобы неназначенные строки не могли скрыться.</li>
+    <li><strong>Переместите пороговые значения и выбор месяца в ячейки.</strong>, на который ссылается  <code>"&gt;="&amp;F1</code>  шаблон, поэтому отчет корректируется без редактирования формул.</li>
+    <li><strong>Остальные преобразуйте только при прикосновении к ним.</strong>  Набранный от руки номер, который никто не читает, не является приоритетом. Тот, что на пятничной встрече.</li>
   </ol>
 
-  <p>If you have paper and five minutes, one optional drawing makes the grammar stick. Draw eight rows flowing through two gates into a sum box, and label the gates with a condition from your own data, your region, your month. Then write the SUMIFS that matches your drawing, sum column first. If the drawing and the formula agree, you own this.</p>
+  <p>Если у вас есть бумага и пять минут, один дополнительный рисунок поможет вам запомнить грамматику. Нарисуйте восемь рядов, проходящих через двое ворот, в поле суммы и пометьте ворота условием из ваших собственных данных, вашего региона, вашего месяца. Затем напишите СУММИФС, соответствующую вашему рисунку, сначала столбец суммы. Если рисунок и формула совпадают, то это ваша собственность.</p>
 
-  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: Excel, SQL, Tableau, and the working habits around them.</div>
+  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: Excel, SQL, Tableau и связанные с ними рабочие привычки.</div>
 
-  <h2>The whole thing on one screen</h2>
+  <h2>Все на одном экране</h2>
 
-  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
+  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
 
   <table>
-    <tr><th>Concept</th><th>The answer</th></tr>
-    <tr><td>What SUMIFS does</td><td>Filters rows by every condition, sums the survivors, in one formula.</td></tr>
-    <tr><td>SUMIFS shape</td><td><code>=SUMIFS(sum_range, range1, criterion1, range2, criterion2, ...)</code></td></tr>
-    <tr><td>The trap</td><td>SUMIF puts the sum range last. SUMIFS puts it first. They read backwards from each other.</td></tr>
-    <tr><td>The fix</td><td>Always write SUMIFS, even for one condition. One argument order everywhere.</td></tr>
-    <tr><td>Criteria pair</td><td>A range to look in plus the condition rows must meet there. Pairs stack, up to 127.</td></tr>
-    <tr><td>How pairs combine</td><td>Always AND. Every condition must pass for a row to count.</td></tr>
-    <tr><td>Text criterion</td><td><code>"East"</code>, in quotes, case does not matter.</td></tr>
-    <tr><td>Number criterion</td><td><code>500</code>, no quotes, matches exactly.</td></tr>
-    <tr><td>Comparison criterion</td><td><code>"&gt;=1000"</code>, operator and number together inside quotes.</td></tr>
-    <tr><td>Cell in a criterion</td><td><code>"&gt;="&amp;F1</code>, operator text joined to the cell with &amp;.</td></tr>
-    <tr><td>COUNTIFS</td><td>Criteria pairs only, no sum column. The audit tool for every SUMIFS.</td></tr>
-    <tr><td>AVERAGEIFS</td><td>Same shape as SUMIFS. No matches gives a divide-by-zero error, on purpose.</td></tr>
-    <tr><td>The blank trap</td><td>Rows with a blank criteria cell fall out of every named group silently. Check with criterion <code>""</code>.</td></tr>
-    <tr><td>A zero result</td><td>Either rows summing to zero or no rows at all. COUNTIFS tells you which.</td></tr>
-    <tr><td>Dates</td><td>Bracket with two criteria on one column: <code>"&gt;="&amp;DATE(...)</code> and <code>"&lt;"&amp;DATE(...)</code>.</td></tr>
-    <tr><td>Range sizes</td><td>All ranges the same rows. Same-height-but-shifted is the silent version.</td></tr>
-    <tr><td>The habit</td><td>Verify one SUMIFS against a filter or pivot before it ships.</td></tr>
+    <tr><th>Concept</th><th>Ответ</th></tr>
+    <tr><td>Что делает СУМИФС</td><td>Фильтрует строки по каждому условию, суммирует выжившие в одной формуле.</td></tr>
+    <tr><td>Форма СУМИФС</td><td><code>=SUMIFS(sum_range, range1, criterion1, range2, criterion2, ...)</code></td></tr>
+    <tr><td>Ловушка</td><td>СУММЕСЛИ помещает диапазон сумм последним. SUMIFS ставит это на первое место. Они читают друг друга задом наперед.</td></tr>
+    <tr><td>Исправление</td><td>Всегда пишите SUMIFS, даже для одного условия. Один порядок аргументов везде.</td></tr>
+    <tr><td>Пара критериев</td><td>Диапазон для поиска, а также строки условий, которые должны соответствовать этому диапазону. Пары складываются до 127.</td></tr>
+    <tr><td>Как объединяются пары</td><td>Всегда И. Чтобы строка считалась, должно выполняться каждое условие.</td></tr>
+    <tr><td>Текстовый критерий</td><td><code>"East"</code>В кавычках регистр не имеет значения.</td></tr>
+    <tr><td>Числовой критерий</td><td><code>500</code>, без кавычек, точное совпадение.</td></tr>
+    <tr><td>Критерий сравнения</td><td><code>"&gt;=1000"</code>, оператор и число вместе внутри кавычек.</td></tr>
+    <tr><td>Ячейка в критерии</td><td><code>"&gt;="&amp;F1</code>, текст оператора, присоединенный к ячейке с помощью &amp;.</td></tr>
+    <tr><td>COUNTIFS</td><td>Только пары критериев, столбец суммы отсутствует. Инструмент аудита для каждого SUMIFS.</td></tr>
+    <tr><td>AVERAGEIFS</td><td>Та же форма, что и SUMIFS. Отсутствие совпадений намеренно приводит к ошибке деления на ноль.</td></tr>
+    <tr><td>Пустая ловушка</td><td>Строки с пустой ячейкой критериев автоматически выпадают из каждой именованной группы. Проверьте по критерию  <code>""</code>.</td></tr>
+    <tr><td>Нулевой результат</td><td>Либо строки суммируются до нуля, либо вообще нет строк. COUNTIFS подскажет вам, что именно.</td></tr>
+    <tr><td>Dates</td><td>Скобка с двумя критериями в одном столбце:  <code>"&gt;="&amp;DATE(...)</code> and <code>"&lt;"&amp;DATE(...)</code>.</td></tr>
+    <tr><td>Размеры диапазона</td><td>Все диапазоны одни и те же строки. Бесшумная версия — та же высота, но сдвинутая.</td></tr>
+    <tr><td>Привычка</td><td>Перед отправкой проверьте один SUMIFS на соответствие фильтру или сводной таблице.</td></tr>
   </table>
 
-  <div class="note"><strong>The one habit to keep.</strong> If you take nothing else from this page, check every SUMIFS you ship against a filter or a pivot once, and keep a COUNTIFS beside it so readers see how many rows the number stands on. A wrong conditional total never looks wrong. It looks like 5,680 when the truth is 6,180. If a formula breaks in a way this page does not cover, there is a general <a href="../technical-tenacity/">diagnosis loop for being stuck</a>.</div>
+  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Если вы больше ничего не берете с этой страницы, один раз проверьте каждую отправленную вами СУММИФ с фильтром или сводной таблицей и оставьте рядом с ней СЧЕТЕСТИ, чтобы читатели видели, на скольких строках стоит число. Неправильная условная сумма никогда не выглядит неправильно. Кажется, что это 5680, хотя на самом деле 6180. Если формула нарушается таким образом, который не описан на этой странице, существует общая  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>.</div>
 
-  <p>One last thought, and I would genuinely like other people's answers. My blank-region row was worth 500 and hid for one reporting cycle before a totals check caught it. What is the biggest gap you have found between a summary sheet and the raw data underneath it, and which check finally surfaced it?</p>
+  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Моя строка с пустой областью стоила 500 и была скрыта в течение одного отчетного цикла, прежде чем ее обнаружила проверка итогов. Какой самый большой разрыв вы обнаружили между сводным листом и необработанными данными под ним, и какая проверка в конечном итоге выявила его?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Cleveland, W. S., &amp; McGill, R. (1984). Graphical perception: Theory, experimentation, and application to the development of graphical methods. <em>Journal of the American Statistical Association</em>, 79(387), 531–554.</li>
-    <li>Bisra, K., Liu, Q., Nesbit, J. C., Salimi, F., &amp; Winne, P. H. (2018). Inducing self-explanation: A meta-analysis. <em>Educational Psychology Review</em>, 30(3), 703–725.</li>
+    <li>Кливленд, У.С., и МакГилл, Р. (1984). Графическое восприятие: теория, эксперименты и применение к разработке графических методов.  <em>Журнал Американской статистической ассоциации</em>, 79(387), 531–554.</li>
+    <li>Бисра К., Лю К., Несбит Дж. К., Салими Ф. и Винн П. Х. (2018). Побуждение к самообъяснению: метаанализ.  <em>Обзор педагогической психологии</em>, 30(3), 703–725.</li>
   </ul>
 
   <div class="book">
-    <strong>SUMIFS returns zero and every argument looks correct.</strong>
-    <p><em>Excel for Analysts</em> is 378 pages, SUMIFS and COUNTIFS read argument by argument, including the criteria that silently match nothing.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-sumifs'})">Excel for Analysts, $19 &rarr;</a>
+    <strong>SUMIFS возвращает ноль, и каждый аргумент выглядит корректно.</strong>
+    <p><em>Excel для аналитиков</em>  составляет 378 страниц, SUMIFS и COUNTIFS считываются аргумент за аргументом, включая критерии, которые молча ничего не соответствуют.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-sumifs'})">Excel для аналитиков, 19 долларов США →</a>
   </div>
 
   <div class="cta">
-    <strong>Practice conditional totals with a table in front of you.</strong>
-    <p style="margin:6px 0 0">SUMIFS, COUNTIFS, and the audit habits around them are lessons in the <a href="../../excel/">Excel Kit</a>: you write the formulas against real tables, verify your own answers, and drill until the argument order is automatic. Flash cards and a mock exam sit alongside. Nothing to install, no account needed.</p>
-    <a class="btn" href="../../excel/">Open the Excel Kit →</a>
+    <strong>Попрактикуйтесь в условных итогах, держа перед собой таблицу.</strong>
+    <p style="margin:6px 0 0">SUMIFS, COUNTIFS и связанные с ними привычки аудита являются уроками  <a href="../../excel/">Excel комплект</a>: вы пишете формулы для реальных таблиц, проверяете свои собственные ответы и детализируете до тех пор, пока порядок аргументов не станет автоматическим. Рядом находятся флеш-карты и пробный экзамен. Ничего устанавливать, учетная запись не требуется.</p>
+    <a class="btn" href="../../excel/">Откройте набор Excel →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> · <a href="../vlookup-vs-xlookup/">VLOOKUP vs XLOOKUP</a> · <a href="../excel-absolute-vs-relative-references/">Absolute vs Relative References</a> · <a href="../budget-vs-actual-variance/">Budget vs Actual Variance</a> · <a href="../excel-dashboard-build-order/">Excel Dashboard Build Order</a> · <a href="../excel-label-rows-before-charting/">Label Rows Before Charting</a> · <a href="../../excel/">Excel Kit</a> · <a href="../what-is-data-analysis/">What Is Data Analysis?</a> · <a href="../report-vs-analysis/">Report vs Analysis</a> · <a href="../choose-your-analyst-role/">Choose Your Analyst Role</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../sql-foundations/">SQL Foundations</a> · <a href="../sql-find-duplicates/">Find Duplicates in SQL</a> · <a href="../sql-null/">NULL in SQL</a> · <a href="../pandas-groupby/">pandas groupby</a> · <a href="../choose-the-right-chart/">Choose the Right Chart</a> · <a href="../correlation-vs-causation/">Correlation vs Causation</a> · <a href="../powerbi-measures-vs-columns/">Power BI Measures vs Columns</a> · <a href="../data-driven-thresholds/">Data-Driven Thresholds</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../git-for-analysts/">Git for Analysts</a> · <a href="../../projects/">Portfolio Projects</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../vlookup-vs-xlookup/">ВПР против XLOOKUP</a> · <a href="../excel-absolute-vs-relative-references/">Абсолютные и относительные ссылки</a> · <a href="../budget-vs-actual-variance/">Бюджет и фактическое отклонение</a> · <a href="../excel-dashboard-build-order/">Порядок построения панели мониторинга Excel</a> · <a href="../excel-label-rows-before-charting/">Пометьте строки перед построением диаграммы</a> · <a href="../../excel/">Excel комплект</a> · <a href="../what-is-data-analysis/">Что такое анализ данных?</a> · <a href="../report-vs-analysis/">Отчет против анализа</a> · <a href="../choose-your-analyst-role/">Выберите роль аналитика</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-foundations/">Основы SQL</a> · <a href="../sql-find-duplicates/">Найти дубликаты в SQL</a> · <a href="../sql-null/">NULL в SQL</a> · <a href="../pandas-groupby/">панды группируются</a> · <a href="../choose-the-right-chart/">Выберите правильный график</a> · <a href="../correlation-vs-causation/">Корреляция против причинно-следственной связи</a> · <a href="../powerbi-measures-vs-columns/">Меры Power BI против столбцов</a> · <a href="../data-driven-thresholds/">Пороги, управляемые данными</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../git-for-analysts/">Git для аналитиков</a> · <a href="../../projects/">Портфельные проекты</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

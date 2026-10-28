@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>pandas pivot_table: index, columns, values, aggfunc &mdash; Analyst Prep Kit</title>
-<meta name="description" content="Four arguments do the whole job, and the default aggfunc is the one that surprises people. Worked on eight rows with totals that check, plus when groupby is the better tool and how to get the long shape back.">
+<title>pandas Pivot_table: индекс, столбцы, значения, aggfunc — комплект подготовки аналитика</title>
+<meta name="description" content="Четыре аргумента делают всю работу, и функция aggfunc по умолчанию удивляет людей. Работал над восемью строками с проверяемыми итогами, а также над тем, когда группировка является лучшим инструментом и как вернуть длинную форму.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/pandas-pivot-table/">
-<meta property="og:title" content="pivot_table in pandas: The Excel Pivot, Written Down">
-<meta property="og:description" content="index, columns, values, aggfunc. The default is mean, not sum, and that is the first surprise.">
+<meta property="og:title" content="Pivot_table в пандах: сводная таблица Excel, записанная">
+<meta property="og:description" content="индекс, столбцы, значения, aggfunc. По умолчанию используется среднее значение, а не сумма, и это первый сюрприз.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/pandas-pivot-table/">
 <meta name="twitter:card" content="summary_large_image">
@@ -164,17 +164,17 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../../python/">Python Kit</a></p>
-  <h1>pivot_table in pandas: The Excel Pivot, Written Down</h1>
-  <p class="meta">Michael Nocito &middot; Updated August 2026 &middot; Every number on this page was worked before it was published</p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../../python/">Комплект Python</a></p>
+  <h1>Pivot_table в пандах: сводная таблица Excel, записанная</h1>
+  <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Все числа на этой странице были обработаны до их публикации.</p>
 
-  <p>Everybody who has used Excel knows what a pivot table does. <code>pivot_table</code> is the same operation with the choices written down instead of dragged, which means it re-runs next month without anybody remembering where the fields went.</p>
+  <p>Каждый, кто использовал Excel, знает, что такое сводная таблица.  <code>pivot_table</code>  — это та же операция, в которой варианты выбора записаны, а не перетаскиваются, что означает, что она повторяется в следующем месяце, и никто не запоминает, куда пошли поля.</p>
 
-  <p>What you do: name four things. Rows, columns, the value, and how to aggregate it. The fourth one has a default you almost never want.</p>
+  <p>Что вы делаете: назовите четыре вещи. Строки, столбцы, значение и способы его агрегирования. Четвертый имеет значение по умолчанию, которое вам почти никогда не понадобится.</p>
 
-  <p><strong>The short version.</strong> <code>aggfunc</code> defaults to mean. Pass it explicitly, every time.</p>
+  <p><strong>Краткая версия.</strong> <code>aggfunc</code>  по умолчанию означает. Передавайте это явно, каждый раз.</p>
 
-  <h2>The table</h2>
+  <h2>Стол</h2>
   <pre><code>import pandas as pd
 
 df = pd.DataFrame({
@@ -186,7 +186,7 @@ df = pd.DataFrame({
                  'shipped','pending','shipped','cancelled'],
 })</code></pre>
 
-  <h2>The four arguments</h2>
+  <h2>Четыре аргумента</h2>
   <pre><code>df.pivot_table(index='region', columns='month', values='amount',
                aggfunc='sum', fill_value=0, margins=True, margins_name='Total')</code></pre>
   <table>
@@ -197,79 +197,79 @@ df = pd.DataFrame({
     <tr><td>West</td><td>60</td><td>90</td><td>150</td></tr>
     <tr><td><strong>Total</strong></td><td><strong>340</strong></td><td><strong>710</strong></td><td><strong>1050</strong></td></tr>
   </table>
-  <p>Four arguments do the work. <code>index</code> is the rows, <code>columns</code> is the columns, <code>values</code> is the number, <code>aggfunc</code> is what to do with it. <code>fill_value</code> replaces the NaN in combinations that never occurred, and <code>margins</code> adds the totals.</p>
-  <p>Note the column order: Feb before Jan, because pandas sorts the column values alphabetically and has no idea they are months. Fixing that is a separate step, below.</p>
+  <p>Четыре аргумента делают свое дело.  <code>index</code>  это строки,  <code>columns</code>  это столбцы,  <code>values</code>  это число,  <code>aggfunc</code>  что с этим делать.  <code>fill_value</code>  заменяет NaN в комбинациях, которые никогда не встречались, и  <code>margins</code>  добавляет итоги.</p>
+  <p>Обратите внимание на порядок столбцов: с февраля до января, потому что pandas сортирует значения столбцов в алфавитном порядке и понятия не имеет, что это месяцы. Исправление этого — отдельный шаг ниже.</p>
 
-  <div class="note"><strong>The default that catches everyone.</strong> Leave <code>aggfunc</code> out and you get the mean. On this table that turns East from 450 into 225, and the result is a perfectly formatted pivot of numbers that are not what you asked for. Nothing errors, because a mean is a legitimate thing to want.</div>
+  <div class="note"><strong>По умолчанию, который ловит всех.</strong> Leave <code>aggfunc</code>  и вы получите среднее значение. В этой таблице Восток превращается из 450 в 225, и в результате получается идеально отформатированная сводка чисел, которые не соответствуют вашим запросам. Ничто не ошибается, потому что стремление к среднему является вполне законным.</div>
 
-  <h2>The fill value is a decision</h2>
-  <p>A missing combination is not the same as a zero. If West genuinely had no February orders, <code>fill_value=0</code> is honest. If February data has not loaded yet, a zero is a fabricated observation that will be charted as a real month with no sales.</p>
-  <p>When you are not sure, leave the NaN in. It is visible, it propagates through arithmetic, and it forces the question. That is the same argument as in <a href="../pandas-fillna-dropna/">fillna and dropna</a>.</p>
+  <h2>Значение заполнения — это решение</h2>
+  <p>Отсутствующая комбинация — это не то же самое, что ноль. Если бы у Уэста действительно не было февральских приказов,  <code>fill_value=0</code>  честен. Если данные за февраль еще не загружены, ноль — это сфабрикованное наблюдение, которое будет отображаться как реальный месяц без продаж.</p>
+  <p>Если вы не уверены, оставьте NaN. Оно видно, оно передается посредством арифметических вычислений и вызывает вопрос. Это тот же аргумент, что и в  <a href="../pandas-fillna-dropna/">Филна и Дропна</a>.</p>
 
-  <h2>Several values, several aggregations</h2>
+  <h2>Несколько значений, несколько агрегаций</h2>
   <pre><code>df.pivot_table(index='region', values=['amount', 'order_id'],
                aggfunc={'amount': 'sum', 'order_id': 'count'})</code></pre>
-  <p>A dictionary lets each column have its own function, which is how you get a total and a count side by side. Passing a list such as <code>aggfunc=['sum','mean']</code> applies every function to every value column and produces a multi-level column index, which is powerful and hard to read. Prefer the dictionary.</p>
+  <p>Словарь позволяет каждому столбцу иметь свою собственную функцию, благодаря которой вы получаете сумму и количество одновременно. Передача списка, например  <code>aggfunc=['sum','mean']</code>  применяет каждую функцию к каждому столбцу значений и создает многоуровневый индекс столбца, который является мощным и трудным для чтения. Предпочитаю словарь.</p>
 
-  <h2>Fixing the column order</h2>
+  <h2>Исправление порядка столбцов</h2>
   <pre><code>months = ['Jan','Feb','Mar','Apr','May','Jun',
           'Jul','Aug','Sep','Oct','Nov','Dec']
 df['month'] = pd.Categorical(df['month'], categories=months, ordered=True)
 
 df.pivot_table(index='region', columns='month', values='amount',
                aggfunc='sum', observed=True)</code></pre>
-  <p>Making the column a Categorical with a defined order fixes the sorting everywhere in pandas, not only in this pivot: it also fixes groupby order and chart axis order. It is the right fix rather than reindexing the result afterwards.</p>
+  <p>Если сделать столбец категориальным с определенным порядком, то сортировка будет исправлена ​​повсюду в pandas, а не только в этой сводной таблице: это также исправит порядок группировки и порядок оси диаграммы. Это правильное исправление, а не последующая переиндексация результата.</p>
 
-  <h2>Getting back to long</h2>
+  <h2>Возвращаясь к долгому</h2>
   <pre><code>wide = df.pivot_table(index='region', columns='month',
                       values='amount', aggfunc='sum').reset_index()
 
 long = wide.melt(id_vars='region', var_name='month', value_name='amount')</code></pre>
-  <p>Wide is for reading, long is for computing. Charting libraries, databases and further groupbys all want long. Pivot at the last possible moment, immediately before a human looks at it.</p>
+  <p>Широкий — для чтения, длинный — для вычислений. Библиотеки диаграмм, базы данных и другие средства группировки — все это нужно долго. Поворот в самый последний момент, непосредственно перед тем, как на него посмотрит человек.</p>
 
-  <h2>pivot, pivot_table and groupby</h2>
+  <h2>сводная таблица, Pivot_table и группировка</h2>
   <table>
     <tr><th>Use</th><th>When</th><th>Note</th></tr>
-    <tr><td><code>groupby</code></td><td>Aggregating, staying long</td><td>The default choice</td></tr>
-    <tr><td><code>pivot_table</code></td><td>Aggregating and going wide</td><td>Handles duplicates by aggregating them</td></tr>
-    <tr><td><code>pivot</code></td><td>Reshaping only, no aggregation</td><td>Raises if the index and columns pair repeats</td></tr>
-    <tr><td><code>crosstab</code></td><td>Counting combinations of two fields</td><td>Shorthand for a count pivot</td></tr>
+    <tr><td><code>groupby</code></td><td>Агрегирование, пребывание надолго</td><td>Выбор по умолчанию</td></tr>
+    <tr><td><code>pivot_table</code></td><td>Объединение и расширение</td><td>Обрабатывает дубликаты, объединяя их.</td></tr>
+    <tr><td><code>pivot</code></td><td>Только изменение формы, без агрегации</td><td>Возникает, если пара индекса и столбца повторяется.</td></tr>
+    <tr><td><code>crosstab</code></td><td>Подсчет комбинаций двух полей</td><td>Сокращение для точки подсчета</td></tr>
   </table>
-  <p><code>pivot</code> failing on duplicates is a feature. It means your key was not unique, which is the same finding as fan-out in a SQL join, and it is better to hear about it than to have it silently averaged.</p>
+  <p><code>pivot</code>  сбой при поиске дубликатов - это особенность. Это означает, что ваш ключ не был уникальным, что является тем же самым фактом, что и разветвление в SQL-соединении, и лучше услышать об этом, чем молча усреднять его.</p>
 
-  <h2>How to apply this to your own work</h2>
+  <h2>Как применить это в своей работе</h2>
   <ol>
-    <li>Pass <code>aggfunc</code> explicitly in every pivot you write, even when the default happens to be right.</li>
-    <li>Check the grand total against the ungrouped sum before believing any pivot.</li>
-    <li>Decide consciously whether a blank cell is a zero or an unknown.</li>
-    <li>Set month and other ordered text columns to Categorical once, at load time.</li>
-    <li>Keep the data long through the pipeline and pivot only for display.</li>
+    <li>Pass <code>aggfunc</code>  явно в каждой сводной таблице, которую вы пишете, даже если значение по умолчанию оказывается правильным.</li>
+    <li>Прежде чем поверить в какой-либо поворотный момент, сверьте общий итог с разгруппированной суммой.</li>
+    <li>Решите сознательно, является ли пустая ячейка нулем или неизвестным.</li>
+    <li>Установите для месяца и других упорядоченных текстовых столбцов значение «Категорический» один раз во время загрузки.</li>
+    <li>Храните данные в конвейере долго и сводите их только для отображения.</li>
   </ol>
 
-  <h2>The one habit to keep</h2>
-  <p>Reconcile the corner. The bottom right cell of a pivot with margins should equal the sum of the original column, and if it does not, something was filtered, dropped or averaged on the way.</p>
+  <h2>Единственная привычка, которую нужно сохранить</h2>
+  <p>Совместите угол. Нижняя правая ячейка сводной таблицы с полями должна равняться сумме исходного столбца, а если это не так, то по пути что-то было отфильтровано, отброшено или усреднено.</p>
 
-  <p>Does the grand total of your last pivot match the raw column total?</p>
+  <p>Соответствует ли общая сумма вашей последней сводной таблицы итоговой сумме необработанного столбца?</p>
 
-  <div class="note"><strong>Every number here was run before it was published,</strong> on pandas 3.0.2. The pivot returns East 450, North 200, South 250, West 150, with column totals of 340 and 710 and a grand total of 1,050.</div>
+  <div class="note"><strong>Каждый номер здесь был проведён до того, как был опубликован.</strong>  на пандах 3.0.2. Сводная точка возвращает Восток 450, Север 200, Юг 250, Запад 150 с общим количеством столбцов 340 и 710 и общим количеством 1050.</div>
 
   <div class="book">
-    <strong>A pivot in code is a pivot somebody else can re-run next month.</strong>
-    <p><em>Python for Analysts</em> is a working analyst pandas book: read a file, fix its types, group it, join it, and check the answer before anyone else sees it.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/python-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=python-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-pandas-pivot-table'})">Python for Analysts, $19 &rarr;</a>
+    <strong>Разворот кода — это поворот, который кто-то другой может повторить в следующем месяце.</strong>
+    <p><em>Python для аналитиков</em>  — это рабочая книга по аналитике панд: прочитайте файл, исправьте его типы, сгруппируйте его, присоединитесь к нему и проверьте ответ, прежде чем его увидит кто-либо еще.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/python-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=python-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-pandas-pivot-table'})">Python для аналитиков, 19 $ →</a>
   </div>
 
   <div class="cta">
-    <strong>Drill it on a table small enough to check.</strong>
-    <p style="margin:6px 0 0"><a href="../pandas-groupby/">pandas groupby</a> is the other half of the same idea, <a href="../excel-pivot-tables/">Excel pivot tables</a> is the version most readers already know, and <a href="../python-practice-drills/">the drill routine</a> puts both into practice.</p>
-    <a class="btn" href="../pandas-groupby/">Read pandas groupby &rarr;</a>
+    <strong>Просверлите его на достаточно маленьком столе, чтобы проверить.</strong>
+    <p style="margin:6px 0 0"><a href="../pandas-groupby/">панды группируются</a>  это вторая половина той же идеи,  <a href="../excel-pivot-tables/">сводные таблицы Excel</a>  это версия, которую большинство читателей уже знают, и  <a href="../python-practice-drills/">программа тренировок</a>  применяет и то, и другое на практике.</p>
+    <a class="btn" href="../pandas-groupby/">Читать группу панд →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../pandas-groupby/">pandas groupby</a> &middot; <a href="../excel-pivot-tables/">Excel Pivot Tables</a> &middot; <a href="../python-practice-drills/">Python Drills</a> &middot; <a href="../pandas-merge/">pandas merge</a> &middot; <a href="../excel-power-query/">Power Query</a> &middot; <a href="../../python/">Python Kit</a>
-    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../pandas-groupby/">панды группируются</a> &middot; <a href="../excel-pivot-tables/">сводные таблицы Excel</a> &middot; <a href="../python-practice-drills/">Упражнения для Python</a> &middot; <a href="../pandas-merge/">панды сливаются</a> &middot; <a href="../excel-power-query/">Power Query</a> &middot; <a href="../../python/">Комплект Python</a>
+    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

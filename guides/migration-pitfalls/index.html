@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Data Migration Pitfalls: What Goes Wrong and What It Costs &mdash; Analyst Prep Kit</title>
-<meta name="description" content="The most common data migration failures and what each one costs: duplicates that survive, moves nobody can prove, orphaned documents, silent loader failures, ambiguous dates, and the gap nobody planned for.">
+<title>Подводные камни миграции данных: что идет не так и сколько это стоит — комплект для подготовки аналитика</title>
+<meta name="description" content="Наиболее распространенные сбои при переносе данных и цена каждого из них: сохранившиеся дубликаты, перемещения, которые никто не может доказать, потерянные документы, сбои в автоматическом режиме загрузки, неоднозначные даты и пробелы, которые никто не планировал.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/migration-pitfalls/">
-<meta property="og:title" content="What Goes Wrong, and What It Costs">
-<meta property="og:description" content="The most common data migration failures and what each one costs: duplicates that survive, moves nobody can prove, orphaned documents, silent loader failures, ambiguous dates, and the gap nobody planned for.">
+<meta property="og:title" content="Что идет не так и сколько это стоит">
+<meta property="og:description" content="Наиболее распространенные сбои при переносе данных и цена каждого из них: сохранившиеся дубликаты, перемещения, которые никто не может доказать, потерянные документы, сбои в автоматическом режиме загрузки, неоднозначные даты и пробелы, которые никто не планировал.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/migration-pitfalls/">
 <meta name="twitter:card" content="summary_large_image">
@@ -133,98 +133,98 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../">All Guides</a> &middot; <a href="../data-migration-stages/">Data Migration Series</a></p>
-  <h1>What Goes Wrong, and What It Costs</h1>
-  <p class="meta">The failures I have seen most, and the check that catches each one &middot; Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-07-30">July 30, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../">Все руководства</a> &middot; <a href="../data-migration-stages/">Серия «Миграция данных»</a></p>
+  <h1>Что идет не так и сколько это стоит</h1>
+  <p class="meta">Неудачи, которые я видел больше всего, и проверка, которая ловит каждую из них · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-07-30">30 июля 2026 г.</time></p>
 
-  <p>Every one of these has a cheap check that catches it early and an expensive version that catches it late. This is the list, ordered by how much the late version costs.</p>
+  <p>У каждого из них есть дешевый чек, который принимается раньше, и дорогая версия, которая приходит позже. Это список, отсортированный по стоимости последней версии.</p>
 
-  <p><strong>The short version.</strong> Almost all migration pain comes from six failures, and five of them are caught by counting things before and after.</p>
+  <p><strong>Краткая версия.</strong>  Почти вся миграционная боль возникает из-за шести неудач, и пять из них выявляются путем подсчета событий до и после.</p>
 
-  <h2>1. Duplicates that survive</h2>
-  <p>One client becomes two in the new system. Their history splits between the two records. Staff pick whichever they find first, and now both are half right.</p>
-  <p>This is the failure users notice first and forgive last, because it makes the new system look worse than the old one on day one.</p>
-  <p><strong>The cheap check.</strong> Group by the identifying field and count anything appearing more than once, during <a href="../migration-profiling/">profiling</a>. <strong>The expensive version.</strong> Finding out from a user in month two, when both records have new activity on them and merging is no longer clean.</p>
+  <h2>1. Дубликаты, которые выживают</h2>
+  <p>В новой системе один клиент становится двумя. Их история разделена между двумя пластинками. Сотрудники выбирают то, что находят первым, и теперь оба наполовину правы.</p>
+  <p>Это ошибка, которую пользователи замечают в первую очередь и прощают в последнюю очередь, потому что в первый же день новая система выглядит хуже старой.</p>
+  <p><strong>Дешевый чек.</strong>  Группируйте по идентификационному полю и учитывайте все, что появляется более одного раза в течение  <a href="../migration-profiling/">profiling</a>. <strong>Дорогая версия.</strong>  Получение информации от пользователя через второй месяц, когда обе записи имеют новую активность и объединение уже не является чистым.</p>
 
-  <h2>2. A move nobody can prove</h2>
-  <p>The load ran, nothing errored, and no one compared the numbers. Weeks later someone notices a year of visits is missing.</p>
-  <p>Say what makes this one so much worse than the others before reading on. It is the fallback: by the time it surfaces, the old system may be gone.</p>
-  <p><strong>The cheap check.</strong> Row counts and totals, written down before and after. <strong>The expensive version.</strong> An audit finding, with no source left to recover from.</p>
+  <h2>2. Ход, который никто не может доказать</h2>
+  <p>Загрузка прошла, ошибок не было, цифры никто не сравнивал. Спустя несколько недель кто-то замечает, что пропал год посещений.</p>
+  <p>Скажите, что делает этот вариант намного хуже остальных, прежде чем читать дальше. Это запасной вариант: к тому времени, когда он появится на свет, старая система может уже исчезнуть.</p>
+  <p><strong>Дешевый чек.</strong>  Количество строк и итоги, записанные до и после.  <strong>Дорогая версия.</strong>  Вывод аудита, без которого не осталось источника для восстановления.</p>
 
-  <h2>3. Orphaned documents</h2>
-  <p>A file loads successfully but attaches to nothing, or to the wrong person. In a regulated industry that is not untidy, it is a compliance problem, and a document attached to the wrong client is worse than a missing one.</p>
-  <p><strong>The cheap check.</strong> A left join from documents to clients where the client is null. The answer must be zero. <strong>The expensive version.</strong> Finding it during an inspection.</p>
+  <h2>3. Потерянные документы</h2>
+  <p>Файл загружается успешно, но прикрепляется ни к чему или не к тому человеку. В регулируемой отрасли, которая не является неряшливой, это проблема соблюдения требований, и документ, прикрепленный не к тому клиенту, хуже, чем отсутствующий.</p>
+  <p><strong>Дешевый чек.</strong>  Левое соединение документов с клиентами, где клиент имеет значение null. Ответ должен быть нулевым.  <strong>Дорогая версия.</strong>  Обнаружили во время проверки.</p>
 
-  <h2>4. The loader that fails quietly</h2>
-  <p>Bulk loaders reject rows without always making it obvious. A load reports success, and four thousand rows are simply not there.</p>
-  <p><strong>The cheap check.</strong> Compare the row count in your load file to the row count in the target, every single time, and keep the rejected rows file from every attempt. <strong>The expensive version.</strong> Discovering the shortfall after go-live, when you no longer know which attempt dropped them.</p>
+  <h2>4. Загрузчик, который тихо выходит из строя</h2>
+  <p>Массовые загрузчики отклоняют строки, не всегда делая это очевидным. Загрузка сообщает об успехе, а четырех тысяч строк просто нет.</p>
+  <p><strong>Дешевый чек.</strong>  Каждый раз сравнивайте количество строк в загрузочном файле с количеством строк в целевом объекте и сохраняйте файл отклоненных строк при каждой попытке.  <strong>Дорогая версия.</strong>  Обнаружение недостатка после запуска, когда вы больше не знаете, какая попытка привела к их сбою.</p>
 
-  <h2>5. The ambiguous date</h2>
-  <p>03/04/24 is either March 4th or April 3rd. A rule that picks silently converts thousands of records to the wrong day, and nothing errors.</p>
-  <p>Picture a care visit dated three weeks off. Who notices, and when? Usually nobody, until a bill or an audit disagrees.</p>
-  <p><strong>The cheap check.</strong> Confirm the source system's date format against a value you can verify independently, then preview the transformation on real rows. <strong>The expensive version.</strong> A billing dispute traced back to a format assumption.</p>
+  <h2>5. Неоднозначная дата</h2>
+  <p>04.03.24 - это либо 4 марта, либо 3 апреля. Правило, которое выбирает, автоматически преобразует тысячи записей в неправильный день и не вызывает никаких ошибок.</p>
+  <p>Представьте себе визит по уходу, назначенный на три недели перерыва. Кто это заметит и когда? Обычно никто, пока законопроект или аудит не разойдутся.</p>
+  <p><strong>Дешевый чек.</strong>  Подтвердите формат даты исходной системы по значению, которое вы можете проверить независимо, а затем просмотрите преобразование в реальных строках.  <strong>Дорогая версия.</strong>  Спор о счетах возник из-за предположения о формате.</p>
 
-  <h2>6. The gap nobody planned for</h2>
-  <p>The migration takes three weeks and the business keeps running. Nobody decided where new work goes, so it goes into four places, and the client's first week on the new system is spent re-keying.</p>
-  <p><strong>The cheap check.</strong> A bridge sheet, shaped like the import file, handed over before the freeze. <a href="../migration-cutover/">The cutover article</a> covers it. <strong>The expensive version.</strong> A go-live that feels like an outage to every member of staff.</p>
+  <h2>6. Разрыв, который никто не планировал</h2>
+  <p>Миграция занимает три недели, и бизнес продолжает работать. Никто не решил, куда будет идти новая работа, поэтому она распределяется по четырем местам, и первая неделя работы клиента в новой системе уходит на перенастройку ключей.</p>
+  <p><strong>Дешевый чек.</strong>  Промежуточный лист в форме файла импорта, переданный перед заморозкой.  <a href="../migration-cutover/">Вырезанная статья</a>  покрывает это.  <strong>Дорогая версия.</strong>  Начало работы, которое кажется отключением для каждого члена персонала.</p>
 
-  <h2>The pitfalls that are not about data</h2>
-  <p><strong>Silence treated as approval.</strong> No reply to a sign off request is not a yes. It is the thing that becomes a dispute later, and <a href="../migration-quiet-client/">chasing it properly</a> is a skill of its own.</p>
-  <p><strong>Scope that grew without the plan changing.</strong> Each addition was small and reasonable. The date did not move, because nobody showed what the additions cost. <a href="../migration-scope-creep/">Handling that</a> is mostly a matter of having a plan to point at.</p>
-  <p><strong>Working files nobody can find.</strong> Including your own, three weeks later. <a href="../migration-file-hygiene/">Keeping your files straight</a> is unglamorous and it is time you get back every day.</p>
+  <h2>Подводные камни, не связанные с данными</h2>
+  <p><strong>Молчание воспринималось как одобрение.</strong>  Отсутствие ответа на запрос о выходе не означает «да». Это то, что позже становится спором, и  <a href="../migration-quiet-client/">гоняюсь за ним как следует</a>  это отдельный навык.</p>
+  <p><strong>Объем, который увеличился без изменения плана.</strong>  Каждое дополнение было небольшим и разумным. Дата не сдвинулась, потому что стоимость дополнений никто не показал.  <a href="../migration-scope-creep/">Обработка этого</a>  в основном это вопрос наличия плана, на который можно указать.</p>
+  <p><strong>Рабочие файлы никто не может найти.</strong>  Включая и твою собственную, три недели спустя.  <a href="../migration-file-hygiene/">Держите ваши файлы в порядке</a>  это непривлекательно, и пришло время возвращаться каждый день.</p>
 
-  <h2>The cheat sheet</h2>
+  <h2>Шпаргалка</h2>
   <table>
-    <tr><th>Failure</th><th>Catch it with</th><th>Which stage</th></tr>
-    <tr><td>Duplicates survive</td><td>Group by identifier, count &gt; 1</td><td>Profiling</td></tr>
-    <tr><td>Unprovable move</td><td>Counts and totals, before and after</td><td>Dry run and cutover</td></tr>
-    <tr><td>Orphans</td><td>Left join, right side null, expect zero</td><td>Dry run</td></tr>
-    <tr><td>Silent loader failure</td><td>Load file count against target count</td><td>Every load</td></tr>
-    <tr><td>Ambiguous dates</td><td>Confirm format, preview the rule</td><td>Cleaning</td></tr>
-    <tr><td>The gap</td><td>Bridge sheet before the freeze</td><td>Cutover</td></tr>
-    <tr><td>Silence as approval</td><td>Written confirmation at each gate</td><td>All</td></tr>
+    <tr><th>Failure</th><th>Поймай это с</th><th>Какой этап</th></tr>
+    <tr><td>Дубликаты выживают</td><td>Группировать по идентификатору, количество &gt; 1</td><td>Profiling</td></tr>
+    <tr><td>Недоказуемый ход</td><td>Подсчеты и итоги до и после</td><td>Сухой ход и переключение</td></tr>
+    <tr><td>Orphans</td><td>Левое соединение, правая сторона — ноль, ожидаем ноль</td><td>Сухой пробег</td></tr>
+    <tr><td>Тихий сбой загрузчика</td><td>Загрузить количество файлов по сравнению с целевым количеством</td><td>Каждая загрузка</td></tr>
+    <tr><td>Неоднозначные даты</td><td>Подтвердить формат, просмотреть правило</td><td>Cleaning</td></tr>
+    <tr><td>Разрыв</td><td>Мостовой лист до заморозков</td><td>Cutover</td></tr>
+    <tr><td>Молчание как одобрение</td><td>Письменное подтверждение у каждых ворот</td><td>All</td></tr>
   </table>
 
-  <h2>Where this comes from</h2>
-  <p>Matthes, Schulz and Haller's work on testing in migration projects lands on the same conclusion from the research side: the quality assurance activity, rather than the loading, is what separates a migration that worked from one that appeared to. Wang and Strong's fitness for use standard is the other half. Data does not have to be perfect. It has to be good enough for what it is about to be used for, and the target system defines that.</p>
+  <h2>Откуда это взялось</h2>
+  <p>Работа Маттеса, Шульца и Халлера по тестированию в проектах миграции приводит к одному и тому же выводу с исследовательской точки зрения: именно деятельность по обеспечению качества, а не нагрузка, отличает миграцию, которая сработала, от той, которая казалась успешной. Стандарт пригодности к использованию Вана и Стронга – это вторая половина. Данные не обязательно должны быть идеальными. Он должен быть достаточно хорош для того, для чего его собираются использовать, и это определяет целевая система.</p>
 
-  <h2>The one habit</h2>
-  <p>Write the counts down before you load. Almost every failure on this page is caught by a number you already had.</p>
-  <p>Which of these six have you actually lived through?</p>
+  <h2>Одна привычка</h2>
+  <p>Запишите счетчик перед загрузкой. Почти каждый сбой на этой странице фиксируется уже имеющимся у вас номером.</p>
+  <p>Что из этих шести вы действительно пережили?</p>
 
 <div class="seriesnav">
-  <p class="up">Up next</p>
-  <a class="next" href="../migration-quiet-client/">When the Client Goes Quiet &rarr;</a>
-  <p class="then">Previously: <a href="../migration-questions/">Ask the Right Questions First</a> &nbsp;&middot;&nbsp; <a href="../data-migration-stages/">All eight stages</a></p>
+  <p class="up">Дальше</p>
+  <a class="next" href="../migration-quiet-client/">Когда клиент молчит →</a>
+  <p class="then">Ранее:  <a href="../migration-questions/">Сначала задавайте правильные вопросы</a> &nbsp;&middot;&nbsp; <a href="../data-migration-stages/">Все восемь этапов</a></p>
 </div>
 
   <div class="cta">
-    <strong>The checking work is SQL, and it is not advanced SQL.</strong>
-    <p style="margin:6px 0 0">Counting rows, grouping to find duplicates, and joining to find orphans covers most of what a migration asks of you. The <a href="../../sql/">SQL Kit</a> teaches those moves in order, with the data in front of you.</p>
-    <a class="btn" href="../../sql/">Open the SQL Kit &rarr;</a>
-    <p style="margin:10px 0 0;font-size:15px">Or start typing straight away: <a href="../../drill/">open SQL Drill</a>, thirteen queries that each add one thing to the last.</p>
+    <strong>Проверочная работа выполняется на языке SQL, а не на продвинутом уровне SQL.</strong>
+    <p style="margin:6px 0 0">Подсчет строк, группировка для поиска дубликатов и объединение для поиска потерянных строк покрывает большую часть того, что требует от вас миграция.  <a href="../../sql/">SQL-комплект</a>  обучает этим движениям по порядку, имея данные перед вами.</p>
+    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
+    <p style="margin:10px 0 0;font-size:15px">Или сразу начните вводить:  <a href="../../drill/">открыть SQL Drill</a>, тринадцать запросов, каждый из которых добавляет что-то одно к последнему.</p>
   </div>
 
   <div class="book">
-    <strong>The whole run, in one place.</strong>
-    <p>You are moving a client’s records into a new system, and the part that worries you is the week the client goes quiet. <em>The Data Migration Playbook</em> is all eight stages in order, 63 pages, from the first kickoff meeting through hypercare, so you can run one without finding the important question three weeks too late.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/data-migration-playbook?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=data-migration-playbook" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-migration-pitfalls'})">The Data Migration Playbook, $29 &rarr;</a>
+    <strong>Весь пробег в одном месте.</strong>
+    <p>Вы переносите записи клиента в новую систему, и вас беспокоит та неделя, когда клиент замолкает.  <em>Руководство по миграции данных</em>  это все восемь этапов по порядку, 63 страницы, от первой стартовой встречи до гиперпомощи, так что вы можете пройти один, не опоздав на три недели с важным вопросом.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/data-migration-playbook?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=data-migration-playbook" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-migration-pitfalls'})">Руководство по миграции данных, 29 долларов США →</a>
   </div>
 
 
   <h2>References</h2>
   <ol class="refs">
-    <li>Matthes, F., Schulz, C., &amp; Haller, K. (2011). Testing &amp; quality assurance in data migration projects. <em>27th IEEE International Conference on Software Maintenance (ICSM)</em>, 438&ndash;447.</li>
-    <li>Wang, R. Y., &amp; Strong, D. M. (1996). Beyond accuracy: What data quality means to data consumers. <em>Journal of Management Information Systems, 12</em>(4), 5&ndash;33.</li>
+    <li>Маттес Ф., Шульц К. и Халлер К. (2011). Тестирование и обеспечение качества в проектах миграции данных.  <em>27-я Международная конференция IEEE по сопровождению программного обеспечения (ICSM)</em>, 438&ndash;447.</li>
+    <li>Ван, Р.Ю., и Стронг, Д.М. (1996). За пределами точности: что качество данных означает для потребителей данных.  <em>Журнал информационных систем управления, 12</em>(4), 5&ndash;33.</li>
   </ol>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../entity-resolution/">Entity Resolution</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../sql-count-function/">COUNT in SQL</a> · <a href="../sql-joins/">SQL JOINs</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../sql/">SQL Kit</a> · <a href="../../projects/">Portfolio Projects</a>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../sql-count-function/">СЧЕТ в SQL</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../../projects/">Портфельные проекты</a>
     
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

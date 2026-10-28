@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tableau Relationships: What the Noodle Actually Does — Analyst Prep Kit</title>
-<meta name="description" content="Relationships are the default way Tableau combines tables, and they behave nothing like a join. Here is what the noodle does, why your totals stop inflating, when you still want a join, and the settings that matter.">
+<title>Табличные отношения: что на самом деле делает лапша — комплект для подготовки аналитика</title>
+<meta name="description" content="Отношения — это способ объединения таблиц в Tableau по умолчанию, и они не ведут себя как соединение. Вот что делает лапша, почему ваши итоговые значения перестают увеличиваться, когда вы все еще хотите присоединиться, и какие настройки имеют значение.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/tableau-relationships/">
-<meta property="og:title" content="Tableau Relationships: What the Noodle Actually Does">
-<meta property="og:description" content="Join two tables at different levels of detail and your totals inflate. A relationship keeps the tables apart and asks a different question per view. Here is the whole idea.">
+<meta property="og:title" content="Табличные отношения: что на самом деле делает лапша">
+<meta property="og:description" content="Соедините две таблицы с разным уровнем детализации, и ваши итоговые значения возрастут. Отношения разделяют таблицы и задают разные вопросы для каждого представления. Вот вся идея.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/tableau-relationships.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/tableau-relationships/">
@@ -132,18 +132,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../tableau/">Tableau Kit</a> · <a href="../">All guides</a></p>
-  <h1>Tableau Relationships: What the Noodle Actually Does</h1>
-  <p class="meta">The default way Tableau combines tables, and why it fixed inflated totals · Written to be listened to · Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Updated <time datetime="2026-07-30">July 30, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../tableau/">Табличный комплект</a> · <a href="../">Все руководства</a></p>
+  <h1>Табличные отношения: что на самом деле делает лапша</h1>
+  <p class="meta">Способ, которым Tableau по умолчанию объединяет таблицы, и почему он фиксирует завышенные итоги · Написано для прослушивания · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Обновлено  <time datetime="2026-07-30">30 июля 2026 г.</time></p>
 
-  <p>By the end of this page you can drag a second table onto the canvas and know exactly what Tableau will do with it. You will know what the flexible line between two tables means, why your grand totals stop being wrong when you use one, when you still want a real join instead, and what the two performance settings underneath actually claim about your data. It is about twenty minutes.</p>
+  <p>К концу этой страницы вы сможете перетащить на холст вторую таблицу и точно знать, что Tableau с ней будет делать. Вы узнаете, что означает гибкая линия между двумя таблицами, почему ваши общие итоги перестают быть неверными, когда вы используете одну из них, когда вместо этого вам все еще нужно настоящее соединение, и что на самом деле говорят о ваших данных два параметра производительности ниже. Это около двадцати минут.</p>
 
-  <p>Here is what to actually do with it. Open any workbook where two tables are joined, and check one number: a total from the smaller table, like a target or a quota. If that total is far larger than it should be, the join is duplicating it, and the fix is to rebuild the connection as a relationship.</p>
+  <p>Вот что на самом деле с этим делать. Откройте любую книгу, в которой объединены две таблицы, и проверьте одно число: сумму из меньшей таблицы, например целевое значение или квоту. Если эта сумма намного больше, чем должна быть, соединение дублирует ее, и исправление состоит в том, чтобы перестроить соединение как связь.</p>
 
-  <p>The short version: a join flattens two tables into one before you start. A relationship leaves them separate and lets Tableau write a different query for every view.</p>
+  <p>Краткая версия: соединение объединяет две таблицы в одну перед началом работы. Отношения оставляют их отдельными и позволяют Tableau писать разные запросы для каждого представления.</p>
 
-  <p>One idea decides everything else here, so it gets the picture. It is the difference between combining the data once, up front, and combining it per question.</p>
+  <p>Здесь одна идея решает все остальное, поэтому она и дает представление о картине. В этом разница между однократным объединением данных и объединением их по каждому вопросу.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 400" role="img" aria-labelledby="relTitle relDesc" xmlns="http://www.w3.org/2000/svg">
@@ -212,226 +212,226 @@
         <text x="486" y="328" font-size="13.5" fill="#09090B">each question gets its own query.</text>
       </g>
     </svg>
-    <figcaption>A join decides how the tables combine before you ask anything. A relationship decides once per view.</figcaption>
+    <figcaption>Соединение решает, как объединяются таблицы, прежде чем вы что-либо спросите. Отношения решаются один раз за просмотр.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>What you'll learn</strong>
+    <strong>Что вы узнаете</strong>
     <ol>
-      <li>What the noodle is</li>
-      <li>The inflated total, and why a relationship fixes it</li>
-      <li>The two layers, and how to reach the join one</li>
-      <li>When you still want a join</li>
-      <li>The performance settings, and what they promise</li>
-      <li>Edge cases and things that surprise people</li>
-      <li>Why this works</li>
-      <li>Using this on your own workbook</li>
-      <li>The whole thing on one screen</li>
+      <li>Что такое лапша</li>
+      <li>Завышенная сумма и почему отношения это исправляют</li>
+      <li>Два слоя и как достичь их соединения</li>
+      <li>Если вы все еще хотите присоединиться</li>
+      <li>Настройки производительности и что они обещают</li>
+      <li>Крайние случаи и вещи, которые удивляют людей</li>
+      <li>Почему это работает</li>
+      <li>Использование этого в своей книге</li>
+      <li>Все на одном экране</li>
     </ol>
   </div>
 
-  <div class="note"><strong>This is on the certification.</strong> Relationships arrived in Tableau 2020.2 and are the default today. The Salesforce Certified Tableau Desktop Foundations exam currently tests on Tableau 2022.3, so the relationship model is in scope, not optional history. The <a href="../../tableau-cert/">Tableau Desktop Foundations kit</a> has practice questions on it.</div>
+  <div class="note"><strong>Это по сертификации.</strong>  Отношения появились в Tableau 2020.2 и сегодня используются по умолчанию. Экзамен Salesforce Certified Tableau Desktop Foundations в настоящее время тестируется на Tableau 2022.3, поэтому модель отношений находится в рамках, а не в необязательной истории.  <a href="../../tableau-cert/">Комплект Tableau Desktop Foundations</a>  есть практические вопросы.</div>
 
   <div class="step">
-    <h2>1. What the noodle is</h2>
+    <h2>1. Что такое лапша</h2>
 
-    <p>Before the explanation: you drag a second table onto the canvas and a curved line appears between the two. At that moment, has Tableau combined your data yet?</p>
+    <p>Перед пояснением: вы перетаскиваете вторую таблицу на холст, и между ними появляется изогнутая линия. На тот момент Tableau уже объединила ваши данные?</p>
 
-    <p>No, and that is the entire idea. Tableau's documentation calls a relationship "a contract between two tables." You are describing how the tables relate, using a shared field. You are not telling Tableau to merge them.</p>
+    <p>Нет, и в этом вся идея. В документации Tableau отношения называются «контрактом между двумя таблицами». Вы описываете взаимосвязь таблиц, используя общее поле. Вы не говорите Tableau объединить их.</p>
 
-    <p>People call that curved line the noodle, and its flexibility is a good visual joke. A join line is a rigid statement about what the combined data looks like. The noodle is a looser promise: these two tables can be matched on this field when a view needs them matched.</p>
+    <p>Люди называют эту изогнутую линию лапшой, а ее гибкость — хорошая визуальная шутка. Линия соединения — это жесткое заявление о том, как выглядят объединенные данные. Лапша — это более свободное обещание: эти две таблицы могут сопоставляться по этому полю, когда представление требует их сопоставления.</p>
 
-    <p>The combining happens later, one view at a time. When you build a chart, Tableau looks at which fields you actually used, then writes a query for that specific question. Drag different fields out and it writes a different query. The documentation puts it plainly: Tableau "adjusts join types intelligently and preserves the native level of detail in your data."</p>
+    <p>Объединение происходит позже, по одному представлению за раз. Когда вы строите диаграмму, Tableau смотрит, какие поля вы на самом деле использовали, а затем пишет запрос по этому конкретному вопросу. Перетащите разные поля, и он напишет другой запрос. В документации это ясно сказано: Tableau «разумно настраивает типы соединений и сохраняет исходный уровень детализации ваших данных».</p>
 
-    <p><strong>Native level of detail</strong> is the important phrase, and it means what one row of a table represents. One row of an orders table is one order line. One row of a targets table is one month for one region. Those are different things, and a relationship keeps them different instead of forcing them into one shape.</p>
+    <p><strong>Собственный уровень детализации</strong>  — это важная фраза, и она означает, что представляет собой одна строка таблицы. Одна строка таблицы заказов — это одна строка заказа. Одна строка таблицы целей соответствует одному месяцу для одного региона. Это разные вещи, и отношения сохраняют их разными, а не принуждают их к одной форме.</p>
 
-    <div class="note"><strong>The noodle is a description, not an instruction.</strong> You are telling Tableau how the tables <em>could</em> be matched. It decides how they actually get matched each time you build a view.</div>
+    <div class="note"><strong>Лапша — это описание, а не инструкция.</strong>  Вы рассказываете Tableau, как таблицы  <em>could</em>  быть сопоставлены. Он решает, как они на самом деле сопоставляются каждый раз, когда вы создаете представление.</div>
   </div>
 
   <div class="step">
-    <h2>2. The inflated total, and why a relationship fixes it</h2>
+    <h2>2. Завышенная сумма и почему отношения ее исправляют</h2>
 
-    <p>Before the explanation: your region has a sales target of $50,000 for January. You join targets to orders, put the target on a chart, and it reads $4,150,000. Where did that number come from?</p>
+    <p>Перед пояснением: в вашем регионе запланирован объем продаж в 50 000 долларов США на январь. Вы присоединяете цели к ордерам, помещаете цель на график, и она составляет 4 150 000 долларов. Откуда взялось это число?</p>
 
-    <p>From the join repeating it. The targets table has one row per region per month. The orders table has thousands of rows per region per month. Joining them writes the January target onto every single order line, and there were 83 of them. Then <code>SUM</code> adds up all 83 copies.</p>
+    <p>Из соединения, повторяющего это. Таблица целей содержит по одной строке на регион в месяц. Таблица заказов содержит тысячи строк на регион в месяц. Присоединение к ним записывает январскую цель в каждую строку заказа, а их было 83. Затем  <code>SUM</code>  суммируется все 83 копии.</p>
 
-    <p>Nothing errored. The chart drew. The number is off by a factor of 83, and only someone who knows the real target will spot it. This is the same duplication covered in <a href="../sql-joins/">SQL joins</a>, and it is the single most common wrong number in business intelligence work.</p>
+    <p>Ничего не ошибочно. График нарисовался. Это число отличается в 83 раза, и только тот, кто знает настоящую цель, сможет ее обнаружить. Это то же самое дублирование, которое описано в  <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a>, и это самая распространенная неправильная цифра в работе по бизнес-аналитике.</p>
 
-    <p>A relationship removes it, and the mechanism is worth understanding rather than trusting. Because the tables were never merged, Tableau aggregates each one at its own level of detail first, then brings the results together. It totals the targets among the targets, where each month appears once. It totals the sales among the orders. Then it lines the two answers up.</p>
+    <p>Отношения устраняют его, и этот механизм стоит понять, а не доверять. Поскольку таблицы никогда не объединялись, Tableau сначала агрегирует каждую из них на своем уровне детализации, а затем объединяет результаты. Он суммирует цели среди целей, где каждый месяц появляется один раз. Он суммирует продажи по заказам. Затем он выравнивает два ответа.</p>
 
-    <p>Say out loud why aggregating first and combining second gives a different answer from combining first and aggregating second, before you read on. That order is the hinge of this whole guide.</p>
+    <p>Прежде чем читать дальше, скажите вслух, почему объединение первого и второго дает другой ответ, чем объединение первого и второго. Этот порядок является основой всего руководства.</p>
 
-    <p>The reason is that duplication is created by the combining step. If you aggregate before that step, you are summing the original rows, and there is only one January target to sum. If you aggregate after, you are summing whatever the combining step produced, copies included. Same data, same <code>SUM</code>, different answer, and only one of them is the target.</p>
+    <p>Причина в том, что дублирование создается на этапе объединения. Если вы выполняете агрегирование до этого шага, вы суммируете исходные строки, и для суммирования требуется только одна цель за январь. Если вы выполняете агрегацию после этого, вы суммируете все, что было получено на этапе объединения, включая копии. Те же данные, те же  <code>SUM</code>, другой ответ, и только один из них является целью.</p>
 
-    <p>There is a second gain in the same mechanism. With a join, a row that matches nothing can vanish from your analysis. With a relationship, Tableau's documentation states that "unmatched measure values aren't dropped," so a region with no target still shows its sales rather than quietly disappearing.</p>
+    <p>В том же механизме есть и второй выигрыш. При объединении строка, которая ничему не соответствует, может исчезнуть из вашего анализа. Что касается связи, в документации Tableau говорится, что «несовпадающие значения показателей не удаляются», поэтому регион без цели по-прежнему показывает свои продажи, а не незаметно исчезает.</p>
   </div>
 
   <div class="step">
-    <h2>3. The two layers, and how to reach the join one</h2>
+    <h2>3. Два слоя и как достичь их соединения</h2>
 
-    <p>Before the explanation: relationships are the default now. Does that mean joins are gone from Tableau?</p>
+    <p>Перед объяснением: отношения теперь используются по умолчанию. Означает ли это, что соединения исчезли из Tableau?</p>
 
-    <p>They are not. They moved down a level, and knowing where they went is most of what confuses people returning to Tableau after a few years.</p>
+    <p>Это не так. Они спустились на уровень ниже, и знание того, куда они пошли, больше всего сбивает с толку людей, возвращающихся в Tableau через несколько лет.</p>
 
-    <p>The data source canvas has two layers.</p>
+    <p>Холст источника данных имеет два слоя.</p>
 
     <table>
-      <tr><th>Layer</th><th>What you see</th><th>What it does</th></tr>
-      <tr><td><strong>Logical</strong>, the top canvas</td><td>Tables joined by noodles</td><td>Describes relationships. Tables stay separate.</td></tr>
-      <tr><td><strong>Physical</strong>, opened by double-clicking a table</td><td>The familiar Venn circles</td><td>Real joins and unions. Merges tables into one before analysis.</td></tr>
+      <tr><th>Layer</th><th>Что ты видишь</th><th>Что он делает</th></tr>
+      <tr><td><strong>Logical</strong>, верхний холст</td><td>Столы, соединенные лапшой</td><td>Описывает отношения. Столы остаются отдельными.</td></tr>
+      <tr><td><strong>Physical</strong>, открывается двойным щелчком по таблице</td><td>Знакомые круги Венна</td><td>Реальные объединения и союзы. Объединяет таблицы в одну перед анализом.</td></tr>
     </table>
 
-    <p>So the answer to the prequestion is that a logical table can itself be built from several physically joined tables. Double-click any table on the top canvas and you drop into its physical layer, where you can join or union as before. Close it, and the result behaves as one logical table that other tables can relate to.</p>
+    <p>Итак, ответ на предварительный вопрос заключается в том, что логическая таблица сама может быть построена из нескольких физически соединенных таблиц. Дважды щелкните любую таблицу на верхнем холсте, и вы попадете на ее физический уровень, где вы можете присоединиться или объединиться, как и раньше. Закройте его, и результат будет вести себя как одна логическая таблица, к которой могут относиться другие таблицы.</p>
 
-    <p>That is also where <strong>unions</strong> live, and unions answer a different question from either. A join or a relationship adds columns by matching on a key. A union stacks rows. If you have a January sales table and a February sales table with identical columns, and you want one table containing all of it, that is a union every time. No matching, no key, just more rows.</p>
+    <p>Там же  <strong>unions</strong>  живут, и профсоюзы отвечают на разные вопросы ни от того, ни от другого. Соединение или связь добавляют столбцы путем сопоставления по ключу. Объединение объединяет строки. Если у вас есть таблица продаж за январь и таблица продаж за февраль с одинаковыми столбцами, и вам нужна одна таблица, содержащая все это, каждый раз это объединение. Никакого соответствия, никакого ключа, просто больше строк.</p>
   </div>
 
   <div class="step">
-    <h2>4. When you still want a join</h2>
+    <h2>4. Если вы все еще хотите присоединиться</h2>
 
-    <p>Before the explanation: if relationships avoid duplication and avoid dropping rows, why would anyone deliberately choose a join?</p>
+    <p>Прежде чем объяснить: если отношения избегают дублирования и удаления строк, зачем кому-то намеренно выбирать соединение?</p>
 
-    <p>Because sometimes you want the flattened table, and stating so up front is clearer than leaving it flexible. Three cases where a join is the right call.</p>
+    <p>Потому что иногда вам нужна плоская таблица, и заявить об этом заранее яснее, чем оставить ее гибкой. Три случая, когда объединение является правильным решением.</p>
 
-    <p><strong>You genuinely want rows removed.</strong> A relationship's habit of keeping unmatched rows is usually a feature and occasionally not what you want. If your analysis is defined as "only orders that were returned," an inner join in the physical layer says that once, permanently, rather than relying on every view to filter correctly.</p>
+    <p><strong>Вы действительно хотите удалить строки.</strong>  Привычка отношения хранить несовпадающие строки обычно является особенностью, а иногда и не тем, что вам нужно. Если ваш анализ определен как «только заказы, которые были возвращены», внутреннее объединение на физическом уровне говорит об этом один раз и навсегда, а не полагаться на правильность фильтрации каждого представления.</p>
 
-    <p><strong>The tables are at the same level of detail.</strong> If both tables have one row per order, no duplication is possible, and a join is simple and predictable. The relationship model is solving a problem you do not have.</p>
+    <p><strong>Таблицы имеют одинаковый уровень детализации.</strong>  Если обе таблицы содержат по одной строке на каждый заказ, дублирование невозможно, а соединение становится простым и предсказуемым. Модель отношений решает проблему, которой у вас нет.</p>
 
-    <p><strong>You are building a deliberately flat extract.</strong> Sometimes you want one wide table, materialised and fast, for a dashboard that many people open. Making that explicit is reasonable engineering.</p>
+    <p><strong>Вы строите намеренно плоский экстракт.</strong>  Иногда вам нужна одна широкая таблица, материализованная и быстрая, для информационной панели, которую открывает много людей. Сделать это явным — разумная инженерия.</p>
 
-    <p>Here is the short decision.</p>
+    <p>Вот краткое решение.</p>
 
     <table>
-      <tr><th>You want</th><th>Use</th></tr>
-      <tr><td>To add columns from a table at a different level of detail</td><td>A relationship</td></tr>
-      <tr><td>To add columns from a table at the same level of detail</td><td>Either. A join is predictable.</td></tr>
-      <tr><td>To stack more rows of the same shape</td><td>A union</td></tr>
-      <tr><td>To permanently exclude rows that do not match</td><td>An inner join, in the physical layer</td></tr>
-      <tr><td>To combine data from two separate data sources</td><td>A blend, which is a different feature again</td></tr>
+      <tr><th>Ты хочешь</th><th>Use</th></tr>
+      <tr><td>Чтобы добавить столбцы из таблицы на другом уровне детализации</td><td>Отношения</td></tr>
+      <tr><td>Чтобы добавить столбцы из таблицы с тем же уровнем детализации</td><td>Или. Объединение предсказуемо.</td></tr>
+      <tr><td>Чтобы сложить больше рядов одинаковой формы</td><td>Союз</td></tr>
+      <tr><td>Чтобы навсегда исключить несовпадающие строки</td><td>Внутреннее соединение на физическом уровне</td></tr>
+      <tr><td>Объединение данных из двух отдельных источников данных</td><td>Смесь, которая снова является другой особенностью</td></tr>
     </table>
 
-    <p>That last row is worth naming so it does not ambush you. Relationships, joins and unions all combine tables <em>inside one data source</em>. Blending combines <em>two different data sources</em>, aggregates each separately, and matches the results on a linking field. Different tool, different canvas, and the one most likely to be confused with a relationship because the outcome sounds similar.</p>
+    <p>Этот последний ряд стоит назвать, чтобы он не застал вас врасплох. Отношения, объединения и объединения объединяют таблицы.  <em>внутри одного источника данных</em>. Смесительные комбайны  <em>два разных источника данных</em>, объединяет каждое из них по отдельности и сопоставляет результаты в поле связи. Другой инструмент, другой холст, и тот, который, скорее всего, будет перепутан с отношениями, потому что результат звучит одинаково.</p>
   </div>
 
   <div class="step">
-    <h2>5. The performance settings, and what they promise</h2>
+    <h2>5. Настройки производительности и что они обещают</h2>
 
-    <p>Before the explanation: Tableau asks you to describe your data's cardinality and referential integrity. If you get one of those answers wrong, what happens?</p>
+    <p>Перед объяснением: Tableau просит вас описать мощность и ссылочную целостность ваших данных. Если вы дадите один из этих ответов неправильно, что произойдет?</p>
 
-    <p>Click a noodle and you get Performance Options. Both settings default to the cautious answer, and both are promises you are making to Tableau about your data.</p>
+    <p>Нажмите на лапшу, и вы получите параметры производительности. Обе настройки по умолчанию относятся к осторожному ответу, и оба являются обещаниями, которые вы даете Tableau в отношении своих данных.</p>
 
-    <p><strong>Cardinality</strong> asks how many rows match. One region has many orders, so that side is many. Telling Tableau a side is "one" lets it skip the work of removing duplicates it would otherwise have to guard against.</p>
+    <p><strong>Cardinality</strong>  спрашивает, сколько строк совпадает. В одном регионе много заказов, поэтому и в той стороне много. Указание Tableau, что сторона равна «одной», позволяет ей пропустить работу по удалению дубликатов, от которых в противном случае пришлось бы защищаться.</p>
 
-    <p><strong>Referential integrity</strong> asks whether every record on one side always has a match on the other. If every order always has a valid region, Tableau can use a simpler and faster join internally instead of carefully preserving unmatched rows.</p>
+    <p><strong>Ссылочная целостность</strong>  спрашивает, всегда ли каждая запись на одной стороне совпадает с другой. Если каждый заказ всегда имеет допустимый регион, Tableau может использовать более простое и быстрое внутреннее соединение вместо тщательного сохранения несовпадающих строк.</p>
 
-    <p>So the answer to the prequestion is that a wrong setting does not throw an error. It changes your numbers. Promise that every order has a region when 400 orders have a blank one, and those 400 can silently drop out of your totals. The default settings are slower and safe, which is the right default.</p>
+    <p>Итак, ответ на главный вопрос заключается в том, что неправильная настройка не приводит к ошибке. Это меняет ваши цифры. Пообещайте, что у каждого заказа будет свой регион, тогда как у 400 заказов он будет пустым, и эти 400 могут незаметно выпасть из ваших итогов. Настройки по умолчанию медленнее и безопаснее, что является правильным значением по умолчанию.</p>
 
-    <div class="note"><strong>Leave these alone until you have a reason.</strong> Change them when a dashboard is genuinely too slow and you can prove the promise is true, not while first building the data source. A performance setting that changes an answer is not a performance setting any more.</div>
+    <div class="note"><strong>Оставьте их в покое, пока у вас не появится причина.</strong>  Измените их, когда панель мониторинга действительно работает слишком медленно и вы можете доказать, что обещание верно, а не при первом создании источника данных. Настройка производительности, которая меняет ответ, больше не является настройкой производительности.</div>
   </div>
 
   <div class="step">
-    <h2>6. Edge cases and things that surprise people</h2>
+    <h2>6. Крайние случаи и вещи, которые удивляют людей</h2>
 
-    <p>Before the explanation: you build a view using fields from only one of your two related tables. Does Tableau query the other one?</p>
+    <p>Перед объяснением: вы создаете представление, используя поля только из одной из двух связанных таблиц. Tableau запрашивает другой?</p>
 
-    <p>Six things worth knowing.</p>
+    <p>Шесть вещей, которые стоит знать.</p>
 
-    <p><strong>Unused tables are not queried.</strong> This is the answer to the prequestion, and it surprises people who expect the whole model to load. If a view only uses order fields, Tableau does not touch the targets table at all. That is why a large relationship model can still be fast.</p>
+    <p><strong>Неиспользуемые таблицы не запрашиваются.</strong>  Это ответ на предварительный вопрос, и он удивляет людей, которые ожидают, что загрузится вся модель. Если представление использует только поля порядка, Tableau вообще не затрагивает целевую таблицу. Вот почему большая модель отношений все еще может быть быстрой.</p>
 
-    <p><strong>The same measure can total differently in two views.</strong> Once you accept that each view gets its own query, this stops being alarming and starts being the point. It does mean you cannot assume a number matches another sheet just because the field name is the same.</p>
+    <p><strong>Одна и та же мера может иметь разную сумму в двух представлениях.</strong>  Как только вы признаете, что каждое представление получает свой собственный запрос, это перестает вызывать тревогу и становится главным. Это означает, что вы не можете предполагать, что число соответствует другому листу только потому, что имя поля такое же.</p>
 
-    <p><strong>Grand totals can look wrong when they are right.</strong> With unmatched values preserved, a total may include records that no row in your table displays. Usually that is honest, and it is worth a note on the dashboard rather than a fix.</p>
+    <p><strong>Общие итоги могут выглядеть неправильными, когда они верны.</strong>  При сохранении несовпадающих значений итог может включать записи, которые не отображаются ни в одной строке таблицы. Обычно это честно, и об этом стоит сделать пометку на приборной панели, а не исправлять.</p>
 
-    <p><strong>Relationships need a shared field, and it has to actually match.</strong> Same values, compatible types. An id stored as text in one table and a number in the other matches nothing, exactly as in SQL.</p>
+    <p><strong>Отношениям необходимо общее поле, и оно должно действительно совпадать.</strong>  Те же значения, совместимые типы. Идентификатор, хранящийся в виде текста в одной таблице, и число в другой ничему не соответствуют, точно так же, как и в SQL.</p>
 
-    <p><strong>You can relate on more than one field.</strong> If a row is only identified by region plus month together, add both to the relationship. A single-field relationship there would match far too much.</p>
+    <p><strong>Вы можете относиться к более чем одной области.</strong>  Если строка идентифицируется только по региону и месяцу, добавьте оба значения в связь. Отношения с одним полем там слишком сильно совпадали бы.</p>
 
-    <p><strong>Workbooks built before 2020.2 still use the old model.</strong> Opening one shows a single physical-layer table, not a noodle. Nothing breaks, and nothing upgrades itself. Rebuilding the data source is a deliberate act.</p>
+    <p><strong>В книгах, созданных до 2020.2, по-прежнему используется старая модель.</strong>  При первом открытии отображается одна таблица физического уровня, а не лапша. Ничего не ломается и ничего не обновляется. Восстановление источника данных — это преднамеренное действие.</p>
   </div>
 
-  <h2>Why this works</h2>
+  <h2>Почему это работает</h2>
 
-  <p>The behaviour here is not a Tableau quirk. It is a direct consequence of what aggregation does, and the same rule governs any tool that combines tables at different levels of detail. Combining first and aggregating second sums duplicated values. Aggregating first and combining second sums original values. The relational model defines a join as the set of matching pairs of rows, which is precisely why a one-row target paired with 83 order lines becomes 83 rows carrying that target (Codd, 1970, <em>Communications of the ACM</em>, 13(6), 377–387). Tableau's relationship model does not repeal that. It reorders the two operations so the duplication never reaches your <code>SUM</code>.</p>
+  <p>Поведение здесь не является причудой Tableau. Это прямое следствие того, что делает агрегирование, и то же правило действует в отношении любого инструмента, объединяющего таблицы с разными уровнями детализации. Объединение первой и агрегирование второй суммы повторяющихся значений. Агрегирование первого и объединение второго суммирует исходные значения. Реляционная модель определяет объединение как набор совпадающих пар строк, и именно поэтому цель из одной строки в паре с 83 строками заказа становится 83 строками, несущими эту цель (Codd, 1970,  <em>Коммуникации ACM</em>, 13(6), 377–387). Модель отношений Tableau не отменяет этого. Он переупорядочивает две операции, поэтому дублирование никогда не достигает вашего  <code>SUM</code>.</p>
 
-  <p>The product behaviour described on this page comes from Tableau's own documentation, which is the authority on it. Relate your data (Tableau Help, current version) states that relationships are "a dynamic, flexible way to combine data from multiple tables for analysis," that they "don't merge the tables together," and that unmatched measure values are not dropped. Where a secondary write-up disagrees with that page, the page wins.</p>
+  <p>Поведение продукта, описанное на этой странице, взято из собственной документации Tableau, которая является авторитетной для нее. В разделе «Связывание данных» (справка Tableau, текущая версия) говорится, что связи — это «динамический, гибкий способ объединения данных из нескольких таблиц для анализа», что они «не объединяют таблицы вместе» и что несовпадающие значения показателей не удаляются. Если вторичная рецензия не согласуется с этой страницей, страница выигрывает.</p>
 
-  <p>There is a second reason this guide keeps asking you to answer before it explains. Learners who explain a worked example to themselves as they go understand it better, and apply it to new problems better, than learners who read the same example straight through (Chi, Bassok, Lewis, Reimann, &amp; Glaser, 1989, <em>Cognitive Science</em>, 13(2), 145–182). Relationships reward that, because the mistake is never in a button. It is in what you believe one row means.</p>
+  <p>Есть вторая причина, по которой это руководство постоянно просит вас ответить, прежде чем оно объяснит. Учащиеся, которые объясняют себе проработанный пример по ходу дела, лучше понимают его и лучше применяют его к новым задачам, чем учащиеся, которые читают тот же пример целиком (Чи, Бассок, Льюис, Рейманн и Глейзер, 1989,  <em>Когнитивная наука</em>, 13(2), 145–182). Отношения вознаграждают это, потому что ошибка никогда не бывает в кнопке. Это то, что, по вашему мнению, означает одна строка.</p>
 
-  <h2>Using this on your own workbook</h2>
+  <h2>Использование этого в своей книге</h2>
 
-  <p>Think of a dashboard you have already shared. Does any number on it come from a smaller table, like a target, a budget, a quota or a rate? If so, that is the number to check first.</p>
+  <p>Подумайте о панели управления, которой вы уже поделились. Взяты ли какие-либо цифры из таблицы меньшего размера, например целевой показатель, бюджет, квота или ставка? Если да, то это номер, который следует проверить в первую очередь.</p>
 
-  <p>Rebuilding every data source at once is grim work and you will stop halfway. Do this instead, in order.</p>
+  <p>Восстановление всех источников данных одновременно — тяжелая работа, и вы остановитесь на полпути. Вместо этого сделайте это по порядку.</p>
 
   <ol>
-    <li><strong>Say the level of detail of each table out loud</strong> before you connect anything. "One row per order line." "One row per region per month." If those differ, you want a relationship.</li>
-    <li><strong>Check one known total.</strong> Put a measure from the smaller table on a sheet on its own and compare it to a figure you already know. This is a ten-second test that catches the whole problem.</li>
-    <li><strong>Relate on every field the match actually needs.</strong> Region alone is not enough when the real key is region and month.</li>
-    <li><strong>Leave the performance settings on their defaults</strong> until a dashboard is measurably slow and you can prove the promise holds.</li>
-    <li><strong>Write down which tables are related and on what</strong>, in the workbook or alongside it. The next person cannot see your reasoning in a curved line.</li>
+    <li><strong>Произнесите вслух уровень детализации каждой таблицы.</strong>  прежде чем что-либо подключать. «Одна строка на строку заказа». «Одна строка на регион в месяц». Если они различаются, вы хотите отношений.</li>
+    <li><strong>Проверьте одну известную сумму.</strong>  Поместите мерку из меньшей таблицы на отдельный лист и сравните ее с уже известной вам цифрой. Это десятисекундный тест, который выявляет всю проблему.</li>
+    <li><strong>Учитывайте каждое поле, в котором действительно нуждается совпадение.</strong>  Одного региона недостаточно, когда настоящим ключом являются регион и месяц.</li>
+    <li><strong>Оставьте настройки производительности по умолчанию</strong>  до тех пор, пока панель мониторинга не станет заметно медленнее и вы не сможете доказать, что обещание выполнено.</li>
+    <li><strong>Запишите, какие таблицы связаны и с чем</strong>, в книге или рядом с ней. Следующий человек не сможет увидеть ваши рассуждения в виде кривой линии.</li>
   </ol>
 
-  <p>If you have paper nearby and five spare minutes, there is one drawing worth doing, and it is optional. Draw your two tables as boxes, write what one row of each means underneath, and draw the line. Then write the number you expect a total from the small table to be. Checking that guess against Tableau is the fastest audit of a data model there is.</p>
+  <p>Если у вас под рукой есть бумага и пять свободных минут, стоит сделать один рисунок, и он не является обязательным. Нарисуйте две таблицы в виде прямоугольников, напишите внизу, что означает каждая строка, и проведите линию. Затем напишите число, которое вы ожидаете получить в маленькой таблице. Проверка этого предположения по Tableau — это самый быстрый аудит модели данных.</p>
 
   <div class="cta">
-    <strong>Practice this before the exam.</strong>
-    <p style="margin:6px 0 0">The <a href="../../tableau-cert/">Tableau Desktop Foundations kit</a> covers connecting and preparing data, which is 23% of the exam, with practice questions on relationships, joins, unions and blends. It runs in the browser and matches the real exam's format.</p>
-    <a class="btn" href="../../tableau-cert/">Open the certification kit →</a>
-    <p style="margin:10px 0 0;font-size:15px">Newer to the tool itself? <a href="../tableau-concepts/">Tableau concepts</a> covers dimensions, measures and aggregation first.</p>
+    <strong>Потренируйтесь в этом перед экзаменом.</strong>
+    <p style="margin:6px 0 0">The <a href="../../tableau-cert/">Комплект Tableau Desktop Foundations</a>  охватывает соединение и подготовку данных, что составляет 23% экзамена, с практическими вопросами об отношениях, соединениях, союзах и сочетаниях. Он запускается в браузере и соответствует формату реального экзамена.</p>
+    <a class="btn" href="../../tableau-cert/">Открыть комплект сертификации →</a>
+    <p style="margin:10px 0 0;font-size:15px">Новичок в самом инструменте?  <a href="../tableau-concepts/">Концепции таблиц</a>  в первую очередь охватывает измерения, меры и агрегирование.</p>
   </div>
 
-  <h2>The whole thing on one screen</h2>
+  <h2>Все на одном экране</h2>
 
-  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
+  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
 
   <table>
-    <tr><th>Concept</th><th>What it does</th></tr>
-    <tr><td>Relationship</td><td>A contract describing how two tables can be matched. Does not merge them.</td></tr>
-    <tr><td>The noodle</td><td>The flexible line showing that contract on the logical canvas.</td></tr>
-    <tr><td>Logical layer</td><td>The top canvas. Relationships live here. Tables stay separate.</td></tr>
-    <tr><td>Physical layer</td><td>Double-click a table. Joins and unions live here. Tables get merged.</td></tr>
-    <tr><td>Level of detail</td><td>What one row of a table means. Relationships preserve it.</td></tr>
-    <tr><td>The inflated total</td><td>A join repeats the small table's value on every matching row, then <code>SUM</code> counts every copy.</td></tr>
-    <tr><td>Why a relationship fixes it</td><td>It aggregates each table first, then combines the results.</td></tr>
-    <tr><td>Unmatched values</td><td>Kept, not dropped, unlike an inner join.</td></tr>
-    <tr><td>Join</td><td>Adds columns by matching a key, and merges the tables permanently.</td></tr>
-    <tr><td>Union</td><td>Stacks rows of the same shape. No key involved.</td></tr>
-    <tr><td>Blend</td><td>Combines two separate data sources, aggregating each first. Different feature.</td></tr>
-    <tr><td>Cardinality</td><td>How many rows match on each side. One or many.</td></tr>
-    <tr><td>Referential integrity</td><td>Whether every record always has a match. Getting it wrong changes numbers, not just speed.</td></tr>
-    <tr><td>Unused tables</td><td>Not queried at all if no field from them is in the view.</td></tr>
-    <tr><td>Introduced</td><td>Tableau 2020.2. The default since. Older workbooks keep the old model.</td></tr>
+    <tr><th>Concept</th><th>Что он делает</th></tr>
+    <tr><td>Relationship</td><td>Контракт, описывающий, как можно сопоставить две таблицы. Не объединяет их.</td></tr>
+    <tr><td>лапша</td><td>Гибкая линия, показывающая этот контракт на логическом холсте.</td></tr>
+    <tr><td>Логический уровень</td><td>Верхнее полотно. Отношения живут здесь. Столы остаются отдельными.</td></tr>
+    <tr><td>Физический уровень</td><td>Дважды щелкните таблицу. Здесь живут объединения и союзы. Таблицы объединяются.</td></tr>
+    <tr><td>уровень детализации</td><td>Что означает одна строка таблицы. Отношения сохраняют это.</td></tr>
+    <tr><td>Завышенная сумма</td><td>Соединение повторяет значение небольшой таблицы в каждой соответствующей строке, а затем  <code>SUM</code>  считает каждую копию.</td></tr>
+    <tr><td>Почему отношения исправляют ситуацию</td><td>Сначала он агрегирует каждую таблицу, а затем объединяет результаты.</td></tr>
+    <tr><td>Непревзойденные значения</td><td>Сохраняется, а не удаляется, в отличие от внутреннего соединения.</td></tr>
+    <tr><td>Join</td><td>Добавляет столбцы путем сопоставления ключа и окончательно объединяет таблицы.</td></tr>
+    <tr><td>Union</td><td>Складывает ряды одинаковой формы. Ключ не задействован.</td></tr>
+    <tr><td>Blend</td><td>Объединяет два отдельных источника данных, агрегируя каждый из них сначала. Другая особенность.</td></tr>
+    <tr><td>Cardinality</td><td>Сколько рядов совпало с каждой стороны. Один или несколько.</td></tr>
+    <tr><td>Ссылочная целостность</td><td>Всегда ли каждая запись имеет совпадение. Ошибка меняет цифры, а не только скорость.</td></tr>
+    <tr><td>Неиспользуемые таблицы</td><td>Не запрашивается вообще, если в представлении нет ни одного поля из них.</td></tr>
+    <tr><td>Introduced</td><td>Таблица 2020.2. По умолчанию с тех пор. В старых книгах сохраняется старая модель.</td></tr>
   </table>
 
-  <div class="note"><strong>The one habit to keep.</strong> If you take nothing else from this page, say the level of detail of both tables out loud before you connect them. Different levels of detail is the whole reason relationships exist, and hearing yourself say "one row per order" and "one row per month" tells you which tool you need before you touch anything.</div>
+  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Если вы больше ничего не извлекаете из этой страницы, произнесите вслух уровень детализации обеих таблиц, прежде чем соединять их. Разные уровни детализации — вот единственная причина, по которой существуют отношения, и, услышав свои слова «одна строка на заказ» и «одна строка в месяц», вы поймете, какой инструмент вам нужен, прежде чем прикасаться к чему-либо.</div>
 
-  <p>One last thought, and I would genuinely like other people's answers. The inflated target is the version of this everyone eventually meets, because a target is a number people already know by heart. What is the number that finally made you check your data model, and how far off was it?</p>
+  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Завышенная цель — это версия, с которой в конечном итоге сталкивается каждый, потому что цель — это число, которое люди уже знают наизусть. Какое число наконец заставило вас проверить вашу модель данных, и насколько оно далеко?</p>
 
     <div class="book">
-    <strong>You can build the chart. Saying why Tableau put the numbers there is the harder part.</strong>
-    <p><em>Tableau for Analysts</em> is 110 pages on how Tableau actually thinks: dimensions against measures, relationships against joins, sets, and level of detail. Enough that you stop dragging fields until it looks right.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/tableau-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=tableau-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-tableau-relationships'})">Tableau for Analysts, $19 &rarr;</a>
+    <strong>Вы можете построить диаграмму. Сложнее всего сказать, почему Tableau поместила туда цифры.</strong>
+    <p><em>Таблица для аналитиков</em>  это 110 страниц о том, как на самом деле думает Tableau: измерения против мер, отношения против объединений, наборы и уровень детализации. Достаточно того, что вы перестанете перетаскивать поля, пока все не станет выглядеть правильно.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/tableau-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=tableau-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-tableau-relationships'})">Таблица для аналитиков, $19 →</a>
   </div>
 
 <h2>References</h2>
   <ul class="refs">
-    <li>Tableau. Relate your data. <em>Tableau Desktop and Web Authoring Help</em>, current version. help.tableau.com. The authority for the product behaviour described here.</li>
-    <li>Codd, E. F. (1970). A relational model of data for large shared data banks. <em>Communications of the ACM</em>, 13(6), 377–387.</li>
-    <li>Chi, M. T. H., Bassok, M., Lewis, M. W., Reimann, P., &amp; Glaser, R. (1989). Self-explanations: How students study and use examples in learning to solve problems. <em>Cognitive Science</em>, 13(2), 145–182.</li>
+    <li>Таблица. Соотнесите свои данные.  <em>Справка по созданию настольных компьютеров и веб-страниц Tableau</em>, текущая версия. help.tableau.com. Полномочия по описанному здесь поведению продукта.</li>
+    <li>Кодд, EF (1970). Реляционная модель данных для крупных общих банков данных.  <em>Коммуникации ACM</em>, 13(6), 377–387.</li>
+    <li>Чи, М.Т.Х., Бассок, М., Льюис, М.В., Рейманн, П. и Глейзер, Р. (1989). Самообъяснения: как учащиеся изучают и используют примеры при обучении решению проблем.  <em>Когнитивная наука</em>, 13(2), 145–182.</li>
   </ul>
 
   <div class="cta">
-    <strong>Build the charts, not just the model.</strong>
-    <p style="margin:6px 0 0">The <a href="../../tableau/">Tableau Kit</a> walks through dimensions, measures, aggregation and dashboard building, with worked examples and flash cards. Nothing to install, no account needed.</p>
-    <a class="btn" href="../../tableau/">Open the Tableau Kit →</a>
+    <strong>Стройте диаграммы, а не только модели.</strong>
+    <p style="margin:6px 0 0">The <a href="../../tableau/">Табличный комплект</a>  рассказывает о измерениях, мерах, агрегировании и построении информационных панелей с проработанными примерами и карточками. Ничего устанавливать, учетная запись не требуется.</p>
+    <a class="btn" href="../../tableau/">Откройте набор таблиц →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> · <a href="../tableau-hierarchies/">Tableau Hierarchies</a> · <a href="../tableau-aliases/">Tableau Aliases</a> · <a href="../tableau-sorts/">Tableau Sorting</a> · <a href="../tableau-sheets-to-dashboard/">Sheets to Dashboard</a> · <a href="../tableau-extensions/">Dashboard Extensions</a> · <a href="../tableau-desktop-foundations-exam/">The Foundations Exam</a> · <a href="../tableau-concepts/">Tableau Concepts</a> · <a href="../build-a-tableau-dashboard/">Build a Tableau Dashboard</a> · <a href="../sql-joins/">SQL JOINs</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../sql-ctes/">SQL CTEs</a> · <a href="../sql-window-functions/">Window Functions</a> · <a href="../sql-foundations/">SQL Foundations</a> · <a href="../../drill/">SQL Drill</a> · <a href="../what-is-data-analysis/">What Is Data Analysis?</a> · <a href="../sql-teaching-comments/">Comment SQL So It Teaches</a> · <a href="../sql-count-function/">COUNT in SQL</a> · <a href="../sql-case-expression/">The CASE Expression</a> · <a href="../sql-aliasing/">SQL Aliases</a> · <a href="../set-up-a-sql-database/">Set Up a SQL Database</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../git-for-analysts/">Git for Analysts</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../data-driven-thresholds/">Data-Driven Thresholds</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../entity-resolution/">Entity Resolution</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../tableau/">Tableau Kit</a> · <a href="../../projects/">Portfolio Projects</a>
+    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../tableau-hierarchies/">Иерархии таблиц</a> · <a href="../tableau-aliases/">Табличные псевдонимы</a> · <a href="../tableau-sorts/">Табличная сортировка</a> · <a href="../tableau-sheets-to-dashboard/">Листы на панель мониторинга</a> · <a href="../tableau-extensions/">Расширения панели мониторинга</a> · <a href="../tableau-desktop-foundations-exam/">Экзамен по основам</a> · <a href="../tableau-concepts/">Концепции таблиц</a> · <a href="../build-a-tableau-dashboard/">Создайте панель управления Tableau</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-ctes/">SQL CTE</a> · <a href="../sql-window-functions/">Оконные функции</a> · <a href="../sql-foundations/">Основы SQL</a> · <a href="../../drill/">SQL-детализация</a> · <a href="../what-is-data-analysis/">Что такое анализ данных?</a> · <a href="../sql-teaching-comments/">Комментарий SQL, чтобы он научился</a> · <a href="../sql-count-function/">СЧЕТ в SQL</a> · <a href="../sql-case-expression/">Выражение CASE</a> · <a href="../sql-aliasing/">SQL-псевдонимы</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../git-for-analysts/">Git для аналитиков</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../data-driven-thresholds/">Пороги, управляемые данными</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../tableau/">Табличный комплект</a> · <a href="../../projects/">Портфельные проекты</a>
     
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

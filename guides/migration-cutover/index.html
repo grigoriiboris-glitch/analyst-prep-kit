@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cutover, the Freeze, and the Bridge Import &mdash; Analyst Prep Kit</title>
-<meta name="description" content="How to run a data migration cutover: freezing the source system as read only, what staff do during the gap, how a bridge import covers records created mid-migration, and the checks that have to pass before you call it live.">
+<title>Переключение, заморозка и импорт моста — комплект для подготовки аналитика</title>
+<meta name="description" content="Как запустить перенастройку миграции данных: заморозить исходную систему как доступную только для чтения, что делает персонал во время перерыва, как мостовой импорт распространяется на записи, созданные в ходе миграции, и проверки, которые необходимо пройти, прежде чем вы объявите ее активной.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/migration-cutover/">
-<meta property="og:title" content="Stage 7: Freeze, Cutover, Bridge">
-<meta property="og:description" content="How to run a data migration cutover: freezing the source system as read only, what staff do during the gap, how a bridge import covers records created mid-migration, and the checks that have to pass before you call it live.">
+<meta property="og:title" content="Этап 7: Заморозка, Переключение, Мост">
+<meta property="og:description" content="Как запустить перенастройку миграции данных: заморозить исходную систему как доступную только для чтения, что делает персонал во время перерыва, как мостовой импорт распространяется на записи, созданные в ходе миграции, и проверки, которые необходимо пройти, прежде чем вы объявите ее активной.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/migration-cutover/">
 <meta name="twitter:card" content="summary_large_image">
@@ -133,111 +133,111 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../">All Guides</a> &middot; <a href="../data-migration-stages/">Data Migration Series</a></p>
-  <h1>Stage 7: Freeze, Cutover, Bridge</h1>
-  <p class="meta">Stage 7 of 8 &middot; The switch, and the plan for the weeks in between &middot; Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-07-30">July 30, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../">Все руководства</a> &middot; <a href="../data-migration-stages/">Серия «Миграция данных»</a></p>
+  <h1>Этап 7: Заморозка, Переключение, Мост</h1>
+  <p class="meta">Этап 7 из 8 · Переключение и план на промежуточные недели · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-07-30">30 июля 2026 г.</time></p>
 
-  <p>Cutover is the switch from old system to new. The part most write-ups skip is the gap: a migration takes weeks, and the business does not stop while you run it. This article covers the freeze, what staff do during the gap, and the bridge import that catches everything created in between.</p>
+  <p>Переключение — это переход от старой системы к новой. Часть, которую пропускают большинство рецензий, — это пробел: миграция занимает недели, и бизнес не останавливается, пока вы ее запускаете. В этой статье рассказывается о заморозке, о том, что делают сотрудники во время перерыва, а также о мостовом импорте, который перехватывает все, что создается между ними.</p>
 
-  <p><strong>The short version.</strong> Freeze the old system as read only on the day you take the final export, capture new work in a structured sheet during the gap, and load that sheet the moment the new system is live.</p>
+  <p><strong>Краткая версия.</strong>  Заморозьте старую систему как только для чтения в день окончательного экспорта, зафиксируйте новую работу в структурированном листе на время перерыва и загрузите этот лист в тот момент, когда новая система начнет работать.</p>
 
-  <h2>The gap, and why it is your problem</h2>
-  <p>Before the answer: a client's staff sign up four new customers the week after you take the export. Where does that data live? Think it through.</p>
-  <p>It has to live somewhere, and if you have not decided where, it lives in four different places. Someone's notebook, an email, a spreadsheet nobody else can find, and the old system, which you are about to stop using.</p>
-  <p>This is the single biggest difference between a migration that feels professional to the client's staff and one that feels like an outage. The data work is invisible to them. The gap is not.</p>
+  <h2>Разрыв и почему это ваша проблема</h2>
+  <p>Перед ответом: сотрудники клиента подписывают четырех новых клиентов через неделю после того, как вы осуществили экспорт. Где хранятся эти данные? Подумайте об этом.</p>
+  <p>Он должен где-то жить, и, если вы еще не решили, где, он живет в четырех разных местах. Чья-то записная книжка, электронная почта, электронная таблица, которую никто больше не может найти, и старая система, которую вы собираетесь прекратить использовать.</p>
+  <p>Это самая большая разница между миграцией, которая кажется профессиональной для сотрудников клиента, и миграцией, которая кажется простоем. Работа с данными для них невидима. Разрыва нет.</p>
 
-  <h2>The freeze</h2>
-  <p>On the day the final export is taken, the old system goes read only. Staff can look things up. They cannot add, edit, or delete.</p>
-  <p>Read only rather than switched off matters. People need their history during the gap, and taking it away for two weeks is how you lose the room. The point of the freeze is that the export you are working from stays true, not that the old system disappears.</p>
-  <p>Announce the freeze date at least two weeks ahead, and again the week of. Say what read only means in concrete terms: you can look, you cannot change, here is where new work goes instead.</p>
+  <h2>Заморозка</h2>
+  <p>В день окончательного экспорта старая система становится доступной только для чтения. Персонал может все посмотреть. Они не могут добавлять, редактировать или удалять.</p>
+  <p>Только чтение, а не выключение имеет значение. Людям нужна их история во время перерыва, и забрав ее на две недели, вы потеряете комнату. Суть заморозки в том, что экспорт, с которым вы работаете, остается верным, а не в том, что старая система исчезает.</p>
+  <p>Объявите о дате замораживания как минимум за две недели вперед, а затем еще раз за неделю. Скажите конкретно, что означает «только чтение»: вы можете смотреть, вы не можете измениться, здесь вместо этого идет новая работа.</p>
 
-  <h2>The bridge</h2>
-  <p>New work during the gap goes onto a structured sheet, built by you, shaped exactly like the import that will load it.</p>
-  <p>That last part is the whole trick. If the sheet has the same columns, the same value lists and the same date format as your load file, then the moment the new system is live you import it in minutes. If the sheet is a free form list somebody invented, you spend a day cleaning it while the client waits.</p>
-  <p>Build it with the same rules as the <a href="../migration-field-mapping/">field map</a>: required fields marked, dropdowns where the target has dropdowns, one row per record, and the client ID column present. Give it to the client before the freeze starts and walk one person through filling a row.</p>
-  <p>Picture a scheduler at 4pm on a Friday during the freeze, signing up a new client. What has to be true about your sheet for that to take them two minutes? That is the design brief.</p>
+  <h2>Мост</h2>
+  <p>Новая работа во время перерыва переносится на созданный вами структурированный лист, имеющий точно такую ​​же форму, как импорт, который будет его загружать.</p>
+  <p>В последней части и заключается вся хитрость. Если лист имеет те же столбцы, те же списки значений и тот же формат даты, что и ваш загрузочный файл, то в тот момент, когда новая система заработает, вы импортируете ее за считанные минуты. Если лист представляет собой список произвольной формы, который кто-то придумал, вы тратите день на его очистку, пока клиент ждет.</p>
+  <p>Постройте его по тем же правилам, что и  <a href="../migration-field-mapping/">карта поля</a>: отмечены обязательные поля, раскрывающиеся списки, в которых цель имеет раскрывающиеся списки, одна строка на запись и присутствует столбец идентификатора клиента. Отдайте его клиенту до того, как начнется заморозка, и помогите одному человеку заполнить строку.</p>
+  <p>Представьте себе планировщика в пятницу в 16:00 во время заморозки, который регистрирует нового клиента. Что должно быть правдой в вашем листе, чтобы это заняло у них две минуты? Это краткое описание дизайна.</p>
 
-  <h2>The rehearsal, before any of this is real</h2>
-  <p>The dry run proved the data is right. It did not prove the move fits in the window.</p>
-  <p>Those are separate failures, and the second one is the one that ruins a weekend. So before cutover, run the whole sequence end to end with the clock going. Final export, load, reconcile, bridge, reconcile again, exactly the steps and exactly the order you will use for real.</p>
-  <p>You are measuring one thing: how long it takes. If the freeze window is a weekend and the rehearsal takes thirty-one hours, you have found that out on a Tuesday, when it is a planning problem. Find it on the night and it is an outage.</p>
-  <p>What the rehearsal catches that a dry run never does:</p>
+  <h2>Репетиция, прежде чем все это станет реальностью</h2>
+  <p>Пробный прогон подтвердил, что данные верны. Это не доказало, что этот шаг вписывается в окно.</p>
+  <p>Это отдельные неудачи, и вторая портит выходные. Поэтому перед переключением выполните всю последовательность от начала до конца, пока часы идут. Окончательный экспорт, загрузка, согласование, соединение, еще раз согласование — именно те шаги и именно в том порядке, который вы будете использовать в реальности.</p>
+  <p>Вы измеряете одно: сколько времени это займет. Если «окно заморозки» приходится на выходные, а репетиция занимает тридцать один час, вы обнаружили это во вторник, когда возникает проблема с планированием. Найдите его ночью, и это отключение.</p>
+  <p>Что улавливается на репетиции, чего никогда не удается сделать при пробном прогоне:</p>
   <ul>
-    <li><strong>The total elapsed time</strong>, including the steps nobody counts. Waiting for an export. Somebody being asleep.</li>
-    <li><strong>The order dependencies</strong>, when run under time pressure rather than over three unhurried afternoons.</li>
-    <li><strong>Who is actually available.</strong> A cutover that needs the client's DBA at 2am needs that agreed in advance, by that person.</li>
+    <li><strong>Общее прошедшее время</strong>, в том числе шаги никто не считает. Ждем экспорта. Кто-то спит.</li>
+    <li><strong>Зависимости порядка</strong>, когда работа ведется в условиях цейтнота, а не в течение трех полных дней.</li>
+    <li><strong>Кто действительно доступен.</strong>  Переключение, для которого требуется администратор базы данных клиента в 2 часа ночи, требует предварительного согласования с этим человеком.</li>
   </ul>
-  <p>Write down the timings. They are the evidence behind your go/no-go, and behind asking for a longer window if you need one.</p>
+  <p>Запишите тайминги. Они являются доказательством того, что вы дадите/не пойдете, а также просьбы о более длительном окне, если оно вам нужно.</p>
 
-  <h2>Go, or no-go</h2>
-  <p>There is a moment before the load where somebody has to say yes. Name it, put it in the plan, and hold it as a short meeting rather than an assumption.</p>
-  <p>Three things get agreed there, and all three are agreed <em>before</em> the day, not during it:</p>
+  <h2>Иди или нет</h2>
+  <p>Перед нагрузкой есть момент, когда кто-то должен сказать «да». Назовите это, внесите в план и проведите это как короткую встречу, а не как предположение.</p>
+  <p>Там согласовываются три вещи, и все три согласованы.  <em>before</em>  день, а не во время него:</p>
   <ul>
-    <li><strong>Who decides.</strong> One named person, usually the client PM. Not a consensus, because consensus at 6am is nobody deciding.</li>
-    <li><strong>On what evidence.</strong> The rehearsal timings, the dry run reconciliation, UAT signed, the freeze confirmed. Write the list before you need it, so nobody is arguing about the standard while the clock runs.</li>
-    <li><strong>What happens if it is no.</strong> This is the one people skip.</li>
+    <li><strong>Кто решает.</strong>  Одно названное лицо, обычно менеджер по работе с клиентами. Это не консенсус, потому что консенсус в 6 утра — это никто не решает.</li>
+    <li><strong>На каких доказательствах.</strong>  График репетиций, сверка пробных прогонов, подписание UAT, подтверждение заморозки. Напишите список до того, как он вам понадобится, чтобы никто не спорил о стандарте, пока идут часы.</li>
+    <li><strong>Что будет, если нет.</strong>  Это то, что люди пропускают.</li>
   </ul>
-  <p>Be honest with yourself about that last one, because the fallback is smaller than it sounds. Once the new system is released to users and they start working in it, going back is close to impossible: the old system is now missing everything created since. The real fallback is almost always <em>do not start</em>, and stay on the old system until the next window.</p>
-  <p>That means the decision point is genuinely before the load, not during it. After the load begins, you are going forward. Say that out loud at the meeting, so everyone knows which side of the line they are standing on.</p>
+  <p>Будьте честны с самим собой в отношении последнего, потому что запасной вариант меньше, чем кажется. Как только новая система будет доступна пользователям и они начнут в ней работать, возврат к ней станет практически невозможным: в старой системе теперь отсутствует все, что было создано с тех пор. Настоящий запасной вариант почти всегда  <em>не начинай</em>и оставайтесь в старой системе до следующего окна.</p>
+  <p>Это означает, что точка принятия решения действительно находится перед нагрузкой, а не во время нее. После того, как начнется нагрузка, вы идете вперед. Скажите это вслух на собрании, чтобы все знали, по какую сторону очереди они стоят.</p>
 
-  <h2>Cutover day, in order</h2>
+  <h2>День перехода, по порядку</h2>
   <ol>
-    <li>Confirm the freeze held. Ask, do not assume.</li>
-    <li>Take the final export.</li>
-    <li>Go/no-go. The named person says yes, on the evidence agreed in advance.</li>
-    <li>Run the load, exactly as rehearsed in the <a href="../migration-dry-run/">dry run</a>.</li>
-    <li>Reconcile: counts, totals, orphans, spot checks, processability, integration. The same six as the dry run.</li>
-    <li>Load the bridge sheet.</li>
-    <li>Reconcile again, including the bridge rows.</li>
-    <li>Confirm with the client that the new system is open, and say so in writing.</li>
+    <li>Подтвердите, что заморозка состоялась. Спросите, а не предполагайте.</li>
+    <li>Возьмите окончательный экспорт.</li>
+    <li>Иди/не ходи. Названное лицо говорит да, на основании заранее согласованных доказательств.</li>
+    <li>Запустите нагрузку, точно так, как описано в  <a href="../migration-dry-run/">Сухой пробег</a>.</li>
+    <li>Согласование: подсчеты, итоги, сиротские проверки, выборочные проверки, обрабатываемость, интеграция. Те же шесть, что и на холостом ходу.</li>
+    <li>Загрузите лист моста.</li>
+    <li>Еще раз согласуйте, включая мостовые ряды.</li>
+    <li>Подтвердите клиенту, что новая система открыта, и сообщите об этом в письменном виде.</li>
   </ol>
-  <p>Go live together. The client's team and yours, on a call, crossing at the same moment. It costs an hour and it is the difference between a milestone and an email nobody read.</p>
+  <p>Идите жить вместе. Команда клиента и ваша, по вызову, пересекаются в один и тот же момент. Это стоит час, и в этом разница между важной вехой и электронным письмом, которое никто не читает.</p>
 
-  <h2>What can still go wrong</h2>
-  <p><strong>The freeze did not hold.</strong> Somebody kept working in the old system. You find this in reconciliation when counts do not match the export. Ask early rather than discovering it late.</p>
-  <p><strong>The bridge sheet grew.</strong> Two weeks of new work is manageable. Six weeks is a second migration. If the gap stretches, the sheet needs a mid point load into the sandbox to prove it still imports cleanly.</p>
-  <p><strong>Something needs reloading.</strong> This is why you kept the crosswalk of old ID to new ID. Without it, a reload creates duplicates, and now you have the failure users hate most.</p>
+  <h2>Что еще может пойти не так</h2>
+  <p><strong>Заморозка не выдержала.</strong>  Кто-то продолжал работать в старой системе. Вы обнаружите это при сверке, когда подсчеты не соответствуют экспортируемым. Спросите заранее, а не обнаруживайте это поздно.</p>
+  <p><strong>Лист моста вырос.</strong>  Две недели новой работы вполне осуществимы. Шесть недель — это вторая миграция. Если зазор растягивается, лист необходимо загрузить в песочницу в средней точке, чтобы убедиться, что он по-прежнему импортируется без ошибок.</p>
+  <p><strong>Что-то требует перезагрузки.</strong>  Вот почему вы сохранили переход от старого идентификатора к новому идентификатору. Без него при перезагрузке создаются дубликаты, и теперь пользователи больше всего ненавидят сбой.</p>
 
-  <h2>The gate</h2>
-  <p>The stage closes when counts tie old to new including bridge records, spot checks pass, and the client has been told in writing that they are live, with the hypercare window and its end date stated.</p>
+  <h2>Ворота</h2>
+  <p>Этап закрывается, когда подсчеты связывают старое с новым, включая записи моста, выборочные проверки пройдены, и клиенту сообщают в письменной форме, что они активны, с указанием окна гиперпомощи и даты его окончания.</p>
 
-  <h2>The one habit</h2>
-  <p>Design the bridge sheet as an import file, not as a form. Everything else about the gap follows from that.</p>
-  <p>How has your workplace handled the gap when a system changed over?</p>
+  <h2>Одна привычка</h2>
+  <p>Создавайте промежуточный лист как файл импорта, а не как форму. Из этого следует все остальное, что касается разрыва.</p>
+  <p>Как ваше рабочее место справилось с разрывом, вызванным сменой системы?</p>
 
 <div class="seriesnav">
-  <p class="up">Up next</p>
-  <a class="next" href="../migration-hypercare/">Stage 8: Hypercare and Close &rarr;</a>
-  <p class="then">Previously: <a href="../migration-uat/">Stage 6: User Acceptance Testing</a> &nbsp;&middot;&nbsp; <a href="../data-migration-stages/">All eight stages</a></p>
+  <p class="up">Дальше</p>
+  <a class="next" href="../migration-hypercare/">Этап 8: Гиперопека и закрытие →</a>
+  <p class="then">Ранее:  <a href="../migration-uat/">Этап 6: Приемочное тестирование пользователей</a> &nbsp;&middot;&nbsp; <a href="../data-migration-stages/">Все восемь этапов</a></p>
 </div>
 
   <div class="cta">
-    <strong>The checking work is SQL, and it is not advanced SQL.</strong>
-    <p style="margin:6px 0 0">Counting rows, grouping to find duplicates, and joining to find orphans covers most of what a migration asks of you. The <a href="../../sql/">SQL Kit</a> teaches those moves in order, with the data in front of you.</p>
-    <a class="btn" href="../../sql/">Open the SQL Kit &rarr;</a>
-    <p style="margin:10px 0 0;font-size:15px">Or start typing straight away: <a href="../../drill/">open SQL Drill</a>, thirteen queries that each add one thing to the last.</p>
+    <strong>Проверочная работа выполняется на языке SQL, а не на продвинутом уровне SQL.</strong>
+    <p style="margin:6px 0 0">Подсчет строк, группировка для поиска дубликатов и объединение для поиска потерянных строк покрывает большую часть того, что требует от вас миграция.  <a href="../../sql/">SQL-комплект</a>  обучает этим движениям по порядку, имея данные перед вами.</p>
+    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
+    <p style="margin:10px 0 0;font-size:15px">Или сразу начните вводить:  <a href="../../drill/">открыть SQL Drill</a>, тринадцать запросов, каждый из которых добавляет что-то одно к последнему.</p>
   </div>
 
   <div class="book">
-    <strong>The whole run, in one place.</strong>
-    <p>You are moving a client’s records into a new system, and the part that worries you is the week the client goes quiet. <em>The Data Migration Playbook</em> is all eight stages in order, 63 pages, from the first kickoff meeting through hypercare, so you can run one without finding the important question three weeks too late.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/data-migration-playbook?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=data-migration-playbook" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-migration-cutover'})">The Data Migration Playbook, $29 &rarr;</a>
+    <strong>Весь пробег в одном месте.</strong>
+    <p>Вы переносите записи клиента в новую систему, и вас беспокоит та неделя, когда клиент замолкает.  <em>Руководство по миграции данных</em>  это все восемь этапов по порядку, 63 страницы, от первой стартовой встречи до гиперпомощи, так что вы можете пройти один, не опоздав на три недели с важным вопросом.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/data-migration-playbook?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=data-migration-playbook" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-migration-cutover'})">Руководство по миграции данных, 29 долларов США →</a>
   </div>
 
 
   <h2>References</h2>
   <ol class="refs">
-    <li>Haller, K., Matthes, F., &amp; Schulz, C. (2012). A detailed process model for large scale data migration projects. <em>Business Information Systems (BIS 2012), Lecture Notes in Business Information Processing, 117</em>. Springer.</li>
-    <li>Matthes, F., Schulz, C., &amp; Haller, K. (2011). Testing &amp; quality assurance in data migration projects. <em>27th IEEE International Conference on Software Maintenance (ICSM)</em>, 438&ndash;447.</li>
+    <li>Халлер К., Маттес Ф. и Шульц К. (2012). Подробная модель процесса для крупномасштабных проектов миграции данных.  <em>Системы бизнес-информации (BIS 2012), Конспекты лекций по обработке бизнес-информации, 117</em>. Спрингер.</li>
+    <li>Маттес Ф., Шульц К. и Халлер К. (2011). Тестирование и обеспечение качества в проектах миграции данных.  <em>27-я Международная конференция IEEE по сопровождению программного обеспечения (ICSM)</em>, 438&ndash;447.</li>
   </ol>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../entity-resolution/">Entity Resolution</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../sql-count-function/">COUNT in SQL</a> · <a href="../sql-joins/">SQL JOINs</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../sql/">SQL Kit</a> · <a href="../../projects/">Portfolio Projects</a>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../sql-count-function/">СЧЕТ в SQL</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../../projects/">Портфельные проекты</a>
     
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Eight Stages of a Data Migration, and the Gate That Closes Each One &mdash; Analyst Prep Kit</title>
-<meta name="description" content="The eight stages of a data migration end to end: kickoff, profiling, mapping, cleaning, dry run, UAT, cutover and hypercare, with the checkpoint that has to close before the next stage starts.">
+<title>Восемь этапов миграции данных и ворота, закрывающие каждый из них — комплект для подготовки аналитика</title>
+<meta name="description" content="Восемь этапов миграции данных от начала до конца: начало, профилирование, картирование, очистка, пробный прогон, UAT, переключение и гиперочистка, с контрольной точкой, которая должна закрыться перед началом следующего этапа.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/data-migration-stages/">
-<meta property="og:title" content="The Eight Stages of a Data Migration">
-<meta property="og:description" content="The eight stages of a data migration end to end: kickoff, profiling, mapping, cleaning, dry run, UAT, cutover and hypercare, with the checkpoint that has to close before the next stage starts.">
+<meta property="og:title" content="Восемь этапов миграции данных">
+<meta property="og:description" content="Восемь этапов миграции данных от начала до конца: начало, профилирование, картирование, очистка, пробный прогон, UAT, переключение и гиперочистка, с контрольной точкой, которая должна закрыться перед началом следующего этапа.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/data-migration-stages/">
 <meta name="twitter:card" content="summary_large_image">
@@ -133,116 +133,116 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../">All Guides</a> &middot; <a href="../data-migration-stages/">Data Migration Series</a></p>
-  <h1>The Eight Stages of a Data Migration</h1>
-  <p class="meta">The industry pattern, with commentary from ten years of running them &middot; Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-07-30">July 30, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../">Все руководства</a> &middot; <a href="../data-migration-stages/">Серия «Миграция данных»</a></p>
+  <h1>Восемь этапов миграции данных</h1>
+  <p class="meta">Структура отрасли с комментариями за десять лет работы. · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-07-30">30 июля 2026 г.</time></p>
 
-  <p>This is the whole shape of a migration on one page. Eight stages, and for each one the single checkpoint that has to close before the next stage may start. Use it to plan a job, to explain to a client why you are not loading yet, or to work out which stage you are actually stuck in.</p>
+  <p>Это вся форма миграции на одной странице. Восемь этапов, и для каждого своя контрольная точка, которая должна закрыться перед началом следующего этапа. Используйте его, чтобы спланировать работу, объяснить клиенту, почему вы еще не загружаетесь, или определить, на каком этапе вы фактически застряли.</p>
 
-  <p>The stage list below is the industry pattern. It is what the research describes and what the large vendors sell. The commentary under each one is mine, from running these for a living, and it is where I say what the pattern gets right and where real projects bend it.</p>
+  <p>Список этапов ниже представляет собой отраслевую модель. Это то, что описывают исследования и что продают крупные продавцы. Комментарий под каждым из них принадлежит мне, потому что я зарабатываю на жизнь этим, и именно здесь я говорю, что шаблон правильный, а где реальные проекты его изменяют.</p>
 
-  <p><strong>The short version.</strong> Eight stages, eight gates. A gate is a checkpoint with an owner and a written answer, and skipping one does not save time, it moves the cost later.</p>
+  <p><strong>Краткая версия.</strong>  Восемь этапов, восемь ворот. Ворота - это КПП с владельцем и письменным ответом, и пропуск одного не экономит время, переносит стоимость позже.</p>
 
   <table>
-    <tr><th>#</th><th>Stage</th><th>The gate that closes it</th></tr>
-    <tr><td>1</td><td><a href="../migration-kickoff-scope/">Kickoff and scope</a></td><td>Success criteria, stakeholders and what does not migrate, confirmed in writing</td></tr>
-    <tr><td>2</td><td><a href="../migration-profiling/">Profile the source</a></td><td>Row counts, blanks, duplicates and bad values documented</td></tr>
-    <tr><td>3</td><td><a href="../migration-field-mapping/">Map the fields</a></td><td>Signed off data map. Nothing moves before this</td></tr>
-    <tr><td>4</td><td><a href="../migration-cleaning/">Clean and de-dupe</a></td><td>Exception list returned with a client decision on every row</td></tr>
-    <tr><td>5</td><td><a href="../migration-dry-run/">Dry run in a sandbox</a></td><td>Clean reconciliation, issues logged, zero orphans</td></tr>
-    <tr><td>6</td><td><a href="../migration-uat/">User acceptance testing</a></td><td>Client validates a real sample and confirms in writing</td></tr>
-    <tr><td>7</td><td><a href="../migration-cutover/">Freeze, cutover, bridge</a></td><td>Counts tie old to new, bridge data loaded, live together</td></tr>
-    <tr><td>8</td><td><a href="../migration-hypercare/">Hypercare and close</a></td><td>Final reconciliation report, readout, handoff to support</td></tr>
+    <tr><th>#</th><th>Stage</th><th>Ворота, которые закрывают его</th></tr>
+    <tr><td>1</td><td><a href="../migration-kickoff-scope/">Начало и масштаб</a></td><td>Критерии успеха, заинтересованные стороны и то, что не мигрирует, подтвержденные в письменной форме</td></tr>
+    <tr><td>2</td><td><a href="../migration-profiling/">Профилируйте источник</a></td><td>Задокументировано количество строк, пробелы, дубликаты и неверные значения.</td></tr>
+    <tr><td>3</td><td><a href="../migration-field-mapping/">Составьте карту полей</a></td><td>Подписанная карта данных. До этого ничего не движется</td></tr>
+    <tr><td>4</td><td><a href="../migration-cleaning/">Чистый и устраненный обман</a></td><td>Список исключений возвращается с решением клиента по каждой строке</td></tr>
+    <tr><td>5</td><td><a href="../migration-dry-run/">Сухой прогон в песочнице</a></td><td>Чистая сверка, зарегистрированные проблемы, отсутствие потерянных данных</td></tr>
+    <tr><td>6</td><td><a href="../migration-uat/">Приемочное тестирование пользователей</a></td><td>Клиент проверяет реальный образец и подтверждает это в письменной форме.</td></tr>
+    <tr><td>7</td><td><a href="../migration-cutover/">Заморозка, переключение, мост</a></td><td>Подсчеты связывают старое с новым, загружаются мостовые данные, живут вместе</td></tr>
+    <tr><td>8</td><td><a href="../migration-hypercare/">Гиперзабота и близость</a></td><td>Окончательный отчет о сверке, считывание, передача в службу поддержки</td></tr>
   </table>
 
-  <h2>Stage 1: Kickoff and scope</h2>
-  <p>Before reading on: what is the one question a kickoff has to answer, that nothing later can fix if it is missed?</p>
-  <p>The pattern says define scope, roles and success criteria. That is correct and it is thin. In practice the kickoff is where you settle four things: why the client is doing this at all, what success looks like in numbers, what is <em>not</em> coming across, and who the one person is that you route everything through.</p>
-  <p><strong>My commentary.</strong> The scope item people underspend on is the exclusion list. Agreeing that seven years of history comes over is easy. Agreeing that three of those years arrive as reference only, and what that means the day a nurse cannot find a note, is the conversation that saves the project.</p>
+  <h2>Этап 1: Начало и масштаб</h2>
+  <p>Прежде чем читать дальше: на какой единственный вопрос должен ответить начальный удар, который потом уже невозможно будет исправить, если он будет пропущен?</p>
+  <p>В шаблоне говорится: определите область действия, роли и критерии успеха. Это правильно, и это тонко. На практике на начальном этапе вы решаете четыре вопроса: почему клиент вообще это делает, как выглядит успех в цифрах, какова его эффективность.  <em>not</em>  сталкиваетесь, и кто тот человек, через которого вы все направляете.</p>
+  <p><strong>Мой комментарий.</strong>  Пункт сферы действия, на который люди тратят недостаточно средств, — это список исключений. Согласиться с тем, что семь лет истории позади, легко. Согласие с тем, что три из этих лет указаны только для справки, и что это означает тот день, когда медсестра не может найти записку, - это разговор, который спасает проект.</p>
 
-  <h2>Stage 2: Profile the source</h2>
-  <p>The pattern splits this from cleaning, and it is right to. Profiling is finding out what is really there. Cleaning is doing something about it.</p>
-  <p><strong>My commentary.</strong> This is the only stage whose output tells you whether your timeline is real, so it belongs before you commit to dates rather than after. A source with a free text field where a dropdown should be is not a cleaning problem, it is a scope problem, and it is cheaper to learn in week two than week six.</p>
+  <h2>Этап 2. Профилирование источника</h2>
+  <p>Шаблон отделяет это от уборки, и это правильно. Профилирование — это выяснение того, что есть на самом деле. Уборка – это что-то с этим делать.</p>
+  <p><strong>Мой комментарий.</strong>  Это единственный этап, выходные данные которого сообщают вам, реален ли ваш график, поэтому он принадлежит до того, как вы определитесь с датами, а не после. Источник со свободным текстовым полем, в котором должен быть раскрывающийся список, — это не проблема очистки, это проблема области действия, и его дешевле изучить на второй неделе, чем на шестой неделе.</p>
 
-  <h2>Stage 3: Map the fields</h2>
-  <p>Every field in the source gets a home in the target, or an explicit decision that it does not travel. The map is a document the client signs.</p>
-  <p><strong>My commentary.</strong> Nothing moves until the map is signed off. That rule sounds rigid and it is the single highest value rule in the list. A map signed by the client turns "the data is wrong" into "the data matches what we agreed", which is a completely different meeting.</p>
+  <h2>Этап 3. Нанесите на карту поля</h2>
+  <p>Каждое поле в источнике получает место в целевом поле или явное решение о том, что оно не перемещается. Карта — это документ, который подписывает клиент.</p>
+  <p><strong>Мой комментарий.</strong>  Ничто не движется, пока карта не будет подписана. Это правило звучит жестко, и это единственное правило с наивысшей ценностью в списке. Карта, подписанная клиентом, превращает «данные неверны» в «данные соответствуют тому, что мы договаривались», а это совсем другая встреча.</p>
 
-  <h2>Stage 4: Clean and de-dupe</h2>
-  <p>Fix what can be fixed by rule. Everything that cannot goes on an exception list, and the client decides row by row.</p>
-  <p><strong>My commentary.</strong> The exception list is a gate, not a document. It closes when every row has a decision, and "we will deal with it later" is not a decision. De-duplication in particular has to happen here, because one client turning into two in the new system is the failure users notice first and forgive last.</p>
+  <h2>Этап 4. Очистка и устранение дублирования</h2>
+  <p>Исправьте то, что можно исправить правилами. Все, что нельзя, попадает в список исключений, и клиент решает построчно.</p>
+  <p><strong>Мой комментарий.</strong>  Список исключений — это ворота, а не документ. Он закрывается, когда для каждой строки есть решение, и «мы разберемся с этим позже» не является решением. Здесь, в частности, должна произойти дедупликация, поскольку в новой системе один клиент превращается в два — это ошибка, которую пользователи замечают первыми и прощают последней.</p>
 
-  <h2>Stage 5: The dry run</h2>
-  <p>Load the whole thing into a sandbox, reconcile it, and log everything that broke. Six checks, not four: counts, totals, orphans and spot checks prove the data arrived, then processability and integration prove it works. This is the stage the research is loudest about.</p>
-  <p><strong>My commentary.</strong> Treat the dry run as the real migration and the go-live as a repeat performance. If the dry run needed manual intervention, it is not finished, because you will not have time to intervene on the night.</p>
+  <h2>Этап 5: Пробный прогон</h2>
+  <p>Загрузите все это в песочницу, согласуйте и запишите все, что сломалось. Шесть проверок, а не четыре: подсчеты, итоги, сиротские проверки и выборочные проверки подтверждают, что данные поступили, а затем удобство обработки и интеграция доказывают, что они работают. Это этап, о котором исследования говорят наиболее громко.</p>
+  <p><strong>Мой комментарий.</strong>  Относитесь к пробному запуску как к настоящей миграции, а к вводу в эксплуатацию — как к повторному выполнению. Если пробный прогон потребовал ручного вмешательства, он не заканчивается, потому что у вас не будет времени вмешаться ночью.</p>
 
-  <h2>Stage 6: User acceptance testing</h2>
-  <p>The client's own people open real records in the new system and say whether it is right.</p>
-  <p><strong>My commentary.</strong> Give them named records, not a general invitation to look around. "Open these ten clients and check the visit history against the old system" gets answers. "Have a look and let us know" gets silence, and silence at this stage is what turns into a dispute later.</p>
+  <h2>Этап 6: Приемочное тестирование пользователей</h2>
+  <p>Собственные люди клиента открывают реальные записи в новой системе и говорят, правильно ли это.</p>
+  <p><strong>Мой комментарий.</strong>  Дайте им именные записи, а не общее приглашение осмотреться. «Откройте эти десять клиентов и сверьте историю посещений со старой системой», — получает ответ. «Посмотрите и дайте нам знать» вызывает молчание, а молчание на этом этапе позже перерастает в спор.</p>
 
-  <h2>Stage 7: Freeze, cutover and the bridge</h2>
-  <p>The source goes read only. The whole sequence is rehearsed once with the clock running, to prove it fits the window. Then the final export runs, somebody named says go, the load runs, counts are compared, and everyone goes live together.</p>
-  <p><strong>My commentary.</strong> This is where the standard write-ups skip the part clients actually feel. A migration takes weeks, and business does not stop for it. The bridge is the plan for the records created during those weeks, and having one is the difference between a calm go-live and a scramble. <a href="../migration-cutover/">The cutover article</a> covers how to run it, including the rehearsal and the go/no-go, and why the honest fallback is almost always "do not start" rather than "roll back".</p>
+  <h2>Этап 7: заморозка, переключение и мост</h2>
+  <p>Исходный код доступен только для чтения. Вся последовательность репетируется один раз при включенных часах, чтобы доказать, что она соответствует окну. Затем запускается окончательный экспорт, кто-то по имени говорит: «Начинай», запускается загрузка, счетчики сравниваются, и все вместе запускаются в работу.</p>
+  <p><strong>Мой комментарий.</strong>  Именно здесь стандартные описания упускают из виду ту часть, которую на самом деле чувствуют клиенты. Миграция занимает недели, и бизнес на этом не останавливается. Мост — это план записей, созданных за эти недели, и его наличие — это разница между спокойным выступлением и суетой.  <a href="../migration-cutover/">Вырезанная статья</a>  рассказывается, как его запустить, включая репетицию и варианты «да/нет», и почему честным откатом почти всегда является «не запускать», а не «откатить назад».</p>
 
-  <h2>Stage 8: Hypercare and close</h2>
-  <p>A defined window of close support after go-live, then a final reconciliation report, a readout, and a handoff to whoever supports the client from here.</p>
-  <p><strong>My commentary.</strong> Hypercare needs an end date agreed at the start, or it becomes free consulting. The close also needs a real handoff, because a client who has worked with one person for three months does not want to be handed a support address and nothing else.</p>
+  <h2>Этап 8: Гиперопека и закрытие</h2>
+  <p>Определенное окно тесной поддержки после запуска, затем окончательный отчет о сверке, считывание данных и передача ответственности тому, кто поддерживает клиента.</p>
+  <p><strong>Мой комментарий.</strong>  Для Hypercare требуется дата окончания, согласованная в начале, иначе консультация станет бесплатной. Закрытие также требует настоящей передачи управления, потому что клиент, который работал с одним человеком в течение трех месяцев, не хочет, чтобы ему вручили адрес поддержки и ничего больше.</p>
 
-  <h2>What a gate actually is</h2>
-  <p>Say what makes a gate different from a status update before you read the answer.</p>
-  <p>A gate has three parts. Something happened, a named person confirmed it in writing, and the confirmation is somewhere both sides can find. A status update has none of those. In real projects the confirmation is almost never a formal signature. It is an email that says what was completed, what is starting, and asks the client to confirm the first part meets expectations. <a href="../migration-emails/">The emails article</a> has the wording.</p>
+  <h2>Что такое ворота на самом деле</h2>
+  <p>Прежде чем прочитать ответ, скажите, чем ворота отличаются от обновления статуса.</p>
+  <p>Ворота состоят из трех частей. Что-то произошло, названное лицо подтвердило это в письменной форме, и подтверждение где-то могут найти обе стороны. Обновление статуса не имеет ничего из этого. В реальных проектах подтверждением почти никогда не является формальная подпись. Это электронное письмо, в котором сообщается, что было завершено и что начинается, и предлагается клиенту подтвердить, что первая часть соответствует ожиданиям.  <a href="../migration-emails/">Статья об электронных письмах</a>  есть формулировка.</p>
 
-  <h2>Where this comes from</h2>
-  <p>Haller, Matthes and Schulz built their process model from the literature plus twenty five industry interviews, and the companion paper argues that testing and quality assurance, rather than the loading itself, determine whether a migration succeeds. The large cloud vendors describe the same arc in fewer words: assess, prove it small, migrate at scale, then hypercare.</p>
-  <p>The eight here are those two views merged, with profiling separated out and the bridge added, because those are the two places I have seen real projects lose the most time.</p>
+  <h2>Откуда это взялось</h2>
+  <p>Халлер, Маттес и Шульц построили свою модель процесса на основе литературы и двадцати пяти отраслевых интервью, а в сопутствующей статье утверждается, что успех миграции определяется тестированием и обеспечением качества, а не самой загрузкой. Крупные поставщики облачных технологий описывают ту же самую дугу меньшими словами: оцените, докажите, что она небольшая, мигрируйте в масштабе, затем гиперуход.</p>
+  <p>Восемь представленных здесь представлений представляют собой объединенные два представления, с разделением профилирования и добавлением моста, потому что это два места, где реальные проекты теряют больше всего времени.</p>
 
-  <h2>The one habit</h2>
-  <p>Never start a stage whose previous gate has not closed in writing. If you cannot point at the email, the gate did not close.</p>
-  <p>Which of the eight do you think gets skipped most often on the jobs you have seen?</p>
+  <h2>Одна привычка</h2>
+  <p>Никогда не начинайте этап, предыдущие ворота которого не закрылись письменно. Если вы не можете указать на электронное письмо, значит, ворота не закрылись.</p>
+  <p>Как вы думаете, какую из восьми работ, которые вы видели, чаще всего пропускают?</p>
 
   <div class="note">
-    <p style="margin:0"><strong>Want to see all eight run on one job?</strong> <a href="../migration-walkthrough/">One Migration, Start to Finish</a> walks a single engagement day by day, with the email that closed each gate, the four change requests, and what it cost to say no.</p>
+    <p style="margin:0"><strong>Хотите увидеть, как все восемь работают на одном задании?</strong> <a href="../migration-walkthrough/">Одна миграция, от начала до конца</a>  проходит одно задание изо дня в день, с электронным письмом, закрывающим все ворота, четырьмя запросами на изменения и ценой отказа.</p>
   </div>
 
 <div class="seriesnav">
-  <p class="up">Up next</p>
-  <a class="next" href="../migration-kickoff-scope/">Stage 1: Kickoff and Scope &rarr;</a>
-  <p class="then">Previously: <a href="../what-is-data-migration/">What Data Migration Actually Is</a></p>
+  <p class="up">Дальше</p>
+  <a class="next" href="../migration-kickoff-scope/">Этап 1: Начало и масштаб →</a>
+  <p class="then">Ранее:  <a href="../what-is-data-migration/">Что на самом деле представляет собой миграция данных</a></p>
 </div>
 
   <div class="cta">
-    <strong>The checking work is SQL, and it is not advanced SQL.</strong>
-    <p style="margin:6px 0 0">Counting rows, grouping to find duplicates, and joining to find orphans covers most of what a migration asks of you. The <a href="../../sql/">SQL Kit</a> teaches those moves in order, with the data in front of you.</p>
-    <a class="btn" href="../../sql/">Open the SQL Kit &rarr;</a>
-    <p style="margin:10px 0 0;font-size:15px">Or start typing straight away: <a href="../../drill/">open SQL Drill</a>, thirteen queries that each add one thing to the last.</p>
+    <strong>Проверочная работа выполняется на языке SQL, а не на продвинутом уровне SQL.</strong>
+    <p style="margin:6px 0 0">Подсчет строк, группировка для поиска дубликатов и объединение для поиска потерянных строк покрывает большую часть того, что требует от вас миграция.  <a href="../../sql/">SQL-комплект</a>  обучает этим движениям по порядку, имея данные перед вами.</p>
+    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
+    <p style="margin:10px 0 0;font-size:15px">Или сразу начните вводить:  <a href="../../drill/">открыть SQL Drill</a>, тринадцать запросов, каждый из которых добавляет что-то одно к последнему.</p>
   </div>
 
   <div class="book">
-    <strong>The checkpoint that closes each gate.</strong>
-    <p>The <em>Migration Gate Sign-off Sheet</em> is the eight gates above as one sheet: what is being signed, who signed, the date, and where the evidence is filed. Blank, plus a worked example mid-engagement, plus a read-me. Excel, and it imports into Smartsheet.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/gate-sign-off-sheet?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=gate-sign-off-sheet" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-migration-stages-gate-sheet'})">Take the Gate Sign-off Sheet &rarr;</a>
+    <strong>КПП, закрывающий каждые ворота.</strong>
+    <p>The <em>Подписной лист миграционных ворот</em>  восемь ворот сверху как один лист: что подписывается, кто подписывает, дата и куда подшиваются доказательства. Бланк, плюс проработанный пример в середине взаимодействия, плюс чтение. Excel, и он импортируется в Smartsheet.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/gate-sign-off-sheet?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=gate-sign-off-sheet" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-migration-stages-gate-sheet'})">Возьмите лист подписи ворот →</a>
   </div>
 
   <div class="book">
-    <strong>The whole run, in one place.</strong>
-    <p>You are moving a client’s records into a new system, and the part that worries you is the week the client goes quiet. <em>The Data Migration Playbook</em> is all eight stages in order, 63 pages, from the first kickoff meeting through hypercare, so you can run one without finding the important question three weeks too late.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/data-migration-playbook?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=data-migration-playbook" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-data-migration-stages'})">The Data Migration Playbook, $29 &rarr;</a>
+    <strong>Весь пробег в одном месте.</strong>
+    <p>Вы переносите записи клиента в новую систему, и вас беспокоит та неделя, когда клиент замолкает.  <em>Руководство по миграции данных</em>  это все восемь этапов по порядку, 63 страницы, от первой стартовой встречи до гиперпомощи, так что вы можете пройти один, не опоздав на три недели с важным вопросом.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/data-migration-playbook?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=data-migration-playbook" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-data-migration-stages'})">Руководство по миграции данных, 29 долларов США →</a>
   </div>
 
 
   <h2>References</h2>
   <ol class="refs">
-    <li>Haller, K., Matthes, F., &amp; Schulz, C. (2012). A detailed process model for large scale data migration projects. <em>Business Information Systems (BIS 2012), Lecture Notes in Business Information Processing, 117</em>. Springer.</li>
-    <li>Matthes, F., Schulz, C., &amp; Haller, K. (2011). Testing &amp; quality assurance in data migration projects. <em>27th IEEE International Conference on Software Maintenance (ICSM)</em>, 438&ndash;447.</li>
+    <li>Халлер К., Маттес Ф. и Шульц К. (2012). Подробная модель процесса для крупномасштабных проектов миграции данных.  <em>Системы бизнес-информации (BIS 2012), Конспекты лекций по обработке бизнес-информации, 117</em>. Спрингер.</li>
+    <li>Маттес Ф., Шульц К. и Халлер К. (2011). Тестирование и обеспечение качества в проектах миграции данных.  <em>27-я Международная конференция IEEE по сопровождению программного обеспечения (ICSM)</em>, 438&ndash;447.</li>
   </ol>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../entity-resolution/">Entity Resolution</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../sql-count-function/">COUNT in SQL</a> · <a href="../sql-joins/">SQL JOINs</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../sql/">SQL Kit</a> · <a href="../../projects/">Portfolio Projects</a>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../sql-count-function/">СЧЕТ в SQL</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../../projects/">Портфельные проекты</a>
     
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

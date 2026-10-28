@@ -105,24 +105,24 @@
       var consent = form.querySelector('input[type=checkbox]').checked;
 
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        err.textContent = 'That does not look like an email address.';
+        err.textContent = "Это не похоже на адрес электронной почты.";
         err.hidden = false;
         return;
       }
       if (!consent) {
-        err.textContent = 'Tick the box so we have your permission on record.';
+        err.textContent = "Установите флажок, чтобы мы зафиксировали ваше разрешение.";
         err.hidden = false;
         return;
       }
       if (!ENDPOINT) {
-        err.textContent = 'Subscriptions are not switched on yet.';
+        err.textContent = "Подписки еще не включены.";
         err.hidden = false;
         return;
       }
 
       var btn = form.querySelector('button');
       btn.disabled = true;
-      btn.textContent = 'Sending…';
+      btn.textContent = "Отправка…";
 
       var body = new FormData();
       body.append(FIELD, email);
@@ -140,7 +140,7 @@
         .catch(function () {
           btn.disabled = false;
           btn.textContent = 'Subscribe';
-          err.textContent = 'That did not go through. Try again in a moment.';
+          err.textContent = "Это не прошло. Повторите попытку через минуту.";
           err.hidden = false;
         });
     });

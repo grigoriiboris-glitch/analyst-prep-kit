@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>How to Export SQL Results to CSV and Excel (Without Wrecking the Data) — Analyst Prep Kit</title>
-<meta name="description" content="Export a query result to CSV or Excel with the zip codes, accents and dates intact. Why double-clicking the file is what breaks it, the one-flag fix, and the checks to run after every export.">
+<title>Как экспортировать результаты SQL в CSV и Excel (не разрушая данные) — комплект для подготовки аналитика</title>
+<meta name="description" content="Экспортируйте результат запроса в CSV или Excel, сохранив почтовые индексы, диакритические знаки и даты. Почему двойной щелчок по файлу приводит к его поломке, исправлению с одним флагом и проверкам, выполняемым после каждого экспорта.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/export-sql-results-to-excel/">
-<meta property="og:title" content="How to Export SQL Results to CSV and Excel (Without Wrecking the Data)">
-<meta property="og:description" content="Your export is usually correct. Opening it by double-click is what strips the leading zeros and mangles the accents. Here is the proof, and the fix.">
+<meta property="og:title" content="Как экспортировать результаты SQL в CSV и Excel (без повреждения данных)">
+<meta property="og:description" content="Ваш экспорт обычно правильный. Открытие его двойным щелчком мыши приводит к удалению ведущих нулей и искажению акцентов. Вот доказательство и исправление.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/export-sql-results-to-excel.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/export-sql-results-to-excel/">
@@ -134,18 +134,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../sql/">SQL Kit</a> · <a href="../">All guides</a></p>
-  <h1>How to Export SQL Results to CSV and Excel</h1>
-  <p class="meta">Getting the file out is easy. Getting it open with the data intact is the part nobody explains · Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-08">August 8, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../">Все руководства</a></p>
+  <h1>Как экспортировать результаты SQL в CSV и Excel</h1>
+  <p class="meta">Вытащить файл несложно. Открытие его с сохранением данных — это та часть, которую никто не объясняет. · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-08">8 августа 2026 г.</time></p>
 
-  <p>By the end of this page you will export a query result and open it with the leading zeros, the accented characters and the dates all still correct. Here is the thing worth knowing before anything else: <strong>your export is almost certainly fine.</strong> The damage happens when you open it, and the difference between a wrecked file and a clean one is which of two ways you opened the same file.</p>
+  <p>К концу этой страницы вы экспортируете результат запроса и откроете его с ведущими нулями, акцентированными символами и датами, которые по-прежнему верны. Вот что стоит знать прежде всего:  <strong>ваш экспорт почти наверняка в порядке.</strong>  Повреждение происходит, когда вы его открываете, и разница между испорченным файлом и чистым заключается в том, каким из двух способов вы открыли один и тот же файл.</p>
 
-  <p>Here is what to actually do today. Stop double-clicking exported CSVs. Open Excel first, then use <strong>Data, Get Data, From Text/CSV</strong>, and open the file from there. That one change prevents most of what follows.</p>
+  <p>Вот чем на самом деле заняться сегодня. Прекратите дважды щелкать экспортированные CSV-файлы. Сначала откройте Excel, затем используйте  <strong>Данные, Получить данные, Из текста/CSV</strong>и откройте файл оттуда. Это одно изменение предотвращает большую часть последующего.</p>
 
-  <p>The short version: export as CSV, open it through the import route rather than by double-click, and add a byte order mark if accented characters matter.</p>
+  <p>Краткая версия: экспортируйте в формате CSV, откройте его с помощью маршрута импорта, а не двойным щелчком мыши, и добавьте метку порядка байтов, если символы с диакритическими знаками имеют значение.</p>
 
-  <p>The same file having two different fates is the one idea worth the page, so it gets the picture.</p>
+  <p>Один и тот же файл, имеющий две разные судьбы, — это единственная идея, достойная страницы, поэтому она дает представление о картине.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 250" role="img" aria-labelledby="exTitle exDesc" xmlns="http://www.w3.org/2000/svg">
@@ -189,36 +189,36 @@
         </g>
       </g>
     </svg>
-    <figcaption>The tick is on the file, not on either result. The bytes on disk are identical in both cases, and only the route into the spreadsheet differs.</figcaption>
+    <figcaption>Галочка стоит на файле, а не на каком-либо результате. Байты на диске в обоих случаях идентичны, отличается только путь к электронной таблице.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>What you'll do</strong>
+    <strong>Что ты будешь делать</strong>
     <ol>
-      <li>Export the result</li>
-      <li>Proof that the file is fine</li>
-      <li>The two ways of opening it</li>
-      <li>The one-flag fix for accents</li>
-      <li>When you actually need a real .xlsx</li>
-      <li>The checks to run every time</li>
-      <li>The full before and after</li>
-      <li>What goes wrong, and the fix</li>
-      <li>Why a CSV cannot protect itself</li>
-      <li>Using this on your own exports</li>
-      <li>The whole thing on one screen</li>
+      <li>экспортировать результат</li>
+      <li>Доказательство того, что с файлом все в порядке</li>
+      <li>Два способа открытия</li>
+      <li>Исправление акцентов одним флажком</li>
+      <li>Когда вам действительно нужен настоящий .xlsx</li>
+      <li>Проверки, которые нужно запускать каждый раз</li>
+      <li>Полное до и после</li>
+      <li>Что пошло не так и как это исправить</li>
+      <li>Почему CSV не может защитить себя</li>
+      <li>Использование этого при собственном экспорте</li>
+      <li>Все на одном экране</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Every byte on this page is real.</strong> The exports were run on 8 August 2026 with SQLite 3.51.1 and the files inspected byte by byte, rather than described from memory. The same behaviour applies to exports from other database tools, because the cause is the file format rather than the tool.</div>
+  <div class="note"><strong>Каждый байт на этой странице реален.</strong>  Экспорт был запущен 8 августа 2026 года с использованием SQLite 3.51.1, и файлы проверялись побайтно, а не описывались по памяти. Такое же поведение применимо и к экспорту из других инструментов баз данных, поскольку причиной является формат файла, а не инструмент.</div>
 
   <div class="step">
-    <h2>1. Export the result</h2>
+    <h2>1. Экспортируйте результат</h2>
 
-    <p>Before the explanation: a CSV is plain text with commas in it. What can such a file say about whether <code>01234</code> is a number or a code?</p>
+    <p>Перед пояснением: CSV — это обычный текст с запятыми. Что такой файл может сказать о том,  <code>01234</code>  это номер или код?</p>
 
-    <p>In a graphical tool like DB Browser for SQLite, run your query and use the export button above the results, or File then Export, then Table(s) as CSV. In pgAdmin or SQL Server Management Studio the equivalent is a Save Results As or Export option on the results grid.</p>
+    <p>В графическом инструменте, таком как DB Browser для SQLite, запустите запрос и используйте кнопку экспорта над результатами или выберите «Файл», затем «Экспорт», затем «Таблицы» в формате CSV. В pgAdmin или SQL Server Management Studio эквивалентом является опция «Сохранить результаты как» или «Экспорт» в таблице результатов.</p>
 
-    <p>From the command line, three lines do it:</p>
+    <p>Из командной строки это делают три строки:</p>
 
     <pre><code>sqlite3 mydata.db
 .mode csv
@@ -226,57 +226,57 @@
 .once results.csv
 SELECT * FROM invoices;</code></pre>
 
-    <p><code>.mode csv</code> sets the output format, <code>.headers on</code> keeps the column names, and <code>.once</code> sends only the next command's output to that file. There are other modes worth knowing about: <code>markdown</code> for pasting into documentation, <code>json</code> for feeding another program, and <code>insert</code> for generating SQL statements that rebuild the rows elsewhere.</p>
+    <p><code>.mode csv</code>  устанавливает формат вывода,  <code>.headers on</code>  сохраняет имена столбцов и  <code>.once</code>  отправляет в этот файл только вывод следующей команды. Есть и другие режимы, о которых стоит знать:  <code>markdown</code>  для вставки в документацию,  <code>json</code>  для подачи другой программы, и  <code>insert</code>  для генерации операторов SQL, которые перестраивают строки в другом месте.</p>
 
-    <p>As for the opening question, the answer is nothing. A CSV carries no type information at all, which is the root of everything below.</p>
+    <p>Что касается вступительного вопроса, то ответ — ничего. CSV вообще не содержит информации о типе, что является корнем всего нижеперечисленного.</p>
   </div>
 
   <div class="step">
-    <h2>2. Proof that the file is fine</h2>
+    <h2>2. Доказательство того, что с файлом все в порядке.</h2>
 
-    <p>I exported a row containing the four things that usually break: a code with leading zeros, an accented word, a decimal, and a date. Then I looked at the actual bytes on disk.</p>
+    <p>Я экспортировал строку, содержащую четыре элемента, которые обычно ломаются: код с ведущими нулями, слово с ударением, десятичную дробь и дату. Затем я посмотрел на фактические байты на диске.</p>
 
     <pre><code>postcode,name,amount,d
 01234,"Café",5.1,2026-03-04</code></pre>
 
-    <p>The zeros are there. <code>01234</code>, all five characters. The accent is there too, stored as the two bytes UTF-8 uses for <code>é</code>. The date is there in an unambiguous year-month-day form. Nothing has been lost by the export.</p>
+    <p>Нули есть.  <code>01234</code>, все пять символов. Акцент тоже присутствует и хранится в виде двух байтов, которые UTF-8 использует для  <code>é</code>. Дата указана в однозначной форме год-месяц-день. От экспорта ничего не потеряно.</p>
 
-    <p>One thing did change, and it is worth naming because it is the export's doing rather than Excel's: I asked for <code>5.10</code> and the file says <code>5.1</code>. Trailing zeros are display formatting, not part of a number's value, so they do not survive being written out. If two decimal places matter in the output, format the column to text in the query rather than expecting the file to remember.</p>
+    <p>Одна вещь действительно изменилась, и ее стоит назвать, потому что это делает экспорт, а не Excel: я попросил  <code>5.10</code>  и в файле написано  <code>5.1</code>. Завершающие нули — это форматирование отображения, а не часть значения числа, поэтому они не сохраняются при записи. Если в выводе важны два десятичных знака, отформатируйте столбец в текстовом виде в запросе, а не ожидайте, что файл запомнит.</p>
   </div>
 
   <div class="step">
-    <h2>3. The two ways of opening it</h2>
+    <h2>3. Два способа открытия</h2>
 
-    <p>Double-click that file and Excel opens it immediately, with no questions. That convenience is the problem, because opening it silently requires Excel to decide what every column means, and it decides badly in two specific ways.</p>
+    <p>Дважды щелкните этот файл, и Excel немедленно откроет его, без вопросов. В этом удобстве и заключается проблема, поскольку для его открытия Excel автоматически требует, чтобы Excel решил, что означает каждый столбец, и он плохо решает два конкретных вопроса.</p>
 
-    <p><code>01234</code> looks numeric, so it becomes the number 1234 and the zeros are gone for good. The accented word arrives as <code>CafÃ©</code>, because Excel assumed a different character set than the one the file used.</p>
+    <p><code>01234</code>  выглядит числом, поэтому оно становится числом 1234, а нули исчезают навсегда. Слово с ударением возникает как  <code>CafÃ©</code>, поскольку Excel использовал другой набор символов, чем тот, который использовался в файле.</p>
 
-    <p>Now open the same file the other way. In Excel, go to <strong>Data</strong>, then <strong>Get Data</strong>, then <strong>From Text/CSV</strong>, and choose the file. A preview appears with dropdowns, exactly the ones described in <a href="../import-a-csv-into-power-bi/">importing a CSV into Power BI</a>, because it is the same underlying tool. Set File Origin to a UTF-8 option, choose <strong>Transform Data</strong>, set the postcode column's type to Text, and load.</p>
+    <p>Теперь откройте тот же файл другим способом. В Excel перейдите к  <strong>Data</strong>, затем  <strong>Получить данные</strong>, затем  <strong>Из текста/CSV</strong>и выберите файл. Появится предварительный просмотр с раскрывающимися списками, точно такими, как описано в  <a href="../import-a-csv-into-power-bi/">импорт CSV в Power BI</a>, потому что это один и тот же базовый инструмент. Установите для параметра «Происхождение файла» значение UTF-8, выберите  <strong>Преобразование данных</strong>, установите тип столбца почтового индекса на «Текст» и загрузите.</p>
 
-    <p>Same file, both times. The second route asks you the questions the first route answers on your behalf, and that is the entire difference. <a href="../excel-csv-import-leading-zeros/">The leading zeros fix</a> covers this in more detail, and <a href="../excel-character-encoding/">character encoding</a> explains the <code>Ã©</code>.</p>
+    <p>Оба раза один и тот же файл. Второй маршрут задает вам вопросы, на которые от вашего имени отвечает первый маршрут, и в этом вся разница.  <a href="../excel-csv-import-leading-zeros/">Ведущие нули исправляют</a>  рассказывает об этом более подробно и  <a href="../excel-character-encoding/">Кодировка символов</a>  объясняет  <code>Ã©</code>.</p>
   </div>
 
   <div class="step">
-    <h2>4. The one-flag fix for accents</h2>
+    <h2>4. Исправление акцентов одним флажком</h2>
 
-    <p>If people will keep double-clicking your file, and they will, you can make the encoding problem go away at the export end.</p>
+    <p>Если люди будут продолжать дважды щелкать ваш файл, и они будут это делать, вы можете решить проблему с кодировкой в ​​​​конце экспорта.</p>
 
-    <p>A <strong>byte order mark</strong> is three invisible bytes at the very start of a file that announce "this is UTF-8". Excel reads them and gets the character set right without asking. Most database exports do not include one, which is why the accents break.</p>
+    <p>A <strong>знак порядка байтов</strong>  — это три невидимых байта в самом начале файла, которые объявляют «это UTF-8». Excel читает их и получает правильный набор символов, не спрашивая об этом. Большинство экспортированных баз данных не включают его, поэтому акценты разбиваются.</p>
 
-    <p>In sqlite3, adding it is one flag:</p>
+    <p>В sqlite3 добавление одного флага:</p>
 
     <pre><code>.once --bom results.csv
 SELECT * FROM invoices;</code></pre>
 
-    <p>Say what that does and does not fix, before reading on. It fixes the accents, because the file now states its own encoding. It does not fix the leading zeros, because no byte order mark can tell Excel that a column of digits is really a code. The zeros need either the import route or a change in the query.</p>
+    <p>Прежде чем читать дальше, скажите, что это исправляет, а что нет. Это исправляет акценты, потому что в файле теперь указана собственная кодировка. Он не исправляет ведущие нули, поскольку никакой знак порядка байтов не может сказать Excel, что столбец цифр на самом деле является кодом. Нули требуют либо маршрута импорта, либо изменения в запросе.</p>
 
-    <p>There is a related trick in the same tool: <code>.excel</code> sends the next result straight into your spreadsheet application, and it takes <code>--bom</code> too. Handy for a quick look, less good as a repeatable step.</p>
+    <p>В том же инструменте есть похожий трюк:  <code>.excel</code>  отправляет следующий результат прямо в ваше приложение для работы с электронными таблицами, и это занимает  <code>--bom</code>  слишком. Удобен для быстрого просмотра, менее хорош в качестве повторяемого шага.</p>
   </div>
 
   <div class="step">
-    <h2>5. When you actually need a real .xlsx</h2>
+    <h2>5. Когда вам действительно нужен настоящий .xlsx</h2>
 
-    <p>Renaming a CSV to <code>.xlsx</code> does not make it a workbook, and Excel will complain when it opens. If you genuinely need a real workbook, with types preserved and no import dance, generate one.</p>
+    <p>Переименование CSV в  <code>.xlsx</code>  не превращает ее в книгу, и Excel будет жаловаться при ее открытии. Если вам действительно нужна настоящая рабочая книга с сохраненными типами и без танцев с импортом, создайте ее.</p>
 
     <pre><code>import sqlite3
 import pandas as pd
@@ -285,140 +285,140 @@ con = sqlite3.connect('mydata.db')
 df = pd.read_sql("SELECT * FROM invoices", con)
 df.to_excel('results.xlsx', index=False)</code></pre>
 
-    <p>That needs <code>openpyxl</code> installed alongside pandas. The advantage is real: an xlsx stores each cell's type, so a text column stays text, the zeros survive, and the accents are never in question. The recipient double-clicks it and everything is correct.</p>
+    <p>Это требует  <code>openpyxl</code>  установлен рядом с пандами. Преимущество реально: в xlsx хранится тип каждой ячейки, поэтому текстовый столбец остается текстовым, нули сохраняются, а акценты никогда не подвергаются сомнению. Получатель дважды щелкает по нему, и все правильно.</p>
 
-    <p><code>index=False</code> matters more than it looks. Without it you get an extra unnamed first column containing row numbers, which then confuses whoever receives the file into thinking it is an identifier.</p>
+    <p><code>index=False</code>  имеет большее значение, чем кажется. Без него вы получите дополнительный безымянный первый столбец, содержащий номера строк, что затем сбивает с толку того, кто получает файл, что он думает, что это идентификатор.</p>
 
-    <p>Choose CSV when the file feeds another program, and xlsx when a person is going to open it. That is the whole rule, and it usually decides itself once you ask who is on the other end.</p>
+    <p>Выбирайте CSV, когда файл передается другой программе, и xlsx, когда человек собирается его открыть. В этом все правило, и оно обычно решается само собой, как только вы спрашиваете, кто на другом конце провода.</p>
   </div>
 
   <div class="step">
-    <h2>6. The checks to run every time</h2>
+    <h2>6. Проверки, которые нужно запускать каждый раз</h2>
 
-    <p>Four checks, under a minute, and they catch nearly everything.</p>
+    <p>Четыре проверки менее чем за минуту, и они ловят почти все.</p>
 
     <ol>
-      <li><strong>Row count.</strong> Compare the rows in the file against the rows the query returned. A silent truncation looks exactly like a successful export.</li>
-      <li><strong>Both ends of every code column.</strong> Sort by it and look at the first and last values. Missing leading zeros show up immediately.</li>
-      <li><strong>One accented or non-English value.</strong> If your data has any, find one and look at it. That single cell tells you the encoding survived.</li>
-      <li><strong>One date.</strong> Check it against a date you know. Day and month swapping is the single most common silent corruption in a shared file.</li>
+      <li><strong>Количество строк.</strong>  Сравните строки в файле со строками, возвращенными запросом. Тихое усечение выглядит точно так же, как успешный экспорт.</li>
+      <li><strong>Оба конца каждого столбца кода.</strong>  Отсортируйте по нему и посмотрите на первое и последнее значения. Отсутствующие ведущие нули отображаются немедленно.</li>
+      <li><strong>Одно акцентированное или неанглийское значение.</strong>  Если у вас есть данные, найдите их и просмотрите. Эта единственная ячейка говорит о том, что кодировка сохранилась.</li>
+      <li><strong>Одно свидание.</strong>  Сравните это с датой, которую вы знаете. Перестановка дня и месяца — самое распространенное скрытое повреждение общего файла.</li>
     </ol>
 
-    <p>Now picture the last export you sent somebody. Which of those four did you check before pressing send? For most of us the honest answer is none, which is fine right up until the file goes to a client.</p>
+    <p>Теперь представьте себе последний экспорт, который вы кому-то отправили. Какой из этих четырех вы проверили, прежде чем нажать «Отправить»? Для большинства из нас честный ответ — нет, и это нормально до тех пор, пока файл не попадет к клиенту.</p>
   </div>
 
-  <h2>The full before and after</h2>
+  <h2>Полное до и после</h2>
 
-  <p>Same query, same recipient.</p>
+  <p>Тот же запрос, тот же получатель.</p>
 
   <h3>Before</h3>
   <pre><code>Run query → Export CSV → double-click to check → looks fine → email it
 Recipient: "the postcodes are wrong and the names have symbols in them"</code></pre>
-  <p>The trap is that checking by double-click uses the same broken route as the recipient, so the file looks fine to you in exactly the way it will look broken to them. Worse, if you now save from that window, the damage is written into the file for real.</p>
+  <p>Ловушка заключается в том, что проверка двойным щелчком мыши использует тот же сломанный маршрут, что и получатель, поэтому файл выглядит для вас нормально именно так, как он будет выглядеть для них сломанным. Хуже того, если вы сейчас сохранитесь из этого окна, ущерб будет записан в файл по-настоящему.</p>
 
   <h3>After</h3>
   <pre><code>Run query → Export CSV with --bom
 Open via Data → Get Data → From Text/CSV, set the code column to Text
 Check: row count, both ends of the code column, one accent, one date
 Person on the other end? Send .xlsx instead. Program? Send the CSV.</code></pre>
-  <p>The byte order mark protects the recipient who double-clicks, the import route protects you while checking, and the four checks catch the rest. Choosing xlsx for a human removes the question entirely.</p>
+  <p>Метка порядка байтов защищает получателя, который дважды щелкает мышью, маршрут импорта защищает вас во время проверки, а четыре проверки фиксируют все остальное. Выбор xlsx для человека полностью снимает вопрос.</p>
 
   <div class="step">
-    <h2>What goes wrong, and the fix</h2>
+    <h2>Что пошло не так и как это исправить</h2>
 
-    <p>Six worth knowing.</p>
+    <p>Шесть, которые стоит знать.</p>
 
-    <p><strong>Leading zeros gone.</strong> Excel read a code as a number. Import route with the column set to Text, or send xlsx.</p>
+    <p><strong>Ведущие нули исчезли.</strong>  Excel читает код как число. Импортируйте маршрут со столбцом «Текст» или отправьте xlsx.</p>
 
-    <p><strong><code>Ã©</code> where <code>é</code> should be.</strong> Encoding. Export with <code>--bom</code>, or set File Origin to UTF-8 on import.</p>
+    <p><strong><code>Ã©</code> where <code>é</code>  должно быть.</strong>  Кодирование. Экспортировать с  <code>--bom</code>или установите для источника файла значение UTF-8 при импорте.</p>
 
-    <p><strong>A long number became <code>1.23457E+14</code>.</strong> Scientific notation. Anything over 15 digits also loses its last digits permanently, which matters for card numbers and long identifiers. Set the column to Text on import, and never let the file be saved from that state.</p>
+    <p><strong>Длинный номер стал  <code>1.23457E+14</code>.</strong>  Научное обозначение. Все, что превышает 15 цифр, также безвозвратно теряет свои последние цифры, что важно для номеров карт и длинных идентификаторов. Установите для столбца значение «Текст» при импорте и никогда не позволяйте файлу сохраняться из этого состояния.</p>
 
-    <p><strong>Dates out by a month.</strong> Day and month swapped by locale. Export dates as <code>YYYY-MM-DD</code>, which cannot be misread, and set the type explicitly on import.</p>
+    <p><strong>Сроки истекают на месяц.</strong>  День и месяц меняются местами в зависимости от локали. Экспортировать даты как  <code>YYYY-MM-DD</code>, который нельзя неправильно прочитать, и явно задайте тип при импорте.</p>
 
-    <p><strong>Rows split across lines.</strong> A text field contains a line break. Proper quoting handles it, but check that whatever reads the file honours quoted line breaks.</p>
+    <p><strong>Строки разделены по строкам.</strong>  Текстовое поле содержит разрыв строки. Правильное цитирование решает эту проблему, но убедитесь, что все, что читает файл, учитывает разрывы строк в кавычках.</p>
 
-    <p><strong>Too many rows for Excel.</strong> A worksheet stops at 1,048,576 rows. If you are near that, the answer is to summarise in the query rather than to export more, and <a href="../handle-large-datasets/">handling large datasets</a> covers the rest.</p>
+    <p><strong>Слишком много строк для Excel.</strong>  Рабочий лист останавливается на 1 048 576 строк. Если вы близки к этому, ответом будет суммировать запрос, а не экспортировать больше, и  <a href="../handle-large-datasets/">Обработка больших наборов данных</a>  покрывает остальное.</p>
   </div>
 
-  <h2>Why a CSV cannot protect itself</h2>
+  <h2>Почему CSV не может защитить себя</h2>
 
-  <p>Every problem on this page comes from one fact: a CSV stores values, not types. The characters <code>01234</code> sit in the file exactly as written, and nothing anywhere in the format says whether they are a number that happens to start with a zero or a code where the zero is meaningful. So the program opening it has to guess, and any guess will be wrong for somebody.</p>
+  <p>Каждая проблема на этой странице связана с одним фактом: в CSV хранятся значения, а не типы. Персонажи  <code>01234</code>  находятся в файле точно так, как написано, и нигде в формате не указано, являются ли они числом, которое начинается с нуля, или кодом, в котором ноль имеет смысл. Поэтому программа, открывающая его, должна догадываться, и любая догадка для кого-то будет неверной.</p>
 
   <p>Encoding has the same shape. A file is a sequence of bytes, and which letters those bytes represent depends on a character set that the file usually does not name. The byte order mark exists precisely to let a file name its own encoding, which is why adding it fixes the accents and cannot possibly fix the zeros. One is a fact the file can state about itself; the other is a fact nobody recorded.</p>
 
-  <p>Seen that way, the import route is not a workaround. It is the format working as designed, with the person who knows the answer supplying it, instead of a program guessing on their behalf.</p>
+  <p>С этой точки зрения маршрут импорта не является обходным путем. Это формат, работающий так, как задумано: его дает человек, который знает ответ, а не программа, предполагающая за него.</p>
 
-  <p>One note on the way this page is written. It kept asking you to commit to an answer, what a CSV can say about a code, what a byte order mark does not fix, before giving one. Attempting an answer before seeing the correct one reliably improves how well the correct one is retained, even when the attempt is wrong (Bisra, Liu, Nesbit, Salimi, &amp; Winne, 2018, <em>Educational Psychology Review</em>, 30(3), 703–725).</p>
+  <p>Одно замечание по поводу написания этой страницы. Он постоянно просил вас дать ответ, что CSV может сказать о коде, что не исправляет знак порядка байтов, прежде чем дать его. Попытка дать ответ до того, как вы увидите правильный, достоверно повышает, насколько хорошо сохраняется правильный ответ, даже если попытка неверна (Бисра, Лю, Несбит, Салими и Винн, 2018,  <em>Обзор педагогической психологии</em>, 30(3), 703–725).</p>
 
-  <h2>Using this on your own exports</h2>
+  <h2>Использование этого при собственном экспорте</h2>
 
-  <p>Five habits, in order.</p>
+  <p>Пять привычек по порядку.</p>
 
   <ol>
-    <li><strong>Never double-click an exported CSV.</strong> Not even to check it. Checking through the broken route is worse than not checking.</li>
-    <li><strong>Export with a byte order mark</strong> when anyone else will open the file.</li>
-    <li><strong>Send xlsx to people and CSV to programs.</strong> The question answers itself once you ask who opens it.</li>
-    <li><strong>Format dates as <code>YYYY-MM-DD</code> in the query.</strong> It is the one form no locale can misread.</li>
-    <li><strong>Run the four checks before sending.</strong> Row count, both ends of a code column, one accent, one date.</li>
+    <li><strong>Никогда не щелкайте дважды по экспортированному CSV-файлу.</strong>  Даже не для того, чтобы это проверить. Проверять нарушенный маршрут хуже, чем не проверять.</li>
+    <li><strong>Экспорт с отметкой порядка байтов</strong>  когда кто-то еще откроет файл.</li>
+    <li><strong>Отправляйте xlsx людям и CSV программам.</strong>  Вопрос ответит сам собой, если вы спросите, кто его открывает.</li>
+    <li><strong>Отформатируйте даты как  <code>YYYY-MM-DD</code>  в запросе.</strong>  Это единственная форма, которую ни одна локаль не может неправильно прочитать.</li>
+    <li><strong>Перед отправкой выполните четыре проверки.</strong>  Количество строк, оба конца столбца кода, одно ударение, одна дата.</li>
   </ol>
 
-  <p>If you have paper nearby, one optional drawing is worth two minutes. List your export's columns and mark each one as a number, a date, or a code that merely looks like a number. Every column in that third group is a column that will break, and knowing which they are before you send the file is the whole job.</p>
+  <p>Если у вас под рукой есть бумага, один дополнительный рисунок стоит двух минут. Перечислите столбцы экспорта и отметьте каждый из них числом, датой или кодом, который просто выглядит как число. Каждый столбец в этой третьей группе — это столбец, который будет разбит, и знать, что это за столбец, прежде чем отправить файл, — это вся работа.</p>
 
-  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: getting set up, SQL, Excel, Python, and the working habits around them.</div>
+  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: настройка, SQL, Excel, Python и навыки работы с ними.</div>
 
-  <h2>The whole thing on one screen</h2>
+  <h2>Все на одном экране</h2>
 
-  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
+  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
 
   <table>
-    <tr><th>Thing</th><th>What it is, or what it does</th></tr>
-    <tr><td>The core fact</td><td>A CSV stores values, not types. Everything else follows.</td></tr>
-    <tr><td>Where damage happens</td><td>On opening, not on exporting. The file is usually correct.</td></tr>
-    <tr><td>Double-click</td><td>Excel guesses silently. Zeros stripped, accents mangled.</td></tr>
-    <tr><td>The import route</td><td>Data → Get Data → From Text/CSV. It asks instead of guessing.</td></tr>
-    <tr><td><code>.mode csv</code> / <code>.headers on</code></td><td>sqlite3: set the format, keep the column names.</td></tr>
-    <tr><td><code>.once file.csv</code></td><td>Send only the next result to that file.</td></tr>
-    <tr><td>Other modes</td><td>markdown, json, insert, box, html, line.</td></tr>
-    <tr><td>Byte order mark</td><td>Three bytes saying "this is UTF-8". <code>.once --bom</code>.</td></tr>
-    <tr><td>What the BOM fixes</td><td>Accents. Not leading zeros: no format can say a digit string is a code.</td></tr>
-    <tr><td>Trailing zeros</td><td>5.10 exports as 5.1. Formatting is not part of a number's value.</td></tr>
-    <tr><td>Real xlsx</td><td><code>df.to_excel('f.xlsx', index=False)</code>, needs openpyxl. Types preserved.</td></tr>
-    <tr><td><code>index=False</code></td><td>Stops an unnamed row-number column appearing.</td></tr>
-    <tr><td>CSV or xlsx</td><td>Program gets CSV. Person gets xlsx.</td></tr>
-    <tr><td>15 digits</td><td>Excel loses digits past that permanently. Set the column to Text.</td></tr>
-    <tr><td>Date format</td><td><code>YYYY-MM-DD</code>. No locale can misread it.</td></tr>
-    <tr><td>Excel row ceiling</td><td>1,048,576. Summarise in the query instead.</td></tr>
-    <tr><td>The four checks</td><td>Row count, both ends of a code column, one accent, one date.</td></tr>
+    <tr><th>Thing</th><th>Что это такое или что оно делает</th></tr>
+    <tr><td>Основной факт</td><td>CSV хранит значения, а не типы. Все остальное следует за этим.</td></tr>
+    <tr><td>Где происходит повреждение</td><td>При открытии, а не при экспорте. Файл обычно правильный.</td></tr>
+    <tr><td>Double-click</td><td>Excel угадывает молча. Нули удалены, акценты искажены.</td></tr>
+    <tr><td>Путь импорта</td><td>Данные → Получить данные → Из текста/CSV. Он спрашивает вместо того, чтобы гадать.</td></tr>
+    <tr><td><code>.mode csv</code> / <code>.headers on</code></td><td>sqlite3: установите формат, сохраните имена столбцов.</td></tr>
+    <tr><td><code>.once file.csv</code></td><td>Отправьте в этот файл только следующий результат.</td></tr>
+    <tr><td>Другие режимы</td><td>уценка, json, вставка, поле, html, строка.</td></tr>
+    <tr><td>знак порядка байтов</td><td>Три байта говорят «это UTF-8».  <code>.once --bom</code>.</td></tr>
+    <tr><td>Что исправляет спецификация</td><td>Акценты. Не ведущие нули: ни один формат не может сказать, что строка цифр является кодом.</td></tr>
+    <tr><td>Завершающие нули</td><td>5.10 экспортирует как 5.1. Форматирование не является частью значения числа.</td></tr>
+    <tr><td>Настоящий xlsx</td><td><code>df.to_excel('f.xlsx', index=False)</code>, нужен openpyxl. Типы сохранились.</td></tr>
+    <tr><td><code>index=False</code></td><td>Останавливает появление безымянного столбца с номером строки.</td></tr>
+    <tr><td>CSV или xlsx</td><td>Программа получает CSV. Человек получает xlsx.</td></tr>
+    <tr><td>15 цифр</td><td>Excel теряет цифры после этого навсегда. Установите для столбца значение «Текст».</td></tr>
+    <tr><td>Формат даты</td><td><code>YYYY-MM-DD</code>. Никакая локаль не может его неправильно прочитать.</td></tr>
+    <tr><td>Рядной потолок Excel</td><td>1 048 576. Вместо этого суммируйте в запросе.</td></tr>
+    <tr><td>Четыре проверки</td><td> Количество строк, оба конца столбца кода, одно ударение, одна дата.</td></tr>
   </table>
 
-  <div class="note"><strong>The one habit to keep.</strong> Never open an exported CSV by double-clicking it, including when you are only checking. That single rule removes the two most common silent corruptions and stops you from confirming a file is fine using the exact route that breaks it. If something breaks in a way this page does not cover, there is a general <a href="../technical-tenacity/">diagnosis loop for being stuck</a>.</div>
+  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Никогда не открывайте экспортированный CSV-файл, дважды щелкнув его, в том числе во время только проверки. Это единственное правило устраняет два наиболее распространенных скрытых повреждения и не позволяет вам подтвердить, что с файлом все в порядке, используя именно тот маршрут, который его нарушает. Если что-то сломалось так, как не описано на этой странице, существует общая  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>.</div>
 
-  <p>One last thought, and I would genuinely like other people's answers. The version of this that stings is opening a file to check it, seeing the damage, and realising you have just saved over the good copy. What has an export quietly changed on you, and who found it first?</p>
+  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Жалящая версия — это открыть файл, чтобы проверить его, увидеть повреждения и понять, что вы только что сохранили хорошую копию. Что на вас незаметно изменил экспорт, и кто нашел его первым?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Bisra, K., Liu, Q., Nesbit, J. C., Salimi, F., &amp; Winne, P. H. (2018). Inducing self-explanation: A meta-analysis. <em>Educational Psychology Review</em>, 30(3), 703–725.</li>
+    <li>Бисра К., Лю К., Несбит Дж. К., Салими Ф. и Винн П. Х. (2018). Побуждение к самообъяснению: метаанализ.  <em>Обзор педагогической психологии</em>, 30(3), 703–725.</li>
   </ul>
 
   <div class="book">
-    <strong>The query is right and the export arrives with dates as text and IDs missing zeros.</strong>
-    <p><em>SQL for Analysts</em> is 458 pages, queries read line by line, including how to shape a result set before it leaves the database.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-export-sql-results-to-excel'})">SQL for Analysts, $19 &rarr;</a>
+    <strong>Запрос верен, и экспорт приходит с датами в виде текста и идентификаторами, в которых отсутствуют нули.</strong>
+    <p><em>SQL для аналитиков</em>  занимает 458 страниц, запросы читаются построчно, включая способы формирования набора результатов перед тем, как он покинет базу данных.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-export-sql-results-to-excel'})">SQL для аналитиков, 19 $ →</a>
   </div>
 
   <div class="cta">
-    <strong>The export is the last step. The query is the work.</strong>
-    <p style="margin:6px 0 0">The <a href="../../sql/">SQL Kit</a> covers writing the query whose result you are exporting, with a live database in the browser tab, and the <a href="../../excel/">Excel Kit</a> covers what happens to it once it lands, including Power Query and the checks that catch a broken import.</p>
-    <a class="btn" href="../../sql/">Open the SQL Kit →</a>
+    <strong>Экспорт — последний шаг. Запрос – это работа.</strong>
+    <p style="margin:6px 0 0">The <a href="../../sql/">SQL-комплект</a>  охватывает написание запроса, результат которого вы экспортируете, с активной базой данных на вкладке браузера и  <a href="../../excel/">Excel комплект</a>  рассказывает о том, что происходит с ним после его доставки, включая Power Query и проверки, обнаруживающие сбой импорта.</p>
+    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> · <a href="../excel-csv-import-leading-zeros/">CSV Leading Zeros</a> · <a href="../excel-character-encoding/">Character Encoding</a> · <a href="../connect-excel-to-a-database/">Connect Excel to a Database</a> · <a href="../import-a-csv-into-power-bi/">Import a CSV into Power BI</a> · <a href="../set-up-a-sql-database/">Set Up a SQL Database</a> · <a href="../set-up-duckdb/">Set Up DuckDB</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../excel-check-your-work/">Check Your Work in Excel</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../sql/">SQL Kit</a> · <a href="../../excel/">Excel Kit</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../excel-csv-import-leading-zeros/">CSV ведущие нули</a> · <a href="../excel-character-encoding/">Кодировка символов</a> · <a href="../connect-excel-to-a-database/">Подключите Excel к базе данных</a> · <a href="../import-a-csv-into-power-bi/">Импортируйте CSV в Power BI.</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../set-up-duckdb/">Настройте DuckDB</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../excel-check-your-work/">Проверьте свою работу в Excel</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../../excel/">Excel комплект</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="ru" data-theme="light" data-static-ru="true">
 <head>
-<script src="../assets/ru-localization-boot.js"></script>
+
   <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
   <script>
     (function () {
@@ -28,9 +28,9 @@
   </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Project Studio · Analyst Prep Kit</title>
+<title>Мастерская проектов — тренажёр аналитика</title>
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/projects/">
-<meta name="description" content="Scope, plan, build, and present a real data-analyst portfolio project. Step-by-step through the industry-standard analysis stages — Excel, SQL, Tableau first.">
+<meta name="description" content="Определите масштаб, спланируйте, создайте и представьте настоящий проект портфолио аналитика данных. Шаг за шагом проходим стандартные этапы анализа — сначала Excel, SQL, Tableau.">
 <link rel="stylesheet" href="../assets/grain/grain.css">
 <link rel="stylesheet" href="../assets/grain/zinc-sky.css"><!-- Zinc & Sky palette rollout -->
 <style>
@@ -168,10 +168,10 @@ input:focus,textarea:focus,select:focus{outline:none;box-shadow:var(--focus-ring
 <body>
 
 <nav>
-  <a class="back" href="../">← All kits</a>
-  <span class="brand"><i data-lucide="compass"></i> Project Studio</span>
+  <a class="back" href="../">← Все комплекты</a>
+  <span class="brand"><i data-lucide="compass"></i> Мастерская проектов</span>
   <span class="spacer"></span>
-  <button class="icon-btn" onclick="toggleTheme()" title="Toggle light/dark"><span id="themeIcon"><i data-lucide="moon"></i></span></button>
+  <button class="icon-btn" onclick="toggleTheme()" title="Переключить светлый/темный"><span id="themeIcon"><i data-lucide="moon"></i></span></button>
 </nav>
 
 <div class="wrap" id="app"></div>
@@ -194,18 +194,18 @@ const SCOPE_STEPS = ['domain','question','criteria','feasibility','output','tool
 const DOMAIN_CHIPS = ['Games','Weather','Job market','Sports','Music','Movies & TV','Food & recipes','E-commerce','Health & fitness','Something else'];
 
 const OUTPUT_TYPES = [
-  {id:'ranked_list', label:'Ranked list', hint:"A sorted table answering 'which ones are best/worst'"},
-  {id:'dashboard', label:'Dashboard', hint:'Interactive, filterable view for ongoing exploration'},
-  {id:'report', label:'Written report', hint:'A narrative with findings and a recommendation'},
-  {id:'single_number', label:'A single number', hint:'One headline stat that settles the question'}
+  {id:'ranked_list', label:"Рейтинговый список", hint:"Отсортированная таблица ответов «какие из них лучшие/худшие»"},
+  {id:'dashboard', label:'Dashboard', hint:"Интерактивное, фильтруемое представление для непрерывного исследования."},
+  {id:'report', label:"Письменный отчет", hint:"Рассказ с выводами и рекомендациями"},
+  {id:'single_number', label:"Один номер", hint:"Один заголовок, который решает вопрос"}
 ];
 
 const TOOLS = [
-  {id:'excel', label:'Excel', rec:true, why:'Assumed everywhere — pivots and lookups get you hired.'},
-  {id:'sql', label:'SQL', rec:true, why:'The #1 hard-skill filter on analyst job posts.'},
-  {id:'tableau', label:'Tableau', rec:true, why:'The dashboard is usually the deliverable interviewers open first.'},
-  {id:'powerbi', label:'Power BI', rec:false, why:'Swap in for Tableau at Microsoft-stack shops.'},
-  {id:'python', label:'Python', rec:false, why:'Great for data prep, but optional for entry-level.'}
+  {id:'excel', label:'Excel', rec:true, why:"Предполагается везде: повороты и поиски помогут вам нанять."},
+  {id:'sql', label:'SQL', rec:true, why:"Фильтр профессиональных навыков №1 на вакансиях аналитиков."},
+  {id:'tableau', label:'Tableau', rec:true, why:"Панель мониторинга обычно открывается интервьюерам в первую очередь."},
+  {id:'powerbi', label:'Power BI', rec:false, why:"Обменяйтесь на Tableau в магазинах Microsoft."},
+  {id:'python', label:'Python', rec:false, why:"Отлично подходит для подготовки данных, но необязателен для начального уровня."}
 ];
 
 /* The six industry-standard analysis stages (Ask → Prepare → Process →
@@ -341,7 +341,7 @@ function openProject(id){
   render();
 }
 function deleteProject(id){
-  if(!confirm('Delete this project and all its progress?')) return;
+  if(!confirm("Удалить этот проект и весь его прогресс?")) return;
   DB.projects = DB.projects.filter(p=>p.id!==id); saveProj();
   VIEW = {name:'home'}; render();
 }
@@ -599,10 +599,10 @@ function buildTemplatePlan(sc){
 function planCustomStart(){
   const el=document.getElementById('plan-extra');
   el.innerHTML = `<div class="card card-sm" style="margin-top:14px">
-    <div class="label">Paste your plan</div>
-    <p class="hint">One step per line. Start a stage with a line like <span class="mono">## Analyze</span> (stages: Ask, Prepare, Process, Analyze, Share, Act). Lines before any heading go to Ask. Tag a skill in brackets, e.g. <span class="mono">Build the pivot [excel]</span>.</p>
+    <div class="label">Вставьте свой план</div>
+    <p class="hint">Один шаг на строку. Начните этап со строки типа <span class="mono">## Анализировать</span> (этапы: Спросить, Подготовиться, Обработать, Анализировать, Поделиться, Действуть). Строки перед любым заголовком переходят к «Спросить». Отметьте навык в скобках, например. <span class="mono">Создайте сводную таблицу [excel]</span>.</p>
     <textarea id="customPlan" rows="10" style="margin-top:8px" placeholder="## Prepare&#10;Download the dataset [excel]&#10;Load into SQLite [sql]&#10;## Analyze&#10;..."></textarea>
-    <div style="margin-top:10px"><button class="btn" onclick="planCustomImport()">Import plan</button></div>
+    <div style="margin-top:10px"><button class="btn" onclick="planCustomImport()">План импорта</button></div>
     <div id="customErr" class="err"></div>
   </div>`;
   el.scrollIntoView({behavior:'smooth'});
@@ -611,7 +611,7 @@ function planCustomImport(){
   const raw = document.getElementById('customPlan').value;
   const stages = parseCustomPlan(raw);
   const total = stages.reduce((n,s)=>n+s.steps.length,0);
-  if(!total){ document.getElementById('customErr').textContent='No steps found — add at least one line that isn\'t a heading.'; return; }
+  if(!total){ document.getElementById('customErr').textContent="Шаги не найдены — добавьте хотя бы одну строку, которая не является заголовком."; return; }
   const p=getProj(VIEW.id);
   p.plan = {source:'custom', locked:false, stages};
   saveProj(); render();
@@ -645,10 +645,10 @@ function planAIStart(){
   const el=document.getElementById('plan-extra');
   const saved = localStorage.getItem(COACH_KEY)||'';
   el.innerHTML = `<div class="card card-sm" style="margin-top:14px">
-    <div class="label">Generate with Claude</div>
-    <p class="hint">Your scoping doc is sent to <span class="mono">api.anthropic.com</span> with your own API key. The key is saved only in this browser (shared with the AI Coach across the kits) and never sent anywhere else.</p>
-    <div style="margin-top:8px"><input type="password" id="aiKey" value="${esc(saved)}" placeholder="Your Anthropic API key (sk-ant-...)"></div>
-    <div style="margin-top:10px"><button class="btn" id="aiGo" onclick="planAIGenerate()"><i data-lucide="sparkles"></i> Draft my step-by-step</button></div>
+    <div class="label">Генерировать с Клодом</div>
+    <p class="hint">Ваш объемный документ будет отправлен на <span class="mono">api.anthropic.com</span> с вашим собственным ключом API. Ключ сохраняется только в этом браузере (совместно с AI Coach во всех наборах) и никогда больше никуда не отправляется.</p>
+    <div style="margin-top:8px"><input type="пароль" id="aiKey" value="${esc(saved)}" Placeholder="Ваш ключ Anthropic API (sk-ant-...)"></div>
+    <div style="margin-top:10px"><button class="btn" id="aiGo" onclick="planAIGenerate()"><i data-lucide="sparkles"></i> Нарисуйте мой пошаговый план</button></div>
     <div id="aiErr" class="err"></div>
   </div>`;
   el.scrollIntoView({behavior:'smooth'});
@@ -656,9 +656,9 @@ function planAIStart(){
 async function planAIGenerate(){
   const key = document.getElementById('aiKey').value.trim();
   const errEl = document.getElementById('aiErr');
-  if(!key){ errEl.textContent='Enter an API key first, or use the template instead.'; return; }
+  if(!key){ errEl.textContent="Сначала введите ключ API или используйте шаблон."; return; }
   localStorage.setItem(COACH_KEY,key);
-  const btn=document.getElementById('aiGo'); btn.disabled=true; btn.textContent='Drafting… (10–20s)';
+  const btn=document.getElementById('aiGo'); btn.disabled=true; btn.textContent="Черчение… (10–20 с)";
   errEl.textContent='';
   const p=getProj(VIEW.id);
   const prompt = `You are a senior data analyst mentoring a beginner building a portfolio project. Draft a step-by-step project plan from their scoping document.
@@ -694,7 +694,7 @@ ${scopeDocText(p.scope)}`;
     saveProj(); render();
   }catch(e){
     errEl.textContent = 'Couldn\'t generate: '+(e.message||'check your key and try again.');
-    btn.disabled=false; btn.innerHTML='<i data-lucide="sparkles"></i> Draft my step-by-step';
+    btn.disabled=false; btn.innerHTML="<i data-lucide=\"sparkles\"></i> Нарисуйте мой пошаговый план";
     if(window.lucide) lucide.createIcons();
   }
 }
@@ -736,11 +736,11 @@ function peText(key,i,v){ peStage(key).steps[i].text=v; saveProj(); }
 function peSkill(key,i,v){ peStage(key).steps[i].skill=v; saveProj(); }
 function peDel(key,i){ peStage(key).steps.splice(i,1); saveProj(); render(); }
 function peAdd(key){ peStage(key).steps.push(mkStep('','')); saveProj(); render(); }
-function planReset(){ if(!confirm('Discard this plan and choose a different source?'))return; const p=getProj(VIEW.id); p.plan={source:'',stages:[],locked:false}; saveProj(); render(); }
+function planReset(){ if(!confirm("Отменить этот план и выбрать другой источник?"))return; const p=getProj(VIEW.id); p.plan={source:'',stages:[],locked:false}; saveProj(); render(); }
 function planLock(){
   const p=getProj(VIEW.id);
   p.plan.stages.forEach(st=>st.steps=st.steps.filter(s=>s.text.trim()));
-  if(!planSteps(p).length){ alert('Your plan has no steps yet.'); return; }
+  if(!planSteps(p).length){ alert("В вашем плане пока нет шагов."); return; }
   p.plan.locked=true; p.phase='build'; saveProj(); render();
 }
 
@@ -882,7 +882,7 @@ function exportMD(p){
 }
 function copyExport(){
   navigator.clipboard.writeText(exportMD(getProj(VIEW.id))).then(()=>{
-    document.getElementById('expMsg').textContent='Copied to clipboard.';
+    document.getElementById('expMsg').textContent="Скопировано в буфер обмена.";
   });
 }
 function downloadExport(){
@@ -898,7 +898,7 @@ function downloadExport(){
 function applyTheme(t){
   document.documentElement.setAttribute('data-theme',t);
   const ic=document.getElementById('themeIcon');
-  if(ic){ ic.innerHTML = `<i data-lucide="${t==='dark'?'sun':'moon'}"></i>`; if(window.lucide) lucide.createIcons(); }
+  if(ic){ ic.innerHTML = `<я данные-lucid="${t==='dark'?'sun':'moon'}"></i>`; if(window.lucide) lucide.createIcons(); }
 }
 function toggleTheme(){
   const t = document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';
@@ -923,21 +923,21 @@ render();
 .apk-about h3:first-child{margin-top:0}
 </style>
 <section class="apk-about">
-  <h3>Related guides</h3>
+  <h3>Полезные руководства</h3>
   <ul>
-    <li><a href="../guides/what-is-data-analysis/">What data analysis actually is</a></li>
-    <li><a href="../guides/free-datasets-to-practice-with/">Free datasets to practice with</a></li>
-    <li><a href="../guides/exploratory-data-analysis/">Exploratory data analysis</a></li>
-    <li><a href="../guides/defining-metrics/">Defining a metric</a></li>
-    <li><a href="../guides/documenting-data-limitations/">Documenting data limitations</a></li>
-    <li><a href="../guides/report-vs-analysis/">Report vs analysis</a></li>
+    <li><a href="../guides/what-is-data-analysis/">Что на самом деле представляет собой анализ данных</a></li>
+    <li><a href="../guides/free-datasets-to-practice-with/">Бесплатные наборы данных для практики</a></li>
+    <li><a href="../guides/exploratory-data-analysis/">Исследовательский анализ данных</a></li>
+    <li><a href="../guides/defining-metrics/">определение метрики</a></li>
+    <li><a href="../guides/documenting-data-limitations/">Документирование ограничений данных</a></li>
+    <li><a href="../guides/report-vs-analysis/">Отчет против анализа</a></li>
   </ul>
-  <p><a href="../guides/">Browse all guides</a> · <a href="../">All kits</a></p>
+  <p><a href="../guides/">Просмотреть все руководства</a> · <a href="../">Все комплекты</a></p>
 </section>
 <!-- APK:KIT-SEO:END -->
   <script src="../assets/plan-return.js" defer></script>
 
 <script src="../assets/ru-localization.js?v=20261027-1"></script>
 <script src="../assets/datacraft-economy.js"></script>
-<script src="../assets/progress-state.js"></script>\n<script src="../assets/supabase_auth_sync.js?v=3"></script>\n</body>
-</html>
+<script src="../assets/progress-state.js"></script>\п<script src="../assets/supabase_auth_sync.js?v=3"></script>\п
+

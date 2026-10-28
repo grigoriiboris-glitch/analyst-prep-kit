@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SQL Date Functions: How to Group by Month Without Losing One — Analyst Prep Kit</title>
-<meta name="description" content="DATE_TRUNC, EXTRACT, INTERVAL and the half-open range, worked on sixteen real orders. Includes the month that never becomes a row, and two engines that disagree about 31 January plus one month.">
+<title>Функции даты SQL: как группировать по месяцам, не теряя ни одного — набор для подготовки аналитика</title>
+<meta name="description" content="DATE_TRUNC, EXTRACT, INTERVAL и полуоткрытый диапазон сработали на шестнадцати реальных ордерах. Включает месяц, который никогда не становится подряд, и два двигателя, которые расходятся во мнениях относительно 31 января, плюс один месяц.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-dates/">
-<meta property="og:title" content="SQL Date Functions: How to Group by Month Without Losing One">
-<meta property="og:description" content="DATE_TRUNC snaps every date to the first of its month, which is what makes GROUP BY work. Plus half-open ranges, the missing month, and why SQLite says 3 March.">
+<meta property="og:title" content="Функции даты SQL: как группировать по месяцам, не теряя ни одного">
+<meta property="og:description" content="DATE_TRUNC привязывает каждую дату к первому числу месяца, что обеспечивает работу GROUP BY. Плюс полуоткрытые диапазоны, недостающий месяц и почему SQLite говорит 3 марта.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/sql-dates.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-dates/">
@@ -134,18 +134,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../sql/">SQL Kit</a> · <a href="../">All guides</a></p>
-  <h1>SQL Date Functions: How to Group by Month Without Losing One</h1>
-  <p class="meta">One function does most of it, and one habit stops it lying · Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-08">August 8, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../">Все руководства</a></p>
+  <h1>Функции даты SQL: как группировать по месяцам, не теряя ни одного</h1>
+  <p class="meta">Одна функция делает большую часть работы, а одна привычка не позволяет ей лгать. · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-08">8 августа 2026 г.</time></p>
 
-  <p>By the end of this page you can summarise any table by month in one line, pull the year, month or weekday out of a date, filter a period without accidentally excluding the last day of it, do date arithmetic that survives month ends, and make a month with no activity appear in your results instead of silently vanishing. It is about twenty-five minutes, and every query and result below was run.</p>
+  <p>В конце этой страницы вы можете суммировать любую таблицу по месяцам в одной строке, извлечь год, месяц или день недели из даты, отфильтровать период, не исключая случайно его последний день, выполнить арифметические операции с датами, которые сохраняются в конце месяца, и сделать так, чтобы месяц без активности появлялся в ваших результатах, а не исчезал молча. Прошло около двадцати пяти минут, и каждый запрос и результат, представленные ниже, были выполнены.</p>
 
-  <p>Here is what to do today. Take your monthly report and count its rows against the number of months in the period. Four rows for a five-month period means one month produced nothing, never became a row, and every comparison after the gap is reaching further back than it claims.</p>
+  <p>Вот чем заняться сегодня. Возьмите свой ежемесячный отчет и посчитайте его строки по количеству месяцев в отчетном периоде. Четыре строки за пятимесячный период означают, что один месяц ничего не дал, никогда не стал строкой, и каждое сравнение после разрыва заходит дальше, чем заявлено.</p>
 
-  <p>The short version: <code>DATE_TRUNC('month', d)</code> snaps every date to the first of its month, so all the dates in one month become the same value and <code>GROUP BY</code> can do the rest.</p>
+  <p>Краткая версия:  <code>DATE_TRUNC('month', d)</code>  привязывает каждую дату к первому числу месяца, поэтому все даты в одном месяце становятся одинаковыми и  <code>GROUP BY</code>  остальное могу сделать.</p>
 
-  <p>That snapping is the mechanism, so it gets the picture.</p>
+  <p>Этот щелчок и есть механизм, поэтому он дает представление.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 250" role="img" aria-labelledby="sdTitle sdDesc" xmlns="http://www.w3.org/2000/svg">
@@ -199,36 +199,36 @@
         </g>
       </g>
     </svg>
-    <figcaption>Twelve different dates become three values. That is all DATE_TRUNC does, and it is exactly what GROUP BY needs, because grouping can only put rows together when they share a value.</figcaption>
+    <figcaption>Двенадцать разных дат становятся тремя значениями. Это все, что делает DATE_TRUNC, и это именно то, что нужно GROUP BY, поскольку группировка может объединять строки только в том случае, если они имеют общее значение.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>What you'll learn</strong>
+    <strong>Что вы узнаете</strong>
     <ol>
-      <li>A date in SQL is a real type</li>
-      <li>DATE_TRUNC, and grouping by month</li>
-      <li>Getting the pieces out</li>
-      <li>Filtering a period, the half-open way</li>
-      <li>Date arithmetic, and where two engines disagree</li>
-      <li>The month that never becomes a row</li>
-      <li>SQLite has no date type</li>
-      <li>Sorting, and the month-name trap</li>
-      <li>The full before and after</li>
-      <li>Edge cases that break a date query</li>
-      <li>Why this works</li>
-      <li>Using this on your own project</li>
-      <li>The whole thing on one screen</li>
+      <li>Дата в SQL — это реальный тип.</li>
+      <li>DATE_TRUNC и группировка по месяцам</li>
+      <li>Вытаскивание осколков</li>
+      <li>Фильтрация периода полуоткрытым способом</li>
+      <li>Арифметика дат, и где два движка расходятся во мнениях</li>
+      <li>Месяц, который никогда не становится ссорой</li>
+      <li>SQLite не имеет типа даты</li>
+      <li>Сортировка и ловушка названия месяца</li>
+      <li>Полное до и после</li>
+      <li>Пограничные случаи, которые нарушают запрос даты</li>
+      <li>Почему это работает</li>
+      <li>Использование этого в вашем собственном проекте</li>
+      <li>Все на одном экране</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Every result on this page is real.</strong> The same sixteen orders used across the Excel side of this set of guides, loaded into DuckDB and into SQLite, with every query run and its output pasted back. DuckDB's dialect is close to PostgreSQL, so the main examples transfer to Postgres, Redshift and Snowflake with little or no change. If you have met <a href="../excel-dates/">the Excel version of dates</a>, this is the same problem in a system that takes it more seriously.</div>
+  <div class="note"><strong>Каждый результат на этой странице реален.</strong>  Те же шестнадцать заказов, которые используются в Excel этого набора руководств, загружаются в DuckDB и SQLite, при этом каждый выполняемый запрос и его выходные данные вставляются обратно. Диалект DuckDB близок к PostgreSQL, поэтому основные примеры переносятся на Postgres, Redshift и Snowflake практически без изменений. Если вы встретили  <a href="../excel-dates/">версия дат Excel</a>, это та же проблема в системе, которая относится к ней более серьезно.</div>
 
   <div class="step">
-    <h2>1. A date in SQL is a real type</h2>
+    <h2>1. Дата в SQL — это реальный тип</h2>
 
-    <p>Before the explanation: in Excel a date is a number wearing a format. Say what you think it is in a database.</p>
+    <p>Перед пояснением: в Excel дата — это число в определенном формате. Скажите, что, по вашему мнению, находится в базе данных.</p>
 
-    <p>Its own type, with its own rules.</p>
+    <p>Свой тип, со своими правилами.</p>
 
     <pre><code>SELECT column_name, data_type
 FROM information_schema.columns
@@ -236,15 +236,15 @@ WHERE table_name = 'orders' AND column_name = 'order_date';
 
 order_date | DATE</code></pre>
 
-    <p>That matters more than it sounds. Because the engine knows the column is a date, it can sort it chronologically without being told, compare it to another date, subtract one from another and give you days, and refuse a value that is not a valid date instead of storing it as text. None of that is available on a column of strings that happen to look like dates.</p>
+    <p>Это имеет большее значение, чем кажется. Поскольку движок знает, что столбец является датой, он может сортировать его в хронологическом порядке без каких-либо указаний, сравнивать его с другой датой, вычитать одну из другой и давать вам дни, а также отклонять значение, которое не является допустимой датой, вместо того, чтобы сохранять его в виде текста. Ничего из этого недоступно для столбца строк, которые выглядят как даты.</p>
 
-    <p>Three types come up, and it is worth being able to name them. <code>DATE</code> is a calendar day with no time. <code>TIMESTAMP</code> is a day and a time. <code>TIMESTAMP WITH TIME ZONE</code> is a day, a time and a position on the globe, and it is the one that turns a Monday report into a Sunday report for somebody in another office. If your source column is a timestamp and your question is about days, cast it early and say so.</p>
+    <p>Выделяются три типа, и стоит уметь их назвать.  <code>DATE</code>  это календарный день без времени.  <code>TIMESTAMP</code>  это день и время.  <code>TIMESTAMP WITH TIME ZONE</code>  это день, время и положение на земном шаре, и именно он превращает отчет за понедельник в отчет за воскресенье для кого-то в другом офисе. Если ваш исходный столбец представляет собой метку времени, а ваш вопрос касается дней, задайте его заранее и скажите об этом.</p>
   </div>
 
   <div class="step">
-    <h2>2. DATE_TRUNC, and grouping by month</h2>
+    <h2>2. DATE_TRUNC и группировка по месяцам</h2>
 
-    <p><code>DATE_TRUNC</code> takes a unit and a date and throws away everything smaller than that unit. Month truncation turns 19 January into 1 January, which makes every January date identical, which is what lets them be grouped.</p>
+    <p><code>DATE_TRUNC</code>  берет единицу измерения и дату и выбрасывает все, что меньше этой единицы. Усечение месяца превращает 19 января в 1 января, что делает все даты января идентичными, что позволяет их группировать.</p>
 
     <pre><code>SELECT DATE_TRUNC('month', order_date) AS month,
        SUM(units * unit_price)          AS revenue,
@@ -258,13 +258,13 @@ ORDER BY 1;
 2026-03-01 | 2585 | 4
 2026-05-01 | 2430 | 4</code></pre>
 
-    <p>Four rows, and the revenue adds to 9,890, which is the table's total, so no rows escaped the grouping. Two things about the output are worth noticing before anything else.</p>
+    <p>Четыре строки, и доход составит 9890, что соответствует общему значению таблицы, поэтому ни одна строка не ускользнет от группировки. Прежде всего стоит обратить внимание на две вещи, касающиеся вывода.</p>
 
-    <p>The month is a <em>date</em>, not a label. That is the whole reason to prefer <code>DATE_TRUNC</code> to a string: the result still sorts chronologically, can still be compared, and can still be joined to a calendar. Some engines, DuckDB among them, return a timestamp from <code>DATE_TRUNC</code> and display it with a zero time on the end; cast it back with <code>::DATE</code> if the trailing zeros bother you.</p>
+    <p>Месяц - это  <em>date</em>, а не этикетка. Вот и вся причина предпочесть  <code>DATE_TRUNC</code>  в строку: результат по-прежнему сортируется в хронологическом порядке, его можно сравнивать и присоединить к календарю. Некоторые движки, в том числе DuckDB, возвращают временную метку из  <code>DATE_TRUNC</code>  и отобразить его с нулевым временем в конце; отбросить его обратно с  <code>::DATE</code>  если вас беспокоят конечные нули.</p>
 
-    <p>And there are four rows for a period that runs from January to May. Hold that thought until section six.</p>
+    <p>И есть четыре ряда за период, который длится с января по май. Удерживайте эту мысль до шестого раздела.</p>
 
-    <p>The string alternative works and gives up the type:</p>
+    <p>Строковая альтернатива работает и отказывается от типа:</p>
 
     <pre><code>SELECT strftime(order_date, '%Y-%m') AS month, SUM(units * unit_price)
 FROM orders GROUP BY 1 ORDER BY 1;
@@ -274,15 +274,15 @@ FROM orders GROUP BY 1 ORDER BY 1;
 2026-03 | 2585
 2026-05 | 2430</code></pre>
 
-    <p>Same numbers, and <code>'2026-01'</code> is now text. It happens to sort correctly because the format puts the year first, which is luck rather than design, and it can no longer be used in date arithmetic. Use it for display at the very end, not for grouping.</p>
+    <p>Те же цифры и  <code>'2026-01'</code>  теперь текст. Сортировка происходит правильно, потому что в формате первым ставится год, что является скорее удачей, чем дизайном, и его больше нельзя использовать в арифметике дат. Используйте его для отображения в самом конце, а не для группировки.</p>
 
-    <p>Everything about grain from <a href="../sql-group-by-having/">GROUP BY and HAVING</a> applies here unchanged: after this query one row is one month, and an individual order no longer exists in the result.</p>
+    <p>Все о зерне от  <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a>  здесь применяется без изменений: после этого запроса одна строка равна одному месяцу, а в результате отдельный заказ больше не существует.</p>
   </div>
 
   <div class="step">
-    <h2>3. Getting the pieces out</h2>
+    <h2>3. Разбираем детали</h2>
 
-    <p><code>EXTRACT</code> pulls a component out as a number, and most engines add friendlier helpers alongside it.</p>
+    <p><code>EXTRACT</code>  извлекает компонент как число, и большинство движков добавляют рядом с ним более дружелюбные помощники.</p>
 
     <pre><code>SELECT order_date,
        EXTRACT(YEAR  FROM order_date) AS y,
@@ -293,54 +293,54 @@ FROM orders LIMIT 1;
 
 2026-01-05 | 2026 | 1 | 5 | Monday</code></pre>
 
-    <p>One warning that costs people a whole report. <code>EXTRACT(MONTH FROM ...)</code> returns 1 to 12 with no year attached, so grouping by it merges January 2025 with January 2026 into a single row labelled 1. That is fine for a seasonality question and wrong for a trend, and the two look identical on the page. If you group by month number, group by year as well, or use <code>DATE_TRUNC</code> and avoid the choice.</p>
+    <p>Одно предупреждение, которое стоит людям целого отчета.  <code>EXTRACT(MONTH FROM ...)</code>  возвращает число от 1 до 12 без указания года, поэтому группировка по нему объединяет январь 2025 года с январем 2026 года в одну строку с пометкой 1. Это хорошо для вопроса сезонности и неправильно для тренда, и на странице они выглядят одинаково. Если вы группируете по номеру месяца, группируете также по году или используете  <code>DATE_TRUNC</code>  и избежать выбора.</p>
   </div>
 
   <div class="step">
-    <h2>4. Filtering a period, the half-open way</h2>
+    <h2>4. Фильтрация периода полуоткрытым способом</h2>
 
-    <p>Before the explanation: you want March. Say which of these you would write, and whether they differ.</p>
+    <p>Перед объяснением: вы хотите март. Скажите, какие из них вы бы написали и отличаются ли они.</p>
 
     <pre><code>WHERE order_date BETWEEN '2026-03-01' AND '2026-03-31'
 WHERE order_date &gt;= DATE '2026-03-01' AND order_date &lt; DATE '2026-04-01'</code></pre>
 
-    <p>On a pure <code>DATE</code> column they agree, and the second returned 2,585 for March in the run. On a <code>TIMESTAMP</code> column they do not agree at all, because an order at 09:14 on 31 March is later than 31 March at midnight, so <code>BETWEEN</code> excludes it. A whole day of activity disappears, and only on months whose last day happens to be busy.</p>
+    <p>На чистом  <code>DATE</code>  столбец они соглашаются, и второй вернул 2585 за март в пробеге. На  <code>TIMESTAMP</code>  столбец они совершенно не согласны, потому что заказ в 09:14 31 марта - это позже, чем в полночь 31 марта, поэтому  <code>BETWEEN</code>  исключает это. Целый день активности исчезает, и только в те месяцы, последний день которых оказывается занятым.</p>
 
-    <p>So adopt the second form as a habit even where the first would work. <strong>Greater than or equal to the start, strictly less than the start of the next period.</strong> It is correct for dates and for timestamps, it needs no knowledge of how many days the month has, and it never needs a <code>23:59:59</code> in it, which is the other common patch and is wrong by a second.</p>
+    <p>Так что возьмите вторую форму за привычку даже там, где первая может сработать.  <strong>Больше или равно началу, строго меньше начала следующего периода.</strong>  Он корректен для дат и временных меток, ему не нужно знать, сколько дней в месяце, и никогда не требуется  <code>23:59:59</code>  в нем, который является еще одним распространенным патчем и ошибочен на секунду.</p>
 
-    <p>Build the boundary as a real date literal, <code>DATE '2026-03-01'</code>, rather than a bare string, so the engine compares dates to dates instead of guessing.</p>
+    <p>Постройте границу как реальный литерал даты,  <code>DATE '2026-03-01'</code>, а не пустую строку, поэтому движок сравнивает даты с датами, а не угадывает.</p>
   </div>
 
   <div class="step">
-    <h2>5. Date arithmetic, and where two engines disagree</h2>
+    <h2>5. Арифметика дат, и где два движка расходятся во мнениях</h2>
 
-    <p>Subtracting two dates gives days, as a number:</p>
+    <p>Вычитание двух дат дает дни в виде числа:</p>
 
     <pre><code>SELECT DATE '2026-05-25' - DATE '2026-01-05';    140</code></pre>
 
-    <p>Adding a period uses <code>INTERVAL</code>, and this is where it gets interesting. Ask two different engines for one month after 31 January:</p>
+    <p>Добавление периода использует  <code>INTERVAL</code>, и вот тут становится интересно. Задайте два разных двигателя на один месяц после 31 января:</p>
 
     <pre><code>DuckDB   SELECT DATE '2026-01-31' + INTERVAL 1 MONTH;      2026-02-28
 SQLite   SELECT date('2026-01-31', '+1 month');            2026-03-03</code></pre>
 
-    <p>Both are defensible and they are not the same answer. DuckDB clamps to the last valid day of the target month. SQLite adds one to the month number and then normalises 31 February forward into March. February 2026 has 28 days, so 31 February becomes 3 March.</p>
+    <p>Оба варианта оправданы, и это не один и тот же ответ. DuckDB фиксирует последний действительный день целевого месяца. SQLite добавляет единицу к номеру месяца, а затем нормализует 31 февраля вперед на март. В феврале 2026 года 28 дней, поэтому 31 февраля становится 3 марта.</p>
 
-    <p>Say out loud what that does to a report that adds one month to every contract start to get a renewal date. On thirty of the days in a month nothing happens. On the thirty-first, one engine renews at the end of February and the other renews in March, and if the same logic is implemented in two systems they will disagree for exactly those contracts.</p>
+    <p>Скажите вслух, что это делает с отчетом, который добавляет один месяц к каждому началу контракта, чтобы получить дату продления. Тридцать дней в месяце ничего не происходит. Тридцать первого числа один двигатель продлевается в конце февраля, а другой — в марте, и если в двух системах реализовать одну и ту же логику, то они разойдутся во мнениях именно по этим контрактам.</p>
 
-    <p>The lesson is not that one engine is wrong. It is that month arithmetic at month ends is a genuine ambiguity, so if it matters in your data, test it on a 31st on the engine you are actually using, rather than assuming. That takes one query.</p>
+    <p>Урок не в том, что один двигатель неисправен. Дело в том, что арифметика месяца в конце месяца представляет собой настоящую двусмысленность, поэтому, если это имеет значение для ваших данных, проверьте ее 31-го числа на движке, который вы действительно используете, а не предполагаете. Это занимает один запрос.</p>
 
-    <p>Two more that come up constantly:</p>
+    <p>Еще два, которые появляются постоянно:</p>
 
     <pre><code>SELECT DATE_TRUNC('month', DATE '2026-01-19');    2026-01-01    first of the month
 SELECT LAST_DAY(DATE '2026-01-19');               2026-01-31    last of the month</code></pre>
   </div>
 
   <div class="step">
-    <h2>6. The month that never becomes a row</h2>
+    <h2>6. Месяц, который никогда не становится ссорой</h2>
 
-    <p>Before the explanation: the data runs from 5 January to 25 May and the monthly query returned four rows. Say which month is missing and why.</p>
+    <p>Перед пояснением: данные обрабатываются с 5 января по 25 мая, а ежемесячный запрос вернул четыре строки. Скажите, какой месяц пропущен и почему.</p>
 
-    <p>April, because there are no April orders. <code>GROUP BY</code> can only produce a row for a value that exists in the data, so a month with nothing in it produces nothing. Asking for it directly confirms there is genuinely nothing there:</p>
+    <p>Апрель, потому что апрельских заказов нет.  <code>GROUP BY</code>  может создать строку только для значения, которое существует в данных, поэтому месяц, в котором ничего нет, ничего не дает. Запрос на это прямо подтверждает, что на самом деле там ничего нет:</p>
 
     <pre><code>SELECT COUNT(*) AS rows_in_april, SUM(units * unit_price) AS april
 FROM orders
@@ -348,18 +348,18 @@ WHERE order_date &gt;= DATE '2026-04-01' AND order_date &lt; DATE '2026-05-01';
 
 0 | NULL</code></pre>
 
-    <p>Note the <code>NULL</code>. <code>SUM</code> over no rows is not zero, it is unknown, which is the correct answer and is another thing to handle rather than to be annoyed by.</p>
+    <p>Обратите внимание на  <code>NULL</code>. <code>SUM</code>  отсутствие строк не равно нулю, это неизвестно, что является правильным ответом, и это еще одна вещь, с которой нужно справиться, а не раздражаться.</p>
 
-    <p>Now watch what the gap does to a growth calculation. Here is month over month with <code>LAG</code>, run on the four rows the data produced:</p>
+    <p>Теперь посмотрите, как этот разрыв влияет на расчет роста. Вот месяц за месяцем с  <code>LAG</code>, запустите четыре строки полученных данных:</p>
 
     <pre><code>2026-01-01 | 2630 |   NULL
 2026-02-01 | 2245 |  -14.6
 2026-03-01 | 2585 |   15.1
 2026-05-01 | 2430 |   -6.0</code></pre>
 
-    <p><code>LAG</code> means "the previous row", and the previous row for May is March. The −6.0 is a real comparison between two real months, two months apart, presented in a column headed month over month.</p>
+    <p><code>LAG</code>  означает «предыдущая строка», а предыдущая строка для мая — март. -6,0 — это реальное сравнение двух реальных месяцев с интервалом в два месяца, представленное в столбце «Месяц за месяцем».</p>
 
-    <p>The fix is a calendar: generate every month in the period, then left join the data onto it, so a month with no orders arrives as a row with a zero.</p>
+    <p>Исправление — календарь: генерируйте каждый месяц в периоде, затем слева присоединяйте к нему данные, так что месяц без заказов отображается в виде строки с нулем.</p>
 
     <pre><code>WITH months AS (
   SELECT UNNEST(generate_series(DATE '2026-01-01', DATE '2026-05-01',
@@ -388,29 +388,29 @@ ORDER BY month;
 2026-04-01 |    0 | 2585 | -100.0
 2026-05-01 | 2430 |    0 |   NULL</code></pre>
 
-    <p>Five rows now, and three of the numbers changed meaning. April is a visible zero and a true −100.0. May's percentage is <code>NULL</code> rather than −6.0, because <code>NULLIF</code> turned the zero denominator into a null and the division declined to answer, which is exactly right: growth from nothing has no percentage.</p>
+    <p>Теперь пять рядов, и три цифры изменили значение. Апрель — это видимый ноль и истинное значение −100,0. Процент Мэй составляет  <code>NULL</code>  а не -6,0, потому что  <code>NULLIF</code>  превратил нулевой знаменатель в ноль, и дивизия отказалась отвечать, что совершенно верно: рост из ничего не имеет процента.</p>
 
-    <p>Three parts of that query are worth naming, because they are the pattern rather than the specifics. <code>generate_series</code> makes the calendar; the equivalent in Postgres is the same function without the <code>UNNEST</code>, and in engines without it you keep a small dates table. <code>LEFT JOIN</code> from the calendar to the data, never the other way round, so the calendar decides which rows exist. And <code>COALESCE(..., 0)</code> turns the resulting null into the zero you actually mean, deliberately, in one place.</p>
+    <p>Стоит назвать три части этого запроса, поскольку они представляют собой скорее закономерность, чем конкретику.  <code>generate_series</code> makes the calendar; the equivalent in Postgres is the same function without the <code>UNNEST</code>, а в движках без него держишь небольшую таблицу дат.  <code>LEFT JOIN</code>  от календаря к данным, а не наоборот, поэтому календарь решает, какие строки существуют. И  <code>COALESCE(..., 0)</code>  превращает полученный нуль в ноль, который вы на самом деле имеете в виду, намеренно, в одном месте.</p>
 
-    <p>The same arithmetic and the same trap in a spreadsheet is <a href="../excel-month-over-month/">the Excel version of this page</a>, and the <code>LAG</code> mechanics on their own are in <a href="../sql-month-over-month/">month-over-month with LAG</a>.</p>
+    <p>Та же арифметика и та же ловушка в электронной таблице  <a href="../excel-month-over-month/">версия этой страницы в Excel</a>и  <code>LAG</code>  механика сама по себе находится в  <a href="../sql-month-over-month/">ежемесячно с LAG</a>.</p>
   </div>
 
   <div class="step">
-    <h2>7. SQLite has no date type</h2>
+    <h2>7. SQLite не имеет типа даты</h2>
 
-    <p>This surprises people who learned SQL on SQLite, which is most beginners, so it is worth stating plainly. SQLite accepts <code>DATE</code> in a column definition and then stores whatever you give it. Asking what it actually holds:</p>
+    <p>Это удивляет людей, изучавших SQL на SQLite, то есть большинства новичков, поэтому об этом стоит сказать прямо. SQLite принимает  <code>DATE</code>  в определении столбца, а затем сохраняет все, что вы ему дадите. Спрашиваем, что там на самом деле содержится:</p>
 
     <pre><code>SELECT typeof(order_date), order_date FROM orders LIMIT 1;
 
 text | 2026-01-05</code></pre>
 
-    <p>Text. The column was declared as <code>DATE</code> and the value is a string. Everything still works, as long as the strings are written <code>YYYY-MM-DD</code>, because that format sorts and compares correctly as text. Step outside it and the functions do not complain, they return nothing:</p>
+    <p>Текст. Столбец был объявлен как  <code>DATE</code>  и значение является строкой. Все по-прежнему работает, пока строки записаны  <code>YYYY-MM-DD</code>, поскольку этот формат правильно сортируется и сравнивается с текстом. Выйдите за его пределы, и функции не будут жаловаться, они ничего не возвращают:</p>
 
     <pre><code>SELECT strftime('%Y-%m', '05/01/2026');    NULL</code></pre>
 
-    <p>A null rather than an error, which will flow into a <code>GROUP BY</code> as a null group and sit there looking like a data problem rather than a format problem.</p>
+    <p>Нуль, а не ошибка, которая перейдет в  <code>GROUP BY</code>  как нулевую группу и сидеть там, выглядя скорее как проблема с данными, чем как проблема с форматом.</p>
 
-    <p>The rest of SQLite's date handling follows from having no type. Grouping needs <code>strftime</code>, differences need <code>julianday</code>, and both worked correctly on the same data:</p>
+    <p>Остальная часть обработки даты в SQLite следует из отсутствия типа. Группировка потребностей  <code>strftime</code>, нужны различия  <code>julianday</code>, и оба корректно работали с одними и теми же данными:</p>
 
     <pre><code>SELECT strftime('%Y-%m', order_date), SUM(units*unit_price)
 FROM orders GROUP BY 1 ORDER BY 1;
@@ -418,13 +418,13 @@ FROM orders GROUP BY 1 ORDER BY 1;
 
 SELECT julianday('2026-05-25') - julianday('2026-01-05');    140.0</code></pre>
 
-    <p>So: on SQLite, store dates as <code>YYYY-MM-DD</code> strings and nothing else, and check the format on import rather than trusting it. On a typed engine, let the column be a date and let the engine enforce it. And when a query behaves oddly on one engine and correctly on another, the type system is the first place to look, not the last.</p>
+    <p>Итак: в SQLite сохраняйте даты как  <code>YYYY-MM-DD</code>  строки и ничего больше, и проверяйте формат при импорте, а не доверяйте ему. В типизированном движке пусть столбец будет датой, и пусть движок применяет ее. И когда запрос ведет себя странно на одном движке и правильно на другом, система типов — это первое место, на которое следует обратить внимание, а не последнее.</p>
   </div>
 
   <div class="step">
-    <h2>8. Sorting, and the month-name trap</h2>
+    <h2>8. Сортировка и ловушка названия месяца</h2>
 
-    <p>Before the explanation: you format the month as a short name for the report, then order by it. Predict the order.</p>
+    <p>Перед пояснением: форматируете месяц как короткое название отчета, далее упорядочиваете по нему. Прогнозируйте порядок.</p>
 
     <pre><code>SELECT strftime(order_date, '%b') AS month, SUM(units*unit_price)
 FROM orders GROUP BY 1 ORDER BY 1;
@@ -434,9 +434,9 @@ Jan | 2630
 Mar | 2585
 May | 2430</code></pre>
 
-    <p>February first. The column is text, so the sort is alphabetical, and February beats January in the alphabet. Anyone reading the chart built on that will see a trend that never happened.</p>
+    <p>Первое февраля. Столбец текстовый, поэтому сортировка ведется по алфавиту, а в алфавите февраль превосходит январь. Любой, кто прочитает построенный на его основе график, увидит тенденцию, которой никогда не было.</p>
 
-    <p>The fix is to keep the real date for ordering and use the label only for display:</p>
+    <p>Исправление состоит в том, чтобы сохранить реальную дату заказа и использовать этикетку только для отображения:</p>
 
     <pre><code>SELECT strftime(m.month, '%b')  AS label,
        m.revenue
@@ -445,12 +445,12 @@ FROM ( SELECT DATE_TRUNC('month', order_date) AS month,
        FROM orders GROUP BY 1 ) m
 ORDER BY m.month;</code></pre>
 
-    <p>Group and order by the date, format at the last possible moment. That single rule covers the month-name sort, the year-number merge from section three, and most of what goes wrong between a query and a chart.</p>
+    <p>Группируйте и упорядочивайте по дате, форматируйте в самый последний момент. Это единственное правило охватывает сортировку названия месяца, слияние числа года из третьего раздела и большую часть того, что не так между запросом и диаграммой.</p>
   </div>
 
-  <h2>The full before and after</h2>
+  <h2>Полное до и после</h2>
 
-  <p>Same sixteen orders, same question: monthly revenue and how it is moving.</p>
+  <p>Те же шестнадцать заказов, тот же вопрос: ежемесячная выручка и как она движется.</p>
 
   <h3>Before</h3>
   <pre><code>SELECT strftime(order_date, '%b') AS month,
@@ -464,7 +464,7 @@ Feb | 2245
 Jan | 2630
 Mar | 2585
 May | 2430</code></pre>
-  <p>Four problems and no errors. The rows are in alphabetical order. April is absent with nothing to say so. <code>BETWEEN</code> would drop the last day of the period if the column ever became a timestamp. And the month column is text, so nothing downstream can do arithmetic with it.</p>
+  <p>Четыре проблемы и ни одной ошибки. Строки расположены в алфавитном порядке. Эйприл отсутствует, и ей не о чем сказать.  <code>BETWEEN</code>  последний день периода будет удален, если столбец когда-либо станет меткой времени. Столбец месяца является текстовым, поэтому ничто в дальнейшем не может выполнять с ним арифметические действия.</p>
 
   <h3>After</h3>
   <pre><code>WITH months AS (
@@ -490,108 +490,108 @@ ORDER BY m.month;
 2026-04-01 |    0
 2026-05-01 | 2430</code></pre>
 
-  <p>Five rows, in date order, with the empty month present as a zero and the period boundary written half-open so it cannot lose a day. The revenue still adds to 9,890.</p>
+  <p>Пять строк в порядке дат, где пустой месяц представлен как ноль, а граница периода написана полуоткрытой, чтобы нельзя было потерять ни дня. Выручка по-прежнему составляет 9890.</p>
 
-  <p>The claim, and it is the reason the calendar goes in before anyone asks for it: <strong>a month with no rows cannot appear in a GROUP BY, so the gap is invisible, and the growth figure printed next to May was really May against March.</strong></p>
+  <p>Заявление, и это причина, по которой календарь появляется раньше, чем кто-либо об этом попросит:  <strong>месяц без строк не может появиться в GROUP BY, поэтому разрыв невидим, а цифра роста, напечатанная рядом с маем, на самом деле соответствует мае по сравнению с мартом.</strong></p>
 
   <div class="step">
-    <h2>Edge cases that break a date query</h2>
+    <h2>Пограничные случаи, которые нарушают запрос даты</h2>
 
-    <p>Six that get through.</p>
+    <p>Шесть, которые пройдут.</p>
 
-    <p><strong>Timestamps compared to dates.</strong> A timestamp column compared to <code>DATE '2026-03-31'</code> means midnight, so everything later that day is excluded. Half-open ranges make this impossible.</p>
+    <p><strong>Временные метки по сравнению с датами.</strong>  Столбец отметки времени по сравнению с  <code>DATE '2026-03-31'</code>  означает полночь, поэтому все, что происходит позже в этот день, исключается. Полуоткрытые диапазоны делают это невозможным.</p>
 
-    <p><strong>Time zones.</strong> A timestamp stored in UTC and read by somebody in another zone can move rows between days, which moves them between months at month boundaries. Decide which zone the report is in and convert once, explicitly.</p>
+    <p><strong>Часовые пояса.</strong>  Временная метка, хранящаяся в формате UTC и прочитанная кем-то в другой зоне, может перемещать строки между днями, что перемещает их между месяцами в границах месяцев. Решите, в какой зоне находится отчет, и выполните одно явное преобразование.</p>
 
-    <p><strong>A function on the filtered column.</strong> <code>WHERE EXTRACT(YEAR FROM order_date) = 2026</code> stops most engines using an index on that column, and on a large table it turns a fast query into a slow one. Compare the raw column to a range instead.</p>
+    <p><strong>Функция для отфильтрованного столбца.</strong> <code>WHERE EXTRACT(YEAR FROM order_date) = 2026</code>  останавливает большинство механизмов, использующих индекс по этому столбцу, а в большой таблице превращает быстрый запрос в медленный. Вместо этого сравните необработанный столбец с диапазоном.</p>
 
-    <p><strong>Month number without year.</strong> Covered in section three, and worth repeating because it produces twelve tidy-looking rows out of three years of data.</p>
+    <p><strong>Номер месяца без года.</strong>  Это описано в третьем разделе, и его стоит повторить, поскольку он дает двенадцать аккуратных строк из данных за три года.</p>
 
-    <p><strong>Nulls in the date column.</strong> They form their own group and land at one end of the sort, so a report can carry a row with a blank month that nobody notices. Count them on purpose.</p>
+    <p><strong>Нулевые значения в столбце даты.</strong>  Они образуют свою собственную группу и приземляются на одном конце группы, поэтому в отчете может оказаться строка с пустым месяцем, который никто не заметит. Посчитайте их специально.</p>
 
-    <p><strong>Weeks.</strong> <code>DATE_TRUNC('week', ...)</code> has to decide whether a week starts on Sunday or Monday, and engines differ. Check it once against a known date rather than assuming.</p>
+    <p><strong>Недели.</strong> <code>DATE_TRUNC('week', ...)</code>  должен решить, начинается ли неделя в воскресенье или в понедельник, а двигатели различаются. Проверьте это один раз на известную дату, а не предполагайте.</p>
   </div>
 
-  <h2>Why this works</h2>
+  <h2>Почему это работает</h2>
 
-  <p>Grouping by month works because grouping is a partition: rows go into the same group when they share a value, and an aggregate is a function from each group to a single number (Codd, 1970, <em>Communications of the ACM</em>, 13(6), 377–387). Dates in one month do not share a value, so nothing can group them until you make them share one, which is precisely what <code>DATE_TRUNC</code> is for. Seeing it that way also explains the missing April without any special rule: a group exists only if a row falls into it, so a month with no rows is not an empty group, it is not a group at all. The calendar table does not fix a bug; it supplies the values that the data could not.</p>
+  <p>Группировка по месяцам работает, потому что группировка представляет собой раздел: строки попадают в одну группу, если они имеют общее значение, а агрегат представляет собой функцию от каждой группы до одного числа (Codd, 1970,  <em>Коммуникации ACM</em>, 13(6), 377–387). Даты в одном месяце не имеют общего значения, поэтому ничто не может их сгруппировать, пока вы не заставите их иметь одно общее значение, а это именно то, что нужно.  <code>DATE_TRUNC</code>  это для. Подобный взгляд также объясняет отсутствие апреля без какого-либо специального правила: группа существует только в том случае, если в нее попадает строка, поэтому месяц без строк — это не пустая группа, это вообще не группа. Таблица календаря не исправляет ошибку; он предоставляет значения, которые не могут быть предоставлены данными.</p>
 
-  <p>The wider point is that time is genuinely harder than the other column types, and that is a known result rather than a complaint. Work on temporal databases has spent decades on questions that look trivial from outside, what an interval means, whether a period includes its endpoint, how to compare a moment to a span, and it exists because ordinary query languages handle time by convention rather than by construction (Snodgrass, 1987, <em>ACM Transactions on Database Systems</em>, 12(2), 247–298). The half-open range in section four is one of those conventions, settled by practice rather than by the language, which is why every engine lets you write the wrong one and none of them warns you.</p>
+  <p>В более широком смысле, время действительно сложнее, чем столбцы других типов, и это известный результат, а не жалоба. Работа над темпоральными базами данных десятилетиями занималась вопросами, которые со стороны кажутся тривиальными: что означает интервал, включает ли период свою конечную точку, как сравнивать момент с интервалом, и это существует потому, что обычные языки запросов обрабатывают время по соглашению, а не по конструкции (Snodgrass, 1987,  <em>Транзакции ACM в системах баз данных</em>, 12(2), 247–298). Полуоткрытый диапазон в четвертом разделе — одно из тех соглашений, которые определяются практикой, а не языком, поэтому каждый движок позволяет вам написать неправильный код, и ни один из них не предупреждает вас.</p>
 
-  <p>One note on the cheat sheet below. It is built to be covered and recalled rather than reread, because people consistently misjudge which study methods are working, rating the fluent-feeling ones highest while learning more from the ones that feel effortful (Bjork, Dunlosky, &amp; Kornell, 2013, <em>Annual Review of Psychology</em>, 64, 417–444).</p>
+  <p>Одно замечание в шпаргалке ниже. Он создан для того, чтобы его просматривали и вспоминали, а не перечитывали, потому что люди постоянно неправильно оценивают, какие методы обучения работают, высоко оценивая те методы, которые позволяют свободно говорить, и в то же время учатся больше у тех, которые требуют усилий (Bjork, Dunlosky &amp; Kornell, 2013,  <em>Ежегодный обзор психологии</em>, 64, 417–444).</p>
 
-  <h2>Using this on your own project</h2>
+  <h2>Использование этого в вашем собственном проекте</h2>
 
-  <p>Auditing every date query at once is miserable and you will stop at the third. Do this instead, in order.</p>
+  <p>Аудит каждого запроса даты одновременно утомителен, и вы остановитесь на третьем. Вместо этого сделайте это по порядку.</p>
 
   <ol>
-    <li><strong>Count the rows against the months.</strong> One query, and it finds the whole class of missing-period bug.</li>
-    <li><strong>Replace every BETWEEN on a date or timestamp</strong> with greater-or-equal and strictly-less-than. Mechanical, and it can only make things more correct.</li>
-    <li><strong>Group with <code>DATE_TRUNC</code>, not with a string</strong>, and format the label at the very end.</li>
-    <li><strong>Add a calendar</strong> to any report where a period could be empty, and <code>LEFT JOIN</code> from the calendar to the data.</li>
-    <li><strong>Guard the growth divide</strong> with <code>NULLIF(prev, 0)</code>, so a zero base gives no answer rather than a wrong one.</li>
-    <li><strong>Test month arithmetic on a 31st</strong>, on your own engine, once. It takes one query and it settles a question you would otherwise assume.</li>
+    <li><strong>Посчитайте строки по месяцам.</strong>  Один запрос, и он находит целый класс ошибок отсутствия месячных.</li>
+    <li><strong>Замените каждое МЕЖДУ датой или меткой времени.</strong>  с «больше или равно» и «строго меньше». Механический, и он может сделать все только правильнее.</li>
+    <li><strong>Группа с  <code>DATE_TRUNC</code>, а не с помощью строки</strong>и отформатируйте метку в самом конце.</li>
+    <li><strong>Добавить календарь</strong>  к любому отчету, где период может быть пустым, и  <code>LEFT JOIN</code>  от календаря к данным.</li>
+    <li><strong>Сохраняйте разрыв в росте</strong> with <code>NULLIF(prev, 0)</code>, поэтому нулевое основание дает скорее неверный ответ, чем неверный.</li>
+    <li><strong>Арифметика тестового месяца 31 числа.</strong>, на вашем собственном движке, один раз. Требуется один запрос, и он решает вопрос, который вы в противном случае могли бы решить.</li>
   </ol>
 
-  <p>If you have paper nearby, one optional sketch is worth five minutes. Draw a timeline for your reporting period and mark every month boundary on it. Then mark, from memory, the periods where you know activity paused: a shutdown, a migration, a seasonal closure. Every one of those is a row your <code>GROUP BY</code> will not produce, and seeing them on a line is faster than discovering them in a chart.</p>
+  <p>Если у вас под рукой есть бумага, один дополнительный эскиз стоит пяти минут. Нарисуйте график отчетного периода и отметьте на нем границу каждого месяца. Затем отметьте по памяти периоды, когда, как вы знаете, активность приостанавливалась: отключение, миграция, сезонное закрытие. Каждый из них — это ваш ряд  <code>GROUP BY</code>  не дадут результатов, и увидеть их на линии быстрее, чем обнаружить на графике.</p>
 
-  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: SQL, Excel, Python, and the working habits around them. If you would rather type queries than read about them, the <a href="../../drill/">SQL Drill</a> hands you one runnable query at a time against a real database.</div>
+  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: SQL, Excel, Python и связанные с ними рабочие привычки. Если вы предпочитаете вводить запросы, а не читать о них,  <a href="../../drill/">SQL-детализация</a>  передает вам по одному выполняемому запросу к реальной базе данных.</div>
 
-  <h2>The whole thing on one screen</h2>
+  <h2>Все на одном экране</h2>
 
-  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
+  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
 
   <table>
-    <tr><th>Thing</th><th>What it does</th></tr>
-    <tr><td>The three types</td><td><code>DATE</code>, <code>TIMESTAMP</code>, <code>TIMESTAMP WITH TIME ZONE</code>.</td></tr>
-    <tr><td><code>DATE_TRUNC('month', d)</code></td><td>Snaps to the first of the month. Result is still a date.</td></tr>
-    <tr><td>Why that groups</td><td>Rows can only group when they share a value.</td></tr>
-    <tr><td>String months</td><td>Work, sort by luck, and cannot do arithmetic. Display only.</td></tr>
-    <tr><td><code>EXTRACT(MONTH FROM d)</code></td><td>1 to 12, no year. Merges the same month across years.</td></tr>
-    <tr><td>Filtering a period</td><td><code>&gt;= start AND &lt; next start</code>. Never BETWEEN on a timestamp.</td></tr>
-    <tr><td>Why not BETWEEN</td><td>The end date means midnight, so the last day is lost.</td></tr>
-    <tr><td>Date minus date</td><td>A number of days. 25 May minus 5 January is 140.</td></tr>
-    <tr><td>Adding a month</td><td><code>+ INTERVAL 1 MONTH</code>. Engines differ at month ends.</td></tr>
-    <tr><td>31 January plus a month</td><td>DuckDB says 28 February. SQLite says 3 March.</td></tr>
-    <tr><td>First and last of the month</td><td><code>DATE_TRUNC('month', d)</code> and <code>LAST_DAY(d)</code>.</td></tr>
-    <tr><td>A month with no rows</td><td>Produces no group at all. Not a zero.</td></tr>
-    <tr><td>SUM over no rows</td><td><code>NULL</code>, not 0.</td></tr>
-    <tr><td>The calendar</td><td><code>generate_series</code>, then LEFT JOIN from calendar to data.</td></tr>
-    <tr><td>Zero base in growth</td><td><code>NULLIF(prev, 0)</code>. No answer beats a wrong one.</td></tr>
-    <tr><td>SQLite</td><td>No date type. <code>typeof</code> says text. Use <code>YYYY-MM-DD</code> only.</td></tr>
-    <tr><td>SQLite functions</td><td><code>strftime</code> to group, <code>julianday</code> to subtract.</td></tr>
-    <tr><td>Month names</td><td>Sort alphabetically. Order by the date, label at the end.</td></tr>
+    <tr><th>Thing</th><th>Что он делает</th></tr>
+    <tr><td>Три типа</td><td><code>DATE</code>, <code>TIMESTAMP</code>, <code>TIMESTAMP WITH TIME ZONE</code>.</td></tr>
+    <tr><td><code>DATE_TRUNC('month', d)</code></td><td>Привязывается к первому числу месяца. Результатом остается свидание.</td></tr>
+    <tr><td>Почему эти группы</td><td>Строки могут группироваться только в том случае, если они имеют общее значение.</td></tr>
+    <tr><td>Строковые месяцы</td><td>Работает, сортирует по счастливой случайности и не умеет считать. Только отображение.</td></tr>
+    <tr><td><code>EXTRACT(MONTH FROM d)</code></td><td>От 1 до 12, без года. Объединяет один и тот же месяц по годам.</td></tr>
+    <tr><td>Фильтрация периода</td><td><code>&gt;= start AND &lt; next start</code>. Никогда МЕЖДУ меткой времени.</td></tr>
+    <tr><td>Почему не МЕЖДУ</td><td>Дата окончания означает полночь, поэтому последний день теряется.</td></tr>
+    <tr><td>Дата минус дата</td><td>Количество дней. 25 мая минус 5 января — 140.</td></tr>
+    <tr><td>Добавление месяца</td><td><code>+ INTERVAL 1 MONTH</code>. Двигатели различаются в конце месяца.</td></tr>
+    <tr><td>31 января плюс месяц</td><td>DuckDB сообщает, что 28 февраля. SQLite говорит 3 марта.</td></tr>
+    <tr><td>Первое и последнее число месяца</td><td><code>DATE_TRUNC('month', d)</code> and <code>LAST_DAY(d)</code>.</td></tr>
+    <tr><td>Месяц без ссор</td><td>Вообще не создает никакой группы. Не ноль.</td></tr>
+    <tr><td>СУММ без строк</td><td><code>NULL</code>, а не 0.</td></tr>
+    <tr><td>Календарь</td><td><code>generate_series</code>, затем LEFT JOIN от календаря к данным.</td></tr>
+    <tr><td>Нулевая база роста</td><td><code>NULLIF(prev, 0)</code>. Ни один ответ не сравнится с неправильным.</td></tr>
+    <tr><td>SQLite</td><td>Нет типа даты.  <code>typeof</code>  говорит текст. Использовать  <code>YYYY-MM-DD</code>  только.</td></tr>
+    <tr><td>SQLite-функции</td><td><code>strftime</code>  группировать,  <code>julianday</code>  вычесть.</td></tr>
+    <tr><td>Названия месяцев</td><td>Сортировать по алфавиту. Упорядочить по дате, метка в конце.</td></tr>
   </table>
 
-  <div class="note"><strong>The one habit to keep.</strong> Count the rows your monthly query returns and compare that with the number of months in the period. Everything else on this page is either a consequence of that check or a way of fixing what it finds, and no other symptom announces a missing month. If a date query misbehaves in a way this page does not cover, there is a general <a href="../technical-tenacity/">diagnosis loop for being stuck</a>.</div>
+  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Подсчитайте строки, которые возвращает ваш ежемесячный запрос, и сравните их с количеством месяцев в периоде. Все остальное на этой странице является либо следствием этой проверки, либо способом исправить то, что она обнаружила, и ни один другой симптом не указывает на пропущенный месяц. Если запрос даты работает не так, как описано на этой странице, существует общая причина.  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>.</div>
 
-  <p>One last thought, and I would genuinely like other people's answers. The version that caught me was a warehouse where a public holiday shutdown produced a week with no rows, and a weekly report that had been quietly comparing each week with the week before the gap for a month. What period has gone missing from something you queried, and what finally showed it?</p>
+  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Версия, которая меня зацепила, была складом, где закрытие в праздничные дни привело к неделе без скандалов, и еженедельным отчетом, в котором каждую неделю спокойно сравнивали с неделей до перерыва в течение месяца. Какой период пропал из того, что вы запрашивали, и что наконец это обнаружило?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Codd, E. F. (1970). A relational model of data for large shared data banks. <em>Communications of the ACM</em>, 13(6), 377–387.</li>
-    <li>Snodgrass, R. (1987). The temporal query language TQuel. <em>ACM Transactions on Database Systems</em>, 12(2), 247–298.</li>
-    <li>Bjork, R. A., Dunlosky, J., &amp; Kornell, N. (2013). Self-regulated learning: Beliefs, techniques, and illusions. <em>Annual Review of Psychology</em>, 64, 417–444.</li>
+    <li>Кодд, EF (1970). Реляционная модель данных для крупных общих банков данных.  <em>Коммуникации ACM</em>, 13(6), 377–387.</li>
+    <li>Снодграсс, Р. (1987). Темпоральный язык запросов TQuel.  <em>Транзакции ACM в системах баз данных</em>, 12(2), 247–298.</li>
+    <li>Бьорк Р.А., Данлоски Дж. и Корнелл Н. (2013). Саморегулируемое обучение: убеждения, методы и иллюзии.  <em>Ежегодный обзор психологии</em>, 64, 417–444.</li>
   </ul>
 
   <div class="book">
-    <strong>The date filter drops the last day of the month and the total quietly shrinks.</strong>
-    <p><em>SQL for Analysts</em> is 458 pages, date handling written out, including the boundary that costs you a day without an error.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-dates'})">SQL for Analysts, $19 &rarr;</a>
+    <strong>Фильтр даты удаляет последний день месяца, и общее количество незаметно уменьшается.</strong>
+    <p><em>SQL для аналитиков</em>  это 458 страниц, обработка дат расписана, включая границу, которая обходится вам в день без ошибок.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-dates'})">SQL для аналитиков, 19 $ →</a>
   </div>
 
   <div class="cta">
-    <strong>Practice date queries against a real database.</strong>
-    <p style="margin:6px 0 0">The <a href="../../sql/">SQL Kit</a> gives you the repetitions: grouping by month, half-open period filters, calendars joined to sparse data, and flash cards on exactly the DATE_TRUNC and EXTRACT distinctions from this page. You now own the method; the kit is the practice. Nothing to install, no account needed.</p>
-    <a class="btn" href="../../sql/">Open the SQL Kit →</a>
+    <strong>Практикуйте запросы дат к реальной базе данных.</strong>
+    <p style="margin:6px 0 0">The <a href="../../sql/">SQL-комплект</a> gives you the repetitions: grouping by month, half-open period filters, calendars joined to sparse data, and flash cards on exactly the DATE_TRUNC and EXTRACT distinctions from this page. You now own the method; the kit is the practice. Nothing to install, no account needed.</p>
+    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> · <a href="../excel-dates/">Excel Dates</a> · <a href="../sql-month-over-month/">Month-over-Month in SQL</a> · <a href="../excel-month-over-month/">Month-over-Month in Excel</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../sql-window-functions/">Window Functions</a> · <a href="../sql-null/">NULL in SQL</a> · <a href="../sql-ctes/">SQL CTEs</a> · <a href="../sql-joins/">SQL JOINs</a> · <a href="../sql-foundations/">SQL Foundations</a> · <a href="../../sql/">SQL Kit</a> · <a href="../set-up-duckdb/">Set Up DuckDB</a> · <a href="../which-sql-database-to-install/">Which SQL Database to Install</a> · <a href="../sql-find-duplicates/">Find Duplicates in SQL</a> · <a href="../pandas-groupby/">pandas groupby</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../projects/">Portfolio Projects</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../excel-dates/">Даты Excel</a> · <a href="../sql-month-over-month/">Месяц за месяцем в SQL</a> · <a href="../excel-month-over-month/">Месяц за месяцем в Excel</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-window-functions/">Оконные функции</a> · <a href="../sql-null/">NULL в SQL</a> · <a href="../sql-ctes/">SQL CTE</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-foundations/">Основы SQL</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../set-up-duckdb/">Настройте DuckDB</a> · <a href="../which-sql-database-to-install/">Какую базу данных SQL установить</a> · <a href="../sql-find-duplicates/">Найти дубликаты в SQL</a> · <a href="../pandas-groupby/">панды группируются</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../projects/">Портфельные проекты</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
