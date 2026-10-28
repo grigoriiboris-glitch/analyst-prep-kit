@@ -247,7 +247,7 @@
 
 /* Shared AI context-copy action for all course pages that load progress helpers. */
 (function bootstrapAIContextCopy() {
-  if (window.__apkAiContextCopyLoader || !document.head) return;
+  if (typeof window === 'undefined' || typeof document === 'undefined' || !document.head || window.__apkAiContextCopyLoader) return;
   window.__apkAiContextCopyLoader = true;
   var current = document.currentScript;
   var script = document.createElement('script');
