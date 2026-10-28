@@ -65,7 +65,8 @@ test("the static Russian build keeps authored game and visualization sources out
     "datacraft/curriculum-map.js",
     "datacraft/index.html",
     "datacraft/quiet-valley.js",
-    "datacraft/lesson-catalog.js"
+    "datacraft/lesson-catalog.js",
+    "postgresql/index.html"
   ]) {
     assert.ok(source.includes('"'+file+'"'), "Native DataCraft source must remain excluded from machine translation: "+file);
   }
