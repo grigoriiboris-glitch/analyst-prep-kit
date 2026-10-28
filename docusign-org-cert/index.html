@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="ru" data-theme="light" data-static-ru="true">
 <head>
-<script src="../assets/ru-localization-boot.js"></script>
+
   <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
   <script>
     (function () {
@@ -28,9 +28,9 @@
   </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Docusign Organization Management Pro Prep · Analyst Prep Kit</title>
+<title>Docusign Organization Management Pro Prep · Набор для подготовки аналитика</title>
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/docusign-org-cert/">
-<meta name="description" content="Prep for the Docusign Organization Management Pro exam. An area-by-area study guide of Docusign Admin: organizations, administrator permission profiles, user management, bulk actions, sharing and transferring ownership, access management and Docusign Monitor, plus a 40-question practice exam graded against the real 80% pass mark.">
+<meta name="description" content="Подготовка к экзамену Docusign Organization Management Pro. Подробное руководство по Docusign Admin: организации, профили разрешений администратора, управление пользователями, массовые действия, совместное использование и передача прав собственности, управление доступом и Docusign Monitor, а также практический экзамен из 40 вопросов, оцениваемый по реальному проходному баллу 80%.">
 <link rel="stylesheet" href="../assets/grain/grain.css">
 <link rel="stylesheet" href="../assets/grain/zinc-sky.css"><!-- Zinc & Sky palette rollout -->
 <style>
@@ -251,14 +251,14 @@ footer{margin-top:50px;padding-top:24px;border-top:1px solid var(--border);text-
 </head>
 <body>
 <nav>
-  <button class="nav-btn" onclick="window.location='../index.html'" title="Back to all kits">← All Kits</button>
+  <button class="nav-btn" onclick="window.location='../index.html'" title="Вернуться ко всем комплектам">← Все комплекты</button>
   <span class="nav-title"><span class="logo-mark"><i data-lucide="badge-check"></i></span>Docusign Org Management Pro Prep</span>
   <button class="nav-btn" id="navHome" onclick="setView('home')">Home</button>
-  <button class="nav-btn" id="navStudy" onclick="setView('study')">Study Guide</button>
-  <button class="nav-btn" id="navExam" onclick="setView('exam')">Practice Exam</button>
+  <button class="nav-btn" id="navStudy" onclick="setView('study')">Учебное руководство</button>
+  <button class="nav-btn" id="navExam" onclick="setView('exam')">Практический экзамен</button>
   <button class="nav-btn" id="navResults" onclick="setView('results')" style="display:none">Results</button>
   <div class="nav-spacer"></div>
-  <button class="nav-btn" onclick="resetAll()" title="Reset progress"><i data-lucide="rotate-ccw"></i>Reset</button>
+  <button class="nav-btn" onclick="resetAll()" title="Сбросить прогресс"><i data-lucide="rotate-ccw"></i>Reset</button>
   <button class="nav-btn" onclick="toggleTheme()"><span id="themeIcon"><i data-lucide="sun"></i></span></button>
 </nav>
 
@@ -286,7 +286,7 @@ function save(){ localStorage.setItem(STORE, JSON.stringify(state)); }
 function getCoachKey(){ return localStorage.getItem('apk-coach-key') || ''; }
 function setCoachKey(k){
   localStorage.setItem('apk-coach-key', k.trim());
-  toast(k.trim() ? 'Key saved. Hints are on.' : 'Key cleared.');
+  toast(k.trim() ? "Ключ сохранен. Подсказки включены." : "Ключ очищен.");
   render();
 }
 function stripTags(html){
@@ -299,8 +299,8 @@ async function hintCall(prompt, targetId){
   if(!el) return;
   const key = getCoachKey();
   el.classList.add('show');
-  if(!key){ el.textContent = 'Add your Anthropic API key on the home page under Hints to turn hints on.'; return; }
-  el.textContent = 'Thinking…';
+  if(!key){ el.textContent = "Добавьте свой ключ Anthropic API на главной странице в разделе «Подсказки», чтобы включить подсказки."; return; }
+  el.textContent = "Думая…";
   try{
     const res = await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
@@ -308,9 +308,9 @@ async function hintCall(prompt, targetId){
       body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:350,messages:[{role:'user',content:prompt}]})
     });
     const data = await res.json();
-    if(!res.ok){ el.textContent = data?.error?.message || 'Request refused. Check your key.'; return; }
-    el.textContent = data.content?.[0]?.text || 'No response. Check your key.';
-  } catch(e){ el.textContent = 'Request failed. Check your key and your connection.'; }
+    if(!res.ok){ el.textContent = data?.error?.message || "Запрос отклонен. Проверьте свой ключ."; return; }
+    el.textContent = data.content?.[0]?.text || "Никакого ответа. Проверьте свой ключ.";
+  } catch(e){ el.textContent = "Запрос не выполнен. Проверьте свой ключ и соединение."; }
 }
 const TUTOR_ROLE = `You are a plain-spoken Docusign tutor helping someone study for the Docusign Organization Management Pro exam. That exam covers Docusign Admin: organizations, organization administrator permission profiles, centralized user management, bulk actions with CSV files, sharing and transferring envelope ownership, access management (claimed domains, SSO, login policies, just-in-time provisioning, connected apps) and Docusign Monitor alerts and data export. It is about the organization level in Docusign Admin, not settings inside a single eSignature account.`;
 function hintStudy(key, i){
@@ -329,7 +329,7 @@ function hintQuestion(qid){
   const q = QUESTIONS.find(x=>x.id===qid);
   if(!q) return;
   const chosen = state.answers[qid];
-  const picked = Array.isArray(chosen) ? chosen.map(i=>stripTags(q.choices[i])).join(' / ') : (chosen!==undefined ? stripTags(q.choices[chosen]) : '(no answer)');
+  const picked = Array.isArray(chosen) ? chosen.map(i=>stripTags(q.choices[i])).join(' / ') : (chosen!==undefined ? stripTags(q.choices[chosen]) : "(нет ответа)");
   const right = q.type==='ms' ? q.correct.map(i=>stripTags(q.choices[i])).join(' / ') : stripTags(q.choices[q.correct]);
   const prompt = `${TUTOR_ROLE} A student got this practice question wrong.
 
@@ -347,155 +347,155 @@ In 3 sentences at most, say what they were probably confusing, then give one pla
    ownership, access management and Docusign Monitor. Docusign does NOT publish weights
    for this exam. The percentages below are OUR study allocation and are labeled as such. */
 const DOMAIN_INFO = {
-  d1:{label:'Area 1', name:'Organizations, administrators and user management', weight:30, color:'var(--c-d1)',
-      hint:'Creating an organization, linking accounts, the nine administrator permission profiles, the Users page, memberships, groups and licences.',
+  d1:{label:"Зона 1", name:"Организации, администраторы и управление пользователями", weight:30, color:'var(--c-d1)',
+      hint:"Создание организации, связывание учетных записей, девять профилей разрешений администратора, страница «Пользователи», членство, группы и лицензии.",
       docPath:'https://support.docusign.com/s/document-item?bundleId=rrf1583359212854&topicId=god1583359152535.html&_LANG=enus',
-      docLabel:'Organization Administrators, Docusign Admin guide'},
-  d2:{label:'Area 2', name:'Bulk actions', weight:20, color:'var(--c-d2)',
-      hint:'User list exports, the add, update and close CSV formats, account settings export and import, permission profiles export.',
+      docLabel:"Администраторы организации, руководство администратора Docusign"},
+  d2:{label:"Зона 2", name:"Массовые действия", weight:20, color:'var(--c-d2)',
+      hint:"Экспорт списков пользователей, добавление, обновление и закрытие форматов CSV, экспорт и импорт настроек учетной записи, экспорт профилей разрешений.",
       docPath:'https://support.docusign.com/s/document-item?bundleId=rrf1583359212854&topicId=eec1583359153905.html&_LANG=enus',
-      docLabel:'Bulk Actions, Docusign Admin guide'},
-  d3:{label:'Area 3', name:'Sharing and transferring ownership', weight:20, color:'var(--c-d3)',
-      hint:'Shared access permissions and dates, shared envelopes in maintenance mode, envelope transfer rules, limits and logs.',
+      docLabel:"Массовые действия, руководство администратора Docusign"},
+  d3:{label:"Зона 3", name:"Совместное использование и передача права собственности", weight:20, color:'var(--c-d3)',
+      hint:"Разрешения и даты общего доступа, общие конверты в режиме обслуживания, правила передачи конвертов, ограничения и журналы.",
       docPath:'https://support.docusign.com/s/document-item?bundleId=rrf1583359212854&topicId=pea1583359198663.html&_LANG=enus',
-      docLabel:'Envelope Transfer Overview, Docusign Admin guide'},
-  d4:{label:'Area 4', name:'Access management and Docusign Monitor', weight:30, color:'var(--c-d4)',
-      hint:'Claimed domains, identity providers, login policies, just-in-time provisioning, connected apps, Monitor alerts, thresholds and CSV export.',
+      docLabel:"Обзор передачи конвертов, руководство администратора Docusign"},
+  d4:{label:"Зона 4", name:"Управление доступом и Docusign Monitor", weight:30, color:'var(--c-d4)',
+      hint:"Заявленные домены, поставщики удостоверений, политики входа, своевременная подготовка, подключенные приложения, оповещения монитора, пороговые значения и экспорт CSV.",
       docPath:'https://support.docusign.com/s/document-item?bundleId=gso1581445176035&topicId=pmk1581445325570.html&_LANG=enus',
-      docLabel:'Protect Your Docusign Deployment with Docusign Monitor'}
+      docLabel:"Защитите развертывание Docusign с помощью Docusign Monitor"}
 };
 const DOMAIN_ORDER = ['d1','d2','d3','d4'];
 
 /* ============== STUDY GUIDE ============== */
 const STUDY = [
-  {key:'d1', title:'Organizations, administrators and user management',
+  {key:'d1', title:"Организации, администраторы и управление пользователями",
     must:[
-      `<strong>An organization is the layer above accounts.</strong> It lets one set of administrators manage users and settings for many Docusign accounts from one place. Almost every wrong answer on this exam is an account-level answer to an organization-level question.`,
-      `<strong>To create an organization you need two things</strong>: you must be an account administrator with <em>All Administration Capabilities</em>, and the account must be enabled for Docusign Admin. If you do not see the <em>Get Started</em> section, the account is not enabled and that is a Support call.`,
-      `<strong>The account you create the organization from becomes the default account</strong>, and you become the organization administrator automatically. The default account is what just-in-time provisioning uses when a new user appears.`,
-      `<strong>The default account cannot be unlinked.</strong> You can change which linked account is the default, but you can never unlink the current one.`,
-      `<strong>Linking an account has three requirements</strong>: you hold the <em>Administrator</em> permission profile in the organization, you are an account administrator with All Administration Capabilities on that account, and the account is not already linked somewhere else. An account belongs to one organization at a time.`,
-      `<strong>External domain accounts are invited, not linked.</strong> These are eSignature accounts holding a user whose email is on your claimed domain. Invitations go to the <strong>five most recently active account administrators</strong>, who accept or decline, and a decline requires a reason.`,
-      `<strong>Every organization has at least one organization administrator</strong>, and by default it is the eSignature administrator who created it. Docusign recommends having <strong>at least two</strong> for continuity.`,
-      `<strong>There are nine administrator permission profiles.</strong> <em>Administrator</em> is full control. The other eight are delegated: Connect Administrator, Users Administrator, Users Administrator - Limited Access, Settings Administrator, Notaries Administrator, Product Reports Administrator, Security Reports Administrator, and Security Appliance Administrator.`,
-      `<strong>Learn the three that carry the exam.</strong> <em>Users Administrator</em> manages users only. <em>Settings Administrator</em> manages accounts and account settings only, including linking and unlinking. <em>Security Reports Administrator</em> gets Docusign Monitor and nothing else.`,
-      `<strong>A Users Administrator has a ceiling.</strong> They can add, edit and close any non-administrator user, and they can apply non-administrator permission profiles only. They cannot assign or change an administrator permission profile, and they cannot add, edit or close other Docusign administrators.`,
-      `<strong>Users Administrator - Limited Access is the same job on named accounts.</strong> You pick which accounts the delegated administrator may manage users in, and they get nothing else.`,
-      `<strong>The navigation menu tells you the profile.</strong> Administrator sees everything. Users Administrator sees Users, Accounts and Bulk Actions. Settings Administrator sees Accounts and Bulk Actions. Product Reports Administrator sees Bulk Actions. Security Reports Administrator sees Docusign Monitor.`,
-      `<strong>Only Administrator and Users Administrator can close users</strong> in the sense the profile table shows: close users is an Administrator-only row, while both can view, add and edit non-administrator users.`,
-      `<strong>Adding an administrator is an invitation, not a switch.</strong> You add them from <em>Users</em>, the <em>Administrators</em> tab, then <em>Add Administrator</em>. They land as <strong>Pending</strong> and must activate the membership from an email before anything happens.`,
-      `<strong>A pending invitation cannot really be edited.</strong> <em>Edit</em> only shows the name and profile. To change either one you delete the invitation and add the user again.`,
-      `<strong>The Users page has two categories</strong>: <em>Account Users</em>, who are members of linked accounts, and <em>Domain Users</em>, who hold any Docusign account on a domain you have claimed. Domain users are the reason claiming a domain matters so much.`,
-      `<strong>Some controls exist for domain users only.</strong> Editing the email address, setting the login policy, manually activating pending memberships and per-user connected apps are domain-user features. On an ordinary account user they are not there.`,
-      `<strong>Profile changes fan out, membership changes do not.</strong> Editing a user's address, job title and phone number at the organization propagates to all their accounts. An account administrator can only change one membership and cannot touch profile details at all.`,
-      `<strong>Groups live in organization settings once CLM is involved.</strong> A CLM account must manage groups in Docusign Admin. An eSignature-only account may manage them in either place. A group created for a CLM-enabled account appears in both eSignature and CLM Admin.`,
-      `<strong>Every user is in the Everyone group automatically</strong>, and no user can be removed from Everyone or from Administrators.`,
-      `<strong>Licences are one type per person.</strong> On IAM plans a user can hold only one licence type across every account. Add them with a Free licence where they already hold a Full one and they get the Full licence. Free licences are unlimited and do not count against the paid pool.`
+      `<strong>Организация — это уровень над учетными записями.</strong> Это позволяет одной группе администраторов управлять пользователями и настройками для многих учетных записей Docusign из одного места. Почти каждый неправильный ответ на этом экзамене является ответом на уровне учетной записи на вопрос уровня организации.`,
+      `<strong>Для создания организации нужны две вещи</strong>: вы должны быть администратором учетной записи с <em>Все возможности администрирования</em>, и для учетной записи должна быть включена поддержка Docusign Admin. Если вы не видите <em>Начать</em> раздел, учетная запись не активирована, и это звонок в службу поддержки.`,
+      `<strong>Учетная запись, из которой вы создаете организацию, становится учетной записью по умолчанию.</strong>, и вы автоматически становитесь администратором организации. Учетная запись по умолчанию — это то, что используется при своевременной подготовке при появлении нового пользователя.`,
+      `<strong>Учетную запись по умолчанию невозможно отсоединить.</strong> Вы можете изменить связанную учетную запись по умолчанию, но никогда не сможете отменить связь с текущей.`,
+      `<strong>Привязка учетной записи имеет три требования</strong>: ты держишь <em>Administrator</em> профиль разрешений в организации, вы являетесь администратором учетной записи со всеми возможностями администрирования для этой учетной записи, и эта учетная запись еще не связана с другим местом. Учетная запись одновременно принадлежит одной организации.`,
+      `<strong>Учетные записи внешних доменов приглашаются, но не связываются.</strong> Это учетные записи электронной подписи, в которых хранятся пользователи, чья электронная почта находится в заявленном вами домене. Приглашения отправляются в <strong>пять последних активных администраторов учетных записей</strong>, которые принимают или отказываются, а отказ требует причины.`,
+      `<strong>В каждой организации есть хотя бы один администратор организации.</strong>, и по умолчанию его создал администратор электронной подписи. Компания Docusign рекомендует иметь <strong>по крайней мере два</strong> для преемственности.`,
+      `<strong>Существует девять профилей разрешений администратора.</strong> <em>Administrator</em> это полный контроль. Остальные восемь делегированы: администратор подключения, администратор пользователей, администратор пользователей с ограниченным доступом, администратор настроек, администратор нотариусов, администратор отчетов о продуктах, администратор отчетов безопасности и администратор устройств безопасности.`,
+      `<strong>Изучите три, которые сдают экзамен.</strong> <em>Администратор пользователей</em> управляет только пользователями. <em>Администратор настроек</em> управляет только учетными записями и настройками учетных записей, включая привязку и отмену привязки. <em>Администратор отчетов безопасности</em> получает Docusign Monitor и ничего больше.`,
+      `<strong>У администратора пользователей есть потолок.</strong> Они могут добавлять, редактировать и закрывать любого пользователя, не являющегося администратором, и могут применять только профили разрешений неадминистратора. Они не могут назначать или изменять профиль разрешений администратора, а также не могут добавлять, редактировать или закрывать других администраторов Docusign.`,
+      `<strong>Администратор пользователей — ограниченный доступ — это та же работа для именованных учетных записей.</strong> Вы выбираете, в каких учетных записях делегированный администратор может управлять пользователями, и больше он ничего не получает.`,
+      `<strong>Меню навигации сообщает вам профиль.</strong> Админ все видит. Администратор пользователей видит пользователей, учетные записи и массовые действия. Администратор настроек видит учетные записи и массовые действия. Администратор отчетов о продуктах видит массовые действия. Администратор отчетов безопасности видит Docusign Monitor.`,
+      `<strong>Только администратор и администратор пользователей могут закрывать пользователей.</strong> в том смысле, в котором показано в таблице профилей: близкие пользователи — это строка, доступная только администратору, в то время как оба могут просматривать, добавлять и редактировать пользователей, не являющихся администраторами.`,
+      `<strong>Добавление администратора — это приглашение, а не переключение.</strong> Вы добавляете их из <em>Users</em>, <em>Administrators</em> вкладка, затем <em>Добавить администратора</em>. Они приземляются как <strong>Pending</strong> и должен активировать членство по электронной почте, прежде чем что-нибудь произойдет.`,
+      `<strong>Ожидающее приглашение не может быть отредактировано.</strong> <em>Edit</em> показывает только имя и профиль. Чтобы изменить любой из них, удалите приглашение и снова добавьте пользователя.`,
+      `<strong>Страница «Пользователи» имеет две категории.</strong>: <em>Пользователи учетной записи</em>, которые являются участниками связанных учетных записей, и <em>пользователи домена</em>, которые владеют какой-либо учетной записью Docusign в домене, на который вы заявили права. Пользователи домена являются причиной того, что домен так важен.`,
+      `<strong>Некоторые элементы управления существуют только для пользователей домена.</strong> Редактирование адреса электронной почты, настройка политики входа, ручная активация ожидающих членства и подключенных приложений для каждого пользователя — это функции пользователя домена. На обычном аккаунте пользователя их нет.`,
+      `<strong>Изменения профиля разветвляются, а изменения членства — нет.</strong> Изменение адреса пользователя, должности и номера телефона в организации распространяется на все его учетные записи. Администратор учетной записи может изменить только одно членство и вообще не может трогать детали профиля.`,
+      `<strong>Группы живут в настройках организации после задействования CLM.</strong> Учетная запись CLM должна управлять группами в Docusign Admin. Учетная запись только для электронной подписи может управлять ими в любом месте. Группа, созданная для учетной записи с поддержкой CLM, отображается как в eSignature, так и в CLM Admin.`,
+      `<strong>Каждый пользователь автоматически попадает в группу «Все».</strong>, и ни один пользователь не может быть удален из списка «Все» или из списка «Администраторы».`,
+      `<strong>Лицензии предоставляются одного типа на человека.</strong> В планах IAM пользователь может иметь только один тип лицензии для каждой учетной записи. Добавьте их с бесплатной лицензией, если у них уже есть полная, и они получат полную лицензию. Бесплатные лицензии не ограничены и не учитываются в платном пуле.`
     ],
-    miscon:`<strong>Misconception to bust:</strong> "Organization administrator means administrator of the accounts." It does not. An organization administrator with the Administrator profile controls SSO, domains and all users across linked accounts without holding rights on those accounts. To also administer an account itself, they need <em>All Administration Capabilities</em> on that account. That is exactly why linking an account requires both hats at once.`,
+    miscon:`<strong>Заблуждение, которое следует разоблачить:</strong> «Администратор организации означает администратор учетных записей». Это не так. Администратор организации с профилем администратора контролирует единый вход, домены и всех пользователей в связанных учетных записях, не обладая правами на эти учетные записи. Чтобы также управлять самой учетной записью, им необходимо <em>Все возможности администрирования</em> на этот счет. Именно поэтому для привязки аккаунта нужны обе шапки сразу.`,
     viz:`<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:12px">
       <span style="padding:5px 11px;border-radius:6px;background:var(--surf);border:1px solid var(--border)"><b>Organization</b></span>
-      <span style="color:var(--dim)">holds →</span>
-      <span style="padding:5px 11px;border-radius:6px;background:var(--surf);border:1px solid var(--border)">Linked account</span>
-      <span style="padding:5px 11px;border-radius:6px;background:var(--surf);border:1px solid var(--border)">Linked account</span>
-      <span style="padding:5px 11px;border-radius:6px;background:var(--surf);border:1px solid var(--border)">Linked account</span>
-    </div><div style="color:var(--dim);font-size:12px;margin-top:7px">One of them is the default account. It cannot be unlinked, and just-in-time provisioning drops new users into it.</div>`},
+      <span style="color:var(--dim)">держит →</span>
+      <span style="padding:5px 11px;border-radius:6px;background:var(--surf);border:1px solid var(--border)">Связанный аккаунт</span>
+      <span style="padding:5px 11px;border-radius:6px;background:var(--surf);border:1px solid var(--border)">Связанный аккаунт</span>
+      <span style="padding:5px 11px;border-radius:6px;background:var(--surf);border:1px solid var(--border)">Связанный аккаунт</span>
+    </div><div style="color:var(--dim);font-size:12px;margin-top:7px">Одна из них — учетная запись по умолчанию. Его нельзя отсоединить, и при своевременной подготовке к нему добавляются новые пользователи.</div>`},
 
-  {key:'d2', title:'Bulk actions: exports, imports and CSV formats',
+  {key:'d2', title:"Массовые действия: экспорт, импорт и форматы CSV.",
     must:[
-      `<strong>Bulk actions live at the organization, under Bulk Actions</strong>, and the feature comes with the <em>Organization Management</em> add-on. Individual account administrators have their own separate User Bulk Actions feature, which is the classic wrong answer.`,
-      `<strong>There are four tiles</strong>: USERS, ACCOUNTS, PERMISSION PROFILES, and the Activity tab that tracks every job. Every export and import is watched from Activity, with a refresh icon and a <em>View</em> then <em>Download</em> step at the end.`,
-      `<strong>Only one export or import can run at a time.</strong> Start a second and you wait.`,
-      `<strong>Storage and retention.</strong> An organization holds a combined total of <code>100</code> user exports and account settings exports, retained for <code>90</code> days. You can delete them by hand with <em>Delete Export</em>.`,
-      `<strong>Three user export types</strong>: <em>Users and Memberships</em> (everyone across all linked accounts), <em>Domain Users</em> (profile details, default account, login policy and last login), and <em>External Domain Users</em> (domain users sitting in accounts outside the organization).`,
-      `<strong>No claimed domain means one export type.</strong> Organizations without a claimed domain see only <em>Users and Memberships</em>. Two of the three exports exist because of the domain claim.`,
-      `<strong>Who may export users.</strong> The Administrator and Users Administrator profiles. Account settings export and import belong to Administrator and Settings Administrator instead.`,
-      `<strong>Add Users CSV, five required columns</strong>: <code>AccountID</code>, <code>FirstName</code>, <code>LastName</code>, <code>UserEmail</code>, <code>eSignPermissionProfile</code>. Everything else is optional.`,
-      `<strong>Update Users and Close Users share a different trio</strong>: <code>AccountID</code>, <code>APIUserName</code>, <code>UserEmail</code>. The moment a question mentions an existing user, <code>APIUserName</code> is in the answer.`,
-      `<strong>AccountID is the 32-character API Account ID</strong>, found in the Apps and Keys section of the account. Not the account name, and not the account number you see on an invoice. For a Close Users CSV, <code>AccountID</code> must also be the <strong>first column</strong>.`,
-      `<strong>Header rules.</strong> Headers are not case-sensitive and, except for the Close Users first column and account settings import, they do not have to be in the listed order. The text still has to match exactly.`,
-      `<strong>Name columns are either or.</strong> Use <code>FirstName</code> plus <code>LastName</code>, or use <code>UserName</code>. Put both in and <code>UserName</code> wins.`,
-      `<strong>CLM columns travel in pairs.</strong> <code>EnableCLM</code> set to TRUE requires <code>CLMPermissionProfile</code>, and assigning a CLM profile requires <code>EnableCLM</code>. One without the other is the trap.`,
-      `<strong>Group versus Groups is a real distinction.</strong> Singular <code>Group</code> only adds, one group per column, and repeated columns add more. Plural <code>Groups</code> adds and removes by rewriting the whole list in one cell as <code>[Group 1],[Group2]</code>. If both appear, the singular <code>Group</code> column wins and <code>Groups</code> is ignored.`,
-      `<strong>Changing an email address needs its own column.</strong> <code>UserEmail</code> identifies the user, and <code>UpdatedUserEmail</code> carries the new address. Overwriting <code>UserEmail</code> does not rename anybody.`,
-      `<strong>LoginPolicy takes three values</strong>: <code>None</code>, <code>FedAuthRequired</code> (must use the identity provider) and <code>FedAuthBypass</code> (identity provider or Docusign credentials). It applies only where there is a reserved domain and SSO.`,
-      `<strong>Bulk add only adds and bulk update only updates.</strong> Changes to existing users in an add file are ignored. New users in an update file are not created. Access codes cannot be used with the bulk add action at all.`,
-      `<strong>Two hard numbers for imports.</strong> Account settings import covers up to <code>40</code> accounts at a time. Closing external domain users tops out at <code>2,000</code> users per site, per CSV.`,
-      `<strong>Account settings import is the one with a fixed column order</strong>: <code>Category</code>, <code>Key</code>, then a column per account, each headed by the account name with the account ID and the environment (Demo or Production) below it. Start from an export, because plans differ.`,
-      `<strong>Permission Profiles export is read-only and organization-wide.</strong> It returns account ID and name, profile name and ID, last modified date, how many users hold each profile, and the list of privileges and values. Two columns are deliberately missing compared to the account-level export: <em>Allow auto tagging</em> and <em>Enable Key Terms Suggestion by Document Type</em>.`,
-      `<strong>Closing users has a signing-group side effect.</strong> The <em>Remove users from signing groups</em> box is selected by default. Clear it and the closed users keep receiving signing group notifications until you edit the groups by hand.`
+      `<strong>Массовые действия доступны в организации в разделе Массовые действия.</strong>, и эта функция поставляется с <em>Управление организацией</em> добавить. У администраторов отдельных учетных записей есть отдельная функция «Массовые действия пользователей», что является классическим неправильным ответом.`,
+      `<strong>Есть четыре плитки</strong>: ПОЛЬЗОВАТЕЛИ, АККАУНТЫ, ПРОФИЛИ РАЗРЕШЕНИЙ и вкладка «Активность», на которой отслеживается каждое задание. Каждый экспорт и импорт отслеживаются из Activity с помощью значка обновления и <em>View</em> then <em>Download</em> шаг в конце.`,
+      `<strong>Одновременно может выполняться только один экспорт или импорт.</strong> Начни секунду и подожди.`,
+      `<strong>Хранение и сохранение.</strong> В общей сложности организация владеет <code>100</code> экспорт пользователей и экспорт настроек учетной записи, сохраняются для <code>90</code> дни. Вы можете удалить их вручную с помощью <em>Удалить экспорт</em>.`,
+      `<strong>Три типа экспорта пользователей</strong>: <em>Пользователи и членство</em> (все во всех связанных аккаунтах), <em>пользователи домена</em> (данные профиля, учетная запись по умолчанию, политика входа и последний вход в систему) и <em>Пользователи внешнего домена</em> (пользователи домена, сидящие в учетных записях вне организации).`,
+      `<strong>Отсутствие заявленного домена означает один тип экспорта.</strong> Организации без заявленного домена видят только <em>Пользователи и членство</em>. Два из трех экспортов существуют из-за заявки на домен.`,
+      `<strong>Кто может экспортировать пользователей.</strong> Профили администратора и пользователей. Экспорт и импорт настроек учетной записи принадлежат Администратору и Администратору настроек.`,
+      `<strong>Добавить пользователей в формате CSV, пять обязательных столбцов.</strong>: <code>AccountID</code>, <code>FirstName</code>, <code>LastName</code>, <code>UserEmail</code>, <code>eSignPermissionProfile</code>. Все остальное не является обязательным.`,
+      `<strong>Обновить пользователей и закрыть пользователей — это другое трио.</strong>: <code>AccountID</code>, <code>APIUserName</code>, <code>UserEmail</code>. В тот момент, когда в вопросе упоминается существующий пользователь, <code>APIUserName</code> есть в ответе.`,
+      `<strong>AccountID — это 32-значный идентификатор учетной записи API.</strong>, находится в разделе «Приложения и ключи» учетной записи. Не имя счета и не номер счета, который вы видите в счете. Для CSV-файла близких пользователей: <code>AccountID</code> также должно быть <strong>первый столбец</strong>.`,
+      `<strong>Правила заголовка.</strong> Заголовки не чувствительны к регистру и, за исключением первого столбца «Закрыть пользователей» и импорта настроек учетной записи, они не обязательно должны располагаться в указанном порядке. Текст все равно должен точно совпадать.`,
+      `<strong>Столбцы имен имеют либо или.</strong> Use <code>FirstName</code> plus <code>LastName</code>или используйте <code>UserName</code>. Поместите и то, и другое. <code>UserName</code> побеждает.`,
+      `<strong>Колонны CLM перемещаются парами.</strong> <code>EnableCLM</code> для установки в TRUE требуется <code>CLMPermissionProfile</code>, а для назначения профиля CLM требуется <code>EnableCLM</code>. Одно без другого — ловушка.`,
+      `<strong>Группа против групп — это настоящее различие.</strong> Singular <code>Group</code> только добавляет одну группу на столбец, а повторяющиеся столбцы добавляют больше. Множественное число <code>Groups</code> добавляет и удаляет, переписывая весь список в одной ячейке как <code>[Группа 1],[Группа2]</code>. Если появляются оба, единственное число <code>Group</code> столбец выигрывает и <code>Groups</code> игнорируется.`,
+      `<strong>Для изменения адреса электронной почты требуется отдельный столбец.</strong> <code>UserEmail</code> идентифицирует пользователя и <code>UpdatedUserEmail</code> несет новый адрес. Перезапись <code>UserEmail</code> никого не переименовывает.`,
+      `<strong>LoginPolicy принимает три значения</strong>: <code>None</code>, <code>FedAuthRequired</code> (необходимо использовать поставщика удостоверений) и <code>FedAuthBypass</code> (поставщик удостоверений или учетные данные Docusign). Это применимо только при наличии зарезервированного домена и единого входа.`,
+      `<strong>Массовое добавление только добавляет и массовое обновление только обновлений.</strong> Изменения существующих пользователей в файле добавления игнорируются. Новые пользователи в файле обновления не создаются. Коды доступа вообще нельзя использовать с действием массового добавления.`,
+      `<strong>Две точные цифры по импорту.</strong>Импорт настроек учетной записи охватывает до <code>40</code> счета одновременно. Закрытие пользователей внешнего домена достигает максимума в <code>2,000</code> пользователей на сайт, на CSV.`,
+      `<strong>Импорт настроек учетной записи — импорт с фиксированным порядком столбцов.</strong>: <code>Category</code>, <code>Key</code>, затем столбец для каждой учетной записи, каждый из которых начинается с имени учетной записи с идентификатором учетной записи и средой (демо или рабочая) под ним. Начнём с экспорта, потому что планы разные.`,
+      `<strong>Экспорт профилей разрешений доступен только для чтения и доступен для всей организации.</strong> Он возвращает идентификатор и имя учетной записи, имя и идентификатор профиля, дату последнего изменения, количество пользователей, владеющих каждым профилем, а также список привилегий и значений. Два столбца намеренно отсутствуют по сравнению с экспортом на уровне аккаунта: <em>Разрешить автоматическую пометку</em> and <em>Включить предложение ключевых терминов по типу документа</em>.`,
+      `<strong>Закрытие пользователей имеет побочный эффект для подписывающей группы.</strong> The <em>Удаление пользователей из подписывающих групп</em> поле выбрано по умолчанию. Очистите его, и закрытые пользователи продолжат получать уведомления о группах подписи, пока вы не отредактируете группы вручную.`
     ],
-    miscon:`<strong>Misconception to bust:</strong> "One CSV template covers bulk work." There are four different shapes, and the exam picks between them. Add wants <code>eSignPermissionProfile</code> and names. Update and Close want <code>APIUserName</code>. Account settings import wants <code>Category</code> and <code>Key</code> in a fixed order. Always download the template from the dialog you are actually in.`,
+    miscon:`<strong>Заблуждение, которое следует разоблачить:</strong> «Один шаблон CSV охватывает объемную работу». Есть четыре разные формы, и экзамен выбирает одну из них. Добавить желания <code>eSignPermissionProfile</code> и имена. Обновить и закрыть желание <code>APIUserName</code>. Требуется импорт настроек учетной записи <code>Category</code> and <code>Key</code> в установленном порядке. Всегда загружайте шаблон из диалогового окна, в котором вы на самом деле находитесь.`,
     viz:`<div style="display:grid;gap:6px;font-size:12.5px">
-      <div style="border:1px solid var(--border);border-radius:6px;padding:7px 11px;background:var(--surf)"><b>Add Users</b> <span style="color:var(--dim)">AccountID · FirstName · LastName · UserEmail · eSignPermissionProfile</span></div>
-      <div style="border:1px solid var(--border);border-radius:6px;padding:7px 11px;background:var(--surf)"><b>Update Users</b> <span style="color:var(--dim)">AccountID · APIUserName · UserEmail</span></div>
-      <div style="border:1px solid var(--border);border-radius:6px;padding:7px 11px;background:var(--surf)"><b>Close Users</b> <span style="color:var(--dim)">AccountID (first column) · APIUserName · UserEmail</span></div>
-      <div style="border:1px solid var(--border);border-radius:6px;padding:7px 11px;background:var(--surf)"><b>Account Settings Import</b> <span style="color:var(--dim)">Category · Key · one column per account, in order</span></div>
-    </div><div style="color:var(--dim);font-size:12px;margin-top:7px">Required columns only. Everything else is optional.</div>`},
+      <div style="border:1px solid var(--border);border-radius:6px;padding:7px 11px;background:var(--surf)"><b>Добавить пользователей</b> <span style="color:var(--dim)">Идентификатор учетной записи · Имя · Фамилия · Электронная почта пользователя · eSignPermissionProfile</span></div>
+      <div style="border:1px solid var(--border);border-radius:6px;padding:7px 11px;background:var(--surf)"><b>Обновить пользователей</b> <span style="color:var(--dim)">AccountID · APIUserName · UserEmail</span></div>
+      <div style="border:1px solid var(--border);border-radius:6px;padding:7px 11px;background:var(--surf)"><b>Закрыть пользователей</b> <span style="color:var(--dim)">AccountID (первый столбец) · APIUserName · UserEmail</span></div>
+      <div style="border:1px solid var(--border);border-radius:6px;padding:7px 11px;background:var(--surf)"><b>Импорт настроек учетной записи</b> <span style="color:var(--dim)">Категория · Ключ · один столбец на аккаунт, по порядку</span></div>
+    </div><div style="color:var(--dim);font-size:12px;margin-top:7px">Только обязательные столбцы. Все остальное не является обязательным.</div>`},
 
-  {key:'d3', title:'Sharing and transferring ownership',
+  {key:'d3', title:"Совместное использование и передача права собственности",
     must:[
-      `<strong>Sharing and transferring are opposites.</strong> Sharing lets a second person work on envelopes that still belong to the first. Transferring moves ownership so the envelopes leave the original account entirely.`,
-      `<strong>Shared access is the current feature.</strong> An administrator opens <em>Users</em>, finds the person, then <em>Actions</em> and <em>Manage Shared Access</em>. Shared envelopes, the older feature, is in maintenance mode and is no longer updated.`,
-      `<strong>Shared access has three permission levels, and they stack.</strong> <em>Manage on behalf of</em> is view, view history, download and move into folders. <em>Edit on behalf of</em> adds correct, resend and void. <em>Send on behalf of</em> adds sending and editing drafts on top of both.`,
-      `<strong>No sending permission means manage only.</strong> A user who cannot send envelopes can only be granted the manage level over someone else's envelopes.`,
-      `<strong>Shared access is dated.</strong> The start date is today or any future date. The end date is optional and, if you set one, access expires on its own with no manual step. Leave it blank and access runs until somebody removes it.`,
-      `<strong>Three hard limits on shared access.</strong> You can select up to <code>100</code> users at a time. Sharing runs user to user and <strong>never to a group</strong>. Both people must be on the same account.`,
-      `<strong>Inactive and pending users are out.</strong> They cannot be granted shared access and their envelopes cannot be shared with anyone else.`,
-      `<strong>For a closed user, share is not the tool.</strong> Transfer their envelopes to yourself or another active user first, then work with them.`,
-      `<strong>Shared access changes are audited.</strong> The audit log records every change, with the fields <em>AgentUser</em> (the person acting for someone else), <em>PrincipalUser</em> (the person acted for), <em>Permission</em> (Send or Manage) and <em>UserAuthorizationId</em>.`,
-      `<strong>Ownership belongs to the sender.</strong> Users own the envelopes they send. Received envelopes belong to their sender and can never be transferred to a recipient.`,
-      `<strong>Envelope Transfer sits in the organization view</strong> and is part of the Organization Management add-on. If it is not in the menu, Docusign has to enable it for your organization.`,
-      `<strong>Two rules decide whether a transfer is even possible.</strong> Both accounts must be linked to your organization, and both must be on the same Docusign site environment, for example NA1 to NA1. You cannot transfer NA1 to NA2.`,
-      `<strong>You need All Administration Capabilities on the source account.</strong> The Envelope Transfer page only lists the accounts where you hold it.`,
-      `<strong>Any status transfers except Draft.</strong> Draft envelopes cannot be transferred. The ceiling is <code>2,000</code> eligible envelopes at one time.`,
-      `<strong>A transfer is complete, not a copy.</strong> The items are removed from the original owner and added to the new owner. History keeps every action by the original sender and gains a <em>Transfer envelope ownership</em> entry naming the new owner.`,
-      `<strong>Two ways to run it.</strong> <em>Transfer Now</em> filters and ticks envelopes on screen. <em>Transfer Using CSV</em> uploads a file of envelope IDs, all from the same source account, all going to a single new owner.`,
-      `<strong>Build the CSV from the download.</strong> Filter the list, choose <em>Download CSV</em>, then strip it back to the <code>EnvelopeId</code> column before uploading. Recipient information and custom fields are useful for choosing, not for transferring.`,
-      `<strong>Only the CSV route offers the courtesy copy.</strong> <em>Add Original Owner as carbon copy</em> is a checkbox on the Transfer Using CSV dialog.`,
-      `<strong>Bulk send has a catch.</strong> Transferring envelopes sent by bulk send fails unless the receiving owner has the Bulk Send permission. The error reads <code>cannot_copy_bulksend_list</code>.`,
-      `<strong>Every job lands in the Envelope Transfer Logs</strong>, held against the account it came from, with a Status column, refresh for queued jobs, a details view, and a downloadable CSV of envelope IDs with the result of each row.`
+      `<strong>Делиться и передавать — противоположности.</strong> Совместное использование позволяет второму пользователю работать с конвертами, которые все еще принадлежат первому. При передаче права собственности перемещаются, поэтому конверты полностью покидают исходную учетную запись.`,
+      `<strong>Совместный доступ — это текущая функция.</strong> Администратор открывает <em>Users</em>, находит человека, затем <em>Actions</em> and <em>Управление общим доступом</em>. Общие конверты, старая функция, находятся в режиме обслуживания и больше не обновляются.`,
+      `<strong>Общий доступ имеет три уровня разрешений, и они суммируются.</strong> <em>Управлять от имени</em> это просмотр, просмотр истории, загрузка и перемещение по папкам. <em>Редактировать от имени</em> добавляет правильно, повторно отправить и аннулировать. <em>Отправить от имени</em> добавляет отправку и редактирование черновиков поверх обоих.`,
+      `<strong>Отсутствие разрешения на отправку означает только управление.</strong> Пользователю, который не может отправлять конверты, может быть предоставлен только уровень управления чужим конвертом.`,
+      `<strong>Общий доступ устарел.</strong> Дата начала — сегодня или любая дата в будущем. Дата окончания не является обязательной, и если вы ее установите, срок действия доступа истечет сам по себе, без каких-либо действий вручную. Оставьте это поле пустым, и доступ будет действовать до тех пор, пока кто-нибудь его не удалит.`,
+      `<strong>Три жестких ограничения на общий доступ.</strong> Вы можете выбрать до <code>100</code> пользователей одновременно. Совместное использование осуществляется от пользователя к пользователю и <strong>никогда в группу</strong>. Оба человека должны быть на одной учетной записи.`,
+      `<strong>Неактивные и ожидающие пользователи исключены.</strong> Им не может быть предоставлен общий доступ, а их конверты нельзя передать кому-либо еще.`,
+      `<strong>Для закрытого пользователя доля не является инструментом.</strong> Сначала передайте их конверты себе или другому активному пользователю, а затем работайте с ними.`,
+      `<strong>Изменения общего доступа проверяются.</strong> В журнале аудита фиксируются все изменения с полями <em>AgentUser</em> (человек, действующий в интересах кого-то другого), <em>PrincipalUser</em> (человек, от имени которого действовал), <em>Permission</em> (Отправить или управлять) и <em>UserAuthorizationId</em>.`,
+      `<strong>Право собственности принадлежит отправителю.</strong> Пользователи владеют конвертами, которые они отправляют. Полученные конверты принадлежат отправителю и не подлежат передаче получателю.`,
+      `<strong>Передача конвертов находится в представлении организации.</strong> и является частью дополнения «Управление организацией». Если его нет в меню, Docusign необходимо включить его для вашей организации.`,
+      `<strong>Два правила определяют, возможен ли вообще трансфер.</strong> Обе учетные записи должны быть связаны с вашей организацией и обе должны находиться в одной среде сайта Docusign, например от NA1 до NA1. Вы не можете перенести NA1 в NA2.`,
+      `<strong>Вам потребуются все возможности администрирования в исходной учетной записи.</strong> На странице «Передача конвертов» перечислены только учетные записи, на которых вы их храните.`,
+      `<strong>Любые передачи статусов, кроме Черновика.</strong> Черновые конверты не могут быть переданы. Потолок <code>2,000</code> подходящие конверты одновременно.`,
+      `<strong>Передача является полной, а не копией.</strong> Элементы удаляются от первоначального владельца и добавляются к новому владельцу. В истории сохраняются все действия первоначального отправителя и сохраняется <em>Передача права собственности на конверт</em> запись с указанием нового владельца.`,
+      `<strong>Два способа запустить его.</strong> <em>Перевести сейчас</em> фильтрует и отмечает конверты на экране. <em>Перенос с использованием CSV</em> загружает файл с идентификаторами конвертов, все из одной исходной учетной записи, и все они переходят к одному новому владельцу.`,
+      `<strong>Создайте CSV из загрузки.</strong> Отфильтруйте список, выберите <em>Скачать CSV-файл</em>, затем разденьте его обратно на <code>EnvelopeId</code> столбец перед загрузкой. Информация о получателе и настраиваемые поля полезны для выбора, а не для передачи.`,
+      `<strong>Только маршрут CSV предлагает бесплатную копию.</strong> <em>Добавить первоначального владельца в качестве точной копии</em> — это флажок в диалоговом окне «Передача с использованием CSV».`,
+      `<strong>Массовая отправка имеет одну загвоздку.</strong> Передача конвертов, отправленных посредством массовой рассылки, невозможна, если у принимающего владельца нет разрешения на массовую отправку. Ошибка читается <code>cannot_copy_bulksend_list</code>.`,
+      `<strong>Каждое задание попадает в журналы передачи конвертов.</strong>, сохраненный для учетной записи, из которой он поступил, со столбцом «Состояние», обновлением для заданий в очереди, представлением подробностей и загружаемым CSV-файлом с идентификаторами конвертов с результатом каждой строки.`
     ],
-    miscon:`<strong>Misconception to bust:</strong> "Shared access and envelope transfer are two sizes of the same thing." They are different levels of the product. Shared access is an account-level tool between two users on one account, with dates and a 100-user selection cap. Envelope transfer is an organization-level tool that moves ownership between accounts, capped at 2,000 envelopes, blocked across sites, and blocked for drafts.`,
+    miscon:`<strong>Заблуждение, которое следует разоблачить:</strong> «Совместный доступ и передача конвертов — это одно и то же». Это разные уровни продукта. Совместный доступ — это инструмент на уровне учетной записи между двумя пользователями одной учетной записи с датами и ограничением выбора в 100 пользователей. Передача конвертов — это инструмент на уровне организации, который позволяет передавать право собственности между учетными записями. Количество конвертов ограничено 2000, блокируется на разных сайтах и ​​блокируется для черновиков.`,
     viz:`<div style="display:grid;gap:6px;font-size:12.5px">
-      <div style="border:1px solid var(--border);border-radius:6px;padding:8px 12px;background:var(--surf)"><b>Shared access</b> <span style="color:var(--dim)">same account · owner keeps the envelopes · start and end dates</span></div>
-      <div style="border:1px solid var(--border);border-radius:6px;padding:8px 12px;background:var(--surf)"><b>Envelope transfer</b> <span style="color:var(--dim)">across linked accounts, same site · ownership moves · no drafts</span></div>
-    </div><div style="color:var(--dim);font-size:12px;margin-top:7px">Ask one question first: does the original owner still own it afterwards?</div>`},
+      <div style="border:1px solid var(--border);border-radius:6px;padding:8px 12px;background:var(--surf)"><b>Общий доступ</b> <span style="color:var(--dim)">тот же аккаунт · конверты остаются у владельца · даты начала и окончания</span></div>
+      <div style="border:1px solid var(--border);border-radius:6px;padding:8px 12px;background:var(--surf)"><b>Передача конвертов</b> <span style="color:var(--dim)">между связанными аккаунтами, одним и тем же сайтом · смена владельца · никаких черновиков</span></div>
+    </div><div style="color:var(--dim);font-size:12px;margin-top:7px">Сначала задайте один вопрос: будет ли он по-прежнему принадлежать первоначальному владельцу после этого?</div>`},
 
-  {key:'d4', title:'Access management and Docusign Monitor',
+  {key:'d4', title:"Управление доступом и Docusign Monitor",
     must:[
-      `<strong>Claiming a domain is the foundation.</strong> Claim and verify an email domain and you can manage every user on that domain across every linked account, restrict personal Docusign signups on it, and grant administrative consent for connected apps.`,
-      `<strong>A domain belongs to exactly one organization.</strong> Once claimed and verified, no other organization can claim it. The same organization may claim it in both demo and production.`,
-      `<strong>Verification is a DNS record, and Docusign recommends CNAME over TXT.</strong> The CNAME host is the 32-digit GUID and it points to <code>verifydomain.docusign.net.</code>, trailing dot included. The TXT form is <code>docusign=</code> plus the same GUID.`,
-      `<strong>The token has to stay in DNS forever.</strong> Docusign rechecks the record periodically. Remove it and you break your users' access. Allow up to <strong>72 hours</strong> for DNS to propagate, and verify with <em>Actions</em> then <em>Verify DNS</em>, which flips the status to Active.`,
-      `<strong>The login policy has three settings.</strong> None, <em>FedAuthRequired</em> (identity provider only) and <em>FedAuthBypass</em> (identity provider or Docusign credentials). A per-user policy deliberately overrides the domain policy, which is why Docusign calls it an exception, not a standard.`,
-      `<strong>Keep one bypass account.</strong> The usual reason is an administrator who has to fix the SSO configuration when the identity provider is down, and integration users on applications that do not support SSO.`,
-      `<strong>Just-in-time provisioning creates the user on first login.</strong> If a reserved-domain email logs in and is not found in any organization account, a user is created, normally in the organization's default account with the default permission profile.`,
-      `<strong>JIT has a basic and an advanced form.</strong> Basic uses the default account and default profile. Advanced passes provisioning details in the SAML assertion to land the user on a specific account and profile.`,
-      `<strong>JIT is on by default</strong> and is switched off with the toggle on the <em>Identity Providers</em> page. Disabling it kills both flows, not just the advanced one.`,
-      `<strong>The Federated ID is the identity provider's unique identifier</strong> for the user, recorded on the user Security profile. If the identity provider changes it, the user is locked out until an administrator clears the stored value, after which the new one records itself on the next login.`,
-      `<strong>Connected apps are authorized for all domain users at once</strong>, limited by the permissions you specify, and you must have claimed a domain before you can do it. Per-user authorization exists for domain users only.`,
-      `<strong>Blocking personal accounts is a proxy header, not a setting.</strong> Your proxy injects <code>X-Docusign-Allow-Organization</code> with your organization ID, and the demo and production IDs are different, so include both. You find the ID on the Features page under <em>Organization Details</em>.`,
-      `<strong>Monitor is an add-on, and access is by profile.</strong> Only the Docusign Administrator and the Security Reports Administrator can reach and manage it. You enable it at <em>Admin</em>, <em>Organization</em>, <em>Monitor</em>, then <em>Actions</em> and <em>Enable</em>.`,
-      `<strong>Monitor is blind without a claimed domain.</strong> It only tracks user activity for users whose email is on a domain your organization has claimed. Account-associated activity such as envelope sends and document downloads is still captured.`,
-      `<strong>The dashboard is five things</strong>: Dashboard, User Investigations, Alert History, IP Safelist, and Settings. Alerts are enabled and disabled in Settings, one slider at a time.`,
-      `<strong>Two numbers separate the editions.</strong> Monitor Free Edition gives <strong>3</strong> alerts and <strong>12</strong> events with a 30-day window. Full Monitor gives <strong>24</strong> alerts and <strong>106</strong> events with data back to November 2020, plus the API, Splunk and alert history. Both editions need a claimed domain.`,
-      `<strong>Alert severity defaults to Auto</strong> and can be set to High, Moderate or Low. Alerts you edit also carry an event threshold, an optional recipient list, and a list of users prevented from triggering the alert.`,
-      `<strong>Thresholds are what you tune.</strong> A count for volume alerts, for example 15 unique envelope downloads in an hour. A distance in kilometres for the simultaneous login alert.`,
-      `<strong>The IP Safe List only feeds one alert.</strong> It drives the <em>IP address outside accepted ranges</em> alert, and if you configure no ranges the alert never fires. Ranges accept a first and last address or CIDR notation.`,
-      `<strong>Email notification limits.</strong> Organization administrators and Security Reports delegated administrators receive alert emails by default, capped at <strong>ten emails per hour per user</strong>. Stop them by disabling the specific alert.`,
-      `<strong>Getting the data out, three ways.</strong> A CSV download of event details, capped at <code>50,000</code> rows and <code>25,000</code> unique users, ascending sort only, and not available in Free Edition. A CSV snapshot of filtered Alert History. Or the Monitor API streaming endpoint into a SIEM such as Splunk.`,
-      `<strong>Monitor keeps alert, event and alert history data for ten years.</strong>`
+      `<strong>Заявка на домен является основой.</strong> Заявите права на домен электронной почты и подтвердите его, и вы сможете управлять каждым пользователем в этом домене в каждой связанной учетной записи, ограничивать личные регистрации в Docusign и предоставлять административное согласие для подключенных приложений.`,
+      `<strong>Домен принадлежит ровно одной организации.</strong> После утверждения и проверки ни одна другая организация не сможет претендовать на это. Одна и та же организация может претендовать на это как в демо, так и в производстве.`,
+      `<strong>Проверка представляет собой запись DNS, и Docusign рекомендует использовать CNAME вместо TXT.</strong> Хост CNAME — это 32-значный GUID, указывающий на <code>verifydomain.docusign.net.</code>, включая конечную точку. Форма TXT <code>документация=</code> плюс тот же GUID.`,
+      `<strong>Токен должен оставаться в DNS навсегда.</strong> Docusign периодически перепроверяет запись. Удалите его, и вы нарушите доступ своих пользователей. Разрешить до <strong>72 часа</strong> для распространения DNS и проверьте с помощью <em>Actions</em> then <em>Проверьте DNS</em>, который меняет статус на Активный.`,
+      `<strong>Политика входа имеет три параметра.</strong> Никто, <em>FedAuthRequired</em> (только поставщик удостоверений) и <em>FedAuthBypass</em> (поставщик удостоверений или учетные данные Docusign). Политика для каждого пользователя намеренно переопределяет политику домена, поэтому Docusign называет ее исключением, а не стандартом.`,
+      `<strong>Держите одну обходную учетную запись.</strong> Обычной причиной является администратор, которому приходится исправлять конфигурацию единого входа, когда поставщик удостоверений не работает, а также пользователи интеграции в приложениях, которые не поддерживают единый вход.`,
+      `<strong>При своевременной подготовке пользователь создается при первом входе в систему.</strong> Если электронная почта зарезервированного домена входит в систему и не найдена ни в одной учетной записи организации, создается пользователь, обычно в учетной записи организации по умолчанию с профилем разрешений по умолчанию.`,
+      `<strong>JIT имеет базовую и расширенную формы.</strong> Базовый использует учетную запись по умолчанию и профиль по умолчанию. Расширенные этапы предоставляют детали подготовки в утверждении SAML, чтобы направить пользователя на определенную учетную запись и профиль.`,
+      `<strong>JIT включен по умолчанию</strong> и выключается переключателем на <em>Поставщики удостоверений</em> страница. Отключение убивает оба потока, а не только расширенный.`,
+      `<strong>Federated ID — это уникальный идентификатор поставщика удостоверений.</strong> для пользователя, записанного в профиле безопасности пользователя. Если поставщик удостоверений меняет его, пользователь блокируется до тех пор, пока администратор не очистит сохраненное значение, после чего новое значение запишется при следующем входе в систему.`,
+      `<strong>Подключенные приложения авторизуются для всех пользователей домена одновременно.</strong>, ограниченный указанными вами разрешениями, и прежде чем вы сможете это сделать, вы должны заявить права на домен. Авторизация для каждого пользователя существует только для пользователей домена.`,
+      `<strong>Блокировка личных аккаунтов — это шапка прокси, а не настройка.</strong> Ваш прокси-инжект <code>X-Docusign-Allow-Organization</code> с идентификатором вашей организации, а демо-идентификаторы и рабочие идентификаторы различаются, поэтому укажите оба. Вы найдете идентификатор на странице «Функции» в разделе <em>Детали организации</em>.`,
+      `<strong>Монитор является дополнением, доступ осуществляется по профилю.</strong> Только администратор Docusign и администратор отчетов безопасности могут получить к нему доступ и управлять им. Вы включаете его в <em>Admin</em>, <em>Organization</em>, <em>Monitor</em>, затем <em>Actions</em> and <em>Enable</em>.`,
+      `<strong>Монитор слеп без заявленного домена.</strong> Он отслеживает только активность пользователей, чья электронная почта находится в домене, на который претендует ваша организация. Действия, связанные с учетной записью, такие как отправка конвертов и загрузка документов, по-прежнему фиксируются.`,
+      `<strong>Приборная панель – это пять вещей</strong>: информационная панель, исследования пользователей, история предупреждений, список безопасных IP-адресов и настройки. Оповещения включаются и отключаются в настройках, по одному ползунку за раз.`,
+      `<strong>Две цифры разделяют издания.</strong> Бесплатная версия Monitor дает <strong>3</strong> оповещения и <strong>12</strong> события с 30-дневным окном. Полный монитор дает <strong>24</strong> оповещения и <strong>106</strong> события с данными за ноябрь 2020 года, а также API, Splunk и историю оповещений. Обеим редакциям необходим заявленный домен.`,
+      `<strong>Уровень серьезности оповещений по умолчанию установлен на «Авто».</strong> и может быть установлен на Высокий, Средний или Низкий. Оповещения, которые вы редактируете, также содержат порог события, необязательный список получателей и список пользователей, которым запрещено активировать оповещение.`,
+      `<strong>Пороги — это то, что вы настраиваете.</strong> Подсчет оповещений об объеме, например 15 уникальных загрузок конвертов в час. Расстояние в километрах для одновременного оповещения о входе в систему.`,
+      `<strong>Список безопасных IP-адресов выдает только одно предупреждение.</strong> Это приводит к <em>IP-адрес вне допустимых диапазонов</em> предупреждение, и если вы не настроите диапазоны, предупреждение никогда не сработает. Диапазоны принимают первый и последний адрес или нотацию CIDR.`,
+      `<strong>Ограничения на уведомления по электронной почте.</strong> Администраторы организации и делегированные администраторы отчетов о безопасности по умолчанию получают оповещения по электронной почте, ограниченное количество раз. <strong>десять писем в час на пользователя</strong>. Остановите их, отключив конкретное предупреждение.`,
+      `<strong>Получение данных тремя способами.</strong> Загрузка информации о мероприятии в формате CSV, ограничение: <code>50,000</code> ряды и <code>25,000</code> уникальные пользователи, сортировка только по возрастанию, недоступно в бесплатной версии. CSV-снимок отфильтрованной истории оповещений. Или конечную точку потоковой передачи Monitor API в SIEM, например Splunk.`,
+      `<strong>Монитор хранит данные предупреждений, событий и истории предупреждений в течение десяти лет.</strong>`
     ],
-    miscon:`<strong>Misconception to bust:</strong> "Monitor watches everything in the account." It watches the users you have proved are yours. No claimed domain means no user-level activity, and if <em>Prevent Unmanaged Signups</em> is on, users outside the claimed domain are never added and never tracked. Claiming the domain is not paperwork, it is the switch that makes access management and Monitor work at all.`,
+    miscon:`<strong>Заблуждение, которое следует разоблачить:</strong> «Монитор следит за всем, что есть в аккаунте». Он наблюдает за пользователями, которые, как вы доказали, являются вашими. Отсутствие заявленного домена означает отсутствие активности на уровне пользователя, и если <em>Предотвращение неуправляемых регистраций</em> включен, пользователи за пределами заявленного домена никогда не добавляются и не отслеживаются. Заявление на домен — это не бумажная работа, это переключатель, который вообще заставляет работать управление доступом и Монитор.`,
     viz:`<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:12px">
-      <span style="padding:5px 11px;border-radius:6px;background:var(--surf);border:1px solid var(--border)"><b style="color:var(--accent)">Claim a domain</b></span>
-      <span style="color:var(--dim)">unlocks →</span>
-      <span style="padding:5px 11px;border-radius:6px;background:var(--surf);border:1px solid var(--border)">SSO and login policies</span>
-      <span style="padding:5px 11px;border-radius:6px;background:var(--surf);border:1px solid var(--border)">Domain users</span>
-      <span style="padding:5px 11px;border-radius:6px;background:var(--surf);border:1px solid var(--border)">Connected apps</span>
-      <span style="padding:5px 11px;border-radius:6px;background:var(--surf);border:1px solid var(--border)">Monitor user tracking</span>
-    </div><div style="color:var(--dim);font-size:12px;margin-top:7px">Nothing on the right works until the left one is verified in DNS.</div>`}
+      <span style="padding:5px 11px;border-radius:6px;background:var(--surf);border:1px solid var(--border)"><b style="color:var(--accent)">Заявить права на домен</b></span>
+      <span style="color:var(--dim)">разблокирует →</span>
+      <span style="padding:5px 11px;border-radius:6px;background:var(--surf);border:1px solid var(--border)">Единый вход и политики входа</span>
+      <span style="padding:5px 11px;border-radius:6px;background:var(--surf);border:1px solid var(--border)">пользователи домена</span>
+      <span style="padding:5px 11px;border-radius:6px;background:var(--surf);border:1px solid var(--border)">Подключенные приложения</span>
+      <span style="padding:5px 11px;border-radius:6px;background:var(--surf);border:1px solid var(--border)">Отслеживайте отслеживание пользователей</span>
+    </div><div style="color:var(--dim);font-size:12px;margin-top:7px">Ничто справа не работает, пока левое не будет проверено в DNS.</div>`}
 ];
 
 /* ============== PRACTICE EXAM: 40 questions ==============
@@ -509,171 +509,171 @@ const STUDY = [
 const QUESTIONS = [
   /* ---------- AREA 1 · Organizations, administrators and user management (12) ---------- */
   {id:'q1', domain:'d1', type:'mc', q:`What is required to create a Docusign organization?`,
-    choices:[`Any active eSignature user account`, `An account administrator with All Administration Capabilities, on an account enabled for Docusign Admin`, `A Docusign Support ticket, because organizations are created by Docusign only`, `A claimed domain and a configured identity provider`],
+    choices:[`Любая активная учетная запись пользователя электронной подписи.`, `Администратор учетной записи со всеми возможностями администрирования в учетной записи, в которой включена функция Docusign Admin.`, `Билет в службу поддержки Docusign, поскольку организации создаются только Docusign.`, `Заявленный домен и настроенный поставщик удостоверений.`],
     correct:1,
-    explain:`You must be an account administrator with <strong>All Administration Capabilities</strong> and the account must be enabled with Docusign Admin. If the <em>Get Started</em> section is missing, organization administration is not enabled and that is a Support call.`},
+    explain:`Вы должны быть администратором учетной записи с <strong>Все возможности администрирования</strong> и учетная запись должна быть активирована с помощью Docusign Admin. Если <em>Начать</em> раздел отсутствует, администрирование организации не включено и это звонок в службу поддержки.`},
   {id:'q2', domain:'d1', type:'mc', q:`Which account becomes the organization's default account?`,
-    choices:[`The largest account by user count`, `The eSignature account used to create the organization`, `Whichever account is linked first after creation`, `There is no default account until an administrator sets one`],
+    choices:[`Самый большой аккаунт по количеству пользователей`, `Учетная запись электронной подписи, использованная для создания организации.`, `Какая учетная запись будет связана первой после создания`, `Учетной записи по умолчанию не существует, пока ее не установит администратор.`],
     correct:1,
     explain:`The account you create the organization from becomes the default account. You can change it to another linked account later, but the current default can never be unlinked.`},
-  {id:'q3', domain:'d1', type:'ms', q:`Which conditions must be met to link an account to your organization? <em>Choose all that apply.</em>`,
-    choices:[`You hold the Administrator permission profile in the organization`, `You are an account administrator with All Administration Capabilities on that account`, `The account is not already linked to an organization`, `The account is on the same site environment as the default account`],
+  {id:'q3', domain:'d1', type:'ms', q:`Какие условия необходимо выполнить, чтобы привязать аккаунт к вашей организации? <em>Выберите все, что применимо.</em>`,
+    choices:[`У вас есть профиль разрешений администратора в организации.`, `Вы являетесь администратором учетной записи и имеете все возможности администрирования для этой учетной записи.`, `Аккаунт еще не связан с организацией`, `Учетная запись находится в той же среде сайта, что и учетная запись по умолчанию.`],
     correct:[0,1,2],
     explain:`Three requirements: the organization Administrator profile, All Administration Capabilities on the account, and the account not already linked elsewhere. The same-site rule belongs to envelope transfer, not to linking.`},
   {id:'q4', domain:'d1', type:'mc', q:`An organization administrator wants to hand user management to a colleague, but that colleague must never be able to create or edit other administrators. Which permission profile fits?`,
-    choices:[`Administrator`, `Users Administrator`, `Settings Administrator`, `Product Reports Administrator`],
+    choices:[`Administrator`, `Администратор пользователей`, `Администратор настроек`, `Администратор отчетов по продуктам`],
     correct:1,
     explain:`The Users Administrator can add, edit and close non-administrator users and can apply non-administrator permission profiles only. They cannot assign or change an administrator permission profile and cannot manage other Docusign administrators.`},
   {id:'q5', domain:'d1', type:'mc', q:`Which delegated administrator profile can link and unlink accounts from the organization?`,
-    choices:[`Users Administrator`, `Settings Administrator`, `Security Reports Administrator`, `Notaries Administrator`],
+    choices:[`Администратор пользователей`, `Администратор настроек`, `Администратор отчетов безопасности`, `Нотариусы Администратор`],
     correct:1,
     explain:`The Settings Administrator views and manages organization accounts and account settings, including viewing, comparing, exporting and importing settings, and linking and unlinking accounts. They do no user management at all.`},
   {id:'q6', domain:'d1', type:'mc', q:`A security team member needs Docusign Monitor and nothing else. Which permission profile do you assign?`,
-    choices:[`Security Appliance Administrator`, `Security Reports Administrator`, `Product Reports Administrator`, `Administrator`],
+    choices:[`Администратор устройств безопасности`, `Администратор отчетов безопасности`, `Администратор отчетов по продуктам`, `Administrator`],
     correct:1,
     explain:`The Security Reports Administrator is limited to event reporting with Docusign Monitor. Security Appliance Administrator covers appliance settings; Product Reports Administrator covers envelope report exports.`},
   {id:'q7', domain:'d1', type:'mc', q:`A newly invited organization administrator says the Admin dashboard still looks unchanged. What is the most likely reason?`,
-    choices:[`Their invitation is still Pending because they have not activated the membership`, `Administrator changes take up to 24 hours to apply`, `They must be an account administrator first`, `Their permission profile was set to Connect Administrator`],
+    choices:[`Их приглашение все еще находится на рассмотрении, поскольку они не активировали членство.`, `Изменения администратора применяются в течение 24 часов.`, `Сначала они должны быть администратором учетной записи.`, `Их профиль разрешений был установлен на «Администратор подключения».`],
     correct:0,
-    explain:`A new administrator is added with the status <strong>Pending</strong>. They receive an email invitation and must select ACTIVATE and log in before the membership takes effect.`},
+    explain:`Новый администратор добавляется со статусом <strong>Pending</strong>. Они получат приглашение по электронной почте и должны выбрать АКТИВИРОВАТЬ и войти в систему, прежде чем членство вступит в силу.`},
   {id:'q8', domain:'d1', type:'mc', q:`You need to change the permission profile on an administrator invitation that has not been accepted yet. What do you do?`,
-    choices:[`Select Actions, then Edit, and change the profile`, `Delete the original invitation and re-add the user as an administrator`, `Wait for the user to activate, then edit the membership`, `Resend the invitation, which reopens the profile selection`],
+    choices:[`Выберите «Действия», затем «Изменить» и измените профиль.`, `Удалите исходное приглашение и повторно добавьте пользователя в качестве администратора.`, `Подождите, пока пользователь активируется, затем отредактируйте членство.`, `Повторно отправьте приглашение, которое снова откроет выбор профиля.`],
     correct:1,
-    explain:`On a pending invitation, <em>Edit</em> only shows the name and permission profile. To change either one you delete the invitation and add the user again.`},
-  {id:'q9', domain:'d1', type:'ms', q:`Which capabilities are available for <strong>domain users</strong> but not for ordinary account users? <em>Choose all that apply.</em>`,
-    choices:[`Editing the user's email address`, `Setting a login policy`, `Manually activating a pending membership`, `Editing the user's job title`],
+    explain:`По ожидающему приглашению <em>Edit</em> показывает только имя и профиль разрешений. Чтобы изменить любой из них, удалите приглашение и снова добавьте пользователя.`},
+  {id:'q9', domain:'d1', type:'ms', q:`Какие возможности доступны для <strong>пользователи домена</strong> а не для обычных пользователей аккаунта? <em>Выберите все, что применимо.</em>`,
+    choices:[`Редактирование адреса электронной почты пользователя`, `Настройка политики входа`, `Активация ожидающего членства вручную`, `Редактирование должности пользователя`],
     correct:[0,1,2],
     explain:`Email address changes, login policy and manual activation of pending memberships are domain-user features, and so are per-user connected apps. Job title is an ordinary profile field for any user, and it propagates across all their accounts.`},
   {id:'q10', domain:'d1', type:'mc', q:`How many external domain account administrators receive the invitation to link an account?`,
-    choices:[`Only the primary administrator`, `The five most recently active account administrators`, `All account administrators`, `The account owner and one backup`],
+    choices:[`Только главный администратор`, `Пять последних активных администраторов учетных записей`, `Все администраторы аккаунта`, `Владелец аккаунта и одна резервная копия`],
     correct:1,
-    explain:`If the eSignature account has multiple administrators, the invitation goes to the <strong>five most recently active</strong> account administrators. Any of them may accept or decline, and a decline requires a reason.`},
+    explain:`Если у учетной записи электронной подписи несколько администраторов, приглашение отправляется <strong>пять последних активных</strong> администраторы аккаунта. Любой из них может принять или отклонить, и для отказа требуется причина.`},
   {id:'q11', domain:'d1', type:'mc', q:`An account has Docusign CLM enabled. Where must its groups be managed?`,
-    choices:[`In the eSignature account administration settings`, `In Docusign organization settings`, `In CLM Admin under User Management`, `Either place, they stay in sync automatically`],
+    choices:[`В настройках администрирования учетной записи электронной подписи.`, `В настройках организации Docusign`, `В администраторе CLM в разделе «Управление пользователями».`, `В любом случае они автоматически синхронизируются.`],
     correct:1,
     explain:`CLM accounts must use Docusign organization settings to manage groups. eSignature-only accounts may use either organization settings or account settings. A group created for a CLM-enabled account appears in both eSignature and CLM Admin.`},
   {id:'q12', domain:'d1', type:'mc', q:`On an IAM plan, a user with a Full licence on Account A is added to Account B with a Free licence. What happens?`,
-    choices:[`They hold a Full licence on A and a Free licence on B`, `They are assigned the Full licence on B to match their other accounts`, `The addition is rejected`, `Both memberships drop to Free`],
+    choices:[`У них есть полная лицензия на A и бесплатная лицензия на B.`, `Им назначается полная лицензия на B, чтобы соответствовать другим их учетным записям.`, `Дополнение отклонено`, `Оба членства опускаются до бесплатного уровня.`],
     correct:1,
     explain:`A single user can hold only one licence type across accounts. Adding them with Free where they already hold Full assigns them the Full licence. To move them down, the administrator edits the licence across every membership.`},
 
   /* ---------- AREA 2 · Bulk actions (8) ---------- */
-  {id:'q13', domain:'d2', type:'ms', q:`Which columns are required in a <strong>Bulk Add Users</strong> CSV? <em>Choose all that apply.</em>`,
+  {id:'q13', domain:'d2', type:'ms', q:`Какие столбцы необходимы в <strong>Массовое добавление пользователей</strong> CSV? <em>Выберите все, что применимо.</em>`,
     choices:[`AccountID`, `UserEmail`, `eSignPermissionProfile`, `APIUserName`],
     correct:[0,1,2],
-    explain:`Add Users requires AccountID, FirstName, LastName, UserEmail and eSignPermissionProfile. <code>APIUserName</code> is required for Update Users and Close Users, because those act on users who already exist.`},
-  {id:'q14', domain:'d2', type:'mc', q:`What value belongs in the <code>AccountID</code> column of a bulk actions CSV?`,
-    choices:[`The account name exactly as it appears in the organization`, `The 32-character API Account ID from the Apps and Keys section`, `The numeric account number on the billing plan`, `The organization ID from the Features page`],
+    explain:`Для добавления пользователей требуются AccountID, FirstName, LastName, UserEmail и eSignPermissionProfile. <code>APIUserName</code> требуется для Обновить пользователей и Закрыть пользователей, поскольку они действуют на уже существующих пользователей.`},
+  {id:'q14', domain:'d2', type:'mc', q:`Какая ценность принадлежит <code>AccountID</code> столбец массовых действий CSV?`,
+    choices:[`Имя учетной записи точно такое, как оно указано в организации.`, `32-значный идентификатор учетной записи API из раздела «Приложения и ключи».`, `Числовой номер счета в тарифном плане`, `Идентификатор организации со страницы «Функции».`],
     correct:1,
-    explain:`<code>AccountID</code> is the 32-character API Account ID of the user's account, found in the API and Keys section of the account. <code>AccountName</code> is a separate optional column and must match the ID you supply.`},
-  {id:'q15', domain:'d2', type:'mc', q:`A CSV to bulk update users contains both a <code>Group</code> column and a <code>Groups</code> column. What happens?`,
-    choices:[`The import fails validation`, `The Groups column is ignored and Group is applied`, `The Group column is ignored and Groups is applied`, `Both are applied and the user ends up in the union of both lists`],
+    explain:`<code>AccountID</code> — это 32-значный идентификатор учетной записи API учетной записи пользователя, который находится в разделе API и ключи учетной записи. <code>AccountName</code>  – это отдельный необязательный столбец, который должен соответствовать указанному вами идентификатору.`},
+  {id:'q15', domain:'d2', type:'mc', q:`CSV-файл для массового обновления пользователей содержит как <code>Group</code> столбец и <code>Groups</code> столбец. Что происходит?`,
+    choices:[`Импорт не проходит проверку`, `Столбец «Группы» игнорируется, и применяется группа.`, `Столбец «Группа» игнорируется, а применяются группы.`, `Оба применяются, и пользователь попадает в объединение обоих списков.`],
     correct:1,
-    explain:`When the singular <code>Group</code> column is included, the plural <code>Groups</code> column is ignored. <code>Group</code> only adds, one group per column. <code>Groups</code> adds and removes by rewriting the whole membership list in one cell.`},
+    explain:`Когда единственное число <code>Group</code> столбец включен, множественное число <code>Groups</code> столбец игнорируется. <code>Group</code> только добавляет одну группу на столбец. <code>Groups</code> добавляет и удаляет, переписывая весь список участников в одной ячейке.`},
   {id:'q16', domain:'d2', type:'mc', q:`How does an administrator change users' email addresses through a bulk update?`,
-    choices:[`Overwrite the UserEmail column with the new address`, `Put the new address in the UpdatedUserEmail column`, `Close the user and bulk add them again`, `Email addresses cannot be changed in bulk`],
+    choices:[`Замените столбец UserEmail новым адресом.`, `Поместите новый адрес в столбец UpdatedUserEmail.`, `Закройте пользователя и снова добавьте его массово.`, `Адреса электронной почты не могут быть изменены массово.`],
     correct:1,
-    explain:`<code>UserEmail</code> is a required column that identifies the user. The new address goes in <code>UpdatedUserEmail</code>. This requires a claimed domain and the Administrator or Users Administrator profile.`},
+    explain:`<code>UserEmail</code> — обязательный столбец, идентифицирующий пользователя. Новый адрес войдет <code>UpdatedUserEmail</code>. Для этого требуется заявленный домен и профиль администратора или администратора пользователей.`},
   {id:'q17', domain:'d2', type:'mc', q:`How many accounts can be updated in one account settings import?`,
     choices:[`10`, `40`, `100`, `2,000`],
     correct:1,
-    explain:`Account settings import covers up to <strong>40 accounts</strong> at a time. The 100 figure is the combined number of stored user and account settings exports; 2,000 is the external domain user close limit per site.`},
+    explain:`Импорт настроек учетной записи охватывает до <strong>40 аккаунтов</strong> за раз. Цифра 100 — это общее количество сохраненных экспортированных настроек пользователя и учетной записи; 2000 — это лимит закрытия пользователей внешнего домена на сайт.`},
   {id:'q18', domain:'d2', type:'mc', q:`How long are bulk exports retained, and how many can an organization store?`,
-    choices:[`30 days, up to 50 exports`, `90 days, up to a combined 100 user and account settings exports`, `365 days, unlimited`, `Until manually deleted, up to 40 exports`],
+    choices:[`30 дней, до 50 экспортов`, `90 дней, до 100 экспортов настроек пользователей и учетных записей в общей сложности.`, `365 дней, без ограничений`, `До 40 экспортов, пока не будет удалено вручную.`],
     correct:1,
-    explain:`An organization can store a combined total of up to <strong>100</strong> user exports and account settings exports, retained for <strong>90 days</strong>. You can also delete them manually with <em>Delete Export</em>.`},
+    explain:`Организация может хранить в общей сложности до <strong>100</strong> экспорт пользователей и экспорт настроек учетной записи, сохраняются для <strong>90 дней</strong>. Вы также можете удалить их вручную с помощью <em>Удалить экспорт</em>.`},
   {id:'q19', domain:'d2', type:'mc', q:`An organization has not claimed a domain. Which user export types are available?`,
-    choices:[`Users and Memberships only`, `Users and Memberships, plus Domain Users`, `All three types`, `None, exports require a claimed domain`],
+    choices:[`Только пользователи и членство`, `Пользователи и членство, а также пользователи домена`, `Все три типа`, `Нет, для экспорта требуется заявленный домен`],
     correct:0,
-    explain:`Organizations without a claimed domain see only the <em>Users and Memberships</em> export. <em>Domain Users</em> and <em>External Domain Users</em> both depend on the domain claim.`},
+    explain:`Организации без заявленного домена видят только <em>Пользователи и членство</em> экспорт. <em>пользователи домена</em> and <em>Пользователи внешнего домена</em> оба зависят от заявки на домен.`},
   {id:'q20', domain:'d2', type:'mc', q:`An administrator uploads a bulk add CSV that includes a few rows for users who already exist. What happens to those rows?`,
-    choices:[`They update the existing users`, `They are ignored, because only new users are imported`, `The whole import is rejected`, `They create duplicate users`],
+    choices:[`Они обновляют существующих пользователей`, `Они игнорируются, поскольку импортируются только новые пользователи.`, `Весь импорт отклонен`, `Они создают дубликатов пользователей`],
     correct:1,
-    explain:`Bulk add imports new users only. Changes to existing users are ignored. Updating existing users is a separate action with a different required column set, including <code>APIUserName</code>.`},
+    explain:`Массовое добавление импортирует только новых пользователей. Изменения существующих пользователей игнорируются. Обновление существующих пользователей — это отдельное действие с другим обязательным набором столбцов, в том числе <code>APIUserName</code>.`},
 
   /* ---------- AREA 3 · Sharing and transferring ownership (8) ---------- */
   {id:'q21', domain:'d3', type:'mc', q:`Which shared access permission allows a user to correct, resend and void another user's envelopes, but not to send new ones on their behalf?`,
-    choices:[`Allow to manage on behalf of`, `Allow to edit on behalf of`, `Allow to send on behalf of`, `Shared envelopes, view only`],
+    choices:[`Разрешить управлять от имени`, `Разрешить редактировать от имени`, `Разрешить отправку от имени`, `Общие конверты, только просмотр`],
     correct:1,
-    explain:`The levels stack. <em>Manage</em> is view, history, download and move to folders. <em>Edit</em> adds correct, resend and void. <em>Send</em> adds sending and editing drafts on top of both.`},
-  {id:'q22', domain:'d3', type:'ms', q:`Which statements about shared access are true? <em>Choose all that apply.</em>`,
-    choices:[`Access can be granted from one user to a group`, `Both users must be on the same account`, `An end date is optional and expires access with no manual step`, `Up to 100 users can be selected at a time`],
+    explain:`Уровни складываются. <em>Manage</em> это просмотр, история, загрузка и перемещение по папкам. <em>Edit</em> добавляет правильно, повторно отправить и аннулировать. <em>Send</em> добавляет отправку и редактирование черновиков поверх обоих.`},
+  {id:'q22', domain:'d3', type:'ms', q:`Какие утверждения об общем доступе верны? <em>Выберите все, что применимо.</em>`,
+    choices:[`Доступ может быть предоставлен от одного пользователя группе.`, `Оба пользователя должны быть в одной учетной записи`, `Дата окончания не является обязательной и истекает доступ без каких-либо действий вручную.`, `Одновременно можно выбрать до 100 пользователей`],
     correct:[1,2,3],
     explain:`Shared access is granted user to user, never user to group. Both parties must be on the same account, an optional end date expires the access automatically, and the selection cap is 100 users.`},
   {id:'q23', domain:'d3', type:'mc', q:`A user has been closed and their envelopes need to be reviewed. What is the supported approach?`,
-    choices:[`Grant shared access to the closed user's envelopes`, `Transfer the envelopes to yourself or another active user, then open them`, `Reactivate the user temporarily`, `Request a Support export of the closed user's envelopes`],
+    choices:[`Предоставить общий доступ к закрытым конвертам пользователя`, `Передайте конверты себе или другому активному пользователю, затем откройте их.`, `Временно активируйте пользователя`, `Запросить поддержку экспорта закрытых конвертов пользователя`],
     correct:1,
     explain:`Inactive and pending users cannot be granted shared access and cannot have their envelopes shared. Transfer the envelopes to an active user first.`},
   {id:'q24', domain:'d3', type:'mc', q:`Which envelopes cannot be transferred to a new owner?`,
-    choices:[`Completed envelopes`, `Voided envelopes`, `Draft envelopes`, `Envelopes with recipient authentication`],
+    choices:[`Заполненные конверты`, `Аннулированные конверты`, `Черновые конверты`, `Конверты с аутентификацией получателя`],
     correct:2,
-    explain:`Envelopes in any status except <strong>Draft</strong> can be transferred. Drafts cannot. Received envelopes are also out of scope, because they are owned by their sender.`},
+    explain:`Конверты в любом статусе, кроме <strong>Draft</strong> можно перенести. Сквозняки не могут. Полученные конверты также выходят за рамки, поскольку они принадлежат отправителю.`},
   {id:'q25', domain:'d3', type:'mc', q:`An administrator tries to transfer envelopes from an NA1 account to a user on an NA2 account in the same organization. What happens?`,
-    choices:[`It works, both accounts are linked to the organization`, `It is not possible, envelopes cannot be transferred across sites`, `It works but the envelopes lose their history`, `It works only for completed envelopes`],
+    choices:[`Все работает, оба аккаунта привязаны к организации`, `Это невозможно, конверты нельзя передавать между сайтами`, `Это работает, но конверты теряют свою историю.`, `Работает только для заполненных конвертов.`],
     correct:1,
-    explain:`Both accounts must be linked to the organization <strong>and</strong> on the same Docusign site environment. NA1 to NA2 is not supported.`},
+    explain:`Обе учетные записи должны быть связаны с организацией. <strong>and</strong> в той же среде сайта Docusign. NA1–NA2 не поддерживается.`},
   {id:'q26', domain:'d3', type:'mc', q:`What is the maximum number of eligible envelopes that can be transferred at one time?`,
     choices:[`100`, `500`, `2,000`, `50,000`],
     correct:2,
-    explain:`Up to <strong>2,000</strong> eligible envelopes can be transferred at a time. The 2,000 figure also appears as the external domain user close limit per site, so read which one the question is asking about.`},
-  {id:'q27', domain:'d3', type:'mc', q:`A CSV transfer of bulk send envelopes fails with <code>cannot_copy_bulksend_list</code>. What is missing?`,
-    choices:[`The receiving user does not have the Bulk Send permission`, `The CSV contains more than one account`, `The envelopes are still in Draft status`, `The originating account is not linked to the organization`],
+    explain:`До <strong>2,000</strong> соответствующие конверты могут быть переданы одновременно. Цифра 2000 также отображается как лимит закрытия пользователей внешнего домена на сайт, поэтому прочитайте, о каком из них задается вопрос.`},
+  {id:'q27', domain:'d3', type:'mc', q:`Передача конвертов массовой отправки в формате CSV завершается с ошибкой. <code>cannot_copy_bulksend_list</code>. Чего не хватает?`,
+    choices:[`Получающий пользователь не имеет разрешения на массовую отправку.`, `CSV содержит более одной учетной записи.`, `Конверты все еще находятся в статусе черновика.`, `Исходный аккаунт не связан с организацией`],
     correct:0,
     explain:`Owners receiving envelopes that were sent via Bulk Send must hold the Bulk Send permission profile. Without it, the transfer fails with that error.`},
-  {id:'q28', domain:'d3', type:'mc', q:`Where is the <em>Add Original Owner as carbon copy</em> option offered?`,
-    choices:[`On the Transfer Now dialog`, `On the Transfer Using CSV dialog`, `In the Envelope Transfer Logs`, `In the account's custody transfer rules`],
+  {id:'q28', domain:'d3', type:'mc', q:`Где находится <em>Добавить первоначального владельца в качестве точной копии</em> предложенный вариант?`,
+    choices:[`В диалоговом окне «Перенести сейчас»`, `В диалоговом окне «Передача с использованием CSV»`, `В журналах передачи конвертов`, `В правилах доверительного управления счетом`],
     correct:1,
-    explain:`The carbon copy option appears in the <em>Transfer Using CSV</em> dialog, after you select the target account and user. Transfer Now does not offer it.`},
+    explain:`Опция копирования появится в <em>Перенос с использованием CSV</em> диалоговое окно после выбора целевой учетной записи и пользователя. Transfer Now не предлагает этого.`},
 
   /* ---------- AREA 4 · Access management and Docusign Monitor (12) ---------- */
-  {id:'q29', domain:'d4', type:'mc', q:`Two organizations both want to claim the domain <code>fontara.com</code>. What happens?`,
-    choices:[`Both may claim it, and users are split by account`, `Only one organization can claim and verify it`, `The claim is shared and both organizations manage the users`, `The second claim replaces the first`],
+  {id:'q29', domain:'d4', type:'mc', q:`Две организации хотят претендовать на домен. <code>Fontara.com</code>. Что происходит?`,
+    choices:[`Оба могут претендовать на это, и пользователи делятся по учетным записям.`, `Только одна организация может заявить и подтвердить это.`, `Заявка является общей, и обе организации управляют пользователями.`, `Второе утверждение заменяет первое.`],
     correct:1,
     explain:`A domain can be claimed by only one Docusign organization. The same organization can claim the same domain in both the demo and production environments.`},
   {id:'q30', domain:'d4', type:'mc', q:`Which DNS record does Docusign recommend for domain verification, and what does it point to?`,
-    choices:[`A TXT record containing the account ID`, `A CNAME record on the GUID subdomain pointing to <code>verifydomain.docusign.net.</code>`, `An MX record pointing to Docusign's mail servers`, `An A record pointing to the organization's IP safe list`],
+    choices:[`Запись TXT, содержащая идентификатор учетной записи.`, `Запись CNAME в субдомене GUID, указывающая на <code>verifydomain.docusign.net.</code>`, `Запись MX, указывающая на почтовые серверы Docusign.`, `Запись A, указывающая на безопасный список IP-адресов организации.`],
     correct:1,
-    explain:`Docusign recommends a CNAME record. The host is the 32-digit GUID and the target is <code>verifydomain.docusign.net.</code> with the trailing dot. A TXT record with <code>docusign=</code> plus the GUID also works.`},
+    explain:`Docusign рекомендует использовать запись CNAME. Хост — это 32-значный GUID, а цель — <code>verifydomain.docusign.net.</code> с завершающей точкой. TXT-запись с <code>документация=</code> плюс GUID тоже работает.`},
   {id:'q31', domain:'d4', type:'mc', q:`An administrator removes the verification token from DNS after the domain shows Active. What is the consequence?`,
-    choices:[`Nothing, verification is a one-time check`, `Docusign rechecks the DNS periodically, and removal would prevent users from accessing Docusign`, `The domain reverts to Pending but users are unaffected`, `Only new users are affected`],
+    choices:[`Ничего, верификация - это разовая проверка`, `Docusign периодически перепроверяет DNS, и удаление приведет к тому, что пользователи не смогут получить доступ к Docusign.`, `Домен снова переходит в состояние ожидания, но на пользователей это не влияет.`, `Затрагиваются только новые пользователи.`],
     correct:1,
     explain:`The TXT or CNAME token must remain in place for as long as you reserve the domain. Docusign periodically checks the DNS to confirm the claim is still valid.`},
   {id:'q32', domain:'d4', type:'mc', q:`Which login policy value lets a user sign in either through the identity provider or with their Docusign username and password?`,
     choices:[`None`, `FedAuthRequired`, `FedAuthBypass`, `AutoActivate`],
     correct:2,
-    explain:`<code>FedAuthBypass</code> allows both routes. <code>FedAuthRequired</code> forces the identity provider. A per-user policy deliberately overrides the domain policy, so Docusign treats it as an exception rather than a rule.`},
+    explain:`<code>FedAuthBypass</code> разрешает оба маршрута. <code>FedAuthRequired</code> заставляет поставщика удостоверений. Политика для каждого пользователя намеренно переопределяет политику домена, поэтому Docusign рассматривает ее как исключение, а не правило.`},
   {id:'q33', domain:'d4', type:'mc', q:`What does disabling just-in-time provisioning on the Identity Providers page do?`,
-    choices:[`Disables only the advanced SAML attribute flow`, `Disables only the default account flow`, `Disables both the default account flow and the SAML attribute flow`, `Blocks all SSO logins`],
+    choices:[`Отключает только расширенный поток атрибутов SAML.`, `Отключает только поток учетной записи по умолчанию.`, `Отключает как поток учетной записи по умолчанию, так и поток атрибутов SAML.`, `Блокирует все входы в систему SSO`],
     correct:2,
     explain:`Disabling JIT stops both flows: adding users to the default account with the default permission profile, and adding users to a specific account from custom identity provider attribute values. JIT is enabled by default.`},
   {id:'q34', domain:'d4', type:'mc', q:`A user cannot log in through SSO after the identity provider changed its unique identifier for them. What should the administrator do?`,
-    choices:[`Reset the user's Docusign password`, `Clear the stored Federated ID on the user's Security profile`, `Close and re-add the user`, `Set the user's login policy to FedAuthBypass permanently`],
+    choices:[`Сброс пароля пользователя Docusign`, `Очистите сохраненный Federated ID в профиле безопасности пользователя.`, `Закройте и повторно добавьте пользователя`, `Установите для политики входа пользователя значение FedAuthBypass навсегда.`],
     correct:1,
     explain:`Clear the recorded Federated ID from the Security section for that identity provider. The next SSO login records the new identifier automatically.`},
-  {id:'q35', domain:'d4', type:'ms', q:`Which permission profiles can access and manage Docusign Monitor? <em>Choose all that apply.</em>`,
-    choices:[`Docusign Administrator`, `Security Reports Administrator`, `Settings Administrator`, `Users Administrator`],
+  {id:'q35', domain:'d4', type:'ms', q:`Какие профили разрешений могут получать доступ к Docusign Monitor и управлять им? <em>Выберите все, что применимо.</em>`,
+    choices:[`Администратор документов`, `Администратор отчетов безопасности`, `Администратор настроек`, `Администратор пользователей`],
     correct:[0,1],
     explain:`Only the Docusign Administrator and the Security Reports Administrator can access and manage Monitor. Settings and Users administrators have no Monitor access at all.`},
   {id:'q36', domain:'d4', type:'mc', q:`Why might Docusign Monitor show no user activity for a set of users?`,
-    choices:[`Those users are on a Free licence`, `Their email domain has not been claimed by the organization`, `The organization has more than 40 linked accounts`, `Monitor only tracks administrators`],
+    choices:[`Эти пользователи используют бесплатную лицензию.`, `Их домен электронной почты не заявлен организацией.`, `У организации более 40 связанных аккаунтов.`, `Монитор отслеживает только администраторов`],
     correct:1,
     explain:`Monitor tracks user activity only for users whose email address is on a domain the organization has claimed. Activity tied to the account itself, such as envelope sends and document downloads, is still captured.`},
   {id:'q37', domain:'d4', type:'mc', q:`How many alerts and events does Docusign Monitor Free Edition provide, compared with full Monitor?`,
-    choices:[`3 alerts and 12 events, versus 24 alerts and 106 events`, `12 alerts and 3 events, versus 106 alerts and 24 events`, `10 alerts and 50 events, versus 24 alerts and 100 events`, `The alert set is identical, only the time window differs`],
+    choices:[`3 оповещения и 12 событий по сравнению с 24 оповещениями и 106 событиями`, `12 оповещений и 3 события по сравнению со 106 оповещениями и 24 событиями`, `10 оповещений и 50 событий по сравнению с 24 оповещениями и 100 событиями`, `Набор оповещений идентичен, отличается только временное окно.`],
     correct:0,
     explain:`Free Edition gives 3 alerts and 12 events over a 30-day window. Full Monitor gives 24 alerts and 106 events with data back to November 2020, plus the API, Splunk integration and alert history.`},
   {id:'q38', domain:'d4', type:'mc', q:`An administrator adds no IP address ranges to the Monitor IP Safe List. What is the effect?`,
-    choices:[`Every login from outside Docusign's own ranges raises an alert`, `The IP address outside allowed ranges alert never generates`, `All alerts are suppressed`, `Monitor falls back to a default corporate range`],
+    choices:[`При каждом входе в систему из-за пределов собственных диапазонов Docusign выдается предупреждение.`, `Предупреждение об IP-адресе за пределами разрешенных диапазонов никогда не генерируется.`, `Все оповещения отключены`, `Монитор возвращается к корпоративному диапазону по умолчанию`],
     correct:1,
-    explain:`The IP Safe List feeds only the <em>IP address outside accepted ranges</em> alert. If no ranges are configured, that alert does not generate. Docusign advises adding ranges rather than individual addresses, and CIDR notation is accepted.`},
-  {id:'q39', domain:'d4', type:'ms', q:`Which limits apply to the Docusign Monitor event CSV download? <em>Choose all that apply.</em>`,
-    choices:[`50,000 total rows`, `25,000 total unique users`, `Ascending sort order only`, `Available in Monitor Free Edition`],
+    explain:`Список безопасных IP-адресов передает только <em>IP-адрес вне допустимых диапазонов</em> тревога. Если диапазоны не настроены, это предупреждение не генерируется. Docusign советует добавлять диапазоны, а не отдельные адреса, и принимается нотация CIDR.`},
+  {id:'q39', domain:'d4', type:'ms', q:`Какие ограничения применяются к загрузке CSV-файла событий Docusign Monitor? <em>Выберите все, что применимо.</em>`,
+    choices:[`Всего 50 000 строк`, `Всего 25 000 уникальных пользователей`, `Только порядок сортировки по возрастанию`, `Доступно в бесплатной версии Monitor`],
     correct:[0,1,2],
     explain:`The CSV download caps at 50,000 rows and 25,000 unique users, sorts ascending only, and column names cannot be customised. It is not available in Monitor Free Edition.`},
   {id:'q40', domain:'d4', type:'mc', q:`How many Monitor alert emails can a single user receive per hour?`,
-    choices:[`Three`, `Ten`, `Twenty-four`, `There is no limit, but alerts can be disabled`],
+    choices:[`Three`, `Ten`, `Twenty-four`, `Ограничений нет, но оповещения можно отключить`],
     correct:1,
-    explain:`Alert emails are limited to <strong>ten per hour per user</strong>. Organization administrators and Security Reports delegated administrators receive them by default, and you stop them by disabling the specific alert in Monitor Settings.`}
+    explain:`Электронные оповещения ограничены <strong>десять в час за пользователя</strong>. Администраторы организации и делегированные администраторы отчетов о безопасности получают их по умолчанию, и вы можете остановить их, отключив определенное оповещение в настройках монитора.`}
 ];
 /* ============== VIEW ROUTING ============== */
 function render(){
@@ -693,7 +693,7 @@ function render(){
 }
 
 function setView(v, opts){
-  if(v === 'results' && !state.submitted){ toast('Finish and submit the exam to see results.'); return; }
+  if(v === 'results' && !state.submitted){ toast("Завершите и отправьте экзамен, чтобы увидеть результаты."); return; }
   state.view = v;
   save();
   render();
@@ -731,20 +731,20 @@ function renderHome(){
   const inProgress = state.examStart !== null && !state.submitted;
   return `
     <div class="hero">
-      <div class="hero-eyebrow">Certification prep · Docusign Organization Management Pro</div>
-      <h1>Docusign <span>Org Management Pro</span> Prep</h1>
-      <p>The badge exam for running Docusign Admin at the organization level, in one place: an area-by-area study guide of administrators, bulk actions, ownership and Docusign Monitor, plus a ${total}-question practice exam graded against the real 80% line.</p>
+      <div class="hero-eyebrow">Подготовка к сертификации · Docusign Organization Management Pro</div>
+      <h1>Docusign <span>Управление организацией Pro</span> Prep</h1>
+      <p>Экзамен на получение значка для запуска Docusign Admin на уровне организации в одном месте: подробное руководство по администраторам, массовым действиям, владению и Docusign Monitor, а также ${total}- Практический экзамен по вопросам оценивается в соответствии с реальной линией 80%.</p>
     </div>
 
     <div class="facts-grid">
-      <div class="fact-chip"><span class="chip-num">20</span><span class="chip-label">Multiple-choice items</span></div>
-      <div class="fact-chip"><span class="chip-num">80%</span><span class="chip-label">Passing score</span></div>
-      <div class="fact-chip"><span class="chip-num">None</span><span class="chip-label">Time limit</span></div>
-      <div class="fact-chip"><span class="chip-num">~30 min</span><span class="chip-label">Docusign's estimate</span></div>
-      <div class="fact-chip"><span class="chip-num">3 mo</span><span class="chip-label">Experience recommended</span></div>
-      <div class="fact-chip"><span class="chip-num">Credly</span><span class="chip-label">Badge on passing</span></div>
+      <div class="fact-chip"><span class="chip-num">20</span><span class="chip-label">Предметы с множественным выбором</span></div>
+      <div class="fact-chip"><span class="chip-num">80%</span><span class="chip-label">Проходной балл</span></div>
+      <div class="fact-chip"><span class="chip-num">None</span><span class="chip-label">Ограничение по времени</span></div>
+      <div class="fact-chip"><span class="chip-num">~30 мин.</span><span class="chip-label">Оценка Docusign</span></div>
+      <div class="fact-chip"><span class="chip-num">3 мес.</span><span class="chip-label">Опыт работы рекомендуется</span></div>
+      <div class="fact-chip"><span class="chip-num">Credly</span><span class="chip-label">Значок при прохождении</span></div>
     </div>
-    <p style="color:var(--dim);font-size:12.5px;margin:-14px 0 26px">Exam facts read off the <a href="https://dsucustomers.docusign.com/exam-docusign-organization-management-pro" target="_blank" rel="noopener">official Docusign University exam page</a> on 2026-08-22. The exam is free, unproctored, and has no time limit, so your progress saves if you stop partway. There is no 45-day lockout if you miss it.</p>
+    <p style="color:var(--dim);font-size:12.5px;margin:-14px 0 26px">Факты экзамена зачитываются <a href="https://dsucustomers.docusign.com/exam-docusign-organization-management-pro" target="_blank" rel="noopener">официальная страница экзамена Университета Docusign</a> 22 августа 2026 г. Экзамен бесплатный, проводится без контроля и не имеет ограничений по времени, поэтому ваш прогресс сохранится, если вы остановитесь на полпути. Если вы пропустите 45-дневную блокировку, не будет.</p>
 
     <div class="domain-weights">
       ${DOMAIN_ORDER.map(k=>{
@@ -756,61 +756,61 @@ function renderHome(){
         </div>`;
       }).join('')}
     </div>
-    <p style="color:var(--dim);font-size:12.5px;margin:0 0 28px"><strong>These four areas come from Docusign's own scope sentence</strong>, which says the exam tests "working knowledge of Docusign Admin, including administrator and user management, bulk actions, sharing and transferring ownership, access management and using Docusign Monitor to create alerts and extract data." <strong>The percentages are ours, not Docusign's.</strong> Docusign does not publish weights for this exam. Treat them as a study budget, not a blueprint.</p>
+    <p style="color:var(--dim);font-size:12.5px;margin:0 0 28px"><strong>Эти четыре области взяты из собственного предложения Docusign.</strong>, в котором говорится, что экзамен проверяет «рабочие знания Docusign Admin, включая управление администратором и пользователями, массовые действия, совместное использование и передачу прав собственности, управление доступом и использование Docusign Monitor для создания оповещений и извлечения данных». <strong>Проценты наши, а не Docusign.</strong> Docusign не публикует веса для этого экзамена. Относитесь к ним как к бюджету на обучение, а не как к проекту.</p>
 
     <div class="cta-row">
       <a class="cta-card" onclick="setView('study')">
         <div class="cta-icon"><i data-lucide="book-open"></i></div>
-        <div class="cta-title">Study Docusign Admin</div>
-        <div class="cta-desc">The four areas, one setting at a time: what each one does, the number or CSV column worth memorising, and the confusion the exam is written to catch.</div>
-        <div class="cta-link">Open study guide →</div>
+        <div class="cta-title">Учебный документ, сигнатура администратора</div>
+        <div class="cta-desc">Четыре области, по одной настройке за раз: что делает каждая из них, номер или столбец CSV, который стоит запомнить, и путаница, ради которой написан экзамен.</div>
+        <div class="cta-link">Открыть учебное пособие →</div>
       </a>
       <a class="cta-card primary" onclick="setView('exam')">
         <div class="cta-icon"><i data-lucide="clipboard-list"></i></div>
-        <div class="cta-title">${state.submitted ? 'Review your exam' : (inProgress ? 'Resume the practice exam' : 'Take the practice exam')}</div>
+        <div class="cta-title">${state.submitted ? "Проверьте свой экзамен" : (inProgress ? "Возобновить пробный экзамен" : "Сдать практический экзамен")}</div>
         <div class="cta-desc">${state.submitted ? `You scored ${calcScore().total}/${total}. Reopen to review the answers, or retake it.` : `${total} questions across the four areas, graded at 80% like the real thing. Includes multiple-response questions so you practise reading carefully. ${answered ? `You've answered ${answered}/${total}.` : ''}`}</div>
-        <div class="cta-link">${state.submitted ? 'Review results →' : (inProgress ? 'Continue →' : 'Start →')}</div>
+        <div class="cta-link">${state.submitted ? "Посмотреть результаты →" : (inProgress ? "Продолжить →" : 'Start →')}</div>
       </a>
     </div>
 
     <div class="method-callout">
-      <strong>🗣️ Say it out loud.</strong> Almost every trap on this exam is account level dressed up as organization level. A group or an organization. Shared access or envelope transfer. Account settings or organization settings. Users Administrator or Settings Administrator. If you can say the difference in one sentence out loud, the phrasing of the question stops mattering.
+      <strong>🗣️ Скажите это вслух.</strong> Почти каждая ловушка на этом экзамене представляет собой уровень учетной записи, замаскированный под уровень организации. Группа или организация. Общий доступ или передача в конверте. Настройки учетной записи или настройки организации. Администратор пользователей или Администратор настроек. Если вы можете произнести вслух разницу в одном предложении, формулировка вопроса перестанет иметь значение.
     </div>
 
     <div class="method-callout" style="border-left-color:var(--c-d1)">
-      <strong>Four misses is the whole budget.</strong> The real exam is 20 items at 80%, so 16 correct passes and 15 does not. One wrong answer costs you 5 points. This practice set is ${total} questions, double the real length, so you drill each area properly rather than seeing one question on it.
+      <strong>Четыре промаха – это весь бюджет.</strong> Настоящий экзамен — это 20 заданий на 80%, то есть 16 сдаются правильно, а 15 — нет. Один неправильный ответ стоит вам 5 баллов. Этот практический набор ${total} вопросы, удваивают реальную длину, поэтому вы должным образом детализируете каждую область, а не видите в ней один вопрос.
     </div>
 
     <div class="method-callout" style="border-left-color:var(--c-d4)">
-      <strong>What Docusign recommends first.</strong> At least three months working with the standard and custom feature functionality of the Docusign Admin application, plus the <em>Manage Docusign Organizations Learning Plan</em>. If you have never claimed a domain or run a bulk CSV, do those two things before booking.
+      <strong>Что Docusign рекомендует в первую очередь.</strong> Не менее трех месяцев работы со стандартными и настраиваемыми функциями приложения Docusign Admin, а также с <em>План обучения организации по управлению документацией</em>. Если вы никогда не заявляли права на домен и не запускали массовую рассылку CSV, сделайте эти две вещи перед бронированием.
     </div>
 
     ${needsReviewCount()>0?`<div class="method-callout" style="border-left-color:var(--warn)">
-      <strong>🔁 ${needsReviewCount()} concept${needsReviewCount()===1?'':'s'} flagged for review.</strong> You rated ${needsReviewCount()===1?'it':'them'} "Not yet" or "Almost" in the study guide. <a href="#" onclick="openReview();return false;">Filter to just those →</a>
+      <strong>🔁 ${needsReviewCount()} concept${needsReviewCount()===1?'':'s'} отмечено для проверки.</strong> Вы оценили ${needsReviewCount()===1?'it':'them'} «Еще нет» или «Почти» в учебном пособии. <a href="#" onclick="openReview();return false;">Фильтровать только по этим →</a>
     </div>`:''}
 
     <div class="method-callout" style="border-left-color:var(--accent)">
-      <strong>💡 Hints.</strong> ${getCoachKey()
-        ? `Hints are on. Every study-guide point has a <em>Stuck? Get a hint →</em> button that explains it a different way, and every missed exam question gets one too. <a href="#" onclick="setCoachKey('');return false;">Turn hints off</a>`
-        : `Optional. Paste an Anthropic API key and every study-guide point gets a <em>Stuck? Get a hint →</em> button that explains it a different way. Missed exam questions get one too. The key is stored only in this browser, and it is the same key the SQL, Excel, Python, Power BI, Tableau and Stats kits use.
+      <strong>💡Подсказки.</strong> ${getCoachKey()
+        ? `Подсказки включены. Каждый учебный ориентир имеет <em>Застрявший? Получить подсказку →</em> Кнопка, которая объясняет это по-другому, и каждый пропущенный экзаменационный вопрос тоже получает один. <a href="#" onclick="setCoachKey('');return false;">Отключить подсказки</a>`
+        : `Необязательный. Вставьте ключ Anthropic API, и каждый пункт учебного пособия получит <em>Застрявший? Получить подсказку →</em> кнопка, которая объясняет это по-другому. Пропущенные экзаменационные вопросы тоже получают один. Ключ хранится только в этом браузере, и это тот же ключ, который используют комплекты SQL, Excel, Python, Power BI, Tableau и Stats.
       <div class="hint-key-row">
         <input id="hintKey" type="password" placeholder="sk-ant-..." autocomplete="off">
-        <button type="button" onclick="setCoachKey(document.getElementById('hintKey').value)">Save key</button>
+        <button type="button" onclick="setCoachKey(document.getElementById('hintKey').value)">Сохранить ключ</button>
       </div>`}
     </div>
 
     <div class="method-callout" style="border-left-color:var(--c-d2)">
-      <strong>Also here:</strong> the <a href="../docusign-cert/">Docusign eSignature Administration Pro kit</a> for the signing side of a single account, and the <a href="../docusign-clm-cert/">Docusign CLM Administration Pro kit</a> for the contract lifecycle side. Different exams, same shape.
+      <strong>Также здесь:</strong> the <a href="../docusign-cert/">Комплект Docusign eSignature Administration Pro</a> для подписывающей стороны одной учетной записи, а <a href="../docusign-clm-cert/">Комплект Docusign CLM Administration Pro</a> для стороны жизненного цикла контракта. Разные экзамены, одна и та же форма.
     </div>
   `;
 }
 function renderStudy(){
   return `
     <div class="study-intro">
-      <p><strong>Docusign Admin, one area at a time.</strong> Click an area to expand. Every point is a setting, a limit or a behavior an administrator has to know; the yellow callouts are the confusions the exam is written to catch.</p>
-      <p>Every point traces to the official Docusign Admin or Docusign Monitor documentation. Each area links to its source at the bottom.</p>
+      <p><strong>Docusign Admin, по одной области за раз.</strong> Щелкните область, чтобы развернуть ее. Каждая точка — это настройка, ограничение или поведение, которое должен знать администратор; желтые выноски — это путаница, для устранения которой написан экзамен.</p>
+      <p>Каждый пункт соответствует официальной документации Docusign Admin или Docusign Monitor. Каждая область связана со своим источником внизу.</p>
     </div>
-    <button class="expand-all" onclick="toggleAllStudy()">${allStudyOpen() ? 'Collapse all' : 'Expand all'}</button>
+    <button class="expand-all" onclick="toggleAllStudy()">${allStudyOpen() ? "Свернуть все" : "Развернуть все"}</button>
     <button class="expand-all ${state.reviewFilter?'rf-on':''}" onclick="toggleReviewFilter()">${state.reviewFilter ? `Showing needs-review only (${needsReviewCount()}), show all` : `Filter: needs review (${needsReviewCount()})`}</button>
     ${STUDY.map(s=>{
       const d = DOMAIN_INFO[s.key];
@@ -829,10 +829,10 @@ function renderStudy(){
             <span class="study-toggle">▸</span>
           </div>
           <div class="study-body">
-            ${state.reviewFilter?'':`<div class="study-viz"><div class="sv-cap"><i data-lucide="monitor"></i> See it</div>${s.viz}</div>`}
+            ${state.reviewFilter?'':`<div class="study-viz"><div class="sv-cap"><i data-lucide="monitor"></i> Посмотри это</div>${s.viz}</div>`}
             <ul>${vis.map(x=>studyItemHTML(s.key,x.i,x.m)).join('')}</ul>
             ${state.reviewFilter?'':`<div class="miscon">${s.miscon}</div>`}
-            <a class="study-link" href="${d.docPath}" target="_blank" rel="noopener">Source: ${d.docLabel} →</a>
+            <a class="study-link" href="${d.docPath}" target="_blank" rel="noopener">Источник: ${d.docLabel} →</a>
           </div>
         </div>
       `;
@@ -845,7 +845,7 @@ function studyItemHTML(key,i,m){
   const id = key+'-'+i;
   const lvl = state.conf[id];
   const chip = (l,txt)=>`<button class="conf-chip ${lvl===l?('on '+l):''}" onclick="rateConf('${id}','${l}')">${txt}</button>`;
-  return `<li>${m}<div class="li-foot"><span class="conf-chips">${chip('low','✗ Not yet')}${chip('mid','~ Almost')}${chip('high','✓ Have it')}</span><button class="hint-btn" onclick="hintStudy('${key}',${i})">Stuck? Get a hint →</button></div><div class="hint-resp" id="hint-resp-${id}"></div></li>`;
+  return `<li>${m}<div class="li-foot"><span class="conf-chips">${chip('low',"✗ Пока нет")}${chip('mid','~ Almost')}${chip('high',"✓ Иметь это")}</span><button class="hint-btn" onclick="hintStudy('${key}',${i})">Застрявший? Получить подсказку →</button></div><div class="hint-resp" id="hint-resp-${id}"></div></li>`;
 }
 function rateConf(id,lvl){
   if(state.conf[id]===lvl) delete state.conf[id];
@@ -854,7 +854,7 @@ function rateConf(id,lvl){
 }
 function needsReviewCount(){ return Object.values(state.conf).filter(v=>v==='low'||v==='mid').length; }
 function toggleReviewFilter(){
-  if(!state.reviewFilter && needsReviewCount()===0){ toast('Rate a concept "Not yet" or "Almost" first, then filter to just those.'); return; }
+  if(!state.reviewFilter && needsReviewCount()===0){ toast("Сначала оцените концепцию «Еще нет» или «Почти», а затем отфильтруйте только их."); return; }
   state.reviewFilter = !state.reviewFilter;
   save(); render();
 }
@@ -895,7 +895,7 @@ function syncTimerLoop(){
     }
     if(left <= 0){
       clearInterval(timerInterval);
-      toast("Pacing drill over. Exam submitted.");
+      toast("Упражнение по темпу завершено. Экзамен сдан.");
       submitExam(true);
     }
   }, 500);
@@ -914,18 +914,18 @@ function renderExam(){
   if(state.examStart === null && !state.submitted){
     return `
       <div class="start-card">
-        <h2>Practice Exam · ${QUESTIONS.length} questions</h2>
-        <p>The real exam is 20 questions. This set is double that, spread across the four areas of Docusign Admin, so each area gets real drill time. One question at a time. Pick an answer and it locks in and moves you on. Some questions are "choose all that apply" with no partial credit, so read them twice. Everything grades at once when you submit.</p>
+        <h2>Практический экзамен · ${QUESTIONS.length} questions</h2>
+        <p>Настоящий экзамен состоит из 20 вопросов. Этот набор в два раза больше и распределен по четырем областям Docusign Admin, поэтому каждая область требует реального времени для тренировки. Один вопрос за раз. Выберите ответ, и он зафиксирует вас и продвинет вас дальше. Некоторые вопросы типа «выберите все подходящие» без частичной оценки, поэтому прочитайте их дважды. Все оценивается сразу при отправке.</p>
         <div class="start-actions">
-          <button class="btn btn-primary" onclick="startExam(false)">Start with no time limit</button>
-          <button class="btn btn-ghost" onclick="startExam(true)">Pacing drill, ${EXAM_MINUTES}:00 ⏱</button>
+          <button class="btn btn-primary" onclick="startExam(false)">Начните без ограничения по времени</button>
+          <button class="btn btn-ghost" onclick="startExam(true)">Тренировка по темпу, ${EXAM_MINUTES}:00 ⏱</button>
         </div>
       </div>
       <div class="method-callout">
-        <strong>The real exam has no clock.</strong> Docusign estimates about ${EXAM_MINUTES} minutes and saves your progress if you stop partway, so untimed is the honest rehearsal. The pacing drill is here only if you want to practise not overthinking.
+        <strong>На настоящем экзамене нет часов.</strong> Docusign оценивает около ${EXAM_MINUTES} минут и сохраняет ваш прогресс, если вы остановитесь на полпути, поэтому честная репетиция не рассчитана по времени. Упражнение на темп подойдет только в том случае, если вы хотите попрактиковаться в том, чтобы не думать слишком много.
       </div>
       <div class="method-callout" style="border-left-color:var(--warn)">
-        <strong>Four misses is the whole budget.</strong> The real exam is 20 items at 80%, so 16 correct passes and 15 does not. One wrong answer costs you 5 points. Answer everything. An unanswered item scores the same as a wrong one.
+        <strong>Четыре промаха – это весь бюджет.</strong> Настоящий экзамен — это 20 заданий на 80%, то есть 16 сдаются правильно, а 15 — нет. Один неправильный ответ стоит вам 5 баллов. Ответьте на все. Задание без ответа оценивается так же, как и неправильное.
       </div>
     `;
   }
@@ -936,8 +936,8 @@ function renderExam(){
   const left = timeLeftMs();
 
   let topBtn;
-  if(state.submitted) topBtn = `<button class="exam-submit-btn" onclick="setView('results')">View results →</button>`;
-  else topBtn = `<button class="exam-submit-btn" onclick="submitExam()" ${answered===0?'disabled':''}>${answered===total?'Submit exam':'Submit ('+answered+'/'+total+' answered)'}</button>`;
+  if(state.submitted) topBtn = `<button class="exam-submit-btn" onclick="setView('results')">Посмотреть результаты →</button>`;
+  else topBtn = `<button class="exam-submit-btn" onclick="submitExam()" ${answered===0?'disabled':''}>${answered===total?"Сдать экзамен":'Submit ('+answered+'/'+total+' answered)'}</button>`;
 
   const i = clampQIdx();
   const q = QUESTIONS[i];
@@ -955,7 +955,7 @@ function renderExam(){
     <div class="exam-header">
       <div class="exam-header-row">
         <div class="exam-title-block">
-          <div class="exam-mini-title">Organization Management Pro practice exam${state.timed?' · pacing drill':''}</div>
+          <div class="exam-mini-title">Практический экзамен по менеджменту организации${state.timed?" · упражнение на темп":''}</div>
           <div class="exam-q-progress"><span>${answered}</span> of ${total} answered</div>
         </div>
         ${(!state.submitted && state.timed && left!==null) ? `<span class="exam-timer${left<5*60000?' low':''}" id="examTimer">${fmtTime(left)}</span>` : ''}
@@ -976,27 +976,27 @@ function renderExam(){
   if(!state.submitted){
     if(q.type === 'ms' && hasAnswer(q)){
       primary = isLast
-        ? `<button class="btn btn-primary" onclick="submitExam()">Lock in &amp; submit →</button>`
-        : `<button class="btn btn-primary" onclick="gotoQ(${i+1})">Lock in &amp; continue →</button>`;
+        ? `<button class="btn btn-primary" onclick="submitExam()">Зафиксируйте и отправьте →</button>`
+        : `<button class="btn btn-primary" onclick="gotoQ(${i+1})">Зафиксировать и продолжить →</button>`;
     } else if(isLast && answered > 0){
-      primary = `<button class="btn btn-primary" onclick="submitExam()">Submit exam →</button>`;
+      primary = `<button class="btn btn-primary" onclick="submitExam()">Сдать экзамен →</button>`;
     }
   }
 
   html += `
     <div class="q-nav">
-      <button class="btn btn-outline btn-sm" onclick="gotoQ(${i-1})" ${i===0?'disabled':''}>← Prev</button>
+      <button class="btn btn-outline btn-sm" onclick="gotoQ(${i-1})" ${i===0?'disabled':''}>← Предыдущий</button>
       <div class="spacer"></div>
       ${primary}
-      <button class="btn btn-outline btn-sm" onclick="gotoQ(${i+1})" ${isLast?'disabled':''}>Next →</button>
+      <button class="btn btn-outline btn-sm" onclick="gotoQ(${i+1})" ${isLast?'disabled':''}>Далее →</button>
     </div>
   `;
 
   if(!state.submitted){
     html += `<div class="lockin-hint">${q.type==='ms'
-      ? 'Choose every option that applies, then lock it in. No partial credit. You need all the right ones and none of the wrong ones.'
-      : 'Pick an answer and it locks in, then moves you on. Use Prev or the bars above to change it before you submit.'}
-      Nothing is graded until you submit.</div>`;
+      ? "Выберите каждый подходящий вариант, а затем зафиксируйте его. Никакого частичного кредита. Вам нужны все правильные и ни одного неправильного."
+      : "Выберите ответ, и он зафиксируется, а затем продвинет вас дальше. Используйте «Предыдущий» или панели выше, чтобы изменить его перед отправкой."}
+      Ничто не оценивается, пока вы не отправите заявку.</div>`;
   }
   return html;
 }
@@ -1049,12 +1049,12 @@ function renderQuestion(q){
   }).join('')}</div>`;
 
   const explanation = state.submitted
-    ? `<div class="explanation show"><strong>${isCorrect(q) ? 'Correct.' : 'Heads up: '}</strong> ${q.explain}${isCorrect(q) ? '' : `<div style="margin-top:10px"><button class="hint-btn" onclick="hintQuestion('${q.id}')">Still unclear? Get a hint →</button></div><div class="hint-resp" id="hint-resp-q-${q.id}"></div>`}</div>`
+    ? `<div class="explanation show"><strong>${isCorrect(q) ? 'Correct.' : "Берегись: "}</strong> ${q.explain}${isCorrect(q) ? '' : `<div style="margin-top:10px"><button class="hint-btn" onclick="hintQuestion('${q.id}')">Все еще неясно? Получить подсказку →</button></div><div class="hint-resp" id="hint-resp-q-${q.id}"></div>`}</div>`
     : '';
 
   return `
     <div class="q-card${stateCls}" id="q-${q.id}">
-      <div class="q-num">Question ${idx} of ${QUESTIONS.length}${isMs?'<span class="ms-tag">· multiple response</span>':''}</div>
+      <div class="q-num">Question ${idx} of ${QUESTIONS.length}${isMs?"<span class=\"ms-tag\">· множественный ответ</span>":''}</div>
       <div class="q-text">${q.q}</div>
       ${body}
       ${explanation}
@@ -1096,7 +1096,7 @@ function submitExam(auto){
   if(state.submitted) return;
   const answered = Object.keys(state.answers).length;
   if(!auto && answered < QUESTIONS.length){
-    if(!confirm(`You've answered ${answered} of ${QUESTIONS.length}. Unanswered questions count as wrong, like the real exam. Submit anyway?`)) return;
+    if(!confirm(`Вы ответили ${answered} of ${QUESTIONS.length}. Вопросы без ответа считаются неправильными, как и настоящий экзамен. Все равно отправить?`)) return;
   }
   state.submitted = true;
   state.qIdx = 0;
@@ -1122,10 +1122,10 @@ const PASS_PCT = 80;
 const READY_PCT = 88; // our recommendation, NOT Docusign's. Margin for a harder question set
 
 function verdictFor(pct){
-  if(pct >= READY_PCT) return {label:'Clear of the 80% line with room to spare. Book it.', tone:'good'};
-  if(pct >= PASS_PCT) return {label:'Over the 80% line, but thin. Close your weakest area, then book it.', tone:'warn'};
-  if(pct >= 65) return {label:'Under the line, and it is the numbers costing you. Work the study guide, then retake this.', tone:'warn'};
-  return {label:'Cold start. Read all four areas end to end, then retake this.', tone:'bad'};
+  if(pct >= READY_PCT) return {label:"Вдали от линии 80%, есть свободное место. Забронируйте это.", tone:'good'};
+  if(pct >= PASS_PCT) return {label:"За чертой 80%, но тонкий. Закройте самое слабое место, а затем забронируйте его.", tone:'warn'};
+  if(pct >= 65) return {label:"Под чертой, и это цифры, которые вам стоят. Поработайте над учебным пособием, а затем пересдайте это.", tone:'warn'};
+  return {label:"Холодный старт. Прочтите все четыре раздела до конца, а затем повторите это.", tone:'bad'};
 }
 
 function renderResults(){
@@ -1135,11 +1135,11 @@ function renderResults(){
   const pass = pct >= PASS_PCT;
   return `
     <div class="results-hero">
-      <div class="results-eyebrow">Practice exam · Results</div>
+      <div class="results-eyebrow">Практический экзамен · Результаты</div>
       <div class="score-big">${score.total}<small>/${score.outOf}</small></div>
       <div class="score-verdict">${pct}%. ${v.label}</div>
-      <div class="scaled-box">Against the real bar: <strong style="color:${pass?'var(--good)':'var(--bad)'}">${pct}%</strong> <span style="color:var(--dim)">vs. ${PASS_PCT}% needed</span></div>
-      <p class="score-sub" style="margin-top:14px">The real exam is 20 items graded on raw percent correct, and <strong>80%</strong> passes, so four misses is the entire budget and one wrong answer costs 5 points. We suggest ${READY_PCT}%+ here before booking, purely as margin for a question set that phrases things differently.</p>
+      <div class="scaled-box">Против настоящего бара: <strong style="color:${pass?'var(--good)':'var(--bad)'}">${pct}%</strong> <span style="color:var(--dim)">против. ${PASS_PCT}% нужный</span></div>
+      <p class="score-sub" style="margin-top:14px">Настоящий экзамен — это 20 заданий, оцениваемых по абсолютному проценту правильных ответов. <strong>80%</strong> проходит, поэтому четыре промаха — это весь бюджет, а один неправильный ответ стоит 5 баллов. Мы предлагаем ${READY_PCT}%+ здесь перед бронированием, просто как запас для набора вопросов, который формулирует вещи по-другому.</p>
     </div>
 
     <div class="results-grid">
@@ -1147,10 +1147,10 @@ function renderResults(){
         const d = DOMAIN_INFO[k];
         const s = score.byDomain[k];
         const p = Math.round(100*s.correct/s.total);
-        const hint = p === 100 ? 'Clean sweep. Move on.'
-          : p >= 80 ? `Nearly there. Reread the <a href="#study-${k}" onclick="setView('study',{scrollToSection:'${k}'});return false;">${d.label} study section</a> once.`
-          : p >= 50 ? `Shaky, and at 80% to pass that is expensive. <a href="#study-${k}" onclick="setView('study',{scrollToSection:'${k}'});return false;">Study section</a> · ${d.hint}`
-          : `Focus here first. ${d.hint} <a href="#study-${k}" onclick="setView('study',{scrollToSection:'${k}'});return false;">Open the study section</a>.`;
+        const hint = p === 100 ? "Чистая развертка. Двигаться дальше."
+          : p >= 80 ? `Почти там. Перечитайте <a href="#study-${k}" onclick="setView('study',{scrollToSection:'${k}'});return false;">${d.label} раздел исследования</a> один раз.`
+          : p >= 50 ? `Шаткие, и при 80% пройти это дорого. <a href="#study-${k}" onclick="setView('study',{scrollToSection:'${k}'});return false;"> раздел исследования</a> · ${d.hint}`
+          : `Сначала сосредоточьтесь здесь. ${d.hint} <a href="#study-${k}" onclick="setView('study',{scrollToSection:'${k}'});return false;">Открыть раздел обучения</a>.`;
         return `
           <div class="results-row">
             <div class="results-row-top">
@@ -1166,15 +1166,15 @@ function renderResults(){
     </div>
 
     <div class="results-actions">
-      <button class="btn btn-ghost" onclick="setView('exam')">Review answers &amp; explanations</button>
-      <button class="btn btn-ghost" onclick="setView('study')">Open study guide</button>
-      <button class="btn btn-primary" onclick="retake()">Retake exam <i data-lucide="rotate-ccw" style="width:14px;height:14px;vertical-align:-2px"></i></button>
+      <button class="btn btn-ghost" onclick="setView('exam')">Просмотрите ответы и пояснения</button>
+      <button class="btn btn-ghost" onclick="setView('study')">Открыть учебное пособие</button>
+      <button class="btn btn-primary" onclick="retake()">Пересдать экзамен <i data-lucide="rotate-ccw" style="width:14px;height:14px;vertical-align:-2px"></i></button>
     </div>
   `;
 }
 
 function retake(){
-  if(!confirm('Clear your answers and retake the practice exam?')) return;
+  if(!confirm("Очистить свои ответы и пересдать пробный экзамен?")) return;
   state.answers = {};
   state.submitted = false;
   state.examStart = null;
@@ -1192,12 +1192,12 @@ function attachFooter(app){
     <div class="footer-links">
       <a href="../docusign-cert/">Docusign eSignature Pro Prep</a>
       <a href="../docusign-clm-cert/">Docusign CLM Admin Pro Prep</a>
-      <a href="../tableau-cert/">Tableau Cert Prep</a>
-      <a href="../excel-cert/">Excel Cert Prep</a>
-      <a href="https://dsucustomers.docusign.com/exam-docusign-organization-management-pro" target="_blank" rel="noopener">Official exam page</a>
-      <a href="../">← All Kits</a>
+      <a href="../tableau-cert/">Подготовка к сертификату Tableau</a>
+      <a href="../excel-cert/">Подготовка сертификата Excel</a>
+      <a href="https://dsucustomers.docusign.com/exam-docusign-organization-management-pro" target="_blank" rel="noopener">Официальная страница экзамена</a>
+      <a href="../">← Все комплекты</a>
     </div>
-    Part of the <a href="../">Analyst Prep Kit</a> · Progress saved locally · Not affiliated with Docusign. Always check the official exam page for current format and policies
+    Часть <a href="../">Analyst Prep Kit</a> · Прогресс сохраняется локально · Не связан с Docusign. Всегда проверяйте официальную страницу экзамена на предмет текущего формата и правил.
   `;
   app.appendChild(f);
 }
@@ -1208,17 +1208,17 @@ function toggleTheme(){
   const next = cur === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('apk-theme', next);
-  document.getElementById('themeIcon').innerHTML = '<i data-lucide="' + (next === 'dark' ? 'sun' : 'moon') + '"></i>';
+  document.getElementById('themeIcon').innerHTML = "<я данные-lucid=\"" + (next === 'dark' ? 'sun' : 'moon') + '"></i>';
   if(window.grainRefreshIcons)grainRefreshIcons();else if(window.lucide)lucide.createIcons();
 }
 (function initTheme(){
   const saved = localStorage.getItem('apk-theme');
   if(saved) document.documentElement.setAttribute('data-theme', saved);
-  document.getElementById('themeIcon').innerHTML = '<i data-lucide="' + (document.documentElement.getAttribute('data-theme')==='dark'?'sun':'moon') + '"></i>';
+  document.getElementById('themeIcon').innerHTML = "<я данные-lucid=\"" + (document.documentElement.getAttribute('data-theme')==='dark'?'sun':'moon') + '"></i>';
 })();
 
 function resetAll(){
-  if(!confirm('Clear all answers and reset the exam + study guide?')) return;
+  if(!confirm("Удалить все ответы и сбросить экзамен + учебное пособие?")) return;
   localStorage.removeItem(STORE);
   location.reload();
 }
@@ -1274,18 +1274,18 @@ function grainRefreshIcons(){
 .apk-about h3:first-child{margin-top:0}
 </style>
 <section class="apk-about">
-  <h3>Related guides</h3>
+  <h3>Полезные руководства</h3>
   <ul>
-    <li><a href="../docusign-cert/">Docusign eSignature Administration Pro prep</a></li>
-    <li><a href="../docusign-clm-cert/">Docusign CLM Administration Pro prep</a></li>
-    <li><a href="../guides/technical-tenacity/">Technical tenacity</a></li>
+    <li><a href="../docusign-cert/">Подготовка Docusign eSignature Administration Pro</a></li>
+    <li><a href="../docusign-clm-cert/">Подготовка Docusign CLM Administration Pro</a></li>
+    <li><a href="../guides/technical-tenacity/">Техническая стойкость</a></li>
   </ul>
-  <p><a href="../guides/">Browse all guides</a> · <a href="../">All kits</a></p>
+  <p><a href="../guides/">Просмотреть все руководства</a> · <a href="../">Все комплекты</a></p>
 </section>
 <!-- APK:KIT-SEO:END -->
 <script src="../assets/datacraft-economy.js"></script>
 <script src="../assets/progress-state.js"></script>
 <script src="../assets/supabase_auth_sync.js?v=3"></script>
-<script src="../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

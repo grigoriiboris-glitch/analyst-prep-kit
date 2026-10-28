@@ -125,7 +125,7 @@
           '<button type="button" class="curriculum-action primary" id="curriculumNext">▶ Следующий курс</button>' +
         '</div>' +
       '</header>' +
-      '<div class="curriculum-map-scroll"><canvas id="curriculumWorld" width="' + MAP_W + "\"высота=\"" + MAP_H + "\" табиндекс=\"0\" роль=\"изображение\" aria-метка=\"Интерактивная живая 2D-карта мира ДатаКрафт со спрайтами зданий поверх битмапа.\"></canvas></div>" +
+      '<div class="curriculum-map-scroll"><canvas id="curriculumWorld" width="' + MAP_W + "\"высота=\"" + MAP_H + "\" табиндекс=\"0\" роль=\"изображение\" ария-метка=\"Интерактивная живая 2D-карта мира ДатаКрафт со спрайтами зданий поверх битмапа.\"></canvas></div>" +
       '<div class="curriculum-legend">' +
         '<span><b class="curriculum-symbol" style="color:#7ed68a">✓</b>Построено (живой спрайт + караваны)</span>' +
         '<span><b class="curriculum-symbol" style="color:#f4d47d">🔨</b>Курс пройден — ждёт постройки за 🪙</span>' +
@@ -686,7 +686,7 @@
       if (course.tracker === 'quality' || course.tracker === 'portfolio') amount = 1;
       if (course.tracker === 'simulator' || course.tracker === 'final') amount = 2;
       if (course.tracker === 'projectStudio' || course.tracker === 'cert') amount = 0;
-      return "<div class=\"учебный план-урока-строка\"" + (done ? ' passed' : '') + (depth ? ' nested' : '') + '"><span class="curriculum-lesson-check">' + (done ? '✓' : '○') + '</span><span class="curriculum-lesson-copy"><span class="curriculum-lesson-title">' + safeText(item.title) + '</span>' + (item.goal ? '<span class="curriculum-lesson-goal">' + safeText(item.goal) + '</span>' : '') + '</span><span class="curriculum-lesson-actions"><span class="curriculum-lesson-reward">' + (done ? 'Зачтено' : (rewardAlreadyClaimed ? 'Монеты получены' : (amount ? '+' + amount + ' 🪙' : 'Этап'))) + "</span><тип кнопки=\"кнопка\" сорт=\"контекст-копии учебной программы\" заголовок=\"Скопировать контекст этого урока для ИИ-агента\" aria-метка=\"Скопировать контекст урока " + safeText(item.title) + "\"название-курса-данных=\"" + safeText(course.title) + "\"путь-курса-данных=\"" + safeText(course.path || '') + "\"id-курса-данных=\"" + safeText(course.id) + '" data-lesson-title="' + safeText(item.title) + '" data-lesson-id="' + safeText(item.id) + '" data-lesson-unit="' + safeText(item.unit || '') + "\"цель-урока-данных=\"" + safeText(item.goal || '') + "\"данные-уроки-готовы=\"" + (done ? 'true' : 'false') + '" data-parent-id="' + safeText(parentId || '') + '">⧉ Скопировать контекст</button></span></div>';
+      return "<класс div=\"учебный план-урока-строка\"" + (done ? ' passed' : '') + (depth ? ' nested' : '') + '"><span class="curriculum-lesson-check">' + (done ? '✓' : '○') + '</span><span class="curriculum-lesson-copy"><span class="curriculum-lesson-title">' + safeText(item.title) + '</span>' + (item.goal ? '<span class="curriculum-lesson-goal">' + safeText(item.goal) + '</span>' : '') + '</span><span class="curriculum-lesson-actions"><span class="curriculum-lesson-reward">' + (done ? 'Зачтено' : (rewardAlreadyClaimed ? 'Монеты получены' : (amount ? '+' + amount + ' 🪙' : 'Этап'))) + "</span><тип кнопки=\"кнопка\" сорт=\"контекст-копии учебной программы\" заголовок=\"Скопировать контекст этого урока для ИИ-агента\" ария-метка=\"Скопировать контекст урока " + safeText(item.title) + "\"название-курса-данных=\"" + safeText(course.title) + "\"путь-курса-данных=\"" + safeText(course.path || '') + "\"id-курса-данных=\"" + safeText(course.id) + '" data-lesson-title="' + safeText(item.title) + '" data-lesson-id="' + safeText(item.id) + '" data-lesson-unit="' + safeText(item.unit || '') + "\"цель-урока-данных=\"" + safeText(item.goal || '') + "\"данные-уроки-готовы=\"" + (done ? 'true' : 'false') + '" data-parent-id="' + safeText(parentId || '') + '">⧉ Скопировать контекст</button></span></div>';
     }
     if (course.tracker === 'portfolio') {
       catalog.forEach(function(project){
@@ -1065,7 +1065,7 @@
     ctx.save();
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.font = "900 17px системный интерфейс, «Эмодзи цвета яблока», «Сегоэ UI Эмодзи», без засечек";
+    ctx.font = "900 17пикселей системный интерфейс, «Эмодзи цвета яблока», «Сегоэ UI Эмодзи», без засечек";
     ctx.lineWidth = 3.4;
     ctx.lineJoin = 'round';
     animState.floatingTexts.forEach(function(item) {
@@ -1444,7 +1444,7 @@
 
       ctx.textAlign = 'center';
       ctx.fillStyle = '#eff8ec';
-      ctx.font = "800 10px системный интерфейс, -Apple-система, без засечек";
+      ctx.font = "800 10пикселей системный интерфейс, -Яблоко-система, без засечек";
       ctx.fillText(c.short, wx, py + 13);
 
       /* Mini progress bar inside nameplate */
@@ -1460,7 +1460,7 @@
       }
 
       /* Bottom status / coin cost line */
-      ctx.font = "700 9px системный интерфейс, -Apple-система, без засечек";
+      ctx.font = "700 9пикселей системный интерфейс, -Яблоко-система, без засечек";
       ctx.fillStyle = st.built ? '#a8eeae' : (st.unlocked && st.courseComplete ? '#ffe39c' : '#b8cbb9');
       var metaLabel = st.built ? '✓ Построено' : (st.unlocked && st.courseComplete ? '🔨 Строить: ' + c.cost + ' 🪙' : p.done + '/' + p.total + ' · ' + c.cost + ' 🪙');
       ctx.fillText(metaLabel, wx, py + 31);

@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>COUNT vs COUNTA vs COUNTBLANK in Excel &mdash; Analyst Prep Kit</title>
-<meta name="description" content="COUNT counts numbers, COUNTA counts anything that is not empty, COUNTBLANK counts the empties. On one cleaned column COUNTA says 20 and COUNTBLANK says 5 over 20 cells, and both are right. Every figure run in Excel.">
+<title>COUNT, COUNT и COUNTBLANK в Excel — комплект для подготовки аналитика</title>
+<meta name="description" content="COUNT подсчитывает числа, COUNTA подсчитывает все, что не пусто, COUNTBLANK подсчитывает пустые предметы. В одном очищенном столбце СЧЁТКА показывает 20, а СЧЁТПУСТО — 5 на 20 ячеек, и оба верны. Все цифры выполняются в Excel.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-count-counta-countblank/">
-<meta property="og:title" content="COUNT vs COUNTA vs COUNTBLANK in Excel">
-<meta property="og:description" content="Three functions, one column, three different totals. Including the cleaned column where COUNTA says 20 and COUNTBLANK says 5 over the same 20 cells.">
+<meta property="og:title" content="COUNT против COUNTA против COUNTBLANK в Excel">
+<meta property="og:description" content="Три функции, один столбец, три разных итога. Включая очищенный столбец, где СЧЁТЗ говорит 20, а СЧЁТПУСТОЙ — 5 в тех же 20 ячейках.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-count-counta-countblank/">
 <meta name="twitter:card" content="summary_large_image">
@@ -69,56 +69,90 @@
   figcaption{font-size:13.5px;color:var(--muted);margin-top:6px}
 </style>
 <!-- SEO:JSONLD:START -->
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "COUNT vs COUNTA vs COUNTBLANK in Excel",
-  "description": "COUNT counts numbers, COUNTA counts anything that is not empty, COUNTBLANK counts the empties, and a cleaned column can make the last two disagree.",
+  "headline": "COUNT против COUNTA против COUNTBLANK в Excel",
+  "description": "COUNT подсчитывает числа, COUNTA подсчитывает все, что не является пустым, COUNTBLANK подсчитывает пустые значения, а очищенный столбец может привести к тому, что последние два столбца не будут противоречить друг другу.",
   "url": "https://michaelnocito.github.io/analyst-prep-kit/guides/excel-count-counta-countblank/",
-  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://michaelnocito.github.io/analyst-prep-kit/guides/excel-count-counta-countblank/" },
-  "author": { "@type": "Person", "name": "Michael Nocito", "url": "https://michaelnocito.github.io" },
-  "publisher": { "@type": "Person", "name": "Michael Nocito" },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://michaelnocito.github.io/analyst-prep-kit/guides/excel-count-counta-countblank/"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Майкл Носито",
+    "url": "https://michaelnocito.github.io"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Майкл Носито"
+  },
   "inLanguage": "en",
   "datePublished": "2026-08-23",
   "dateModified": "2026-08-23"
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "Analyst Prep Kit", "item": "https://michaelnocito.github.io/analyst-prep-kit/" },
-    { "@type": "ListItem", "position": 2, "name": "Guides", "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/" },
-    { "@type": "ListItem", "position": 3, "name": "COUNT vs COUNTA vs COUNTBLANK", "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/excel-count-counta-countblank/" }
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Analyst Prep Kit",
+      "item": "https://michaelnocito.github.io/analyst-prep-kit/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Guides",
+      "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "COUNT против COUNTA против COUNTBLANK",
+      "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/excel-count-counta-countblank/"
+    }
   ]
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "What is the difference between COUNT and COUNTA in Excel?",
-      "acceptedAnswer": { "@type": "Answer", "text": "COUNT counts cells holding a number, and dates count because a date is a number. COUNTA counts every cell that is not empty, so text, TRUE and FALSE, error values and a cell holding only a space all count. On the twenty-cell column in this guide, COUNT returns 8 and COUNTA returns 15." }
+      "name": "В чем разница между COUNT и COUNTA в Excel?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "COUNT подсчитывает ячейки, содержащие числа, а даты учитываются, поскольку дата является числом. COUNTA подсчитывает каждую непустую ячейку, поэтому учитываются текст, TRUE и FALSE, значения ошибок и ячейка, содержащая только пробел. В столбце из двадцати ячеек в этом руководстве COUNT возвращает 8, а COUNTA возвращает 15."
+      }
     },
     {
       "@type": "Question",
-      "name": "Why does COUNT ignore my text?",
-      "acceptedAnswer": { "@type": "Answer", "text": "By design. COUNT is built to count numeric values, so names, labels and numbers stored as text are skipped. A cell holding the text 1200 is skipped too, which is the version that surprises people, because it looks identical to the real number in the cell above it. Use COUNTA when you want every filled cell." }
+      "name": "Почему COUNT игнорирует мое сообщение?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "По дизайну. Функция COUNT предназначена для подсчета числовых значений, поэтому имена, метки и числа, хранящиеся в виде текста, пропускаются. Ячейка, содержащая текст 1200, также пропускается, и эта версия удивляет людей, поскольку она выглядит идентично реальному числу в ячейке над ней. Используйте COUNTA, если вам нужна каждая заполненная ячейка."
+      }
     },
     {
       "@type": "Question",
-      "name": "Why do COUNTA and COUNTBLANK add up to more than the number of cells?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Because a formula that returns empty text counts in both. COUNTA sees a formula in the cell and counts it as filled. COUNTBLANK sees the empty text result and counts it as blank. On a cleaned 20-cell column, COUNTA returned 20 and COUNTBLANK returned 5, which adds to 25." }
+      "name": "Почему сумма СЧЕТЗ и ПРОСЧЕТ превышает количество ячеек?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Потому что формула, возвращающая пустой текст, учитывается в обоих случаях. СЧЕТЗ видит формулу в ячейке и считает ее заполненной. COUNTBLANK видит пустой текстовый результат и считает его пустым. В очищенном столбце из 20 ячеек функция СЧЕТЗ вернула 20, а СЧЁТПУСТОЙ вернула 5, что в сумме дает 25."
+      }
     },
     {
       "@type": "Question",
-      "name": "How do I count cells that are not empty in Excel?",
-      "acceptedAnswer": { "@type": "Answer", "text": "COUNTA(range) counts filled cells including formula results that look empty. COUNTIF(range,\"<>\") counts non-empty cells and also counts those formula results. To count only cells with real visible content, use SUMPRODUCT(--(TRIM(range)<>\"\")), which returned 14 where COUNTA returned 15, because one cell held nothing but spaces." }
+      "name": "Как подсчитать непустые ячейки в Excel?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "COUNTA(диапазон) подсчитывает заполненные ячейки, включая результаты формулы, которые выглядят пустыми. СЧЁТЕСЛИ(диапазон,\"<>\") подсчитывает непустые ячейки, а также результаты формулы. Чтобы подсчитать только ячейки с реальным видимым содержимым, используйте СУММПРОИЗВ(--(TRIM(диапазон)<>\"\")), который вернул 14, тогда как СЧЕТЗ вернул 15, поскольку одна ячейка не содержала ничего, кроме пробелов."
+      }
     }
   ]
 }
@@ -127,15 +161,15 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../excel/">Excel Kit</a></p>
-  <h1>COUNT vs COUNTA vs COUNTBLANK in Excel</h1>
-  <p class="meta">Michael Nocito · Updated August 2026 · Every figure on this page was run in Excel before it was published</p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../excel/">Excel комплект</a></p>
+  <h1>COUNT против COUNTA против COUNTBLANK в Excel</h1>
+  <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Все рисунки на этой странице были обработаны в Excel перед публикацией.</p>
 
-  <p>This page tells you which of the three counting functions answers the question you are actually asking, and how to check a count before you put it in front of anyone. The reason it matters: on the twenty-cell column below, <code>COUNT</code> returns 8, <code>COUNTA</code> returns 15, and on the cleaned version of the same column <code>COUNTA</code> returns 20 while <code>COUNTBLANK</code> returns 5. That is 25 answers from 20 cells, and nothing is broken.</p>
+  <p>На этой странице вы узнаете, какая из трех функций подсчета отвечает на вопрос, который вы на самом деле задаете, и как проверить счет, прежде чем представить его кому-либо. Причина, по которой это важно: в столбце из двадцати ячеек ниже:  <code>COUNT</code>  возвращает 8,  <code>COUNTA</code>  возвращает 15, и в очищенной версии того же столбца  <code>COUNTA</code>  возвращает 20, пока  <code>COUNTBLANK</code>  возвращает 5. То есть 25 ответов из 20 ячеек, и ничего не сломано.</p>
 
-  <p>What you do: pick by what you mean. Numbers only is <code>COUNT</code>. Anything filled in is <code>COUNTA</code>. Empties is <code>COUNTBLANK</code>. Then run one check, <code>COUNTA</code> plus <code>COUNTBLANK</code> against the size of the range, and read what the gap tells you.</p>
+  <p>Что вы делаете: выбирайте то, что вы имеете в виду. Только цифры есть  <code>COUNT</code>. Все, что заполнено,  <code>COUNTA</code>. Пустая тара  <code>COUNTBLANK</code>. Затем запустите одну проверку,  <code>COUNTA</code> plus <code>COUNTBLANK</code>  против размера диапазона и прочитайте, о чем говорит вам разрыв.</p>
 
-  <p><strong>The short version.</strong> <code>COUNT</code> counts numbers. <code>COUNTA</code> counts filled cells. <code>COUNTBLANK</code> counts empty ones.</p>
+  <p><strong>Краткая версия.</strong> <code>COUNT</code>  считает числа.  <code>COUNTA</code>  считает заполненные ячейки.  <code>COUNTBLANK</code>  считает пустые.</p>
 
   <figure>
     <svg viewBox="0 0 640 220" role="img" aria-labelledby="cntdesc" xmlns="http://www.w3.org/2000/svg">
@@ -152,134 +186,134 @@
         <rect x="96" y="166" width="44" height="24" rx="5" fill="#FFFFFF"/><rect x="144" y="166" width="44" height="24" rx="5" fill="#FFFFFF"/><rect x="192" y="166" width="44" height="24" rx="5" fill="#0E7490"/><rect x="240" y="166" width="44" height="24" rx="5" fill="#FFFFFF"/><rect x="288" y="166" width="44" height="24" rx="5" fill="#FFFFFF"/><rect x="336" y="166" width="44" height="24" rx="5" fill="#FFFFFF"/><rect x="384" y="166" width="44" height="24" rx="5" fill="#0E7490"/><rect x="432" y="166" width="44" height="24" rx="5" fill="#FFFFFF"/><rect x="480" y="166" width="44" height="24" rx="5" fill="#FFFFFF"/><rect x="528" y="166" width="44" height="24" rx="5" fill="#FFFFFF"/>
       </g>
     </svg>
-    <figcaption>Same ten cells, three answers. Watch the cell holding two spaces.</figcaption>
+    <figcaption>Те же десять клеток, три ответа. Посмотрите на ячейку, содержащую два пробела.</figcaption>
   </figure>
 
-  <h2>The column the examples run on</h2>
-  <p>Twenty cells, A2 to A21, holding a response column exactly as one arrives from a form export. Numbers, names, a date, some blanks, one cell holding two spaces, one number typed as text, and a TRUE.</p>
+  <h2>Столбец, в котором выполняются примеры</h2>
+  <p>Двадцать ячеек, от A2 до A21, содержат столбец ответа точно так же, как он поступает из формы экспорта. Числа, имена, дата, несколько пробелов, одна ячейка, содержащая два пробела, одно число, введенное в виде текста, и значение ИСТИНА.</p>
   <table>
     <tr><th>Cell</th><th>Holds</th><th>Cell</th><th>Holds</th></tr>
-    <tr><td>A2</td><td>1200</td><td>A12</td><td>4 July 2026 (a date)</td></tr>
+    <tr><td>A2</td><td>1200</td><td>A12</td><td>4 июля 2026 г. (дата)</td></tr>
     <tr><td>A3</td><td>Alvarez</td><td>A13</td><td>300</td></tr>
     <tr><td>A4</td><td>empty</td><td>A14</td><td>empty</td></tr>
     <tr><td>A5</td><td>0</td><td>A15</td><td>Cho</td></tr>
     <tr><td>A6</td><td>45.5</td><td>A16</td><td>75</td></tr>
     <tr><td>A7</td><td>n/a</td><td>A17</td><td>empty</td></tr>
-    <tr><td>A8</td><td>empty</td><td>A18</td><td>1200, typed as text</td></tr>
+    <tr><td>A8</td><td>empty</td><td>A18</td><td>1200, вводится как текст</td></tr>
     <tr><td>A9</td><td>980</td><td>A19</td><td>TRUE</td></tr>
-    <tr><td>A10</td><td>two spaces</td><td>A20</td><td>60</td></tr>
+    <tr><td>A10</td><td>два места</td><td>A20</td><td>60</td></tr>
     <tr><td>A11</td><td>Brennan</td><td>A21</td><td>empty</td></tr>
   </table>
-  <p>Nothing there is unusual. Every one of those cell types turns up in real exported data, and the two that look identical on screen, A2 and A18, are the ones the counting functions disagree about.</p>
+  <p>Ничего там необычного. Каждый из этих типов ячеек присутствует в реальных экспортированных данных, а два, которые выглядят одинаково на экране, A2 и A18, — это те, по поводу которых функции подсчета расходятся во мнениях.</p>
 
-  <h2>The three functions on that column</h2>
-  <p>Before the numbers: how many of the twenty cells do you think <code>COUNT</code> returns?</p>
+  <h2>Три функции в этом столбце</h2>
+  <p>Перед цифрами: как вы думаете, сколько из двадцати клеток  <code>COUNT</code>  возвращается?</p>
   <table>
-    <tr><th>Formula</th><th>Result</th><th>What it counted</th></tr>
-    <tr><td><code>=COUNT(A2:A21)</code></td><td>8</td><td>Numbers only, and the date counts as one</td></tr>
-    <tr><td><code>=COUNTA(A2:A21)</code></td><td>15</td><td>Every cell that is not empty</td></tr>
-    <tr><td><code>=COUNTBLANK(A2:A21)</code></td><td>5</td><td>Every cell that is empty</td></tr>
-    <tr><td><code>=ROWS(A2:A21)</code></td><td>20</td><td>The size of the range</td></tr>
+    <tr><th>Formula</th><th>Result</th><th>Что это значит</th></tr>
+    <tr><td><code>=COUNT(A2:A21)</code></td><td>8</td><td>Только цифры, а дата считается за единицу.</td></tr>
+    <tr><td><code>=COUNTA(A2:A21)</code></td><td>15</td><td>Каждая ячейка, которая не пуста</td></tr>
+    <tr><td><code>=COUNTBLANK(A2:A21)</code></td><td>5</td><td>Каждая пустая ячейка</td></tr>
+    <tr><td><code>=ROWS(A2:A21)</code></td><td>20</td><td>Размер диапазона</td></tr>
   </table>
-  <p>The eight numbers are 1200, 0, 45.5, 980, the date, 300, 75 and 60. The seven filled cells <code>COUNT</code> skipped are the four names and labels, the two spaces, the text 1200, and TRUE.</p>
-  <p>Here 15 plus 5 is 20, which is what you want a count to do. That relationship holds until a formula gets involved, which is the next section and the reason this page exists.</p>
-  <p>Say out loud why <code>COUNT</code> skips A18 while counting A2, when both cells show 1200. The answer is that A18 holds text that happens to look like a number, and <code>COUNT</code> is checking what the value is, not what it looks like.</p>
+  <p>Восемь чисел: 1200, 0, 45,5, 980, дата, 300, 75 и 60. Семь заполненных ячеек.  <code>COUNT</code>  пропускаются четыре имени и метки, два пробела, текст 1200 и TRUE.</p>
+  <p>Здесь 15 плюс 5 равно 20, именно это и нужно, чтобы считать. Эти отношения сохраняются до тех пор, пока не будет задействована формула, которая является следующим разделом и причиной существования этой страницы.</p>
+  <p>Скажи вслух, почему  <code>COUNT</code>  пропускает A18 при подсчете A2, когда в обеих ячейках отображается 1200. Ответ заключается в том, что A18 содержит текст, который выглядит как число, и  <code>COUNT</code>  проверяет, каково значение, а не то, как оно выглядит.</p>
 
-  <h2>The cleaned column where 20 plus 5 is 25</h2>
-  <p>First: column B cleans column A with <code>=IF(A2="","",A2)</code> copied down. Twenty cells, five of them showing nothing. What does <code>COUNTA(B2:B21)</code> return?</p>
-  <p><strong>20.</strong> Every cell in B holds a formula, so every cell is filled, including the five that display nothing at all.</p>
+  <h2>Очищенный столбец, где 20 плюс 5 равно 25.</h2>
+  <p>Сначала: столбец B очищает столбец A с помощью  <code>=IF(A2="","",A2)</code>  скопировал вниз. Двадцать камер, пять из них ничего не показывают. Что значит  <code>COUNTA(B2:B21)</code>  возвращаться?</p>
+  <p><strong>20.</strong>  Каждая ячейка в B содержит формулу, поэтому заполняется каждая ячейка, включая пять, в которых вообще ничего не отображается.</p>
   <table>
-    <tr><th>Formula</th><th>Column A (typed)</th><th>Column B (cleaned by formula)</th></tr>
+    <tr><th>Formula</th><th>Столбец А (печатный)</th><th>Колонка Б (очищенная по формуле)</th></tr>
     <tr><td><code>COUNT</code></td><td>8</td><td>8</td></tr>
     <tr><td><code>COUNTA</code></td><td>15</td><td>20</td></tr>
     <tr><td><code>COUNTBLANK</code></td><td>5</td><td>5</td></tr>
     <tr><td><code>COUNTA + COUNTBLANK</code></td><td>20</td><td>25</td></tr>
   </table>
-  <p>Both functions are right, and they are answering different questions. <code>COUNTA</code> asks whether the cell has anything in it, and a formula is something. <code>COUNTBLANK</code> asks whether the cell is empty or shows empty text, and it treats <code>""</code> as empty on purpose, so the everyday cleaning trick does not litter your reports with false counts.</p>
-  <p>You can watch the two disagree on one cell. <code>=COUNTBLANK(B4)</code> returns 1, and <code>=ISBLANK(B4)</code> returns FALSE. <code>ISBLANK</code> means "truly empty", and B4 is a formula, so it is not.</p>
-  <p>This is the specific failure behind a report saying 20 responses when 15 people answered. A cleaning step ran, the column looks the same, and the headline count went up by five with nobody touching the data.</p>
+  <p>Обе функции верны и отвечают на разные вопросы.  <code>COUNTA</code>  спрашивает, есть ли в ячейке что-нибудь, а формула — это что-то.  <code>COUNTBLANK</code>  спрашивает, пуста ли ячейка или показывает пустой текст, и обрабатывает  <code>""</code>  как пустое намеренно, чтобы ежедневная уборка не засоряла ваши отчеты ложными подсчетами.</p>
+  <p>Вы можете наблюдать, как двое расходятся во мнениях в одной ячейке.  <code>=COUNTBLANK(B4)</code>  возвращает 1, и  <code>=ISBLANK(B4)</code>  возвращает ЛОЖЬ.  <code>ISBLANK</code>  означает «действительно пусто», а B4 — это формула, поэтому это не так.</p>
+  <p>Это конкретный провал отчета, в котором говорится о 20 ответах, хотя ответили 15 человек. Выполнен этап очистки, столбец выглядит по-прежнему, а количество заголовков увеличилось на пять, а данные никто не трогал.</p>
 
-  <h2>Count what you actually mean</h2>
-  <p>Before the list: which formula counts the cells a human would call filled, ignoring both the empty formulas and the cell holding only spaces?</p>
+  <h2>Посчитайте, что вы на самом деле имеете в виду</h2>
+  <p>Перед списком: какая формула подсчитывает ячейки, которые человек назвал бы заполненными, игнорируя как пустые формулы, так и ячейки, содержащие только пробелы?</p>
   <table>
-    <tr><th>You want</th><th>Formula</th><th>On this data</th></tr>
+    <tr><th>Ты хочешь</th><th>Formula</th><th>По этим данным</th></tr>
     <tr><td>Numbers</td><td><code>=COUNT(A2:A21)</code></td><td>8</td></tr>
-    <tr><td>Anything filled</td><td><code>=COUNTA(A2:A21)</code></td><td>15</td></tr>
+    <tr><td>Все заполнено</td><td><code>=COUNTA(A2:A21)</code></td><td>15</td></tr>
     <tr><td>Empties</td><td><code>=COUNTBLANK(A2:A21)</code></td><td>5</td></tr>
-    <tr><td>Anything filled, formulas included</td><td><code>=COUNTIF(A2:A21,"&lt;&gt;")</code></td><td>15 on A, 20 on B</td></tr>
-    <tr><td>Real visible content only</td><td><code>=SUMPRODUCT(--(TRIM(A2:A21)&lt;&gt;""))</code></td><td>14</td></tr>
-    <tr><td>Cells matching a condition</td><td><code>=COUNTIF(A2:A21,"1200")</code></td><td>2</td></tr>
+    <tr><td>Все заполнено, включая формулы</td><td><code>=COUNTIF(A2:A21,"&lt;&gt;")</code></td><td>15 на А, 20 на Б</td></tr>
+    <tr><td>Только реальный видимый контент</td><td><code>=SUMPRODUCT(--(TRIM(A2:A21)&lt;&gt;""))</code></td><td>14</td></tr>
+    <tr><td>Ячейки, соответствующие условию</td><td><code>=COUNTIF(A2:A21,"1200")</code></td><td>2</td></tr>
   </table>
-  <p>Two of those deserve a sentence each.</p>
-  <p><code>SUMPRODUCT(--(TRIM(A2:A21)&lt;&gt;""))</code> returns 14 where <code>COUNTA</code> returns 15. The missing one is A10, the cell holding two spaces. <code>TRIM</code> strips the spaces, the result is empty text, and the cell drops out. That is usually the number a person means by "how many did we get".</p>
-  <p><code>COUNTIF(A2:A21,"1200")</code> returns 2, counting both the real number in A2 and the text in A18. <code>COUNTIF</code> compares what things look like rather than what they are, which makes it looser than <code>COUNT</code> and occasionally more useful. It is covered alongside its siblings in <a href="../excel-if-family/">IF vs COUNTIF vs SUMIF</a>.</p>
-  <p>Picture your own data for a moment. Take one column you count regularly and ask what is in it that you have never actually looked at: exported blanks, a cleaning formula, a stray total row. The count you publish is a claim about all of it.</p>
+  <p>Двое из них заслуживают наказания каждый.</p>
+  <p><code>SUMPRODUCT(--(TRIM(A2:A21)&lt;&gt;""))</code>  возвращает 14, где  <code>COUNTA</code>  возвращает 15. Недостающий — A10, ячейка, содержащая два пробела.  <code>TRIM</code>  удаляет пробелы, в результате получается пустой текст, и ячейка выпадает. Обычно это число, которое человек подразумевает под «сколько мы получили».</p>
+  <p><code>COUNTIF(A2:A21,"1200")</code>  возвращает 2, считая как действительное число в A2, так и текст в A18.  <code>COUNTIF</code>  сравнивает то, как вещи выглядят, а не то, чем они являются, что делает его более свободным, чем  <code>COUNT</code>  и иногда более полезным. Он покрыт вместе со своими братьями и сестрами в  <a href="../excel-if-family/">ЕСЛИ против СЧЁТЕСЛИ против СУММЕСЛИ</a>.</p>
+  <p>Представьте на мгновение свои собственные данные. Возьмите один столбец, который вы регулярно подсчитываете, и спросите, что в нем есть такого, на что вы никогда не смотрели: экспортированные пробелы, формула очистки, случайная итоговая строка. Количество, которое вы публикуете, является заявлением обо всем этом.</p>
 
-  <h2>The related trap: what SUM does to the same column</h2>
-  <p><code>=SUM(A2:A21)</code> on that column returns <strong>48,867.50</strong>. The amounts add to 2,660.50. The extra 46,207 is the date in A12, because Excel stores a date as the number of days since 1900 and 4 July 2026 is day 46,207.</p>
-  <p><code>SUM</code> ignores text, so the names cost nothing, and it ignores the text 1200 too, which quietly leaves 1200 out of a total that should have had it. One stray date inflates the answer, and one number typed as text shrinks it. Both show as clean numbers with no error anywhere. The date behaviour is covered in <a href="../excel-dates/">Excel dates</a>, and the text-number problem in <a href="../excel-clean-messy-data/">cleaning messy data</a>.</p>
+  <h2>Связанная ловушка: что SUM делает с тем же столбцом</h2>
+  <p><code>=SUM(A2:A21)</code>  в этом столбце возвращается  <strong>48,867.50</strong>. Суммы в сумме составляют 2660,50. Дополнительные 46 207 — это дата в формате A12, поскольку Excel хранит дату как количество дней с 1900 года и 4 июля 2026 года — это день 46 207.</p>
+  <p><code>SUM</code>  игнорирует текст, поэтому имена ничего не стоят, а также игнорирует текст 1200, что незаметно оставляет 1200 из общего числа, которое должно было бы его иметь. Одна случайная дата увеличивает ответ, а одно число, введенное в виде текста, уменьшает его. Оба показывают чистые числа без ошибок. Поведение даты описано в  <a href="../excel-dates/">Даты Excel</a>и проблема с номером текста в  <a href="../excel-clean-messy-data/">очистка запутанных данных</a>.</p>
 
-  <h2>Edge cases worth knowing</h2>
-  <p><strong>Errors count as filled.</strong> A cell holding <code>#N/A</code> is counted by <code>COUNTA</code> and skipped by <code>COUNT</code>. It also poisons <code>SUM</code>, unlike text. If a count and a total disagree about which rows exist, look for errors first.</p>
-  <p><strong>TRUE and FALSE count as filled, not as numbers.</strong> <code>COUNTA</code> counts them, <code>COUNT</code> does not, even though they behave as 1 and 0 in arithmetic.</p>
-  <p><strong>A space is not a blank.</strong> A10 holds two spaces. <code>COUNTA</code> counts it, <code>COUNTBLANK</code> does not, and no amount of squinting at the screen will show you which cells are like this. <code>=LEN(A10)</code> returning 2 is how you prove it.</p>
-  <p><strong><code>COUNTBLANK</code> takes one range only.</strong> <code>COUNT</code> and <code>COUNTA</code> accept up to 255 arguments, so <code>=COUNTA(A2:A21,C2:C21)</code> is fine while the same shape fails on <code>COUNTBLANK</code>. Add two <code>COUNTBLANK</code> calls together instead.</p>
-  <p><strong>A filtered range still counts the hidden rows.</strong> None of the three respect a filter. <code>=SUBTOTAL(103,A2:A21)</code> is the visible-cells version of <code>COUNTA</code>, and <code>=SUBTOTAL(102,A2:A21)</code> is the visible version of <code>COUNT</code>.</p>
+  <h2>Пограничные случаи, которые стоит знать</h2>
+  <p><strong>Ошибки считаются заполненными.</strong>  Ячейка холдинга  <code>#N/A</code>  рассчитывается по  <code>COUNTA</code>  и пропустил мимо  <code>COUNT</code>. Он также отравляет  <code>SUM</code>, в отличие от текста. Если количество и общее количество не совпадают относительно того, какие строки существуют, сначала найдите ошибки.</p>
+  <p><strong>ИСТИНА и ЛОЖЬ считаются заполненными, а не числами.</strong> <code>COUNTA</code>  считает их,  <code>COUNT</code>  нет, хотя в арифметике они ведут себя как 1 и 0.</p>
+  <p><strong>Пробел не является пустым.</strong>  A10 содержит два пробела.  <code>COUNTA</code>  считает это,  <code>COUNTBLANK</code>  нет, и никакое пристальное взгляд на экран не покажет вам, какие именно ячейки такие.  <code>=LEN(A10)</code>  возвращение 2 - вот как вы это докажете.</p>
+  <p><strong><code>COUNTBLANK</code>  занимает только один диапазон.</strong> <code>COUNT</code> and <code>COUNTA</code>  принять до 255 аргументов, поэтому  <code>=COUNTA(A2:A21,C2:C21)</code>  все в порядке, пока та же форма не работает  <code>COUNTBLANK</code>. Добавить два  <code>COUNTBLANK</code>  вместо этого созванивается.</p>
+  <p><strong>Отфильтрованный диапазон по-прежнему учитывает скрытые строки.</strong>  Ни один из трех не уважает фильтр.  <code>=SUBTOTAL(103,A2:A21)</code>  это версия видимых ячеек  <code>COUNTA</code>, и  <code>=SUBTOTAL(102,A2:A21)</code>  это видимая версия  <code>COUNT</code>.</p>
 
-  <h2>Why the split exists</h2>
-  <p>Excel keeps three separate ideas in a cell: whether it is empty, what type its value is, and what it looks like on screen. The three functions each read a different one of those.</p>
-  <p><code>COUNT</code> reads the type, so it answers "how many measurements do I have", which is the question behind an average or a total. That is why <code>AVERAGE</code> on this column divides by 8 and returns 6,108.44, using the same rule and the same eight cells.</p>
-  <p><code>COUNTA</code> reads emptiness, so it answers "how many rows did somebody fill in", which is the question behind a response rate.</p>
-  <p><code>COUNTBLANK</code> reads emptiness and display together, treating a formula's empty text as blank, so it answers "how much is still missing" in the way a person looking at the sheet would.</p>
-  <p>The three only look interchangeable because on a clean column of pure numbers they agree. Data does not stay clean, and the day it stops, they stop agreeing, which is when the difference reaches a report.</p>
+  <h2>Почему существует раскол</h2>
+  <p>Excel хранит в ячейке три отдельных понятия: пуста ли она, какого типа ее значение и как оно выглядит на экране. Каждая из трех функций читает разные из них.</p>
+  <p><code>COUNT</code>  читает тип и отвечает на вопрос «сколько у меня измерений», что является вопросом, лежащим в основе среднего или общего числа. Поэтому  <code>AVERAGE</code>  в этом столбце делится на 8 и возвращает 6108,44, используя то же правило и те же восемь ячеек.</p>
+  <p><code>COUNTA</code>  читает пустоту, поэтому отвечает «сколько строк кто-то заполнил», что и является вопросом, лежащим в основе скорости ответа.</p>
+  <p><code>COUNTBLANK</code>  читает пустоту и отображает ее вместе, рассматривая пустой текст формулы как пустой, поэтому он отвечает «сколько еще не хватает» так, как это сделал бы человек, смотрящий на лист.</p>
+  <p>Эти три числа выглядят взаимозаменяемыми только потому, что в чистом столбце чистых чисел они совпадают. Данные не остаются чистыми, и в тот день, когда они прекращаются, они перестают согласовываться, и именно тогда разница достигает отчета.</p>
 
-  <h2>How to apply this to your own work</h2>
+  <h2>Как применить это в своей работе</h2>
   <ol>
-    <li>On any column you count, put <code>=COUNTA(range)+COUNTBLANK(range)</code> next to <code>=ROWS(range)</code>. Equal is normal. Higher means formulas returning empty text. Lower would mean a range you did not select fully.</li>
-    <li>If <code>COUNT</code> and <code>COUNTA</code> differ by more than you expected, the gap is your text-and-blank problem in one number. Investigate the gap, not the column.</li>
-    <li>Use <code>SUMPRODUCT(--(TRIM(range)&lt;&gt;""))</code> when the number goes in front of a person. It is the count that matches what they would get by scrolling.</li>
-    <li>Label the count in the sheet with what it counts. "Responses (filled cells)" survives being read six months later. "Count" does not.</li>
-    <li>Do not go back and change every count in every workbook. Fix the ones whose numbers are published, starting with anything anyone reconciles against.</li>
+    <li>В любом столбце, который вы считаете, поставьте  <code>=COUNTA(range)+COUNTBLANK(range)</code>  рядом с  <code>=ROWS(range)</code>. Равенство – это нормально. Выше означает, что формулы возвращают пустой текст. Ниже будет означать, что вы выбрали не полностью диапазон.</li>
+    <li>If <code>COUNT</code> and <code>COUNTA</code>  отличаются больше, чем вы ожидали, разрыв — это ваша проблема с текстом и пробелом в одном числе. Исследуйте пробел, а не колонну.</li>
+    <li>Use <code>SUMPRODUCT(--(TRIM(range)&lt;&gt;""))</code>  когда число идет перед человеком. Это количество, соответствующее тому, что они получат при прокрутке.</li>
+    <li>Обозначьте количество на листе тем, что оно считает. «Ответы (заполненные ячейки)» сохраняются, если их прочитать шесть месяцев спустя. «Считать» нет.</li>
+    <li>Не возвращайтесь назад и не меняйте каждый счет в каждой книге. Исправьте тех, чьи номера опубликованы, начиная с того, с чем кто-то примиряется.</li>
   </ol>
-  <p>If you have paper nearby, draw twenty boxes and mark each one with what it holds from the table above. Then tick the ones each function counts, one pass per function. Three passes over the same twenty boxes teaches the split faster than any table can.</p>
+  <p>Если у вас под рукой есть бумага, нарисуйте двадцать коробок и отметьте в каждой содержимое, указанное в таблице выше. Затем отметьте те, которые учитывает каждая функция, один проход на функцию. Три прохода по одним и тем же двадцати ящикам учат разделять быстрее, чем любой стол.</p>
 
-  <h2>Cheat sheet</h2>
+  <h2>Шпаргалка</h2>
   <table>
-    <tr><th>Function</th><th>Counts</th><th>Skips</th><th>Use it for</th></tr>
-    <tr><td><code>COUNT</code></td><td>Numbers, dates, times</td><td>Text, TRUE/FALSE, errors, blanks, numbers stored as text</td><td>How many measurements</td></tr>
-    <tr><td><code>COUNTA</code></td><td>Everything that is not empty, formulas included</td><td>Truly empty cells only</td><td>How many rows were filled in</td></tr>
-    <tr><td><code>COUNTBLANK</code></td><td>Empty cells and formulas returning ""</td><td>Everything else</td><td>How much is still missing</td></tr>
-    <tr><td><code>COUNTIF</code></td><td>Cells matching a condition, by appearance</td><td>Non-matching cells</td><td>How many of a particular thing</td></tr>
-    <tr><td><code>SUBTOTAL(103,…)</code></td><td>Filled visible cells</td><td>Rows hidden by a filter</td><td>Counting what is on screen</td></tr>
+    <tr><th>Function</th><th>Counts</th><th>Skips</th><th>Используйте его для</th></tr>
+    <tr><td><code>COUNT</code></td><td>Числа, даты, время</td><td>Текст, ИСТИНА/ЛОЖЬ, ошибки, пробелы, числа, сохраненные в виде текста.</td><td>Сколько измерений</td></tr>
+    <tr><td><code>COUNTA</code></td><td>Все, что не пусто, включая формулы</td><td>Только действительно пустые ячейки</td><td>Сколько строк было заполнено</td></tr>
+    <tr><td><code>COUNTBLANK</code></td><td>Пустые ячейки и формулы, возвращающие ""</td><td>Все остальное</td><td>Сколько еще не хватает</td></tr>
+    <tr><td><code>COUNTIF</code></td><td>Ячейки, соответствующие условию по внешнему виду</td><td>Несовпадающие ячейки</td><td>Сколько конкретной вещи</td></tr>
+    <tr><td><code>SUBTOTAL(103,…)</code></td><td>Заполненные видимые ячейки</td><td>Строки скрыты фильтром</td><td>Считаем, что на экране</td></tr>
   </table>
 
-  <h2>The one habit to keep</h2>
-  <p>Put <code>COUNTA</code> plus <code>COUNTBLANK</code> beside <code>ROWS</code> on any column you report a count from. It takes ten seconds, it needs no judgment, and the one time the three do not agree it will tell you something about your data that the column itself was hiding.</p>
+  <h2>Единственная привычка, которую нужно сохранить</h2>
+  <p>Put <code>COUNTA</code> plus <code>COUNTBLANK</code> beside <code>ROWS</code>  в любом столбце, из которого вы сообщаете количество. Это занимает десять секунд, не требует никаких суждений, и в тот единственный раз, когда все трое не придут к согласию, он расскажет вам что-то о ваших данных, что скрывал сам столбец.</p>
 
-  <p>Which number in your current workbook is a count, and would you be able to say out loud, right now, exactly which cells it includes?</p>
+  <p>Какое число в вашей текущей книге является числом, и можете ли вы прямо сейчас сказать вслух, какие именно ячейки оно включает?</p>
 
-  <div class="note"><strong>Every figure here was run in Excel before it was published.</strong> The 8, the 15, the 5, the 20 and the 25 are real outputs from the twenty-cell column described above, not worked examples.</div>
+  <div class="note"><strong>Каждый рисунок здесь был обработан в Excel перед публикацией.</strong>  8, 15, 5, 20 и 25 — это реальные результаты столбца из двадцати ячеек, описанного выше, а не проработанные примеры.</div>
 
   <div class="book">
-    <strong>A count is only as good as your certainty about what is in the column.</strong>
-    <p><em>Excel for Analysts</em> is 378 pages on the everyday work around that: what a cell really holds, how exports lie, and which formula answers which question.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=excel-count-counta-countblank" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-count-counta-countblank'})">Excel for Analysts, $19 &rarr;</a>
+    <strong>Подсчет будет настолько хорош, насколько вы уверены в том, что находится в столбце.</strong>
+    <p><em>Excel для аналитиков</em>  это 378 страниц, посвященных повседневной работе: что на самом деле содержит ячейка, как осуществляется экспорт и какая формула отвечает на какой вопрос.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=excel-count-counta-countblank" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-count-counta-countblank'})">Excel для аналитиков, 19 долларов США →</a>
   </div>
 
   <div class="cta">
-    <strong>Practice this where it is marked.</strong>
-    <p style="margin:6px 0 0">The <a href="../../excel/">Excel Kit</a> covers formulas, cleanup, pivot tables and charts with worked examples and a mock exam, in the browser. The counting family is question 26 of the <a href="../../excel-cert/">MO-210 practice drill</a>.</p>
-    <a class="btn" href="../../excel/">Open the Excel Kit →</a>
+    <strong>Практикуйте это там, где это отмечено.</strong>
+    <p style="margin:6px 0 0">The <a href="../../excel/">Excel комплект</a>  охватывает формулы, очистку, сводные таблицы и диаграммы с проработанными примерами и пробным экзаменом в браузере. Счетная семья – это вопрос 26  <a href="../../excel-cert/">Учебная дрель МО-210</a>.</p>
+    <a class="btn" href="../../excel/">Откройте набор Excel →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> &middot; <a href="../excel-if-family/">IF, COUNTIF and SUMIF</a> · <a href="../excel-clean-messy-data/">Clean Messy Data</a> · <a href="../excel-dates/">Excel Dates</a> · <a href="../excel-text-functions/">Excel Text Functions</a> · <a href="../excel-paste-special/">Paste Special</a> · <a href="../excel-sum-of-id-trap/">The SUM of ID Trap</a> · <a href="../excel-tables/">Excel Tables vs Ranges</a> · <a href="../vlookup-vs-xlookup/">VLOOKUP vs XLOOKUP</a> · <a href="../../excel/">Excel Kit</a>
-    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../excel-if-family/">ЕСЛИ, СЧЁТЕСЛИ и СУММЕСЛИ</a> · <a href="../excel-clean-messy-data/">Очистите беспорядочные данные</a> · <a href="../excel-dates/">Даты Excel</a> · <a href="../excel-text-functions/">Текстовые функции Excel</a> · <a href="../excel-paste-special/">Специальная вставка</a> · <a href="../excel-sum-of-id-trap/">Ловушка суммы идентификаторов</a> · <a href="../excel-tables/">Таблицы Excel против диапазонов</a> · <a href="../vlookup-vs-xlookup/">ВПР против XLOOKUP</a> · <a href="../../excel/">Excel комплект</a>
+    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-<script src="../../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

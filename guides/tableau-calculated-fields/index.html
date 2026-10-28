@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tableau Calculated Fields: Row Level, Aggregate, LOD and Table Calc &mdash; Analyst Prep Kit</title>
-<meta name="description" content="Four kinds of calculation that look alike in the editor and behave completely differently. Which one runs per row, which per mark, which ignores your filters, and the error message that tells you which you have written by accident.">
+<title>Вычисляемые поля Tableau: уровень строк, агрегат, уровень детализации и расчет таблицы — комплект подготовки аналитика</title>
+<meta name="description" content="Четыре вида вычислений, которые в редакторе выглядят одинаково, но ведут себя совершенно по-разному. Какой из них выполняется для каждой строки, какой для каждой отметки, какой игнорирует ваши фильтры и сообщение об ошибке, сообщающее вам, что вы написали случайно.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/tableau-calculated-fields/">
-<meta property="og:title" content="Calculated Fields in Tableau: The Four Kinds and How to Tell Them Apart">
-<meta property="og:description" content="Row level, aggregate, level of detail, table calculation. Four kinds, one editor, very different results.">
+<meta property="og:title" content="Вычисляемые поля в Tableau: четыре типа и как их отличить">
+<meta property="og:description" content="Уровень строки, агрегат, уровень детализации, расчет таблицы. Четыре вида, один редактор, очень разные результаты.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/tableau-calculated-fields/">
 <meta name="twitter:card" content="summary_large_image">
@@ -69,12 +69,11 @@
   figcaption{font-size:13.5px;color:var(--muted);margin-top:6px}
 </style>
 <!-- SEO:JSONLD:START -->
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "Calculated Fields in Tableau: The Four Kinds and How to Tell Them Apart",
-  "description": "Four kinds of calculation that look alike in the editor and behave completely differently. Which one runs per row, which per mark, which ignores your filters, and the error message that tells you which you have written by accident.",
+  "headline": "Вычисляемые поля в Tableau: четыре типа и как их отличить",
+  "description": "Четыре вида вычислений, которые в редакторе выглядят одинаково, но ведут себя совершенно по-разному. Какой из них выполняется для каждой строки, какой для каждой отметки, какой игнорирует ваши фильтры и сообщение об ошибке, сообщающее вам, что вы написали случайно.",
   "url": "https://michaelnocito.github.io/analyst-prep-kit/guides/tableau-calculated-fields/",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -82,20 +81,19 @@
   },
   "author": {
     "@type": "Person",
-    "name": "Michael Nocito",
+    "name": "Майкл Носито",
     "url": "https://michaelnocito.github.io"
   },
   "publisher": {
     "@type": "Person",
-    "name": "Michael Nocito"
+    "name": "Майкл Носито"
   },
   "inLanguage": "en",
   "datePublished": "2026-08-23",
   "dateModified": "2026-08-23"
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
@@ -114,47 +112,46 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Tableau Calculated Fields",
+      "name": "Таблица вычисляемых полей",
       "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/tableau-calculated-fields/"
     }
   ]
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "What are the types of calculated field in Tableau?",
+      "name": "Каковы типы вычисляемых полей в Tableau?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Four: row level, which runs once per row of data; aggregate, which runs once per mark after grouping; level of detail expressions, which compute at a grain you specify; and table calculations, which run on the result table after everything else."
+        "text": "Четвертый: уровень строк, который выполняется один раз для каждой строки данных; агрегат, который выполняется один раз для каждой отметки после группировки; уровень детализации выражений, которые вычисляются с указанной вами степенью детализации; и табличные вычисления, которые выполняются после всего остального с таблицей результатов."
       }
     },
     {
       "@type": "Question",
-      "name": "Why does Tableau say cannot mix aggregate and non-aggregate arguments?",
+      "name": "Почему в Таблице говорится, что нельзя смешивать агрегированные и неагрегированные аргументы?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Because one part of the formula returns one value per mark and another returns one per row, and there is no single grain for the result. Wrap the row-level part in an aggregation, usually SUM, MIN or ATTR, or move the whole thing to row level."
+        "text": "Потому что одна часть формулы возвращает одно значение для каждой отметки, а другая — по одному для каждой строки, и для результата нет единого зерна. Оберните часть уровня строки в агрегацию, обычно SUM, MIN или ATTR, или переместите все это на уровень строки."
       }
     },
     {
       "@type": "Question",
-      "name": "What is a FIXED level of detail expression?",
+      "name": "Что такое ФИКСИРОВАННЫЙ уровень детализации выражения?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "A calculation computed at a grain you name, independent of what is on the view. {FIXED [Customer]: SUM([Sales])} gives total sales per customer even when the view shows regions. It ignores dimension filters unless they are added to context."
+        "text": "Расчет вычисляется с точностью до зерна, которое вы называете, независимо от того, что отображается в представлении. {FIXED [Клиент]: SUM([Продажи])} дает общий объем продаж на одного клиента, даже если в представлении показаны регионы. Он игнорирует фильтры измерений, если они не добавлены в контекст."
       }
     },
     {
       "@type": "Question",
-      "name": "Should I calculate a ratio as SUM(a)/SUM(b) or AVG(a/b)?",
+      "name": "Должен ли я рассчитывать соотношение как SUM(a)/SUM(b) или AVG(a/b)?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "SUM(a)/SUM(b) in nearly all cases. Averaging row-level ratios weights every row equally regardless of size, which gives a different and usually wrong answer."
+        "text": "СУММ(а)/СУММ(б) почти во всех случаях. Усреднение соотношений на уровне строк дает одинаковый вес каждой строке независимо от размера, что дает другой и обычно неправильный ответ."
       }
     }
   ]
@@ -164,111 +161,111 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../../tableau/">Tableau Kit</a></p>
-  <h1>Calculated Fields in Tableau: The Four Kinds and How to Tell Them Apart</h1>
-  <p class="meta">Michael Nocito &middot; Updated August 2026 &middot; Every number on this page was worked before it was published</p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../../tableau/">Табличный комплект</a></p>
+  <h1>Вычисляемые поля в Tableau: четыре типа и как их отличить</h1>
+  <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Все числа на этой странице были обработаны до их публикации.</p>
 
-  <p>The calculation editor looks the same for all of them, which is the problem. Four kinds of calculation, one dialog, and the only way to tell which one you have written is to know what the parts do.</p>
+  <p>Редактор вычислений для всех выглядит одинаково, и в этом проблема. Четыре вида вычислений, один диалог, и единственный способ определить, какой из них вы написали, — это знать, что делают его части.</p>
 
-  <p>What you do: decide the grain before you type. Per row, per mark, per named grain, or across the finished table.</p>
+  <p>Что вы делаете: определите зерно, прежде чем печатать. По строке, по метке, по названному зерну или по всей готовой таблице.</p>
 
-  <p><strong>The short version.</strong> The question is always at what grain does this run.</p>
+  <p><strong>Краткая версия.</strong>  Вопрос всегда в том, на каком уровне это происходит.</p>
 
-  <h2>1. Row level</h2>
-  <p>Runs once per row of the underlying data, before any grouping.</p>
+  <h2>1. Уровень строки</h2>
+  <p>Выполняется один раз для каждой строки базовых данных перед любой группировкой.</p>
   <pre><code>[Profit] / [Sales]
 IF [Status] = "Cancelled" THEN 0 ELSE [Amount] END
 DATEDIFF('day', [Ordered], [Shipped])</code></pre>
-  <p>Use these for classifying and cleaning: a flag column, a band, a difference between two dates on the same row. They behave like a new column in the source, and Tableau will aggregate them for you when they land on a shelf.</p>
-  <p>The trap: <code>AVG([Profit]/[Sales])</code> averages the per-row ratios. On rows of very different sizes that is not the profit margin, it is the average of margins, and it can be several points away from the real answer.</p>
+  <p>Используйте их для классификации и очистки: столбец флажков, полоса, разница между двумя датами в одной строке. Они ведут себя как новый столбец в источнике, и Tableau соберет их для вас, когда они окажутся на полке.</p>
+  <p>Ловушка:  <code>AVG([Profit]/[Sales])</code>  усредняет соотношения по строкам. В строках очень разных размеров это не размер прибыли, а среднее значение прибыли, и оно может отличаться на несколько пунктов от реального ответа.</p>
 
-  <h2>2. Aggregate</h2>
-  <p>Runs once per mark, after Tableau has grouped by whatever is on the view.</p>
+  <h2>2. Агрегат</h2>
+  <p>Запускается один раз для каждой метки, после того как Tableau сгруппировала все, что находится в представлении.</p>
   <pre><code>SUM([Profit]) / SUM([Sales])
 COUNTD([Customer])
 MIN([Order Date])</code></pre>
-  <p>This is where a ratio belongs. <code>SUM([Profit])/SUM([Sales])</code> is the true margin at every level of aggregation, and it re-computes correctly when you change what is on the view.</p>
+  <p>Здесь самое главное соотношение.  <code>SUM([Profit])/SUM([Sales])</code>  — это истинная маржа на каждом уровне агрегации, и она корректно пересчитывается при изменении содержимого представления.</p>
 
-  <div class="note"><strong>The error message is a diagnosis.</strong> "Cannot mix aggregate and non-aggregate arguments" means half your formula runs per row and half per mark. Wrap the row-level half in <code>SUM</code>, <code>MIN</code> or <code>ATTR</code>. <code>ATTR</code> is the honest one for text: it returns the value if it is the same for every row in the mark, and an asterisk if it is not, which is information rather than a guess.</div>
+  <div class="note"><strong>Сообщение об ошибке является диагнозом.</strong>  «Невозможно смешивать агрегированные и неагрегированные аргументы» означает, что половина формулы выполняется в каждой строке, а половина — в каждой отметке. Оберните половину уровня строки в  <code>SUM</code>, <code>MIN</code> or <code>ATTR</code>. <code>ATTR</code>  является честным для текста: он возвращает значение, если оно одинаковое для каждой строки метки, и звездочку, если это не так, что является информацией, а не предположением.</div>
 
-  <h2>3. Level of detail expressions</h2>
-  <p>Computed at a grain you specify, in braces, independent of the view.</p>
+  <h2>3. Уровень детализации выражений</h2>
+  <p>Вычисляется с указанной вами степенью дробности, в фигурных скобках, независимо от представления.</p>
   <table>
-    <tr><th>Keyword</th><th>Means</th><th>Typical use</th></tr>
-    <tr><td><code>FIXED</code></td><td>This grain, ignoring the view</td><td>Customer total shown on a region chart</td></tr>
-    <tr><td><code>INCLUDE</code></td><td>The view grain plus these dimensions</td><td>Average of per-customer totals</td></tr>
-    <tr><td><code>EXCLUDE</code></td><td>The view grain minus these dimensions</td><td>Percent of a total that ignores one dimension</td></tr>
+    <tr><th>Keyword</th><th>Means</th><th>Типичное использование</th></tr>
+    <tr><td><code>FIXED</code></td><td>Это зерно, игнорируя взгляд</td><td>Общее количество клиентов показано на диаграмме регионов</td></tr>
+    <tr><td><code>INCLUDE</code></td><td>Зернистость вида плюс эти размеры</td><td>Средняя сумма по каждому клиенту</td></tr>
+    <tr><td><code>EXCLUDE</code></td><td>Зернистость вида минус эти размеры</td><td>Процент от общего числа, игнорирующий одно измерение</td></tr>
   </table>
   <pre><code>{FIXED [Customer]: SUM([Sales])}
 {INCLUDE [Customer]: SUM([Sales])}
 {EXCLUDE [Region]: SUM([Sales])}</code></pre>
-  <p>The classic use is a cohort or a first-order date: <code>{FIXED [Customer]: MIN([Order Date])}</code> gives every row the customer's first order date, which is the foundation of any retention view.</p>
-  <p><code>FIXED</code> runs before dimension filters, which is the single most common surprise in Tableau. If a filtered view shows an unfiltered denominator, put the filter in context. That sequence is set out in <a href="../tableau-filter-order-of-operations/">the order of operations</a>.</p>
+  <p>Классическое использование — это когорта или дата первого заказа:  <code>{FIXED [Customer]: MIN([Order Date])}</code>  дает каждой строке дату первого заказа клиента, что является основой любого представления об удержании.</p>
+  <p><code>FIXED</code>  выполняется перед фильтрами измерений, что является наиболее распространенным сюрпризом в Tableau. Если отфильтрованное представление показывает нефильтрованный знаменатель, поместите фильтр в контекст. Эта последовательность изложена в  <a href="../tableau-filter-order-of-operations/">Порядок операций</a>.</p>
 
-  <h2>4. Table calculations</h2>
-  <p>Run last, on the table of results the view has already produced.</p>
+  <h2>4. Табличные расчеты</h2>
+  <p>Запускаем последним, на таблицу результатов представление уже выдало.</p>
   <pre><code>RUNNING_SUM(SUM([Sales]))
 INDEX()
 SUM([Sales]) / TOTAL(SUM([Sales]))
 LOOKUP(SUM([Sales]), -1)</code></pre>
-  <p>Because they operate on the result table, they depend on how the table is laid out, which is what Compute Using controls. Change the view and a table calculation can change meaning without you editing it. That property is covered in <a href="../tableau-table-calculations/">table calculations</a>.</p>
+  <p>Поскольку они работают с таблицей результатов, они зависят от того, как она расположена, что и контролирует использование вычислений. Измените представление, и расчет таблицы может изменить значение без вашего редактирования. Это имущество покрыто  <a href="../tableau-table-calculations/">таблица расчетов</a>.</p>
 
-  <h2>Choosing between them</h2>
+  <h2>Выбор между ними</h2>
   <table>
-    <tr><th>You want</th><th>Kind</th><th>Example</th></tr>
-    <tr><td>A flag or band per row</td><td>Row level</td><td><code>IF [Days] &gt; 30 THEN "Late" ELSE "On time" END</code></td></tr>
-    <tr><td>A ratio at any level</td><td>Aggregate</td><td><code>SUM([Profit])/SUM([Sales])</code></td></tr>
-    <tr><td>Each customer's first order date</td><td>FIXED</td><td><code>{FIXED [Customer]: MIN([Order Date])}</code></td></tr>
-    <tr><td>Rank within the view</td><td>Table calc</td><td><code>RANK(SUM([Sales]))</code></td></tr>
-    <tr><td>Difference from last month</td><td>Table calc</td><td><code>ZN(SUM([Sales]) - LOOKUP(SUM([Sales]), -1))</code></td></tr>
-    <tr><td>Average order size per customer</td><td>INCLUDE</td><td><code>AVG({INCLUDE [Customer]: SUM([Sales])})</code></td></tr>
+    <tr><th>Ты хочешь</th><th>Kind</th><th>Example</th></tr>
+    <tr><td>Флаг или полоса в каждом ряду</td><td>Уровень строки</td><td><code>IF [Days] &gt; 30 THEN "Late" ELSE "On time" END</code></td></tr>
+    <tr><td>Соотношение на любом уровне</td><td>Aggregate</td><td><code>SUM([Profit])/SUM([Sales])</code></td></tr>
+    <tr><td>Дата первого заказа каждого клиента</td><td>FIXED</td><td><code>{FIXED [Customer]: MIN([Order Date])}</code></td></tr>
+    <tr><td>Рейтинг в представлении</td><td>Табличный расчет</td><td><code>RANK(SUM([Sales]))</code></td></tr>
+    <tr><td>Отличие от прошлого месяца</td><td>Табличный расчет</td><td><code>ZN(SUM([Sales]) - LOOKUP(SUM([Sales]), -1))</code></td></tr>
+    <tr><td>Средний размер заказа на одного клиента</td><td>INCLUDE</td><td><code>AVG({INCLUDE [Customer]: SUM([Sales])})</code></td></tr>
   </table>
 
-  <h2>Habits that make calculations maintainable</h2>
+  <h2>Привычки, которые делают вычисления удобными</h2>
   <ol>
-    <li><strong>Name them for what they mean,</strong> not for what they do. <code>Margin</code>, not <code>Calc1</code> and not <code>SUM Profit over SUM Sales</code>.</li>
-    <li><strong>Put a comment at the top</strong> with <code>//</code>. Two lines saying what grain it runs at and why saves the next person an hour.</li>
-    <li><strong>Build in steps.</strong> Three small named calculations beat one long nested one, and each can be dropped on a sheet and checked.</li>
-    <li><strong>Check every calculation against a number you know,</strong> at two different levels of aggregation. Many calculation bugs are correct at one level and wrong at another.</li>
-    <li><strong>Use <code>ZN</code> around anything that can be null</strong> in an arithmetic chain, or one missing month quietly empties a running total.</li>
+    <li><strong>Назовите их по тому, что они означают,</strong>  не за то, что они делают.  <code>Margin</code>, нет  <code>Calc1</code>  и не  <code>SUM Profit over SUM Sales</code>.</li>
+    <li><strong>Оставьте комментарий вверху</strong> with <code>//</code>. Две строчки о том, на каком зерне он работает и почему следующему человеку экономится час.</li>
+    <li><strong>Стройте поэтапно.</strong>  Три небольших вычисления с именами превосходят одно длинное вложенное, и каждое из них можно перенести на лист и проверить.</li>
+    <li><strong>Сверяйте каждый расчет с известным вам числом,</strong>  на двух разных уровнях агрегации. Многие ошибки в расчетах верны на одном уровне и ошибочны на другом.</li>
+    <li><strong>Use <code>ZN</code>  вокруг всего, что может быть нулевым</strong>  в арифметической цепочке, или один пропущенный месяц незаметно опустошает текущий итог.</li>
   </ol>
 
-  <h2>How to apply this to your own work</h2>
+  <h2>Как применить это в своей работе</h2>
   <ol>
-    <li>Open a workbook you inherited and classify every calculated field into one of the four kinds.</li>
-    <li>Find any <code>AVG</code> of a row-level ratio and compare it to the <code>SUM</code> over <code>SUM</code> version. Note the gap.</li>
-    <li>Check every <code>FIXED</code> against the filters that ought to affect it.</li>
-    <li>Add a two-line comment to your five most-used calculations.</li>
-    <li>Validate one calculation at the row level and again at the total. Agreement at both is the test.</li>
+    <li>Откройте книгу, которую вы унаследовали, и отнесите каждое вычисляемое поле к одному из четырех типов.</li>
+    <li>Найдите любой  <code>AVG</code>  отношения на уровне строки и сравнить его с  <code>SUM</code> over <code>SUM</code>  версия. Обратите внимание на пробел.</li>
+    <li>Проверяйте каждый  <code>FIXED</code>  против фильтров, которые должны на него повлиять.</li>
+    <li>Добавьте комментарий в две строки к пяти наиболее часто используемым вычислениям.</li>
+    <li>Проверьте одно вычисление на уровне строки и еще раз на уровне итога. Согласие в обоих случаях является проверкой.</li>
   </ol>
 
-  <h2>The one habit to keep</h2>
-  <p>Say the grain out loud before typing: per row, per mark, per customer, or across the table. Every Tableau calculation question is that question wearing different clothes.</p>
+  <h2>Единственная привычка, которую нужно сохранить</h2>
+  <p>Прежде чем печатать, произнесите вслух зернистость: для каждой строки, для каждой марки, для каждого клиента или по всей таблице. Каждый вопрос расчета Tableau — это вопрос в разной одежде.</p>
 
-  <p>Which kind is the calculation you rely on most, and does it respect your filters?</p>
+  <p>На какие вычисления вы больше всего полагаетесь и учитывают ли они ваши фильтры?</p>
 
-  <div class="note"><strong>Written from the tool as it ships.</strong> The four calculation kinds, the mixed-argument error and the LOD keywords are all standard Tableau Desktop behaviour.</div>
+  <div class="note"><strong>Написано с помощью инструмента в момент его поставки.</strong>  Четыре типа вычислений, ошибка смешанных аргументов и ключевые слова LOD — все это стандартное поведение Tableau Desktop.</div>
 
   <div class="book">
-    <strong>Cannot mix aggregate and non-aggregate arguments is Tableau telling you which kind you wrote.</strong>
-    <p><em>Tableau for Analysts</em> is 110 pages on how Tableau actually thinks: dimensions against measures, relationships against joins, sets, and level of detail. Enough that you stop dragging fields until it looks right.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/tableau-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=tableau-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-tableau-calculated-fields'})">Tableau for Analysts, $19 &rarr;</a>
+    <strong>Нельзя смешивать агрегированные и неагрегированные аргументы. Табло сообщает вам, какой тип вы написали.</strong>
+    <p><em>Таблица для аналитиков</em>  это 110 страниц о том, как на самом деле думает Tableau: измерения против мер, отношения против объединений, наборы и уровень детализации. Достаточно того, что вы перестанете перетаскивать поля, пока все не станет выглядеть правильно.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/tableau-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=tableau-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-tableau-calculated-fields'})">Таблица для аналитиков, $19 →</a>
   </div>
 
   <div class="cta">
-    <strong>Calculations are where Tableau stops being drag and drop.</strong>
-    <p style="margin:6px 0 0"><a href="../tableau-table-calculations/">Table calculations</a> covers the fourth kind in depth, and <a href="../tableau-filter-order-of-operations/">the order of operations</a> explains when each one runs.</p>
-    <a class="btn" href="../tableau-table-calculations/">Read Table Calculations &rarr;</a>
+    <strong>В вычислениях Tableau перестает перетаскиваться.</strong>
+    <p style="margin:6px 0 0"><a href="../tableau-table-calculations/">таблица расчетов</a>  подробно охватывает четвертый вид, и  <a href="../tableau-filter-order-of-operations/">Порядок операций</a>  объясняет, когда каждый из них работает.</p>
+    <a class="btn" href="../tableau-table-calculations/">Читать Табличные расчеты →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../tableau-table-calculations/">Table Calculations</a> &middot; <a href="../tableau-filter-order-of-operations/">Filter Order</a> &middot; <a href="../tableau-concepts/">Tableau Concepts</a> &middot; <a href="../tableau-relationships/">Relationships</a> &middot; <a href="../build-a-tableau-dashboard/">Build a Tableau Dashboard</a> &middot; <a href="../../tableau/">Tableau Kit</a>
-    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../tableau-table-calculations/">таблица расчетов</a> &middot; <a href="../tableau-filter-order-of-operations/">Порядок фильтра</a> &middot; <a href="../tableau-concepts/">Концепции таблиц</a> &middot; <a href="../tableau-relationships/">Relationships</a> &middot; <a href="../build-a-tableau-dashboard/">Создайте панель управления Tableau</a> &middot; <a href="../../tableau/">Табличный комплект</a>
+    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-<script src="../../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

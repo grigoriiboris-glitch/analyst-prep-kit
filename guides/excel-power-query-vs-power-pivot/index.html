@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Power Query vs Power Pivot: Which One, and When &mdash; Analyst Prep Kit</title>
-<meta name="description" content="Power Query shapes data on the way in. Power Pivot models and measures it once it is there. The dividing line, the four jobs each is best at, and why the answer to a slow workbook is usually the first one.">
+<title>Power Query и Power Pivot: какой и когда — комплект для подготовки аналитика</title>
+<meta name="description" content="Power Query формирует данные по мере их поступления. Power Pivot моделирует и измеряет их, как только они поступают. Разделительная линия, четыре профессии, с которыми каждая из них справляется лучше всего, и почему ответом на медленную рабочую тетрадь обычно является первый ответ.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-power-query-vs-power-pivot/">
-<meta property="og:title" content="Power Query or Power Pivot: Which One Does the Thing You Are Trying to Do">
-<meta property="og:description" content="One reshapes before the load, one measures after it. The line between them, with four jobs each.">
+<meta property="og:title" content="Power Query или Power Pivot: какой из них делает то, что вы пытаетесь сделать">
+<meta property="og:description" content="Перед нагрузкой меняют форму, после нее измеряют. Очередь между ними, по четыре задания в каждом.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-power-query-vs-power-pivot/">
 <meta name="twitter:card" content="summary_large_image">
@@ -69,12 +69,11 @@
   figcaption{font-size:13.5px;color:var(--muted);margin-top:6px}
 </style>
 <!-- SEO:JSONLD:START -->
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "Power Query or Power Pivot: Which One Does the Thing You Are Trying to Do",
-  "description": "Power Query shapes data on the way in. Power Pivot models and measures it once it is there. The dividing line, the four jobs each is best at, and why the answer to a slow workbook is usually the first one.",
+  "headline": "Power Query или Power Pivot: какой из них делает то, что вы пытаетесь сделать",
+  "description": "Power Query формирует данные по мере их поступления. Power Pivot моделирует и измеряет их, как только они поступают. Разделительная линия, четыре профессии, с которыми каждая из них справляется лучше всего, и почему ответом на медленную рабочую тетрадь обычно является первый ответ.",
   "url": "https://michaelnocito.github.io/analyst-prep-kit/guides/excel-power-query-vs-power-pivot/",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -82,20 +81,19 @@
   },
   "author": {
     "@type": "Person",
-    "name": "Michael Nocito",
+    "name": "Майкл Носито",
     "url": "https://michaelnocito.github.io"
   },
   "publisher": {
     "@type": "Person",
-    "name": "Michael Nocito"
+    "name": "Майкл Носито"
   },
   "inLanguage": "en",
   "datePublished": "2026-08-23",
   "dateModified": "2026-08-23"
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
@@ -114,47 +112,46 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Power Query vs Power Pivot",
+      "name": "Power Query против Power Pivot",
       "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/excel-power-query-vs-power-pivot/"
     }
   ]
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "What is the difference between Power Query and Power Pivot?",
+      "name": "В чем разница между Power Query и Power Pivot?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Power Query is the load step: it connects, cleans, reshapes and combines data before it reaches Excel, and it records those steps so they replay on refresh. Power Pivot is the model: it stores the loaded tables, holds the relationships between them, and calculates DAX measures over them."
+        "text": "Power Query — это этап загрузки: он соединяет, очищает, изменяет и объединяет данные до того, как они попадут в Excel, и записывает эти шаги, чтобы они воспроизводились при обновлении. Power Pivot — это модель: она хранит загруженные таблицы, поддерживает связи между ними и вычисляет по ним показатели DAX."
       }
     },
     {
       "@type": "Question",
-      "name": "Do I need Power Pivot if I have Power Query?",
+      "name": "Нужен ли мне Power Pivot, если у меня есть Power Query?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Not for a single table. You need Power Pivot when you have several tables that must relate to each other, when you need measures reused across many pivots, or when the row count exceeds what a worksheet can hold."
+        "text": "Не за один стол. Вам нужен Power Pivot, когда у вас есть несколько таблиц, которые должны быть связаны друг с другом, когда вам нужно, чтобы показатели повторно использовались во многих сводных таблицах или когда количество строк превышает то, что может содержать рабочий лист."
       }
     },
     {
       "@type": "Question",
-      "name": "Is Power Query available in all versions of Excel?",
+      "name": "Доступен ли Power Query во всех версиях Excel?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "It is built into Excel 2016 and later on Windows under the Data tab as Get and Transform. Excel 2010 and 2013 needed an add-in. Mac support arrived later and is still narrower than on Windows."
+        "text": "Он встроен в Excel 2016 и более поздних версиях Windows на вкладке «Данные» как «Получить и преобразовать». Для Excel 2010 и 2013 требовалась надстройка. Поддержка Mac появилась позже и все еще уже, чем в Windows."
       }
     },
     {
       "@type": "Question",
-      "name": "Which one should I learn first?",
+      "name": "Какой из них мне следует выучить в первую очередь?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Power Query. It solves more everyday problems, it fixes most slow-workbook complaints, and it is the step everything else depends on. Power Pivot is worth learning the moment you write the same measure into three different pivots."
+        "text": "Мощность запроса. Он решает больше повседневных проблем, устраняет большинство жалоб на медленную работу книг, и именно от этого шага зависит все остальное. Power Pivot стоит изучить в тот момент, когда вы записываете одну и ту же меру в три разных сводных показателя."
       }
     }
   ]
@@ -164,105 +161,105 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../../excel/">Excel Kit</a></p>
-  <h1>Power Query or Power Pivot: Which One Does the Thing You Are Trying to Do</h1>
-  <p class="meta">Michael Nocito &middot; Updated August 2026 &middot; Every number on this page was worked before it was published</p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../../excel/">Excel комплект</a></p>
+  <h1>Power Query или Power Pivot: какой из них делает то, что вы пытаетесь сделать</h1>
+  <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Все числа на этой странице были обработаны до их публикации.</p>
 
-  <p>Two tools, both bolted onto Excel, both with Power in the name, and they do entirely different jobs. The confusion costs people months, because the wrong one turns a fifteen minute task into a week of nested formulas.</p>
+  <p>Два инструмента, оба привязаны к Excel, оба имеют Power в названии и выполняют совершенно разные задачи. Путаница стоит людям месяцев, потому что неправильный вариант превращает пятнадцатиминутную задачу в неделю вложенных формул.</p>
 
-  <p>What you do: everything that changes the shape of the data goes in Power Query, before it lands. Everything that measures the data goes in Power Pivot, after it lands.</p>
+  <p>Что вы делаете: все, что меняет форму данных, передается в Power Query до того, как они попадут в систему. Все, что измеряет данные, попадает в Power Pivot после их доставки.</p>
 
-  <p><strong>The short version.</strong> Power Query is the kitchen. Power Pivot is the till.</p>
+  <p><strong>Краткая версия.</strong>  Power Query — это кухня. Power Pivot — это касса.</p>
 
-  <h2>The dividing line</h2>
+  <h2>Разделительная линия</h2>
   <table>
     <tr><th></th><th>Power Query</th><th>Power Pivot</th></tr>
-    <tr><td>When it runs</td><td>On refresh, before the data lands</td><td>When a pivot or a formula is evaluated</td></tr>
+    <tr><td>Когда он работает</td><td>При обновлении, прежде чем данные попадут</td><td>Когда оценивается сводная точка или формула</td></tr>
     <tr><td>Language</td><td>M</td><td>DAX</td></tr>
-    <tr><td>Works on</td><td>Rows and columns as they arrive</td><td>Tables already loaded, and relationships</td></tr>
-    <tr><td>Where you find it</td><td>Data tab, Get and Transform</td><td>Data tab, Manage Data Model</td></tr>
-    <tr><td>Output</td><td>A table, or a connection into the model</td><td>Measures and calculated columns</td></tr>
+    <tr><td>Работает над</td><td>Строки и столбцы по мере их поступления</td><td>Таблицы уже загружены и связи</td></tr>
+    <tr><td>Где вы это найдете</td><td>Вкладка «Данные», «Получить и преобразовать».</td><td>Вкладка «Данные», «Управление моделью данных».</td></tr>
+    <tr><td>Output</td><td>Таблица или соединение с моделью</td><td>Меры и вычисляемые столбцы</td></tr>
   </table>
 
-  <h3>Power Query is best at these four</h3>
+  <h3>Power Query лучше всего справляется с этими четырьмя</h3>
   <ol>
-    <li><strong>Combining files.</strong> Point it at a folder and it appends every file in it. Twelve monthly extracts become one table, and next month's file joins automatically.</li>
-    <li><strong>Unpivoting.</strong> A report with twelve month columns becomes a long table with a month column, in two clicks. This is the single highest-value thing Power Query does, because almost all awkward Excel data is wide when it should be long.</li>
-    <li><strong>Cleaning that must repeat.</strong> Trim, split, change type, remove the top four junk rows. The steps are recorded, so next month you press refresh instead of remembering.</li>
-    <li><strong>Merging tables.</strong> A proper join with a chosen join type, rather than a lookup down a column.</li>
+    <li><strong>Объединение файлов.</strong>  Наведите его на папку, и он добавит в нее каждый файл. Двенадцать ежемесячных извлечений объединяются в одну таблицу, и файл следующего месяца присоединяется автоматически.</li>
+    <li><strong>Разворот.</strong>  Отчет со столбцами двенадцати месяцев превращается в длинную таблицу со столбцом месяца в два клика. Это единственное, что делает Power Query с наибольшей ценностью, поскольку почти все неудобные данные Excel имеют ширину, хотя должны быть длинными.</li>
+    <li><strong>Очистку, которую необходимо повторить.</strong>  Обрезать, разделить, изменить тип, удалить четыре верхние ненужные строки. Шаги записываются, поэтому в следующем месяце вместо запоминания вы нажимаете «Обновить».</li>
+    <li><strong>Объединение таблиц.</strong>  Правильное соединение с выбранным типом соединения, а не поиск по столбцу.</li>
   </ol>
 
-  <h3>Power Pivot is best at these four</h3>
+  <h3>Power Pivot лучше всех справляется с этими четырьмя задачами.</h3>
   <ol>
-    <li><strong>Relationships.</strong> Several tables joined once in a model, rather than lookups copied into every table.</li>
-    <li><strong>Measures reused everywhere.</strong> Define Revenue once and every pivot in the file uses that definition. When it changes, it changes in one place.</li>
-    <li><strong>Calculations that respond to filters.</strong> Share of total, year to date, same period last year. These are hard in a normal pivot and natural in DAX.</li>
-    <li><strong>More rows than a worksheet holds.</strong> The model is not the grid, so the million row limit from <a href="../excel-row-limit/">the row limit page</a> does not apply.</li>
+    <li><strong>Отношения.</strong>  Несколько таблиц объединяются в модели один раз, а не копируются в каждую таблицу.</li>
+    <li><strong>Меры используются повторно повсюду.</strong>  Определите доход один раз, и каждая сводная таблица в файле использует это определение. Когда оно меняется, оно меняется в одном месте.</li>
+    <li><strong>Расчеты, реагирующие на фильтры.</strong>  Доля от общего числа с начала года по настоящий момент, за тот же период прошлого года. Это сложно в обычном сводном отчете и естественно в DAX.</li>
+    <li><strong>Больше строк, чем вмещается на листе.</strong>  Модель не является сеткой, поэтому ограничение в миллион строк из  <a href="../excel-row-limit/">страница ограничения строк</a>  не применяется.</li>
   </ol>
 
-  <div class="note"><strong>The rule that resolves most arguments.</strong> If the answer changes when the user clicks a slicer, it is a measure and belongs in Power Pivot. If it is fixed the moment the data lands, do it in Power Query, where it is computed once instead of on every recalculation.</div>
+  <div class="note"><strong>Правило, разрешающее большинство аргументов.</strong>  Если ответ меняется, когда пользователь щелкает срез, это мера и она принадлежит Power Pivot. Если проблема исправлена ​​в момент получения данных, сделайте это в Power Query, где она вычисляется один раз, а не при каждом перерасчете.</div>
 
-  <h2>The order of operations</h2>
-  <p>Power Query, then the Data Model, then measures, then the pivot. That order is not a preference, it is the flow of the data, and building against it is where slow workbooks come from.</p>
+  <h2>Порядок операций</h2>
+  <p>Power Query, затем модель данных, затем показатели, затем сводная таблица. Этот порядок не является предпочтением, это поток данных, и именно на его основе возникают медленные рабочие книги.</p>
   <pre><code>Source file  ->  Power Query (clean, reshape, combine)
              ->  Data Model (tables plus relationships)
              ->  DAX measures
              ->  PivotTable / chart on the sheet</code></pre>
-  <p>The classic mistake is loading raw data to a sheet, then bolting 200,000 <code>SUMIFS</code> onto it. Every one of those recalculates constantly. Move the same work up into the query and it happens once per refresh.</p>
+  <p>Классическая ошибка — загрузка необработанных данных на лист, а затем привязка 200 000  <code>SUMIFS</code>  на это. Каждый из них постоянно пересчитывает. Переместите ту же работу в запрос, и это произойдет один раз за обновление.</p>
 
-  <h2>Which one fixes your problem</h2>
+  <h2>Какой из них решит вашу проблему</h2>
   <table>
     <tr><th>Problem</th><th>Tool</th></tr>
-    <tr><td>Twelve files to append every month</td><td>Power Query, from folder</td></tr>
-    <tr><td>Month names spread across columns</td><td>Power Query, unpivot</td></tr>
-    <tr><td>Same lookup pasted into four tables</td><td>Power Pivot, one relationship</td></tr>
-    <tr><td>Percent of total that respects slicers</td><td>Power Pivot, DAX measure</td></tr>
-    <tr><td>Workbook takes two minutes to open</td><td>Power Query, move work into the load</td></tr>
-    <tr><td>File is 3 million rows</td><td>Power Query into the model, no worksheet</td></tr>
-    <tr><td>Need last year's value beside this year's</td><td>Power Pivot, time intelligence</td></tr>
-    <tr><td>Ten junk rows at the top of every export</td><td>Power Query, remove top rows</td></tr>
+    <tr><td>Двенадцать файлов для добавления каждый месяц</td><td>Power Query, из папки</td></tr>
+    <tr><td>Названия месяцев разбросаны по столбцам</td><td>Power Query, отмена поворота</td></tr>
+    <tr><td>Тот же поиск, вставленный в четыре таблицы.</td><td>Power Pivot, одно отношение</td></tr>
+    <tr><td>Процент от общего числа, который учитывает срезы</td><td>Power Pivot, мера DAX</td></tr>
+    <tr><td>Книга открывается две минуты</td><td>Power Query, переносите работу в нагрузку</td></tr>
+    <tr><td>Файл состоит из 3 миллионов строк.</td><td>Power Query в модель, без рабочего листа</td></tr>
+    <tr><td>Нужна стоимость прошлого года рядом с ценой этого года</td><td>Power Pivot, анализ времени</td></tr>
+    <tr><td>Десять ненужных строк вверху каждого экспорта.</td><td>Power Query, удалить верхние строки</td></tr>
   </table>
 
-  <h2>Getting started with each</h2>
-  <p><strong>Power Query.</strong> Data, Get Data, From File. Do one transform, then look at the Applied Steps list on the right. That list is the whole idea: a recorded, editable, re-runnable recipe. Delete a step and the data goes back.</p>
-  <p><strong>Power Pivot.</strong> Data, Manage Data Model. Add tables, drag a key from one to another to build a relationship, then create a measure with <code>Revenue := SUM(Sales[Amount])</code>. If a measure returns the same number in every row of a pivot, the relationship is missing or pointing the wrong way.</p>
+  <h2>Начало работы с каждым</h2>
+  <p><strong>Мощность запроса.</strong>  Данные, Получить данные, Из файла. Выполните одно преобразование, затем посмотрите на список «Примененные шаги» справа. В этом списке и заключается вся идея: записанный, редактируемый и воспроизводимый рецепт. Удалите шаг, и данные вернутся.</p>
+  <p><strong>Силовой поворот.</strong>  Данные, управление моделью данных. Добавляйте таблицы, перетаскивайте ключ из одной в другую, чтобы построить связь, а затем создайте меру с помощью  <code>Revenue := SUM(Sales[Amount])</code>. Если мера возвращает одно и то же число в каждой строке сводной таблицы, связь отсутствует или указывает в неправильном направлении.</p>
 
-  <h2>How to apply this to your own work</h2>
+  <h2>Как применить это в своей работе</h2>
   <ol>
-    <li>Open your slowest workbook and count the formulas that repeat down a column. Those are candidates for the query step.</li>
-    <li>Take the monthly file-combining job you do by hand and rebuild it as a folder query once. It pays for itself the first month.</li>
-    <li>Find any lookup column you have pasted into more than one table and replace it with a relationship.</li>
-    <li>Write down your three most-used calculations and turn them into measures with names people can say out loud.</li>
-    <li>After each change, refresh and check a total against the old version. Moving work between layers is exactly where numbers quietly shift.</li>
+    <li>Откройте свою самую медленную книгу и посчитайте формулы, повторяющиеся в столбце. Это кандидаты на этап запроса.</li>
+    <li>Возьмите ежемесячную работу по объединению файлов, которую вы выполняете вручную, и один раз перестройте ее как запрос к папке. Окупается в первый месяц.</li>
+    <li>Найдите любой столбец подстановки, который вы вставили в несколько таблиц, и замените его связью.</li>
+    <li>Запишите три наиболее часто используемых вычисления и превратите их в меры с названиями, которые люди смогут произнести вслух.</li>
+    <li>После каждого изменения обновите и сверьте итог со старой версией. Перемещение работы между уровнями — это именно то место, где цифры незаметно меняются.</li>
   </ol>
 
-  <h2>The one habit to keep</h2>
-  <p>Ask where a calculation belongs before you write it. Load time or read time. That single question keeps the model clean and it is the same question you will answer again in Power BI, where the two tools are the same two tools with different names on the tabs.</p>
+  <h2>Единственная привычка, которую нужно сохранить</h2>
+  <p>Спросите, где место вычисления, прежде чем писать его. Время загрузки или время чтения. Этот единственный вопрос сохраняет модель чистой, и на этот же вопрос вы снова ответите в Power BI, где два инструмента — это одни и те же два инструмента с разными именами на вкладках.</p>
 
-  <p>What is the oldest repeated cleaning job in your week, and could a query do it once?</p>
+  <p>Какая самая старая повторяющаяся уборка за неделю и может ли запрос выполнить ее один раз?</p>
 
-  <div class="note"><strong>Written from the tools as they ship.</strong> Power Query is Get and Transform on the Data tab in Excel 2016 and later; Power Pivot is Manage Data Model in the same tab.</div>
+  <div class="note"><strong>Написано с помощью инструментов по мере их доставки.</strong>  Power Query — это получение и преобразование на вкладке «Данные» в Excel 2016 и более поздних версиях; Power Pivot — «Управление моделью данных» на той же вкладке.</div>
 
   <div class="book">
-    <strong>Most Excel performance problems are calculations doing a job that belonged in the load step.</strong>
-    <p><em>Excel for Analysts</em> is 378 pages that read every formula and dialog one at a time, so the workbook stops being a place where numbers appear and becomes one you can check.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-power-query-vs-power-pivot'})">Excel for Analysts, $19 &rarr;</a>
+    <strong>Большинство проблем с производительностью Excel связаны с вычислениями, выполняемыми на этапе загрузки.</strong>
+    <p><em>Excel для аналитиков</em>  состоит из 378 страниц, на которых каждая формула и диалог читаются по одному, поэтому книга перестает быть местом, где появляются числа, и становится тем местом, которое вы можете проверить.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-power-query-vs-power-pivot'})">Excel для аналитиков, 19 долларов США →</a>
   </div>
 
   <div class="cta">
-    <strong>Learn the load step first.</strong>
-    <p style="margin:6px 0 0"><a href="../excel-power-query/">Power Query for beginners</a> is the hands-on version, and <a href="../powerbi-star-schema/">the star schema</a> covers the model shape both tools want. The <a href="../../excel/">Excel Kit</a> has the drills.</p>
-    <a class="btn" href="../excel-power-query/">Read Power Query for Beginners &rarr;</a>
+    <strong>Сначала изучите этап загрузки.</strong>
+    <p style="margin:6px 0 0"><a href="../excel-power-query/">Power Query для начинающих</a>  это практическая версия, и  <a href="../powerbi-star-schema/">Звездная схема</a>  покрывает форму модели, необходимую обоим инструментам.  <a href="../../excel/">Excel комплект</a>  есть дрели.</p>
+    <a class="btn" href="../excel-power-query/">Читать Power Query для начинающих →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../excel-power-query/">Power Query</a> &middot; <a href="../powerbi-measures-vs-columns/">Measures vs Columns</a> &middot; <a href="../powerbi-star-schema/">Star Schema</a> &middot; <a href="../excel-row-limit/">The Excel Row Limit</a> &middot; <a href="../excel-file-too-slow/">When the Workbook Gets Slow</a> &middot; <a href="../../excel/">Excel Kit</a>
-    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../excel-power-query/">Power Query</a> &middot; <a href="../powerbi-measures-vs-columns/">Меры против столбцов</a> &middot; <a href="../powerbi-star-schema/">Схема звезды</a> &middot; <a href="../excel-row-limit/">Ограничение строк Excel</a> &middot; <a href="../excel-file-too-slow/">Когда книга работает медленно</a> &middot; <a href="../../excel/">Excel комплект</a>
+    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-<script src="../../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

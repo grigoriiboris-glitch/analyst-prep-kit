@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Data Quality Checks: Eight Queries to Run Before Reporting &mdash; Analyst Prep Kit</title>
-<meta name="description" content="Eight checks that take ten minutes and catch the errors that otherwise get found in the meeting: row count, key uniqueness, nulls, ranges, dates, referential integrity, category drift, and the total against a known number.">
+<title>Проверки качества данных: восемь запросов, которые необходимо выполнить перед отчетом — комплект для подготовки аналитика</title>
+<meta name="description" content="Восемь проверок, которые занимают десять минут и выявляют ошибки, которые в противном случае обнаруживаются на собрании: количество строк, уникальность ключа, значения NULL, диапазоны, даты, ссылочная целостность, смещение категорий и итоговое значение по известному числу.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/data-quality-checks/">
-<meta property="og:title" content="The Data Quality Checks to Run Before Anybody Sees the Numbers">
-<meta property="og:description" content="Eight checks, ten minutes, run before every report. The list, with the query for each.">
+<meta property="og:title" content="Проверки качества данных должны выполняться до того, как кто-либо увидит цифры">
+<meta property="og:description" content="Перед каждым отчетом проводится восемь проверок по десять минут. Список с запросом для каждого.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/data-quality-checks/">
 <meta name="twitter:card" content="summary_large_image">
@@ -69,12 +69,11 @@
   figcaption{font-size:13.5px;color:var(--muted);margin-top:6px}
 </style>
 <!-- SEO:JSONLD:START -->
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "The Data Quality Checks to Run Before Anybody Sees the Numbers",
-  "description": "Eight checks that take ten minutes and catch the errors that otherwise get found in the meeting: row count, key uniqueness, nulls, ranges, dates, referential integrity, category drift, and the total against a known number.",
+  "headline": "Проверки качества данных должны выполняться до того, как кто-либо увидит цифры",
+  "description": "Восемь проверок, которые занимают десять минут и выявляют ошибки, которые в противном случае обнаруживаются на собрании: количество строк, уникальность ключа, значения NULL, диапазоны, даты, ссылочная целостность, смещение категорий и итоговое значение по известному числу.",
   "url": "https://michaelnocito.github.io/analyst-prep-kit/guides/data-quality-checks/",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -82,20 +81,19 @@
   },
   "author": {
     "@type": "Person",
-    "name": "Michael Nocito",
+    "name": "Майкл Носито",
     "url": "https://michaelnocito.github.io"
   },
   "publisher": {
     "@type": "Person",
-    "name": "Michael Nocito"
+    "name": "Майкл Носито"
   },
   "inLanguage": "en",
   "datePublished": "2026-08-23",
   "dateModified": "2026-08-23"
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
@@ -114,28 +112,27 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Data Quality Checks",
+      "name": "Проверки качества данных",
       "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/data-quality-checks/"
     }
   ]
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "What are basic data quality checks?",
+      "name": "Что такое базовые проверки качества данных?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Row count against the source, uniqueness of the key, null rates per column, value ranges, date sanity, referential integrity, category drift against the previous load, and one total reconciled to a number from another system."
+        "text": "Подсчет строк относительно источника, уникальность ключа, частота нулевых значений на столбец, диапазоны значений, корректность дат, ссылочная целостность, отклонение категории от предыдущей загрузки и одна общая сумма, согласованная с числом из другой системы."
       }
     },
     {
       "@type": "Question",
-      "name": "How do I check for duplicate keys in SQL?",
+      "name": "Как проверить наличие дубликатов ключей в SQL?",
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "SELECT key, COUNT(*) FROM table GROUP BY key HAVING COUNT(*) > 1. Any rows returned mean the column you thought was unique is not, and every join through it is multiplying rows."
@@ -143,18 +140,18 @@
     },
     {
       "@type": "Question",
-      "name": "What is referential integrity?",
+      "name": "Что такое ссылочная целостность?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Every child row pointing at a parent that exists. An order whose customer id is not in the customer table is an orphan, and it will disappear from any report that joins the two, without warning."
+        "text": "Каждая дочерняя строка, указывающая на существующий родительский элемент. Заказ, идентификатор клиента которого отсутствует в таблице клиентов, является потерянным и исчезнет из любого отчета, который объединяет эти два отчета, без предупреждения."
       }
     },
     {
       "@type": "Question",
-      "name": "How often should data quality checks run?",
+      "name": "Как часто следует проводить проверки качества данных?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Every load, automatically, with the results stored. A single run tells you today looks fine. A stored history tells you the null rate on a column went from 2 percent to 30 percent last Tuesday, which is the finding you actually need."
+        "text": "Каждая загрузка автоматически, с сохранением результатов. Один прогон говорит вам, что сегодня все в порядке. Сохраненная история сообщает вам, что в прошлый вторник нулевая ставка в столбце выросла с 2 до 30 процентов, и это именно тот результат, который вам действительно нужен."
       }
     }
   ]
@@ -164,115 +161,115 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../../sql/">SQL Kit</a></p>
-  <h1>The Data Quality Checks to Run Before Anybody Sees the Numbers</h1>
-  <p class="meta">Michael Nocito &middot; Updated August 2026 &middot; Every number on this page was worked before it was published</p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../../sql/">SQL-комплект</a></p>
+  <h1>Проверки качества данных должны выполняться до того, как кто-либо увидит цифры</h1>
+  <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Все числа на этой странице были обработаны до их публикации.</p>
 
-  <p>Every analyst has had the meeting where somebody else finds the error. It is almost never a subtle one. It is a duplicated key, a missing week, or a category that got renamed upstream, and all of them are caught by checks that take ten minutes to run.</p>
+  <p>У каждого аналитика случалась встреча, на которой кто-то другой обнаружил ошибку. Это почти никогда не бывает тонким. Это дублированный ключ, отсутствующая неделя или категория, переименованная в исходном коде, и все они выявляются проверками, выполнение которых занимает десять минут.</p>
 
-  <p>What you do: run these eight before you build anything, store the results, and compare them against the last run.</p>
+  <p>Что вы делаете: запускаете эти восемь, прежде чем что-либо создавать, сохраняете результаты и сравниваете их с последним запуском.</p>
 
-  <p><strong>The short version.</strong> Ten minutes at the start beats an hour in the meeting, every time.</p>
+  <p><strong>Краткая версия.</strong>  Десять минут в начале всегда лучше часа на совещании.</p>
 
-  <h2>1. Row count against the source</h2>
+  <h2>1. Подсчет строк по источнику</h2>
   <pre><code>SELECT COUNT(*) FROM orders;</code></pre>
-  <p>Compare with the source system's own count. This is the single most valuable check and the most often skipped. It catches truncated files, failed loads, and a filter somebody added last month. The Excel version of the same trap is in <a href="../excel-row-limit/">the row limit</a>: a file cut at 1,048,576 rows looks entirely normal.</p>
+  <p>Сравните с собственным счетом исходной системы. Это самая ценная проверка, которую чаще всего пропускают. Он обнаруживает обрезанные файлы, неудачные загрузки и фильтр, добавленный кем-то в прошлом месяце. Версия той же ловушки в Excel находится в  <a href="../excel-row-limit/">предел строки</a>: файл, обрезанный на 1 048 576 строк, выглядит совершенно нормально.</p>
 
-  <h2>2. Is the key actually unique</h2>
+  <h2>2. Действительно ли ключ уникален?</h2>
   <pre><code>SELECT order_id, COUNT(*) AS n
 FROM orders
 GROUP BY order_id
 HAVING COUNT(*) &gt; 1
 ORDER BY n DESC;</code></pre>
-  <p>If this returns anything, every join through <code>order_id</code> is multiplying rows and every sum downstream is inflated. Test the key you are about to join on, not just the primary key, since the join key is often a business column with no constraint on it.</p>
+  <p>Если это что-то возвращает, каждое соединение через  <code>order_id</code>  умножает строки, и каждая следующая сумма увеличивается. Проверьте ключ, по которому вы собираетесь присоединиться, а не только первичный ключ, поскольку ключ соединения часто представляет собой бизнес-столбец без каких-либо ограничений.</p>
 
-  <h2>3. Nulls per column</h2>
+  <h2>3. Нулевые значения в столбце</h2>
   <pre><code>SELECT COUNT(*) AS rows,
        SUM(CASE WHEN region   IS NULL THEN 1 ELSE 0 END) AS null_region,
        SUM(CASE WHEN amount   IS NULL THEN 1 ELSE 0 END) AS null_amount,
        SUM(CASE WHEN order_dt IS NULL THEN 1 ELSE 0 END) AS null_date
 FROM orders;</code></pre>
-  <p>What matters is not the number today but the change since last load. A column that has always been 2 percent null and is suddenly 30 percent null means something changed upstream, and nobody will have told you.</p>
+  <p>Важно не сегодняшнее число, а изменение с момента последней загрузки. Столбец, в котором всегда было 2 процента нулевых значений, а затем внезапно стал нулевым 30 процентов, означает, что что-то изменилось в восходящем направлении, и никто вам об этом не сообщит.</p>
 
-  <h2>4. Ranges and impossible values</h2>
+  <h2>4. Диапазоны и невозможные значения</h2>
   <pre><code>SELECT MIN(amount), MAX(amount), AVG(amount),
        SUM(CASE WHEN amount &lt; 0 THEN 1 ELSE 0 END) AS negatives,
        SUM(CASE WHEN amount = 0 THEN 1 ELSE 0 END) AS zeros
 FROM orders;</code></pre>
-  <p>Look for the placeholder values that systems use for missing: -1, 0, 999, 9999, and the date 1900-01-01. Each of those will be averaged into your results as if it were real. A quantity of 99,999 is not an outlier, it is a data entry convention.</p>
+  <p>Найдите значения-заполнители, которые системы используют для отсутствующих: -1, 0, 999, 9999 и дату 1900-01-01. Каждый из них будет усреднен в ваших результатах, как если бы он был реальным. Число 99 999 не является выбросом, это соглашение о вводе данных.</p>
 
-  <h2>5. Date sanity</h2>
+  <h2>5. Разумное свидание</h2>
   <pre><code>SELECT MIN(order_dt), MAX(order_dt) FROM orders;
 
 SELECT strftime('%Y-%m', order_dt) AS month, COUNT(*)
 FROM orders GROUP BY 1 ORDER BY 1;</code></pre>
-  <p>The second query is the one to read carefully. A missing month, or one with a tenth of the usual volume, is a failed load rather than a quiet trading period. Future dates and dates before the business existed both indicate parsing problems, usually a day-first file read as month-first.</p>
+  <p>Второй запрос следует внимательно прочитать. Пропущенный месяц или месяц с десятой частью обычного объема – это скорее провальная загрузка, чем период затишья в торговле. Будущие даты и даты до существования бизнеса указывают на проблемы синтаксического анализа, обычно файл с первым днем ​​читается как первый с месяца.</p>
 
-  <h2>6. Referential integrity</h2>
+  <h2>6. Ссылочная целостность</h2>
   <pre><code>SELECT COUNT(*) AS orphan_orders
 FROM orders o
 WHERE NOT EXISTS (SELECT 1 FROM customers c
                   WHERE c.customer_id = o.customer_id);</code></pre>
-  <p>Orphans vanish from any inner join, silently, taking their revenue with them. That is why two reports on the same data can differ by a few percent with neither being obviously wrong. <code>NOT EXISTS</code> rather than <code>NOT IN</code>, for the NULL reason in <a href="../sql-anti-join/">the anti-join</a>.</p>
+  <p>Сироты исчезают из любого внутреннего объединения, молча, забирая с собой свои доходы. Вот почему два отчета по одним и тем же данным могут отличаться на несколько процентов, причем ни один из них не является явно ошибочным.  <code>NOT EXISTS</code>  скорее, чем  <code>NOT IN</code>, по причине NULL в  <a href="../sql-anti-join/">анти-соединение</a>.</p>
 
-  <h2>7. Category drift</h2>
+  <h2>7. Смещение категории</h2>
   <pre><code>SELECT region, COUNT(*) FROM orders GROUP BY region ORDER BY 2 DESC;</code></pre>
   <p>Read the whole list, including the small values at the bottom. New categories appear when a system is reconfigured; old ones stop appearing when a rename happens upstream. A grouped report will happily show two rows where there should be one, and it will look like a real split.</p>
 
-  <h2>8. Reconcile one total to something external</h2>
-  <p>The finance ledger, last month's published report, the source system's own dashboard. One number, agreed to the penny or explained. Everything above tests the data against itself; this is the only check that tests it against the world.</p>
+  <h2>8. Сверьте одну сумму с чем-то внешним</h2>
+  <p>Финансовая книга, опубликованный отчет за прошлый месяц, собственная информационная панель исходной системы. Один номер, договорились до копейки или объяснили. Все вышеперечисленное проверяет данные на себе; это единственная проверка, которая проверяет его на соответствие миру.</p>
 
-  <div class="note"><strong>Store the results, do not just read them.</strong> Write each run into a small table with a timestamp. The value of these checks is in the comparison between runs, and a number you looked at once and did not keep cannot be compared with anything.</div>
+  <div class="note"><strong>Сохраняйте результаты, а не просто читайте их.</strong>  Запишите каждый прогон в небольшую таблицу с отметкой времени. Ценность этих проверок — в сравнении прогонов, и число, которое вы сразу посмотрели и не сохранили, невозможно ни с чем сравнить.</div>
 
-  <h2>The ten-minute routine</h2>
+  <h2>Десятиминутная рутина</h2>
   <table>
-    <tr><th>#</th><th>Check</th><th>Fails when</th></tr>
-    <tr><td>1</td><td>Row count</td><td>Load truncated or filtered</td></tr>
-    <tr><td>2</td><td>Key uniqueness</td><td>Joins will fan out</td></tr>
-    <tr><td>3</td><td>Null rates</td><td>Upstream field stopped being filled</td></tr>
-    <tr><td>4</td><td>Ranges</td><td>Placeholders treated as values</td></tr>
-    <tr><td>5</td><td>Date span and per-month counts</td><td>Missing period, bad parsing</td></tr>
-    <tr><td>6</td><td>Orphans</td><td>Rows disappear in a join</td></tr>
-    <tr><td>7</td><td>Category list</td><td>Renames split a group in two</td></tr>
-    <tr><td>8</td><td>External reconciliation</td><td>Everything internal agreed and was still wrong</td></tr>
+    <tr><th>#</th><th>Check</th><th>Сбой, когда</th></tr>
+    <tr><td>1</td><td>Количество строк</td><td>Загрузка сокращена или отфильтрована</td></tr>
+    <tr><td>2</td><td>Ключевая уникальность</td><td>Объединения будут разветвляться</td></tr>
+    <tr><td>3</td><td>Нулевые ставки</td><td>Поле Upstream перестало заполняться</td></tr>
+    <tr><td>4</td><td>Ranges</td><td>Заполнители рассматриваются как значения</td></tr>
+    <tr><td>5</td><td>Диапазон дат и количество месяцев</td><td>Пропущена точка, плохой синтаксический анализ</td></tr>
+    <tr><td>6</td><td>Orphans</td><td>Строки исчезают при объединении</td></tr>
+    <tr><td>7</td><td>Список категорий</td><td>Переименование разделяет группу на две части</td></tr>
+    <tr><td>8</td><td>Внешнее примирение</td><td>Все внутри согласилось и все еще было неправильным</td></tr>
   </table>
 
-  <h2>How to apply this to your own work</h2>
+  <h2>Как применить это в своей работе</h2>
   <ol>
-    <li>Save the eight queries as one script per source, with the table names filled in.</li>
-    <li>Run it before you build, not after somebody asks a question.</li>
-    <li>Write the results into a log table with a date, so drift becomes visible.</li>
-    <li>Put the row count and the reconciliation into the report itself, as a footnote. It changes how the report is received.</li>
-    <li>When a check fails, tell the person who owns the source. Silent workarounds mean the same failure arrives every month forever.</li>
+    <li>Сохраните восемь запросов как один сценарий для каждого источника с заполненными именами таблиц.</li>
+    <li>Запускайте его до начала сборки, а не после того, как кто-то задаст вопрос.</li>
+    <li>Запишите результаты в таблицу журнала с указанием даты, чтобы стало видно отклонение.</li>
+    <li>Поместите количество строк и сверку в сам отчет в виде сноски. Это меняет способ получения отчета.</li>
+    <li>Если проверка не удалась, сообщите об этом владельцу источника. Тихие обходные пути означают, что один и тот же сбой происходит каждый месяц навсегда.</li>
   </ol>
 
-  <h2>The one habit to keep</h2>
-  <p>Check before you build. The work is identical either way; the difference is whether you find the problem or somebody else does, and that difference is most of what people mean when they say an analyst is reliable.</p>
+  <h2>Единственная привычка, которую нужно сохранить</h2>
+  <p>Проверьте, прежде чем строить. Работа в любом случае идентична; разница в том, нашли ли вы проблему или ее нашел кто-то другой, и эта разница во многом состоит в том, что люди имеют в виду, когда говорят, что аналитик надежен.</p>
 
-  <p>Which of these eight would fail on the data you used most recently?</p>
+  <p>Какой из этих восьми не сработает с данными, которые вы использовали в последний раз?</p>
 
-  <div class="note"><strong>Every query here was written to run.</strong> The date functions are SQLite; use DATE_TRUNC in Postgres, FORMAT or CONVERT in SQL Server, and DATE_FORMAT in MySQL.</div>
+  <div class="note"><strong>Каждый запрос здесь был написан для выполнения.</strong>  Функции даты — SQLite; используйте DATE_TRUNC в Postgres, FORMAT или CONVERT в SQL Server и DATE_FORMAT в MySQL.</div>
 
   <div class="book">
-    <strong>The errors that damage a reputation are the ordinary ones, found by somebody else.</strong>
-    <p><em>SQL for Analysts</em> is 458 pages that read queries line by line in everyday words, so a result that came back wrong has somewhere to be traced instead of being retyped until it looks better.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-data-quality-checks'})">SQL for Analysts, $19 &rarr;</a>
+    <strong>Ошибки, портящие репутацию, — это обычные ошибки, обнаруженные кем-то другим.</strong>
+    <p><em>SQL для аналитиков</em>  — это 458 страниц, которые считывают запросы построчно в повседневных словах, поэтому ошибочный результат нужно где-то отслеживать, а не перепечатывать, пока он не станет выглядеть лучше.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-data-quality-checks'})">SQL для аналитиков, 19 $ →</a>
   </div>
 
   <div class="cta">
-    <strong>Run these before the report, not after the question.</strong>
-    <p style="margin:6px 0 0"><a href="../migration-profiling/">Profiling a source system</a> is the deeper version of the same checks, and <a href="../exploratory-data-analysis/">exploratory data analysis</a> is what you do once the data passes them.</p>
-    <a class="btn" href="../migration-profiling/">Read Profiling a Source &rarr;</a>
+    <strong>Запускайте их перед отчетом, а не после вопроса.</strong>
+    <p style="margin:6px 0 0"><a href="../migration-profiling/">Профилирование исходной системы</a>  это более глубокая версия тех же проверок, и  <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a>  это то, что вы делаете, когда данные проходят мимо них.</p>
+    <a class="btn" href="../migration-profiling/">Читать «Профилирование источника» →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../migration-profiling/">Migration Profiling</a> &middot; <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> &middot; <a href="../sql-reconciliation/">Reconciling Row Counts</a> &middot; <a href="../sql-find-duplicates/">Find Duplicate Rows</a> &middot; <a href="../documenting-data-limitations/">Documenting Data Limitations</a> &middot; <a href="../../sql/">SQL Kit</a>
-    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../migration-profiling/">Профилирование миграции</a> &middot; <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> &middot; <a href="../sql-reconciliation/">Согласование количества строк</a> &middot; <a href="../sql-find-duplicates/">Найти повторяющиеся строки</a> &middot; <a href="../documenting-data-limitations/">Документирование ограничений данных</a> &middot; <a href="../../sql/">SQL-комплект</a>
+    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-<script src="../../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

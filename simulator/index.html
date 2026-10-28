@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="ru" data-theme="light" data-static-ru="true">
 <head>
-<script src="../assets/ru-localization-boot.js"></script>
+
   <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
   <script>
     (function () {
@@ -28,9 +28,9 @@
   </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Associate Data Analyst Simulator</title>
+<title>Симулятор работы младшего аналитика данных</title>
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/simulator/">
-<meta name="description" content="A simulated first week as an associate data analyst at DataBridge Analytics. 5 days, 10 real assignments, AI manager review on each.">
+<meta name="description" content="Моделирование первой недели работы младшим аналитиком данных в DataBridge Analytics. 5 дней, 10 реальных заданий, обзор ИИ-менеджера по каждому.">
 <link rel="stylesheet" href="../assets/grain/grain.css">
 <link rel="stylesheet" href="../assets/grain/zinc-sky.css"><!-- Zinc & Sky palette rollout -->
 <style>
@@ -254,13 +254,13 @@ footer{text-align:center;padding:32px 20px;color:var(--dim);font-size:12px;borde
 <script src="../assets/progress-state.js"></script>
 <script src="../assets/supabase_auth_sync.js?v=3"></script>
 <nav>
-  <a class="back-link" href="../">← All Kits</a>
-  <span class="nav-title"><span class="logo-mark"><i data-lucide="briefcase"></i></span>Associate Data Analyst Simulator</span>
+  <a class="back-link" href="../">← Все комплекты</a>
+  <span class="nav-title"><span class="logo-mark"><i data-lucide="briefcase"></i></span>Симулятор работы младшего аналитика данных</span>
   <span class="user-email" id="userEmail" style="display:none"></span>
-  <button class="signin-btn" id="loginBtn" onclick="openAuthModal()" style="display:none">Sign in</button>
-  <button class="signin-btn ghost" id="logoutBtn" onclick="handleLogout()" style="display:none">Log out</button>
+  <button class="signin-btn" id="loginBtn" onclick="openAuthModal()" style="display:none">Войти</button>
+  <button class="signin-btn ghost" id="logoutBtn" onclick="handleLogout()" style="display:none">Выйти</button>
   <div class="nav-spacer"></div>
-  <button class="nav-btn" onclick="openApiModal()"><i data-lucide="settings"></i>API Key</button>
+  <button class="nav-btn" onclick="openApiModal()"><i data-lucide="settings"></i>API-ключ</button>
   <button class="nav-btn" onclick="resetSim()"><i data-lucide="rotate-ccw"></i>Reset</button>
   <button class="nav-btn" onclick="toggleTheme()"><span id="themeIcon"><i data-lucide="sun"></i></span></button>
 </nav>
@@ -270,8 +270,8 @@ footer{text-align:center;padding:32px 20px;color:var(--dim);font-size:12px;borde
 
 <div class="modal" id="apiModal">
   <div class="modal-card">
-    <h3>Claude API key</h3>
-    <p>Sarah's reviews are generated live by Claude. Paste an API key — it's stored only in your browser (<code>localStorage</code>) and sent only to <code>api.anthropic.com</code>. Without a key, the simulator falls back to a rubric self-check and a sample strong answer.</p>
+    <h3>Ключ API Claude</h3>
+    <p>Отзывы Сары написаны Клодом в прямом эфире. Вставьте ключ API — он хранится только в вашем браузере (<code>localStorage</code>) и отправляются только  <code>api.anthropic.com</code>. Без ключа симулятор возвращается к самопроверке рубрик и выборочному убедительному ответу.</p>
     <input id="apiKeyInput" type="password" placeholder="sk-ant-…" autocomplete="off">
     <div class="modal-actions">
       <button class="btn-ghost" onclick="clearApiKey()">Clear</button>
@@ -290,24 +290,26 @@ footer{text-align:center;padding:32px 20px;color:var(--dim);font-size:12px;borde
     <a href="../python/">Python</a>
     <a href="../tableau/">Tableau</a>
     <a href="../stats/">Stats</a>
-    <a href="../chart-literacy/">Chart Literacy</a>
+    <a href="../chart-literacy/">Работа с диаграммами</a>
     <a href="../forecasting/">Forecasting</a>
     <a href="../interview/">Interview</a>
     <a href="../powerbi/">Power BI</a>
-    <a href="../final/">Final Exam</a>
-    <a href="../">← All Kits</a>
+    <a href="../final/">Заключительный экзамен</a>
+    <a href="../">← Все комплекты</a>
   </div>
-  Part of the <a href="../">Analyst Prep Kit</a> · DataBridge Analytics is fictional
+  
+    Часть  <a href="../">Analyst Prep Kit</a>  · DataBridge Analytics является вымышленным
+
 </footer>
 
 <script>
 /* ============ COMPANY ============ */
 const COMPANY = {
-  name: "DataBridge Analytics",
-  desc: "a mid-size SaaS company providing analytics dashboards to retail clients",
-  team: "Data & Insights Team",
-  manager: "Sarah Chen",
-  managerTitle: "Senior Data Analyst",
+  name: "Аналитика DataBridge",
+  desc: "SaaS-компания среднего размера, предоставляющая аналитические панели розничным клиентам",
+  team: "Команда данных и аналитики",
+  manager: "Сара Чен",
+  managerTitle: "Старший аналитик данных",
   initials: "SC"
 };
 
@@ -321,15 +323,15 @@ const TYPE_COLOR = {
 /* ============ TASKS ============ */
 const DAYS = [
   {
-    label: "Monday — Orientation",
+    label: "Понедельник — Ориентация",
     tasks: [
       {
         id:"d1t1", type:"SQL", duration:"45 min", difficulty:"Intro",
-        title:"Explore the Database Schema",
-        skills:["SQL","Critical Thinking","Business Acumen"],
-        context:"On your first day, before writing a single query, every data professional needs to understand what data exists and how it's organized. Schema exploration is how you build your mental map of the business.",
-        realWorld:"In real jobs, you'll spend significant time understanding existing data structures. Knowing the schema prevents errors, saves time, and lets you answer business questions faster — senior analysts say schema literacy is what separates week-1 analysts from week-4 ones.",
-        objective:"Understand how data is structured in a relational database and what business entities they represent.",
+        title:"Изучите схему базы данных",
+        skills:["SQL","Критическое мышление","Деловая хватка"],
+        context:"В первый день, прежде чем писать один запрос, каждый специалист по данным должен понять, какие данные существуют и как они организованы. Исследование схемы — это то, как вы строите свою мысленную карту бизнеса.",
+        realWorld:"На реальной работе вы потратите много времени на понимание существующих структур данных. Знание схемы предотвращает ошибки, экономит время и позволяет быстрее отвечать на бизнес-вопросы. Старшие аналитики говорят, что грамотность в схемах — это то, что отличает аналитиков первой недели от аналитиков четвертой недели.",
+        objective:"Поймите, как данные структурированы в реляционной базе данных и какие бизнес-объекты они представляют.",
         assignment:`You have access to the DataBridge sales database with these tables:
 
 customers   → customer_id, name, email, signup_date, plan_type, region
@@ -345,10 +347,10 @@ YOUR TASKS:
         hints:[
           "SELECT COUNT(*) FROM table_name — one query per table",
           "SELECT DISTINCT plan_type FROM customers for unique values",
-          "The column that appears in two tables is your JOIN key — look for customer_id and product_id",
-          "Think: what decisions would a business make using this data?"
+          "Столбец, который отображается в двух таблицах, является вашим ключом JOIN — найдите customer_id и Product_id.",
+          "Подумайте: какие решения принял бы бизнес, используя эти данные?"
         ],
-        rubric:["Correct SQL syntax on all 4 queries","JOIN logic is accurate","Business description shows understanding beyond just column names"],
+        rubric:["Правильный синтаксис SQL для всех 4 запросов.","Логика JOIN точна","Описание бизнеса демонстрирует понимание, выходящее за рамки названий столбцов."],
         exemplar:`-- 1. Row counts
 SELECT COUNT(*) FROM customers;
 SELECT COUNT(*) FROM orders;
@@ -375,11 +377,11 @@ support load is concentrated in certain customer segments.`
       },
       {
         id:"d1t2", type:"Excel", duration:"30 min", difficulty:"Intro",
-        title:"Data Audit: Client Export",
-        skills:["Excel","Data Quality","Attention to Detail"],
-        context:"Your manager forwarded a CSV export of last quarter's client list and asked you to 'take a look at it before we use it.' That's analyst-speak for: find the problems before they become my problems.",
-        realWorld:"Data quality issues caught before analysis save hours — or days — of downstream debugging. The habit of auditing before analyzing is one of the most valuable instincts you can build early.",
-        objective:"Practice a systematic data audit approach using Excel functions.",
+        title:"Аудит данных: экспорт клиентов",
+        skills:["Excel","Качество данных","Внимание к деталям"],
+        context:"Ваш менеджер переслал экспортированный в формате CSV список клиентов за прошлый квартал и попросил вас «взглянуть на него, прежде чем мы его воспользуемся». Так говорят аналитики: находите проблемы до того, как они станут моими проблемами.",
+        realWorld:"Проблемы с качеством данных, обнаруженные до анализа, экономят часы или дни последующей отладки. Привычка проводить одитинг перед анализом — один из самых ценных инстинктов, которые вы можете развить на раннем этапе.",
+        objective:"Практикуйте систематический подход к аудиту данных с использованием функций Excel.",
         assignment:`You receive a 500-row client export:
 Client_ID | Company_Name | Contact_Email | Annual_Revenue | Region | Last_Contact_Date
 
@@ -393,13 +395,13 @@ Describe your audit process and the exact Excel functions you'd use to:
 
 Write out both the functions AND your interpretation of what the results would mean.`,
         hints:[
-          "=COUNTIF(A:A, A2)>1 flags duplicates — then filter for TRUE",
-          "=ISBLANK(B2) or =COUNTA(B:B) vs expected row count",
-          "=ISNUMBER(D2) returns FALSE on text like '$50,000'",
-          "=ISNUMBER(DATEVALUE(F2)) catches text-formatted dates — real dates return TRUE",
-          "Manager notes: lead with 'Found X issues' not 'I checked and...'"
+          "=COUNTIF(A:A, A2)>1 отмечает дубликаты — затем фильтрует по TRUE",
+          "=ISBLANK(B2) или =COUNTA(B:B) против ожидаемого количества строк",
+          "=ISNUMBER(D2) возвращает FALSE для текста типа «50 000 долларов США».",
+          "=ISNUMBER(DATEVALUE(F2)) улавливает даты в текстовом формате — реальные даты возвращают TRUE",
+          "Замечания менеджера: ведите фразу «Обнаружено Х проблем», а не «Я проверил и...»"
         ],
-        rubric:["Correct function syntax","Explains what to DO with each finding","Manager note is professional and concise"],
+        rubric:["Правильный синтаксис функции","Объясняет, что делать с каждым обнаружением","Примечание менеджера профессиональное и лаконичное"],
         exemplar:`Approach: add a helper column for each check, then filter for problems.
 
 1. Duplicate Client_IDs
@@ -426,15 +428,15 @@ Data quality note to manager:
     ]
   },
   {
-    label: "Tuesday — First Real Deliverables",
+    label: "Вторник — первые реальные результаты",
     tasks: [
       {
         id:"d2t1", type:"SQL", duration:"60 min", difficulty:"Beginner",
-        title:"Monthly Sales Summary",
-        skills:["SQL","Aggregation","Business Reporting"],
-        context:"Your manager needs the monthly sales summary for a stakeholder meeting tomorrow morning. This is your first real deliverable with a real deadline. The data in the queries you write will appear in a slide deck.",
-        realWorld:"Monthly business reviews almost always require aggregation queries. GROUP BY, HAVING, and date filtering are the workhorse of business SQL — you'll write some version of these queries hundreds of times in your career.",
-        objective:"Write aggregation queries using GROUP BY, HAVING, and date-based filtering.",
+        title:"Ежемесячная сводка продаж",
+        skills:["SQL","Aggregation","Бизнес-отчетность"],
+        context:"Вашему менеджеру нужен ежемесячный отчет о продажах для встречи с заинтересованными сторонами завтра утром. Это ваш первый реальный результат с реальным сроком выполнения. Данные в написанных вами запросах появятся в виде слайдов.",
+        realWorld:"Ежемесячные бизнес-обзоры почти всегда требуют агрегирующих запросов. GROUP BY, HAVING и фильтрация по дате — это рабочие лошадки бизнес-SQL. За свою карьеру вам придется писать те или иные версии этих запросов сотни раз.",
+        objective:"Напишите запросы агрегирования, используя GROUP BY, HAVING и фильтрацию на основе даты.",
         assignment:`Using the DataBridge schema, write three complete SQL queries:
 
 QUERY 1 — Revenue by region, last 30 days
@@ -449,12 +451,12 @@ Output: plan_type | customer_count
 After writing all three, answer in 2–3 sentences:
 Which query was hardest to write and why?`,
         hints:[
-          "Date filter: WHERE order_date >= CURRENT_DATE - INTERVAL '30 days'",
-          "JOIN orders to products on product_id for query 2",
-          "HAVING filters after grouping (unlike WHERE which filters rows before grouping)",
-          "ROUND(SUM(amount)::numeric / COUNT(*), 2) for clean avg_order_value"
+          "Фильтр даты: WHERE order_date >= CURRENT_DATE – ИНТЕРВАЛ '30 дней'",
+          "ПРИСОЕДИНЯЙТЕ заказы к продуктам по product_id для запроса 2",
+          "HAVING фильтрует после группировки (в отличие от WHERE, которая фильтрует строки перед группировкой)",
+          "ROUND(SUM(amount)::numeric / COUNT(*), 2) для чистого avg_order_value"
         ],
-        rubric:["All three queries are syntactically correct","HAVING vs WHERE used correctly","Joins reference correct columns","Reflection answer is specific"],
+        rubric:["Все три запроса синтаксически корректны.","HAVING vs WHERE используется правильно","Объединяет ссылки на правильные столбцы","Рефлексия Ответ конкретный"],
         exemplar:`-- Q1: Revenue by region, last 30 days
 SELECT
   c.region,
@@ -493,11 +495,11 @@ think about.`
       },
       {
         id:"d2t2", type:"Python", duration:"45 min", difficulty:"Beginner",
-        title:"Automate a File Validation Check",
+        title:"Автоматизируйте проверку достоверности файла",
         skills:["Python","pandas","Automation"],
-        context:"Every morning, a vendor drops a CSV into your shared drive. A senior analyst has been manually checking it — missing values, weird amounts, wrong columns. They want you to automate this check so it runs without anyone looking at it.",
-        realWorld:"Automation of repetitive validation tasks is one of the highest-ROI things a data professional can do. A 30-minute script that runs daily saves 5 hours per month and eliminates human error. This is one of the first things you'll be asked to build.",
-        objective:"Use pandas to load and validate a CSV with automated checks and clean output.",
+        context:"Каждое утро продавец отправляет CSV-файл на ваш общий диск. Старший аналитик вручную проверял данные: пропущенные значения, странные суммы, неправильные столбцы. Они хотят, чтобы вы автоматизировали эту проверку, чтобы никто на нее не смотрел.",
+        realWorld:"Автоматизация повторяющихся задач проверки — одна из самых прибыльных задач, которую может сделать специалист по данным. 30-минутный сценарий, выполняемый ежедневно, экономит 5 часов в месяц и исключает человеческие ошибки. Это одна из первых вещей, которые вас попросят построить.",
+        objective:"Используйте pandas для загрузки и проверки CSV-файла с помощью автоматических проверок и чистого вывода.",
         assignment:`Write a Python script that:
 
 1. Loads daily_orders.csv using pandas
@@ -517,13 +519,13 @@ If issues exist, Status should be FAIL ✗ and list what failed.
 
 Add a comment block at the top: what the script does, what it expects, who wrote it.`,
         hints:[
-          "pd.read_csv('daily_orders.csv') to load",
-          "set(required_cols).issubset(df.columns) to check column names",
-          "df.isnull().any(axis=1).sum() counts rows with any null",
-          "(df['amount'] < 0).sum() counts negatives",
-          "Build a list of failures and join them — cleaner than nested ifs"
+          "pd.read_csv('daily_orders.csv') для загрузки",
+          "set(required_cols).issubset(df.columns) для проверки имен столбцов",
+          "df.isnull().any(axis=1).sum() подсчитывает строки с любым нулевым значением",
+          "(df['amount'] < 0).sum() подсчитывает отрицательные числа",
+          "Создайте список неудач и объедините их — чище, чем вложенные if."
         ],
-        rubric:["Script runs without errors","All 5 checks implemented","Output is cleanly formatted","Comment block is present and informative"],
+        rubric:["Скрипт работает без ошибок","Все 5 проверок реализованы","Вывод четко отформатирован","Блок комментариев присутствует и информативен."],
         exemplar:`"""
 daily_orders_validation.py
 Purpose: Validate the daily_orders.csv vendor drop before downstream load.
@@ -561,15 +563,15 @@ for f in failures:
     ]
   },
   {
-    label: "Wednesday — Analysis & Viz",
+    label: "Среда — Анализ и визуализация",
     tasks: [
       {
         id:"d3t1", type:"Tableau", duration:"75 min", difficulty:"Beginner",
-        title:"Design a Client Health Dashboard",
-        skills:["Tableau","Data Visualization","Design Thinking","Stakeholder Communication"],
-        context:"Account managers need a dashboard to spot at-risk clients before they churn. Your manager wants you to design it before you build it — she's learned the hard way that building first means rebuilding twice.",
-        realWorld:"Great analysts design before they build. Stakeholders who say 'just make something' usually mean 'make something I'll love on the first try' — which requires asking questions first. The ability to translate vague requests into a design spec is a career-defining skill.",
-        objective:"Practice translating a business need into a dashboard design spec with chart type justifications.",
+        title:"Создайте информационную панель состояния клиента",
+        skills:["Tableau","Визуализация данных","Дизайнерское мышление","Коммуникация с заинтересованными сторонами"],
+        context:"Менеджерам по работе с клиентами нужна информационная панель, чтобы выявлять клиентов, находящихся в группе риска, прежде чем они уйдут. Ваш менеджер хочет, чтобы вы спроектировали его, прежде чем строить — он на собственном горьком опыте усвоил, что сначала построить — значит дважды перестроить.",
+        realWorld:"Великие аналитики проектируют, прежде чем строить. Заинтересованные стороны, которые говорят «просто сделай что-нибудь», обычно имеют в виду «сделай что-то, что мне понравится с первой попытки», а для этого сначала нужно задать вопросы. Умение воплощать расплывчатые запросы в спецификацию дизайна — навык, определяющий карьеру.",
+        objective:"Потренируйтесь переводить бизнес-потребности в спецификацию дизайна информационной панели с обоснованиями типов диаграмм.",
         assignment:`Design a "Client Health" dashboard for account managers. Metrics needed:
 — Which clients haven't ordered in 90+ days (churn risk)
 — Monthly revenue trend (last 6 months)
@@ -587,12 +589,12 @@ Then:
 
 This is a planning doc, not a Tableau build.`,
         hints:[
-          "Time trends → line charts. Distributions with few categories → bar chart (not pie). Comparisons → bar.",
-          "Eyes go top-left first — put the most urgent metric there",
-          "Ask about: refresh frequency, who else will use this, mobile vs desktop",
-          "Think about what action the account manager takes after seeing each metric"
+          "Временные тенденции → линейные графики. Распределения с несколькими категориями → гистограмма (не круговая). Сравнения → бар.",
+          "Глаза сначала движутся вверху слева — поместите туда самый срочный показатель.",
+          "Спросите о: частоте обновления, кто еще будет использовать это, мобильный или настольный компьютер.",
+          "Подумайте, какие действия предпринимает менеджер по работе с клиентами после просмотра каждого показателя."
         ],
-        rubric:["Chart justifications are logical","Layout shows awareness of visual hierarchy","Questions reveal business curiosity, not just technical questions","Missing metric makes business sense"],
+        rubric:["Обоснования диаграммы логичны","Макет демонстрирует понимание визуальной иерархии","Вопросы раскрывают деловое любопытство, а не только технические вопросы.","Отсутствие метрики имеет смысл для бизнеса"],
         exemplar:`METRICS
 
 1. Clients with no order in 90+ days
@@ -635,11 +637,11 @@ delta-arrow per client beats raw last-order-date for prioritization.`
       },
       {
         id:"d3t2", type:"SQL", duration:"60 min", difficulty:"Intermediate",
-        title:"Investigate a Revenue Drop",
-        skills:["SQL","Critical Thinking","Root Cause Analysis","Communication"],
-        context:"Your manager pings you at 2pm: 'Revenue dropped 23% last Tuesday vs the prior Tuesday — can you dig into it before EOD?' This is your first real fire drill.",
-        realWorld:"Anomaly investigation is a core analyst skill. Executives notice metric drops and expect fast, specific answers. The ability to systematically segment data to find root causes is what gets analysts included in important conversations.",
-        objective:"Practice systematic root-cause analysis by writing queries that isolate and compare segments.",
+        title:"Расследование падения доходов",
+        skills:["SQL","Критическое мышление","Анализ первопричин","Communication"],
+        context:"Ваш менеджер звонит вам в 14:00: «Выручка в прошлый вторник упала на 23% по сравнению с предыдущим вторником. Можете ли вы разобраться в этом до EOD?» Это ваши первые настоящие пожарные учения.",
+        realWorld:"Расследование аномалий — это основной навык аналитика. Руководители замечают снижение показателей и ожидают быстрых и конкретных ответов. Способность систематически сегментировать данные для выявления коренных причин — это то, что привлекает аналитиков к важным обсуждениям.",
+        objective:"Практикуйте систематический анализ первопричин, создавая запросы, которые изолируют и сравнивают сегменты.",
         assignment:`Revenue dropped 23% on Oct 15 vs Oct 8 (both Tuesdays).
 
 Write 5 SQL queries to investigate:
@@ -653,12 +655,12 @@ Q5 — Count of orders with status = 'cancelled' or 'refunded' on both dates
 After writing all 5, write a 3–5 sentence Slack reply to your manager with your findings.
 Make up plausible numbers for your "results" — the practice is in the structure and communication.`,
         hints:[
-          "WHERE order_date IN ('2024-10-08', '2024-10-15') then GROUP BY order_date",
-          "GROUP BY region, order_date for the regional breakdown",
-          "COUNT(order_id) vs SUM(amount) tells you if it's volume or value",
-          "Slack reply: lead with the answer, then the evidence. Don't bury the finding."
+          "ГДЕ order_date IN ('2024-10-08', '2024-10-15'), затем GROUP BY order_date",
+          "GROUP BY регион, order_date для региональной разбивки",
+          "COUNT(order_id) vs SUM(количество) сообщает вам, является ли это объемом или стоимостью.",
+          "Слабый ответ: начните с ответа, затем с доказательствами. Не хороните находку."
         ],
-        rubric:["All 5 queries are logical and syntactically correct","Queries build a systematic investigation arc","Slack message is concise and leads with the finding"],
+        rubric:["Все 5 запросов логичны и синтаксически корректны.","Запросы создают систематическую линию расследования.","Сообщение Slack лаконично и приводит к выводу"],
         exemplar:`-- Q1 Headline
 SELECT order_date, COUNT(*) AS orders, SUM(amount) AS revenue
 FROM orders
@@ -704,15 +706,15 @@ worth confirming with the West AM before we put it in any narrative.`
     ]
   },
   {
-    label: "Thursday — Quality & Cleanup",
+    label: "Четверг — Качество и очистка",
     tasks: [
       {
         id:"d4t1", type:"Communication", duration:"45 min", difficulty:"Beginner",
-        title:"Write a Data Quality Report",
-        skills:["Business Writing","Data Quality","Stakeholder Communication"],
-        context:"While running your Day 1 audit, you found three issues in the customers table: 8% missing emails, 3% duplicate IDs, and inconsistent region values ('US', 'United States', 'usa'). Your manager asked you to write it up formally.",
-        realWorld:"Data quality documentation creates accountability and protects you. When a report shows wrong numbers because of bad data, 'I documented this two weeks ago' is the difference between a bad day and a career-limiting event.",
-        objective:"Write a professional data quality report that a non-technical manager can read and act on.",
+        title:"Напишите отчет о качестве данных",
+        skills:["Деловое письмо","Качество данных","Коммуникация с заинтересованными сторонами"],
+        context:"При проведении аудита первого дня вы обнаружили три проблемы в таблице клиентов: 8% пропущенных электронных писем, 3% повторяющихся идентификаторов и несогласованные значения региона («США», «США», «США»). Ваш менеджер попросил вас официально это описать.",
+        realWorld:"Документация по качеству данных обеспечивает подотчетность и защищает вас. Когда в отчете приводятся неправильные цифры из-за плохих данных, фраза «Я задокументировал это две недели назад» — это разница между плохим днем ​​и событием, ограничивающим карьеру.",
+        objective:"Напишите профессиональный отчет о качестве данных, который сможет прочитать и принять меры нетехнический менеджер.",
         assignment:`Write a Data Quality Report for the customers table.
 
 ISSUES:
@@ -729,12 +731,12 @@ Your report should include:
 
 Write it as a real document, not notes. It should be professional enough to forward directly.`,
         hints:[
-          "Executive summary: write it last, after you know everything you want to say",
-          "Business impact: 'duplicate IDs could cause double-billing or suppressed email campaigns'",
-          "Prioritize by business risk, not ease of fix",
-          "Assign fixes to people/teams — don't leave 'someone should fix this'"
+          "Краткое содержание: напишите его в последнюю очередь, после того, как вы знаете все, что хотите сказать.",
+          "Влияние на бизнес: «дубликаты идентификаторов могут привести к двойному выставлению счетов или подавлению кампаний по электронной почте»",
+          "Отдавайте приоритет бизнес-рискам, а не простоте исправления",
+          "Назначайте исправления людям/командам — не оставляйте фразу «кто-то должен это исправить»"
         ],
-        rubric:["Executive summary is non-technical and actionable","Business impacts are specific and realistic","Next steps are prioritized and assigned","Professional tone throughout"],
+        rubric:["Резюме нетехническое и практическое.","Воздействие на бизнес является конкретным и реалистичным","Следующие шаги расставлены по приоритетам и назначены","Профессиональный тон во всем"],
         exemplar:`DATA QUALITY REPORT — customers table
 Author: [you] · Reviewed by: Sarah Chen
 
@@ -771,11 +773,11 @@ Recommended Next Steps
       },
       {
         id:"d4t2", type:"Python", duration:"60 min", difficulty:"Intermediate",
-        title:"Data Cleaning Script: Standardize Regions",
-        skills:["Python","pandas","Data Cleaning","Code Documentation"],
-        context:"Your quality report flagged the region inconsistency. Now fix it. A script is better than a manual fix because it's repeatable, auditable, and runs on the next messy file automatically.",
-        realWorld:"Data cleaning scripts are a data professional's secret weapon. Unlike manual Excel edits, scripts document every transformation — which means you can explain exactly what changed and why, months later, to auditors or stakeholders.",
-        objective:"Use pandas to standardize inconsistent values and produce a transparent audit trail.",
+        title:"Скрипт очистки данных: стандартизация регионов",
+        skills:["Python","pandas","Очистка данных","Кодовая документация"],
+        context:"В вашем отчете о качестве отмечено несоответствие региона. Теперь исправьте это. Сценарий лучше, чем исправление вручную, потому что он повторяем, проверяем и автоматически запускается со следующим беспорядочным файлом.",
+        realWorld:"Скрипты очистки данных — это секретное оружие профессионала в области данных. В отличие от ручного редактирования Excel, сценарии документируют каждое преобразование, а это означает, что через несколько месяцев вы можете точно объяснить аудиторам или заинтересованным сторонам, что изменилось и почему.",
+        objective:"Используйте pandas для стандартизации противоречивых значений и создания прозрачного контрольного журнала.",
         assignment:`Write a Python script that:
 
 1. Creates this DataFrame:
@@ -798,12 +800,12 @@ data = {
 
 Top of file: docstring with script name, purpose, author, date, expected input columns`,
         hints:[
-          "df['region'].map(mapping_dict) or .replace() both work",
-          "df['region'].unique() shows distinct values before and after",
-          "(df['region'] != df['region_clean']).sum() counts changed rows",
-          "Docstring format: triple-quoted string at top of file"
+          "df['region'].map(mapping_dict) или .replace() оба работают",
+          "df['region'].unique() показывает разные значения до и после",
+          "(df['region'] != df['region_clean']).sum() подсчитывает измененные строки",
+          "Формат строки документации: строка в тройных кавычках вверху файла."
         ],
-        rubric:["Mapping covers all variants in sample data","Before/after printed clearly with correct change count","Output saved correctly","Docstring is present and informative"],
+        rubric:["Сопоставление охватывает все варианты выборочных данных.","Четкая печать до/после с правильным количеством изменений.","Вывод сохранен правильно","Строка документации присутствует и информативна."],
         exemplar:`"""
 standardize_regions.py
 Purpose: Normalize free-text region values in the customers export so
@@ -839,15 +841,15 @@ df.to_csv("customers_cleaned.csv", index=False)`
     ]
   },
   {
-    label: "Friday — Synthesis",
+    label: "Пятница — Синтез",
     tasks: [
       {
         id:"d5t1", type:"Tableau", duration:"90 min", difficulty:"Intermediate",
-        title:"Dashboard Specification: Sales Overview",
-        skills:["Tableau","Data Storytelling","Design","Visual Hierarchy"],
-        context:"It's your last task of week 1. Your manager wants you to spec out a 'Week 1 Sales Overview' dashboard for the Monday all-hands. You'll present the spec — not the built version — in a 10-minute slot.",
-        realWorld:"Dashboard specs are how data teams communicate intent before spending hours building. A clear spec prevents rework, aligns stakeholders early, and makes the actual build go faster. Being able to write a spec that others can build from is a senior-analyst skill you're practicing now.",
-        objective:"Write a complete dashboard specification that defines purpose, metrics, chart types, layout, and the key insight.",
+        title:"Спецификация информационной панели: обзор продаж",
+        skills:["Tableau","Рассказ о данных","Design","Визуальная иерархия"],
+        context:"Это ваше последнее задание на первой неделе. Ваш менеджер хочет, чтобы вы подготовили информационную панель «Обзор продаж на первой неделе» для общего собрания в понедельник. Вы представите спецификацию, а не встроенную версию, в течение 10 минут.",
+        realWorld:"Спецификации информационной панели — это то, как команды обработки данных сообщают о намерениях, прежде чем тратить часы на создание. Четкая спецификация предотвращает доработку, заранее объединяет заинтересованных сторон и ускоряет фактическую сборку. Умение написать спецификацию, на основе которой смогут построить другие, — это навык старшего аналитика, который вы сейчас практикуете.",
+        objective:"Напишите полную спецификацию информационной панели, которая определит цель, метрики, типы диаграмм, макет и ключевую информацию.",
         assignment:`Write a full Dashboard Specification doc for a Sales Overview dashboard.
 
 1. Purpose Statement — one sentence: who is this for and what decision will it help them make?
@@ -865,12 +867,12 @@ df.to_csv("customers_cleaned.csv", index=False)`
 
 6. If you had Tableau open right now: describe step-by-step how you'd build the first chart.`,
         hints:[
-          "Hero metric goes top-left or center-top — eyes land there first",
-          "Fewer metrics = clearer dashboard. 4 is the right number for a 10-minute all-hands slot",
-          "Your 10-second insight should be a specific claim: 'The West region drives 60% of revenue' not 'revenue overview'",
-          "Build step-by-step: connect data → drag dimension to columns → drag measure to rows → choose chart type"
+          "Показатели героя располагаются вверху слева или по центру вверху — взгляд сначала попадает туда.",
+          "Меньше показателей = более понятная панель мониторинга. 4 — подходящее число для 10-минутного слота на все руки",
+          "Ваша 10-секундная информация должна представлять собой конкретное утверждение: «Западный регион приносит 60% доходов», а не «обзор доходов».",
+          "Постройте шаг за шагом: соедините данные → перетащите измерение в столбцы → перетащите показатель в строки → выберите тип диаграммы."
         ],
-        rubric:["Purpose statement is specific and audience-focused","Chart type justifications are sound","Layout choices reflect visual hierarchy principles","10-second insight is a specific, testable claim"],
+        rubric:["Заявление о цели является конкретным и ориентированным на аудиторию.","Обоснования типа диаграммы обоснованы","Выбор макета отражает принципы визуальной иерархии.","10-секундное понимание — это конкретное, проверяемое утверждение"],
         exemplar:`DASHBOARD SPEC — Sales Overview (Week 1)
 
 1. Purpose
@@ -933,11 +935,11 @@ returning customers in EMEA."
       },
       {
         id:"d5t2", type:"Reflection", duration:"30 min", difficulty:"Intro",
-        title:"Week 1 Retrospective",
-        skills:["Self-Awareness","Growth Mindset","Professional Communication"],
-        context:"Friday afternoon. Most people skip reflection because it feels unproductive. The analysts who do it consistently are the ones who grow fastest — and managers notice who comes in Monday with follow-up questions from their own thinking.",
-        realWorld:"Structured self-reflection accelerates skill development — this is well-documented in learning science. The ability to accurately assess your own knowledge gaps (metacognition) is what separates analysts who plateau from those who become seniors in 2 years instead of 5.",
-        objective:"Practice structured professional self-reflection to identify patterns in your learning and name your real knowledge gaps.",
+        title:"Ретроспектива первой недели",
+        skills:["Self-Awareness","Мышление роста","Профессиональное общение"],
+        context:"Пятница, полдень. Большинство людей пропускают размышления, потому что они кажутся непродуктивными. Аналитики, которые делают это постоянно, растут быстрее всего, и менеджеры замечают, кто приходит в понедельник с дополнительными вопросами, основанными на их собственном мнении.",
+        realWorld:"Структурированная саморефлексия ускоряет развитие навыков — это хорошо документировано в науке об обучении. Способность точно оценивать собственные пробелы в знаниях (метапознание) — это то, что отличает аналитиков, у которых наблюдается плато, от тех, кто становится старшими через 2 года вместо 5.",
+        objective:"Практикуйте структурированную профессиональную саморефлексию, чтобы выявить закономерности в своем обучении и назвать реальные пробелы в знаниях.",
         assignment:`Write your Week 1 retrospective. Your manager will read this.
 
 1. HIGHLIGHT — What was the moment you thought "I actually got this"? What specifically clicked?
@@ -955,12 +957,12 @@ returning customers in EMEA."
 
 Be honest. Accurate self-assessment is more valuable than a confident-sounding review.`,
         hints:[
-          "Specific > vague: 'I struggled with HAVING vs WHERE' beats 'SQL was hard'",
-          "Your open question should be something you genuinely want answered — not something you think sounds impressive",
-          "If all your confidence ratings are 4–5, your manager will wonder if you're self-aware",
-          "Week 2 intention should be actionable: 'I'll look up CTEs before Tuesday' not 'get better at SQL'"
+          "Конкретно > расплывчато: «Я боролся с HAVING vs WHERE» лучше «SQL был трудным»",
+          "Ваш открытый вопрос должен быть тем, на что вы искренне хотите получить ответ, а не тем, что, по вашему мнению, звучит впечатляюще.",
+          "Если все ваши рейтинги уверенности равны 4–5, ваш руководитель задастся вопросом, хорошо ли вы себя осознаете.",
+          "Намерение второй недели должно быть осуществимым: «Я посмотрю CTE до вторника», а не «научусь лучше в SQL»."
         ],
-        rubric:["Highlight is specific, not generic","Hardest moment shows honest self-awareness","Three insights are real insights, not just skill names","Open question is specific enough that it could be answered","Confidence ratings feel calibrated and honest"],
+        rubric:["Выделение конкретное, а не общее","Самый трудный момент показывает честное самосознание","Три идеи — это настоящие идеи, а не просто названия навыков","Открытый вопрос достаточно конкретен, чтобы на него можно было ответить","Рейтинги уверенности кажутся выверенными и честными"],
         exemplar:`Week 1 Retrospective — [you]
 
 1. HIGHLIGHT
@@ -1068,34 +1070,34 @@ function escapeHtml(s){
 
 function renderIntro(){
   return `
-    <h2 class="sr-only">Associate Data Analyst Simulator — Week 1 Onboarding</h2>
-    <div class="intro-eyebrow">${COMPANY.name} · New Hire Program</div>
+    <h2 class="sr-only">Симулятор младшего аналитика данных — ввод в эксплуатацию, неделя 1</h2>
+    <div class="intro-eyebrow">${COMPANY.name} · Новая программа найма</div>
     <div class="intro-emoji"><i data-lucide="bar-chart-3"></i></div>
-    <h1 class="intro-h1">Your first week as an <span>Associate Data Analyst</span></h1>
-    <p class="intro-sub">It's Monday morning. Your badge doesn't work yet, your laptop's being set up — but your manager just Slacked you your first tasks.</p>
+    <h1 class="intro-h1">Ваша первая неделя в качестве <span>Младший аналитик данных</span></h1>
+    <p class="intro-sub">Сегодня утро понедельника. Ваш бейдж еще не работает, ваш ноутбук настраивают, но ваш менеджер только что замедлил выполнение первых задач.</p>
 
     <div class="role-card">
-      <div class="kicker">Your role</div>
+      <div class="kicker">Ваша роль</div>
       <div class="role-line">
-        <strong>Associate Data Analyst</strong> at <strong>${COMPANY.name}</strong>
+        <strong>Младший аналитик данных</strong> at <strong>${COMPANY.name}</strong>
         <span class="meta">${COMPANY.desc}</span>
-        <span class="meta">Manager: ${COMPANY.manager}, ${COMPANY.managerTitle}</span>
+        <span class="meta">Менеджер: ${COMPANY.manager}, ${COMPANY.managerTitle}</span>
       </div>
     </div>
 
     <div class="stat-row">
-      <div class="stat-card"><div class="stat-icon"><i data-lucide="calendar-days"></i></div><div class="stat-label">5 Days</div><div class="stat-sub">Mon – Fri</div></div>
-      <div class="stat-card"><div class="stat-icon"><i data-lucide="list-checks"></i></div><div class="stat-label">10 Tasks</div><div class="stat-sub">Real scenarios</div></div>
-      <div class="stat-card"><div class="stat-icon"><i data-lucide="message-square"></i></div><div class="stat-label">AI Review</div><div class="stat-sub">Manager feedback</div></div>
+      <div class="stat-card"><div class="stat-icon"><i data-lucide="calendar-days"></i></div><div class="stat-label">5 дней</div><div class="stat-sub">Пн – Пт</div></div>
+      <div class="stat-card"><div class="stat-icon"><i data-lucide="list-checks"></i></div><div class="stat-label">10 задач</div><div class="stat-sub">Реальные сценарии</div></div>
+      <div class="stat-card"><div class="stat-icon"><i data-lucide="message-square"></i></div><div class="stat-label">Обзор ИИ</div><div class="stat-sub">Обратная связь менеджера</div></div>
     </div>
 
     <div class="how-box">
-      <div class="kicker" style="margin-bottom:10px">How it works</div>
+      <div class="kicker" style="margin-bottom:10px">Как это работает</div>
       ${[
-        'Read the brief — including why this task exists in real jobs',
-        'Write your answer in the submission box',
-        'Submit for AI-powered manager review',
-        'Move through the week at your own pace'
+        "Прочтите краткое описание, в том числе о том, почему эта задача существует на реальных должностях.",
+        "Напишите свой ответ в поле для отправки",
+        "Отправьте на рассмотрение менеджеру с помощью искусственного интеллекта",
+        "Проживайте неделю в своем темпе"
       ].map((s,i)=>`<div class="how-step"><div class="how-num">${i+1}</div><div class="how-text">${s}</div></div>`).join('')}
     </div>
 
@@ -1103,7 +1105,7 @@ function renderIntro(){
       ${Object.entries(TYPE_COLOR).map(([s,c])=>`<span class="skill-pill" style="color:${c}">${s}</span>`).join('')}
     </div>
 
-    <button class="btn-primary" onclick="setScreen('board')">Start Week 1 →</button>
+    <button class="btn-primary" onclick="setScreen('board')">Начало первой недели →</button>
   `;
 }
 
@@ -1117,7 +1119,7 @@ function renderBoard(){
     <div class="board-head">
       <div>
         <div class="board-eyebrow">${COMPANY.name}</div>
-        <div class="board-title">Week 1 Task Board</div>
+        <div class="board-title">Доска задач первой недели</div>
       </div>
       <div>
         <div class="board-progress-num">${done}<span>/${total}</span></div>
@@ -1195,43 +1197,43 @@ function renderTaskScreen(){
   if(state.tab === 'brief'){
     panel = `
       <div class="brief-situation">
-        <div class="brief-h">The situation</div>
+        <div class="brief-h">Ситуация</div>
         <p>${escapeHtml(t.context)}</p>
       </div>
       <div class="brief-realworld">
-        <div class="brief-h">In the real world</div>
+        <div class="brief-h">В реальном мире</div>
         <p>${escapeHtml(t.realWorld)}</p>
       </div>
       <div class="brief-objective">
-        <div class="brief-h">Learning objective</div>
+        <div class="brief-h">Цель обучения</div>
         <p>${escapeHtml(t.objective)}</p>
       </div>
       <div class="brief-skills">
-        <div class="brief-h">Skills you'll use</div>
+        <div class="brief-h">Навыки, которые вы будете использовать</div>
         <div class="brief-skills-list">${t.skills.map(s=>`<span class="brief-skill-chip">${escapeHtml(s)}</span>`).join('')}</div>
       </div>
-      <button class="btn-view-feedback" onclick="setTab('task')">View Assignment →</button>
+      <button class="btn-view-feedback" onclick="setTab('task')">Посмотреть задание →</button>
     `;
   } else if(state.tab === 'task'){
     const disabled = st === 'reviewed';
     panel = `
       <div class="assignment-box">${renderAssignmentBody(t.assignment)}</div>
-      <label class="sub-label">Your submission</label>
+      <label class="sub-label">Ваше представление</label>
       <textarea class="submission" id="draftBox" placeholder="Write your answer here. For code, write it out. For written tasks, use complete sentences..." ${disabled?'disabled':''} oninput="onDraft(this.value)">${escapeHtml(state.draft)}</textarea>
       ${st === 'reviewed'
-        ? `<button class="btn-view-feedback" onclick="setScreen('review')">View Manager Feedback →</button>`
-        : `<button class="btn-submit" id="submitBtn" onclick="submitForReview()" ${!state.draft.trim()?'disabled':''}>Submit for Review ↗</button>`
+        ? `<button class="btn-view-feedback" onclick="setScreen('review')">Посмотреть отзыв менеджера →</button>`
+        : `<button class="btn-submit" id="submitBtn" onclick="submitForReview()" ${!state.draft.trim()?'disabled':''}>Отправить на рассмотрение ↗</button>`
       }
     `;
   } else {
     panel = `
-      <p class="hints-note">Like asking a senior colleague for a nudge — direction without giving away the answer.</p>
+      <p class="hints-note">Это все равно, что попросить старшего коллегу подтолкнуть его — дать указание, не раскрывая ответа.</p>
       <div style="background:var(--surf2);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:var(--r-md);padding:12px 14px;margin-bottom:18px;font-size:13px;line-height:1.6;color:var(--text)">
-        <strong style="color:var(--accent)">🗣️ Try this:</strong> before you write anything, read the assignment back to yourself in plain language — in whatever language you think in. If you can say what the answer needs to do, the syntax follows. This is the same "Say It Out Loud" method the other kits teach.
+        <strong style="color:var(--accent)">🗣️ Попробуйте это:</strong> Прежде чем что-то написать, прочитайте задание простым языком — на том языке, на котором вы думаете. Если вы можете сказать, что должен делать ответ, синтаксис будет следующим. Это тот же метод «Скажи это вслух», которому обучают другие наборы.
       </div>
       ${t.hints.map(h=>`<div class="hint-row"><span class="hint-bulb">💡</span><div class="hint-text">${escapeHtml(h)}</div></div>`).join('')}
       <div class="rubric-box">
-        <div class="brief-h" style="margin-bottom:8px">What your manager is looking for</div>
+        <div class="brief-h" style="margin-bottom:8px">Что ищет ваш менеджер</div>
         ${t.rubric.map(r=>`<div class="rubric-item">${escapeHtml(r)}</div>`).join('')}
       </div>
     `;
@@ -1239,7 +1241,7 @@ function renderTaskScreen(){
 
   return `
     <div class="task-nav">
-      <button class="btn-back" onclick="setScreen('board')">← Board</button>
+      <button class="btn-back" onclick="setScreen('board')">← Доска</button>
       <div style="flex:1"></div>
       <span class="type-pill" style="color:${TYPE_COLOR[t.type]}">${t.type}</span>
       <span class="task-dur">${t.duration}</span>
@@ -1248,7 +1250,7 @@ function renderTaskScreen(){
     <p class="task-from">👤 ${COMPANY.manager}, ${COMPANY.managerTitle}</p>
 
     <div class="tabs">
-      <button class="tab ${state.tab==='brief'?'active':''}" onclick="setTab('brief')">Why This Matters</button>
+      <button class="tab ${state.tab==='brief'?'active':''}" onclick="setTab('brief')">Почему это важно</button>
       <button class="tab ${state.tab==='task'?'active':''}" onclick="setTab('task')">Assignment</button>
       <button class="tab ${state.tab==='hints'?'active':''}" onclick="setTab('hints')">Hints</button>
     </div>
@@ -1263,13 +1265,13 @@ function renderReview(){
   const next = findNext(t.id);
 
   return `
-    <button class="btn-back" onclick="setScreen('board')" style="margin-bottom:18px">← Back to board</button>
+    <button class="btn-back" onclick="setScreen('board')" style="margin-bottom:18px">← Вернуться на доску</button>
 
     <div class="reviewer">
       <div class="avatar">${COMPANY.initials}</div>
       <div>
         <div class="reviewer-name">${COMPANY.manager}</div>
-        <div class="reviewer-sub">Re: ${escapeHtml(t.title)}</div>
+        <div class="reviewer-sub">Ре: ${escapeHtml(t.title)}</div>
       </div>
       <span class="check-icon">✓</span>
     </div>
@@ -1277,14 +1279,14 @@ function renderReview(){
     <div class="review-box">${review ? renderReviewText(review) : ''}</div>
 
     <details class="your-sub">
-      <summary>Your submission</summary>
+      <summary>Ваше представление</summary>
       <div class="sub-display">${escapeHtml(state.submissions[t.id] || '')}</div>
     </details>
 
     <div class="review-actions">
       ${next
-        ? `<button class="btn-next" onclick="goToNext('${next.id}')">Next: ${escapeHtml(next.title)} →</button>`
-        : `<div class="complete-banner">🎉 Week 1 Complete!</div>`
+        ? `<button class="btn-next" onclick="goToNext('${next.id}')">Следующий: ${escapeHtml(next.title)} →</button>`
+        : `<div class="complete-banner">🎉 Первая неделя завершена!</div>`
       }
       <button class="btn-board" onclick="setScreen('board')">Board</button>
     </div>
@@ -1336,7 +1338,7 @@ async function submitForReview(){
   state.screen = 'review';
   state.reviews[id] = ''; // empty triggers loading-ish; but renderReview just shows empty box
   render();
-  document.querySelector('.review-box').innerHTML = `<div class="review-loading"><div class="spinner"></div>${COMPANY.manager} is reviewing your submission…</div>`;
+  document.querySelector('.review-box').innerHTML = `<div class="review-loading"><div class="spinner"></div>${COMPANY.manager} рассматривает вашу заявку…</div>`;
 
   const apiKey = localStorage.getItem('sim2-apikey');
   let review;
@@ -1344,7 +1346,7 @@ async function submitForReview(){
     try{ review = await fetchLiveReview(apiKey, t, state.draft); }
     catch(e){
       console.warn(e);
-      review = fallbackReview(t, state.draft, 'Live review failed ('+(e.message||'unknown')+'). Falling back to rubric self-check.');
+      review = fallbackReview(t, state.draft, "Живой обзор не удался ("+(e.message||'unknown')+"). Возвращаемся к рубрике самопроверки.");
     }
   } else {
     review = fallbackReview(t, state.draft);
@@ -1403,7 +1405,7 @@ Max 280 words. Reference specific things from their submission, not generic prai
     throw new Error(`API ${res.status}: ${txt.slice(0,200)}`);
   }
   const data = await res.json();
-  return data.content?.map(b=>b.text||'').join('') || 'No response.';
+  return data.content?.map(b=>b.text||'').join('') || "Никакого ответа.";
 }
 
 function fallbackReview(task, submission, prefix=''){
@@ -1440,12 +1442,12 @@ function saveApiKey(){
   const v = document.getElementById('apiKeyInput').value.trim();
   if(v) localStorage.setItem('sim2-apikey', v); else localStorage.removeItem('sim2-apikey');
   closeApiModal();
-  toast(v ? 'API key saved locally.' : 'API key cleared.');
+  toast(v ? "Ключ API сохранен локально." : "Ключ API очищен.");
 }
 function clearApiKey(){
   localStorage.removeItem('sim2-apikey');
   document.getElementById('apiKeyInput').value = '';
-  toast('API key cleared.');
+  toast("Ключ API очищен.");
 }
 
 /* ============ THEME / RESET / TOAST ============ */
@@ -1454,17 +1456,17 @@ function toggleTheme(){
   const next = cur === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('apk-theme', next);
-  document.getElementById('themeIcon').innerHTML = '<i data-lucide="' + (next === 'dark' ? 'sun' : 'moon') + '"></i>';
+  document.getElementById('themeIcon').innerHTML = "<я данные-lucid=\"" + (next === 'dark' ? 'sun' : 'moon') + '"></i>';
   if(window.grainRefreshIcons)grainRefreshIcons();else if(window.lucide)lucide.createIcons();
 }
 (function initTheme(){
   const saved = localStorage.getItem('apk-theme');
   if(saved) document.documentElement.setAttribute('data-theme', saved);
-  document.getElementById('themeIcon').innerHTML = '<i data-lucide="' + (document.documentElement.getAttribute('data-theme')==='dark'?'sun':'moon') + '"></i>';
+  document.getElementById('themeIcon').innerHTML = "<я данные-lucid=\"" + (document.documentElement.getAttribute('data-theme')==='dark'?'sun':'moon') + '"></i>';
 })();
 
 function resetSim(){
-  if(!confirm('Clear all your submissions and progress?')) return;
+  if(!confirm("Очистить все отправленные материалы и прогресс?")) return;
   localStorage.removeItem(STORE);
   location.reload();
 }
@@ -1553,19 +1555,19 @@ setTimeout(initAuthUI,600);
 .apk-about h3:first-child{margin-top:0}
 </style>
 <section class="apk-about">
-  <h3>Related guides</h3>
+  <h3>Полезные руководства</h3>
   <ul>
-    <li><a href="../guides/report-vs-analysis/">Report vs analysis</a></li>
-    <li><a href="../guides/defining-metrics/">Defining a metric</a></li>
-    <li><a href="../guides/documenting-data-limitations/">Documenting data limitations</a></li>
-    <li><a href="../guides/technical-tenacity/">Technical tenacity</a></li>
-    <li><a href="../guides/verify-ai-agent-work/">Verifying AI agent work</a></li>
+    <li><a href="../guides/report-vs-analysis/">Отчет против анализа</a></li>
+    <li><a href="../guides/defining-metrics/">определение метрики</a></li>
+    <li><a href="../guides/documenting-data-limitations/">Документирование ограничений данных</a></li>
+    <li><a href="../guides/technical-tenacity/">Техническая стойкость</a></li>
+    <li><a href="../guides/verify-ai-agent-work/">Проверка работы AI-агента</a></li>
   </ul>
-  <p><a href="../guides/">Browse all guides</a> · <a href="../">All kits</a></p>
+  <p><a href="../guides/">Просмотреть все руководства</a> · <a href="../">Все комплекты</a></p>
 </section>
 <!-- APK:KIT-SEO:END -->
 
-<script src="../assets/ru-localization.js?v=20261027-1"></script>
+
 <script src="../assets/datacraft-economy.js"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tableau Order of Operations: Filters, Context and Table Calcs &mdash; Analyst Prep Kit</title>
-<meta name="description" content="Tableau applies filters in a fixed sequence, and a top N filter that fights a dimension filter is the classic symptom. The order in full, what a context filter really does, and the three places a filter can be applied.">
+<title>Порядок операций Tableau: фильтры, контекст и табличные вычисления — комплект подготовки аналитика</title>
+<meta name="description" content="Tableau применяет фильтры в фиксированной последовательности, а фильтр из N верхних позиций, который борется с фильтром измерения, является классическим симптомом. Полный порядок, что на самом деле делает контекстный фильтр, и три места, где фильтр можно применить.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/tableau-filter-order-of-operations/">
-<meta property="og:title" content="Why Your Tableau Filter Did Not Do What You Expected: The Order of Operations">
-<meta property="og:description" content="Extract, data source, context, dimension, measure, table calc. The sequence that explains the surprise.">
+<meta property="og:title" content="Почему ваш табличный фильтр не сделал того, что вы ожидали: порядок операций">
+<meta property="og:description" content="Извлечение, источник данных, контекст, измерение, мера, расчет таблицы. Последовательность, объясняющая удивление.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/tableau-filter-order-of-operations/">
 <meta name="twitter:card" content="summary_large_image">
@@ -69,12 +69,11 @@
   figcaption{font-size:13.5px;color:var(--muted);margin-top:6px}
 </style>
 <!-- SEO:JSONLD:START -->
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "Why Your Tableau Filter Did Not Do What You Expected: The Order of Operations",
-  "description": "Tableau applies filters in a fixed sequence, and a top N filter that fights a dimension filter is the classic symptom. The order in full, what a context filter really does, and the three places a filter can be applied.",
+  "headline": "Почему ваш табличный фильтр не сделал того, что вы ожидали: порядок операций",
+  "description": "Tableau применяет фильтры в фиксированной последовательности, а фильтр из N верхних позиций, который борется с фильтром измерения, является классическим симптомом. Полный порядок, что на самом деле делает контекстный фильтр, и три места, где фильтр можно применить.",
   "url": "https://michaelnocito.github.io/analyst-prep-kit/guides/tableau-filter-order-of-operations/",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -82,20 +81,19 @@
   },
   "author": {
     "@type": "Person",
-    "name": "Michael Nocito",
+    "name": "Майкл Носито",
     "url": "https://michaelnocito.github.io"
   },
   "publisher": {
     "@type": "Person",
-    "name": "Michael Nocito"
+    "name": "Майкл Носито"
   },
   "inLanguage": "en",
   "datePublished": "2026-08-23",
   "dateModified": "2026-08-23"
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
@@ -114,47 +112,46 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Tableau Filter Order",
+      "name": "Порядок фильтра таблицы",
       "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/tableau-filter-order-of-operations/"
     }
   ]
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "What is the Tableau order of operations?",
+      "name": "Каков порядок операций в Таблице?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Extract filters, then data source filters, then context filters, then fixed level of detail expressions, then dimension filters, then measure filters, then table calculation filters, and finally totals and reference lines. Each stage sees only what the earlier stages left."
+        "text": "Фильтры извлечения, затем фильтры источников данных, затем контекстные фильтры, затем выражения с фиксированным уровнем детализации, затем фильтры измерений, затем фильтры измерений, затем фильтры вычислений в таблице и, наконец, итоговые суммы и ссылочные строки. Каждый этап видит только то, что осталось на предыдущих этапах."
       }
     },
     {
       "@type": "Question",
-      "name": "What does a context filter do in Tableau?",
+      "name": "Что делает контекстный фильтр в Tableau?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "It promotes a dimension filter so it runs before FIXED level of detail expressions and before top N filters. Right click the filter, Add to Context, and it turns blue. Use it when a top N should be computed within the filtered subset."
+        "text": "Он продвигает фильтр измерений, поэтому он выполняется перед выражениями уровня детализации ФИКСИРОВАННОГО и перед фильтрами N верхних уровней. Щелкните правой кнопкой мыши фильтр, выберите «Добавить в контекст», и он станет синим. Используйте его, когда необходимо вычислить верхнее N внутри отфильтрованного подмножества."
       }
     },
     {
       "@type": "Question",
-      "name": "Why does my Top 10 filter show fewer than 10 rows?",
+      "name": "Почему мой фильтр «Топ-10» показывает менее 10 строк?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Because the Top N is computed before the dimension filter, so it picks the top 10 overall and the dimension filter then removes some of them. Add the dimension filter to context so it runs first."
+        "text": "Поскольку Top N вычисляется перед фильтром измерений, он выбирает 10 лучших в целом, а фильтр измерений затем удаляет некоторые из них. Добавьте фильтр измерения в контекст, чтобы он запускался первым."
       }
     },
     {
       "@type": "Question",
-      "name": "What is the difference between a dimension filter and a measure filter?",
+      "name": "В чем разница между фильтром измерения и фильтром меры?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "A dimension filter removes rows before aggregation. A measure filter runs after aggregation, so it can only keep or drop whole aggregated marks, and it cannot change the values of the marks that survive."
+        "text": "Фильтр измерений удаляет строки перед агрегированием. Фильтр показателей запускается после агрегирования, поэтому он может сохранять или удалять только целые агрегированные оценки и не может изменять значения сохранившихся оценок."
       }
     }
   ]
@@ -164,95 +161,95 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../../tableau/">Tableau Kit</a></p>
-  <h1>Why Your Tableau Filter Did Not Do What You Expected: The Order of Operations</h1>
-  <p class="meta">Michael Nocito &middot; Updated August 2026 &middot; Every number on this page was worked before it was published</p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../../tableau/">Табличный комплект</a></p>
+  <h1>Почему ваш табличный фильтр не сделал того, что вы ожидали: порядок операций</h1>
+  <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Все числа на этой странице были обработаны до их публикации.</p>
 
-  <p>You put a Top 10 Customers filter on the view and a Region filter beside it. Choose North and eight rows appear. Nothing is broken: Tableau computed the top 10 before it applied the region filter, then threw two of them away.</p>
+  <p>Вы помещаете фильтр «10 крупнейших клиентов» в представление и фильтр «Регион» рядом с ним. Выберите «Север», и появятся восемь строк. Ничего не сломано: Tableau вычислила 10 лучших, прежде чем применила фильтр регионов, а затем выбросила два из них.</p>
 
-  <p>What you do: learn the sequence, then use context filters to move a filter earlier when the order is wrong for your question.</p>
+  <p>Что вы делаете: изучаете последовательность, затем используете контекстные фильтры, чтобы переместить фильтр раньше, когда порядок не соответствует вашему вопросу.</p>
 
-  <p><strong>The short version.</strong> Filters do not all run at the same time, and the earlier ones decide what the later ones can see.</p>
+  <p><strong>Краткая версия.</strong>  Не все фильтры запускаются одновременно, и более ранние фильтры решают, что смогут увидеть более поздние.</p>
 
-  <h2>The sequence</h2>
+  <h2>Последовательность</h2>
   <table>
-    <tr><th>Order</th><th>Stage</th><th>What lives here</th></tr>
-    <tr><td>1</td><td>Extract filters</td><td>Rows never brought into the extract at all</td></tr>
-    <tr><td>2</td><td>Data source filters</td><td>Applied to every sheet in the workbook</td></tr>
-    <tr><td>3</td><td>Context filters</td><td>Dimension filters you promoted</td></tr>
-    <tr><td>4</td><td>FIXED level of detail</td><td>Computed on what stages 1 to 3 left</td></tr>
-    <tr><td>5</td><td>Dimension filters</td><td>The ordinary filter shelf, and top N</td></tr>
-    <tr><td>6</td><td>INCLUDE and EXCLUDE level of detail</td><td>After dimension filters</td></tr>
-    <tr><td>7</td><td>Measure filters</td><td>Filters on aggregates, such as SUM(Sales) &gt; 1000</td></tr>
-    <tr><td>8</td><td>Table calculation filters</td><td>Hide marks without changing the calculation</td></tr>
-    <tr><td>9</td><td>Totals, reference lines, forecasts</td><td>Drawn on what survived</td></tr>
+    <tr><th>Order</th><th>Stage</th><th>Что здесь живет</th></tr>
+    <tr><td>1</td><td>Извлечь фильтры</td><td>Строки вообще не вносились в выписку</td></tr>
+    <tr><td>2</td><td>Фильтры источников данных</td><td>Применяется к каждому листу книги.</td></tr>
+    <tr><td>3</td><td>Контекстные фильтры</td><td>Фильтры параметров, которые вы продвигаете</td></tr>
+    <tr><td>4</td><td>ФИКСИРОВАННЫЙ уровень детализации</td><td>Посчитано, какие этапы с 1 по 3 остались</td></tr>
+    <tr><td>5</td><td>Фильтры размеров</td><td>Обычная полка фильтра и верхняя N</td></tr>
+    <tr><td>6</td><td>ВКЛЮЧИТЬ и ИСКЛЮЧИТЬ уровень детализации</td><td>После фильтров параметров</td></tr>
+    <tr><td>7</td><td>Измерение фильтров</td><td>Фильтры по агрегатам, например SUM(Продажи) &gt; 1000.</td></tr>
+    <tr><td>8</td><td>Табличные фильтры расчета</td><td>Скрыть отметки без изменения расчета</td></tr>
+    <tr><td>9</td><td>Итоги, ориентиры, прогнозы</td><td>Нарисовано на том, что выжило</td></tr>
   </table>
-  <p>Two rows of this table explain most confusion. Stage 4 is why a <code>FIXED</code> expression seems to ignore the filter you just set: it does ignore it, unless that filter is in context. And stage 8 is why a table calculation filter hides rows while leaving a running total looking like it still counts them, which is usually exactly what you want.</p>
+  <p>Две строки этой таблицы объясняют большую часть путаницы. Этап 4: почему  <code>FIXED</code>  Кажется, что выражение игнорирует только что установленный вами фильтр: оно игнорирует его, если только этот фильтр не находится в контексте. И на этапе 8 объясняется, почему фильтр табличных вычислений скрывает строки, в то время как промежуточная сумма выглядит так, как будто он все еще их считает, а это обычно именно то, что вам нужно.</p>
 
-  <h2>The context filter, worked</h2>
-  <p>Back to the Top 10 problem. Region is a dimension filter at stage 5, and so is the Top 10, so they compete inside the same stage with the top N computed against everything the earlier stages allowed through.</p>
-  <p>Right click the Region filter and choose Add to Context. It turns blue and moves to stage 3. Now the top 10 is computed within North only, and ten rows appear.</p>
-  <p>The cost: a context filter creates a temporary table behind the scenes, so it is not free. Use it where it is needed rather than as a habit, and remember that changing a context filter forces more work than changing an ordinary one.</p>
+  <h2>Контекстный фильтр сработал</h2>
+  <p>Вернемся к 10-й проблеме. Регион — это фильтр по параметрам на этапе 5, как и Топ-10, поэтому они конкурируют на одном этапе, при этом вершина N рассчитывается на основе всего, что было разрешено на предыдущих этапах.</p>
+  <p>Щелкните правой кнопкой мыши фильтр «Регион» и выберите «Добавить в контекст». Он станет синим и перейдет на этап 3. Теперь 10 лучших вычисляются только в пределах Севера, и появляются десять строк.</p>
+  <p>Цена: контекстный фильтр «за кулисами» создает временную таблицу, поэтому он не бесплатен. Используйте его там, где это необходимо, а не как привычку, и помните, что изменение контекстного фильтра требует больше работы, чем изменение обычного.</p>
 
-  <div class="note"><strong>The blue pill on the filter shelf is the whole tell.</strong> Grey means an ordinary dimension filter at stage 5. Blue means context, at stage 3. If a view behaves oddly, look at the colours on the filter shelf before anything else.</div>
+  <div class="note"><strong>Синяя таблетка на полке с фильтром — вот и все.</strong>  Серый означает обычный фильтр измерений на этапе 5. Синий означает контекст на этапе 3. Если представление ведет себя странно, прежде всего посмотрите на цвета на полке фильтров.</div>
 
-  <h2>Where a filter can be applied</h2>
+  <h2>Где можно применить фильтр</h2>
   <table>
-    <tr><th>Scope</th><th>How to set it</th><th>Use for</th></tr>
-    <tr><td>This sheet only</td><td>Drag to the Filters shelf</td><td>Most things</td></tr>
-    <tr><td>Selected sheets</td><td>Apply to Worksheets, Selected</td><td>A dashboard where two views share a control</td></tr>
-    <tr><td>All using this source</td><td>Apply to All Using This Data Source</td><td>A workbook-wide slice, such as one year</td></tr>
-    <tr><td>Data source</td><td>Data menu, Edit Data Source Filters</td><td>Excluding test rows permanently</td></tr>
-    <tr><td>Extract</td><td>On the extract dialog</td><td>Keeping the extract small</td></tr>
+    <tr><th>Scope</th><th>Как это установить</th><th>Используйте для</th></tr>
+    <tr><td>Только этот лист</td><td>Перетащите на полку «Фильтры».</td><td>Большинство вещей</td></tr>
+    <tr><td>Выбранные листы</td><td>Применить к листам, выбрано</td><td>Панель мониторинга, где два представления имеют общий элемент управления</td></tr>
+    <tr><td>Все используют этот источник</td><td>Применить ко всем, использующим этот источник данных</td><td>Срез всей книги, например один год.</td></tr>
+    <tr><td>Источник данных</td><td>Меню «Данные», «Редактировать фильтры источника данных»</td><td>Исключение тестовых строк навсегда</td></tr>
+    <tr><td>Extract</td><td>В диалоговом окне извлечения</td><td>Сохранение небольшого размера экстракта</td></tr>
   </table>
-  <p>Rows that should never appear in any view belong in the extract or data source filter, not on a shelf. It is the same argument as filtering in Power Query rather than in a report: a filter one click away from being removed will eventually be removed.</p>
+  <p>Строки, которые никогда не должны появляться ни в одном представлении, относятся к фильтру извлечения или источника данных, а не на полке. Это тот же аргумент, что и фильтрация в Power Query, а не в отчете: фильтр, который можно удалить одним щелчком мыши, в конечном итоге будет удален.</p>
 
-  <h2>The three symptoms and their causes</h2>
+  <h2>Три симптома и их причины</h2>
   <ol>
-    <li><strong>Top N returns fewer rows than N.</strong> A dimension filter is competing with it. Add that filter to context.</li>
-    <li><strong>A percent of total does not change when you filter.</strong> The denominator is a <code>FIXED</code> expression running before the filter. Add the filter to context, or use <code>INCLUDE</code>, or write the total as a table calculation.</li>
-    <li><strong>Hiding a row changes the running total.</strong> You used a dimension filter where you wanted a table calculation filter. Filtering with a table calc, or right click and Hide, keeps the calculation intact.</li>
+    <li><strong>Top N возвращает меньше строк, чем N.</strong>  С ним конкурирует фильтр измерений. Добавьте этот фильтр в контекст.</li>
+    <li><strong>Процент от общего числа не меняется при фильтрации.</strong>  Знаменатель – это  <code>FIXED</code>  выражение, выполняемое перед фильтром. Добавьте фильтр в контекст или используйте  <code>INCLUDE</code>или запишите сумму в виде табличного расчета.</li>
+    <li><strong>Скрытие строки изменяет промежуточную сумму.</strong>  Вы использовали фильтр измерений там, где вам нужен фильтр табличных вычислений. Фильтрация с помощью табличного расчета или щелчка правой кнопкой мыши и выбора «Скрыть» сохраняет расчет без изменений.</li>
   </ol>
 
-  <h2>Hide is not filter</h2>
-  <p>Right clicking a header and choosing Hide removes the mark from the view without removing the row from the calculation. That is genuinely useful for a running total or a percent of total, and it is a trap when you meant to exclude the data. Hidden members do not appear in the filter shelf, so nothing on screen says they exist, and a colleague opening the workbook will not find them.</p>
+  <h2>Скрыть — это не фильтр</h2>
+  <p>Щелчок правой кнопкой мыши по заголовку и выбор «Скрыть» удаляет метку из представления, не удаляя строку из расчета. Это действительно полезно для промежуточной суммы или процента от общей суммы, и это ловушка, когда вы хотите исключить данные. Скрытые элементы не отображаются на полке фильтров, поэтому на экране ничего не сообщает об их существовании, и коллега, открывающий книгу, не найдет их.</p>
 
-  <h2>How to apply this to your own work</h2>
+  <h2>Как применить это в своей работе</h2>
   <ol>
-    <li>Open your most complicated sheet and read the filter shelf colours. Note which are in context.</li>
-    <li>For every top N filter, check whether another dimension filter should be in context beside it.</li>
-    <li>Search your calculated fields for <code>FIXED</code> and ask which filters it is meant to respect.</li>
-    <li>Move permanent exclusions into a data source filter and remove them from the shelves.</li>
-    <li>Check for hidden members before you trust any total, using Analysis, Reveal Hidden Data.</li>
+    <li>Откройте самый сложный лист и прочитайте цвета полочек с фильтрами. Обратите внимание, что находится в контексте.</li>
+    <li>Для каждого N первого фильтра проверьте, должен ли рядом с ним находиться другой фильтр измерения.</li>
+    <li>Найдите в вычисляемых полях  <code>FIXED</code>  и спросите, какие фильтры он должен учитывать.</li>
+    <li>Переместите постоянные исключения в фильтр источников данных и уберите их с полок.</li>
+    <li>Проверьте наличие скрытых элементов, прежде чем доверять какой-либо сумме, используя «Анализ», «Показать скрытые данные».</li>
   </ol>
 
-  <h2>The one habit to keep</h2>
-  <p>When a view surprises you, ask which stage each part of it runs in. That question converts a mysterious result into a sequence you can reason about, and it works for every version of Tableau.</p>
+  <h2>Единственная привычка, которую нужно сохранить</h2>
+  <p>Когда представление вас удивляет, спросите, на каком этапе находится каждая его часть. Этот вопрос преобразует загадочный результат в последовательность, о которой вы можете рассуждать, и это работает для каждой версии Tableau.</p>
 
-  <p>Is the top N on your dashboard computed before or after the region filter?</p>
+  <p>Верхняя N на вашей информационной панели вычисляется до или после фильтра регионов?</p>
 
-  <div class="note"><strong>Written from the tool as it ships.</strong> Add to Context, Apply to Worksheets, Edit Data Source Filters and Reveal Hidden Data are all current Tableau Desktop features.</div>
+  <div class="note"><strong>Написано с помощью инструмента в момент его поставки.</strong>  «Добавить в контекст», «Применить к листам», «Редактировать фильтры источника данных» и «Показать скрытые данные» — все это текущие функции Tableau Desktop.</div>
 
   <div class="book">
-    <strong>Tableau is not ignoring your filter. It is applying it later than you assumed.</strong>
-    <p><em>Tableau for Analysts</em> is 110 pages on how Tableau actually thinks: dimensions against measures, relationships against joins, sets, and level of detail. Enough that you stop dragging fields until it looks right.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/tableau-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=tableau-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-tableau-filter-order-of-operations'})">Tableau for Analysts, $19 &rarr;</a>
+    <strong>Tableau не игнорирует ваш фильтр. Он применяет его позже, чем вы предполагали.</strong>
+    <p><em>Таблица для аналитиков</em>  это 110 страниц о том, как на самом деле думает Tableau: измерения против мер, отношения против объединений, наборы и уровень детализации. Достаточно того, что вы перестанете перетаскивать поля, пока все не станет выглядеть правильно.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/tableau-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=tableau-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-tableau-filter-order-of-operations'})">Таблица для аналитиков, $19 →</a>
   </div>
 
   <div class="cta">
-    <strong>The order explains most Tableau surprises.</strong>
-    <p style="margin:6px 0 0"><a href="../tableau-table-calculations/">Table calculations</a> sit at the far end of the sequence, and <a href="../tableau-sorts/">sorting in Tableau</a> is affected by the same order. The <a href="../../tableau/">Tableau Kit</a> has the drills.</p>
-    <a class="btn" href="../tableau-table-calculations/">Read Table Calculations &rarr;</a>
+    <strong>Этот приказ объясняет большинство сюрпризов Tableau.</strong>
+    <p style="margin:6px 0 0"><a href="../tableau-table-calculations/">таблица расчетов</a>  сядьте в дальнем конце последовательности и  <a href="../tableau-sorts/">сортировка в Таблице</a>  действует тот же порядок.  <a href="../../tableau/">Табличный комплект</a>  есть дрели.</p>
+    <a class="btn" href="../tableau-table-calculations/">Читать Табличные расчеты →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../tableau-table-calculations/">Table Calculations</a> &middot; <a href="../tableau-calculated-fields/">Calculated Fields</a> &middot; <a href="../tableau-sorts/">Sorting</a> &middot; <a href="../tableau-sets/">Sets</a> &middot; <a href="../tableau-relationships/">Relationships</a> &middot; <a href="../../tableau/">Tableau Kit</a>
-    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../tableau-table-calculations/">таблица расчетов</a> &middot; <a href="../tableau-calculated-fields/">Вычисляемые поля</a> &middot; <a href="../tableau-sorts/">Sorting</a> &middot; <a href="../tableau-sets/">Sets</a> &middot; <a href="../tableau-relationships/">Relationships</a> &middot; <a href="../../tableau/">Табличный комплект</a>
+    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-<script src="../../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

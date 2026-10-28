@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Approximate Match Lookup in Excel: Bands and Brackets Done Right &mdash; Analyst Prep Kit</title>
-<meta name="description" content="One lookup table replaces seven nested IFs. The rule that makes it work, why the bounds must be sorted ascending, and the off-by-one that puts a score of exactly 70 in the wrong band.">
+<title>Поиск приблизительного совпадения в Excel: правильно выполненные полосы и скобки — комплект для подготовки аналитика</title>
+<meta name="description" content="Одна таблица поиска заменяет семь вложенных IF. Правило, которое заставляет его работать, почему границы должны быть отсортированы по возрастанию, а также отклонение на единицу, которое помещает ровно 70 баллов в неправильный диапазон.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-approximate-match-lookup/">
-<meta property="og:title" content="Approximate Match Lookups: Grades, Tax Bands and Anything With Cut-Offs">
-<meta property="og:description" content="Seven nested IFs become one lookup and a table. The sort rule that makes it safe.">
+<meta property="og:title" content="Поиск приблизительных совпадений: оценки, налоговые диапазоны и все, что связано с ограничениями">
+<meta property="og:description" content="Семь вложенных IF становятся одним поиском и таблицей. Правило сортировки, которое делает его безопасным.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-approximate-match-lookup/">
 <meta name="twitter:card" content="summary_large_image">
@@ -69,12 +69,11 @@
   figcaption{font-size:13.5px;color:var(--muted);margin-top:6px}
 </style>
 <!-- SEO:JSONLD:START -->
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "Approximate Match Lookups: Grades, Tax Bands and Anything With Cut-Offs",
-  "description": "One lookup table replaces seven nested IFs. The rule that makes it work, why the bounds must be sorted ascending, and the off-by-one that puts a score of exactly 70 in the wrong band.",
+  "headline": "Поиск приблизительных совпадений: оценки, налоговые диапазоны и все, что связано с ограничениями",
+  "description": "Одна таблица поиска заменяет семь вложенных IF. Правило, которое заставляет его работать, почему границы должны быть отсортированы по возрастанию, а также отклонение на единицу, которое помещает ровно 70 баллов в неправильный диапазон.",
   "url": "https://michaelnocito.github.io/analyst-prep-kit/guides/excel-approximate-match-lookup/",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -82,20 +81,19 @@
   },
   "author": {
     "@type": "Person",
-    "name": "Michael Nocito",
+    "name": "Майкл Носито",
     "url": "https://michaelnocito.github.io"
   },
   "publisher": {
     "@type": "Person",
-    "name": "Michael Nocito"
+    "name": "Майкл Носито"
   },
   "inLanguage": "en",
   "datePublished": "2026-08-23",
   "dateModified": "2026-08-23"
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
@@ -114,47 +112,46 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Approximate Match Lookups",
+      "name": "Поиск приблизительных совпадений",
       "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/excel-approximate-match-lookup/"
     }
   ]
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "What is an approximate match lookup?",
+      "name": "Что такое поиск приблизительного совпадения?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "A lookup that finds the largest value less than or equal to what you searched for, instead of an exact hit. It is how grade boundaries, tax brackets, discount tiers and any banded rule are implemented with one small table."
+        "text": "Поиск, который находит наибольшее значение, меньшее или равное искомому, вместо точного совпадения. Именно так границы классов, налоговые категории, уровни скидок и любые групповые правила реализуются с помощью одной небольшой таблицы."
       }
     },
     {
       "@type": "Question",
-      "name": "How do I do a banded lookup in Excel?",
+      "name": "Как выполнить групповой поиск в Excel?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Build a table of lower bounds sorted ascending with the label beside each, then use =INDEX(labels, MATCH(value, bounds, 1)) or =VLOOKUP(value, table, 2, TRUE). MATCH type 1 and VLOOKUP TRUE both mean approximate."
+        "text": "Создайте таблицу нижних границ, отсортированных по возрастанию, с меткой рядом с каждой, затем используйте =INDEX(labels, MATCH(value, borders, 1)) или =VLOOKUP(value, table, 2, TRUE). Тип MATCH 1 и VLOOKUP TRUE означают приблизительное значение."
       }
     },
     {
       "@type": "Question",
-      "name": "Why does my approximate match return the wrong band?",
+      "name": "Почему мое приблизительное совпадение возвращает не ту полосу?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Nearly always because the bounds are not sorted ascending. Approximate match assumes sorted data and stops at the first value that is too big, so an unsorted table returns whatever it happened to reach, with no error."
+        "text": "Почти всегда, потому что границы не отсортированы по возрастанию. Приблизительное совпадение предполагает отсортированные данные и останавливается на первом слишком большом значении, поэтому несортированная таблица возвращает все, чего достигла, без ошибок."
       }
     },
     {
       "@type": "Question",
-      "name": "Should the band table hold lower bounds or upper bounds?",
+      "name": "Должна ли таблица диапазонов содержать нижние или верхние границы?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Lower bounds, sorted ascending, starting at the smallest possible value. That way every value has a home and the boundary rule is unambiguous: a value equal to a bound gets that band."
+        "text": "Нижние границы отсортированы по возрастанию, начиная с наименьшего возможного значения. Таким образом, у каждого значения есть дом, и правило границы однозначно: значение, равное границе, получает эту полосу."
       }
     }
   ]
@@ -164,34 +161,34 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../../excel/">Excel Kit</a></p>
-  <h1>Approximate Match Lookups: Grades, Tax Bands and Anything With Cut-Offs</h1>
-  <p class="meta">Michael Nocito &middot; Updated August 2026 &middot; Every number on this page was worked before it was published</p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../../excel/">Excel комплект</a></p>
+  <h1>Поиск приблизительных совпадений: оценки, налоговые диапазоны и все, что связано с ограничениями</h1>
+  <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Все числа на этой странице были обработаны до их публикации.</p>
 
-  <p>Scores turn into grades. Amounts turn into tax bands. Order sizes turn into discount tiers. Every one of these is a rule with cut-offs, and almost every one gets written first as a stack of nested <code>IF</code>s that nobody can review.</p>
+  <p>Баллы превращаются в оценки. Суммы превращаются в налоговые диапазоны. Размеры заказов превращаются в уровни скидок. Каждое из них представляет собой правило с сокращениями, и почти каждое из них сначала записывается в виде стопки вложенных правил.  <code>IF</code>это то, что никто не может просмотреть.</p>
 
-  <p>What you do: put the cut-offs in a two-column table, sorted ascending, and look the value up with an approximate match. The rule becomes something a colleague can read, and changing it means editing a cell.</p>
+  <p>Что вы делаете: поместите значения отсечений в таблицу из двух столбцов, отсортированную по возрастанию, и найдите значение с приблизительным совпадением. Правило становится тем, что может прочитать коллега, и его изменение означает редактирование ячейки.</p>
 
-  <p><strong>The short version.</strong> Lower bounds, ascending, no gaps. Then one lookup does the whole rule.</p>
+  <p><strong>Краткая версия.</strong>  Нижние границы по возрастанию, пропусков нет. Тогда один поиск выполняет все правило.</p>
 
-  <h2>The band table</h2>
+  <h2>Стол группы</h2>
   <table>
-    <tr><th>Lower bound</th><th>Grade</th></tr>
+    <tr><th>Нижняя граница</th><th>Grade</th></tr>
     <tr><td>0</td><td>F</td></tr>
     <tr><td>50</td><td>D</td></tr>
     <tr><td>60</td><td>C</td></tr>
     <tr><td>70</td><td>B</td></tr>
     <tr><td>80</td><td>A</td></tr>
   </table>
-  <p>Five rows. Each says: from this number upward, until the next row, the answer is this. The first row starts at 0 so that every possible score has a band, which is the detail that stops the formula erroring on a low value.</p>
+  <p>Пять рядов. Каждый говорит: от этого числа вверх, до следующего ряда, ответ такой. Первая строка начинается с 0, поэтому каждая возможная оценка имеет полосу, которая является деталью, предотвращающей ошибку формулы при низком значении.</p>
   <pre><code>=INDEX($F$2:$F$6, MATCH(B2, $E$2:$E$6, 1))</code></pre>
-  <p>Or the older form, which needs the label to be to the right of the bound:</p>
+  <p>Или более старая форма, в которой метка должна располагаться справа от границы:</p>
   <pre><code>=VLOOKUP(B2, $E$2:$F$6, 2, TRUE)</code></pre>
-  <p>The <code>1</code> in <code>MATCH</code> and the <code>TRUE</code> in <code>VLOOKUP</code> are the same instruction: find the largest value that is less than or equal to this, and give me its position.</p>
+  <p>The <code>1</code> in <code>MATCH</code>  и  <code>TRUE</code> in <code>VLOOKUP</code>  это одна и та же инструкция: найти наибольшее значение, которое меньше или равно этому, и сообщить мне его позицию.</p>
 
-  <h2>Worked, including the boundary</h2>
+  <h2>Работало, включая границу</h2>
   <table>
-    <tr><th>Score</th><th>Largest bound not above it</th><th>Grade</th></tr>
+    <tr><th>Score</th><th>Наибольшая граница не выше нее</th><th>Grade</th></tr>
     <tr><td>92</td><td>80</td><td>A</td></tr>
     <tr><td>80</td><td>80</td><td>A</td></tr>
     <tr><td>79.5</td><td>70</td><td>B</td></tr>
@@ -199,76 +196,76 @@
     <tr><td>69.9</td><td>60</td><td>C</td></tr>
     <tr><td>0</td><td>0</td><td>F</td></tr>
   </table>
-  <p>A score of exactly 70 gets a B. That is a decision, not an accident: with lower bounds, a value equal to a bound belongs to that band. If your policy says 70 is a C, the bound must be 70.01, or better, 71 if scores are whole numbers. Write the policy in a cell next to the table so nobody has to reverse-engineer it from the numbers.</p>
+  <p>Ровно 70 баллов дают оценку B. Это решение, а не случайность: при нижних границах значение, равное границе, принадлежит этому диапазону. Если в вашей политике указано, что 70 — это C, граница должна быть 70,01 или лучше, 71, если баллы — целые числа. Запишите политику в ячейку рядом с таблицей, чтобы никому не приходилось перепроектировать ее на основе чисел.</p>
 
-  <div class="note"><strong>Sorting is not cosmetic here.</strong> Approximate match walks the list assuming it climbs. Put 80 above 50 and the formula returns a plausible, wrong band and raises nothing. This is the single most damaging silent error in Excel modelling, because the output still looks like a grade.</div>
+  <div class="note"><strong>Сортировка здесь не косметическая.</strong>  Приблизительное совпадение перемещается по списку при условии, что оно поднимается вверх. Поставьте 80 выше 50, и формула вернет правдоподобный, неправильный диапазон и ничего не даст. Это самая разрушительная молчаливая ошибка в моделировании Excel, поскольку результат по-прежнему выглядит как оценка.</div>
 
-  <h2>The four rules</h2>
+  <h2>Четыре правила</h2>
   <ol>
-    <li><strong>Sort the bounds ascending.</strong> Then protect that: put the table on its own sheet and lock it.</li>
-    <li><strong>Start at the lowest possible value,</strong> usually 0 or a large negative number if the measure can go below zero. Otherwise the smallest values return <code>#N/A</code>.</li>
-    <li><strong>No gaps.</strong> Each row's bound is where the previous band ends. Bands defined as "50 to 59" invite a value of 59.5 that belongs nowhere.</li>
-    <li><strong>Exact match is a different function.</strong> If the key is a category rather than a number, you want <code>MATCH(...,0)</code>, and the two must never be mixed up in one workbook.</li>
+    <li><strong>Отсортируйте границы по возрастанию.</strong>  Тогда защитите это: положите стол на отдельный лист и заприте его.</li>
+    <li><strong>Начните с минимально возможного значения,</strong>  обычно 0 или большое отрицательное число, если показатель может опускаться ниже нуля. В противном случае возвращаются наименьшие значения.  <code>#N/A</code>.</li>
+    <li><strong>Никаких пробелов.</strong>  Границей каждой строки является место, где заканчивается предыдущая полоса. Полосы, определяемые как «50 к 59», подразумевают значение 59,5, которое никуда не годится.</li>
+    <li><strong>Точное совпадение — это другая функция.</strong>  Если ключ представляет собой категорию, а не число, вы хотите  <code>MATCH(...,0)</code>, и их никогда нельзя смешивать в одной книге.</li>
   </ol>
 
-  <h2>Progressive brackets are not the same problem</h2>
-  <p>A tax band that says "40 percent on the part above 50,270" is not a lookup, it is a cumulative calculation. A single approximate match gives you the <em>rate</em> that applies at the top; it does not give you the tax. For that you need a cumulative column in the band table:</p>
+  <h2>Прогрессивные брекеты – это не та же проблема</h2>
+  <p>Налоговый диапазон, в котором указано «40 процентов для части выше 50 270», — это не поиск, а совокупный расчет. Одно приблизительное совпадение дает вам  <em>rate</em>  это применимо сверху; это не дает вам налога. Для этого вам понадобится накопительный столбец в таблице диапазонов:</p>
   <table>
-    <tr><th>Lower bound</th><th>Rate</th><th>Tax on everything below this bound</th></tr>
+    <tr><th>Нижняя граница</th><th>Rate</th><th>Налог на все, что ниже этой границы</th></tr>
     <tr><td>0</td><td>0%</td><td>0</td></tr>
     <tr><td>12,570</td><td>20%</td><td>0</td></tr>
     <tr><td>50,270</td><td>40%</td><td>7,540</td></tr>
   </table>
   <pre><code>=cum_tax + (income - lower_bound) * rate</code></pre>
-  <p>With the three lookups pulling <code>rate</code>, <code>lower_bound</code> and <code>cum_tax</code> from the same matched row. An income of 60,000 gives 7,540 + (60,000 - 50,270) x 40 percent = 7,540 + 3,892 = 11,432. Those figures are illustrative; take the current thresholds from the tax authority, and keep them in the table where they can be updated in one place each April.</p>
+  <p>С тремя поисками  <code>rate</code>, <code>lower_bound</code> and <code>cum_tax</code> from the same matched row. An income of 60,000 gives 7,540 + (60,000 - 50,270) x 40 percent = 7,540 + 3,892 = 11,432. Those figures are illustrative; take the current thresholds from the tax authority, and keep them in the table where they can be updated in one place each April.</p>
 
-  <h2>Why not nested IFs</h2>
+  <h2>Почему не вложенные IF</h2>
   <table>
-    <tr><th>Nested IF</th><th>Band table</th></tr>
-    <tr><td>Rule is invisible in a formula bar</td><td>Rule is five rows anyone can read</td></tr>
-    <tr><td>Changing a cut-off means editing every copy</td><td>Change one cell</td></tr>
-    <tr><td>Adding a band means rewriting the formula</td><td>Insert a row</td></tr>
-    <tr><td>Order of conditions can hide a branch</td><td>Sorted bounds make overlap impossible</td></tr>
-    <tr><td>No audit trail</td><td>The table can carry a change log</td></tr>
+    <tr><th>Вложенный ЕСЛИ</th><th>Таблица групп</th></tr>
+    <tr><td>Правило невидимо в строке формул</td><td>Правило — пять строк, которые может прочитать каждый.</td></tr>
+    <tr><td>Изменение обрезки означает редактирование каждой копии.</td><td>Изменить одну ячейку</td></tr>
+    <tr><td>Добавление полосы означает переписывание формулы</td><td>Вставить строку</td></tr>
+    <tr><td>Порядок условий может скрыть ветку</td><td>Сортированные границы делают перекрытие невозможным</td></tr>
+    <tr><td>Нет контрольного журнала</td><td>Стол может нести журнал изменений</td></tr>
   </table>
-  <p>The overlapping-branch failure is the same one that shows up in SQL, worked in <a href="../sql-case-overlapping-conditions/">CASE with overlapping conditions</a>. A sorted band table cannot have that bug, which is a real argument for the table beyond tidiness.</p>
+  <p>Сбой перекрывающейся ветки — тот же самый, который появляется в SQL, и работал в  <a href="../sql-case-overlapping-conditions/">СЛУЧАЙ с перекрывающимися условиями</a>. В таблице отсортированных групп такой ошибки быть не может, что является реальным аргументом в пользу чистоты таблицы.</p>
 
-  <h2>How to apply this to your own work</h2>
+  <h2>Как применить это в своей работе</h2>
   <ol>
-    <li>Find your longest nested <code>IF</code> and count the cut-offs in it. That count is the number of rows in its replacement table.</li>
-    <li>Build the table on its own sheet, sorted ascending, starting at the lowest possible value.</li>
-    <li>Write the boundary policy in words next to it: does a value equal to the cut-off go up or down?</li>
-    <li>Rebuild the column with <code>INDEX MATCH</code> and reconcile every row against the old formula before deleting it.</li>
-    <li>Add a change log row with the date and who approved the cut-offs. Banded rules are exactly the thing people query six months later.</li>
+    <li>Найдите самое длинное вложенное  <code>IF</code>  и посчитаем в нем отсечки. Это количество представляет собой количество строк в таблице замены.</li>
+    <li>Постройте таблицу на отдельном листе, отсортировав ее по возрастанию, начиная с наименьшего возможного значения.</li>
+    <li>Напишите рядом слова граничной политики: увеличивается или уменьшается значение, равное отсечению?</li>
+    <li>Восстановите столбец с помощью  <code>INDEX MATCH</code>  и согласуйте каждую строку со старой формулой, прежде чем удалять ее.</li>
+    <li>Добавьте строку журнала изменений с датой и указанием того, кто утвердил ограничения. Объединенные правила — это именно то, о чем люди спрашивают шесть месяцев спустя.</li>
   </ol>
 
-  <h2>The one habit to keep</h2>
-  <p>Put the rule where it can be reviewed. A cut-off inside a formula is a decision only its author can see, and the person who needs to check it is usually the one without access to the formula bar.</p>
+  <h2>Единственная привычка, которую нужно сохранить</h2>
+  <p>Разместите правило там, где его можно будет просмотреть. Отсечение внутри формулы — это решение, которое может видеть только его автор, и человек, которому нужно его проверить, обычно не имеет доступа к строке формул.</p>
 
-  <p>Where do your grade or tier boundaries live right now, and who could read them without asking you?</p>
+  <p>Где сейчас находятся границы ваших классов или уровней и кто может их прочитать, не спросив вас?</p>
 
-  <div class="note"><strong>Every number here was worked before it was published.</strong> 7,540 + (60,000 - 50,270) x 0.40 = 11,432. The bracket figures are illustrative; check the current ones before using them.</div>
+  <div class="note"><strong>Каждый номер здесь был обработан до того, как был опубликован.</strong>  7540 + (60 000 – 50 270) х 0,40 = 11 432. Цифры на кронштейнах являются иллюстративными; проверьте текущие перед их использованием.</div>
 
   <div class="book">
-    <strong>A rule that lives in a table can be reviewed. A rule buried in a nested IF cannot.</strong>
-    <p><em>Excel for Analysts</em> is 378 pages that read every formula and dialog one at a time, so the workbook stops being a place where numbers appear and becomes one you can check.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-approximate-match-lookup'})">Excel for Analysts, $19 &rarr;</a>
+    <strong>Правило, которое находится в таблице, можно просмотреть. Правило, скрытое во вложенном операторе IF, не может.</strong>
+    <p><em>Excel для аналитиков</em>  состоит из 378 страниц, на которых каждая формула и диалог читаются по одному, поэтому книга перестает быть местом, где появляются числа, и становится тем местом, которое вы можете проверить.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-approximate-match-lookup'})">Excel для аналитиков, 19 долларов США →</a>
   </div>
 
   <div class="cta">
-    <strong>The rule belongs in a column, not in a formula.</strong>
-    <p style="margin:6px 0 0"><a href="../build-a-risk-index/">Building a risk index</a> takes this pattern all the way to a scored, banded, self-colouring model. <a href="../excel-ifs-vs-nested-if/">IFS against nested IF</a> covers when a formula is still the right answer.</p>
-    <a class="btn" href="../build-a-risk-index/">Read Build a Risk Index &rarr;</a>
+    <strong>Правило принадлежит столбцу, а не формуле.</strong>
+    <p style="margin:6px 0 0"><a href="../build-a-risk-index/">Построение индекса риска</a>  превращает этот узор в самоцветную модель с насечками, полосами.  <a href="../excel-ifs-vs-nested-if/">IFS против вложенного IF</a>  охватывает случаи, когда формула по-прежнему является правильным ответом.</p>
+    <a class="btn" href="../build-a-risk-index/">Читать далее «Построение индекса риска» →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../excel-index-match/">INDEX MATCH</a> &middot; <a href="../excel-ifs-vs-nested-if/">IFS vs Nested IF</a> &middot; <a href="../build-a-risk-index/">Build a Risk Index</a> &middot; <a href="../vlookup-vs-xlookup/">VLOOKUP vs XLOOKUP</a> &middot; <a href="../data-driven-thresholds/">Data-Driven Thresholds</a> &middot; <a href="../../excel/">Excel Kit</a>
-    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../excel-index-match/">INDEX MATCH</a> &middot; <a href="../excel-ifs-vs-nested-if/">IFS против вложенного IF</a> &middot; <a href="../build-a-risk-index/">Создайте индекс риска</a> &middot; <a href="../vlookup-vs-xlookup/">ВПР против XLOOKUP</a> &middot; <a href="../data-driven-thresholds/">Пороги, управляемые данными</a> &middot; <a href="../../excel/">Excel комплект</a>
+    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-<script src="../../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>How to Load a CSV Into a Database: Types, Keys and the Row Count &mdash; Analyst Prep Kit</title>
-<meta name="description" content="Import tools guess types, and their guesses turn IDs into numbers and dates into text. The five decisions to make before loading, the three checks after, and the staging table that makes the whole thing reversible.">
+<title>Как загрузить CSV в базу данных: типы, ключи и количество строк — комплект для подготовки аналитика</title>
+<meta name="description" content="Инструменты импорта угадывают типы, и их догадки превращают идентификаторы в числа, а даты в текст. Пять решений, которые необходимо принять перед загрузкой, три проверки после нее и промежуточная таблица, которая делает все это обратимым.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/csv-to-database-first-load/">
-<meta property="og:title" content="Loading Your First CSV Into a Database Without Ruining the Data">
-<meta property="og:description" content="Load into text columns first, check, then cast. The order that keeps leading zeros alive.">
+<meta property="og:title" content="Загрузка вашего первого CSV в базу данных без повреждения данных">
+<meta property="og:description" content="Сначала загрузите в текстовые столбцы, проверьте, затем приведите. Порядок, который сохраняет ведущие нули живыми.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/csv-to-database-first-load/">
 <meta name="twitter:card" content="summary_large_image">
@@ -69,12 +69,11 @@
   figcaption{font-size:13.5px;color:var(--muted);margin-top:6px}
 </style>
 <!-- SEO:JSONLD:START -->
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "Loading Your First CSV Into a Database Without Ruining the Data",
-  "description": "Import tools guess types, and their guesses turn IDs into numbers and dates into text. The five decisions to make before loading, the three checks after, and the staging table that makes the whole thing reversible.",
+  "headline": "Загрузка вашего первого CSV в базу данных без повреждения данных",
+  "description": "Инструменты импорта угадывают типы, и их догадки превращают идентификаторы в числа, а даты в текст. Пять решений, которые необходимо принять перед загрузкой, три проверки после нее и промежуточная таблица, которая делает все это обратимым.",
   "url": "https://michaelnocito.github.io/analyst-prep-kit/guides/csv-to-database-first-load/",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -82,20 +81,19 @@
   },
   "author": {
     "@type": "Person",
-    "name": "Michael Nocito",
+    "name": "Майкл Носито",
     "url": "https://michaelnocito.github.io"
   },
   "publisher": {
     "@type": "Person",
-    "name": "Michael Nocito"
+    "name": "Майкл Носито"
   },
   "inLanguage": "en",
   "datePublished": "2026-08-23",
   "dateModified": "2026-08-23"
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
@@ -114,47 +112,46 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Loading Your First CSV",
+      "name": "загружаем свой первый CSV",
       "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/csv-to-database-first-load/"
     }
   ]
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "How do I import a CSV into SQLite?",
+      "name": "Как импортировать CSV в SQLite?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "In the sqlite3 shell: .mode csv, then .import --skip 1 orders.csv orders after creating the table with the types you want. Creating the table first is what stops the importer guessing."
+        "text": "В оболочке sqlite3: .mode csv, затем .import --skip 1 Orders.csv Orders после создания таблицы с нужными типами. Первое создание таблицы останавливает импортера в догадках."
       }
     },
     {
       "@type": "Question",
-      "name": "Why did my ID column lose its leading zeros?",
+      "name": "Почему в моем столбце идентификатора исчезли ведущие нули?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Because the importer decided the column was numeric, and 00042 as a number is 42. Create the column as TEXT before importing, or import everything as text and cast afterwards."
+        "text": "Потому что импортер решил, что столбец является числовым, а число 00042 равно 42. Создайте столбец как ТЕКСТ перед импортом или импортируйте все как текст и затем приведите его."
       }
     },
     {
       "@type": "Question",
-      "name": "Should I let the import tool create the table?",
+      "name": "Должен ли я позволить инструменту импорта создать таблицу?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Only for a quick look. For anything you will keep, create the table yourself so you control the types, because a guessed type is silently applied to every row."
+        "text": "Только для быстрого просмотра. Для всего, что вы сохраните, создайте таблицу самостоятельно, чтобы контролировать типы, поскольку предполагаемый тип автоматически применяется к каждой строке."
       }
     },
     {
       "@type": "Question",
-      "name": "How do I know the import worked?",
+      "name": "Как я узнаю, что импорт сработал?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Three checks: the row count matches the file, no column is entirely null, and one known value is present and correct. Run all three before building anything on top."
+        "text": "Три проверки: количество строк соответствует файлу, ни один столбец не является полностью нулевым и одно известное значение присутствует и является правильным. Запустите все три, прежде чем строить что-нибудь сверху."
       }
     }
   ]
@@ -164,29 +161,29 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../../sql/">SQL Kit</a></p>
-  <h1>Loading Your First CSV Into a Database Without Ruining the Data</h1>
-  <p class="meta">Michael Nocito &middot; Updated August 2026 &middot; Every number on this page was worked before it was published</p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../../sql/">SQL-комплект</a></p>
+  <h1>Загрузка вашего первого CSV в базу данных без повреждения данных</h1>
+  <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Все числа на этой странице были обработаны до их публикации.</p>
 
-  <p>The import runs, it says it succeeded, and the data is now subtly different from the file. Postcodes lost their leading zeros, dates became text, a column with one stray word became text for every row, and a total row from the bottom of the export is now a record.</p>
+  <p>Импорт запускается, сообщается, что все прошло успешно, и данные теперь немного отличаются от файла. Почтовые индексы потеряли ведущие нули, даты стали текстовыми, столбец с одним случайным словом стал текстовым для каждой строки, а общая строка в нижней части экспорта теперь является записью.</p>
 
-  <p>What you do: create the table yourself, load everything as text, check, then cast into a clean table. It is one extra step and it makes the whole load reversible.</p>
+  <p>Что вы делаете: создаете таблицу сами, загружаете все как текст, проверяете, затем приводите в чистую таблицу. Это один дополнительный шаг, и он делает всю нагрузку обратимой.</p>
 
-  <p><strong>The short version.</strong> Let the importer move the data. Do not let it decide the types.</p>
+  <p><strong>Краткая версия.</strong>  Позвольте импортеру перенести данные. Не позволяйте ему решать типы.</p>
 
-  <h2>Five decisions before you load</h2>
+  <h2>Пять решений перед загрузкой</h2>
   <table>
-    <tr><th>Decision</th><th>Wrong answer costs you</th></tr>
-    <tr><td>Which columns are text, not numbers</td><td>Leading zeros, and IDs above 15 digits</td></tr>
-    <tr><td>Which column is the key</td><td>You find out later it is not unique</td></tr>
-    <tr><td>What date format the file uses</td><td>A third of the rows silently wrong</td></tr>
-    <tr><td>What encoding it is in</td><td>Names arriving as Ã© and Â£</td></tr>
-    <tr><td>Whether the file has junk rows</td><td>A total row becomes a record</td></tr>
+    <tr><th>Decision</th><th>Неправильный ответ будет стоить вам</th></tr>
+    <tr><td>Какие столбцы являются текстовыми, а не цифровыми</td><td>Ведущие нули и идентификаторы длиной более 15 цифр.</td></tr>
+    <tr><td>Какой столбец является ключевым</td><td>Позже вы узнаете, что это не уникально.</td></tr>
+    <tr><td>Какой формат даты использует файл</td><td>Треть строк молча ошибается</td></tr>
+    <tr><td>В какой кодировке он находится</td><td>Имена, поступающие как Ã© и Â£</td></tr>
+    <tr><td>Есть ли в файле ненужные строки</td><td>Общая строка становится записью</td></tr>
   </table>
-  <p>Answer all five by looking at the file before touching the database. Open the first thousand rows in a text editor, not in Excel, because Excel will have already changed some of them by the time you look. That peek command is in <a href="../open-a-large-csv/">opening a large CSV</a>.</p>
+  <p>Ответьте на все пять, просмотрев файл, прежде чем прикасаться к базе данных. Откройте первую тысячу строк в текстовом редакторе, а не в Excel, потому что к моменту просмотра Excel уже изменит некоторые из них. Эта команда просмотра находится в  <a href="../open-a-large-csv/">открытие большого CSV</a>.</p>
 
-  <h2>The staging pattern</h2>
-  <p>Two tables. One holds everything as text exactly as it arrived; the other holds the typed, cleaned version. It sounds like extra work and it takes about four minutes.</p>
+  <h2>Постановочный шаблон</h2>
+  <p>Два стола. Один хранит все в виде текста в том виде, в каком оно поступило; другой содержит напечатанную, очищенную версию. Это звучит как дополнительная работа и занимает около четырех минут.</p>
   <pre><code>-- 1. staging: every column TEXT, nothing can be lost
 CREATE TABLE orders_raw (
   order_id   TEXT,
@@ -205,7 +202,7 @@ SELECT COUNT(*) FROM orders_raw;
 SELECT * FROM orders_raw LIMIT 10;
 SELECT order_date FROM orders_raw
 WHERE order_date NOT LIKE '____-__-__' LIMIT 20;</code></pre>
-  <p>That third query is the one that earns the pattern. It lists the values that are not in the expected shape, before any conversion has thrown them away.</p>
+  <p>Именно этот третий запрос и определяет шаблон. В нем перечислены значения, которые не имеют ожидаемой формы, прежде чем какое-либо преобразование их выбросит.</p>
   <pre><code>-- 4. cast into the real table, deliberately
 CREATE TABLE orders (
   order_id   TEXT PRIMARY KEY,
@@ -223,11 +220,11 @@ SELECT TRIM(order_id),
        LOWER(TRIM(status))
 FROM orders_raw
 WHERE order_id IS NOT NULL AND order_id &lt;&gt; '';</code></pre>
-  <p>Every transformation is visible and every one is a decision you made. If a cast fails or produces nulls, the raw table is still there and nothing has to be re-downloaded.</p>
+  <p>Каждая трансформация видна, и каждая из них — это решение, которое вы приняли. Если приведение завершается неудачно или выдает нули, необработанная таблица все еще существует, и ничего не нужно повторно загружать.</p>
 
-  <div class="note"><strong>Keep order_id as TEXT.</strong> Even when it looks numeric. IDs are labels rather than quantities: you never add two of them, you do sometimes need the leading zeros, and anything above 15 digits loses precision as a number. The same argument applies in Excel, in <a href="../excel-csv-import-leading-zeros/">leading zeros on import</a>.</div>
+  <div class="note"><strong>Сохраните order_id как ТЕКСТ.</strong>  Даже если оно выглядит числовым. Идентификаторы — это скорее метки, чем количества: вы никогда не добавляете два из них, иногда вам нужны ведущие нули, и все, что превышает 15 цифр, теряет точность как число. Тот же аргумент применяется в Excel, в  <a href="../excel-csv-import-leading-zeros/">ведущие нули при импорте</a>.</div>
 
-  <h2>The three checks after loading</h2>
+  <h2>Три проверки после загрузки</h2>
   <pre><code>-- 1. row count against the file
 SELECT COUNT(*) FROM orders;          -- compare with wc -l, minus the header
 
@@ -238,64 +235,64 @@ FROM orders;
 
 -- 3. a value you can verify by eye
 SELECT * FROM orders WHERE order_id = '00042';</code></pre>
-  <p>The second one catches a failed cast, which is the most common way a load goes wrong while reporting success. A column that is entirely null after a cast means the source format did not match what you assumed, every time.</p>
+  <p>Второй перехватывает неудачное приведение, которое является наиболее распространенной причиной сбоя при загрузке при сообщении об успехе. Столбец, который после приведения становится полностью нулевым, означает, что исходный формат каждый раз не соответствует тому, что вы предполагали.</p>
 
-  <h2>The other tools</h2>
+  <h2>Другие инструменты</h2>
   <table>
     <tr><th>Tool</th><th>Command</th></tr>
-    <tr><td>SQLite shell</td><td><code>.mode csv</code> then <code>.import --skip 1 file.csv table</code></td></tr>
-    <tr><td>DB Browser for SQLite</td><td>File, Import, Table from CSV file</td></tr>
+    <tr><td>SQLite-оболочка</td><td><code>.mode csv</code> then <code>.import --skip 1 file.csv table</code></td></tr>
+    <tr><td>Браузер БД для SQLite</td><td>Файл, Импорт, Таблица из файла CSV</td></tr>
     <tr><td>DuckDB</td><td><code>CREATE TABLE t AS SELECT * FROM read_csv_auto('file.csv')</code></td></tr>
     <tr><td>PostgreSQL</td><td><code>\copy orders FROM 'file.csv' CSV HEADER</code></td></tr>
     <tr><td>pandas</td><td><code>df.to_sql('orders', con, if_exists='append', index=False)</code></td></tr>
   </table>
-  <p>DuckDB's <code>read_csv_auto</code> is unusually good at guessing, and you can override any column with the <code>types</code> argument when the guess is wrong. Postgres <code>\copy</code> runs client side, which matters because the plain <code>COPY</code> command needs the file to be on the server.</p>
+  <p>DuckDB's <code>read_csv_auto</code>  необычайно хорош в догадках, и вы можете переопределить любой столбец с помощью  <code>types</code>  аргумент, когда догадка неверна. Постгрес  <code>\copy</code>  запускает клиентскую сторону, что важно, потому что простой  <code>COPY</code>  команде необходимо, чтобы файл находился на сервере.</p>
 
-  <h2>When the file will arrive every month</h2>
+  <h2>Когда файл будет приходить каждый месяц</h2>
   <ol>
-    <li>Write the load as a script, never as a sequence of clicks.</li>
-    <li>Put the source file name and the load date into a column, so any row can be traced back.</li>
-    <li>Load into staging, run the checks, and only then replace or append to the clean table.</li>
-    <li>Keep the raw files. Storage is cheap and a re-load is the only real recovery.</li>
-    <li>Log the row count of every load in a small table. Drift shows up as a number, not a feeling.</li>
+    <li>Пишите нагрузку как скрипт, а не как последовательность кликов.</li>
+    <li>Поместите имя исходного файла и дату загрузки в столбец, чтобы можно было отследить любую строку.</li>
+    <li>Загрузите в промежуточную версию, запустите проверки и только потом замените или добавьте в чистую таблицу.</li>
+    <li>Сохраните необработанные файлы. Хранилище стоит дешево, и единственным реальным восстановлением является перезагрузка.</li>
+    <li>Запишите количество строк каждой загрузки в небольшую таблицу. Дрифт проявляется как число, а не как ощущение.</li>
   </ol>
 
-  <h2>How to apply this to your own work</h2>
+  <h2>Как применить это в своей работе</h2>
   <ol>
-    <li>Create the table yourself for the next file you load, rather than letting the tool do it.</li>
-    <li>Add the staging step once and see how much it catches on a file you thought was clean.</li>
-    <li>Run the three checks and write the numbers into the project notes.</li>
-    <li>Make every ID column text, and check one known ID afterwards.</li>
-    <li>Turn a repeated import into a script the first time you do it twice.</li>
+    <li>Создайте таблицу самостоятельно для следующего загружаемого файла, а не позволяйте этому инструменту сделать это.</li>
+    <li>Добавьте промежуточный шаг один раз и посмотрите, сколько он зафиксирует в файле, который, по вашему мнению, был чистым.</li>
+    <li>Запустите три проверки и запишите цифры в примечаниях к проекту.</li>
+    <li>Создайте текст каждого столбца идентификатора и затем проверьте один известный идентификатор.</li>
+    <li>Превратите повторный импорт в сценарий, если вы делаете это впервые дважды.</li>
   </ol>
 
-  <h2>The one habit to keep</h2>
-  <p>Count the rows in the file before you import and after. It takes ten seconds, it is the only way to notice a truncated or partial load, and it is the number you will want when somebody asks whether the data is complete.</p>
+  <h2>Единственная привычка, которую нужно сохранить</h2>
+  <p>Подсчитайте строки в файле до импорта и после. Это занимает десять секунд, это единственный способ заметить усеченную или частичную загрузку, и именно это число вам понадобится, когда кто-нибудь спросит, полны ли данные.</p>
 
-  <p>Do you know the row count of the last file you loaded into anything?</p>
+  <p>Знаете ли вы количество строк в последнем файле, который вы во что-нибудь загрузили?</p>
 
-  <div class="note"><strong>Written from the tools as they ship.</strong> The SQLite dot commands, DuckDB read_csv_auto, the Postgres client-side copy and pandas to_sql are all current.</div>
+  <div class="note"><strong>Написано с помощью инструментов по мере их доставки.</strong>  Все команды SQLite dot, DuckDB read_csv_auto, копирование на стороне клиента Postgres и pandas to_sql являются текущими.</div>
 
   <div class="book">
-    <strong>An import that succeeded is not the same as an import that is correct.</strong>
-    <p><em>SQL for Analysts</em> is 458 pages that read queries line by line in everyday words, so a result that came back wrong has somewhere to be traced instead of being retyped until it looks better.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-csv-to-database-first-load'})">SQL for Analysts, $19 &rarr;</a>
+    <strong>Успешный импорт — это не то же самое, что правильный импорт.</strong>
+    <p><em>SQL для аналитиков</em>  — это 458 страниц, которые считывают запросы построчно в повседневных словах, поэтому ошибочный результат нужно где-то отслеживать, а не перепечатывать, пока он не станет выглядеть лучше.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-csv-to-database-first-load'})">SQL для аналитиков, 19 $ →</a>
   </div>
 
   <div class="cta">
-    <strong>The load step is where most data problems are created.</strong>
-    <p style="margin:6px 0 0"><a href="../set-up-a-sql-database/">Setting up a SQL database</a> covers the tool, <a href="../data-quality-checks/">the data quality checks</a> cover what to run afterwards, and <a href="../database-setup-for-analysts/">database setup</a> covers which one to install.</p>
-    <a class="btn" href="../data-quality-checks/">Read the Data Quality Checks &rarr;</a>
+    <strong>На этапе загрузки возникает большинство проблем с данными.</strong>
+    <p style="margin:6px 0 0"><a href="../set-up-a-sql-database/">Настройка базы данных SQL</a>  покрывает инструмент,  <a href="../data-quality-checks/">проверка качества данных</a>  о том, что нужно запустить потом, и  <a href="../database-setup-for-analysts/">Настройка базы данных</a>  крышки, какой из них установить.</p>
+    <a class="btn" href="../data-quality-checks/">Прочтите проверки качества данных →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../set-up-a-sql-database/">Set Up a SQL Database</a> &middot; <a href="../database-setup-for-analysts/">Database Setup</a> &middot; <a href="../data-quality-checks/">Data Quality Checks</a> &middot; <a href="../excel-csv-import-leading-zeros/">Leading Zeros on Import</a> &middot; <a href="../excel-character-encoding/">Character Encoding</a> &middot; <a href="../sql-reconciliation/">Reconciling Row Counts</a> &middot; <a href="../../sql/">SQL Kit</a>
-    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> &middot; <a href="../database-setup-for-analysts/">Настройка базы данных</a> &middot; <a href="../data-quality-checks/">Проверки качества данных</a> &middot; <a href="../excel-csv-import-leading-zeros/">ведущие нули при импорте</a> &middot; <a href="../excel-character-encoding/">Кодировка символов</a> &middot; <a href="../sql-reconciliation/">Согласование количества строк</a> &middot; <a href="../../sql/">SQL-комплект</a>
+    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-<script src="../../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

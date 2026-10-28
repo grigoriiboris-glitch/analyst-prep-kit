@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cleaning and De-duplication Before a Data Migration &mdash; Analyst Prep Kit</title>
-<meta name="description" content="How to clean data before a migration: what to fix by rule, what has to go on an exception list for the client to decide, how to de-duplicate without merging real records, and why the exception list is a gate.">
+<title>Очистка и дедупликация перед миграцией данных — комплект подготовки аналитика</title>
+<meta name="description" content="Как очистить данные перед миграцией: что исправить по правилу, что должно попасть в список исключений, чтобы клиент мог решить, как выполнить дедупликацию без объединения реальных записей и почему список исключений является шлюзом.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/migration-cleaning/">
-<meta property="og:title" content="Stage 4: Clean and De-dupe">
-<meta property="og:description" content="How to clean data before a migration: what to fix by rule, what has to go on an exception list for the client to decide, how to de-duplicate without merging real records, and why the exception list is a gate.">
+<meta property="og:title" content="Этап 4. Очистка и устранение дублирования">
+<meta property="og:description" content="Как очистить данные перед миграцией: что исправить по правилу, что должно попасть в список исключений, чтобы клиент мог решить, как выполнить дедупликацию без объединения реальных записей и почему список исключений является шлюзом.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/migration-cleaning/">
 <meta name="twitter:card" content="summary_large_image">
@@ -78,12 +78,11 @@
   @media (max-width:520px){.seriesnav a.next{font-size:20px}}
 </style>
 <!-- SEO:JSONLD:START -->
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "Stage 4: Clean and De-dupe",
-  "description": "How to clean data before a migration: what to fix by rule, what has to go on an exception list for the client to decide, how to de-duplicate without merging real records, and why the exception list is a gate.",
+  "headline": "Этап 4. Очистка и устранение дублирования",
+  "description": "Как очистить данные перед миграцией: что исправить по правилу, что должно попасть в список исключений, чтобы клиент мог решить, как выполнить дедупликацию без объединения реальных записей и почему список исключений является шлюзом.",
   "url": "https://michaelnocito.github.io/analyst-prep-kit/guides/migration-cleaning/",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -91,20 +90,19 @@
   },
   "author": {
     "@type": "Person",
-    "name": "Michael Nocito",
+    "name": "Майкл Носито",
     "url": "https://michaelnocito.github.io"
   },
   "publisher": {
     "@type": "Person",
-    "name": "Michael Nocito"
+    "name": "Майкл Носито"
   },
   "inLanguage": "en",
   "datePublished": "2026-07-30",
   "dateModified": "2026-07-30"
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
@@ -123,7 +121,7 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Stage 4: Clean and De-dupe",
+      "name": "Этап 4. Очистка и устранение дублирования",
       "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/migration-cleaning/"
     }
   ]
@@ -133,95 +131,95 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../">All Guides</a> &middot; <a href="../data-migration-stages/">Data Migration Series</a></p>
-  <h1>Stage 4: Clean and De-dupe</h1>
-  <p class="meta">Stage 4 of 8 &middot; Fix by rule, escalate by exception, decide before you move &middot; Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-07-30">July 30, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../">Все руководства</a> &middot; <a href="../data-migration-stages/">Серия «Миграция данных»</a></p>
+  <h1>Этап 4. Очистка и устранение дублирования</h1>
+  <p class="meta">Этап 4 из 8 · Исправляйте по правилам, эскалируйте по исключению, принимайте решение перед перемещением · Часть  <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-07-30">30 июля 2026 г.</time></p>
 
-  <p>Cleaning is where you fix what can be fixed automatically and escalate everything else to the client. The output is a source that the target system will accept, and an exception list where every row has a decision. This article covers the split between the two, and how to de-duplicate without destroying real records.</p>
+  <p>Очистка — это когда вы исправляете то, что можно исправить автоматически, а все остальное передаете клиенту. Выходные данные — это источник, который будет принят целевой системой, и список исключений, в котором каждая строка имеет решение. В этой статье рассматривается различие между ними и способы дедупликации без уничтожения реальных записей.</p>
 
-  <p><strong>The short version.</strong> If a rule can fix it safely, fix it. If a human has to decide, it goes on the exception list, and the list is a gate that closes only when every row has an answer.</p>
+  <p><strong>Краткая версия.</strong>  Если правило может исправить это безопасно, исправьте его. Если человек должен принять решение, он попадает в список исключений, а этот список представляет собой ворота, которые закрываются только тогда, когда в каждой строке есть ответ.</p>
 
-  <h2>What a rule can fix</h2>
-  <p>Which of these do you think is riskier to automate: trimming spaces, or standardizing a date? Have an answer before the list.</p>
-  <p>Safe to fix by rule, because the intent is not in doubt: leading and trailing spaces, inconsistent capitalization in codes, a date format that is unambiguous, a phone number written with different punctuation, a country name that appears in two spellings.</p>
-  <p>Not safe by rule, because you would be guessing at meaning: a date that could be March 4th or April 3rd, a status string nobody recognizes, a blank in a required field, two records that look similar but might be two real people.</p>
-  <p>The date one is the trap. 03/04/24 is ambiguous, and a rule that picks a side silently converts thousands of rows to the wrong day. Check the source system's setting, confirm it with a value you can verify independently, then apply the rule.</p>
+  <h2>Что может исправить правило</h2>
+  <p>Что из этого, по вашему мнению, более рискованно автоматизировать: обрезку пробелов или стандартизацию даты? Пусть ответ будет перед списком.</p>
+  <p>Безопасно исправить по правилу, поскольку намерение не вызывает сомнений: начальные и конечные пробелы, несогласованное использование заглавных букв в кодах, однозначный формат даты, номер телефона, написанный с разной пунктуацией, название страны, которое появляется в двух вариантах написания.</p>
+  <p>По правилам это небезопасно, потому что вы можете догадываться о значении: дата, которая может быть 4 марта или 3 апреля, строка статуса, которую никто не узнает, пробел в обязательном поле, две записи, которые выглядят одинаково, но могут быть двумя реальными людьми.</p>
+  <p>Первое свидание — это ловушка. 04.03.24 является неоднозначным, и правило, которое выбирает сторону, автоматически преобразует тысячи строк в неправильный день. Проверьте настройку исходной системы, подтвердите ее значением, которое вы можете проверить независимо, а затем примените правило.</p>
 
-  <h2>Every rule gets previewed</h2>
-  <p>Never run a transformation you have not looked at on real rows. Show the original and the result side by side, twenty rows, and read them.</p>
-  <p>This catches the thing that no error message will. A rule that strips a suffix and accidentally invents a value that does not exist will run without complaint on a hundred thousand rows. The only defence is looking at the output. The <a href="../entity-resolution/">entity resolution guide</a> walks a real example where two rounds of preview caught two separate defects in one rule.</p>
+  <h2>Каждое правило предварительно просматривается</h2>
+  <p>Никогда не запускайте преобразование, которое вы не просмотрели, в реальных строках. Покажите оригинал и результат рядом, двадцать строк, и прочитайте их.</p>
+  <p>Это улавливает то, чего не будет ни в одном сообщении об ошибке. Правило, удаляющее суффикс и случайно изобретающее несуществующее значение, будет без проблем работать в сотнях тысяч строк. Единственная защита — это смотреть на результат.  <a href="../entity-resolution/">руководство по разрешению объектов</a>  приводится реальный пример, когда два раунда предварительного просмотра выявили два отдельных дефекта в одном правиле.</p>
 
-  <h2>De-duplication without damage</h2>
-  <p>One client becoming two in the new system is the failure users notice first. Merging two real people into one is worse, and harder to undo.</p>
-  <p>Work in three passes.</p>
-  <p><strong>Exact duplicates first.</strong> Same identifier, same name, same date of birth. These are safe and they are usually the bulk of the problem.</p>
-  <p><strong>Near matches second.</strong> Same person, different spelling. These are candidates, not decisions. Build the list, sort it so the most consequential are at the top, and read it.</p>
-  <p><strong>Ambiguous cases to the client.</strong> A father and son with the same name at the same address are not a duplicate, and no rule will tell you that. The client knows. Ask.</p>
-  <p>Picture two records in front of you: same name, same address, birth dates two years apart. Say what you would do before reading on. The answer is that you do not decide it. That row goes on the exception list.</p>
+  <h2>Дедупликация без ущерба</h2>
+  <p>В новой системе один клиент превращается в два — это ошибка, которую пользователи замечают в первую очередь. Слияние двух реальных людей в одного еще хуже, и его труднее отменить.</p>
+  <p>Работайте в три прохода.</p>
+  <p><strong>Сначала точные дубликаты.</strong>  Тот же идентификатор, то же имя, та же дата рождения. Они безопасны и обычно являются основной причиной проблемы.</p>
+  <p><strong>Рядом матч второй.</strong>  Тот же человек, другое написание. Это кандидаты, а не решения. Составьте список, отсортируйте его так, чтобы наиболее важные были вверху, и прочитайте его.</p>
+  <p><strong>Неоднозначные случаи для клиента.</strong>  Отец и сын с одинаковым именем и по одному и тому же адресу не являются дубликатами, и никакое правило не скажет вам об этом. Клиент знает. Просить.</p>
+  <p>Представьте перед собой две записи: одно и то же имя, один и тот же адрес, даты рождения с разницей в два года. Скажите, что бы вы сделали, прежде чем читать дальше. Ответ в том, что не вы это решаете. Эта строка попадает в список исключений.</p>
 
-  <h2>The exception list is a gate, not a document</h2>
-  <p>Format it so a non-technical person can work through it. One row per problem, the record identifier, what is wrong in words, the options, and an empty decision column.</p>
-  <p>Send it in batches with a date attached. A four hundred row list arriving in one email gets nothing back. Fifty rows with a Friday deadline gets answers.</p>
-  <p>The stage closes when every row has a decision. "Leave it for now" is not a decision, it is a deferred problem that resurfaces during <a href="../migration-uat/">user testing</a> when there is no time left. Write down who decided and when, next to each row.</p>
+  <h2>Список исключений — это ворота, а не документ</h2>
+  <p>Отформатируйте его так, чтобы с ним мог работать нетехнический человек. Одна строка на каждую проблему, идентификатор записи, что не так в словах, варианты и пустой столбец решения.</p>
+  <p>Отправляйте его партиями с указанием даты. Список из четырехсот строк, пришедший в одном электронном письме, ничего не получает обратно. Пятьдесят строк с крайним сроком в пятницу получат ответы.</p>
+  <p>Этап закрывается, когда в каждой строке принимается решение. «Оставить это пока» — это не решение, это отложенная проблема, которая всплывает на поверхность во время  <a href="../migration-uat/">пользовательское тестирование</a>  когда уже не остается времени. Рядом с каждой строкой запишите, кто и когда решил.</p>
 
-  <h2>What you do not clean</h2>
-  <p>Resist fixing things that are merely untidy. A client's data does not have to be good, it has to be acceptable to the target system and true to what they had.</p>
-  <p>Cleaning past that point costs time, introduces risk, and changes records the client never asked you to change. When you find genuine quality problems that are out of scope, write them up as a limitation and hand them over at close. That is a gift to the client, not a failure. <a href="../documenting-data-limitations/">Documenting limitations</a> covers how to write them so they are useful.</p>
+  <h2>Что ты не чистишь</h2>
+  <p>Не чините вещи, которые просто неопрятны. Данные клиента не обязательно должны быть хорошими, они должны быть приемлемыми для целевой системы и соответствовать тому, что у них было.</p>
+  <p>Очистка после этого момента требует времени, сопряжена с риском и изменяет записи, которые клиент никогда не просил вас изменить. Если вы обнаружите настоящие проблемы с качеством, выходящие за рамки рассмотрения, запишите их как ограничение и передайте в ближайшее время. Это подарок клиенту, а не провал.  <a href="../documenting-data-limitations/">Документирование ограничений</a>  рассказывает, как их писать, чтобы они были полезны.</p>
 
-  <h2>Cheat sheet</h2>
+  <h2>Шпаргалка</h2>
   <table>
-    <tr><th>Situation</th><th>Rule or exception</th></tr>
-    <tr><td>Trailing spaces, mixed case codes</td><td>Rule</td></tr>
-    <tr><td>Unambiguous date reformat</td><td>Rule, after confirming source format</td></tr>
-    <tr><td>Ambiguous date</td><td>Exception</td></tr>
-    <tr><td>Blank required field</td><td>Exception</td></tr>
-    <tr><td>Exact duplicate</td><td>Rule</td></tr>
-    <tr><td>Near duplicate</td><td>Exception</td></tr>
-    <tr><td>Unrecognized status value</td><td>Exception</td></tr>
-    <tr><td>Untidy but valid data</td><td>Leave it, note it at close</td></tr>
+    <tr><th>Situation</th><th>Правило или исключение</th></tr>
+    <tr><td>Завершающие пробелы, коды смешанного регистра</td><td>Rule</td></tr>
+    <tr><td>Однозначное переформатирование даты</td><td>Правило после подтверждения исходного формата</td></tr>
+    <tr><td>Неоднозначная дата</td><td>Exception</td></tr>
+    <tr><td>Пустое обязательное поле</td><td>Exception</td></tr>
+    <tr><td>Точный дубликат</td><td>Rule</td></tr>
+    <tr><td>Почти дубликат</td><td>Exception</td></tr>
+    <tr><td>Нераспознанное значение статуса</td><td>Exception</td></tr>
+    <tr><td>Неопрятные, но достоверные данные</td><td>Оставьте это, обратите внимание на это в конце</td></tr>
   </table>
 
-  <h2>The one habit</h2>
-  <p>Preview every rule on real rows before you run it at scale. The data will not tell you when a rule is wrong.</p>
-  <p>What is the cleaning rule you have seen do the most damage?</p>
+  <h2>Одна привычка</h2>
+  <p>Предварительный просмотр каждого правила в реальных строках, прежде чем запускать его в масштабе. Данные не скажут вам, когда правило неверно.</p>
+  <p>Какое правило уборки, по вашему мнению, приносит больше всего вреда?</p>
 
 <div class="seriesnav">
-  <p class="up">Up next</p>
-  <a class="next" href="../migration-dry-run/">Stage 5: The Dry Run &rarr;</a>
-  <p class="then">Previously: <a href="../migration-field-mapping/">Stage 3: Map the Fields</a> &nbsp;&middot;&nbsp; <a href="../data-migration-stages/">All eight stages</a></p>
+  <p class="up">Дальше</p>
+  <a class="next" href="../migration-dry-run/">Этап 5: Пробный прогон →</a>
+  <p class="then">Ранее:  <a href="../migration-field-mapping/">Этап 3. Нанесите на карту поля</a> &nbsp;&middot;&nbsp; <a href="../data-migration-stages/">Все восемь этапов</a></p>
 </div>
 
   <div class="cta">
-    <strong>The checking work is SQL, and it is not advanced SQL.</strong>
-    <p style="margin:6px 0 0">Counting rows, grouping to find duplicates, and joining to find orphans covers most of what a migration asks of you. The <a href="../../sql/">SQL Kit</a> teaches those moves in order, with the data in front of you.</p>
-    <a class="btn" href="../../sql/">Open the SQL Kit &rarr;</a>
-    <p style="margin:10px 0 0;font-size:15px">Or start typing straight away: <a href="../../drill/">open SQL Drill</a>, thirteen queries that each add one thing to the last.</p>
+    <strong>Проверочная работа выполняется на языке SQL, а не на продвинутом уровне SQL.</strong>
+    <p style="margin:6px 0 0">Подсчет строк, группировка для поиска дубликатов и объединение для поиска потерянных строк покрывает большую часть того, что требует от вас миграция.  <a href="../../sql/">SQL-комплект</a>  обучает этим движениям по порядку, имея данные перед вами.</p>
+    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
+    <p style="margin:10px 0 0;font-size:15px">Или сразу начните вводить:  <a href="../../drill/">открыть SQL Drill</a>, тринадцать запросов, каждый из которых добавляет что-то одно к последнему.</p>
   </div>
 
   <div class="book">
-    <strong>The whole run, in one place.</strong>
-    <p>You are moving a client’s records into a new system, and the part that worries you is the week the client goes quiet. <em>The Data Migration Playbook</em> is all eight stages in order, 63 pages, from the first kickoff meeting through hypercare, so you can run one without finding the important question three weeks too late.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/data-migration-playbook?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=data-migration-playbook" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-migration-cleaning'})">The Data Migration Playbook, $29 &rarr;</a>
+    <strong>Весь пробег в одном месте.</strong>
+    <p>Вы переносите записи клиента в новую систему, и вас беспокоит та неделя, когда клиент замолкает.  <em>Руководство по миграции данных</em>  это все восемь этапов по порядку, 63 страницы, от первой стартовой встречи до гиперпомощи, так что вы можете пройти один, не опоздав на три недели с важным вопросом.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/data-migration-playbook?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=data-migration-playbook" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-migration-cleaning'})">Руководство по миграции данных, 29 долларов США →</a>
   </div>
 
 
   <h2>References</h2>
   <ol class="refs">
-    <li>Fellegi, I. P., &amp; Sunter, A. B. (1969). A theory for record linkage. <em>Journal of the American Statistical Association, 64</em>(328), 1183&ndash;1210. doi:10.1080/01621459.1969.10501049</li>
-    <li>Wang, R. Y., &amp; Strong, D. M. (1996). Beyond accuracy: What data quality means to data consumers. <em>Journal of Management Information Systems, 12</em>(4), 5&ndash;33.</li>
-    <li>Matthes, F., Schulz, C., &amp; Haller, K. (2011). Testing &amp; quality assurance in data migration projects. <em>27th IEEE International Conference on Software Maintenance (ICSM)</em>, 438&ndash;447.</li>
+    <li>Феллеги, И.П. и Сантер, А.Б. (1969). Теория связи записей.  <em>Журнал Американской статистической ассоциации, 64.</em>(328), 1183&ndash;1210. doi:10.1080/01621459.1969.10501049</li>
+    <li>Ван, Р.Ю., и Стронг, Д.М. (1996). За пределами точности: что качество данных означает для потребителей данных.  <em>Журнал информационных систем управления, 12</em>(4), 5&ndash;33.</li>
+    <li>Маттес Ф., Шульц К. и Халлер К. (2011). Тестирование и обеспечение качества в проектах миграции данных.  <em>27-я Международная конференция IEEE по сопровождению программного обеспечения (ICSM)</em>, 438&ndash;447.</li>
   </ol>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../entity-resolution/">Entity Resolution</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../sql-count-function/">COUNT in SQL</a> · <a href="../sql-joins/">SQL JOINs</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../sql/">SQL Kit</a> · <a href="../../projects/">Portfolio Projects</a>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../sql-count-function/">СЧЕТ в SQL</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../../projects/">Портфельные проекты</a>
     
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-<script src="../../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

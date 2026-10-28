@@ -21,7 +21,7 @@ let apkCloudReadyUserId = null;
 const apkPendingSyncTimers = Object.create(null);
 
 function apkProgressApi() {
-  if (!window.APKProgress) throw new Error("Прогресс-state.js не был загружен до supabase_auth_sync.js");
+  if (!window.APKProgress) throw new Error("Прогресс-состояние.js не был загружен до supabase_auth_sync.js");
   return window.APKProgress;
 }
 
@@ -615,7 +615,7 @@ if (typeof window !== 'undefined') {
   if (!framed) return;
   document.documentElement.classList.add('apk-framed');
   const st = document.createElement('style');
-  st.textContent = ".в рамке apk #входBtn,.в рамке apk #выход из системыBtn,.в рамке apk #электронная почта пользователя,.в рамке apk [заголовок=\"Вернуться ко всем наборам\"]{отображать:никто !важный}";
+  st.textContent = ".в рамке апк #входБатн,.в рамке апк #выход из системыБатн,.в рамке апк #электронная почта пользователя,.в рамке апк [заголовок=\"Вернуться ко всем наборам\"]{отображать:никто !важный}";
   document.head.appendChild(st);
 })();
 

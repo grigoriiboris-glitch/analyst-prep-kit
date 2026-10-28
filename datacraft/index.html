@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru" data-theme="light">
+<html lang="ru" data-theme="light" data-static-ru="true">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -63,7 +63,7 @@ footer{max-width:1500px;margin:auto;padding:0 20px 24px;color:#8fa697;font-size:
       <div class="quiet-valley-scene">
         <div class="quiet-valley-canvas-scroll"><canvas id="quietValleyCanvas" width="900" height="540" tabindex="0" role="application" aria-label="Интерактивный участок отдыха. Выбери предмет и нажми на свободное место, чтобы разместить его."></canvas></div>
       </div>
-      <div class="quiet-valley-help">Управление: купи предмет → нажми на свободное место. Нажми на установленный объект, чтобы повернуть, переместить или убрать его обратно в инвентарь. Клавиша R поворачивает выбранный объект, Escape отменяет выбор.</div>
+      <div class="quiet-valley-help">Управление: купи предмет → нажми на свободное место. Нажми на установленный объект, чтобы повернуть, переместить или убрать его обратно в инвентарь. Клавиша R поворачивает выбранный объект, Побег отменяет выбор.</div>
       <div class="quiet-valley-zones" id="quietValleyZones" aria-label="Территории долины"></div>
       <div class="quiet-valley-workbench">
         <section class="quiet-valley-box" aria-labelledby="quietValleyShopHeading">
@@ -122,7 +122,7 @@ footer{max-width:1500px;margin:auto;padding:0 20px 24px;color:#8fa697;font-size:
     </div>
   </aside>
 </main>
-<footer>DataCraft — учебная игра Analyst Prep Kit. Все игровые сохранения хранятся локально в браузере; аккаунт и сервер не нужны. <a href="../README.md">Документация проекта</a>.</footer>
+<footer>DataCraft — учебная игра Подготовительный комплект для аналитика. Все игровые сохранения хранятся локально в браузере; аккаунт и сервер не нужны.  <a href="../README.md">Документация проекта</a>.</footer>
 <div id="toast" role="status" aria-live="polite"></div>
 <div class="modal" id="challengeModal" role="dialog" aria-modal="true" aria-labelledby="challengeTitle">
   <div class="dialog">
@@ -132,12 +132,12 @@ footer{max-width:1500px;margin:auto;padding:0 20px 24px;color:#8fa697;font-size:
 </div>
 <script src="../assets/progress-state.js"></script>
 <script src="../assets/supabase_auth_sync.js?v=3"></script>
-<script src="../assets/ru-localization.js"></script>
+
 <script src="../assets/datacraft-economy.js"></script>
 <script src="lesson-catalog.js"></script>
 <script>
 (function(){
-'use strict';
+"используйте строгий";
 const SAVE_KEY='datacraft-save-v1';
 const TILE=30, COLS=30, ROWS=18;
 const RESOURCE_INFO={
@@ -507,7 +507,7 @@ function drawObject(node){
   ctx.fillStyle='#c2a56b';ctx.fillRect(x-11,y-10,22,20);ctx.strokeStyle='#f7e4aa';ctx.strokeRect(x-8,y-7,16,14);
   ctx.fillStyle='#745c35';ctx.fillRect(x-4,y-5,8,10);
  }
- if(locked){ctx.fillStyle='#111b17bb';ctx.fillRect(x-14,y-15,28,30);ctx.font='bold 18px system-ui';ctx.textAlign='center';ctx.fillStyle='#f8df9a';ctx.fillText('🔒',x,y+6)}
+ if(locked){ctx.fillStyle='#111b17bb';ctx.fillRect(x-14,y-15,28,30);ctx.font="жирный шрифт 18 пикселей, системный интерфейс";ctx.textAlign='center';ctx.fillStyle='#f8df9a';ctx.fillText('🔒',x,y+6)}
 }
 function drawBuildings(){
  const b=[
@@ -519,8 +519,8 @@ function drawBuildings(){
  b.forEach(o=>{if(!state.buildings[o.id])return;const x=o.x*TILE+TILE/2,y=o.y*TILE+TILE/2;
   ctx.fillStyle='#26402e';ctx.fillRect(x-14,y-11,28,23);
   ctx.strokeStyle='#b7d39d';ctx.strokeRect(x-14,y-11,28,23);
-  ctx.font='18px system-ui';ctx.textAlign='center';ctx.fillText(o.icon,x,y+5);
-  ctx.font='bold 9px system-ui';ctx.fillStyle='#f0f6df';ctx.fillText(o.label,x,y+23);
+  ctx.font="18px системный интерфейс";ctx.textAlign='center';ctx.fillText(o.icon,x,y+5);
+  ctx.font="жирный шрифт 9px, системный интерфейс";ctx.fillStyle='#f0f6df';ctx.fillText(o.label,x,y+23);
  });
 }
 function drawPlayer(){
@@ -538,8 +538,8 @@ function drawWorld(){
  for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++)drawTile(x,y);
  // Forest edge and ruins border.
  ctx.strokeStyle='#c7da9a';ctx.setLineDash([6,5]);ctx.lineWidth=2;ctx.strokeRect(23*TILE,4*TILE,7*TILE,14*TILE);ctx.setLineDash([]);
- ctx.fillStyle='#f7e0a1';ctx.font='bold 13px system-ui';ctx.textAlign='center';ctx.fillText('SQL-РУИНЫ',26.5*TILE,5.2*TILE);
- ctx.fillStyle='#f1efc9';ctx.font='bold 13px system-ui';ctx.fillText('ЛАГЕРЬ',6*TILE,4.2*TILE);
+ ctx.fillStyle='#f7e0a1';ctx.font="жирный шрифт 13 пикселей, системный интерфейс";ctx.textAlign='center';ctx.fillText('SQL-РУИНЫ',26.5*TILE,5.2*TILE);
+ ctx.fillStyle='#f1efc9';ctx.font="жирный шрифт 13 пикселей, системный интерфейс";ctx.fillText('ЛАГЕРЬ',6*TILE,4.2*TILE);
  NODES.forEach(drawObject);drawBuildings();drawPlayer();
 }
 function movePlayer(dt){

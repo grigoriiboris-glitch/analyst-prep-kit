@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Absolute vs Relative References in Excel: What the Dollar Sign Locks — Analyst Prep Kit</title>
-<meta name="description" content="What the dollar sign does in an Excel formula, and why a copied column can be wrong while its first row is right. The four F4 states in order, mixed references, and when you need no dollar sign at all.">
+<title>Абсолютные и относительные ссылки в Excel: что блокирует знак доллара — комплект для подготовки аналитика</title>
+<meta name="description" content="Что делает знак доллара в формуле Excel и почему скопированный столбец может быть неправильным, хотя его первая строка верна. Четыре состояния F4 по порядку, смешанные ссылки и когда вам вообще не нужен знак доллара.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-absolute-vs-relative-references/">
-<meta property="og:title" content="Absolute vs Relative References in Excel: What the Dollar Sign Locks">
-<meta property="og:description" content="Excel stores the distance to a cell, not its address. A dollar sign replaces that distance with a fixed address, which is why one missing sign made a 1,326.40 column read 1,840.00.">
+<meta property="og:title" content="Абсолютные и относительные ссылки в Excel: что блокирует знак доллара">
+<meta property="og:description" content="Excel хранит расстояние до ячейки, а не ее адрес. Знак доллара заменяет это расстояние фиксированным адресом, поэтому из-за одного отсутствующего знака в столбце 1326,40 отображается значение 1840,00.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/excel-absolute-vs-relative-references.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-absolute-vs-relative-references/">
@@ -78,12 +78,11 @@
   .figure figcaption{color:var(--muted);font-size:14px;margin-top:10px}
 </style>
 <!-- SEO:JSONLD:START -->
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "Absolute vs Relative References in Excel: What the Dollar Sign Locks",
-  "description": "What the dollar sign does in an Excel formula, and why a copied column can be wrong while its first row is right. The four F4 states in order, mixed references, and when you need no dollar sign at all.",
+  "headline": "Абсолютные и относительные ссылки в Excel: что блокирует знак доллара",
+  "description": "Что делает знак доллара в формуле Excel и почему скопированный столбец может быть неправильным, хотя его первая строка верна. Четыре состояния F4 по порядку, смешанные ссылки и когда вам вообще не нужен знак доллара.",
   "url": "https://michaelnocito.github.io/analyst-prep-kit/guides/excel-absolute-vs-relative-references/",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -91,12 +90,12 @@
   },
   "author": {
     "@type": "Person",
-    "name": "Michael Nocito",
+    "name": "Майкл Носито",
     "url": "https://michaelnocito.github.io"
   },
   "publisher": {
     "@type": "Person",
-    "name": "Michael Nocito"
+    "name": "Майкл Носито"
   },
   "inLanguage": "en",
   "datePublished": "2026-08-10",
@@ -104,8 +103,7 @@
   "image": "https://michaelnocito.github.io/analyst-prep-kit/assets/social/excel-absolute-vs-relative-references.png"
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
@@ -124,7 +122,7 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Absolute vs Relative References in Excel: What the Dollar Sign Locks",
+      "name": "Абсолютные и относительные ссылки в Excel: что блокирует знак доллара",
       "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/excel-absolute-vs-relative-references/"
     }
   ]
@@ -134,18 +132,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../excel/">Excel Kit</a> · <a href="../">All guides</a></p>
-  <h1>Absolute vs Relative References in Excel: What the Dollar Sign Locks</h1>
-  <p class="meta">One character decides what moves when you copy · Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-10">August 10, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../excel/">Excel комплект</a> · <a href="../">Все руководства</a></p>
+  <h1>Абсолютные и относительные ссылки в Excel: что блокирует знак доллара</h1>
+  <p class="meta">Один персонаж решает, что будет двигаться при копировании · Часть  <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-10">10 августа 2026 г.</time></p>
 
-  <p>By the end of this page you can copy a formula anywhere in a sheet and say in advance which parts of it will move. You will be able to pin a rate so a whole column can use it, fill a nine-cell grid from a single formula, and recognize the copied column that is wrong even though its first row is right. It takes about twenty minutes. Every number below is printed next to the arithmetic that produced it, so you can check any of them.</p>
+  <p>В конце этой страницы вы можете скопировать формулу в любое место листа и заранее указать, какие ее части будут перемещены. Вы сможете закрепить ставку, чтобы ее мог использовать весь столбец, заполнить сетку из девяти ячеек с помощью одной формулы и распознать неправильный скопированный столбец, даже если его первая строка верна. Это занимает около двадцати минут. Каждое число ниже напечатано рядом с результатом его вычисления, поэтому вы можете проверить любое из них.</p>
 
-  <p>Here is the move. When a formula points at a cell that must not move as the formula is copied, put a dollar sign in front of both halves of that address: <code>=D2*$G$1</code>. Click the reference in the formula bar and press F4 to put the signs in. That is the whole mechanic. A dollar sign means "this part stays where it is".</p>
+  <p>Вот ход. Если формула указывает на ячейку, которая не должна перемещаться при копировании формулы, поставьте знак доллара перед обеими половинами этого адреса:  <code>=D2*$G$1</code>. Щелкните ссылку в строке формул и нажмите F4, чтобы вставить знаки. Вот и вся механика. Знак доллара означает «эта часть остается на месте».</p>
 
-  <p>The short version: Excel does not store the address you typed. It stores the distance from your formula to the cell it points at. A dollar sign replaces that distance with a fixed address.</p>
+  <p>Краткая версия: Excel не сохраняет введенный вами адрес. Он сохраняет расстояние от вашей формулы до ячейки, на которую она указывает. Знак доллара заменяет это расстояние фиксированным адресом.</p>
 
-  <p>That is the idea everything else on the page rests on, so it gets the picture.</p>
+  <p>Именно на этой идее основано все остальное на странице, чтобы получить представление о ней.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 300" role="img" aria-labelledby="refTitle refDesc" xmlns="http://www.w3.org/2000/svg">
@@ -202,304 +200,304 @@
         </marker>
       </defs>
     </svg>
-    <figcaption>Four copies of the same formula. On the left the second half of it travels with the copy, so three of the four arrows land on cells that hold nothing. On the right it is pinned, so every copy asks the same cell.</figcaption>
+    <figcaption>Четыре копии одной и той же формулы. Слева вторая половина перемещается вместе с копией, поэтому три из четырех стрелок попадают в ячейки, которые ничего не содержат. Справа он закреплен, поэтому каждая копия запрашивает одну и ту же ячейку.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>What you'll learn</strong>
+    <strong>Что вы узнаете</strong>
     <ol>
-      <li>The fork: should this part move, or stay?</li>
-      <li>What a relative reference actually stores</li>
-      <li>The rate in one cell, and the 513.60 it cost</li>
-      <li>F4, and the four states in order</li>
-      <li>Mixed: lock one half, free the other</li>
-      <li>Nine answers from one formula</li>
-      <li>Four things the dollar sign does not do</li>
-      <li>When you need no dollar sign at all</li>
-      <li>The full before and after</li>
-      <li>Edge cases that break a copied formula quietly</li>
-      <li>Why this works</li>
-      <li>Using this on your own workbook</li>
-      <li>The whole thing on one screen</li>
+      <li>Вилка: должна ли эта часть двигаться или оставаться?</li>
+      <li>Что на самом деле хранит относительная ссылка</li>
+      <li>Ставка в одной ячейке и 513,60 она стоит</li>
+      <li>F4 и четыре состояния по порядку</li>
+      <li>Смешанное: заблокируйте одну половину, освободите другую.</li>
+      <li>Девять ответов из одной формулы</li>
+      <li>Четыре вещи, которых не делает знак доллара</li>
+      <li>Когда тебе вообще не нужен знак доллара</li>
+      <li>Полное до и после</li>
+      <li>Крайние случаи, которые незаметно нарушают скопированную формулу</li>
+      <li>Почему это работает</li>
+      <li>Использование этого в своей книге</li>
+      <li>Все на одном экране</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Every number on this page is checkable.</strong> The worked example uses the sixteen-row orders table that runs through this set of guides, and every result is printed beside its arithmetic in the form 1,200 &times; 0.08 = 96.00. If a number here does not match the arithmetic next to it, I got it wrong and you caught it.</div>
+  <div class="note"><strong>Каждое число на этой странице можно проверить.</strong>  В проработанном примере используется таблица заказов из шестнадцати строк, которая проходит через этот набор направляющих, и каждый результат печатается рядом с его арифметикой в ​​форме 1200 × 0,08 = 96,00. Если число здесь не соответствует арифметике рядом с ним, значит, я ошибся, и вы это заметили.</div>
 
   <div class="step">
-    <h2>1. The fork: should this part move, or stay?</h2>
+    <h2>1. Вилка: эта часть должна двигаться или оставаться?</h2>
 
-    <p>Before the explanation, one question worth answering from memory. Think of a formula you have dragged down a column. Say which parts of it needed to point somewhere new on each row, and which parts needed to keep pointing at the same place.</p>
+    <p>Перед объяснением один вопрос, на который стоит ответить по памяти. Подумайте о формуле, которую вы перетащили вниз по столбцу. Скажите, какие его части должны указывать на новое место в каждой строке, а какие части должны продолжать указывать на одно и то же место.</p>
 
-    <p>That question is the whole decision, and it gets asked once per reference in the formula. There are two possible answers.</p>
+    <p>Этот вопрос и есть все решение, и он задается один раз для каждой ссылки в формуле. Есть два возможных ответа.</p>
 
-    <p><strong>Answer one: it should move.</strong> The reference points at something that belongs to this row. The amount for this order, the date of this order, the name on this line. If that is true, you want the reference to shift as the formula is copied, and you leave it alone. This is called a <strong>relative</strong> reference, and it is what you get by default.</p>
+    <p><strong>Ответ первый: он должен двигаться.</strong>  Ссылка указывает на что-то, принадлежащее этой строке. Сумма этого заказа, дата этого заказа, имя в этой строке. Если это правда, вы хотите, чтобы ссылка смещалась при копировании формулы, и оставьте ее в покое. Это называется  <strong>relative</strong>  ссылку, и это то, что вы получаете по умолчанию.</p>
 
-    <p><strong>Answer two: it should stay.</strong> The reference points at one thing that every row shares. A commission rate, a tax percentage, an exchange rate, the top-left corner of a lookup table. If that is true, you want every copy of the formula to ask the same cell, and you write it as <code>$G$1</code>. This is an <strong>absolute</strong> reference.</p>
+    <p><strong>Ответ второй: должно остаться.</strong>  Ссылки указывают на одну вещь, которая является общей для каждой строки. Ставка комиссии, процент налога, обменный курс, верхний левый угол справочной таблицы. Если это правда, вы хотите, чтобы каждая копия формулы запрашивала одну и ту же ячейку, и вы записываете это как  <code>$G$1</code>. Это  <strong>absolute</strong>  ссылка.</p>
 
-    <p>What decides between them is not the formula and not the cell. It is the sentence you would say out loud about that reference. "The amount on this row" moves. "The rate" stays.</p>
+    <p>Между ними решается не формула и не ячейка. Это предложение, которое вы бы сказали вслух по поводу этой ссылки. «Сумма в этой строке» перемещается. «Ставка» остается.</p>
 
-    <p>It matters because getting it backwards does not usually produce an error message. It produces a number, and the next section is about why that number is often believable.</p>
+    <p>Это важно, потому что обратный ход обычно не приводит к появлению сообщения об ошибке. Он дает число, и следующий раздел посвящен тому, почему этому числу часто можно доверять.</p>
   </div>
 
   <div class="step">
-    <h2>2. What a relative reference actually stores</h2>
+    <h2>2. Что на самом деле хранит относительная ссылка</h2>
 
-    <p>Here is the fact that makes the rest of the page obvious rather than memorized. Type <code>=D2</code> into cell E2. Excel does not remember "D2". It remembers "one cell to my left".</p>
+    <p>Именно этот факт делает остальную часть страницы очевидной, а не запоминаемой. Тип  <code>=D2</code>  в ячейку Е2. Excel не запоминает «D2». Он помнит «одну клетку слева от меня».</p>
 
-    <p>Copy that formula to E5 and it still means one cell to my left, which is now D5. The formula did not know it said D2. It only ever knew the distance.</p>
+    <p>Скопируйте эту формулу в E5, и она по-прежнему будет означать одну ячейку слева от меня, которая теперь является D5. Формулу не знал, там написано D2. Он всегда знал только расстояние.</p>
 
-    <p>Say it out loud, because it is the sentence the whole topic hangs off: a reference is a direction and a distance, not an address.</p>
+    <p>Скажите это вслух, потому что от этого предложения зависит вся тема: ссылка — это направление и расстояние, а не адрес.</p>
 
-    <p>That is exactly why filling a column works at all. You write one formula for row 2 and copy it to row 17, and each copy quietly points at its own row, because "one cell to my left" is true on every row.</p>
+    <p>Именно поэтому заполнение столбца вообще работает. Вы пишете одну формулу для строки 2 и копируете ее в строку 17, и каждая копия спокойно указывает на свою строку, потому что «одна ячейка слева от меня» верна для каждой строки.</p>
 
-    <p>A dollar sign switches off that behavior for the half of the address it sits in front of. <code>$G</code> means column G, always, no matter where this formula ends up. <code>$1</code> means row 1, always. Put both in and the reference stops being a distance and becomes a place.</p>
+    <p>Знак доллара отключает это поведение для половины адреса, перед которым он находится.  <code>$G</code>  означает столбец G, всегда, независимо от того, где заканчивается эта формула.  <code>$1</code>  всегда означает строку 1. Поместите оба, и ссылка перестанет быть расстоянием и станет местом.</p>
   </div>
 
   <div class="step">
-    <h2>3. The rate in one cell, and the 513.60 it cost</h2>
+    <h2>3. Ставка в одной ячейке и 513,60 она стоит</h2>
 
-    <p>Here is the failure, worked end to end on real numbers.</p>
+    <p>Вот и провал, работало впритык на реальных цифрах.</p>
 
-    <p>The orders table sits in A1:D17. Column D holds the amount. Off to the side is a small block of assumptions, which is where a careful person puts rates so they are visible and editable instead of buried inside formulas.</p>
+    <p>Таблица заказов находится в A1:D17. В столбце D указана сумма. В стороне находится небольшой блок предположений, куда осторожный человек помещает ставки так, чтобы они были видны и редактировались, а не были скрыты внутри формул.</p>
 
     <table>
       <tr><th>Cell</th><th>Label</th><th>Value</th></tr>
-      <tr><td>G1</td><td>Commission rate</td><td>0.08</td></tr>
-      <tr><td>G2</td><td>Tax rate</td><td>0.20</td></tr>
-      <tr><td>G3</td><td>Uplift factor</td><td>1.05</td></tr>
+      <tr><td>G1</td><td>Ставка комиссии</td><td>0.08</td></tr>
+      <tr><td>G2</td><td>Ставка налога</td><td>0.20</td></tr>
+      <tr><td>G3</td><td>Коэффициент подъема</td><td>1.05</td></tr>
     </table>
 
-    <p>Now commission per order goes in column E. In E2 you write <code>=D2*G1</code> and fill it down to E17.</p>
+    <p>Теперь комиссия за заказ идет в столбце E. В E2 вы пишете  <code>=D2*G1</code>  и заливаем до Е17.</p>
 
-    <p>The first row is right. E2 reads 96.00, and 1,200 &times; 0.08 = 96.00. So the formula gets a nod and the fill gets trusted.</p>
+    <p>Первый ряд правый. E2 читается как 96,00 и 1200 × 0,08 = 96,00. Таким образом, формула получает одобрение, а заливке доверяют.</p>
 
-    <p>Here is what the next three rows did.</p>
+    <p>Вот что сделали следующие три строки.</p>
 
     <table>
-      <tr><th>Cell</th><th>What it became</th><th>Arithmetic</th><th>Result</th></tr>
+      <tr><th>Cell</th><th>Что это стало</th><th>Arithmetic</th><th>Result</th></tr>
       <tr><td>E2</td><td><code>=D2*G1</code></td><td>1,200 &times; 0.08</td><td>96.00</td></tr>
       <tr><td>E3</td><td><code>=D3*G2</code></td><td>950 &times; 0.20</td><td>190.00</td></tr>
       <tr><td>E4</td><td><code>=D4*G3</code></td><td>1,480 &times; 1.05</td><td>1,554.00</td></tr>
-      <tr><td>E5</td><td><code>=D5*G4</code></td><td>720 &times; nothing</td><td>0.00</td></tr>
-      <tr><td>E6:E17</td><td><code>=D6*G5</code> and down</td><td>each amount &times; nothing</td><td>0.00</td></tr>
+      <tr><td>E5</td><td><code>=D5*G4</code></td><td>720 × ничего</td><td>0.00</td></tr>
+      <tr><td>Е6:Е17</td><td><code>=D6*G5</code>  и вниз</td><td>каждая сумма × ничего</td><td>0.00</td></tr>
     </table>
 
-    <p>The column totals <strong>1,840.00</strong>. It should total <strong>1,326.40</strong>, because the sixteen amounts add up to 16,580 and 16,580 &times; 0.08 = 1,326.40. The sheet is over by 513.60, and 1,840.00 minus 1,326.40 = 513.60.</p>
+    <p>Итоги по столбцу  <strong>1,840.00</strong>. Оно должно составить  <strong>1,326.40</strong>, потому что сумма шестнадцати сумм составляет 16 580 и 16 580 × 0,08 = 1 326,40. Лист закончился на 513,60, и 1840,00 минус 1326,40 = 513,60.</p>
 
-    <p>Before reading on, say why row 2 came out right. Getting this in your own words is worth more than the fix itself.</p>
+    <p>Прежде чем читать дальше, скажите, почему вторая строка оказалась верной. Изложить это своими словами стоит больше, чем само исправление.</p>
 
-    <p>Row 2 is right because row 2 is the row you wrote the formula for. The distance from E2 to G1 is up one, right two. On row 3 that same distance lands on G2, which is the tax rate. On row 4 it lands on the uplift factor. From row 5 down it lands in empty space, and an empty cell is treated as zero in arithmetic.</p>
+    <p>Строка 2 верна, потому что строка 2 — это строка, для которой вы написали формулу. Расстояние от E2 до G1 на единицу вверх, на две вправо. В строке 3 то же расстояние находится на G2, что соответствует ставке налога. В строке 4 указан коэффициент подъема. Начиная с строки 5, она оказывается в пустом пространстве, а пустая ячейка рассматривается в арифметике как ноль.</p>
 
-    <p>Two of those wrong numbers, 190.00 and 1,554.00, look like money. That is the part worth remembering. This mistake does not announce itself, and the one row a reviewer usually checks is the one row that is correct.</p>
+    <p>Два из этих неправильных чисел, 190,00 и 1554,00, выглядят как деньги. Это та часть, которую стоит запомнить. Эта ошибка не дает о себе знать, и рецензент обычно проверяет только одну строку, которая является правильной.</p>
 
-    <p>The fix is one keystroke. In E2, click on the <code>G1</code> and press F4, which turns it into <code>$G$1</code>, then fill down again.</p>
+    <p>Исправление — одно нажатие клавиши. В E2 нажмите на  <code>G1</code>  и нажмите F4, что превратит его в  <code>$G$1</code>, затем заполните снова.</p>
 
     <pre><code>=D2*$G$1</code></pre>
 
-    <p>Now every row asks G1, the column totals 1,326.40, and changing the rate in G1 updates all sixteen rows at once. That second part is the real reward. The rate is in a cell someone can type into, which is what makes the sheet a model instead of a printout.</p>
+    <p>Теперь каждая строка запрашивает G1, общая сумма столбца составляет 1326,40, а изменение скорости в G1 обновляет сразу все шестнадцать строк. Эта вторая часть — настоящая награда. Ставка указана в ячейке, которую кто-то может ввести, что делает лист моделью, а не распечаткой.</p>
   </div>
 
   <div class="step">
-    <h2>4. F4, and the four states in order</h2>
+    <h2>4. F4 и четыре состояния по порядку</h2>
 
-    <p>You almost never type dollar signs. You put the cursor on a reference and press F4, which cycles through the four possible states. Microsoft documents the order, and it is worth knowing because it means one extra press gets you where you want rather than starting over.</p>
+    <p>Вы почти никогда не печатаете знаки доллара. Вы помещаете курсор на ссылку и нажимаете F4, что приводит к циклическому перебору четырех возможных состояний. Microsoft документирует порядок, и его стоит знать, потому что это означает, что одно дополнительное нажатие доставит вас туда, куда вы хотите, вместо того, чтобы начинать все сначала.</p>
 
     <table>
-      <tr><th>Press</th><th>Looks like</th><th>What is locked</th><th>Use it when</th></tr>
-      <tr><td>1</td><td><code>$A$1</code></td><td>Column and row</td><td>One cell every copy must ask. Rates, thresholds, a lookup range.</td></tr>
-      <tr><td>2</td><td><code>A$1</code></td><td>Row only</td><td>Filling across and down, where the anchor lives in one row.</td></tr>
-      <tr><td>3</td><td><code>$A1</code></td><td>Column only</td><td>Filling across and down, where the anchor lives in one column.</td></tr>
-      <tr><td>4</td><td><code>A1</code></td><td>Nothing</td><td>Back to a plain relative reference.</td></tr>
+      <tr><th>Press</th><th>Похоже на</th><th>Что заблокировано</th><th>Используйте его, когда</th></tr>
+      <tr><td>1</td><td><code>$A$1</code></td><td>Столбец и строка</td><td>Одна ячейка должна спрашиваться у каждой копии. Ставки, пороги, диапазон поиска.</td></tr>
+      <tr><td>2</td><td><code>A$1</code></td><td>Только строка</td><td>Заполнение поперек и вниз, где якорь живет в одном ряду.</td></tr>
+      <tr><td>3</td><td><code>$A1</code></td><td>Только столбец</td><td>Заполнение поперек и вниз, где якорь живет в одном столбце.</td></tr>
+      <tr><td>4</td><td><code>A1</code></td><td>Nothing</td><td>Вернёмся к простой относительной ссылке.</td></tr>
     </table>
 
-    <p>On a Mac the same toggle is Cmd+T, and F4 also works if your function keys are set up for it.</p>
+    <p>На Mac тот же переключатель — Cmd+T, и F4 также работает, если для этого настроены ваши функциональные клавиши.</p>
 
-    <p>One thing that confuses people on Windows: F4 only cycles references when the cursor is on a reference inside a formula. Anywhere else it repeats your last action, which is a genuinely useful key for a different job.</p>
+    <p>Одна вещь, которая смущает людей в Windows: F4 циклически перемещает ссылки только тогда, когда курсор находится на ссылке внутри формулы. В любом другом месте оно повторяет ваше последнее действие, что является действительно полезным ключом для другой работы.</p>
   </div>
 
   <div class="step">
-    <h2>5. Mixed: lock one half, free the other</h2>
+    <h2>5. Смешанный: зафиксируйте одну половину, освободите другую.</h2>
 
-    <p>Before the explanation, a prediction. If <code>$G$1</code> pins both halves and <code>G1</code> pins neither, say what you think <code>G$1</code> pins.</p>
+    <p>Прежде чем объяснение, предсказание. Если  <code>$G$1</code>  скрепляет обе половинки и  <code>G1</code>  булавок нет, скажи, что думаешь  <code>G$1</code>  булавки.</p>
 
-    <p>The row. <code>G$1</code> is free to move sideways and stuck on row 1. Its mirror, <code>$G1</code>, is stuck in column G and free to move up and down.</p>
+    <p>Ряд.  <code>G$1</code>  свободно перемещается вбок и застрял в ряду 1. Это зеркало,  <code>$G1</code>, застрял в столбце G и может свободно перемещаться вверх и вниз.</p>
 
-    <p>These are called mixed references, and they exist for one situation: a formula that gets copied in two directions at once. When you only ever fill down a column, relative and fully absolute cover everything you need. The moment you fill across as well, you usually want one half of the address pinned and the other half loose.</p>
+    <p>Их называют смешанными ссылками, и они существуют для одной ситуации: формула копируется в двух направлениях одновременно. Когда вы только заполняете столбец, относительные и полностью абсолютные данные охватывают все, что вам нужно. В тот момент, когда вы также заполняете адрес, вы обычно хотите, чтобы одна половина адреса была закреплена, а другая половина свободна.</p>
 
-    <p>The rule of thumb is short. Pin the part that must not change in the direction you are copying.</p>
+    <p>Эмпирическое правило короткое. Закрепите ту часть, которая не должна меняться в направлении копирования.</p>
 
     <ul>
-      <li>Your anchors sit in a <strong>row</strong> across the top, and you copy down: lock the row, <code>G$1</code>.</li>
-      <li>Your anchors sit in a <strong>column</strong> down the side, and you copy across: lock the column, <code>$D2</code>.</li>
-      <li>Both at once is the grid in the next section, and it needs one of each.</li>
+      <li>Ваши якоря сидят в  <strong>row</strong>  вверху и копируете вниз: зафиксируйте строку,  <code>G$1</code>.</li>
+      <li>Ваши якоря сидят в  <strong>column</strong>  вниз сбоку и копируете поперек: зафиксируйте столбец,  <code>$D2</code>.</li>
+      <li>Оба сразу — это сетка в следующем разделе, и для нее нужно по одному каждому.</li>
     </ul>
   </div>
 
   <div class="step">
-    <h2>6. Nine answers from one formula</h2>
+    <h2>6. Девять ответов из одной формулы</h2>
 
-    <p>Finance wants the commission bill at three possible rates, for the first three orders, so they can pick one. That is nine numbers. It is also one formula.</p>
+    <p>Финансовому отделу нужны комиссионные по трем возможным ставкам для первых трех заказов, чтобы они могли выбрать один. Это девять цифр. Это тоже одна формула.</p>
 
-    <p>Put the three rates across the top, in J1, K1 and L1: 0.06, 0.08 and 0.10. The amounts are already down column D. In J2 write this, then fill it right to L2 and down to row 4.</p>
+    <p>Поместите три ставки вверху в J1, K1 и L1: 0,06, 0,08 и 0,10. Суммы уже находятся в столбце D. Впишите это в J2, затем заполните до L2 и до строки 4.</p>
 
     <pre><code>=$D2*J$1</code></pre>
 
-    <p>Read it as two decisions rather than as punctuation. <code>$D2</code> is locked to column D and free on the row, because the amount is always in D but changes row by row. <code>J$1</code> is locked to row 1 and free on the column, because the rate is always in row 1 but changes column by column.</p>
+    <p>Прочтите это как два решения, а не как знаки препинания.  <code>$D2</code>  привязан к столбцу D и свободен в строке, поскольку сумма всегда находится в D, но меняется построчно.  <code>J$1</code>  привязан к строке 1 и свободен в столбце, поскольку ставка всегда находится в строке 1, но меняется столбец за столбцом.</p>
 
-    <p>Here is what the nine cells hold, with the arithmetic.</p>
+    <p>Вот что содержат девять ячеек с арифметикой.</p>
 
     <table>
-      <tr><th>Amount</th><th>At 0.06</th><th>At 0.08</th><th>At 0.10</th></tr>
+      <tr><th>Amount</th><th>В 0,06</th><th>В 0,08</th><th>В 0.10</th></tr>
       <tr><td>1,200</td><td>72.00 (1,200 &times; 0.06)</td><td>96.00 (1,200 &times; 0.08)</td><td>120.00 (1,200 &times; 0.10)</td></tr>
       <tr><td>950</td><td>57.00 (950 &times; 0.06)</td><td>76.00 (950 &times; 0.08)</td><td>95.00 (950 &times; 0.10)</td></tr>
       <tr><td>1,480</td><td>88.80 (1,480 &times; 0.06)</td><td>118.40 (1,480 &times; 0.08)</td><td>148.00 (1,480 &times; 0.10)</td></tr>
     </table>
 
-    <p>Nine correct answers, one formula, typed once. If you get a grid like this wrong, the symptom is recognizable: the whole first row or the whole first column is right and everything else is nonsense, because the one copy you checked was the one that needed no shifting.</p>
+    <p>Девять правильных ответов, одна формула, набранная один раз. Если вы построили подобную сетку неправильно, симптом очевиден: вся первая строка или весь первый столбец верны, а все остальное — ерунда, потому что единственная копия, которую вы проверяли, была той, которую не нужно было сдвигать.</p>
 
-    <p>Now picture this on your own numbers. Take a table you actually use, put two or three scenario values across the top of a blank area, and imagine which half of each address you would pin. You do not have to build it. Just decide, for one formula, which two dollar signs you would place and where.</p>
+    <p>А теперь представьте это на своих цифрах. Возьмите таблицу, которую вы на самом деле используете, поместите два или три значения сценария поверх пустой области и представьте, какую половину каждого адреса вы бы закрепили. Вам не обязательно его строить. Просто решите для одной формулы, какие два знака доллара вы бы разместили и где.</p>
   </div>
 
   <div class="step">
-    <h2>7. Four things the dollar sign does not do</h2>
+    <h2>7. Четыре вещи, которых не делает знак доллара</h2>
 
-    <p>Each of these catches somebody, and three of them are only visible after the damage.</p>
+    <p>Каждый из них кого-то ловит, а троих можно увидеть только после повреждения.</p>
 
-    <p><strong>It does not change the answer where you typed it.</strong> <code>=D2*G1</code> and <code>=D2*$G$1</code> return exactly the same number in E2. The difference appears only when the formula is copied somewhere else. That is why testing one cell proves nothing about a fill.</p>
+    <p><strong>Это не меняет ответ там, где вы его набрали.</strong> <code>=D2*G1</code> and <code>=D2*$G$1</code> return exactly the same number in E2. The difference appears only when the formula is copied somewhere else. That is why testing one cell proves nothing about a fill.</p>
 
-    <p><strong>It does not protect the cell from editing.</strong> Locking a reference and locking a cell are unrelated. Stopping people from typing over G1 is sheet protection, which is a different feature in a different menu.</p>
+    <p><strong>Он не защищает ячейку от редактирования.</strong>  Блокировка ссылки и блокировка ячейки не связаны между собой. Чтобы люди не могли печатать через G1, используется защита листа, которая представляет собой другую функцию в другом меню.</p>
 
-    <p><strong>It does not stop a reference changing when the target physically moves.</strong> This one surprises people who think absolute means permanent. Insert a row above row 1, and every <code>$G$1</code> in the workbook quietly rewrites itself to <code>$G$2</code>, because Excel is following the value you pointed at. Absolute means "does not shift when the formula is copied", not "never changes".</p>
+    <p><strong>Это не останавливает изменение ссылки при физическом перемещении цели.</strong>  Это удивляет людей, которые думают, что абсолютное означает постоянное. Вставьте строку выше строки 1, и каждый  <code>$G$1</code>  в рабочей книге незаметно перезаписывается на  <code>$G$2</code>, поскольку Excel следует указанному вами значению. Абсолют означает «не смещается при копировании формулы», а не «никогда не меняется».</p>
 
-    <p><strong>It does not survive a cut.</strong> Cutting the anchor cell with Ctrl+X and pasting it elsewhere drags every reference to it along, dollar signs and all. Copying it does not. If a model breaks the day someone tidied the layout, this is usually why.</p>
+    <p><strong>Он не выдерживает разреза.</strong>  Вырезание ячейки привязки с помощью Ctrl+X и вставка ее в другое место перетаскивает каждую ссылку на нее, знаки доллара и все такое. Копирование этого не дает. Если модель ломается в тот день, когда кто-то приводил в порядок макет, обычно именно поэтому.</p>
   </div>
 
   <div class="step">
-    <h2>8. When you need no dollar sign at all</h2>
+    <h2>8. Когда вам вообще не нужен знак доллара</h2>
 
-    <p>There are two ways to get the same protection without any punctuation, and both read better afterwards.</p>
+    <p>Есть два способа получить одинаковую защиту без каких-либо знаков препинания, и оба впоследствии читаются лучше.</p>
 
-    <p><strong>Name the cell.</strong> Select G1, type <code>CommissionRate</code> into the Name Box beside the formula bar, and press Enter. Now the formula is <code>=D2*CommissionRate</code>, which is already absolute, and which says what it means to anyone who opens the file next year. Defined names do not shift when a formula is copied.</p>
+    <p><strong>Назовите ячейку.</strong>  Выберите G1, введите  <code>CommissionRate</code>  в поле имени рядом со строкой формул и нажмите Enter. Теперь формула  <code>=D2*CommissionRate</code>, что уже является абсолютным и говорит, что это значит для любого, кто откроет файл в следующем году. Определенные имена не изменяются при копировании формулы.</p>
 
-    <p><strong>Put the data in a table.</strong> Inside an <a href="../excel-tables/">Excel Table created with Ctrl+T</a>, a column reference is written <code>[@Amount]</code> and it means "the amount on this row" by name rather than by distance. There is nothing to lock and nothing to get backwards, and the reference keeps working when columns are inserted. This is one of the better reasons to press Ctrl+T on a range you are about to write formulas against.</p>
+    <p><strong>Поместите данные в таблицу.</strong>  Внутри  <a href="../excel-tables/">Таблица Excel, созданная с помощью Ctrl+T</a>, записывается ссылка на столбец  <code>[@Amount]</code>  и это означает «сумма в этой строке» по имени, а не по расстоянию. Нечего блокировать и нечего возвращать назад, и ссылка продолжает работать при вставке столбцов. Это одна из веских причин нажать Ctrl+T в диапазоне, для которого вы собираетесь писать формулы.</p>
 
-    <p>Neither one removes the need to understand the dollar sign, because you will read other people's workbooks for the rest of your career. But for the sheets you build, a named rate is easier to be right about than a pinned address.</p>
+    <p>Ни один из них не устраняет необходимости понимать знак доллара, потому что вы будете читать рабочие тетради других людей до конца своей карьеры. Но для таблиц, которые вы создаете, легче быть правым в отношении именованного тарифа, чем закрепленного адреса.</p>
   </div>
 
-  <h2>The full before and after</h2>
+  <h2>Полное до и после</h2>
 
-  <p>Same table, same rate, same fill. One character apart.</p>
+  <p>Та же таблица, та же ставка, та же загрузка. Отличие в один персонаж.</p>
 
   <table>
-    <tr><th></th><th>Before: <code>=D2*G1</code></th><th>After: <code>=D2*$G$1</code></th></tr>
-    <tr><td>Row 2</td><td>96.00</td><td>96.00</td></tr>
-    <tr><td>Row 3</td><td>190.00 (used the tax rate)</td><td>76.00 (950 &times; 0.08)</td></tr>
-    <tr><td>Row 4</td><td>1,554.00 (used the uplift)</td><td>118.40 (1,480 &times; 0.08)</td></tr>
-    <tr><td>Rows 5 to 17</td><td>0.00 (pointed at empty cells)</td><td>Each amount &times; 0.08</td></tr>
-    <tr><td>Column total</td><td>1,840.00</td><td>1,326.40</td></tr>
-    <tr><td>Change the rate in G1</td><td>Three rows react, thirteen do not</td><td>All sixteen rows react</td></tr>
-    <tr><td>What a reviewer sees first</td><td>A correct first row</td><td>A correct first row</td></tr>
+    <tr><th></th><th>До:  <code>=D2*G1</code></th><th>После:  <code>=D2*$G$1</code></th></tr>
+    <tr><td>Ряд 2</td><td>96.00</td><td>96.00</td></tr>
+    <tr><td>Ряд 3</td><td>190,00 (использована ставка налога)</td><td>76.00 (950 &times; 0.08)</td></tr>
+    <tr><td>Ряд 4</td><td>1554,00 (использован подъем)</td><td>118.40 (1,480 &times; 0.08)</td></tr>
+    <tr><td>Ряды с 5 по 17</td><td>0,00 (указан на пустые ячейки)</td><td>Каждая сумма × 0,08</td></tr>
+    <tr><td>Итого по столбцу</td><td>1,840.00</td><td>1,326.40</td></tr>
+    <tr><td>Изменить ставку в G1</td><td>Три ряда реагируют, тринадцать нет</td><td>Все шестнадцать рядов реагируют</td></tr>
+    <tr><td>Что рецензент видит в первую очередь</td><td>Правильный первый ряд</td><td>Правильный первый ряд</td></tr>
   </table>
 
-  <p>The last line is the point of the whole page. Both versions pass the check most people run.</p>
+  <p>Последняя строка — это точка всей страницы. Обе версии проходят проверку, которую проводит большинство людей.</p>
 
-  <h2>Edge cases that break a copied formula quietly</h2>
+  <h2>Крайние случаи, которые незаметно нарушают скопированную формулу</h2>
 
-  <p>These are the ones that produce a number rather than an error.</p>
+  <p>Это те, которые выдают число, а не ошибку.</p>
 
   <ul>
-    <li><strong>A lookup range with no dollar signs.</strong> <code>=VLOOKUP(A2,H2:I50,2,FALSE)</code> filled down becomes <code>H3:I51</code>, then <code>H4:I52</code>. The range slides off the bottom of your lookup table and the last rows return not-found for no visible reason. Lock it: <code>$H$2:$I$50</code>. There is more on this in <a href="../vlookup-vs-xlookup/">VLOOKUP vs XLOOKUP</a>.</li>
-    <li><strong>Filling right when you only tested down.</strong> A column-only test passes, then somebody drags the same formula sideways and the row reference was never pinned. Test a fill in both directions if the formula might be copied in both.</li>
-    <li><strong>A mixed reference on the wrong axis.</strong> <code>$D2</code> where you meant <code>D$2</code> still returns numbers. They are just the wrong numbers, taken from a plausible neighbor.</li>
-    <li><strong>Rows inserted inside a locked range.</strong> <code>$H$2:$I$50</code> expands to <code>$H$2:$I$51</code> when a row is inserted inside it, which is usually what you want. Rows added at the bottom, outside the range, are not picked up at all. A table reference avoids the whole question.</li>
-    <li><strong>Conditional formatting uses the same mechanism.</strong> A formula rule is written once for the top-left cell of the selection and filled across the rest, which is why <a href="../excel-conditional-formatting/">one dollar sign turns a highlighted cell into a highlighted row</a>.</li>
-    <li><strong>The value that never moves anyway.</strong> If a rate appears in exactly one formula and nowhere else, a dollar sign is not the fix for anything. The fix is putting the rate in a cell in the first place, so it is visible and editable.</li>
+    <li><strong>Диапазон поиска без знаков доллара.</strong> <code>=VLOOKUP(A2,H2:I50,2,FALSE)</code>  заполненный становится  <code>H3:I51</code>, затем  <code>H4:I52</code>. Диапазон выскальзывает из нижней части таблицы поиска, и последние строки возвращаются как не найденные без видимой причины. Заблокируйте это:  <code>$H$2:$I$50</code>. Подробнее об этом есть в  <a href="../vlookup-vs-xlookup/">ВПР против XLOOKUP</a>.</li>
+    <li><strong>Заполнение правильно, когда вы только протестировали.</strong>  Тест только для столбцов проходит успешно, затем кто-то перетаскивает ту же формулу в сторону, и ссылка на строку так и не была закреплена. Проверьте заливку в обоих направлениях, если формула может быть скопирована в обоих направлениях.</li>
+    <li><strong>Смешанная ссылка на неправильной оси.</strong> <code>$D2</code>  где ты имел в виду  <code>D$2</code>  по-прежнему возвращает числа. Это просто неправильные цифры, взятые у вероятного соседа.</li>
+    <li><strong>Строки вставлены внутри заблокированного диапазона.</strong> <code>$H$2:$I$50</code>  расширяется до  <code>$H$2:$I$51</code>  когда внутри него вставляется строка, что обычно и является тем, что вам нужно. Строки, добавленные внизу, за пределами диапазона, вообще не подбираются. Ссылка на таблицу позволяет избежать всего вопроса.</li>
+    <li><strong>Условное форматирование использует тот же механизм.</strong>  Правило формулы записывается один раз для верхней левой ячейки выделенного фрагмента и заполняется для остальных, поэтому  <a href="../excel-conditional-formatting/">один знак доллара превращает выделенную ячейку в выделенную строку</a>.</li>
+    <li><strong>Ценность, которая все равно никогда не движется.</strong>  Если ставка появляется только в одной формуле и нигде больше, знак доллара ни для чего не является решением. Исправление заключается в том, чтобы поместить ставку в ячейку на первое место, чтобы она была видна и доступна для редактирования.</li>
   </ul>
 
-  <h2>Why this works</h2>
+  <h2>Почему это работает</h2>
 
-  <p>The mechanism itself is a design decision with an obvious payoff: storing an offset instead of an address is what lets one typed formula serve sixteen rows. Everything in this topic, including the failure, comes out of that single choice.</p>
+  <p>Сам механизм представляет собой дизайнерское решение с очевидным преимуществом: сохранение смещения вместо адреса позволяет одной типизированной формуле обслуживать шестнадцать строк. Все в этой теме, включая неудачу, является результатом этого единственного выбора.</p>
 
-  <p>The failure is worth taking seriously, because reference mistakes are one of the plainest examples of a general finding about spreadsheets. They are common, they produce plausible output, and inspection catches fewer of them than people expect. When undergraduate students inspected a spreadsheet seeded with deliberate errors, working alone for forty-five minutes, they found 63% of them on average, and groups of three working together found 83% (Panko, 1999, <em>Journal of Management Information Systems</em>, 16(2), 159&ndash;176). A single reviewer glancing at one row is a long way below either number. The broader review of this literature is worth reading if you build models anybody relies on (Panko, 1998, <em>Journal of End User Computing</em>, 10(2), 15&ndash;21).</p>
+  <p>К этой неудаче стоит отнестись серьезно, потому что ошибки в ссылках являются одним из самых ярких примеров общего вывода о электронных таблицах. Они распространены, дают правдоподобные результаты, и проверка выявляет их меньше, чем люди ожидают. Когда студенты бакалавриата проверяли электронную таблицу, засеянную преднамеренными ошибками, работая в одиночку в течение сорока пяти минут, они обнаружили в среднем 63% ошибок, а группы из трех человек, работавшие вместе, обнаружили 83% (Панко, 1999,  <em>Журнал информационных систем управления</em>, 16(2), 159–176). Один рецензент, взглянувший на одну строку, намного ниже любого числа. Если вы строите модели, на которые кто-то может положиться, стоит прочитать более широкий обзор этой литературы (Панко, 1998,  <em>Журнал вычислений для конечных пользователей</em>, 10(2), 15&ndash;21).</p>
 
-  <p>That is the argument for the habit at the end of this page rather than for being more careful. Care is not a control. A total you predicted before you looked is a control, and it is the reason this page keeps printing the arithmetic beside every number.</p>
+  <p>Это аргумент в пользу привычки, приведенный в конце этой страницы, а не в пользу большей осторожности. Уход – это не контроль. Сумма, которую вы предсказали до того, как посмотрели, является контрольной, и именно поэтому на этой странице рядом с каждым числом печатается арифметика.</p>
 
-  <p>One note on the cheat sheet below. It is built to be covered and recalled rather than read, because testing yourself on material transfers to new situations better than restudying it, which matters here since you will be applying this to sheets that look nothing like the one above (Butler, 2010, <em>Journal of Experimental Psychology: Learning, Memory, and Cognition</em>, 36(5), 1118&ndash;1133).</p>
+  <p>Одно замечание в шпаргалке ниже. Он создан для того, чтобы его просматривали и вспоминали, а не читали, потому что проверка себя на перенос материала в новые ситуации лучше, чем его повторное изучение, что здесь важно, поскольку вы будете применять это к листам, которые совсем не похожи на приведенный выше (Батлер, 2010,  <em>Журнал экспериментальной психологии: обучение, память и познание</em>, 36(5), 1118&ndash;1133).</p>
 
-  <h2>Using this on your own workbook</h2>
+  <h2>Использование этого в своей книге</h2>
 
-  <p>Auditing every reference in an inherited file is miserable and you will give up on the second sheet. Do this instead, in order.</p>
+  <p>Аудит каждой ссылки в унаследованном файле утомителен, и вы откажетесь от второго листа. Вместо этого сделайте это по порядку.</p>
 
   <ol>
-    <li><strong>Find the numbers typed inside formulas.</strong> Anything like <code>*0.08</code> or <code>*1.2</code> sitting in a formula is a rate with nowhere to live. Move it to a labeled cell first. The dollar sign question does not even arise until the value has a home.</li>
-    <li><strong>Say the sentence out loud for each reference.</strong> "The amount on this row" moves. "The rate" stays. If you cannot say which one it is, that reference is the one to check.</li>
-    <li><strong>Use F4 rather than typing the signs.</strong> Fewer keystrokes and no chance of putting one in front of the wrong half.</li>
-    <li><strong>Check the last row, not the first.</strong> The first row of a fill is the one that is right in both the working and the broken version. Scroll to the bottom and read one formula there.</li>
-    <li><strong>Predict the column total before you look at it.</strong> Sixteen orders at eight percent should land near 1,300. A total of 1,840 fails that test in one second, and there is more on where these checks belong in <a href="../excel-check-your-work/">checking your work before anyone else does</a>.</li>
-    <li><strong>Name the anchors you keep reusing.</strong> A rate used in four formulas is worth a name. A rate used once is not.</li>
+    <li><strong>Найдите числа, введенные внутри формул.</strong>  Что-нибудь вроде  <code>*0.08</code> or <code>*1.2</code>  сидеть в формуле - это ставка, которой негде жить. Сначала переместите его в помеченную ячейку. Вопрос о знаке доллара даже не возникает, пока у стоимости нет дома.</li>
+    <li><strong>Произнесите предложение вслух для каждого упоминания.</strong>  «Сумма в этой строке» перемещается. «Ставка» остается. Если вы не можете сказать, какой именно, необходимо проверить эту ссылку.</li>
+    <li><strong>Используйте F4 вместо того, чтобы печатать знаки.</strong>  Меньше нажатий клавиш и нет шансов поставить одну перед неправильной половиной.</li>
+    <li><strong>Проверьте последнюю строку, а не первую.</strong>  Первый ряд заливки – тот, который правильный и в рабочем, и в ломаном варианте. Прокрутите вниз и прочитайте там одну формулу.</li>
+    <li><strong>Предскажите общее количество столбца, прежде чем взглянуть на него.</strong>  Шестнадцать заказов на восемь процентов должны достичь отметки около 1300. В общей сложности 1840 человек не прошли этот тест за одну секунду, и есть еще информация о том, где эти проверки должны быть.  <a href="../excel-check-your-work/">проверять свою работу, прежде чем это сделает кто-то другой</a>.</li>
+    <li><strong>Назовите якоря, которые вы продолжаете использовать повторно.</strong>  Ставка, используемая в четырех формулах, заслуживает отдельного имени. Ставка, использованная один раз, не является таковой.</li>
   </ol>
 
-  <p>If you have paper nearby, one optional sketch locks this in for good. Draw two columns of four boxes. On the left write one formula at the top and draw an arrow from each box to where it points when copied down. Do it once with the arrows fanning out to four different boxes, and once with all four arrows meeting at the top box. Then label which picture needed the dollar signs. You will not need to look this up again.</p>
+  <p>Если у вас под рукой есть бумага, один дополнительный эскиз зафиксирует ее навсегда. Нарисуйте две колонки по четыре коробки. Слева напишите одну формулу вверху и нарисуйте стрелку от каждого поля туда, куда она указывает при копировании вниз. Сделайте это один раз, когда стрелки разветвляются на четыре разных поля, и один раз, когда все четыре стрелки встречаются в верхнем поле. Затем отметьте, на какой картинке нужны знаки доллара. Вам не нужно будет искать это снова.</p>
 
-  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: Excel, SQL, Python, and the working habits around them.</div>
+  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: Excel, SQL, Python и связанные с ними методы работы.</div>
 
-  <h2>The whole thing on one screen</h2>
+  <h2>Все на одном экране</h2>
 
-  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
+  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
 
   <table>
-    <tr><th>Thing</th><th>What it does</th></tr>
-    <tr><td>What a reference stores</td><td>A direction and a distance, not an address.</td></tr>
-    <tr><td><code>A1</code></td><td>Relative. Moves with the copy, both ways.</td></tr>
-    <tr><td><code>$A$1</code></td><td>Absolute. Every copy asks the same cell.</td></tr>
-    <tr><td><code>A$1</code></td><td>Row locked, column free. Anchors sitting in one row.</td></tr>
-    <tr><td><code>$A1</code></td><td>Column locked, row free. Anchors sitting in one column.</td></tr>
-    <tr><td>F4 order</td><td><code>$A$1</code>, <code>A$1</code>, <code>$A1</code>, <code>A1</code>. Mac: Cmd+T.</td></tr>
-    <tr><td>The question to ask</td><td>"The amount on this row" moves. "The rate" stays.</td></tr>
-    <tr><td>Grid, filled both ways</td><td><code>=$D2*J$1</code>. One of each, one formula, nine answers.</td></tr>
-    <tr><td>Why it survives review</td><td>The first row is correct in the broken version too.</td></tr>
-    <tr><td>Row 3 reading 190.00</td><td>The reference walked onto the next assumption down.</td></tr>
-    <tr><td>Rows reading 0.00</td><td>The reference walked into empty cells. Empty is zero.</td></tr>
-    <tr><td>Inserting a row</td><td>Rewrites <code>$G$1</code> to <code>$G$2</code>. Absolute is not permanent.</td></tr>
-    <tr><td>Cutting the anchor</td><td>Drags every reference with it. Copying does not.</td></tr>
-    <tr><td>Lookup range</td><td>Lock it, or it slides off the bottom of the table.</td></tr>
-    <tr><td>No dollar sign needed</td><td>A defined name, or <code>[@Amount]</code> inside a table.</td></tr>
-    <tr><td>Which row to check</td><td>The last one. The first one is right either way.</td></tr>
+    <tr><th>Thing</th><th>Что он делает</th></tr>
+    <tr><td>Какие справочные магазины</td><td>Направление и расстояние, а не адрес.</td></tr>
+    <tr><td><code>A1</code></td><td>Родственник. Перемещается вместе с копией в обе стороны.</td></tr>
+    <tr><td><code>$A$1</code></td><td>Абсолютный. Каждая копия запрашивает одну и ту же ячейку.</td></tr>
+    <tr><td><code>A$1</code></td><td>Строка заблокирована, столбец свободен. Якоря сидят в один ряд.</td></tr>
+    <tr><td><code>$A1</code></td><td>Столбец заблокирован, строка свободна. Якоря сидят в одной колонне.</td></tr>
+    <tr><td>порядок F4</td><td><code>$A$1</code>, <code>A$1</code>, <code>$A1</code>, <code>A1</code>. Мак: Cmd+T.</td></tr>
+    <tr><td>Вопрос, который нужно задать</td><td>«Сумма в этой строке» перемещается. «Ставка» остается.</td></tr>
+    <tr><td>Сетка, заполненная в обе стороны</td><td><code>=$D2*J$1</code>. По одному каждому, одна формула, девять ответов.</td></tr>
+    <tr><td>Почему он выдерживает обзор</td><td>Первая строка верна и в сломанной версии.</td></tr>
+    <tr><td>В строке 3 читается 190,00.</td><td>Ссылка перешла к следующему предположению.</td></tr>
+    <tr><td>Чтение строк 0,00</td><td>Ссылка попала в пустые ячейки. Пусто — ноль.</td></tr>
+    <tr><td>Вставка строки</td><td>Rewrites <code>$G$1</code> to <code>$G$2</code>. Абсолют не постоянен.</td></tr>
+    <tr><td>Разрезание якоря</td><td>Перетаскивает за собой каждую ссылку. Копирование не дает.</td></tr>
+    <tr><td>Диапазон поиска</td><td>Зафиксируйте его, иначе он соскользнет со дна стола.</td></tr>
+    <tr><td>Знак доллара не нужен</td><td>Определенное имя или  <code>[@Amount]</code>  внутри стола.</td></tr>
+    <tr><td>Какую строку проверить</td><td>Последний. Первый в любом случае прав.</td></tr>
   </table>
 
-  <div class="note"><strong>The one habit to keep.</strong> Predict the total before you read it. Sixteen orders at eight percent is roughly thirteen hundred, so 1,840.00 is wrong before you have looked at a single formula. A rough number you committed to in advance catches reference mistakes faster than reading the formulas will, and it costs about four seconds.</div>
+  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Предскажите общую сумму, прежде чем читать ее. Шестнадцать ордеров по восьми процентам — это примерно тринадцать сотен, поэтому значение 1840,00 неверно, пока вы не взглянули на одну формулу. Приблизительное число, которое вы заранее определили, выявляет ссылочные ошибки быстрее, чем чтение формул, и это стоит около четырех секунд.</div>
 
-  <p>One last thought, and I would genuinely like other people's answers. The most expensive version of this I have seen was a forecast where the growth rate was pinned correctly and the base year was not, so every column quietly grew from the wrong starting point and the shape of the chart still looked right. What is the longest one of these has gone unnoticed in a file you inherited?</p>
+  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Самая дорогая версия этого прогноза, которую я видел, представляла собой прогноз, в котором темпы роста были определены правильно, а базовый год — нет, поэтому каждый столбец незаметно рос из неправильной отправной точки, а форма диаграммы по-прежнему выглядела правильной. Какой из них дольше всего оставался незамеченным в файле, который вы унаследовали?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Panko, R. R. (1999). Applying code inspection to spreadsheet testing. <em>Journal of Management Information Systems</em>, 16(2), 159&ndash;176.</li>
-    <li>Panko, R. R. (1998). What we know about spreadsheet errors. <em>Journal of End User Computing</em>, 10(2), 15&ndash;21.</li>
-    <li>Butler, A. C. (2010). Repeated testing produces superior transfer of learning relative to repeated studying. <em>Journal of Experimental Psychology: Learning, Memory, and Cognition</em>, 36(5), 1118&ndash;1133.</li>
+    <li>Панко, Р.Р. (1999). Применение проверки кода к тестированию электронных таблиц.  <em>Журнал информационных систем управления</em>, 16(2), 159&ndash;176.</li>
+    <li>Панко, Р.Р. (1998). Что мы знаем об ошибках в электронных таблицах.  <em>Журнал вычислений для конечных пользователей</em>, 10(2), 15&ndash;21.</li>
+    <li>Батлер, AC (2010). Повторное тестирование обеспечивает лучшую передачу знаний по сравнению с повторным обучением.  <em>Журнал экспериментальной психологии: обучение, память и познание</em>, 36(5), 1118&ndash;1133.</li>
   </ul>
 
   <div class="book">
-    <strong>The formula worked in the cell you typed it in, and you have no way to tell whether the other fifteen rows are right.</strong>
-    <p><em>Excel for Analysts</em> is 378 pages, references read one symbol at a time, with the checks that catch a bad fill before it reaches a report, and practice questions that print the answer and the reason it is right.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-absolute-vs-relative-references'})">Excel for Analysts, $19 &rarr;</a>
+    <strong>Формула работала в ячейке, в которую вы ее ввели, и у вас нет возможности определить, верны ли остальные пятнадцать строк.</strong>
+    <p><em>Excel для аналитиков</em>  состоит из 378 страниц, ссылки читаются по одному символу, с проверками, которые выявляют неправильное заполнение до того, как оно достигнет отчета, и практическими вопросами, которые печатают ответ и причину, по которой он правильный.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-absolute-vs-relative-references'})">Excel для аналитиков, 19 долларов США →</a>
   </div>
 
   <div class="cta">
-    <strong>Practice this where a wrong reference shows itself.</strong>
-    <p style="margin:6px 0 0">The <a href="../../excel/">Excel Kit</a> gives you the repetitions: fills that break on row three, grids that need one of each sign, and questions that ask which row to check rather than which answer is right. You now own the method; the kit is the practice. Nothing to install, no account needed.</p>
-    <a class="btn" href="../../excel/">Open the Excel Kit →</a>
+    <strong>Практикуйте это там, где проявляется неправильная ссылка.</strong>
+    <p style="margin:6px 0 0">The <a href="../../excel/">Excel комплект</a>  дает вам повторения: заполняет пробелы в третьей строке, сетки, в которых требуется по одному знаку каждого знака, и вопросы, которые спрашивают, какую строку проверить, а не какой ответ правильный. Теперь вы владеете методом; комплект - это практика. Ничего устанавливать, учетная запись не требуется.</p>
+    <a class="btn" href="../../excel/">Откройте набор Excel →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> · <a href="../excel-tables/">Excel Tables vs Ranges</a> · <a href="../excel-index-match/">INDEX MATCH vs VLOOKUP</a> · <a href="../vlookup-vs-xlookup/">VLOOKUP vs XLOOKUP</a> · <a href="../excel-sumifs/">SUMIFS and COUNTIFS</a> · <a href="../excel-conditional-formatting/">Conditional Formatting</a> · <a href="../excel-check-your-work/">Check Your Work</a> · <a href="../excel-pivot-tables/">Make a Pivot Table</a> · <a href="../excel-dates/">Excel Dates</a> · <a href="../excel-remove-duplicates/">Remove Duplicates</a> · <a href="../excel-dynamic-arrays/">Dynamic Arrays</a> · <a href="../../excel/">Excel Kit</a> · <a href="../excel-kpi-row/">The KPI Row</a> · <a href="../choose-the-right-chart/">Choose the Right Chart</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../projects/">Portfolio Projects</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../excel-tables/">Таблицы Excel против диапазонов</a> · <a href="../excel-index-match/">ИНДЕКСНОЕ СООТВЕТСТВИЕ против ВПР</a> · <a href="../vlookup-vs-xlookup/">ВПР против XLOOKUP</a> · <a href="../excel-sumifs/">СУММИФЫ и СЧЁТЕЛИ</a> · <a href="../excel-conditional-formatting/">Условное форматирование</a> · <a href="../excel-check-your-work/">Проверьте свою работу</a> · <a href="../excel-pivot-tables/">Создайте сводную таблицу</a> · <a href="../excel-dates/">Даты Excel</a> · <a href="../excel-remove-duplicates/">Удалить дубликаты</a> · <a href="../excel-dynamic-arrays/">Динамические массивы</a> · <a href="../../excel/">Excel комплект</a> · <a href="../excel-kpi-row/">Ряд КПЭ</a> · <a href="../choose-the-right-chart/">Выберите правильный график</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../projects/">Портфельные проекты</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-<script src="../../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

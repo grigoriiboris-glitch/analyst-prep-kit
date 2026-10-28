@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SUM vs SUMX in DAX: Why a Row-by-Row Calculation Needs an Iterator — Analyst Prep Kit</title>
-<meta name="description" content="SUM takes one column. SUMX takes a table and an expression and evaluates it on every row before adding up. Worked on sixteen orders, with the 9,890 that reads 214,625 and the average that is wrong by 0.73 points.">
+<title>SUM против SUMX в DAX: почему для построчного расчета нужен итератор — комплект для подготовки аналитика</title>
+<meta name="description" content="СУММА занимает один столбец. SUMX берет таблицу и выражение и оценивает их в каждой строке перед суммированием. Работал над шестнадцатью ордерами, при этом 9890 показывает 214625 и среднее значение неверно на 0,73 пункта.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/powerbi-sum-vs-sumx/">
-<meta property="og:title" content="SUM vs SUMX in DAX: Why a Row-by-Row Calculation Needs an Iterator">
-<meta property="og:description" content="SUM adds a column that already exists. SUMX builds a value on every row first, then adds those up. Multiplying two SUMs counts every pairing of a quantity with a price, including the 240 that never happened.">
+<meta property="og:title" content="SUM против SUMX в DAX: почему для построчного расчета нужен итератор">
+<meta property="og:description" content="SUM добавляет уже существующий столбец. SUMX сначала строит значение для каждой строки, а затем складывает их. При умножении двух СУММ учитываются все пары количества и цены, включая 240, которых никогда не было.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/powerbi-sum-vs-sumx.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/powerbi-sum-vs-sumx/">
@@ -78,12 +78,11 @@
   .figure figcaption{color:var(--muted);font-size:14px;margin-top:10px}
 </style>
 <!-- SEO:JSONLD:START -->
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "SUM vs SUMX in DAX: Why a Row-by-Row Calculation Needs an Iterator",
-  "description": "SUM takes one column. SUMX takes a table and an expression and evaluates it on every row before adding up. Worked on sixteen orders, with the 9,890 that reads 214,625 and the average that is wrong by 0.73 points.",
+  "headline": "SUM против SUMX в DAX: почему для построчного расчета нужен итератор",
+  "description": "СУММА занимает один столбец. SUMX берет таблицу и выражение и оценивает их в каждой строке перед суммированием. Работал над шестнадцатью ордерами, при этом 9890 показывает 214625 и среднее значение неверно на 0,73 пункта.",
   "url": "https://michaelnocito.github.io/analyst-prep-kit/guides/powerbi-sum-vs-sumx/",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -91,12 +90,12 @@
   },
   "author": {
     "@type": "Person",
-    "name": "Michael Nocito",
+    "name": "Майкл Носито",
     "url": "https://michaelnocito.github.io"
   },
   "publisher": {
     "@type": "Person",
-    "name": "Michael Nocito"
+    "name": "Майкл Носито"
   },
   "inLanguage": "en",
   "datePublished": "2026-08-10",
@@ -104,8 +103,7 @@
   "image": "https://michaelnocito.github.io/analyst-prep-kit/assets/social/powerbi-sum-vs-sumx.png"
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
@@ -124,7 +122,7 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "SUM vs SUMX in DAX: Why a Row-by-Row Calculation Needs an Iterator",
+      "name": "SUM против SUMX в DAX: почему для построчного расчета нужен итератор",
       "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/powerbi-sum-vs-sumx/"
     }
   ]
@@ -134,18 +132,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../powerbi/">Power BI Kit</a> · <a href="../">All guides</a></p>
-  <h1>SUM vs SUMX in DAX: Why a Row-by-Row Calculation Needs an Iterator</h1>
-  <p class="meta">One takes a column. The other takes a table and a calculation · Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-10">August 10, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../powerbi/">Комплект Power BI</a> · <a href="../">Все руководства</a></p>
+  <h1>SUM против SUMX в DAX: почему для построчного расчета нужен итератор</h1>
+  <p class="meta">Берут колонну. Другой берет таблицу и расчет · Часть  <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-10">10 августа 2026 г.</time></p>
 
-  <p>By the end of this page you can look at any DAX aggregation and say which of the two it needs, before you write it. You will also be able to spot the wrong one in somebody else's model, including the version that returns a number close enough to pass. It takes about twenty minutes. Every figure below is printed next to the arithmetic that produced it, so you can check any of them on paper.</p>
+  <p>В конце этой страницы вы сможете просмотреть любую агрегацию DAX и сказать, какая из двух ей нужна, прежде чем писать ее. Вы также сможете обнаружить неправильный вариант в чужой модели, включая версию, которая возвращает число, достаточно близкое для прохождения. Это занимает около двадцати минут. Каждая цифра ниже напечатана рядом с арифметикой, в результате которой она была получена, поэтому вы можете проверить любую из них на бумаге.</p>
 
-  <p>Here is the move. If the number you want to add up already sits in a column, use <code>SUM(Orders[Units])</code>. If it has to be worked out on each row first, use <code>SUMX(Orders, Orders[Units] * Orders[UnitPrice])</code>: a table, then the calculation to run on every row of it.</p>
+  <p>Вот ход. Если число, которое вы хотите сложить, уже находится в столбце, используйте  <code>SUM(Orders[Units])</code>. Если сначала необходимо проработать каждую строку, используйте  <code>SUMX(Orders, Orders[Units] * Orders[UnitPrice])</code>: таблица, затем вычисления выполняются для каждой ее строки.</p>
 
-  <p>The short version: SUM adds a column that already exists. SUMX builds a value on each row, then adds those up.</p>
+  <p>Краткая версия: SUM добавляет уже существующий столбец. SUMX строит значение для каждой строки, а затем складывает их.</p>
 
-  <p>The mistake that follows from missing this is worth seeing as a picture, because the arithmetic explains itself once you have.</p>
+  <p>Ошибку, возникающую из-за этого, стоит рассматривать как картинку, потому что арифметика объяснится сама собой, как только вы это сделаете.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 400" role="img" aria-labelledby="pairTitle pairDesc" xmlns="http://www.w3.org/2000/svg">
@@ -185,31 +183,31 @@
         </g>
       </g>
     </svg>
-    <figcaption>One cell per possible pairing of a quantity with a price, for sixteen orders. Multiplying two totals adds all 256 of them. SUMX adds the 16 where the quantity and the price came off the same order line.</figcaption>
+    <figcaption>Одна ячейка на возможное сочетание количества и цены для шестнадцати заказов. Умножение двух сумм добавляет все 256 из них. SUMX добавляет 16, где количество и цена находятся в одной строке заказа.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>What you'll learn</strong>
+    <strong>Что вы узнаете</strong>
     <ol>
-      <li>The fork: is the number already in a column?</li>
-      <li>What SUM will and will not accept</li>
-      <li>The failure: 2,630 that reads 12,995</li>
-      <li>Why nobody catches it: slice to one row and both agree</li>
-      <li>What SUMX is actually doing on each row</li>
-      <li>The rest of the X family</li>
-      <li>The wrong number that looks right: an average of percentages</li>
-      <li>When SUM is the correct answer</li>
-      <li>The full before and after</li>
-      <li>Edge cases that return a number instead of an error</li>
-      <li>Why this works</li>
-      <li>Using this on your own model</li>
-      <li>The whole thing on one screen</li>
+      <li>Развилка: число уже находится в столбце?</li>
+      <li>Что SUM примет и не примет</li>
+      <li>Ошибка: 2630, значит 12995.</li>
+      <li>Почему никто не улавливает: вырежьте одну строку, и обе согласятся</li>
+      <li>Что на самом деле делает SUMX в каждой строке</li>
+      <li>Остальные члены семьи X</li>
+      <li>Неправильное число, которое выглядит правильно: среднее значение процентов</li>
+      <li>Когда СУММ является правильным ответом</li>
+      <li>Полное до и после</li>
+      <li>Крайние случаи, которые возвращают число вместо ошибки</li>
+      <li>Почему это работает</li>
+      <li>Использование этого на вашей собственной модели</li>
+      <li>Все на одном экране</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Every number on this page is checkable.</strong> It runs on the sixteen-order fixture used across these Power BI guides, and every result is printed beside its arithmetic in the form 4 &times; 220 = 880. Every DAX behavior described is quoted from Microsoft's own reference pages in the "why this works" section rather than inferred. If measures against calculated columns is still fuzzy, <a href="../powerbi-measures-vs-columns/">columns vs measures</a> comes first.</div>
+  <div class="note"><strong>Каждое число на этой странице можно проверить.</strong>  Он работает на основе приспособления шестнадцатого порядка, используемого в этих руководствах Power BI, и каждый результат печатается рядом с его арифметикой в ​​форме 4 × 220 = 880. Каждое описанное поведение DAX цитируется из собственных справочных страниц Microsoft в разделе «почему это работает», а не выводится. Если меры по вычисляемым столбцам все еще нечеткие,  <a href="../powerbi-measures-vs-columns/">Столбцы против мер</a>  на первом месте.</div>
 
-  <p><strong>Orders</strong>, the fact table. Sixteen rows. The unit price is stamped on the line, which is what an order table does so that a later price change does not rewrite last year's sales.</p>
+  <p><strong>Orders</strong>, таблица фактов. Шестнадцать рядов. Цена за единицу проставляется в строке, что и делает таблица заказов, чтобы более позднее изменение цены не переписывало прошлогодние продажи.</p>
 
   <table>
     <tr><th>OrderID</th><th>Region</th><th>Product</th><th>Units</th><th>UnitPrice</th></tr>
@@ -231,7 +229,7 @@
     <tr><td>1016</td><td>West</td><td>Desk</td><td>2</td><td>220</td></tr>
   </table>
 
-  <p><strong>Products</strong>, the dimension table, joined one-to-many to Orders on Product.</p>
+  <p><strong>Products</strong>, таблица измерений, присоединенная «один ко многим» к заказам на продукт.</p>
 
   <table>
     <tr><th>Category</th><th>Product</th><th>ListPrice</th><th>Cost</th></tr>
@@ -240,151 +238,151 @@
     <tr><td>Lighting</td><td>Lamp</td><td>40</td><td>22</td></tr>
   </table>
 
-  <p>There are 101 units in total, and no revenue column anywhere. Revenue is the number you have to build.</p>
+  <p>Всего 101 единица, и нигде нет столбца доходов. Доход — это число, которое вам нужно построить.</p>
 
   <div class="step">
-    <h2>1. The fork: is the number already in a column?</h2>
+    <h2>1. Развилка: номер уже в столбце?</h2>
 
-    <p>Before the explanation, one question worth answering from memory. Think of the last measure you wrote. Say whether the values it added up were already stored somewhere, or whether the model had to work each one out first.</p>
+    <p>Перед объяснением один вопрос, на который стоит ответить по памяти. Подумайте о последней мере, которую вы написали. Скажем, были ли уже где-то сохранены суммированные значения или модель должна была сначала проработать каждое из них.</p>
 
-    <p>That question decides which function you reach for, and it has two answers.</p>
+    <p>Этот вопрос определяет, какую функцию вы достигнете, и на него есть два ответа.</p>
 
-    <p><strong>Answer one: the number is already in a column.</strong> Units, Revenue, Amount, Headcount. Somebody stored it, one value per row, and adding it up is the whole job. If that is true you want <code>SUM</code>, and you hand it the column.</p>
+    <p><strong>Ответ первый: число уже находится в столбце.</strong>  Единицы, выручка, количество, численность персонала. Кто-то сохранил это значение, по одному значению в каждой строке, и сложить его — это вся работа. Если это правда, ты хочешь  <code>SUM</code>, и вы передаете ему колонку.</p>
 
-    <p><strong>Answer two: the number does not exist yet.</strong> Line revenue when the table only has units and a price. Margin when the cost lives on another table. Weighted score, extended amount, anything with an operator in the middle of it. If that is true, something has to visit each row, work the value out there, and only then add them up. That something is <code>SUMX</code>.</p>
+    <p><strong>Ответ второй: номера пока не существует.</strong>  Линейный доход, когда в таблице указаны только единицы измерения и цена. Маржа, когда стоимость находится на другой таблице. Взвешенная оценка, расширенная сумма, что угодно, в середине которой есть оператор. Если это правда, что-то должно посещать каждую строку, вычислять там значение и только затем складывать их. Это что-то  <code>SUMX</code>.</p>
 
-    <p>What decides between them is not how complicated the formula looks. It is whether you could point at a column in the Fields pane and say "that one". If you can, it is SUM. If you have to describe a calculation instead, it is SUMX.</p>
+    <p>Решающее значение между ними имеет не то, насколько сложной выглядит формула. Вопрос в том, можете ли вы указать на столбец на панели «Поля» и сказать «этот». Если можете, это СУММА. Если вместо этого вам нужно описать вычисление, то это SUMX.</p>
 
-    <p>It matters because picking the wrong one does not always produce an error. Sometimes it produces a number, and the next three sections are about what that number is and why it survives.</p>
+    <p>Это важно, потому что неправильный выбор не всегда приводит к ошибке. Иногда он выдает число, и следующие три раздела посвящены тому, что это за число и почему оно выживает.</p>
   </div>
 
   <div class="step">
-    <h2>2. What SUM will and will not accept</h2>
+    <h2>2. Что SUM примет, а что нет</h2>
 
-    <p>Microsoft's reference page for SUM gives it one parameter, and describes it in six words: "The column that contains the numbers to sum." Not an expression. A column.</p>
+    <p>Справочная страница Microsoft по SUM содержит один параметр и описывает его в шести словах: «Столбец, содержащий числа для суммирования». Не выражение. Колонка.</p>
 
-    <p>So this does not work, and it is the single most common thing a new Power BI user types:</p>
+    <p>Так что это не работает, и это самая распространенная вещь, которую вводит новый пользователь Power BI:</p>
 
     <pre><code>Revenue = SUM ( Orders[Units] * Orders[UnitPrice] )</code></pre>
 
-    <p>Power BI refuses it with a message that is unusually direct for a formula engine: <em>The SUM function only accepts a column reference as an argument.</em> Nothing is stored in the model called <code>Units * UnitPrice</code>, so there is no column to hand over.</p>
+    <p>Power BI отклоняет это сообщение, необычно прямое для механизма формул:  <em>Функция СУММ принимает в качестве аргумента только ссылку на столбец.</em>  В модели под названием ничего не хранится  <code>Units * UnitPrice</code>, поэтому столбца для передачи нет.</p>
 
-    <p>That refusal is the helpful outcome. It stops you at the point of the mistake. The damaging version is the one that compiles, which is what happens when somebody works around the error by summing each column on its own:</p>
+    <p>Этот отказ является полезным результатом. Это останавливает вас в момент ошибки. Повреждающая версия — это та, которая компилируется, что происходит, когда кто-то пытается обойти ошибку, суммируя каждый столбец отдельно:</p>
 
     <pre><code>Revenue = SUM ( Orders[Units] ) * SUM ( Orders[UnitPrice] )</code></pre>
 
-    <p>Two columns, two legal SUMs, one multiplication. Power BI accepts it without complaint, because there is nothing wrong with it as DAX. It is only wrong as arithmetic.</p>
+    <p>Два столбца, две допустимые суммы, одно умножение. Power BI принимает его без жалоб, поскольку в нем нет ничего плохого, как в DAX. Это неправильно только как арифметика.</p>
   </div>
 
   <div class="step">
-    <h2>3. The failure: 2,630 that reads 12,995</h2>
+    <h2>3. Неудача: 2630 значит 12995.</h2>
 
-    <p>Take the first four orders and do it by hand. Four rows is small enough to check every step, and the shape of the error is identical at sixteen rows or sixteen million.</p>
+    <p>Возьмите первые четыре заказа и сделайте это вручную. Четырех строк достаточно, чтобы проверить каждый шаг, а форма ошибки одинакова при шестнадцати строках или шестнадцати миллионах.</p>
 
     <table>
-      <tr><th>OrderID</th><th>Units</th><th>UnitPrice</th><th>Line revenue</th></tr>
+      <tr><th>OrderID</th><th>Units</th><th>UnitPrice</th><th>Линейный доход</th></tr>
       <tr><td>1001</td><td>4</td><td>220</td><td>880 (4 &times; 220)</td></tr>
       <tr><td>1002</td><td>10</td><td>85</td><td>850 (10 &times; 85)</td></tr>
       <tr><td>1003</td><td>3</td><td>220</td><td>660 (3 &times; 220)</td></tr>
       <tr><td>1004</td><td>6</td><td>40</td><td>240 (6 &times; 40)</td></tr>
     </table>
 
-    <p>The right answer is <strong>2,630</strong>, because 880 + 850 + 660 + 240 = 2,630. That is what SUMX returns: it works out each line, then adds the four results.</p>
+    <p>Правильный ответ  <strong>2,630</strong>, потому что 880 + 850 + 660 + 240 = 2630. Именно это и возвращает SUMX: он обрабатывает каждую строку, а затем складывает четыре результата.</p>
 
-    <p>Now the version that compiles. SUM(Units) is 4 + 10 + 3 + 6 = 23. SUM(UnitPrice) is 220 + 85 + 220 + 40 = 565. Multiply them and you get <strong>12,995</strong>, because 23 &times; 565 = 12,995.</p>
+    <p>Теперь версия, которая компилируется. SUM(Units) равна 4 + 10 + 3 + 6 = 23. SUM(UnitPrice) равна 220 + 85 + 220 + 40 = 565. Умножьте их, и вы получите  <strong>12,995</strong>, потому что 23 × 565 = 12 995.</p>
 
-    <p>Before reading on, say why 12,995 is so much bigger than 2,630. It is not rounding and it is not a doubled join. Say what those extra 10,365 are made of.</p>
+    <p>Прежде чем читать дальше, скажите, почему 12 995 намного больше, чем 2 630. Это не округление и не двойное соединение. Скажите, из чего состоят эти лишние 10 365?</p>
 
-    <p>They are pairings that never happened. Multiplying two totals is the same as adding up every quantity crossed with every price: order 1001's four units at order 1002's price of 85, order 1004's six units at the desk price of 220, and so on through all sixteen combinations. Four rows produce 4 &times; 4 = 16 pairings. Only four of them are real, the ones where the quantity and the price came off the same line, and those four are the 2,630.</p>
+    <p>Это пары, которых никогда не было. Умножение двух сумм аналогично суммированию каждого количества, пересекающегося с каждой ценой: четыре единицы заказа 1001 по цене 85 заказа 1002, шесть единиц заказа 1004 по розничной цене 220 и так далее для всех шестнадцати комбинаций. Четыре ряда образуют 4 × 4 = 16 пар. Только четыре из них настоящие, те, у которых количество и цена совпадают, и эти четыре — 2630.</p>
 
-    <p>The gap is the other twelve: 12,995 minus 2,630 = 10,365.</p>
+    <p>Разрыв равен остальным двенадцати: 12 995 минус 2 630 = 10 365.</p>
 
-    <p>Run the same thing on the full sixteen orders and the numbers get louder. SUMX returns <strong>9,890</strong>. SUM(Units) is 101, SUM(UnitPrice) is 2,125, and 101 &times; 2,125 = <strong>214,625</strong>. Sixteen rows means 16 &times; 16 = 256 pairings, and 240 of them are fiction.</p>
+    <p>Запустите то же самое для всех шестнадцати заказов, и цифры станут громче. SUMX возвращает  <strong>9,890</strong>. SUM(Units) — 101, SUM(UnitPrice) — 2125 и 101 × 2125 =  <strong>214,625</strong>. Шестнадцать рядов означают 16×16 = 256 пар, из них 240 — вымышленные.</p>
 
-    <p>Here is the working measure.</p>
+    <p>Вот рабочая мера.</p>
 
     <pre><code>Total Revenue =
 SUMX ( Orders, Orders[Units] * Orders[UnitPrice] )</code></pre>
 
-    <p>Read it as two arguments doing two jobs. <code>Orders</code> is the table to walk. <code>Orders[Units] * Orders[UnitPrice]</code> is the calculation to run while standing on each row of it. SUMX adds the sixteen results.</p>
+    <p>Прочтите это как два аргумента, выполняющих две работы.  <code>Orders</code>  это стол, по которому можно ходить.  <code>Orders[Units] * Orders[UnitPrice]</code>  это расчет, который нужно бежать, стоя на каждом его ряду. SUMX добавляет шестнадцать результатов.</p>
   </div>
 
   <div class="step">
-    <h2>4. Why nobody catches it: slice to one row and both agree</h2>
+    <h2>4. Почему никто не улавливает: разрежьте на одну строку, и обе согласятся</h2>
 
-    <p>Before the explanation, a prediction. You have a table visual showing revenue, and you drill all the way down to a single order to check the measure. Say whether the broken version and the working version show the same figure in that cell.</p>
+    <p>Прежде чем объяснение, предсказание. У вас есть визуальная таблица, показывающая доход, и вы детализируете ее до одного заказа, чтобы проверить показатель. Скажите, показывают ли сломанную версию и рабочую версию одно и то же число в этой ячейке.</p>
 
-    <p>They do, exactly, and this is the part worth carrying away from the page.</p>
+    <p>Да, именно так, и именно эту часть стоит вынести со страницы.</p>
 
-    <p>Filter the visual to order 1001 alone. SUMX walks one row and returns 4 &times; 220 = 880. The broken measure computes SUM(Units) over that one row, which is 4, and SUM(UnitPrice) over that one row, which is 220, then multiplies: 4 &times; 220 = 880. Identical.</p>
+    <p>Отфильтруйте визуальное изображение только по заказу 1001. SUMX проходит одну строку и возвращает 4 × 220 = 880. Разбитая мера вычисляет SUM(Units) по этой строке, которая равна 4, и SUM(UnitPrice) по этой одной строке, которая равна 220, а затем умножается: 4 × 220 = 880. Идентично.</p>
 
-    <p>That is not a coincidence about this fixture. With one row there is only one pairing available, so "every pairing" and "the real pairing" are the same set. The two measures cannot disagree.</p>
+    <p>Это не совпадение в отношении этого приспособления. В одной строке доступна только одна пара, поэтому «каждая пара» и «настоящая пара» представляют собой один и тот же набор. Эти две меры не могут противоречить друг другу.</p>
 
     <table>
-      <tr><th>What the visual is sliced to</th><th>Broken measure</th><th>Working measure</th></tr>
-      <tr><td>Order 1001 alone</td><td>880</td><td>880</td></tr>
-      <tr><td>Order 1013 alone</td><td>600 (15 &times; 40)</td><td>600 (15 &times; 40)</td></tr>
-      <tr><td>Lamps, four orders</td><td>6,400 (40 &times; 160)</td><td>1,600</td></tr>
-      <tr><td>All sixteen orders</td><td>214,625</td><td>9,890</td></tr>
+      <tr><th>На что нарезается визуальный элемент</th><th>Сломанная мера</th><th>Рабочая мера</th></tr>
+      <tr><td>Закажите 1001 самостоятельно</td><td>880</td><td>880</td></tr>
+      <tr><td>Заказ 1013 в одиночку</td><td>600 (15 &times; 40)</td><td>600 (15 &times; 40)</td></tr>
+      <tr><td>Светильники, четыре заказа</td><td>6,400 (40 &times; 160)</td><td>1,600</td></tr>
+      <tr><td>Все шестнадцать заказов</td><td>214,625</td><td>9,890</td></tr>
     </table>
 
-    <p>The lamp row needs its own line, because it is the one that shows where the agreement stops. Lamps are four orders of 6, 12, 7 and 15 units, all at 40. SUMX gives 240 + 480 + 280 + 600 = 1,600. The broken measure gives SUM(Units) = 40 and SUM(UnitPrice) = 160, and 40 &times; 160 = 6,400. Four times too big, because four rows means sixteen pairings and only four are real.</p>
+    <p>Световому ряду нужна своя линия, потому что именно она показывает, где заканчивается соглашение. Лампы четырех порядков по 6, 12, 7 и 15 штук, все по 40. СУММ дает 240 + 480 + 280 + 600 = 1600. Разбитая мера дает SUM(Units) = 40 и SUM(UnitPrice) = 160 и 40 × 160 = 6400. В четыре раза больше, потому что четыре ряда означают шестнадцать пар, а реальными являются только четыре.</p>
 
-    <p>So the test that proves the measure works is the test that cannot fail. A single-row check passes on a measure that is wrong by a factor of sixteen at the total. This is the same shape as the Excel fill whose first row is right in both the working and the broken version, and it is why the habit at the end of this page is about totals rather than about being careful.</p>
+    <p>Таким образом, тест, который доказывает эффективность меры, — это тест, который не может потерпеть неудачу. Проверка одной строки пропускает меру, которая в общей сложности ошибочна в шестнадцать раз. Это та же форма, что и заливка Excel, первая строка которой правильная как в рабочей, так и в сломанной версии, и именно поэтому в конце этой страницы принято говорить об итогах, а не об осторожности.</p>
   </div>
 
   <div class="step">
-    <h2>5. What SUMX is actually doing on each row</h2>
+    <h2>5. Что на самом деле делает SUMX с каждой строкой</h2>
 
-    <p>Microsoft calls SUMX an <strong>iterator function</strong>, and defines the category in one sentence: "A DAX function that enumerates all rows of a given table and evaluate a given expression for each row."</p>
+    <p>Microsoft называет SUMX  <strong>функция итератора</strong>и определяет категорию в одном предложении: «Функция DAX, которая перечисляет все строки заданной таблицы и оценивает заданное выражение для каждой строки».</p>
 
-    <p>The word that matters underneath that is <strong>row context</strong>. Row context is the model knowing which single row it is standing on, which is what makes <code>Orders[Units]</code> mean a number rather than a whole column. Microsoft's glossary puts it plainly: row context "represents the 'current row', and is used to evaluate calculated column formulas and expressions used by table iterators."</p>
+    <p>Слово, которое имеет значение под этим,  <strong>контекст строки</strong>. Контекст строки — это модель, которая знает, в какой строке она находится, что делает  <code>Orders[Units]</code>  означают число, а не целый столбец. В глоссарии Microsoft это ясно сказано: контекст строки «представляет «текущую строку» и используется для оценки формул и выражений вычисляемых столбцов, используемых итераторами таблиц».</p>
 
-    <p>So the sequence inside <code>SUMX(Orders, Orders[Units] * Orders[UnitPrice])</code> is:</p>
+    <p>Итак, последовательность внутри  <code>SUMX(Orders, Orders[Units] * Orders[UnitPrice])</code>  является:</p>
 
     <ol>
-      <li>Take the rows of Orders that survived the filters on the visual.</li>
-      <li>Stand on the first one. <code>Orders[Units]</code> is 4 and <code>Orders[UnitPrice]</code> is 220, so the expression is 880.</li>
-      <li>Move to the next. Repeat. Sixteen times.</li>
-      <li>Add up the sixteen results and return one number.</li>
+      <li>Возьмите строки заказов, которые прошли фильтры на визуальном элементе.</li>
+      <li>Встаньте на первый.  <code>Orders[Units]</code>  это 4 и  <code>Orders[UnitPrice]</code>  равно 220, поэтому выражение равно 880.</li>
+      <li>Переходите к следующему. Повторить. Шестнадцать раз.</li>
+      <li>Сложите шестнадцать результатов и верните одно число.</li>
     </ol>
 
-    <p>Nothing is stored. There is no revenue column at the end of it, which is the difference between this and a <a href="../powerbi-measures-vs-columns/">calculated column</a>. A calculated column would compute 880 once, save it in the file, and use memory forever. SUMX computes it when a visual asks and throws it away.</p>
+    <p>Ничего не сохраняется. В конце столбца доходов нет, и в этом разница между ним и столбцом доходов.  <a href="../powerbi-measures-vs-columns/">Расчетный столбец</a>. Вычисляемый столбец вычислит 880 один раз, сохранит его в файле и будет использовать память навсегда. SUMX вычисляет его, когда визуальный элемент запрашивает, и отбрасывает его.</p>
 
-    <p>One thing to know rather than discover: a row context does not filter anything. Standing on row 1001 does not restrict other tables to that order. Referencing a measure inside the iterator changes that, and it changes it silently, which is the trapdoor covered in <a href="../powerbi-calculate/">CALCULATE and filter context</a>. Read that one before you write <code>SUMX(Orders, [Some Measure])</code>.</p>
+    <p>Лучше знать, чем узнавать одну вещь: контекст строки ничего не фильтрует. Расположение в строке 1001 не ограничивает другие таблицы этим порядком. Ссылка на меру внутри итератора меняет это, и это меняет молча, что является скрытым люком.  <a href="../powerbi-calculate/">РАСЧЕТ и фильтрация контекста</a>. Прочтите это, прежде чем писать  <code>SUMX(Orders, [Some Measure])</code>.</p>
 
-    <p>Now picture this running on a table you actually own. Take your own fact table, find one number on a report that had to be worked out rather than looked up, and say out loud which table SUMX would walk and what the expression on each row would be. Two pieces, that is the whole call.</p>
+    <p>А теперь представьте, что это происходит на столе, который у вас есть. Возьмите свою собственную таблицу фактов, найдите в отчете одно число, которое нужно было вычислить, а не искать, и скажите вслух, по какой таблице будет идти SUMX и какое выражение будет в каждой строке. Две штуки, вот и весь звонок.</p>
   </div>
 
   <div class="step">
-    <h2>6. The rest of the X family</h2>
+    <h2>6. Остальные члены семьи X</h2>
 
-    <p>SUMX is not special. Every aggregation in DAX has an X twin, and they all take the same two arguments in the same order: a table, then an expression to evaluate on each row of it. Learning SUMX teaches you all of them at once.</p>
+    <p>SUMX не является чем-то особенным. У каждого агрегата в DAX есть двойник X, и все они принимают одни и те же два аргумента в одном и том же порядке: таблица, затем выражение для вычисления в каждой ее строке. Изучение SUMX научит вас всему этому одновременно.</p>
 
     <table>
-      <tr><th>Plain version</th><th>Iterator</th><th>Reach for the iterator when</th></tr>
-      <tr><td><code>SUM(col)</code></td><td><code>SUMX(table, expr)</code></td><td>The amount has to be calculated per row first.</td></tr>
-      <tr><td><code>AVERAGE(col)</code></td><td><code>AVERAGEX(table, expr)</code></td><td>You want the mean of a per-row calculation.</td></tr>
-      <tr><td><code>MAX(col)</code></td><td><code>MAXX(table, expr)</code></td><td>The biggest calculated value, not the biggest stored one.</td></tr>
-      <tr><td><code>MIN(col)</code></td><td><code>MINX(table, expr)</code></td><td>Same, in the other direction.</td></tr>
-      <tr><td><code>COUNT(col)</code></td><td><code>COUNTX(table, expr)</code></td><td>Counting rows where an expression produces a number.</td></tr>
-      <tr><td>none</td><td><code>RANKX(table, expr)</code></td><td>Ranking on something the model works out per row.</td></tr>
-      <tr><td>none</td><td><code>CONCATENATEX(table, expr, delim)</code></td><td>Turning rows into one readable string for a card.</td></tr>
+      <tr><th>Обычная версия</th><th>Iterator</th><th>Доберитесь до итератора, когда</th></tr>
+      <tr><td><code>SUM(col)</code></td><td><code>SUMX(table, expr)</code></td><td>Сначала необходимо рассчитать сумму для каждой строки.</td></tr>
+      <tr><td><code>AVERAGE(col)</code></td><td><code>AVERAGEX(table, expr)</code></td><td>Вам нужно среднее значение расчета по строкам.</td></tr>
+      <tr><td><code>MAX(col)</code></td><td><code>MAXX(table, expr)</code></td><td>Самое большое расчетное значение, а не самое большое сохраненное.</td></tr>
+      <tr><td><code>MIN(col)</code></td><td><code>MINX(table, expr)</code></td><td>То же, в другую сторону.</td></tr>
+      <tr><td><code>COUNT(col)</code></td><td><code>COUNTX(table, expr)</code></td><td>Подсчет строк, в которых выражение дает число.</td></tr>
+      <tr><td>none</td><td><code>RANKX(table, expr)</code></td><td>Ранжирование по чему-то, что модель определяет для каждой строки.</td></tr>
+      <tr><td>none</td><td><code>CONCATENATEX(table, expr, delim)</code></td><td>Превращение строк в одну читаемую строку для карточки.</td></tr>
     </table>
 
-    <p>CONCATENATEX is the one worth trying first, because it makes the row-by-row idea visible. It takes an optional third argument, the separator, and it is how a report shows "Desk, Chair, Lamp" in a title instead of a number.</p>
+    <p>CONCATENATEX стоит попробовать в первую очередь, потому что он делает идею построчной записи наглядной. Он принимает необязательный третий аргумент, разделитель, и именно так в заголовке отчета вместо числа отображается «Стол, Стул, Лампа».</p>
 
-    <p>AVERAGEX has one behavior worth knowing before it surprises you in a matrix. Microsoft states it directly: "When there are no rows to aggregate, the function returns a blank. When there are rows, but none of them meet the specified criteria, then the function returns 0." A blank cell and a zero cell mean different things, and only one of them draws a bar.</p>
+    <p>У AVERAGEX есть одно поведение, о котором стоит знать, прежде чем оно вас удивит в матрице. Microsoft заявляет об этом прямо: «Когда нет строк для агрегирования, функция возвращает пустое значение. Когда есть строки, но ни одна из них не соответствует указанным критериям, функция возвращает 0». Пустая ячейка и нулевая ячейка означают разные вещи, и только одна из них рисует полосу.</p>
   </div>
 
   <div class="step">
-    <h2>7. The wrong number that looks right: an average of percentages</h2>
+    <h2>7. Неправильная цифра, которая выглядит правильно: среднее процентное значение</h2>
 
-    <p>Before this one: a report needs the overall margin percentage. Somebody writes a margin percent for each order and averages it. Say whether that gives the same answer as total margin divided by total revenue.</p>
+    <p>До этого: для отчета требуется общий процент маржи. Кто-то записывает процент маржи для каждого заказа и усредняет его. Скажите, дает ли это тот же ответ, что и общая прибыль, деленная на общий доход.</p>
 
-    <p>It does not, and unlike the revenue example the gap here is small enough to ship.</p>
+    <p>Это не так, и в отличие от примера с доходами, разрыв здесь достаточно мал, чтобы его можно было отправить.</p>
 
-    <p>Cost lives on Products, not on Orders, so margin is a number that exists nowhere and has to be built. <code>RELATED</code> is what lets a row of Orders read its own product's row on the other side of the relationship.</p>
+    <p>Стоимость зависит от продуктов, а не от заказов, поэтому маржа — это число, которое нигде не существует и которое необходимо создавать.  <code>RELATED</code>  это то, что позволяет строке Orders читать строку своего собственного продукта на другой стороне отношения.</p>
 
     <pre><code>Total Margin =
 SUMX (
@@ -392,159 +390,159 @@ SUMX (
     Orders[Units] * ( Orders[UnitPrice] - RELATED ( Products[Cost] ) )
 )</code></pre>
 
-    <p>Per unit that is 220 - 140 = 80 on a desk, 85 - 52 = 33 on a chair, and 40 - 22 = 18 on a lamp. Across the sixteen orders there are 23 desk units, 38 chair units and 40 lamp units, so total margin is 23 &times; 80 + 38 &times; 33 + 40 &times; 18 = 1,840 + 1,254 + 720 = <strong>3,814</strong>.</p>
+    <p>На единицу то есть 220–140 = 80 на столе, 85–52 = 33 на стуле и 40–22 = 18 на лампе. В шестнадцати заказах имеется 23 письменных стола, 38 стульев и 40 светильников, поэтому общая прибыль равна 23 × 80 + 38 × 33 + 40 × 18 = 1840 + 1254 + 720 =  <strong>3,814</strong>.</p>
 
-    <p>Revenue is 9,890. So the blended margin is 3,814 / 9,890 = <strong>38.56%</strong>.</p>
+    <p>Выручка 9890. Таким образом, смешанная маржа равна 3814 / 9890 =  <strong>38.56%</strong>.</p>
 
-    <p>Now the version that averages. Every desk order runs at 80 / 220 = 36.36%, every chair at 33 / 85 = 38.82%, every lamp at 18 / 40 = 45.00%, whatever the quantity. There are seven desk orders, five chair orders and four lamp orders, so:</p>
+    <p>Теперь версия, которая усредняется. Каждый заказ на стол выполняется по 80/220 = 36,36%, каждый стул по 33/85 = 38,82%, каждая лампа по 18/40 = 45,00%, независимо от количества. Существует семь заказов на столы, пять заказов на стулья и четыре заказа на лампы, поэтому:</p>
 
     <pre><code>Average Margin % =
 AVERAGEX ( Orders, DIVIDE ( [Order Margin], [Order Revenue] ) )</code></pre>
 
     <table>
-      <tr><th>Product</th><th>Margin %</th><th>Orders</th><th>Contribution to the average</th></tr>
+      <tr><th>Product</th><th>Допуск %</th><th>Orders</th><th>Вклад в средний</th></tr>
       <tr><td>Desk</td><td>36.36% (80 / 220)</td><td>7</td><td>7 &times; 36.36 = 254.55</td></tr>
       <tr><td>Chair</td><td>38.82% (33 / 85)</td><td>5</td><td>5 &times; 38.82 = 194.12</td></tr>
       <tr><td>Lamp</td><td>45.00% (18 / 40)</td><td>4</td><td>4 &times; 45.00 = 180.00</td></tr>
       <tr><td><strong>Total</strong></td><td></td><td><strong>16</strong></td><td><strong>628.66 / 16 = 39.29%</strong></td></tr>
     </table>
 
-    <p>39.29% against a true 38.56%. Wrong by 0.73 percentage points, and entirely believable in a card on a dashboard.</p>
+    <p>39,29% против истинных 38,56%. Ошибочно на 0,73 процентных пункта и вполне правдоподобно в карточке на приборной панели.</p>
 
-    <p>The reason is worth saying in one line, because it is the whole class of error. The average gives every order one vote. Lamps are 4 of the 16 orders, so they carry 25% of the vote, but they are only 1,600 of the 9,890 in revenue, which is 16.18%. Lamps also have the highest margin percentage, so overweighting them pulls the average up.</p>
+    <p>Причину стоит сказать одной строкой, ведь это целый класс ошибок. Среднее значение дает каждому заказу один голос. Лампы занимают 4 из 16 заказов, поэтому они приносят 25% голосов, но приносят только 1600 из 9890 доходов, что составляет 16,18%. Лампы также имеют самый высокий процент маржи, поэтому их избыточный вес увеличивает средний показатель.</p>
 
-    <p>A ratio of totals is not the total of ratios. The fix is to divide once, at the end:</p>
+    <p>Отношение итогов не является суммой отношений. Исправление состоит в том, чтобы разделить один раз в конце:</p>
 
     <pre><code>Margin % = DIVIDE ( [Total Margin], [Total Revenue] )</code></pre>
 
-    <p>The rule that comes out of this: SUMX the numerator, SUMX the denominator, and divide those two. Never average a percentage that was already a ratio, unless somebody has told you in writing that they want each order to count equally.</p>
+    <p>Из этого следует правило: СУММКС числитель, СУММКС знаменатель и разделите эти два числа. Никогда не усредняйте процент, который уже был соотношением, если только кто-то не сказал вам в письменном виде, что он хочет, чтобы каждый заказ учитывался одинаково.</p>
   </div>
 
   <div class="step">
-    <h2>8. When SUM is the correct answer</h2>
+    <h2>8. Когда СУММ — правильный ответ</h2>
 
-    <p>Nothing above is an argument for using iterators everywhere. Microsoft's own guidance, on the SUMX page itself, is the opposite: "If you do not need to filter the column, use the SUM function."</p>
+    <p>Ничто из вышеперечисленного не является аргументом в пользу повсеместного использования итераторов. Собственные рекомендации Microsoft на самой странице SUMX противоположны: «Если вам не нужно фильтровать столбец, используйте функцию SUM».</p>
 
-    <p>SUM is right whenever the value is already sitting in the column, which covers most of a normal model. <code>SUM(Orders[Units])</code> is 101 and there is nothing an iterator would add to that. A fact table that stores an extended amount per line should be summed, not re-derived.</p>
+    <p>СУММ верен, когда значение уже находится в столбце, который охватывает большую часть обычной модели.  <code>SUM(Orders[Units])</code>  равно 101, и итератор ничего к этому не добавил бы. Таблицу фактов, в каждой строке которой хранится расширенная сумма, следует суммировать, а не выводить заново.</p>
 
-    <p>There is a second case worth naming, because it looks like laziness and is not. If your fact table already has a stored revenue column, using it is more accurate than recomputing units times price, because the stored value is what was actually invoiced. Rounding, discounts and price overrides all live in that stored number and none of them are in the multiplication.</p>
+    <p>Стоит упомянуть и второй случай, потому что он выглядит как лень, но таковым не является. Если в вашей таблице фактов уже есть столбец сохраненного дохода, его использование будет более точным, чем повторный расчет единиц, умноженных на цену, поскольку сохраненное значение — это то, что фактически было выставлено в счете. Округление, скидки и переопределение цен — все это хранится в этом сохраненном числе и ни одно из них не участвует в умножении.</p>
 
-    <p>And if you find yourself writing <code>SUMX(Orders, Orders[Units])</code>, with a bare column as the expression and no calculation in it, that is a SUM with extra syntax. Write the SUM.</p>
+    <p>И если вы обнаружите, что пишете  <code>SUMX(Orders, Orders[Units])</code>, с пустым столбцом в качестве выражения и без каких-либо вычислений, это СУММА с дополнительным синтаксисом. Напишите СУММУ.</p>
   </div>
 
-  <h2>The full before and after</h2>
+  <h2>Полное до и после</h2>
 
-  <p>Same model, same visual, same sixteen rows. One function apart.</p>
+  <p>Та же модель, тот же визуальный элемент, те же шестнадцать строк. Одна функция отдельно.</p>
 
   <table>
-    <tr><th></th><th>Before: <code>SUM(Units) * SUM(UnitPrice)</code></th><th>After: <code>SUMX(Orders, Units * UnitPrice)</code></th></tr>
-    <tr><td>Does it compile</td><td>Yes</td><td>Yes</td></tr>
-    <tr><td>One order (1001)</td><td>880</td><td>880</td></tr>
-    <tr><td>Lamps, four orders</td><td>6,400 (40 &times; 160)</td><td>1,600</td></tr>
-    <tr><td>Desks, seven orders</td><td>35,420 (23 &times; 1,540)</td><td>5,060 (23 &times; 220)</td></tr>
-    <tr><td>All sixteen orders</td><td>214,625 (101 &times; 2,125)</td><td>9,890</td></tr>
-    <tr><td>What it is adding</td><td>All 256 quantity-and-price pairings</td><td>The 16 pairings that happened</td></tr>
-    <tr><td>What a reviewer checks first</td><td>A single row, which matches</td><td>A single row, which matches</td></tr>
+    <tr><th></th><th>До:  <code>SUM(Units) * SUM(UnitPrice)</code></th><th>После:  <code>SUMX(Orders, Units * UnitPrice)</code></th></tr>
+    <tr><td>Он компилируется?</td><td>Yes</td><td>Yes</td></tr>
+    <tr><td>Один заказ (1001)</td><td>880</td><td>880</td></tr>
+    <tr><td>Светильники, четыре заказа</td><td>6,400 (40 &times; 160)</td><td>1,600</td></tr>
+    <tr><td>Столы, семь заказов</td><td>35,420 (23 &times; 1,540)</td><td>5,060 (23 &times; 220)</td></tr>
+    <tr><td>Все шестнадцать заказов</td><td>214,625 (101 &times; 2,125)</td><td>9,890</td></tr>
+    <tr><td>Что это добавляет</td><td>Все 256 сочетаний количества и цены.</td><td>16 пар, которые произошли</td></tr>
+    <tr><td>Что рецензент проверяет в первую очередь</td><td>Одна строка, соответствующая</td><td>Одна строка, соответствующая</td></tr>
   </table>
 
-  <p>The last line is the point of the page. Both versions pass the check most people run.</p>
+  <p>Последняя строка — это точка страницы. Обе версии проходят проверку, которую проводит большинство людей.</p>
 
-  <h2>Edge cases that return a number instead of an error</h2>
+  <h2>Крайние случаи, которые возвращают число вместо ошибки</h2>
 
-  <p>These are the ones that produce output rather than a red squiggle.</p>
+  <p>Это те, которые производят результат, а не красную закорючку.</p>
 
   <ul>
-    <li><strong>Averaging a percentage.</strong> Section 7 in one line: <code>AVERAGEX</code> over a ratio weights every row equally, so the answer drifts by however unbalanced your rows are. Divide two totals instead.</li>
-    <li><strong>Blanks are not zeros.</strong> The SUMX reference says only numbers are counted and "blanks, logical values, and text are ignored". A row with a blank price contributes nothing rather than erroring, so a partly-loaded column produces a total that is quietly low.</li>
-    <li><strong>A measure inside the iterator.</strong> <code>SUMX(Products, [Total Revenue])</code> does not do what the syntax suggests, because referencing a measure in a row context triggers context transition automatically. That is a whole mechanism, and it is worked through on the <a href="../powerbi-calculate/">CALCULATE</a> page.</li>
-    <li><strong>Iterating the wrong table.</strong> <code>SUMX(Products, ...)</code> walks three rows and <code>SUMX(Orders, ...)</code> walks sixteen. Both compile. The first argument is a decision, not boilerplate, and if it is a dimension table you are almost always on the wrong one. There is more on which table is which in <a href="../powerbi-star-schema/">star schema in Power BI</a>.</li>
-    <li><strong>Nesting an iterator inside an iterator.</strong> Legal, and it multiplies the work: a SUMX over 16 rows containing a SUMX over 16 rows evaluates 256 times. Fine here, and not fine on a fact table with ten million rows.</li>
-    <li><strong>Using it where a calculated column belongs.</strong> If the per-row value is needed as a slicer or an axis, a measure cannot give you that. That decision has its own page: <a href="../powerbi-measures-vs-columns/">calculated column vs measure</a>.</li>
+    <li><strong>Усреднение процента.</strong>  Раздел 7 в одну строку:  <code>AVERAGEX</code>  по отношению к каждой строке одинаковый вес, поэтому ответ зависит от того, насколько несбалансированы ваши строки. Вместо этого разделите две суммы.</li>
+    <li><strong>Пробелы не являются нулями.</strong>  В справочнике SUMX говорится, что подсчитываются только числа, а «пробелы, логические значения и текст игнорируются». Строка с пустой ценой ничего не дает, кроме ошибок, поэтому частично загруженный столбец дает довольно низкую сумму.</li>
+    <li><strong>Мера внутри итератора.</strong> <code>SUMX(Products, [Total Revenue])</code>  не делает того, что предполагает синтаксис, поскольку ссылка на меру в контексте строки автоматически запускает переход контекста. Это целый механизм, и он отработан на  <a href="../powerbi-calculate/">CALCULATE</a>  страница.</li>
+    <li><strong>Итерация неправильной таблицы.</strong> <code>SUMX(Products, ...)</code>  ходит в три ряда и  <code>SUMX(Orders, ...)</code>  ходит шестнадцать. Оба компилируются. Первый аргумент — это решение, а не шаблон, и если это таблица измерений, вы почти всегда ошибаетесь. Подробнее о том, какая таблица какая в  <a href="../powerbi-star-schema/">Схема «звезда» в Power BI</a>.</li>
+    <li><strong>Вложение итератора внутрь итератора.</strong>  Законно, и это умножает работу: SUMX из 16 строк, содержащий SUMX из 16 строк, оценивается 256 раз. Здесь все в порядке, а в таблице фактов с десятью миллионами строк — нет.</li>
+    <li><strong>Использование его там, где принадлежит вычисляемый столбец.</strong>  Если значение для каждой строки необходимо в качестве среза или оси, мера не может дать вам этого. У этого решения есть своя страница:  <a href="../powerbi-measures-vs-columns/">вычисляемый столбец и мера</a>.</li>
   </ul>
 
-  <h2>Why this works</h2>
+  <h2>Почему это работает</h2>
 
-  <p>The design reason is the useful part. DAX separates the two functions because they answer different questions, and Microsoft's reference pages say so in their opening lines. SUM "adds all the numbers in a column". SUMX "returns the sum of an expression evaluated for each row in a table". One reads storage, the other runs a calculation.</p>
+  <p>Причина дизайна – полезная часть. DAX разделяет эти две функции, поскольку они отвечают на разные вопросы, и на справочных страницах Microsoft об этом говорится в первых строках. СУММ «складывает все числа в столбце». SUMX «возвращает сумму выражения, вычисленного для каждой строки таблицы». Один считывает память, другой выполняет расчет.</p>
 
-  <p>The failure is worth taking seriously because it is a specific case of something general: a calculation done on totals is not the same calculation done on the individual rows and then totalled. That is not a Power BI quirk. W. S. Robinson demonstrated the same thing for correlations in 1950, showing that relationships computed from grouped census data did not match the relationships among the individuals inside those groups, which is the finding that became known as the ecological fallacy (Robinson, 1950, <em>American Sociological Review</em>, 15(3), 351&ndash;357). The arithmetic here is simpler than his, but the mistake is the same one: aggregate first and the row-level relationship is gone before you use it.</p>
+  <p>К ошибке стоит отнестись серьезно, потому что это частный случай чего-то общего: расчет итогов — это не тот же расчет, который выполняется для отдельных строк, а затем суммируется. Это не особенность Power BI. У. С. Робинсон продемонстрировал то же самое для корреляций в 1950 году, показав, что отношения, рассчитанные на основе сгруппированных данных переписи, не соответствуют отношениям между людьми внутри этих групп. Это открытие стало известно как экологическая ошибка (Робинсон, 1950,  <em>Американское социологическое обозрение</em>, 15(3), 351–357). Арифметика здесь проще, чем у него, но ошибка та же: сначала агрегируйте, и связь на уровне строк исчезает еще до того, как вы ее используете.</p>
 
-  <p>The reason it survives a code review is arithmetic rather than psychology. Every check on a single row returns identical results from both measures, as shown in section 4. So the reviewer's evidence is real, and it is evidence about nothing. The only test that separates the two measures is one that spans more than one row, which means a total you predicted before you looked at it.</p>
+  <p>Причина, по которой он выдерживает проверку кода, заключается в арифметике, а не в психологии. Каждая проверка одной строки возвращает идентичные результаты обоих измерений, как показано в разделе 4. Таким образом, свидетельства рецензента реальны, и это свидетельство ни о чем. Единственный тест, который разделяет эти два показателя, — это тест, охватывающий более одной строки, что означает сумму, которую вы спрогнозировали до того, как на нее посмотрели.</p>
 
-  <p>One note on the cheat sheet below. It is built to be covered and recalled rather than read, because testing yourself on material transfers to new situations better than restudying it, which matters here since you will be applying this to models that look nothing like the one above (Butler, 2010, <em>Journal of Experimental Psychology: Learning, Memory, and Cognition</em>, 36(5), 1118&ndash;1133).</p>
+  <p>Одно замечание в шпаргалке ниже. Он создан для того, чтобы его изучать и вспоминать, а не читать, потому что тестирование переноса материала в новые ситуации лучше, чем его повторное изучение, что здесь важно, поскольку вы будете применять это к моделям, которые совсем не похожи на приведенную выше (Батлер, 2010,  <em>Журнал экспериментальной психологии: обучение, память и познание</em>, 36(5), 1118&ndash;1133).</p>
 
-  <h2>Using this on your own model</h2>
+  <h2>Использование этого на вашей собственной модели</h2>
 
-  <p>Auditing every measure in an inherited file is miserable and you will stop on the second table. Do this instead, in order.</p>
+  <p>Проверка каждой меры в унаследованном файле утомительна, и вы остановитесь на второй таблице. Вместо этого сделайте это по порядку.</p>
 
   <ol>
-    <li><strong>Search the measure list for <code>) * SUM</code> and <code>) / SUM</code>.</strong> Two aggregations combined with an operator between them is the pattern. Most of the hits will be fine. The ones that are not are all here.</li>
-    <li><strong>For each hit, ask whether the two columns come from the same row.</strong> Units and price on the same line are a row-level pair, and multiplying their totals is wrong. Revenue and headcount from different tables usually are not, and dividing their totals is right.</li>
-    <li><strong>Check a total, never a row.</strong> Take the filter off, read the grand total, and compare it to something you know. A revenue figure twenty times your annual sales fails in one second.</li>
-    <li><strong>Check a group with more than one row in it.</strong> If a single-row slice is all you tested, you tested nothing. Pick the product with the most orders behind it.</li>
-    <li><strong>Find every averaged percentage.</strong> Anything named "Average X %" or "Avg Margin" is worth opening. If it averages a ratio, replace it with DIVIDE of two totals and tell whoever owns the report that the number will move.</li>
-    <li><strong>Write the intended arithmetic in the measure description.</strong> "Sum of units times unit price, per line" is one sentence, it sits in the model, and it makes the next person's review possible.</li>
+    <li><strong>Найдите в списке мер  <code>) * SUM</code> and <code>) / SUM</code>.</strong>  Два агрегата в сочетании с оператором между ними — это шаблон. Большинство попаданий будут в порядке. Те, кого нет, все здесь.</li>
+    <li><strong>Для каждого совпадения спрашивайте, принадлежат ли эти два столбца к одной и той же строке.</strong>  Единицы измерения и цена в одной строке представляют собой пару на уровне строки, и умножать их суммы неправильно. Выручка и численность персонала из разных таблиц обычно отсутствуют, и правильно разделить их суммы.</li>
+    <li><strong>Проверяйте общее количество, а не ряд.</strong>  Снимите фильтр, прочитайте общую сумму и сравните ее с чем-то, что вы знаете. Сумма дохода, в двадцать раз превышающая ваш годовой объем продаж, терпит неудачу за одну секунду.</li>
+    <li><strong>Проверьте группу, содержащую более одной строки.</strong>  Если вы тестировали только однострочный срез, вы ничего не тестировали. Выберите продукт, за которым находится наибольшее количество заказов.</li>
+    <li><strong>Найдите каждый усредненный процент.</strong>  Все, что называется «Средний X %» или «Средняя маржа», стоит открыть. Если он усредняет соотношение, замените его на РАЗДЕЛИТЬ на две суммы и сообщите владельцу отчета, что число изменится.</li>
+    <li><strong>Напишите предполагаемую арифметику в описании меры.</strong>  «Сумма единиц, умноженная на цену за единицу, за строку» — это одно предложение, оно присутствует в модели и делает возможным отзыв следующего человека.</li>
   </ol>
 
-  <p>If you have paper nearby, one optional sketch fixes this permanently. Draw a four-by-four grid of boxes. Write four quantities down the side and four prices across the top. Shade the four boxes where a quantity meets its own price. What you have shaded is SUMX, and the whole grid is what multiplying two totals gives you. You will not need to look this up again.</p>
+  <p>Если у вас под рукой есть бумага, один дополнительный эскиз исправит это навсегда. Нарисуйте сетку коробок размером четыре на четыре. Напишите четыре количества сбоку и четыре цены сверху. Заштрихуйте четыре клетки, в которых количество соответствует своей цене. То, что вы заштриховали, — это СУММ, а вся сетка — это то, что дает умножение двух сумм. Вам не нужно будет искать это снова.</p>
 
-  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: Power BI, SQL, Excel, and the working habits around them.</div>
+  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: Power BI, SQL, Excel и связанные с ними рабочие привычки.</div>
 
-  <h2>The whole thing on one screen</h2>
+  <h2>Все на одном экране</h2>
 
-  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
+  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
 
   <table>
-    <tr><th>Thing</th><th>What it does</th></tr>
-    <tr><td><code>SUM(col)</code></td><td>Adds a column that already exists. One argument, and it must be a column.</td></tr>
-    <tr><td><code>SUMX(table, expr)</code></td><td>Evaluates the expression on every row, then adds the results.</td></tr>
-    <tr><td>The question to ask</td><td>Can I point at a column in the Fields pane? If not, it is SUMX.</td></tr>
-    <tr><td>Iterator</td><td>A function that walks every row of a table and evaluates an expression there.</td></tr>
-    <tr><td>Row context</td><td>The model knowing which single row it is standing on.</td></tr>
-    <tr><td>Row context does not</td><td>Filter anything. Referencing a measure is what changes that.</td></tr>
-    <tr><td><code>SUM(a) * SUM(b)</code></td><td>Adds every pairing of a with b. 16 rows means 256 pairings.</td></tr>
-    <tr><td>Why it passes review</td><td>Sliced to one row, both measures return the same number.</td></tr>
-    <tr><td>The test that works</td><td>A total you predicted before you read it.</td></tr>
-    <tr><td>The X family</td><td>AVERAGEX, MAXX, MINX, COUNTX, RANKX, CONCATENATEX. Same two arguments.</td></tr>
-    <tr><td>Average of a ratio</td><td>Weights every row equally. 39.29% where the truth is 38.56%.</td></tr>
-    <tr><td>Fix for a ratio</td><td><code>DIVIDE([Total Margin], [Total Revenue])</code>. Divide once, at the end.</td></tr>
-    <tr><td>Reading another table</td><td><code>RELATED</code>, from the many side to the one side.</td></tr>
-    <tr><td>Blanks in SUMX</td><td>Ignored, not zero. A half-loaded column totals quietly low.</td></tr>
-    <tr><td><code>SUMX(t, t[col])</code></td><td>A SUM with extra syntax. Write the SUM.</td></tr>
-    <tr><td>When SUM is right</td><td>The value is stored. Microsoft: "If you do not need to filter the column, use the SUM function."</td></tr>
+    <tr><th>Thing</th><th>Что он делает</th></tr>
+    <tr><td><code>SUM(col)</code></td><td>Добавляет столбец, который уже существует. Один аргумент, и это должен быть столбец.</td></tr>
+    <tr><td><code>SUMX(table, expr)</code></td><td>Вычисляет выражение в каждой строке, а затем суммирует результаты.</td></tr>
+    <tr><td>Вопрос, который нужно задать</td><td>Могу ли я указать столбец на панели «Поля»? Если нет, то это SUMX.</td></tr>
+    <tr><td>Iterator</td><td>Функция, которая просматривает каждую строку таблицы и вычисляет в ней выражение.</td></tr>
+    <tr><td>контекст строки</td><td>Модель знает, в каком ряду она стоит.</td></tr>
+    <tr><td>Контекст строки не</td><td>Фильтруйте что угодно. Ссылка на меру меняет ситуацию.</td></tr>
+    <tr><td><code>SUM(a) * SUM(b)</code></td><td>Добавляет каждую пару a с b. 16 рядов означают 256 пар.</td></tr>
+    <tr><td>Почему он проходит проверку</td><td>Обе меры, разделенные на одну строку, возвращают одно и то же число.</td></tr>
+    <tr><td>Тест, который работает</td><td>Сумма, которую вы предсказали еще до того, как прочитали.</td></tr>
+    <tr><td>Семья Х</td><td>СРЗНАЧ, MAXX, MINX, СЧЕТХ, РАНГX, КОНКАТЕНАТЕКС. Те же два аргумента.</td></tr>
+    <tr><td>Среднее соотношение</td><td>Каждая строка имеет одинаковый вес. 39,29%, где правда 38,56%.</td></tr>
+    <tr><td>Исправление соотношения</td><td><code>DIVIDE([Total Margin], [Total Revenue])</code>. В конце разделите один раз.</td></tr>
+    <tr><td>Чтение другой таблицы</td><td><code>RELATED</code>, от многих сторон к одной стороне.</td></tr>
+    <tr><td>Пробелы в SUMX</td><td>Игнорируется, а не ноль. Полузагруженная колонна тихонько падает.</td></tr>
+    <tr><td><code>SUMX(t, t[col])</code></td><td>СУММА с дополнительным синтаксисом. Напишите СУММУ.</td></tr>
+    <tr><td>Когда SUM верен</td><td>Значение сохраняется. Microsoft: «Если вам не нужно фильтровать столбец, используйте функцию СУММ».</td></tr>
   </table>
 
-  <div class="note"><strong>The one habit to keep.</strong> Predict the grand total before you read it. Sixteen orders at these prices is roughly ten thousand, so 214,625 is wrong before you have opened a single measure. A rough number you committed to in advance catches this class of mistake faster than reading DAX will, and it costs about four seconds.</div>
+  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Предскажите общую сумму, прежде чем читать ее. Шестнадцать ордеров по этим ценам — это примерно десять тысяч, поэтому 214 625 — это неправильно, пока вы не открыли хотя бы один такт. Грубое число, которое вы заранее определили, выявляет ошибки этого класса быстрее, чем чтение DAX, и это занимает около четырех секунд.</div>
 
-  <p>One last thought, and I would genuinely like other people's answers. The worst version I have seen was an average discount percentage on an executive card. It was built as an average of per-order discounts, it ran about two points under the real blended figure, and it had been quoted in board papers for three quarters before anyone divided the two totals. What is the longest one of these has gone unnoticed in a model you inherited?</p>
+  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Худшая версия, которую я видел, — это средний процент скидки по представительской карте. Она была построена как среднее значение скидок на заказ, она была примерно на два пункта ниже реальной смешанной цифры и котировалась в документах совета директоров в течение трех четвертей, прежде чем кто-либо разделил эти две суммы. Какой из них дольше всего оставался незамеченным в модели, доставшейся вам по наследству?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Robinson, W. S. (1950). Ecological correlations and the behavior of individuals. <em>American Sociological Review</em>, 15(3), 351&ndash;357.</li>
-    <li>Butler, A. C. (2010). Repeated testing produces superior transfer of learning relative to repeated studying. <em>Journal of Experimental Psychology: Learning, Memory, and Cognition</em>, 36(5), 1118&ndash;1133.</li>
-    <li>Microsoft. SUM function (DAX), SUMX function (DAX), AVERAGEX function (DAX), CONCATENATEX function (DAX) and DAX glossary. Microsoft Learn. All quotations above are taken from these reference pages.</li>
+    <li>Робинсон, WS (1950). Экологические корреляции и поведение особей.  <em>Американское социологическое обозрение</em>, 15(3), 351&ndash;357.</li>
+    <li>Батлер, AC (2010). Повторное тестирование обеспечивает лучшую передачу знаний по сравнению с повторным обучением.  <em>Журнал экспериментальной психологии: обучение, память и познание</em>, 36(5), 1118&ndash;1133.</li>
+    <li>Майкрософт. Функция СУММ (DAX), функция СУММ (DAX), функция СРЗНАЧ (DAX), функция CONCATENATEX (DAX) и глоссарий DAX. Microsoft Learn. Все приведенные выше цитаты взяты с этих справочных страниц.</li>
   </ul>
 
   <div class="book">
-    <strong>The measure compiled, the single row you checked was right, and the grand total is off by a factor you have not noticed yet.</strong>
-    <p><em>Power BI for Analysts</em> is 187 pages, measures built one argument at a time, with the checks that catch a wrong aggregation before it reaches a card, and practice questions that print the answer and the arithmetic behind it.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/power-bi-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=power-bi-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-powerbi-sum-vs-sumx'})">Power BI for Analysts, $19 &rarr;</a>
+    <strong>Показатель скомпилирован, единственная проверенная вами строка оказалась верной, а общий итог отличается на фактор, который вы еще не заметили.</strong>
+    <p><em>Power BI для аналитиков</em>  состоит из 187 страниц, меры строятся по одному аргументу за раз, с проверками, которые выявляют неправильное агрегирование до того, как оно достигнет карточки, и практическими вопросами, которые печатают ответ и стоящие за ним арифметические действия.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/power-bi-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=power-bi-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-powerbi-sum-vs-sumx'})">Power BI для аналитиков, 19 долларов США →</a>
   </div>
 
   <div class="cta">
-    <strong>Practice this where a wrong aggregation shows itself.</strong>
-    <p style="margin:6px 0 0">The <a href="../../powerbi/">Power BI Kit</a> gives you the repetitions: measures that compile and lie, totals that need predicting first, and questions that ask which table the iterator should walk rather than which function name is right. You now own the method; the kit is the practice. Nothing to install, no account needed.</p>
-    <a class="btn" href="../../powerbi/">Open the Power BI Kit →</a>
+    <strong>Практикуйте это там, где проявляется неправильная агрегация.</strong>
+    <p style="margin:6px 0 0">The <a href="../../powerbi/">Комплект Power BI</a> gives you the repetitions: measures that compile and lie, totals that need predicting first, and questions that ask which table the iterator should walk rather than which function name is right. You now own the method; the kit is the practice. Nothing to install, no account needed.</p>
+    <a class="btn" href="../../powerbi/">Откройте комплект Power BI →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> · <a href="../powerbi-calculate/">CALCULATE and Filter Context</a> · <a href="../powerbi-row-level-security/">Row-Level Security in Power BI</a> · <a href="../powerbi-measures-vs-columns/">Columns vs Measures in Power BI</a> · <a href="../powerbi-star-schema/">Star Schema in Power BI</a> · <a href="../powerbi-time-intelligence/">DAX Time Intelligence</a> · <a href="../powerbi-switch-true/">SWITCH TRUE for Segmentation</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../excel-sumifs/">SUMIFS in Excel</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../mean-vs-median/">Mean vs Median</a> · <a href="../how-charts-mislead/">How Charts Mislead</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../powerbi/">Power BI Kit</a> · <a href="../../projects/">Portfolio Projects</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../powerbi-calculate/">РАСЧЕТ и фильтрация контекста</a> · <a href="../powerbi-row-level-security/">Безопасность на уровне строк в Power BI</a> · <a href="../powerbi-measures-vs-columns/">Столбцы и меры в Power BI</a> · <a href="../powerbi-star-schema/">Схема «звезда» в Power BI</a> · <a href="../powerbi-time-intelligence/">DAX Временная аналитика</a> · <a href="../powerbi-switch-true/">ПЕРЕКЛЮЧИТЕ TRUE для сегментации</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../excel-sumifs/">СУМИМС в Excel</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../mean-vs-median/">Среднее против медианы</a> · <a href="../how-charts-mislead/">Как графики вводят в заблуждение</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../powerbi/">Комплект Power BI</a> · <a href="../../projects/">Портфельные проекты</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-<script src="../../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

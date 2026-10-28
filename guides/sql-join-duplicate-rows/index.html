@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SQL Join Duplicate Rows: Fan-Out, and the Fix &mdash; Analyst Prep Kit</title>
-<meta name="description" content="Eight orders worth 1,050 become 730 across six rows after a join, and the sum of five orders reads 730 instead of 610. What fan-out is, the count that detects it in ten seconds, and the three correct fixes.">
+<title>SQL-соединение повторяющихся строк: разветвление и исправление — комплект подготовки аналитика</title>
+<meta name="description" content="Восемь заказов на сумму 1050 после объединения превращаются в 730 в шести строках, а сумма пяти заказов становится 730 вместо 610. Что такое разветвление, счетчик, который обнаруживает его за десять секунд, и три правильных исправления.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-join-duplicate-rows/">
-<meta property="og:title" content="Why Your JOIN Duplicated the Rows and the Total Is Too High">
-<meta property="og:description" content="One order with two payments doubles its own amount. 610 becomes 730, and nothing errors.">
+<meta property="og:title" content="Почему ваш JOIN дублирует строки, и общая сумма слишком велика">
+<meta property="og:description" content="Один заказ с двумя платежами удваивает собственную сумму. 610 становится 730, и никаких ошибок.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-join-duplicate-rows/">
 <meta name="twitter:card" content="summary_large_image">
@@ -69,12 +69,11 @@
   figcaption{font-size:13.5px;color:var(--muted);margin-top:6px}
 </style>
 <!-- SEO:JSONLD:START -->
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "Why Your JOIN Duplicated the Rows and the Total Is Too High",
-  "description": "Eight orders worth 1,050 become 730 across six rows after a join, and the sum of five orders reads 730 instead of 610. What fan-out is, the count that detects it in ten seconds, and the three correct fixes.",
+  "headline": "Почему ваш JOIN дублирует строки, и общая сумма слишком велика",
+  "description": "Восемь заказов на сумму 1050 после объединения превращаются в 730 в шести строках, а сумма пяти заказов становится 730 вместо 610. Что такое разветвление, счетчик, который обнаруживает его за десять секунд, и три правильных исправления.",
   "url": "https://michaelnocito.github.io/analyst-prep-kit/guides/sql-join-duplicate-rows/",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -82,20 +81,19 @@
   },
   "author": {
     "@type": "Person",
-    "name": "Michael Nocito",
+    "name": "Майкл Носито",
     "url": "https://michaelnocito.github.io"
   },
   "publisher": {
     "@type": "Person",
-    "name": "Michael Nocito"
+    "name": "Майкл Носито"
   },
   "inLanguage": "en",
   "datePublished": "2026-08-23",
   "dateModified": "2026-08-23"
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
@@ -114,20 +112,19 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Why a Join Duplicates Rows",
+      "name": "почему объединение дублирует строки",
       "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/sql-join-duplicate-rows/"
     }
   ]
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Why does my SQL join return duplicate rows?",
+      "name": "Почему мое соединение SQL возвращает повторяющиеся строки?",
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "Because the key is not unique on the other side. One order with two payment rows produces two joined rows, one per payment. The join is behaving correctly; the assumption that the other table had one row per key was wrong."
@@ -135,26 +132,26 @@
     },
     {
       "@type": "Question",
-      "name": "Why is my SUM too high after a join?",
+      "name": "Почему моя сумма слишком высока после присоединения?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Because the joined rows repeat the value from the one side. An order of 120 that matched two payments contributes 240 to the sum. This is called fan-out, and it inflates every aggregate downstream except COUNT DISTINCT."
+        "text": "Потому что соединяемые строки повторяют значение с одной стороны. Заказ на сумму 120, соответствующий двум платежам, добавляет к сумме 240. Это называется разветвлением, и оно расширяет все последующие агрегаты, кроме COUNT DISTINCT."
       }
     },
     {
       "@type": "Question",
-      "name": "How do I stop a join from duplicating rows?",
+      "name": "Как запретить объединению дублировать строки?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Aggregate the many side before joining, use a subquery or CTE that returns one row per key, or use EXISTS when you only need to know whether a match exists. Adding DISTINCT is the fix that usually hides the problem rather than solving it."
+        "text": "Агрегируйте множество сторон перед объединением, используйте подзапрос или CTE, который возвращает одну строку для каждого ключа, или используйте EXISTS, когда вам нужно знать только, существует ли совпадение. Добавление DISTINCT — это исправление, которое обычно скрывает проблему, а не решает ее."
       }
     },
     {
       "@type": "Question",
-      "name": "How do I detect fan-out?",
+      "name": "Как обнаружить разветвление?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Count rows before and after the join. If the count grew, the join multiplied rows. Then check the other table for duplicate keys with GROUP BY key HAVING COUNT(*) > 1."
+        "text": "Подсчитайте строки до и после соединения. Если число росло, соединение умножало строки. Затем проверьте другую таблицу на наличие повторяющихся ключей с помощью GROUP BY key HAVING COUNT(*) > 1."
       }
     }
   ]
@@ -164,17 +161,17 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../../sql/">SQL Kit</a></p>
-  <h1>Why Your JOIN Duplicated the Rows and the Total Is Too High</h1>
-  <p class="meta">Michael Nocito &middot; Updated August 2026 &middot; Every query on this page was run before it was published</p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../../sql/">SQL-комплект</a></p>
+  <h1>Почему ваш JOIN дублирует строки, и общая сумма слишком велика</h1>
+  <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Каждый запрос на этой странице был выполнен до его публикации.</p>
 
-  <p>The query ran, the numbers came back, and revenue is higher than finance says it should be. Nothing errored. Somewhere in the query a join matched one row against several, and every value on the one side got counted more than once.</p>
+  <p>Запрос был выполнен, цифры вернулись, и доход оказался выше, чем предполагалось в финансовом отделе. Ничего не ошибочно. Где-то в запросе соединение сопоставляло одну строку с несколькими, и каждое значение на одной стороне учитывалось более одного раза.</p>
 
-  <p>What you do: count the rows before and after the join. If the count grew, you have fan-out, and every sum in the query is wrong.</p>
+  <p>Что вы делаете: подсчитываете строки до и после объединения. Если число выросло, значит, произошло разветвление, и каждая сумма в запросе неверна.</p>
 
-  <p><strong>The short version.</strong> A join multiplies rows whenever the key repeats on the other side.</p>
+  <p><strong>Краткая версия.</strong>  Соединение умножает строки всякий раз, когда ключ повторяется на другой стороне.</p>
 
-  <h2>The two tables</h2>
+  <h2>Две таблицы</h2>
   <pre><code>CREATE TABLE orders(order_id INT, customer_id INT, amount INT, status TEXT);
 INSERT INTO orders VALUES
 (101,1,120,'shipped'),(102,1,80,'shipped'),(103,2,200,'cancelled'),
@@ -184,29 +181,29 @@ INSERT INTO orders VALUES
 CREATE TABLE payments(payment_id INT, order_id INT, amount INT);
 INSERT INTO payments VALUES
 (1,101,60),(2,101,60),(3,102,80),(4,104,50),(5,105,300),(6,107,60);</code></pre>
-  <p>Eight orders totalling 1,050. Six payments. Order 101 was paid in two instalments of 60, which is the only unusual thing in the data and it is enough.</p>
+  <p>Восемь заказов на общую сумму 1050 штук. Шесть платежей. Заказ 101 был оплачен двумя частями по 60, это единственная необычность в данных и этого достаточно.</p>
 
-  <h2>The query that goes wrong</h2>
+  <h2>Запрос, который идет не так</h2>
   <pre><code>SELECT COUNT(*), SUM(o.amount)
 FROM orders o
 JOIN payments p ON p.order_id = o.order_id;
 -- 6 rows, 730</code></pre>
-  <p>Five orders have payments: 101, 102, 104, 105 and 107. Their true total is 120 + 80 + 50 + 300 + 60 = <strong>610</strong>. The query says 730, because order 101 appears twice and contributes its 120 twice.</p>
-  <p>Six rows for five orders. That single extra row is the whole error, and 730 is a plausible enough number that nobody questions it until it is compared with something.</p>
+  <p>Пять заказов имеют выплаты: 101, 102, 104, 105 и 107. Их истинная сумма равна 120 + 80 + 50 + 300 + 60 =  <strong>610</strong>. В запросе указано 730, поскольку порядок 101 появляется дважды и дважды вносит свои 120.</p>
+  <p>Шесть рядов для пяти заказов. Эта единственная дополнительная строка и есть вся ошибка, а 730 — достаточно правдоподобное число, поэтому никто не ставит его под сомнение, пока его с чем-то не сравнят.</p>
 
-  <h2>Detecting it in ten seconds</h2>
+  <h2>Обнаружение за десять секунд</h2>
   <pre><code>SELECT COUNT(*) FROM orders;                        -- 8
 SELECT COUNT(*) FROM orders o
 JOIN payments p ON p.order_id = o.order_id;         -- 6, from 5 orders
 
 SELECT order_id, COUNT(*) FROM payments
 GROUP BY order_id HAVING COUNT(*) &gt; 1;              -- 101, 2</code></pre>
-  <p>The last query is the one to keep. It names the key that repeats, which turns "the numbers are too high" into "order 101 has two payment rows", and that is a sentence somebody can act on.</p>
+  <p>Последний запрос следует сохранить. Он называет повторяющийся ключ, который превращает «цифры слишком велики» в «заказ 101 имеет две строки платежей», и это предложение, по которому кто-то может действовать.</p>
 
-  <div class="note"><strong>Fan-out compounds.</strong> Join three tables where two of them fan out and the multiplication is 2 x 3, not 2 + 3. That is how a total ends up six times too high, and it is why the row count should be checked after each join rather than only at the end.</div>
+  <div class="note"><strong>Разветвленные соединения.</strong>  Объедините три таблицы, две из которых разветвляются, а умножение равно 2 x 3, а не 2 + 3. Вот почему общая сумма оказывается в шесть раз больше, и именно поэтому количество строк следует проверять после каждого соединения, а не только в конце.</div>
 
-  <h2>The three correct fixes</h2>
-  <h3>1. Aggregate the many side first</h3>
+  <h2>Три правильных исправления</h2>
+  <h3>1. Сначала агрегируйте множество сторон</h3>
   <pre><code>SELECT o.order_id, o.amount, COALESCE(p.paid, 0) AS paid
 FROM orders o
 LEFT JOIN (
@@ -214,72 +211,72 @@ LEFT JOIN (
     FROM payments
     GROUP BY order_id
 ) p ON p.order_id = o.order_id;</code></pre>
-  <p>The subquery returns one row per order, so the join cannot multiply anything. Order 101 arrives as a single row with 120 paid. This is the default answer and the one to reach for first.</p>
+  <p>Подзапрос возвращает одну строку на каждый заказ, поэтому соединение не может ничего умножать. Заказ 101 поступает в виде одной строки со 120 оплаченными заказами. Это ответ по умолчанию, к которому следует обратиться в первую очередь.</p>
 
-  <h3>2. Use EXISTS when you only need to know whether a match exists</h3>
+  <h3>2. Используйте EXISTS, когда вам нужно знать, существует ли совпадение.</h3>
   <pre><code>SELECT COUNT(*), SUM(amount)
 FROM orders o
 WHERE EXISTS (SELECT 1 FROM payments p WHERE p.order_id = o.order_id);
 -- 5 rows, 610</code></pre>
-  <p>Five orders, 610. <code>EXISTS</code> asks a yes or no question, so it cannot duplicate a row however many payments there are. If you are joining only to filter, this is both correct and usually faster.</p>
+  <p>Пять заказов, 610.  <code>EXISTS</code>  задает вопрос «да» или «нет», поэтому он не может дублировать строку, сколько бы платежей ни было. Если вы присоединяетесь только для фильтрации, это правильно и обычно быстрее.</p>
 
-  <h3>3. Aggregate with the right function</h3>
+  <h3>3. Агрегируйте с правильной функцией</h3>
   <pre><code>SELECT COUNT(DISTINCT o.order_id) AS orders,
        SUM(p.amount)               AS paid
 FROM orders o
 JOIN payments p ON p.order_id = o.order_id;</code></pre>
-  <p>Sum the column from the <em>many</em> side, which has one row per payment and is therefore not duplicated, and count distinct on the one side. Mixing them up is where this fix goes wrong: <code>SUM(o.amount)</code> is still 730 no matter what you count.</p>
+  <p>Суммируем столбец из  <em>many</em>  сторона, которая имеет одну строку на каждый платеж и поэтому не дублируется, а с одной стороны считается отдельной. Если вы их перепутаете, это исправление пойдет не так:  <code>SUM(o.amount)</code>  все равно 730, сколько бы вы ни считали.</p>
 
-  <h2>Why DISTINCT is not the fix</h2>
+  <h2>Почему DISTINCT не является решением проблемы</h2>
   <pre><code>SELECT SUM(DISTINCT o.amount) FROM ...   -- wrong, and quietly so</code></pre>
-  <p><code>SELECT DISTINCT</code> removes duplicate rows, which looks like it solves the problem and does not. Two different orders of exactly 60 are collapsed into one, so the total is now too low. And it cannot help at all when the duplicated rows differ in any column, which they usually do once you select a few more fields.</p>
-  <p>Reaching for <code>DISTINCT</code> to fix a total is the clearest sign that the grain of the query has not been decided. Decide it instead: one row per order, or one row per payment, and build to that.</p>
+  <p><code>SELECT DISTINCT</code>  удаляет повторяющиеся строки, что выглядит так, как будто это решает проблему, но это не так. Два разных порядка ровно по 60 объединяются в один, поэтому общая сумма теперь слишком мала. И совсем не может помочь, когда дублирующиеся строки различаются в каком-либо столбце, что обычно происходит, когда вы выбираете еще несколько полей.</p>
+  <p>Достижение  <code>DISTINCT</code>  фиксирование суммы — самый явный признак того, что зерно запроса не определено. Вместо этого решите: одна строка на заказ или одна строка на платеж, и ориентируйтесь на это.</p>
 
-  <h2>The habit that prevents it</h2>
+  <h2>Привычка, которая мешает этому</h2>
   <table>
-    <tr><th>Before joining, ask</th><th>Then</th></tr>
-    <tr><td>What is one row of my result?</td><td>Write it down. That is the grain.</td></tr>
-    <tr><td>Is the join key unique on the other side?</td><td>Check with GROUP BY and HAVING</td></tr>
-    <tr><td>Did the row count grow?</td><td>Count before and after every join</td></tr>
-    <tr><td>Does my total match a known number?</td><td>Reconcile to something external</td></tr>
+    <tr><th>Прежде чем присоединиться, спросите</th><th>Then</th></tr>
+    <tr><td>Какова одна строка моего результата?</td><td>Запишите это. Это зерно.</td></tr>
+    <tr><td>Является ли ключ соединения уникальным на другой стороне?</td><td>Проверьте с помощью GROUP BY и HAVING.</td></tr>
+    <tr><td>Число строк увеличилось?</td><td>Считайте до и после каждого соединения</td></tr>
+    <tr><td>Соответствует ли моя сумма известному числу?</td><td>Примириться с чем-то внешним</td></tr>
   </table>
 
-  <h2>How to apply this to your own work</h2>
+  <h2>Как применить это в своей работе</h2>
   <ol>
-    <li>Take a query you rely on and count the rows after each join. Add them as a comment in the query.</li>
-    <li>Run the duplicate-key check on every table you join to. Uniqueness is an assumption until it is tested.</li>
-    <li>Replace any <code>DISTINCT</code> that was added to fix a total with a pre-aggregated subquery.</li>
-    <li>Where a join exists only to filter, rewrite it as <code>EXISTS</code>.</li>
-    <li>Reconcile the total against a number from another system, which is the only check that catches fan-out you did not think to look for.</li>
+    <li>Возьмите запрос, на который вы полагаетесь, и посчитайте строки после каждого соединения. Добавьте их в качестве комментария в запросе.</li>
+    <li>Запустите проверку дубликатов ключей для каждой таблицы, к которой вы присоединяетесь. Уникальность является предположением, пока оно не проверено.</li>
+    <li>Замените любой  <code>DISTINCT</code>  это было добавлено для фиксации суммы с помощью предварительно агрегированного подзапроса.</li>
+    <li>Если соединение существует только для фильтрации, перепишите его как  <code>EXISTS</code>.</li>
+    <li>Сверьте полученную сумму с числом из другой системы. Это единственная проверка, позволяющая обнаружить разветвление, которое вы даже не подумали искать.</li>
   </ol>
 
-  <h2>The one habit to keep</h2>
-  <p>Say what one row of the result represents before you write the <code>FROM</code>. Fan-out is not really a join problem; it is what happens when a query is written without deciding its grain.</p>
+  <h2>Единственная привычка, которую нужно сохранить</h2>
+  <p>Скажите, что представляет собой одна строка результата, прежде чем писать  <code>FROM</code>. Fan-out is not really a join problem; it is what happens when a query is written without deciding its grain.</p>
 
-  <p>Does the report you send most often join to a table whose key you have never tested for uniqueness?</p>
+  <p>Отчет, который вы отправляете чаще всего, объединяется с таблицей, уникальность ключа которой вы никогда не проверяли?</p>
 
-  <div class="note"><strong>Every number here was run before it was published.</strong> Eight orders totalling 1,050. The join returns 6 rows and a SUM of 730, where the five matched orders truly total 610.</div>
+  <div class="note"><strong>Каждый номер здесь был проведён до того, как был опубликован.</strong>  Восемь заказов на общую сумму 1050 штук. Соединение возвращает 6 строк и сумму 730, где сумма пяти совпавших заказов действительно равна 610.</div>
 
   <div class="book">
-    <strong>A total that is too high by exactly one row is the hardest kind of wrong to notice.</strong>
-    <p><em>SQL for Analysts</em> is 458 pages that read queries line by line in everyday words, so a result that came back wrong has somewhere to be traced instead of being retyped until it looks better.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-join-duplicate-rows'})">SQL for Analysts, $19 &rarr;</a>
+    <strong>Сложнее всего заметить ошибку, превышающую сумму ровно на одну строку.</strong>
+    <p><em>SQL для аналитиков</em>  — это 458 страниц, которые считывают запросы построчно в повседневных словах, поэтому ошибочный результат нужно где-то отслеживать, а не перепечатывать, пока он не станет выглядеть лучше.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-join-duplicate-rows'})">SQL для аналитиков, 19 $ →</a>
   </div>
 
   <div class="cta">
-    <strong>Count before you sum.</strong>
-    <p style="margin:6px 0 0"><a href="../sql-joins/">SQL JOINs explained</a> covers the four types, <a href="../sql-reconciliation/">reconciling row counts</a> is the check, and <a href="../../drill/">SQL Drill</a> gives you the reps.</p>
-    <a class="btn" href="../sql-joins/">Read SQL JOINs &rarr;</a>
+    <strong>Прежде чем суммировать, посчитайте.</strong>
+    <p style="margin:6px 0 0"><a href="../sql-joins/">Объяснение SQL JOIN</a>  охватывает четыре типа,  <a href="../sql-reconciliation/">Согласование количества строк</a>  это чек, и  <a href="../../drill/">SQL-детализация</a>  дает вам повторения.</p>
+    <a class="btn" href="../sql-joins/">Читать SQL JOIN →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../sql-joins/">SQL JOINs</a> &middot; <a href="../sql-self-join/">The Self Join</a> &middot; <a href="../sql-reconciliation/">Reconciling Row Counts</a> &middot; <a href="../sql-find-duplicates/">Find Duplicate Rows</a> &middot; <a href="../sql-subqueries/">Subqueries</a> &middot; <a href="../../drill/">SQL Drill</a> &middot; <a href="../../sql/">SQL Kit</a>
-    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> &middot; <a href="../sql-self-join/">Самостоятельное присоединение</a> &middot; <a href="../sql-reconciliation/">Согласование количества строк</a> &middot; <a href="../sql-find-duplicates/">Найти повторяющиеся строки</a> &middot; <a href="../sql-subqueries/">Subqueries</a> &middot; <a href="../../drill/">SQL-детализация</a> &middot; <a href="../../sql/">SQL-комплект</a>
+    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-<script src="../../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

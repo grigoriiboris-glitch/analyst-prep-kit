@@ -67,7 +67,7 @@
         out.push({ el: el, text: marker });
         return;
       }
-      if (el.closest("предварительно, таблица, ул.refs, старые ссылки")) return;
+      if (el.closest("предварительно, таблица, ул.ссылки, старые ссылки")) return;
 
       var text = (el.innerText || el.textContent || '').replace(/\s+/g, ' ').trim();
       if (text.length < 2) return;

@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Subquery vs CTE in SQL: Same Logic, One You Can Check — Analyst Prep Kit</title>
-<meta name="description" content="The four places a subquery can go, the correlated one that runs per row, the NOT IN that returns nothing, and why a CTE is the same query with a name and a row count.">
+<title>Подзапрос и CTE в SQL: одна и та же логика, которую вы можете проверить — комплект подготовки аналитика</title>
+<meta name="description" content="Четыре места, куда может попасть подзапрос: коррелированный, который выполняется для каждой строки, NOT IN, который ничего не возвращает, и почему CTE — это тот же запрос с именем и количеством строк.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-subqueries/">
-<meta property="og:title" content="Subquery vs CTE in SQL: Same Logic, One You Can Check">
-<meta property="og:description" content="A subquery buries its intermediate result; a CTE names it, so you can count it. Plus the NOT IN that returns zero rows because one value in the list was NULL.">
+<meta property="og:title" content="Подзапрос против CTE в SQL: та же логика, которую вы можете проверить">
+<meta property="og:description" content="Подзапрос скрывает свой промежуточный результат; CTE дает ему имя, поэтому вы можете его посчитать. Плюс NOT IN, который возвращает ноль строк, поскольку одно значение в списке было NULL.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/sql-subqueries.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-subqueries/">
@@ -78,12 +78,11 @@
   .figure figcaption{color:var(--muted);font-size:14px;margin-top:10px}
 </style>
 <!-- SEO:JSONLD:START -->
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "Subquery vs CTE in SQL: Same Logic, One You Can Check",
-  "description": "The four places a subquery can go, the correlated one that runs per row, the NOT IN that returns nothing, and why a CTE is the same query with a name and a row count.",
+  "headline": "Подзапрос против CTE в SQL: та же логика, которую вы можете проверить",
+  "description": "Четыре места, куда может попасть подзапрос: коррелированный, который выполняется для каждой строки, NOT IN, который ничего не возвращает, и почему CTE — это тот же запрос с именем и количеством строк.",
   "url": "https://michaelnocito.github.io/analyst-prep-kit/guides/sql-subqueries/",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -91,12 +90,12 @@
   },
   "author": {
     "@type": "Person",
-    "name": "Michael Nocito",
+    "name": "Майкл Носито",
     "url": "https://michaelnocito.github.io"
   },
   "publisher": {
     "@type": "Person",
-    "name": "Michael Nocito"
+    "name": "Майкл Носито"
   },
   "inLanguage": "en",
   "datePublished": "2026-08-08",
@@ -104,8 +103,7 @@
   "image": "https://michaelnocito.github.io/analyst-prep-kit/assets/social/sql-subqueries.png"
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
@@ -124,7 +122,7 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Subquery vs CTE in SQL: Same Logic, One You Can Check",
+      "name": "Подзапрос против CTE в SQL: та же логика, которую вы можете проверить",
       "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/sql-subqueries/"
     }
   ]
@@ -134,18 +132,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../sql/">SQL Kit</a> · <a href="../">All guides</a></p>
-  <h1>Subquery vs CTE in SQL: Same Logic, One You Can Check</h1>
-  <p class="meta">A query inside a query, and the version that lets you count the middle · Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-08">August 8, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../">Все руководства</a></p>
+  <h1>Подзапрос против CTE в SQL: та же логика, которую вы можете проверить</h1>
+  <p class="meta">Запрос внутри запроса и версия, позволяющая считать середину · Часть  <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-08">8 августа 2026 г.</time></p>
 
-  <p>By the end of this page you can write a query that uses the answer to another query, recognise the four places one can go, spot the correlated kind that runs once per row, avoid the <code>NOT IN</code> that silently returns nothing, and convert any nest into named steps you can count one at a time. It is about twenty-five minutes, and every query and result below was run.</p>
+  <p>К концу этой страницы вы сможете написать запрос, который использует ответ на другой запрос, распознать четыре места, куда можно пойти, определить коррелированный тип, который выполняется один раз для каждой строки, избежать  <code>NOT IN</code>  который молча ничего не возвращает, и преобразует любое гнездо в именованные шаги, которые вы можете считать по одному. Прошло около двадцати пяти минут, и каждый запрос и результат, представленные ниже, были выполнены.</p>
 
-  <p>Here is what to do today, on the most nested query you own. Take the innermost subquery, lift it out to the top as a CTE with a real name, and run <code>SELECT COUNT(*)</code> against that name. You now know how many rows the middle of your query is working with, which is the one number a nested version will not give you.</p>
+  <p>Вот что нужно сделать сегодня с самым вложенным запросом, который у вас есть. Возьмите самый внутренний подзапрос, поднимите его наверх как CTE с настоящим именем и запустите  <code>SELECT COUNT(*)</code>  против этого имени. Теперь вы знаете, со сколькими строками работает середина вашего запроса, и это единственное число, которое вам не даст вложенная версия.</p>
 
-  <p>The short version: a subquery is a query used as a value, a list, or a table. A CTE is the same query given a name up front. The logic is identical and only one of them can be checked in pieces.</p>
+  <p>Краткая версия: подзапрос — это запрос, используемый в виде значения, списка или таблицы. CTE — это тот же запрос, которому заранее присвоено имя. Логика идентична и только один из них можно проверить по частям.</p>
 
-  <p>That difference is the idea, so it gets the picture.</p>
+  <p>Эта разница и есть идея, поэтому она и отражает картину.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 272" role="img" aria-labelledby="sqTitle sqDesc" xmlns="http://www.w3.org/2000/svg">
@@ -181,52 +179,52 @@
         </g>
       </g>
     </svg>
-    <figcaption>Same three steps, same final answer. Nested, only the outside has a number you can read. Named, every step has one, and the step where the count goes wrong is the step that is wrong.</figcaption>
+    <figcaption>Те же три шага, тот же окончательный ответ. Вложенный, только снаружи есть номер, который вы можете прочитать. Названный, каждый шаг имеет один, и шаг, на котором счетчик идет неправильно, является неправильным шагом.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>What you'll learn</strong>
+    <strong>Что вы узнаете</strong>
     <ol>
-      <li>What a subquery is, and the four places it goes</li>
-      <li>A scalar subquery: one value</li>
-      <li>IN, and the NOT IN that returns nothing</li>
-      <li>Correlated subqueries: one run per row</li>
-      <li>The derived table, and where it stops being readable</li>
-      <li>The CTE: the same query with a name</li>
-      <li>Counting every step</li>
-      <li>When a window function beats both</li>
-      <li>The full before and after</li>
-      <li>Edge cases that break a subquery</li>
-      <li>Why this works</li>
-      <li>Using this on your own project</li>
-      <li>The whole thing on one screen</li>
+      <li>Что такое подзапрос и в каких четырех местах он находится</li>
+      <li>Скалярный подзапрос: одно значение</li>
+      <li>IN и NOT IN, которые ничего не возвращают</li>
+      <li>Коррелированные подзапросы: один запуск на строку</li>
+      <li>Производная таблица и места, где она перестает быть читаемой</li>
+      <li>CTE: тот же запрос с именем</li>
+      <li>Считая каждый шаг</li>
+      <li>Когда оконная функция превосходит обе</li>
+      <li>Полное до и после</li>
+      <li>Краевые случаи, которые нарушают подзапрос</li>
+      <li>Почему это работает</li>
+      <li>Использование этого в вашем собственном проекте</li>
+      <li>Все на одном экране</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Every result on this page is real.</strong> Sixteen orders, 9,890 in revenue, the same table used across this whole set of guides, loaded into DuckDB and queried. DuckDB's dialect is close to PostgreSQL, so these transfer to Postgres, Redshift and Snowflake unchanged.</div>
+  <div class="note"><strong>Каждый результат на этой странице реален.</strong>  Шестнадцать заказов, 9890 доходов, одна и та же таблица, используемая во всем наборе руководств, загруженная в DuckDB и запрошенная. Диалект DuckDB близок к PostgreSQL, поэтому они передаются в Postgres, Redshift и Snowflake без изменений.</div>
 
   <div class="step">
-    <h2>1. What a subquery is, and the four places it goes</h2>
+    <h2>1. Что такое подзапрос и четыре места, в которых он находится</h2>
 
-    <p>A subquery is a <code>SELECT</code> written inside another statement, wrapped in brackets. What it is <em>for</em> depends on where you put it, and there are only four places.</p>
+    <p>Подзапрос – это  <code>SELECT</code>  написано внутри другого оператора, заключенного в скобки. Что это такое  <em>for</em>  зависит от того, куда вы его поставите, а мест всего четыре.</p>
 
     <table>
-      <tr><th>Where</th><th>What it must return</th><th>What it is doing</th></tr>
-      <tr><td>In <code>WHERE</code>, against <code>=</code> or <code>&gt;</code></td><td>One value</td><td>Supplying a number you would otherwise look up first</td></tr>
-      <tr><td>In <code>WHERE</code>, against <code>IN</code></td><td>One column, any number of rows</td><td>Supplying a list to match against</td></tr>
-      <tr><td>In <code>SELECT</code></td><td>One value</td><td>Putting a total or a rate beside every row</td></tr>
-      <tr><td>In <code>FROM</code></td><td>A whole table</td><td>Querying the result of a query</td></tr>
+      <tr><th>Where</th><th>Что он должен вернуть</th><th>Что он делает</th></tr>
+      <tr><td>In <code>WHERE</code>, против  <code>=</code> or <code>&gt;</code></td><td>одно значение</td><td>Указывая номер, который в противном случае вы бы сначала искали</td></tr>
+      <tr><td>In <code>WHERE</code>, против  <code>IN</code></td><td>Один столбец, любое количество строк</td><td>Предоставление списка для сопоставления</td></tr>
+      <tr><td>In <code>SELECT</code></td><td>одно значение</td><td>Размещение суммы или ставки рядом с каждой строкой</td></tr>
+      <tr><td>In <code>FROM</code></td><td>Целый стол</td><td>Запрос результата запроса</td></tr>
     </table>
 
-    <p>Everything else on this page is one of those four with a variation. Knowing which of the four you are writing tells you immediately what shape the subquery has to return, and most subquery errors are a shape mismatch: a list where one value was expected, or one column where a table was.</p>
+    <p>Все остальное на этой странице — одно из этих четырех с вариациями. Зная, какой из четырех вы пишете, вы сразу же поймете, какую форму должен вернуть подзапрос, а большинство ошибок подзапроса — это несоответствие формы: список, в котором ожидалось одно значение, или один столбец, в котором была таблица.</p>
   </div>
 
   <div class="step">
-    <h2>2. A scalar subquery: one value</h2>
+    <h2>2. Скалярный подзапрос: одно значение</h2>
 
-    <p>Before the explanation: you want the orders worth more than the average order. Say why you cannot write <code>WHERE revenue &gt; AVG(revenue)</code>.</p>
+    <p>Прежде чем объяснить: вы хотите, чтобы заказы стоили больше среднего заказа. Скажи, почему ты не можешь писать  <code>WHERE revenue &gt; AVG(revenue)</code>.</p>
 
-    <p>Because <code>WHERE</code> runs before any aggregation, so at the moment it is evaluated there is no average yet. The subquery solves it by computing the average as a separate, complete query first.</p>
+    <p>Because <code>WHERE</code>  выполняется перед любым агрегированием, поэтому на момент его оценки еще нет среднего значения. Подзапрос решает эту проблему, сначала вычисляя среднее значение в виде отдельного полного запроса.</p>
 
     <pre><code>SELECT COUNT(*) AS orders, SUM(units*unit_price) AS revenue
 FROM orders
@@ -234,9 +232,9 @@ WHERE units*unit_price &gt; (SELECT AVG(units*unit_price) FROM orders);
 
 8 | 6475</code></pre>
 
-    <p>Eight of the sixteen orders, worth 6,475 between them. The average itself is 9,890 ÷ 16, which is 618.125, and the eight are the ones above it.</p>
+    <p>Восемь из шестнадцати заказов общей стоимостью 6475 долларов. Само среднее составляет 9890 ÷ 16, что составляет 618,125, а восьмёрки — те, что выше него.</p>
 
-    <p>A subquery that returns exactly one value is called <strong>scalar</strong>, and it can be used anywhere a number could be. That includes the select list, which is how you put a whole-table figure beside every row:</p>
+    <p>Подзапрос, который возвращает ровно одно значение, называется  <strong>scalar</strong>, и его можно использовать везде, где может находиться число. Сюда входит список выбора, в котором рядом с каждой строкой помещается цифра всей таблицы:</p>
 
     <pre><code>SELECT order_id,
        units*unit_price AS revenue,
@@ -248,33 +246,33 @@ FROM orders ORDER BY revenue DESC LIMIT 3;
 1001 |  880 |  8.9
 1015 |  880 |  8.9</code></pre>
 
-    <p>The largest order is 11.1% of everything. Check it: 1,100 ÷ 9,890 is 0.1112. The subquery ran once, not once per row, because it does not depend on the row it sits beside. That distinction becomes the whole of section four.</p>
+    <p>Самый крупный заказ составляет 11,1% от всего. Проверьте это: 1100 ÷ 9890 равно 0,1112. Подзапрос выполнялся один раз, а не один раз для каждой строки, поскольку он не зависит от строки, рядом с которой он находится. Это различие составляет весь четвертый раздел.</p>
   </div>
 
   <div class="step">
-    <h2>3. IN, and the NOT IN that returns nothing</h2>
+    <h2>3. IN и NOT IN, которые ничего не возвращают.</h2>
 
-    <p><code>IN</code> takes a list rather than a value, so the subquery returns one column and as many rows as it likes.</p>
+    <p><code>IN</code>  принимает список, а не значение, поэтому подзапрос возвращает один столбец и столько строк, сколько ему нужно.</p>
 
     <pre><code>SELECT COUNT(*) FROM orders
 WHERE order_id IN (SELECT order_id FROM cancelled);
 
 2</code></pre>
 
-    <p>Two of the sixteen orders are on the cancelled list. Now the obvious next step, and this is the one to slow down for.</p>
+    <p>Два из шестнадцати заказов находятся в списке отмененных. Теперь очевидный следующий шаг, и именно ради него нужно притормозить.</p>
 
-    <p>Before the explanation: the cancelled table holds three rows, <code>1004</code>, <code>1009</code> and one <code>NULL</code>. Predict how many of the sixteen orders come back as not cancelled.</p>
+    <p>Перед пояснением: отмененная таблица содержит три строки,  <code>1004</code>, <code>1009</code>  и один  <code>NULL</code>. Предскажите, сколько из шестнадцати заказов вернутся не отмененными.</p>
 
     <pre><code>SELECT COUNT(*) FROM orders
 WHERE order_id NOT IN (SELECT order_id FROM cancelled);
 
 0</code></pre>
 
-    <p>Zero. Not fourteen. Every row disappeared, and nothing errored.</p>
+    <p>Ноль. Не четырнадцать. Каждая строка исчезла, и ничего не произошло.</p>
 
-    <p>The reason is that <code>x NOT IN (a, b, NULL)</code> expands to <code>x &lt;&gt; a AND x &lt;&gt; b AND x &lt;&gt; NULL</code>, and a comparison with <code>NULL</code> is never true, it is unknown. An <code>AND</code> chain containing an unknown can never come out true, so no row qualifies. The full account of why unknown behaves that way is in <a href="../sql-null/">NULL in SQL</a>, and this is its most expensive consequence.</p>
+    <p>Причина в том, что  <code>x NOT IN (a, b, NULL)</code>  расширяется до  <code>x &lt;&gt; a AND x &lt;&gt; b AND x &lt;&gt; NULL</code>и сравнение с  <code>NULL</code>  никогда не является правдой, это неизвестно. Ан  <code>AND</code>  цепочка, содержащая неизвестное, никогда не может оказаться истинной, поэтому ни одна строка не подходит. Полный отчет о том, почему неизвестный ведет себя таким образом, находится в  <a href="../sql-null/">NULL в SQL</a>, и это самое дорогое его последствие.</p>
 
-    <p>Two fixes, both verified on the same data:</p>
+    <p>Два исправления, оба проверены на одних и тех же данных:</p>
 
     <pre><code>-- exclude the NULLs from the list
 WHERE order_id NOT IN (SELECT order_id FROM cancelled WHERE order_id IS NOT NULL)
@@ -284,15 +282,15 @@ WHERE order_id NOT IN (SELECT order_id FROM cancelled WHERE order_id IS NOT NULL
 WHERE NOT EXISTS (SELECT 1 FROM cancelled c WHERE c.order_id = o.order_id)
 14</code></pre>
 
-    <p>Prefer <code>NOT EXISTS</code>. It cannot be broken by a null appearing in the list next month, it usually plans at least as well, and it reads as what you mean: there is no matching row. Keep <code>IN</code> for the positive case, where a null in the list is harmless.</p>
+    <p>Prefer <code>NOT EXISTS</code>. Его нельзя нарушить, если в следующем месяце в списке появится нуль, обычно он также планирует, по крайней мере, и читается так, как вы имеете в виду: нет соответствующей строки. Держать  <code>IN</code>  для положительного случая, когда ноль в списке безвреден.</p>
   </div>
 
   <div class="step">
-    <h2>4. Correlated subqueries: one run per row</h2>
+    <h2>4. Коррелирующие подзапросы: один запуск на строку.</h2>
 
-    <p>A subquery that refers to a column from the outer query cannot be computed once, because its answer is different for every outer row. That is a <strong>correlated</strong> subquery.</p>
+    <p>Подзапрос, который ссылается на столбец из внешнего запроса, не может быть вычислен один раз, поскольку его ответ различен для каждой внешней строки. Это  <strong>correlated</strong>  подзапрос.</p>
 
-    <p>The question: which orders beat the average <em>for their own region</em>? Here are the region averages first, so there is something to check against.</p>
+    <p>Вопрос: какие заказы превосходят средние  <em>для своего региона</em>? Вот средние показатели по региону, так что есть с чем сравнить.</p>
 
     <pre><code>East  | 4 orders | 3040 | 760.00
 North | 5 orders | 2495 | 499.00
@@ -314,15 +312,15 @@ ORDER BY o.region, revenue DESC;
 1002 | South |  850
 1012 | West  |  765</code></pre>
 
-    <p>Six orders. Check one: North's average is 499, and North's orders are 880, 510, 440, 425 and 240, so exactly two clear it. The inner query ran sixteen times, once per outer row, each time filtered to that row's region.</p>
+    <p>Шесть заказов. Проверьте первый: среднее значение Норта равно 499, а заказы Норта равны 880, 510, 440, 425 и 240, поэтому ровно два его очищают. Внутренний запрос выполнялся шестнадцать раз, по одному разу для каждой внешней строки, каждый раз фильтруясь по региону этой строки.</p>
 
-    <p>Two things follow. It reads well, because the <code>WHERE i.region = o.region</code> line says out loud what "their own region" means. And it is the slowest shape on this page, because it is a loop: on sixteen rows nobody notices, on sixteen million it is the difference between a second and a coffee break. Section eight has the version that does the same job in one pass.</p>
+    <p>Далее следуют две вещи. Читается хорошо, потому что  <code>WHERE i.region = o.region</code>  линия говорит вслух, что означает «свой регион». И это самая медленная фигура на этой странице, потому что это петля: на шестнадцати строках никто не замечает, на шестнадцати миллионах это разница между секундой и перерывом на кофе. В восьмом разделе есть версия, выполняющая ту же работу за один проход.</p>
   </div>
 
   <div class="step">
-    <h2>5. The derived table, and where it stops being readable</h2>
+    <h2>5. Производная таблица и места, где она перестает читаться</h2>
 
-    <p>A subquery in <code>FROM</code> returns a whole table, which the outer query then treats as if it were one. It has to be given an alias, and it is the shape that lets you filter on an aggregate you just computed.</p>
+    <p>Подзапрос в  <code>FROM</code>  возвращает целую таблицу, которую внешний запрос затем обрабатывает так, как если бы она была единой. Ему должен быть присвоен псевдоним, и именно эта форма позволяет фильтровать только что вычисленный агрегат.</p>
 
     <pre><code>SELECT region, revenue FROM (
   SELECT region, SUM(units*unit_price) AS revenue
@@ -334,15 +332,15 @@ ORDER BY revenue DESC;
 East  | 3040
 South | 2670</code></pre>
 
-    <p>This works and it is fine at one level deep. The trouble starts at two, because the reading order inverts: the query executes from the inside out and is written from the outside in, so you scroll down to find the beginning. At three levels, with a join in the middle, nobody reads it at all, including whoever wrote it.</p>
+    <p>Это работает, и это нормально на одном уровне. Проблемы начинаются с двух, потому что порядок чтения инвертируется: запрос выполняется изнутри наружу и записывается снаружи внутрь, поэтому вы прокручиваете вниз, чтобы найти начало. На трёх уровнях, с объединением посередине, его вообще никто не читает, включая того, кто его написал.</p>
 
-    <p>There is also a practical limitation worth knowing before it bites. A derived table can only be used once. If two parts of your query need the same intermediate result, you write it twice, and then somebody edits one copy.</p>
+    <p>Существует также практическое ограничение, о котором стоит знать, прежде чем оно укусит. Производную таблицу можно использовать только один раз. Если двум частям вашего запроса нужен один и тот же промежуточный результат, вы пишете его дважды, а затем кто-то редактирует одну копию.</p>
   </div>
 
   <div class="step">
-    <h2>6. The CTE: the same query with a name</h2>
+    <h2>6. CTE: тот же запрос с именем</h2>
 
-    <p>A common table expression is the same subquery moved to the top and given a name with <code>WITH</code>. Here is the derived table from section five, unchanged in meaning:</p>
+    <p>Общее табличное выражение — это тот же подзапрос, перемещенный наверх и получивший имя с помощью  <code>WITH</code>. Вот производная таблица из пятого раздела, не изменившаяся по смыслу:</p>
 
     <pre><code>WITH by_region AS (
   SELECT region, SUM(units*unit_price) AS revenue
@@ -356,9 +354,9 @@ ORDER BY revenue DESC;
 East  | 3040
 South | 2670</code></pre>
 
-    <p>Identical output. What changed is that the steps are now in the order they happen, the intermediate result has a name a person chose, and the final <code>SELECT</code> is short enough to read in one go.</p>
+    <p>Идентичный выход. Что изменилось, так это то, что шаги теперь расположены в том порядке, в котором они происходят, промежуточный результат имеет имя, выбранное пользователем, а конечный результат  <code>SELECT</code>  достаточно короток, чтобы прочитать его за один раз.</p>
 
-    <p>They stack, separated by commas, and each one can use the ones above it:</p>
+    <p>Они складываются друг в друга, разделенные запятыми, и каждый из них может использовать те, что расположены над ним:</p>
 
     <pre><code>WITH big AS (
   SELECT * FROM orders WHERE units*unit_price &gt; 600
@@ -373,17 +371,17 @@ Owen Park  | 3 | 2390
 Dana Reyes | 1 |  880
 Sam Okafor | 1 |  765</code></pre>
 
-    <p>Eight large orders, spread four ways. Reading it top to bottom describes the analysis in the order somebody would explain it out loud: first take the large orders, then group them by rep, then sort. A nested version of the same thing says the last step first.</p>
+    <p>Восемь крупных заказов, распределенных в четырех направлениях. При чтении сверху вниз анализ описывается в том порядке, в котором кто-то объяснил бы его вслух: сначала возьмите большие заказы, затем сгруппируйте их по представителям, затем отсортируйте. Вложенная версия того же самого говорит, что сначала последний шаг.</p>
 
-    <p>A named step can also be used more than once, which the derived table could not. <a href="../sql-ctes/">The CTE guide</a> goes further into the syntax and into building a query in checkable stages; this page is about when to reach for one instead of a subquery.</p>
+    <p>Именованный шаг также можно использовать несколько раз, чего не может сделать производная таблица.  <a href="../sql-ctes/">Руководство по CTE</a>  идет дальше в синтаксис и строит запрос на проверяемых этапах; на этой странице рассказывается о том, когда использовать его вместо подзапроса.</p>
   </div>
 
   <div class="step">
-    <h2>7. Counting every step</h2>
+    <h2>7. Считаем каждый шаг</h2>
 
-    <p>This is the practical reason to prefer CTEs, and it is worth more than the readability.</p>
+    <p>Это практическая причина предпочитать CTE, и она важнее, чем просто читаемость.</p>
 
-    <p>When a nested query returns the wrong answer, you have one number, the final one, and no way to tell which layer went wrong. With named steps you can point <code>SELECT COUNT(*)</code> at any of them by changing the last line:</p>
+    <p>Когда вложенный запрос возвращает неправильный ответ, у вас есть одно число, последнее, и нет возможности определить, какой слой пошёл не так. С помощью именованных шагов вы можете указать  <code>SELECT COUNT(*)</code>  в любом из них, изменив последнюю строку:</p>
 
     <pre><code>WITH big AS (
   SELECT * FROM orders WHERE units*unit_price &gt; 600
@@ -394,15 +392,15 @@ Sam Okafor | 1 |  765</code></pre>
 SELECT COUNT(*) FROM big;      -- 8
 -- SELECT COUNT(*) FROM by_rep;   -- 4</code></pre>
 
-    <p>Sixteen orders in, eight survive the filter, four rows come out of the grouping. Write those three numbers down before you run the real query, then compare. A filter that was meant to remove a handful and removed most of the table announces itself immediately, and a grouping that produced more rows than you have categories means a join multiplied something.</p>
+    <p>Пришло шестнадцать заказов, восемь прошли фильтр, четыре строки вышли из группировки. Запишите эти три числа, прежде чем запускать реальный запрос, а затем сравните. Фильтр, который должен был удалить несколько и большую часть таблицы, сразу же объявляет о себе, а группировка, которая создает больше строк, чем категорий, означает, что соединение что-то умножило.</p>
 
-    <p>Say out loud what the equivalent debugging looks like on a three-deep nested query. You comment out the outer layers one at a time, editing the query to inspect it, which means the thing you are testing is no longer the thing that was wrong. Named steps let you look without changing anything above the last line.</p>
+    <p>Произнесите вслух, как выглядит эквивалентная отладка для трехуровневого вложенного запроса. Вы комментируете внешние слои по одному, редактируя запрос для его проверки, а это означает, что то, что вы тестируете, больше не является тем, что было неправильным. Именованные шаги позволяют просматривать, не меняя ничего выше последней строки.</p>
   </div>
 
   <div class="step">
-    <h2>8. When a window function beats both</h2>
+    <h2>8. Когда оконная функция превосходит обе</h2>
 
-    <p>The correlated subquery from section four asked: is this order above its region's average? Here is the same question with no subquery at all.</p>
+    <p>Связанный подзапрос из четвертого раздела спрашивал: превышает ли этот порядок средний показатель по региону? Вот тот же вопрос без подзапроса.</p>
 
     <pre><code>SELECT order_id, region, revenue FROM (
   SELECT order_id, region,
@@ -419,23 +417,23 @@ ORDER BY region, revenue DESC;
 1002 | South |  850
 1012 | West  |  765</code></pre>
 
-    <p>The same six orders. <code>AVG(...) OVER (PARTITION BY region)</code> computes each region's average once and attaches it to every row of that region, in a single pass, instead of running a separate query per row.</p>
+    <p>Те же шесть заказов.  <code>AVG(...) OVER (PARTITION BY region)</code>  вычисляет среднее значение для каждого региона один раз и присоединяет его к каждой строке этого региона за один проход вместо выполнения отдельного запроса для каждой строки.</p>
 
-    <p>So the rule of thumb: whenever a correlated subquery is computing an aggregate over a group the outer row belongs to, a window function does it faster and usually more clearly. <a href="../sql-window-functions/">Window functions</a> covers the rest of what <code>OVER</code> can do. Correlated subqueries keep their place for existence checks and for logic a window cannot express.</p>
+    <p>Итак, практическое правило: всякий раз, когда коррелированный подзапрос вычисляет агрегат по группе, к которой принадлежит внешняя строка, оконная функция делает это быстрее и обычно более четко.  <a href="../sql-window-functions/">Оконные функции</a>  охватывает все остальное, что  <code>OVER</code>  могу сделать. Связанные подзапросы сохраняют свое место для проверок существования и логики, которую окно не может выразить.</p>
 
-    <p>Picture the slowest query you are responsible for. Is there a subquery inside it that mentions a column from the outer query? That one line is where the time is going.</p>
+    <p>Представьте себе самый медленный запрос, за который вы отвечаете. Есть ли внутри него подзапрос, в котором упоминается столбец из внешнего запроса? Эта линия показывает, куда движется время.</p>
   </div>
 
-  <h2>The full before and after</h2>
+  <h2>Полное до и после</h2>
 
-  <p>Same question: which reps are carrying the large orders?</p>
+  <p>Тот же вопрос: какие представители выполняют крупные заказы?</p>
 
   <h3>Before</h3>
   <pre><code>SELECT rep, COUNT(*), SUM(revenue) FROM (
   SELECT rep, units*unit_price AS revenue FROM orders
   WHERE units*unit_price &gt; (SELECT AVG(units*unit_price) FROM orders)
 ) x GROUP BY 1 ORDER BY 3 DESC;</code></pre>
-  <p>Correct, and it has to be read from the middle outwards. The threshold is buried two levels down. There is no way to ask how many rows survived the filter without editing the query, and the derived table is called <code>x</code>, which tells the next reader nothing.</p>
+  <p>Правильно, и читать его нужно от середины к краям. Порог заглублен двумя уровнями ниже. Невозможно узнать, сколько строк выдержало фильтр, не редактируя запрос, и производная таблица называется  <code>x</code>, что ничего не говорит следующему читателю.</p>
 
   <h3>After</h3>
   <pre><code>WITH avg_order AS (
@@ -454,110 +452,110 @@ Owen Park  | 3 | 2390
 Dana Reyes | 1 |  880
 Sam Okafor | 1 |  765</code></pre>
 
-  <p>Same answer, read top to bottom, with the threshold named and three intermediate counts you can verify separately. 2,440 plus 2,390 plus 880 plus 765 is 6,475, which is the figure section two produced from the whole table, so nothing was lost between the steps.</p>
+  <p>Тот же ответ, читаем сверху вниз, с указанным пороговым значением и тремя промежуточными значениями, которые вы можете проверить отдельно. 2440 плюс 2390 плюс 880 плюс 765 — это 6475, то есть вторая часть фигуры, полученная из всей таблицы, поэтому между шагами ничего не потерялось.</p>
 
-  <p>The claim, and it is the reason to convert: <strong>a nested query gives you one number to check and a named one gives you a number per step, which is the difference between knowing the answer is wrong and knowing where.</strong></p>
+  <p>Претензия, и она является причиной конвертации:  <strong>вложенный запрос дает вам одно число для проверки, а именованный запрос дает вам число за шаг, что является разницей между знанием того, что ответ неправильный, и знанием того, где.</strong></p>
 
   <div class="step">
-    <h2>Edge cases that break a subquery</h2>
+    <h2>Краевые случаи, которые нарушают подзапрос</h2>
 
-    <p>Six worth knowing.</p>
+    <p>Шесть, которые стоит знать.</p>
 
-    <p><strong>A scalar subquery that returns more than one row.</strong> Fine until the data changes, then the query errors. If you are relying on it returning one row, say so with <code>LIMIT 1</code> and an <code>ORDER BY</code>, or aggregate it.</p>
+    <p><strong>Скалярный подзапрос, возвращающий более одной строки.</strong>  Хорошо, пока данные не изменятся, а затем ошибки запроса. Если вы ожидаете, что он вернет одну строку, скажите об этом с помощью  <code>LIMIT 1</code>  и  <code>ORDER BY</code>или агрегировать его.</p>
 
-    <p><strong>A scalar subquery that returns no rows.</strong> It gives <code>NULL</code>, not an error, and <code>NULL</code> in a comparison makes the whole condition unknown, so rows quietly disappear rather than a message appearing.</p>
+    <p><strong>Скалярный подзапрос, который не возвращает строк.</strong>  Это дает  <code>NULL</code>, это не ошибка, а  <code>NULL</code>  при сравнении все условие становится неизвестным, поэтому строки незаметно исчезают, а не появляются сообщения.</p>
 
-    <p><strong><code>NOT IN</code> against anything nullable.</strong> Section three. Assume every column is nullable unless the schema says otherwise, and reach for <code>NOT EXISTS</code>.</p>
+    <p><strong><code>NOT IN</code>  против всего, что можно обнулить.</strong>  Раздел третий. Предположим, что каждый столбец имеет значение NULL, если в схеме не указано иное, и используйте  <code>NOT EXISTS</code>.</p>
 
-    <p><strong>A correlated subquery on a large table.</strong> It is a loop. If a query got slow after somebody added a filter that references the outer table, this is why.</p>
+    <p><strong>Связанный подзапрос к большой таблице.</strong>  Это петля. Если запрос стал медленным после того, как кто-то добавил фильтр, ссылающийся на внешнюю таблицу, вот почему.</p>
 
-    <p><strong>The same CTE used twice.</strong> Some engines recompute it each time it is referenced and some materialise it once, and which one yours does affects both speed and, if the CTE contains anything non-deterministic, the answer. Check your engine's behaviour before relying on it.</p>
+    <p><strong>Один и тот же CTE использовался дважды.</strong>  Некоторые движки пересчитывают его каждый раз, когда к нему обращаются, а некоторые материализуют его один раз, и то, какой из них делает ваш, влияет как на скорость, так и, если CTE содержит что-то недетерминированное, на ответ. Проверьте поведение вашего двигателя, прежде чем полагаться на него.</p>
 
-    <p><strong>An alias that shadows a table.</strong> In a correlated subquery, if the inner and outer tables are not clearly aliased, <code>WHERE region = region</code> compares a column to itself and is always true, so the filter silently does nothing. Always alias both, as <code>o</code> and <code>i</code> above.</p>
+    <p><strong>Псевдоним, который затеняет таблицу.</strong>  Если в коррелированном подзапросе внутренние и внешние таблицы не имеют явного псевдонима,  <code>WHERE region = region</code>  сравнивает столбец сам с собой и всегда имеет значение true, поэтому фильтр ничего не делает. Всегда используйте псевдонимы обоих, т.к.  <code>o</code> and <code>i</code>  выше.</p>
   </div>
 
-  <h2>Why this works</h2>
+  <h2>Почему это работает</h2>
 
-  <p>The nesting is not an accident of the language, it is the design. SQL's ancestor was built around the idea of a query block that could appear wherever a value or a table could, so that a complex question could be composed out of simpler ones without inventing new syntax for each combination (Chamberlin &amp; Boyce, 1974, <em>Proceedings of the 1974 ACM SIGFIDET Workshop on Data Description, Access and Control</em>, 249–264). That is why there are exactly four places a subquery can go: they are the four places a value or a table can appear. And it explains why a CTE is not a different feature. It is the same block, given a name and moved to the front, which is why converting between them never changes the answer.</p>
+  <p>Вложенность — это не случайность языка, это замысел. Предок SQL был построен на идее блока запроса, который мог появиться везде, где только может быть значение или таблица, так что сложный вопрос можно было составить из более простых, не изобретая новый синтаксис для каждой комбинации (Chamberlin &amp; Boyce, 1974,  <em>Материалы семинара ACM SIGFIDET 1974 г. по описанию данных, доступу и контролю.</em>, 249–264). Вот почему существует ровно четыре места, куда может попасть подзапрос: это четыре места, где может появиться значение или таблица. И это объясняет, почему CTE не является отдельной функцией. Это тот же блок, которому присвоено имя и он перемещен вперед, поэтому преобразование между ними никогда не меняет ответ.</p>
 
-  <p>The <code>NOT IN</code> failure is also a design consequence rather than a bug. A missing value is explicitly not the same as any other value, including itself, so a comparison involving one yields unknown rather than true or false, and an <code>AND</code> chain containing unknown cannot come out true (Codd, 1979, <em>ACM Transactions on Database Systems</em>, 4(4), 397–434). Once you accept that rule, zero rows from <code>NOT IN</code> is not surprising, it is forced. The reason it catches everybody is that <code>IN</code> behaves perfectly normally on the same list, so the failure appears only on the negation.</p>
+  <p>The <code>NOT IN</code>  сбой также является следствием конструкции, а не ошибкой. Пропущенное значение явно не совпадает с любым другим значением, включая само себя, поэтому сравнение с его участием дает неизвестное, а не истинное или ложное значение.  <code>AND</code>  цепочка, содержащая неизвестное, не может оказаться верной (Codd, 1979,  <em>Транзакции ACM в системах баз данных</em>, 4(4), 397–434). Как только вы примете это правило, обнулите строки из  <code>NOT IN</code>  неудивительно, это вынужденно. Причина, по которой это всех привлекает, заключается в том, что  <code>IN</code>  ведет себя совершенно нормально в том же списке, поэтому ошибка появляется только при отрицании.</p>
 
-  <p>One note on the cheat sheet below. It is built to be covered and recalled rather than reread, because self-testing beats restudying reliably enough to show up across a wide range of real classroom and workplace settings, not only in the laboratory (Agarwal, Nunes, &amp; Blunt, 2021, <em>Educational Psychology Review</em>, 33(4), 1409–1453).</p>
+  <p>Одно замечание в шпаргалке ниже. Он создан для того, чтобы его просматривали и вспоминали, а не перечитывали, поскольку самотестирование превосходит повторное обучение достаточно надежно, чтобы проявляться в широком диапазоне реальных условий в классе и на рабочем месте, а не только в лаборатории (Agarwal, Nunes &amp; Blunt, 2021,  <em>Обзор педагогической психологии</em>, 33(4), 1409–1453).</p>
 
-  <h2>Using this on your own project</h2>
+  <h2>Использование этого в вашем собственном проекте</h2>
 
-  <p>Rewriting every query in a repository is miserable and pointless. Do this instead, in order.</p>
+  <p>Переписывать каждый запрос в репозитории — это жалко и бессмысленно. Вместо этого сделайте это по порядку.</p>
 
   <ol>
-    <li><strong>Search your queries for <code>NOT IN (SELECT</code></strong> and change each to <code>NOT EXISTS</code>. That is a correctness fix, not a style one, and it is mechanical.</li>
-    <li><strong>Find any query nested more than one level</strong> and convert only that one. Two levels is where readability falls off a cliff.</li>
-    <li><strong>Name each CTE after what one of its rows is</strong>: <code>big_orders</code>, <code>by_rep</code>, <code>first_purchase</code>. Not <code>t</code>, <code>x</code> or <code>cte1</code>.</li>
-    <li><strong>Write the expected row count as a comment on each step</strong> before you run it, then check. That habit finds more bugs than reading the SQL does.</li>
-    <li><strong>Look for correlated subqueries in anything slow</strong>, and replace the aggregate ones with a window function.</li>
-    <li><strong>Leave working single-level subqueries alone.</strong> A scalar subquery in a <code>WHERE</code> clause is clear and needs no ceremony.</li>
+    <li><strong>Найдите по своим запросам  <code>NOT IN (SELECT</code></strong>  и измените каждый на  <code>NOT EXISTS</code>. Это исправление правильности, а не стиля, и оно механическое.</li>
+    <li><strong>Найдите любой запрос, вложенный более чем в один уровень</strong>  и конвертировать только этот. Два уровня — это то место, где читаемость падает с обрыва.</li>
+    <li><strong>Назовите каждый CTE в честь одной из его строк.</strong>: <code>big_orders</code>, <code>by_rep</code>, <code>first_purchase</code>. Нет  <code>t</code>, <code>x</code> or <code>cte1</code>.</li>
+    <li><strong>Напишите ожидаемое количество строк в качестве комментария к каждому шагу.</strong>  прежде чем запускать, проверьте. Эта привычка находит больше ошибок, чем чтение SQL.</li>
+    <li><strong>Ищите коррелированные подзапросы во всем медленном</strong>и замените агрегатные функции оконной функцией.</li>
+    <li><strong>Оставьте рабочие одноуровневые подзапросы в покое.</strong>  Скалярный подзапрос в  <code>WHERE</code>  Пункт ясен и не нуждается в церемониях.</li>
   </ol>
 
-  <p>If you have paper nearby, one optional sketch is worth five minutes. Draw your query as boxes, one per step, with an arrow between them, and write beside each box how many rows you expect to come out of it. That drawing is the CTE version, and typing it up afterwards is mostly transcription.</p>
+  <p>Если у вас под рукой есть бумага, один дополнительный эскиз стоит пяти минут. Нарисуйте запрос в виде блоков, по одному на шаг, со стрелкой между ними и напишите рядом с каждым блоком, сколько строк вы ожидаете получить из него. Этот рисунок является версией CTE, и его последующий ввод в основном представляет собой транскрипцию.</p>
 
-  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>. If you would rather type queries than read about them, the <a href="../../drill/">SQL Drill</a> hands you one runnable query at a time against a real database, each one the query you just typed plus one new thing.</div>
+  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>. Если вы предпочитаете вводить запросы, а не читать о них,  <a href="../../drill/">SQL-детализация</a>  передает вам по одному выполняемому запросу к реальной базе данных, каждый из которых представляет собой только что введенный вами запрос плюс одну новую вещь.</div>
 
-  <h2>The whole thing on one screen</h2>
+  <h2>Все на одном экране</h2>
 
-  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
+  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
 
   <table>
-    <tr><th>Thing</th><th>What it does</th></tr>
-    <tr><td>A subquery</td><td>A SELECT used as a value, a list or a table.</td></tr>
-    <tr><td>The four places</td><td>WHERE with a comparison, WHERE with IN, SELECT, FROM.</td></tr>
-    <tr><td>Scalar subquery</td><td>Returns one value. Usable anywhere a number could go.</td></tr>
-    <tr><td>Why not <code>WHERE x &gt; AVG(x)</code></td><td>WHERE runs before aggregation. There is no average yet.</td></tr>
-    <tr><td><code>IN (SELECT ...)</code></td><td>One column, any number of rows.</td></tr>
-    <tr><td><code>NOT IN</code> with a NULL</td><td>Returns zero rows. No error.</td></tr>
-    <tr><td>The fix</td><td><code>NOT EXISTS</code>, or filter the NULLs out of the list.</td></tr>
-    <tr><td>Correlated subquery</td><td>Mentions an outer column, so it runs once per outer row.</td></tr>
-    <tr><td>Its cost</td><td>A loop. Invisible on small tables, expensive on large ones.</td></tr>
-    <tr><td>Derived table</td><td>A subquery in FROM. Needs an alias. Usable once.</td></tr>
-    <tr><td>CTE</td><td><code>WITH name AS (...)</code>. Same query, named, at the top.</td></tr>
-    <tr><td>Stacking</td><td>Comma-separated. Each can use the ones above it.</td></tr>
-    <tr><td>Why prefer a CTE</td><td>Every step gets a name and a row count you can check.</td></tr>
-    <tr><td>Debugging a CTE</td><td>Change the final line to <code>SELECT COUNT(*) FROM step</code>.</td></tr>
-    <tr><td>Correlated aggregate</td><td>Replace with <code>AVG(...) OVER (PARTITION BY ...)</code>.</td></tr>
-    <tr><td>Scalar returning no rows</td><td>NULL, so the comparison is unknown and rows vanish.</td></tr>
-    <tr><td>Alias both tables</td><td>Or <code>WHERE region = region</code> is always true.</td></tr>
+    <tr><th>Thing</th><th>Что он делает</th></tr>
+    <tr><td>Подзапрос</td><td>SELECT, используемый как значение, список или таблица.</td></tr>
+    <tr><td>Четыре места</td><td>ГДЕ со сравнением, ГДЕ с IN, SELECT, FROM.</td></tr>
+    <tr><td>Скалярный подзапрос</td><td>Возвращает одно значение. Можно использовать везде, где может быть номер.</td></tr>
+    <tr><td>Почему нет  <code>WHERE x &gt; AVG(x)</code></td><td>WHERE выполняется перед агрегацией. Среднего пока нет.</td></tr>
+    <tr><td><code>IN (SELECT ...)</code></td><td>Один столбец, любое количество строк.</td></tr>
+    <tr><td><code>NOT IN</code>  с НУЛЕМ</td><td>Возвращает ноль строк. Никакой ошибки.</td></tr>
+    <tr><td>Исправление</td><td><code>NOT EXISTS</code>или отфильтруйте NULL-значения из списка.</td></tr>
+    <tr><td>Связанный подзапрос</td><td>Упоминает внешний столбец, поэтому он выполняется один раз для каждой внешней строки.</td></tr>
+    <tr><td>Его стоимость</td><td>Петля. Незаметен на маленьких столах, дорогой на больших.</td></tr>
+    <tr><td>Производная таблица</td><td>Подзапрос в FROM. Нужен псевдоним. Можно использовать один раз.</td></tr>
+    <tr><td>CTE</td><td><code>WITH name AS (...)</code>. Тот же запрос с именем вверху.</td></tr>
+    <tr><td>Stacking</td><td>Через запятую. Каждый может использовать те, что выше него.</td></tr>
+    <tr><td>Почему стоит выбрать CTE</td><td>Каждый шаг получает имя и количество строк, которые вы можете проверить.</td></tr>
+    <tr><td>Отладка CTE</td><td>Измените последнюю строку на  <code>SELECT COUNT(*) FROM step</code>.</td></tr>
+    <tr><td>Коррелированный агрегат</td><td>Заменить на  <code>AVG(...) OVER (PARTITION BY ...)</code>.</td></tr>
+    <tr><td>Скаляр не возвращает строк</td><td>NULL, поэтому сравнение неизвестно и строки исчезают.</td></tr>
+    <tr><td>Псевдоним обеих таблиц</td><td>Or <code>WHERE region = region</code>  всегда верно.</td></tr>
   </table>
 
-  <div class="note"><strong>The one habit to keep.</strong> Write the row count you expect beside every step before you run it. A nested query only lets you check the last number; a named one lets you check all of them, and the first count that disagrees with your expectation is the bug. If a query misbehaves in a way this page does not cover, there is a general <a href="../technical-tenacity/">diagnosis loop for being stuck</a>.</div>
+  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Запишите ожидаемое количество строк рядом с каждым шагом перед его запуском. Вложенный запрос позволяет проверить только последнее число; именованный позволяет вам проверить их все, и первый счетчик, который не соответствует вашим ожиданиям, является ошибкой. Если запрос ведет себя не так, как описано на этой странице, существует общая ошибка.  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>.</div>
 
-  <p>One last thought, and I would genuinely like other people's answers. The one that cost me most was a <code>NOT IN</code> against a supplier list that had been fine for a year, until one supplier record was created with a blank code, and the exclusion report went from a few hundred rows to none overnight without anybody noticing an empty report was unusual. What has a subquery quietly done to you?</p>
+  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Больше всего мне стоило  <code>NOT IN</code>  против списка поставщиков, который был в порядке в течение года, пока одна запись о поставщике не была создана с пустым кодом, и в отчете об исключении в одночасье количество строк уменьшилось с нескольких сотен до нуля, и никто не заметил, что пустой отчет является необычным. Что с вами незаметно сделал подзапрос?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Chamberlin, D. D., &amp; Boyce, R. F. (1974). SEQUEL: A structured English query language. <em>Proceedings of the 1974 ACM SIGFIDET Workshop on Data Description, Access and Control</em>, 249–264.</li>
-    <li>Codd, E. F. (1979). Extending the database relational model to capture more meaning. <em>ACM Transactions on Database Systems</em>, 4(4), 397–434.</li>
-    <li>Agarwal, P. K., Nunes, L. D., &amp; Blunt, J. R. (2021). Retrieval practice consistently benefits student learning: A systematic review of applied research. <em>Educational Psychology Review</em>, 33(4), 1409–1453.</li>
+    <li>Чемберлин Д.Д. и Бойс Р.Ф. (1974). ПРОДОЛЖЕНИЕ: структурированный английский язык запросов.  <em>Материалы семинара ACM SIGFIDET 1974 г. по описанию данных, доступу и контролю.</em>, 249–264.</li>
+    <li>Кодд, EF (1979). Расширение реляционной модели базы данных для более глубокого понимания.  <em>Транзакции ACM в системах баз данных</em>, 4(4), 397–434.</li>
+    <li>Агарвал П.К., Нуньес Л.Д. и Блант Дж.Р. (2021). Практика поиска неизменно приносит пользу обучению студентов: систематический обзор прикладных исследований.  <em>Обзор педагогической психологии</em>, 33(4), 1409–1453.</li>
   </ul>
 
   <div class="book">
-    <strong>The subquery works alone and returns something different inside the outer query.</strong>
-    <p><em>SQL for Analysts</em> is 458 pages, subqueries and CTEs compared, including what each one can and cannot see.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-subqueries'})">SQL for Analysts, $19 &rarr;</a>
+    <strong>Подзапрос работает отдельно и возвращает что-то другое внутри внешнего запроса.</strong>
+    <p><em>SQL для аналитиков</em>  составляет 458 страниц, сравниваются подзапросы и CTE, включая то, что каждый может видеть, а что нет.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-subqueries'})">SQL для аналитиков, 19 $ →</a>
   </div>
 
   <div class="cta">
-    <strong>Practice building queries in steps you can check.</strong>
-    <p style="margin:6px 0 0">The <a href="../../sql/">SQL Kit</a> gives you the repetitions: subqueries in all four positions, correlated ones to convert, and NOT IN traps to walk into on purpose, plus flash cards on exactly the shape each position requires. You now own the method; the kit is the practice. Nothing to install, no account needed.</p>
-    <a class="btn" href="../../sql/">Open the SQL Kit →</a>
+    <strong>Попрактикуйтесь в построении запросов по шагам, которые вы можете проверить.</strong>
+    <p style="margin:6px 0 0">The <a href="../../sql/">SQL-комплект</a>  дает вам повторы: подзапросы во всех четырех позициях, коррелированные для преобразования и НЕ В ловушках, в которые нужно попасть намеренно, а также флеш-карточки именно той формы, которая требуется для каждой позиции. Теперь вы владеете методом; комплект - это практика. Ничего устанавливать, учетная запись не требуется.</p>
+    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> · <a href="../sql-ctes/">SQL CTEs</a> · <a href="../sql-null/">NULL in SQL</a> · <a href="../sql-window-functions/">Window Functions</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../sql-joins/">SQL JOINs</a> · <a href="../sql-dates/">SQL Date Functions</a> · <a href="../sql-foundations/">SQL Foundations</a> · <a href="../sql-find-duplicates/">Find Duplicates in SQL</a> · <a href="../sql-case-expression/">The SQL CASE Expression</a> · <a href="../../sql/">SQL Kit</a> · <a href="../sql-aliasing/">SQL Aliases</a> · <a href="../sql-teaching-comments/">Comment SQL So It Teaches</a> · <a href="../pandas-groupby/">pandas groupby</a> · <a href="../excel-index-match/">INDEX MATCH vs VLOOKUP</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../projects/">Portfolio Projects</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../sql-ctes/">SQL CTE</a> · <a href="../sql-null/">NULL в SQL</a> · <a href="../sql-window-functions/">Оконные функции</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-dates/">Функции даты SQL</a> · <a href="../sql-foundations/">Основы SQL</a> · <a href="../sql-find-duplicates/">Найти дубликаты в SQL</a> · <a href="../sql-case-expression/">Выражение SQL CASE</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../sql-aliasing/">SQL-псевдонимы</a> · <a href="../sql-teaching-comments/">Комментарий SQL, чтобы он научился</a> · <a href="../pandas-groupby/">панды группируются</a> · <a href="../excel-index-match/">ИНДЕКСНОЕ СООТВЕТСТВИЕ против ВПР</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../projects/">Портфельные проекты</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-<script src="../../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

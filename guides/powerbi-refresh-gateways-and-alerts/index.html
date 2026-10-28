@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Power BI Scheduled Refresh, Gateways and Data Alerts &mdash; Analyst Prep Kit</title>
-<meta name="description" content="Eight scheduled refreshes a day on shared capacity, 48 on Premium, and a gateway only when the source is not reachable from the cloud. Plus the merge that drags a cloud source through the gateway, and where alerts actually live.">
+<title>Плановое обновление Power BI, шлюзы и оповещения о данных — комплект подготовки аналитика</title>
+<meta name="description" content="Восемь запланированных обновлений в день для общей емкости, 48 для версии Premium и шлюза только в том случае, если источник недоступен из облака. Плюс слияние, которое перетаскивает облачный источник через шлюз и где фактически находятся оповещения.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/powerbi-refresh-gateways-and-alerts/">
-<meta property="og:title" content="Power BI Scheduled Refresh, Gateways and Data Alerts">
-<meta property="og:description" content="Eight refreshes a day on shared capacity, 48 on Premium. When you need a gateway, when you do not, and the one query shape that changes the answer.">
+<meta property="og:title" content="Плановое обновление Power BI, шлюзы и оповещения о данных">
+<meta property="og:description" content="Восемь обновлений в день в общей емкости и 48 в Премиум. Когда вам нужен шлюз, когда нет, и одна форма запроса, которая меняет ответ.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/powerbi-refresh-gateways-and-alerts/">
 <meta name="twitter:card" content="summary_large_image">
@@ -69,56 +69,90 @@
   figcaption{font-size:13.5px;color:var(--muted);margin-top:6px}
 </style>
 <!-- SEO:JSONLD:START -->
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "Power BI Scheduled Refresh, Gateways and Data Alerts",
-  "description": "How many refreshes you get, when a gateway is required, and what data alerts can and cannot watch.",
+  "headline": "Плановое обновление Power BI, шлюзы и оповещения о данных",
+  "description": "Сколько обновлений вы получаете, когда требуется шлюз и какие оповещения о данных можно и нельзя отслеживать.",
   "url": "https://michaelnocito.github.io/analyst-prep-kit/guides/powerbi-refresh-gateways-and-alerts/",
-  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://michaelnocito.github.io/analyst-prep-kit/guides/powerbi-refresh-gateways-and-alerts/" },
-  "author": { "@type": "Person", "name": "Michael Nocito", "url": "https://michaelnocito.github.io" },
-  "publisher": { "@type": "Person", "name": "Michael Nocito" },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://michaelnocito.github.io/analyst-prep-kit/guides/powerbi-refresh-gateways-and-alerts/"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Майкл Носито",
+    "url": "https://michaelnocito.github.io"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Майкл Носито"
+  },
   "inLanguage": "en",
   "datePublished": "2026-08-23",
   "dateModified": "2026-08-23"
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "Analyst Prep Kit", "item": "https://michaelnocito.github.io/analyst-prep-kit/" },
-    { "@type": "ListItem", "position": 2, "name": "Guides", "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/" },
-    { "@type": "ListItem", "position": 3, "name": "Refresh, Gateways and Alerts", "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/powerbi-refresh-gateways-and-alerts/" }
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Analyst Prep Kit",
+      "item": "https://michaelnocito.github.io/analyst-prep-kit/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Guides",
+      "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "обновление, шлюзы и оповещения",
+      "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/powerbi-refresh-gateways-and-alerts/"
+    }
   ]
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "How many times a day can a Power BI dataset refresh?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Power BI limits semantic models on shared capacity to eight scheduled daily refreshes, and the quota resets at 12:01 AM local time. On Premium capacity, Premium Per User or Fabric capacity you can schedule up to 48 a day. Manual Refresh now operations do not count against the eight." }
+      "name": "Сколько раз в день может обновляться набор данных Power BI?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Power BI ограничивает семантические модели общей емкости восемью запланированными ежедневными обновлениями, а квота сбрасывается в 00:01 по местному времени. Для емкости «Премиум», «Премиум на пользователя» или «Структура» вы можете запланировать до 48 операций в день. Операции «Обновить вручную сейчас» не учитываются в счет восьми."
+      }
     },
     {
       "@type": "Question",
-      "name": "When do I need an on-premises data gateway?",
-      "acceptedAnswer": { "@type": "Answer", "text": "When Power BI cannot reach the source over a direct network connection, which means anything sitting inside your own network, such as a SQL Server in the office or a file on a network share. Cloud sources such as Azure SQL Database do not require a gateway if Power BI can connect to them directly." }
+      "name": "Когда мне понадобится локальный шлюз данных?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Когда Power BI не может подключиться к источнику через прямое сетевое подключение, что означает что-либо, находящееся внутри вашей сети, например SQL-сервер в офисе или файл в общей сетевой папке. Облачные источники, такие как база данных SQL Azure, не требуют шлюза, если Power BI может подключиться к ним напрямую."
+      }
     },
     {
       "@type": "Question",
-      "name": "Does DirectQuery need a scheduled refresh?",
-      "acceptedAnswer": { "@type": "Answer", "text": "No. Only Import mode semantic models require a source data refresh, because only Import mode copies the data into Power BI. DirectQuery, Direct Lake and live connection models query the source with every interaction instead." }
+      "name": "Требуется ли DirectQuery запланированное обновление?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Нет. Только семантические модели режима импорта требуют обновления исходных данных, поскольку только режим импорта копирует данные в Power BI. Вместо этого модели DirectQuery, Direct Lake и Live Connection запрашивают источник при каждом взаимодействии."
+      }
     },
     {
       "@type": "Question",
-      "name": "Where can you set a data alert in Power BI?",
-      "acceptedAnswer": { "@type": "Answer", "text": "On dashboard tiles only, and only on tiles pinned from report visuals that are gauges, KPIs or cards. Alerts cannot be set in Power BI Desktop. Only you can see the alerts you set, even on a dashboard you share, and they only fire on refreshed data." }
+      "name": "Где можно настроить оповещение о данных в Power BI?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Только на плитках информационной панели и только на плитках, закрепленных из визуальных элементов отчета, которые являются датчиками, ключевыми показателями эффективности или карточками. Оповещения невозможно настроить в Power BI Desktop. Только вы можете видеть установленные вами оповещения, даже на общей информационной панели, и они активируются только при обновлении данных."
+      }
     }
   ]
 }
@@ -127,15 +161,15 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../powerbi/">Power BI Kit</a></p>
-  <h1>Power BI Scheduled Refresh, Gateways and Data Alerts</h1>
-  <p class="meta">Michael Nocito · Updated August 2026 · Limits and behaviour checked against Microsoft's own documentation, linked at the end</p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../powerbi/">Комплект Power BI</a></p>
+  <h1>Плановое обновление Power BI, шлюзы и оповещения о данных</h1>
+  <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Ограничения и поведение проверены по собственной документации Microsoft, ссылка на которую находится в конце.</p>
 
-  <p>This page answers the three questions that decide whether a published report stays useful: how often your data can update, what has to be installed for it to reach your sources, and how somebody gets told when a number crosses a line. The headline numbers are eight scheduled refreshes a day on shared capacity and 48 on Premium, and the gateway rule is simpler than it sounds.</p>
+  <p>Эта страница отвечает на три вопроса, которые определяют, будет ли опубликованный отчет оставаться полезным: как часто ваши данные могут обновляться, что необходимо установить, чтобы они достигли ваших источников, и как кто-то узнает, когда число пересекает черту. Заголовки — восемь запланированных обновлений в день для общей емкости и 48 для Premium, а правило шлюза проще, чем кажется.</p>
 
-  <p>What you do: check your storage mode first, because only Import mode needs a refresh at all. Then set the schedule in the semantic model's settings, add a gateway only if the source lives inside your network, and put alerts on dashboard tiles rather than reports.</p>
+  <p>Что вы делаете: сначала проверьте режим хранения, потому что только режим импорта вообще требует обновления. Затем установите расписание в настройках семантической модели, добавьте шлюз, только если источник находится внутри вашей сети, и разместите оповещения на плитках информационной панели, а не в отчетах.</p>
 
-  <p><strong>The short version.</strong> Import mode refreshes on a schedule. A gateway is only for sources the cloud cannot reach. Alerts watch dashboard tiles.</p>
+  <p><strong>Краткая версия.</strong>  Режим импорта обновляется по расписанию. Шлюз предназначен только для источников, к которым облако не может получить доступ. Оповещения наблюдаются за плитками приборной панели.</p>
 
   <figure>
     <svg viewBox="0 0 640 200" role="img" aria-labelledby="gwdesc" xmlns="http://www.w3.org/2000/svg">
@@ -155,125 +189,125 @@
       <path d="M470 40 C 520 20, 590 30, 600 62 C 626 66, 626 104, 596 108 L 476 108 C 446 104, 444 62, 470 40 Z" fill="#FFFFFF" stroke="#0E7490" stroke-width="2"/>
       <text x="536" y="82" text-anchor="middle" font-size="12.5" fill="#09090B">Power BI service</text>
     </svg>
-    <figcaption>The gateway only sits on the line the cloud cannot reach on its own.</figcaption>
+    <figcaption>Шлюз находится только на той линии, к которой облако не может добраться самостоятельно.</figcaption>
   </figure>
 
-  <h2>Only one storage mode needs refreshing</h2>
-  <p>Before the table: your report is slow to update. Is a refresh schedule even the right fix?</p>
-  <p>Only if you are in Import mode. Microsoft's own wording is blunt: only Import mode semantic models require a source data refresh, because only that type imports data. Everything else queries the source as people use the report.</p>
+  <h2>Требуется обновить только один режим хранения.</h2>
+  <p>Перед таблицей: ваш отчет обновляется медленно. Является ли график обновления правильным решением?</p>
+  <p>Только если вы находитесь в режиме импорта. Собственная формулировка Microsoft прямолинейна: только семантические модели режима импорта требуют обновления исходных данных, поскольку только этот тип импортирует данные. Все остальное запрашивает источник, когда люди используют отчет.</p>
   <table>
-    <tr><th>Storage mode</th><th>Needs a scheduled refresh</th><th>Where the data lives</th></tr>
-    <tr><td>Import</td><td>Yes</td><td>Copied into the semantic model</td></tr>
-    <tr><td>DirectQuery</td><td>No</td><td>At the source, queried on every interaction</td></tr>
-    <tr><td>Direct Lake</td><td>No</td><td>Read from the lake</td></tr>
-    <tr><td>Live connection to Analysis Services</td><td>No</td><td>At the source</td></tr>
-    <tr><td>Push</td><td>No</td><td>Pushed in by something else</td></tr>
+    <tr><th>Режим хранения</th><th>Требуется плановое обновление</th><th>Где живут данные</th></tr>
+    <tr><td>Import</td><td>Yes</td><td>Скопировано в семантическую модель</td></tr>
+    <tr><td>DirectQuery</td><td>No</td><td>В источнике, запрашивается при каждом взаимодействии</td></tr>
+    <tr><td>Прямое озеро</td><td>No</td><td>Читать с озера</td></tr>
+    <tr><td>Живое подключение к службам аналитики</td><td>No</td><td>В источнике</td></tr>
+    <tr><td>Push</td><td>No</td><td>Подтолкнуло что-то другое</td></tr>
   </table>
-  <p>Say out loud what that means for a stale number in a DirectQuery report. If nothing is imported, a refresh schedule cannot help, so a stale number is either cached visuals in an open browser or something at the source. Reload the report rather than hunting for a refresh setting that does nothing.</p>
+  <p>Произнесите вслух, что это означает для устаревшего числа в отчете DirectQuery. Если ничего не импортировано, расписание обновления не поможет, поэтому устаревшее число — это либо кэшированные визуальные эффекты в открытом браузере, либо что-то в источнике. Перезагрузите отчет, а не ищите настройку обновления, которая ничего не делает.</p>
 
-  <h2>Eight a day, or 48</h2>
-  <p>First: your stakeholder asks for hourly data. How many scheduled refreshes can you promise on a normal Pro workspace?</p>
-  <p>Eight. Power BI limits semantic models on shared capacity to eight scheduled daily refreshes, stored against the local time zone you pick on the settings page, with the quota resetting at 12:01 AM local time. On Premium capacity, Premium Per User or a Fabric capacity, the limit is 48.</p>
+  <h2>Восемь в день, или 48</h2>
+  <p>Во-первых: ваша заинтересованная сторона запрашивает почасовые данные. Сколько запланированных обновлений вы можете обещать в обычном рабочем пространстве Pro?</p>
+  <p>Восемь. Power BI ограничивает семантические модели общей емкости восемью запланированными ежедневными обновлениями, которые хранятся в соответствии с часовым поясом, выбранным на странице настроек, со сбросом квоты в 00:01 по местному времени. Для емкости Premium, Premium Per User или емкости Fabric ограничение составляет 48.</p>
   <table>
-    <tr><th>Capacity</th><th>Scheduled refreshes per day</th><th>Maximum refresh duration</th></tr>
-    <tr><td>Shared</td><td>8</td><td>2 hours</td></tr>
-    <tr><td>Premium, PPU or Fabric</td><td>48</td><td>5 hours</td></tr>
+    <tr><th>Capacity</th><th>Запланированные обновления в день</th><th>Максимальная продолжительность обновления</th></tr>
+    <tr><td>Shared</td><td>8</td><td>2 часа</td></tr>
+    <tr><td>Премиум, ППУ или Ткань</td><td>48</td><td>5 часов</td></tr>
   </table>
-  <p>Three practical notes on top of that. A manual <strong>Refresh now</strong> does not count against the eight, so you can always update on demand while you are working. The shared-capacity limit does apply to refreshes triggered through the REST API, not just the ones on the schedule. And with the XMLA endpoint enabled for read-write on Premium, programmatic refreshes are effectively unlimited, subject to the capacity's own resources.</p>
-  <p>So "eight a day" is really "every three hours, at times you choose", which is usually the honest answer to an hourly request on a Pro licence.</p>
+  <p>И еще три практических замечания. Руководство  <strong>Обновить сейчас</strong>  не идет в счет восьмерки, поэтому вы всегда можете обновиться по требованию во время работы. Ограничение общей емкости применяется к обновлениям, запускаемым через REST API, а не только к обновлениям по расписанию. А поскольку конечная точка XMLA поддерживает чтение и запись в версии Premium, программные обновления фактически не ограничены в зависимости от собственных ресурсов емкости.</p>
+  <p>Таким образом, «восемь в день» на самом деле означает «каждые три часа, в выбранное вами время», что обычно является честным ответом на почасовой запрос на лицензию Pro.</p>
 
-  <h2>When you need a gateway, and when you do not</h2>
-  <p>Before the rule: which of these needs a gateway, a SQL Server in your office or an Azure SQL database?</p>
-  <p>The office one. The rule is about reachability, not about the technology: if Power BI cannot access the source over a direct network connection, you must configure a gateway connection before you can enable a refresh schedule or run an on-demand refresh. Semantic models using cloud sources such as Azure SQL Database do not require a gateway, as long as Power BI can connect directly.</p>
-  <p>There are three kinds, and the names matter on an exam and in a procurement conversation.</p>
+  <h2>Когда вам нужен шлюз, а когда нет</h2>
+  <p>Перед правилом: чему из них нужен шлюз, SQL-сервер в вашем офисе или база данных SQL Azure?</p>
+  <p>Офисный. Правило касается доступности, а не технологии: если Power BI не может получить доступ к источнику через прямое сетевое подключение, вам необходимо настроить соединение шлюза, прежде чем вы сможете включить расписание обновления или запустить обновление по требованию. Семантические модели, использующие облачные источники, такие как база данных SQL Azure, не требуют шлюза, если Power BI может подключаться напрямую.</p>
+  <p>Их три вида, и имена имеют значение на экзамене и в разговоре о закупках.</p>
   <table>
-    <tr><th>Type</th><th>Who it serves</th><th>Notes</th></tr>
-    <tr><td>On-premises data gateway</td><td>Multiple users, multiple sources</td><td>The standard choice, and what Microsoft recommends over personal mode</td></tr>
-    <tr><td>On-premises data gateway (personal mode)</td><td>One user, no sharing</td><td>Power BI only, for when you are the only person publishing</td></tr>
-    <tr><td>Virtual network data gateway</td><td>Multiple users, sources behind a virtual network</td><td>A Microsoft managed service, nothing to install</td></tr>
+    <tr><th>Type</th><th>Кому он служит</th><th>Notes</th></tr>
+    <tr><td>Локальный шлюз данных</td><td>Несколько пользователей, несколько источников</td><td>Стандартный выбор и что Microsoft рекомендует вместо личного режима</td></tr>
+    <tr><td>Локальный шлюз данных (персональный режим)</td><td>Один пользователь, совместного доступа нет</td><td>Только Power BI, если вы единственный человек, публикующий</td></tr>
+    <tr><td>Шлюз данных виртуальной сети</td><td>Несколько пользователей, источники виртуальной сети</td><td>Служба, управляемая Microsoft, не требует установки.</td></tr>
   </table>
-  <p>Now the part that turns a working refresh into a broken one, and it is the best question on this page. <strong>A semantic model can only use a single gateway connection</strong>, so every on-premises source it touches has to be on the same gateway. And if one query merges or appends data from a gateway-connected source and a cloud source, Power BI switches to the gateway connection for the cloud source as well.</p>
-  <p>Picture that happening. Your Azure SQL table refreshed fine for a year. Somebody merges it with a spreadsheet on a network share, and now the cloud source is going through the gateway too, and it fails on credentials nobody configured. The fix is either to add a data source definition for the cloud source to the gateway, or to tick "Allow user's cloud data sources to refresh through this gateway cluster".</p>
-  <p>Worth knowing before you ask an admin for anything: gateway permissions are managed separately from workspace roles. A Contributor can schedule refresh through a gateway, but only if a gateway admin has added the data source and given them permission to use it.</p>
+  <p>Теперь та часть, которая превращает рабочее обновление в сломанное, и это лучший вопрос на этой странице.  <strong>Семантическая модель может использовать только одно шлюзовое соединение.</strong>, поэтому каждый локальный источник, которого он касается, должен находиться на одном и том же шлюзе. А если один запрос объединяет или добавляет данные из источника, подключенного к шлюзу, и источника в облаке, Power BI также переключается на соединение шлюза для источника в облаке.</p>
+  <p>Представьте себе, что это происходит. Ваша таблица SQL Azure обновлялась нормально в течение года. Кто-то объединяет его с электронной таблицей в общей сетевой папке, и теперь облачный источник тоже проходит через шлюз, и он не работает с учетными данными, которые никто не настроил. Исправление заключается в том, чтобы либо добавить определение источника данных для облачного источника в шлюз, либо установить флажок «Разрешить облачным источникам данных пользователя обновляться через этот кластер шлюзов».</p>
+  <p>Прежде чем спрашивать администратора о чем-либо, стоит знать: разрешения шлюза управляются отдельно от ролей рабочей области. Участник может запланировать обновление через шлюз, но только в том случае, если администратор шлюза добавил источник данных и предоставил ему разрешение на его использование.</p>
 
-  <h2>Data alerts live on dashboard tiles, and only yours are yours</h2>
-  <p>First: you want an email when open tickets cross 100. Where do you set it up?</p>
-  <p>On a dashboard tile, not in the report. Alerts can only be set on tiles pinned from report visuals, and only on <strong>gauges, KPIs and cards</strong>. They are not available in Power BI Desktop at all.</p>
-  <p>The rest of the behaviour, in the order it bites:</p>
+  <h2>Оповещения о данных отображаются на плитках информационной панели, и только ваши данные принадлежат вам.</h2>
+  <p>Во-первых: вы хотите получать электронное письмо, когда открытые заявки пересекают 100. Где вы это настроите?</p>
+  <p>На плитке панели мониторинга, а не в отчете. Оповещения можно устанавливать только на плитках, закрепленных на визуальных элементах отчета, и только на  <strong>датчики, ключевые показатели эффективности и карты</strong>. Они вообще недоступны в Power BI Desktop.</p>
+  <p>Остальная часть поведения в том порядке, в котором оно кусается:</p>
   <ul>
-    <li><strong>Only you can see the alerts you set</strong>, even if you share the dashboard, and the dashboard owner cannot see the alerts you set on your view of their dashboard. An alert is a personal notification, not a team one.</li>
-    <li><strong>Alerts only work on refreshed data.</strong> When data refreshes, Power BI checks whether a threshold was crossed. Static data never triggers anything, and neither does an unchanged value.</li>
-    <li><strong>You choose how often you can be told</strong>, at most once an hour or once every 24 hours, and the notification goes to your Notification center with an optional email.</li>
-    <li><strong>Numeric only</strong>, and not on card tiles showing a date or time measure.</li>
-    <li><strong>250 alerts</strong> across all your models is the cap.</li>
+    <li><strong>Только вы можете видеть установленные вами оповещения</strong>, даже если вы предоставляете общий доступ к информационной панели, и владелец информационной панели не может видеть оповещения, которые вы установили в вашем представлении его информационной панели. Оповещение — это личное уведомление, а не командное.</li>
+    <li><strong>Оповещения работают только для обновленных данных.</strong>  При обновлении данных Power BI проверяет, был ли превышен порог. Статические данные никогда ничего не запускают, равно как и неизмененное значение.</li>
+    <li><strong>Вы сами выбираете, как часто вам можно будет сообщать</strong>, не чаще одного раза в час или раз в 24 часа, а уведомление отправляется в ваш Центр уведомлений по дополнительному адресу электронной почты.</li>
+    <li><strong>Только числовые значения</strong>, а не на плитках карточек с указанием даты или времени.</li>
+    <li><strong>250 оповещений</strong>  во всех ваших моделях есть шапка.</li>
   </ul>
-  <p>Compare that with a subscription, which sends a snapshot of a report or dashboard on a schedule whether or not anything changed. Alerts are conditional and personal; subscriptions are scheduled and can be sent to other people. If a manager wants "tell me when", that is an alert they set for themselves. If they want "send me it every Monday", that is a subscription, and you can set it up for them.</p>
-  <p>For alerting rules that belong to a team rather than a person, Microsoft points at Fabric Activator alerts on reports rather than dashboard alerts, which is where that need has moved.</p>
+  <p>Сравните это с подпиской, которая отправляет снимок отчета или информационной панели по расписанию независимо от того, изменилось ли что-либо или нет. Оповещения являются условными и персональными; подписки запланированы и могут быть отправлены другим людям. Если менеджер хочет «сказать мне когда», он устанавливает для себя это предупреждение. Если они хотят «присылать мне это каждый понедельник», это подписка, и вы можете настроить ее для них.</p>
+  <p>Что касается правил оповещения, которые принадлежат команде, а не человеку, Microsoft указывает на оповещения Fabric Activator в отчетах, а не на оповещения информационной панели, и именно здесь эта потребность переместилась.</p>
 
-  <h2>Edge cases worth knowing</h2>
-  <p><strong>A rename at the source fails the refresh in the service.</strong> If a column or table is renamed or removed upstream, refresh fails, because the service does not do a schema refresh. Fix it in Desktop and republish.</p>
-  <p><strong>A refresh can succeed and still be wrong.</strong> Power BI logs a warning when a refresh completes but hits a non-fatal problem, such as a measure referencing a column that no longer exists. The data updates, the affected calculations return errors or blanks, and the status is not a failure. Check the refresh history, not just your inbox.</p>
-  <p><strong>OneDrive refresh is a separate thing.</strong> Reports built on a file in OneDrive or SharePoint Online sync about every hour, and that sync tracks the file's item ID. Copying a new file over the old one creates a different ID and silently breaks the link; upload and replace instead.</p>
-  <p><strong>Refresh times use the time zone on the settings page.</strong> The eight slots are stored against the local time zone you chose, which is the thing to check when a refresh is mysteriously an hour out twice a year.</p>
+  <h2>Пограничные случаи, которые стоит знать</h2>
+  <p><strong>Переименование в источнике приводит к сбою обновления в службе.</strong>  Если столбец или таблица переименовываются или удаляются из исходной версии, обновление завершается неудачей, поскольку служба не выполняет обновление схемы. Исправьте это на рабочем столе и опубликуйте повторно.</p>
+  <p><strong>Обновление может быть успешным, но при этом оказаться неправильным.</strong>  Power BI регистрирует предупреждение, когда обновление завершается, но возникает некритическая проблема, например мера, ссылающаяся на несуществующий столбец. Обновления данных, затронутые вычисления возвращают ошибки или пробелы, а состояние не является сбоем. Проверяйте историю обновлений, а не только свой почтовый ящик.</p>
+  <p><strong>Обновление OneDrive — это отдельная тема.</strong>  Отчеты, созданные на основе файла в OneDrive или SharePoint Online, синхронизируются примерно каждый час, и эта синхронизация отслеживает идентификатор элемента файла. Копирование нового файла поверх старого создает другой идентификатор и автоматически разрывает ссылку; вместо этого загрузите и замените.</p>
+  <p><strong>Для времени обновления используйте часовой пояс на странице настроек.</strong>  Восемь слотов хранятся в соответствии с выбранным вами местным часовым поясом, и это нужно проверять, когда обновление загадочным образом происходит на час два раза в год.</p>
 
-  <h2>Why the limits are shaped this way</h2>
-  <p>A scheduled refresh is not free. It reads the whole source, rebuilds the model, and invalidates the cached query results that make reports feel instant, which Power BI then has to rebuild.</p>
-  <p>That is why the refresh count is capacity based rather than licence based: it is a queue on somebody's hardware. Shared capacity is shared, so it gets eight slots and a two hour ceiling. A capacity you paid for gets 48 and five hours because you are the one absorbing the cost.</p>
-  <p>The same logic explains why alerts only fire on refreshed data. There is no process sitting and watching your number. The check happens as part of a refresh, which means the fastest an alert can possibly be is the speed of your schedule. Promising a stakeholder a real-time alert on an eight-refresh schedule is promising something the architecture cannot do.</p>
+  <h2>Почему ограничения имеют такую ​​форму</h2>
+  <p>Запланированное обновление не является бесплатным. Он считывает весь источник, перестраивает модель и аннулирует результаты кэшированных запросов, благодаря чему отчеты кажутся мгновенными, а затем Power BI приходится перестраивать их.</p>
+  <p>Вот почему количество обновлений зависит от емкости, а не от лицензии: это очередь на чьем-то оборудовании. Общая емкость является общей, поэтому она получает восемь слотов и двухчасовой потолок. Мощность, за которую вы заплатили, получает 48 и пять часов, потому что вы несете расходы.</p>
+  <p>Та же логика объясняет, почему оповещения срабатывают только при обновлении данных. Нет никакого процесса, сидящего и наблюдающего за вашим номером. Проверка происходит как часть обновления, а это означает, что самое быстрое оповещение может зависеть от скорости вашего расписания. Обещать заинтересованной стороне оповещение в режиме реального времени по расписанию с восемью обновлениями — это обещание того, чего архитектура не может сделать.</p>
 
-  <h2>How to apply this to your own work</h2>
+  <h2>Как применить это в своей работе</h2>
   <ol>
-    <li>Check the storage mode of your model before touching any refresh setting. If it is not Import, the schedule is not your problem.</li>
-    <li>Count how often the source data genuinely changes. Most daily reports are refreshed more often than the data underneath them moves.</li>
-    <li>Space your eight slots around when people actually read the report, not evenly. One before the morning meeting is worth three overnight.</li>
-    <li>Before merging a cloud source with an on-premises one in a single query, check the gateway's cloud-source setting, or plan the failure into your afternoon.</li>
-    <li>Set your own alert on the number you get asked about most. It is the cheapest early warning you will ever build, and nobody else has to know it exists.</li>
-    <li>Read the refresh history once a week. Warnings are not failures and nobody emails you about them.</li>
+    <li>Прежде чем нажимать на какие-либо настройки обновления, проверьте режим хранения вашей модели. Если это не Импорт, то расписание – не ваша проблема.</li>
+    <li>Посчитайте, как часто действительно меняются исходные данные. Большинство ежедневных отчетов обновляются чаще, чем перемещаются содержащиеся в них данные.</li>
+    <li>Распределите восемь слотов вокруг, когда люди действительно читают отчет, а не равномерно. Один перед утренней встречей стоит трех за ночь.</li>
+    <li>Прежде чем объединять облачный источник с локальным в одном запросе, проверьте настройку облачного источника шлюза или запланируйте сбой на вторую половину дня.</li>
+    <li>Установите собственное оповещение на номер, о котором вас спрашивают чаще всего. Это самое дешевое средство раннего предупреждения, которое вы когда-либо создавали, и никто больше не должен знать о его существовании.</li>
+    <li>Читайте историю обновлений раз в неделю. Предупреждения не являются сбоями, и никто не отправляет вам о них электронное письмо.</li>
   </ol>
-  <p>If you have paper nearby, draw your model's sources as boxes and put a line around the ones inside your network. Everything inside that line shares one gateway, and anything joining across the line is the query to look at first when refresh breaks.</p>
+  <p>Если у вас есть бумага поблизости, нарисуйте источники вашей модели в виде прямоугольников и обведите линией те, что находятся внутри вашей сети. Все внутри этой линии использует один шлюз, и все, что соединяется через линию, является запросом, на который следует обратить внимание в первую очередь, когда обновление прерывается.</p>
 
-  <h2>Cheat sheet</h2>
+  <h2>Шпаргалка</h2>
   <table>
     <tr><th>Question</th><th>Answer</th></tr>
-    <tr><td>Refreshes a day, shared capacity</td><td>8 scheduled, resetting 12:01 AM local time</td></tr>
-    <tr><td>Refreshes a day, Premium, PPU or Fabric</td><td>48 scheduled</td></tr>
-    <tr><td>Does Refresh now count</td><td>No, manual on-demand refreshes are outside the eight</td></tr>
-    <tr><td>Which modes need refresh</td><td>Import only</td></tr>
-    <tr><td>Gateway needed</td><td>When Power BI cannot reach the source directly, so on-premises and virtual network sources</td></tr>
-    <tr><td>Gateway not needed</td><td>Cloud sources Power BI can connect to directly</td></tr>
-    <tr><td>Gateways per semantic model</td><td>One connection, so all on-premises sources on the same gateway</td></tr>
-    <tr><td>Alerts, where</td><td>Dashboard tiles pinned from card, KPI or gauge visuals</td></tr>
-    <tr><td>Alerts, who sees them</td><td>Only the person who set them</td></tr>
-    <tr><td>Scheduled email regardless of value</td><td>A subscription, not an alert</td></tr>
+    <tr><td>Обновляет день, общая емкость</td><td>8 по расписанию, сброс на 00:01 по местному времени.</td></tr>
+    <tr><td>Обновляет день, Премиум, ППУ или Ткань</td><td>48 запланировано</td></tr>
+    <tr><td>Засчитывается ли теперь обновление?</td><td>Нет, обновления вручную по требованию выходят за рамки восьми</td></tr>
+    <tr><td>Какие режимы нужно обновить</td><td>Только импорт</td></tr>
+    <tr><td>Требуется шлюз</td><td>Когда Power BI не может напрямую связаться с источником, поэтому локальные источники и источники виртуальной сети</td></tr>
+    <tr><td>Шлюз не нужен</td><td>Облачные источники, к которым Power BI может подключаться напрямую</td></tr>
+    <tr><td>Шлюзы для каждой семантической модели</td><td>Одно подключение, поэтому все локальные источники находятся на одном шлюзе.</td></tr>
+    <tr><td>Оповещения, где</td><td>Плитки информационной панели, прикрепленные к визуальным элементам карты, ключевого показателя эффективности или индикатора.</td></tr>
+    <tr><td>Оповещения, кто их видит</td><td>Только тот, кто их установил</td></tr>
+    <tr><td>Запланированная электронная почта независимо от ценности</td><td>Подписка, а не оповещение</td></tr>
   </table>
 
-  <h2>The one habit to keep</h2>
-  <p>Before promising anybody a refresh frequency, say out loud which capacity the workspace is on. Eight and 48 are different products, and the gap between them is where most disappointed stakeholders live.</p>
+  <h2>Единственная привычка, которую нужно сохранить</h2>
+  <p>Прежде чем обещать кому-либо частоту обновления, скажите вслух, на какой мощности находится рабочее пространство. Eight и 48 — это разные продукты, и именно в разрыве между ними живет большинство разочарованных заинтересованных сторон.</p>
 
-  <p>What is the refresh schedule on your most-read report, and when did you last check that all eight slots actually ran?</p>
+  <p>Каков график обновления вашего наиболее читаемого отчета и когда вы в последний раз проверяли, действительно ли все восемь слотов работали?</p>
 
-  <div class="note"><strong>Sources.</strong> Limits and behaviour here come from Microsoft's own documentation: <a href="https://learn.microsoft.com/en-us/power-bi/connect-data/refresh-data" target="_blank" rel="noopener">Data refresh in Power BI</a>, <a href="https://learn.microsoft.com/en-us/power-bi/connect-data/service-gateway-onprem" target="_blank" rel="noopener">On-premises data gateway</a> and <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/service-set-data-alerts" target="_blank" rel="noopener">Set data alerts in the Power BI service</a>. Capacity limits change, so check the current article before quoting a number in a meeting.</div>
+  <div class="note"><strong>Источники.</strong>  Ограничения и поведение здесь взяты из собственной документации Microsoft:  <a href="https://learn.microsoft.com/en-us/power-bi/connect-data/refresh-data" target="_blank" rel="noopener">Обновление данных в Power BI</a>, <a href="https://learn.microsoft.com/en-us/power-bi/connect-data/service-gateway-onprem" target="_blank" rel="noopener">Локальный шлюз данных</a> and <a href="https://learn.microsoft.com/en-us/power-bi/create-reports/service-set-data-alerts" target="_blank" rel="noopener">Установите оповещения о данных в службе Power BI.</a>. Ограничения емкости меняются, поэтому проверьте текущую статью, прежде чем называть цифру на собрании.</div>
 
   <div class="book">
-    <strong>A report nobody can trust the freshness of is a report nobody uses twice.</strong>
-    <p><em>Power BI for Analysts</em> is 187 pages on the whole path from source to reader, including the parts that only show up after you publish.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/power-bi-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=powerbi-refresh-gateways-and-alerts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-powerbi-refresh-gateways-and-alerts'})">Power BI for Analysts, $19 &rarr;</a>
+    <strong>Отчет, свежесть которого никто не может доверять, — это отчет, который никто не использует дважды.</strong>
+    <p><em>Power BI для аналитиков</em>  это 187 страниц на всем пути от источника до читателя, включая те части, которые появляются только после публикации.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/power-bi-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=powerbi-refresh-gateways-and-alerts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-powerbi-refresh-gateways-and-alerts'})">Power BI для аналитиков, 19 долларов США →</a>
   </div>
 
   <div class="cta">
-    <strong>Practice this where it is marked.</strong>
-    <p style="margin:6px 0 0">The <a href="../../powerbi/">Power BI Kit</a> covers the model, DAX and report building with worked examples in the browser. Gateways and data alerts are questions 45 and 48 of the <a href="../../powerbi-cert/">PL-300 practice drill</a>.</p>
-    <a class="btn" href="../../powerbi/">Open the Power BI Kit →</a>
+    <strong>Практикуйте это там, где это отмечено.</strong>
+    <p style="margin:6px 0 0">The <a href="../../powerbi/">Комплект Power BI</a>  описывает модель, DAX и построение отчетов с отработанными примерами в браузере. Шлюзы и оповещения о данных — это вопросы 45 и 48  <a href="../../powerbi-cert/">Учебная дрель ПЛ-300</a>.</p>
+    <a class="btn" href="../../powerbi/">Откройте комплект Power BI →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> &middot; <a href="../powerbi-publish-workspace-to-app/">Workspaces and Apps</a> · <a href="../powerbi-row-level-security/">Row-Level Security</a> · <a href="../powerbi-slicers-filters-and-interactions/">Slicers and Interactions</a> · <a href="../powerbi-drillthrough-and-bookmarks/">Drillthrough and Bookmarks</a> · <a href="../powerbi-star-schema/">Star Schema</a> · <a href="../sql-indexing-for-analysts/">Indexing for Analysts</a> · <a href="../../powerbi/">Power BI Kit</a>
-    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../powerbi-publish-workspace-to-app/">Рабочие пространства и приложения</a> · <a href="../powerbi-row-level-security/">безопасность на уровне строк</a> · <a href="../powerbi-slicers-filters-and-interactions/">Срезы и взаимодействия</a> · <a href="../powerbi-drillthrough-and-bookmarks/">Детализация и закладки</a> · <a href="../powerbi-star-schema/">Схема звезды</a> · <a href="../sql-indexing-for-analysts/">Индексирование для аналитиков</a> · <a href="../../powerbi/">Комплект Power BI</a>
+    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-<script src="../../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SQL JOINs: How to Join Two Tables Without Losing or Doubling Rows — Analyst Prep Kit</title>
-<meta name="description" content="Every join concept in the order they build on each other: the pair rule, grain, all six join types, the silent delete, the silent multiply, the two counts that catch each one, and the edge cases that break joins in real data. Worked on 41 million rows.">
+<title>SQL JOIN: как соединить две таблицы без потери или удвоения строк — комплект для подготовки аналитика</title>
+<meta name="description" content="Каждая концепция соединения в том порядке, в котором они основаны друг на друге: парное правило, зернистость, все шесть типов соединения, автоматическое удаление, тихое умножение, два счетчика, которые перехватывают каждый из них, и крайние случаи, которые нарушают соединения в реальных данных. Работал над 41 миллионом строк.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-joins/">
-<meta property="og:title" content="SQL JOINs: How to Join Two Tables Without Losing or Doubling Rows">
-<meta property="og:description" content="A join can silently drop rows or silently multiply them, and both look like a query that worked. Here is every join type, both failures, and the two counts that catch them.">
+<meta property="og:title" content="SQL JOIN: как соединить две таблицы без потери или удвоения строк">
+<meta property="og:description" content="Соединение может автоматически удалять строки или автоматически умножать их, и оба варианта выглядят как сработавший запрос. Вот каждый тип соединения, оба отказа и два счетчика, которые их перехватывают.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/sql-joins.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-joins/">
@@ -78,12 +78,11 @@
   .figure figcaption{color:var(--muted);font-size:14px;margin-top:10px}
 </style>
 <!-- SEO:JSONLD:START -->
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "SQL JOINs: How to Join Two Tables Without Losing or Doubling Rows",
-  "description": "Every join concept in the order they build on each other: the pair rule, grain, all six join types, the silent delete, the silent multiply, the two counts that catch each one, and the edge cases that break joins in real data. Worked on 41 million rows.",
+  "headline": "SQL JOIN: как соединить две таблицы без потери или удвоения строк",
+  "description": "Каждая концепция соединения в том порядке, в котором они основаны друг на друге: парное правило, зернистость, все шесть типов соединения, автоматическое удаление, тихое умножение, два счетчика, которые перехватывают каждый из них, и крайние случаи, которые нарушают соединения в реальных данных. Работал над 41 миллионом строк.",
   "url": "https://michaelnocito.github.io/analyst-prep-kit/guides/sql-joins/",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -91,12 +90,12 @@
   },
   "author": {
     "@type": "Person",
-    "name": "Michael Nocito",
+    "name": "Майкл Носито",
     "url": "https://michaelnocito.github.io"
   },
   "publisher": {
     "@type": "Person",
-    "name": "Michael Nocito"
+    "name": "Майкл Носито"
   },
   "inLanguage": "en",
   "datePublished": "2026-07-24",
@@ -104,8 +103,7 @@
   "image": "https://michaelnocito.github.io/analyst-prep-kit/assets/social/sql-joins.png"
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
@@ -124,7 +122,7 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "SQL JOINs: How to Join Two Tables Without Losing or Doubling Rows",
+      "name": "SQL JOIN: как соединить две таблицы без потери или удвоения строк",
       "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/sql-joins/"
     }
   ]
@@ -134,18 +132,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../sql/">SQL Kit</a> · <a href="../">All guides</a></p>
-  <h1>SQL JOINs: How to Join Two Tables Without Losing or Doubling Rows</h1>
-  <p class="meta">Every join concept, in the order they build on each other · Written to be listened to · Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Updated <time datetime="2026-07-30">July 30, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../">Все руководства</a></p>
+  <h1>SQL JOIN: как соединить две таблицы без потери или удвоения строк</h1>
+  <p class="meta">Каждая концепция соединения, в том порядке, в котором они дополняют друг друга · Написано для прослушивания · Часть  <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Обновлено  <time datetime="2026-07-30">30 июля 2026 г.</time></p>
 
-  <p>By the end of this page you can predict, before you run it, how many rows any join will return. You will know all six join types and what each keeps. You will know the two ways a join goes wrong without ever raising an error, and the two counts that catch each one. That is the whole subject, and it is about a forty-minute read.</p>
+  <p>К концу этой страницы вы можете предсказать, прежде чем запускать ее, сколько строк вернет любое соединение. Вы будете знать все шесть типов соединений и то, что хранит каждый из них. Вы узнаете, в каких двух случаях соединение идет не так, как надо, ни разу не вызвав ошибки, а также два счетчика, которые ловят каждый из них. Вот и вся тема, а чтение ее занимает около сорока минут.</p>
 
-  <p>Here is what to actually do with it. Go through once end to end for the shape. Then, on the next join you write, run the two counts before you trust any number that comes out of it. Two extra queries, ten seconds, and they catch the class of mistake that ends up in a report.</p>
+  <p>Вот что на самом деле с этим делать. Пройдите один раз от начала до конца, чтобы получить форму. Затем при следующем соединении, которое вы запишете, запустите два подсчета, прежде чем доверять любому числу, полученному из него. Два дополнительных запроса, десять секунд, и они обнаруживают тот класс ошибок, который попадает в отчет.</p>
 
-  <p>The short version: a join can drop rows that found no match, and duplicate rows that found several. So count your rows before and after, every time.</p>
+  <p>Краткая версия: объединение может удалять строки, которые не нашли совпадений, и дублировать строки, которые нашли несколько. Поэтому каждый раз считайте свои ряды до и после.</p>
 
-  <p>One idea decides everything else here, so it gets the picture. A join does not add columns to your table. It builds a new table, and you have to work out its row count yourself.</p>
+  <p>Здесь одна идея решает все остальное, поэтому она и дает представление о картине. Соединение не добавляет столбцы в вашу таблицу. Он создает новую таблицу, и вам придется самостоятельно подсчитать количество ее строк.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 372" role="img" aria-labelledby="joinDiagTitle joinDiagDesc" xmlns="http://www.w3.org/2000/svg">
@@ -203,93 +201,93 @@
         <text x="46" y="340" font-size="13.5" fill="#09090B">The result has four rows. Neither table had four rows. That change is the whole subject of this guide.</text>
       </g>
     </svg>
-    <figcaption>A join builds a new table whose row count is neither of the two you started with.</figcaption>
+    <figcaption>Соединение создает новую таблицу, количество строк которой не совпадает с тем, с которого вы начали.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>What you'll learn</strong>
+    <strong>Что вы узнаете</strong>
     <ol>
-      <li>What a join actually does to your rows</li>
-      <li>The six join types, and what each one keeps</li>
-      <li>Failure one: the silent delete, and the check that catches it</li>
-      <li>Failure two: the silent multiply, and the check that catches it</li>
-      <li>The full before and after</li>
-      <li>Edge cases that break joins in real data</li>
-      <li>Why this works</li>
-      <li>Using this on your own project</li>
-      <li>The whole thing on one screen</li>
+      <li>Что на самом деле делает соединение с вашими строками</li>
+      <li>Шесть типов соединений и что сохраняет каждый из них</li>
+      <li>Ошибка первая: автоматическое удаление и проверка, которая его перехватывает.</li>
+      <li>Ошибка вторая: молчаливое умножение и проверка, которая его ловит.</li>
+      <li>Полное до и после</li>
+      <li>Пограничные случаи, нарушающие соединения в реальных данных</li>
+      <li>Почему это работает</li>
+      <li>Использование этого в вашем собственном проекте</li>
+      <li>Все на одном экране</li>
     </ol>
   </div>
 
-  <div class="note"><strong>The worked example is real.</strong> Every number on this page comes from a published portfolio project: a list of 175 games joined to a table of 41,154,794 player reviews. The queries run against the full datasets at <a href="https://github.com/michaelnocito/steam-hidden-gems" target="_blank" rel="noopener">Steam Hidden Gems on GitHub</a>. If joins are the only thing here that is new, and clauses like <code>GROUP BY</code> and <code>HAVING</code> are too, start with <a href="../sql-foundations/">SQL foundations</a> and come back.</div>
+  <div class="note"><strong>Проработанный пример реальный.</strong>  Все цифры на этой странице взяты из опубликованного портфолио проекта: списка из 175 игр, объединенных в таблицу из 41 154 794 отзывов игроков. Запросы выполняются к полным наборам данных по адресу  <a href="https://github.com/michaelnocito/steam-hidden-gems" target="_blank" rel="noopener">Скрытые сокровища Steam на GitHub</a>. Если соединения — единственное новое здесь, и такие предложения, как  <code>GROUP BY</code> and <code>HAVING</code>  тоже, начните с  <a href="../sql-foundations/">Основы SQL</a>  и вернись.</div>
 
   <div class="step">
-    <h2>1. What a join actually does to your rows</h2>
+    <h2>1. Что на самом деле делает соединение с вашими строками</h2>
 
-    <p>Before the explanation: you join two tables and get a result with more rows than either of them had. Nothing errored. What did the database do to produce extra rows out of nowhere?</p>
+    <p>Перед пояснением: вы объединяете две таблицы и получаете результат с большим количеством строк, чем было в любой из них. Ничего не ошибочно. Что сделала база данных, чтобы создать дополнительные строки из ниоткуда?</p>
 
-    <p>The Venn diagram is where most people meet joins, and it is a reasonable start. It just describes the wrong thing. It shows which <em>keys</em> survive. What you need to predict is how many <em>rows</em> come out, and those are different questions.</p>
+    <p>Диаграмма Венна — это то место, где большинство людей встречаются с соединениями, и это разумное начало. Это просто описывает неправильную вещь. Он показывает, какой  <em>keys</em>  выживать. Вам нужно предсказать, сколько  <em>rows</em>  выходите, и это разные вопросы.</p>
 
-    <p>Here is the rule that answers both. A join walks the left table, and for every row it finds every row on the right whose key matches. Then it writes one output row per pair. That single sentence explains everything on this page.</p>
+    <p>Вот правило, которое отвечает обоим. Соединение проходит левую таблицу и для каждой строки находит каждую строку справа, ключ которой совпадает. Затем он записывает одну выходную строку для каждой пары. Это единственное предложение объясняет все, что есть на этой странице.</p>
     <ul>
-      <li>A left row that finds <strong>no</strong> match produces <strong>zero</strong> output rows. It disappears.</li>
-      <li>A left row that finds <strong>three</strong> matches produces <strong>three</strong> output rows. It is duplicated, and every one of its column values is duplicated with it.</li>
+      <li>Левая строка, которая находит  <strong>no</strong>  спичка производит  <strong>zero</strong>  выходные строки. Оно исчезает.</li>
+      <li>Левая строка, которая находит  <strong>three</strong>  спички производят  <strong>three</strong>  выходные строки. Он дублируется, и каждое значение его столбца дублируется вместе с ним.</li>
     </ul>
-    <p>So the output row count is not the left count, and it is not the right count. It is the number of matching pairs, which can be smaller than either table or larger than both.</p>
+    <p>Таким образом, количество выходных строк не является ни левым, ни правым. Это количество совпадающих пар, которое может быть меньше, чем любая таблица, или больше, чем обе.</p>
 
-    <h3>Grain, the idea that makes joins make sense</h3>
-    <p>The <strong>grain</strong> of a table is what one row means. Say it out loud before you join anything.</p>
+    <h3>Зерно: идея, благодаря которой соединения имеют смысл</h3>
+    <p>The <strong>grain</strong>  таблицы — это то, что означает одна строка. Скажите это вслух, прежде чем присоединиться к чему-либо.</p>
     <ul>
-      <li><code>games</code> has a grain of one row per game. 125,855 rows, 125,855 games.</li>
-      <li><code>recommendations</code> has a grain of one row per player review. 41,154,794 rows, and a popular game owns thousands of them.</li>
+      <li><code>games</code>  имеет зерно одной строки за игру. 125 855 строк, 125 855 игр.</li>
+      <li><code>recommendations</code>  имеет долю в одну строку на отзыв игрока. 41 154 794 строки, а в популярной игре их тысячи.</li>
     </ul>
-    <p>Joining those two gives you a table whose grain is one row per review, not one row per game. The game columns are still there, but they now repeat once for every review that game received. The moment you forget that, a <code>SUM</code> on a game column stops meaning what its name says.</p>
-    <div class="note"><strong>Name the grain of the result before you write the aggregate.</strong> Almost every wrong number that comes out of a join comes from aggregating a column at the wrong grain. If you can say "one row per review" out loud, you already know that <code>SUM(price)</code> is now price times review count.</div>
+    <p>Объединив эти две, вы получите таблицу, зернистость которой составляет одну строку на обзор, а не одну строку на игру. Столбцы игр по-прежнему присутствуют, но теперь они повторяются один раз для каждого полученного обзора на игру. В тот момент, когда ты забудешь это,  <code>SUM</code>  в колонке игры перестает означать то, что говорит ее название.</p>
+    <div class="note"><strong>Назовите зерно результата, прежде чем писать совокупность.</strong>  Почти каждое неправильное число, полученное в результате соединения, происходит из-за агрегирования столбца с неправильной зернистостью. Если вы можете произнести вслух «одна строка на отзыв», вы уже это знаете.  <code>SUM(price)</code>  теперь цена умножена на количество отзывов.</div>
 
-    <p>Every query on this page nicknames its tables. <code>FROM hidden_gems AS g</code> means "for the rest of this query, call that table <code>g</code>", so <code>g.Name</code> is the Name column of <code>hidden_gems</code>. Two joined tables almost always need those nicknames, because both can carry a column of the same name. <a href="../sql-aliasing/">SQL aliases, and reading a query out loud</a> covers the whole habit if it is new.</p>
+    <p>Каждый запрос на этой странице присваивает своим таблицам псевдонимы.  <code>FROM hidden_gems AS g</code>  означает «для оставшейся части этого запроса вызовите эту таблицу  <code>g</code>", так  <code>g.Name</code>  столбец «Имя»  <code>hidden_gems</code>. Двум объединенным таблицам почти всегда нужны эти псевдонимы, поскольку обе могут содержать столбец с одинаковым именем.  <a href="../sql-aliasing/">Псевдонимы SQL и чтение запроса вслух</a>  охватывает всю привычку, если она новая.</p>
   </div>
 
   <div class="step">
-    <h2>2. The six join types, and what each one keeps</h2>
+    <h2>2. Шесть типов соединений и что сохраняет каждый из них</h2>
 
-    <p>Before the explanation: five of the six join types below match rows on a key. One of them does not match on anything at all. Which do you think it is, and what could it possibly be for?</p>
+    <p>Перед объяснением: пять из шести типов соединений ниже соответствуют строкам ключа. Один из них вообще ни с чем не совпадает. Как вы думаете, что это такое и для чего оно может быть?</p>
 
-    <p>Each type keeps a different set of rows. The pair rule from section one still applies to all of them. All they change is what happens to rows that found no partner.</p>
+    <p>Каждый тип хранит свой набор строк. Правило пары из первого раздела по-прежнему применимо ко всем из них. Все, что они меняют, — это то, что происходит со строками, которые не нашли партнера.</p>
 
     <table>
-      <tr><th>Type</th><th>What it keeps</th><th>When you want it</th></tr>
-      <tr><td><code>INNER JOIN</code></td><td>Only matched pairs. Unmatched rows from both sides are gone.</td><td>When a row without a partner is genuinely not part of the question</td></tr>
-      <tr><td><code>LEFT JOIN</code></td><td>Every left row. Right columns come back <code>NULL</code> where nothing matched.</td><td>The safe default. You keep your population and can see what did not match.</td></tr>
-      <tr><td><code>RIGHT JOIN</code></td><td>Every right row, same idea reversed.</td><td>Rarely. Most people swap the table order and use <code>LEFT</code> instead, because reading two directions in one query is hard.</td></tr>
-      <tr><td><code>FULL OUTER JOIN</code></td><td>Everything from both sides, matched or not.</td><td>Reconciling two lists that should agree and do not</td></tr>
-      <tr><td><code>CROSS JOIN</code></td><td>Every left row paired with every right row. No key at all.</td><td>Building a complete grid on purpose, such as every month crossed with every region so empty combinations still appear</td></tr>
-      <tr><td>Self join</td><td>Not a keyword. A table joined to itself under two different aliases.</td><td>Rows that relate to other rows in the same table, such as an employee and their manager</td></tr>
+      <tr><th>Type</th><th>Что он хранит</th><th>Когда ты этого захочешь</th></tr>
+      <tr><td><code>INNER JOIN</code></td><td>Только совпадающие пары. Несовпадающие строки с обеих сторон исчезли.</td><td>Когда о ссоре без партнера действительно не может быть и речи</td></tr>
+      <tr><td><code>LEFT JOIN</code></td><td>Каждый левый ряд. Правые столбцы возвращаются  <code>NULL</code>  где ничего не совпало. </td><td>Безопасное значение по умолчанию. Вы сохраняете свою популяцию и можете увидеть, что не совпало.</td></tr>
+      <tr><td><code>RIGHT JOIN</code></td><td>В каждом правом ряду та же идея в обратном порядке.</td><td>Редко. Большинство людей меняют порядок таблиц и используют  <code>LEFT</code>  вместо этого, потому что читать два направления в одном запросе сложно.</td></tr>
+      <tr><td><code>FULL OUTER JOIN</code></td><td>Всё с обеих сторон, совпало или нет.</td><td>Согласование двух списков, которые должны совпадать и не совпадать</td></tr>
+      <tr><td><code>CROSS JOIN</code></td><td>Каждый левый ряд в паре с каждым правым рядом. Никакого ключа вообще.</td><td>Специальное создание полной сетки, например, каждый месяц пересекается с каждым регионом, чтобы пустые комбинации все еще появлялись.</td></tr>
+      <tr><td>Самостоятельное присоединение</td><td>Не ключевое слово. Таблица, присоединенная сама к себе под двумя разными псевдонимами.</td><td>Строки, относящиеся к другим строкам в той же таблице, например, сотрудник и его руководитель.</td></tr>
     </table>
 
-    <p><code>CROSS JOIN</code> is the answer to the prequestion, and it is worth knowing precisely because of the accident. Two tables of 1,000 rows each cross-joined produce a million rows. If you ever write a join and forget the <code>ON</code> clause, some databases give you exactly that, and the first sign is a query that never finishes.</p>
+    <p><code>CROSS JOIN</code>  — это ответ на вопрос, и его стоит узнать именно из-за несчастного случая. Две таблицы по 1000 строк каждая, перекрестно соединенные, дают миллион строк. Если вы когда-нибудь напишете соединение и забудете  <code>ON</code>  некоторые базы данных дают именно это, и первым признаком этого является запрос, который никогда не завершается.</p>
 
-    <p>A note on the word "outer". <code>LEFT</code>, <code>RIGHT</code> and <code>FULL</code> are all outer joins, and you will see them written as <code>LEFT OUTER JOIN</code>. The word <code>OUTER</code> is optional and means the same thing. Similarly, a plain <code>JOIN</code> with no word in front of it is an <code>INNER JOIN</code>, which is worth remembering because that default is what causes the first failure below.</p>
+    <p>Примечание к слову «внешний».  <code>LEFT</code>, <code>RIGHT</code> and <code>FULL</code>  все являются внешними соединениями, и вы увидите, что они записаны как  <code>LEFT OUTER JOIN</code>. Слово  <code>OUTER</code>  является необязательным и означает то же самое. Аналогично, равнина  <code>JOIN</code>  без слова перед ним - это  <code>INNER JOIN</code>, о чем стоит помнить, поскольку именно это значение по умолчанию вызывает первый сбой ниже.</p>
 
-    <p>Two more pieces of syntax show up constantly. <code>ON</code> states the matching condition, as in <code>ON g.AppID = r.app_id</code>. <code>USING (app_id)</code> is a shorthand for when the column has the same name in both tables. And when a join condition is not a plain equals, for example matching a date to a range, that is a non-equi join. It works the same way and it fans out enthusiastically, so count your rows.</p>
+    <p>Постоянно появляются еще два фрагмента синтаксиса.  <code>ON</code>  устанавливает условие соответствия, как в  <code>ON g.AppID = r.app_id</code>. <code>USING (app_id)</code>  это сокращение, обозначающее, что столбец имеет одно и то же имя в обеих таблицах. А когда условие соединения не является простым равенством, например, сопоставление даты с диапазоном, это неэквивалентное соединение. Он работает таким же образом и с энтузиазмом расходится веерами, так что считайте свои ряды.</p>
   </div>
 
   <div class="step">
-    <h2>3. Failure one: the silent delete</h2>
+    <h2>3. Ошибка первая: тихое удаление</h2>
 
-    <p>Before the explanation: you join two tables and get fewer rows back than you started with. No error, no warning. Where did the missing rows go, and who decided they should go?</p>
+    <p>Перед пояснением: вы объединяете две таблицы и получаете обратно меньше строк, чем начали. Ни ошибки, ни предупреждения. Куда делись недостающие строки и кто решил, что они должны исчезнуть?</p>
 
-    <p>A plain <code>JOIN</code> is an <code>INNER JOIN</code>. It keeps only rows that matched on both sides. Rows that matched nothing are not flagged, not counted, and not mentioned. They are simply absent.</p>
+    <p>Равнина  <code>JOIN</code>  это  <code>INNER JOIN</code>. Он сохраняет только строки, совпадающие с обеих сторон. Строки, не совпавшие ни с чем, не помечаются, не учитываются и не упоминаются. Они просто отсутствуют.</p>
 
-    <p>On my two datasets, that mattered enormously. The two tables were collected by different people at different times, so their coverage does not line up. Checking how many games had any matching review at all:</p>
+    <p>Для моих двух наборов данных это имело огромное значение. Две таблицы были собраны разными людьми в разное время, поэтому их охват не совпадает. Проверка того, сколько игр вообще имели соответствующий обзор:</p>
 
     <pre><code>SELECT COUNT(DISTINCT g.AppID) AS games_with_reviews
 FROM games_raw AS g
 JOIN recommendations AS r ON g.AppID = r.app_id;</code></pre>
 
-    <p>The answer was 36,255 out of 125,855 games, which is about 29%. Roughly seven out of ten games in the left table would vanish from any inner join with the review table. Narrowed to the 175 games I actually cared about, about 57 of them had no reviews. An inner join quietly reduced my population by a third before I calculated anything, and the result set looked finished. The columns were right, the ordering was right, the numbers were plausible.</p>
+    <p>Ответ — 36 255 из 125 855 игр, это около 29%. Примерно семь из десяти игр в левой таблице исчезнут из любого внутреннего соединения с таблицей обзора. Если ограничиться 175 играми, которые меня действительно интересовали, около 57 из них не имели обзоров. Внутреннее соединение незаметно уменьшило мою популяцию на треть, прежде чем я что-либо рассчитал, и набор результатов выглядел законченным. Столбцы были правильными, порядок был правильным, цифры были правдоподобными.</p>
 
-    <h3>The check that catches it</h3>
-    <p>Two lines, run before you trust anything downstream. First, how many rows went in. Second, how many distinct keys came out.</p>
+    <h3>Проверка, которая ловит это</h3>
+    <p>Две строки: запускайте, прежде чем доверять чему-либо нижестоящему. Во-первых, сколько строк вошло. Во-вторых, сколько разных ключей получилось.</p>
 
     <pre><code>SELECT COUNT(*) AS rows_in FROM hidden_gems;
 
@@ -297,12 +295,12 @@ SELECT COUNT(DISTINCT g.AppID) AS keys_out
 FROM hidden_gems AS g
 JOIN recommendations AS r ON g.AppID = r.app_id;</code></pre>
 
-    <p>If <code>keys_out</code> is smaller than <code>rows_in</code>, your join is dropping records, and you now have a decision to make rather than an accident to discover later. Either the drop is fine and you say so in writing, or it is not and you switch to a <code>LEFT JOIN</code>.</p>
+    <p>If <code>keys_out</code>  меньше, чем  <code>rows_in</code>, ваше присоединение теряет записи, и теперь вам нужно принять решение, а не случайно узнать об этом позже. Либо дроп в порядке и вы об этом письменно говорите, либо нет и вы переходите на дроп.  <code>LEFT JOIN</code>.</p>
 
-    <p>Write the match rate down either way. "The playtime analysis covers 118 of 175 games, or 67%, because the review dataset does not include the rest" is a sentence that makes a reviewer trust the whole document. Leaving it out is what makes them stop trusting it.</p>
+    <p>Запишите коэффициент совпадения в любом случае. «Анализ игрового времени охватывает 118 из 175 игр, или 67%, поскольку набор данных обзора не включает остальные» — это предложение, которое заставляет рецензента доверять всему документу. Если оставить это в стороне, они перестанут ему доверять.</p>
 
-    <h3>The anti-join, and why an empty column is a finding</h3>
-    <p>A <code>LEFT JOIN</code> keeps every row from the left table whether it matched or not, filling the right side with <code>NULL</code>. That gives you a way to ask the question an inner join cannot answer: which rows found nothing? Keep everything, then keep only the ones where the right side came back empty. This pattern is called an <strong>anti-join</strong>, and it shows up in interviews constantly.</p>
+    <h3>Анти-соединение и почему пустой столбец — это находка</h3>
+    <p>A <code>LEFT JOIN</code>  сохраняет каждую строку из левой таблицы независимо от того, совпала она или нет, заполняя правую часть  <code>NULL</code>. Это дает вам возможность задать вопрос, на который не может ответить внутреннее соединение: какие строки ничего не нашли? Сохраните все, а затем оставьте только те, правая сторона которых оказалась пустой. Этот шаблон называется  <strong>anti-join</strong>и это постоянно проявляется в интервью.</p>
 
     <pre><code>SELECT g.Name, g.pct_positive
 FROM hidden_gems AS g
@@ -310,44 +308,44 @@ LEFT JOIN recommendations AS r ON g.AppID = r.app_id
 WHERE r.app_id IS NULL
 ORDER BY g.pct_positive DESC;</code></pre>
 
-    <p>Read the <code>WHERE</code> clause carefully, because it is the part that surprises people. <code>r.app_id IS NULL</code> cannot be true for any row that matched, since a matched row has a real value there. It is only true for rows the <code>LEFT JOIN</code> invented to keep an unmatched left row alive. So the filter means "keep the rows that found nothing".</p>
+    <p>Прочтите  <code>WHERE</code>  внимательно, потому что это та часть, которая удивляет людей.  <code>r.app_id IS NULL</code>  не может быть истинным для любой совпавшей строки, поскольку совпавшая строка имеет там реальное значение. Это справедливо только для строк  <code>LEFT JOIN</code>  изобретен, чтобы сохранить непревзойденный левый ряд. Таким образом, фильтр означает «сохранить строки, которые ничего не нашли».</p>
 
-    <p>When I ran it, the 57 missing games were not noise. They fell into three groups, and every group told me something. Several were mainstream blockbusters that an earlier data-quality pass had already flagged for impossible price and ownership values, and a completely separate method fingering the same rows is strong confirmation those rows are broken. Others were released after the reviews were collected in August 2024, so they could not possibly match, which turned a vague limitation into a nameable list. The rest were genuinely uncovered titles the review dataset never sampled.</p>
+    <p>Когда я запустил его, 57 пропущенных игр не были шумом. Они разделились на три группы, и каждая группа что-то мне рассказала. Некоторые из них были массовыми блокбастерами, которые при более раннем этапе проверки качества данных уже были отмечены как невозможные цена и стоимость владения, а совершенно отдельный метод, проверяющий одни и те же строки, является убедительным подтверждением того, что эти строки повреждены. Другие были выпущены после того, как обзоры были собраны в августе 2024 года, поэтому они не могли совпадать, что превратило расплывчатое ограничение в список, который можно назвать. Остальные были действительно обнаруженными названиями, которые никогда не использовались в наборе обзорных данных.</p>
 
-    <p>None of that would have existed in an inner join. An empty column is not a hole in your work. It is often the most interesting result you have, and it belongs in your write-up: <a href="../documenting-data-limitations/">documenting data limitations</a> covers how.</p>
+    <p>Ничего из этого не существовало бы во внутреннем соединении. Пустой столбец – это не дыра в вашей работе. Часто это самый интересный результат, который у вас есть, и он должен быть в вашей рецензии:  <a href="../documenting-data-limitations/">Документирование ограничений данных</a>  рассказывает о том, как.</p>
   </div>
 
   <div class="step">
-    <h2>4. Failure two: the silent multiply</h2>
+    <h2>4. Ошибка вторая: молчаливое умножение</h2>
 
-    <p>Before the explanation: one customer has three orders. You join customers to orders, then sum a column that lives on the customer, like their credit limit. What number comes out, and why is it not the credit limit?</p>
+    <p>Перед пояснением: у одного покупателя три заказа. Вы присоединяете клиентов к заказам, а затем суммируете столбец, который относится к клиенту, например, его кредитный лимит. Какая цифра выходит, и почему это не кредитный лимит?</p>
 
-    <p>When a game with 2,498 reviews is joined to the review table, that one game becomes 2,498 rows. Its name repeats 2,498 times. Its price repeats 2,498 times. This is called <strong>fan-out</strong>, and the trouble starts the moment you aggregate a column that came from the one-row-per-game side.</p>
+    <p>Когда к таблице обзоров присоединяется игра с 2498 отзывами, в этой игре становится 2498 строк. Его название повторяется 2498 раз. Его цена повторяется 2498 раз. Это называется  <strong>fan-out</strong>, и проблемы начинаются в тот момент, когда вы объединяете столбец, полученный со стороны одной строки на игру.</p>
 
-    <p>Here is the wrong query. It looks entirely reasonable.</p>
+    <p>Вот неправильный запрос. Это выглядит вполне разумно.</p>
 
     <pre><code>SELECT g.Name, SUM(g.Price) AS total_price
 FROM hidden_gems AS g
 JOIN recommendations AS r ON g.AppID = r.app_id
 GROUP BY g.AppID, g.Name;</code></pre>
 
-    <p>For one game in my data, priced at $3.49 with 2,498 matched reviews, that <code>SUM</code> returns 8,718.02. The price of the game is still $3.49. The query added it up once per review, because after the join there are 2,498 rows carrying that price. No error, no warning, and a number roughly 2,500 times too big sitting in a column labelled total price.</p>
+    <p>По моим данным, для одной игры по цене 3,49 доллара США с 2498 совпадающими отзывами это  <code>SUM</code>  возвращает 8718,02. Цена игры по-прежнему составляет $3,49. Запрос добавлял ее один раз за проверку, поскольку после объединения имеется 2498 строк, содержащих эту цену. Никаких ошибок, никаких предупреждений, а в столбце «Общая цена» находится число примерно в 2500 раз больше.</p>
 
-    <div class="note"><strong>Only aggregate columns that came from the many side.</strong> Columns from the one side belong in <code>GROUP BY</code>, never in <code>SUM</code>. In this join, <code>hours</code> and <code>review_id</code> are on the many side, so counting and averaging them is correct. <code>Name</code> and <code>Price</code> are on the one side, so they get grouped.</div>
+    <div class="note"><strong>Объединять только столбцы, полученные со стороны многих.</strong>  Колонны с одной стороны принадлежат  <code>GROUP BY</code>, никогда в  <code>SUM</code>. В этом объединении  <code>hours</code> and <code>review_id</code>  находятся на стороне многих, поэтому их подсчет и усреднение корректны.  <code>Name</code> and <code>Price</code>  находятся на одной стороне, поэтому они группируются.</div>
 
-    <p>Averages hide this better than sums, which makes them more dangerous. <code>AVG(g.Price)</code> across 2,498 duplicated rows returns $3.49, the right answer, so nothing looks wrong. Then the same pattern meets a game with two rows in a second joined table. The duplication stops being uniform, and the average silently starts weighting some records more than others. Say out loud why uneven duplication breaks an average but even duplication does not, before you read on. That one is the hinge of this whole guide.</p>
+    <p>Средние значения скрывают это лучше, чем суммы, что делает их более опасными.  <code>AVG(g.Price)</code>  по 2498 повторяющимся строкам возвращается 3,49 доллара, правильный ответ, поэтому все выглядит не так. Затем тот же образец встречается с игрой с двумя строками во второй объединенной таблице. Дублирование перестает быть равномерным, и среднее значение незаметно начинает придавать некоторым записям больший вес, чем другим. Прежде чем читать дальше, скажите вслух, почему неравномерное дублирование нарушает средний показатель, а даже дублирование — нет. Это основа всего руководства.</p>
 
-    <h3>The check that catches it</h3>
-    <p>Compare total rows to distinct keys. If they differ, you have fan-out, and you should know its size before you aggregate.</p>
+    <h3>Проверка, которая ловит это</h3>
+    <p>Сравните общее количество строк с отдельными ключами. Если они различаются, у вас есть разветвление, и вам следует знать его размер, прежде чем агрегировать.</p>
 
     <pre><code>SELECT COUNT(*) AS joined_rows,
        COUNT(DISTINCT g.AppID) AS distinct_games
 FROM hidden_gems AS g
 JOIN recommendations AS r ON g.AppID = r.app_id;</code></pre>
 
-    <p>If <code>joined_rows</code> is much larger than <code>distinct_games</code>, the join expanded your table, which is completely fine as long as you meant it. Fan-out is not a bug. It is what a one-to-many join is for. It only becomes a bug when you aggregate as if it did not happen.</p>
+    <p>If <code>joined_rows</code>  намного больше, чем  <code>distinct_games</code>, объединение расширило вашу таблицу, и это совершенно нормально, если вы это имели в виду. Разветвление не является ошибкой. Для этого и нужно соединение «один-ко-многим». Это становится ошибкой только тогда, когда вы суммируете, как будто этого не произошло.</p>
 
-    <p>The other half of the fix is <code>HAVING</code>. Once you group, a filter on an aggregate has to run after the grouping, which is what <code>HAVING</code> does and <code>WHERE</code> cannot.</p>
+    <p>Другая половина исправления  <code>HAVING</code>. После группировки фильтр по агрегату должен выполняться после группировки, что и является  <code>HAVING</code>  делает и  <code>WHERE</code>  не могу.</p>
 
     <pre><code>SELECT g.Name,
        g.Price,
@@ -359,13 +357,13 @@ GROUP BY g.AppID, g.Name, g.Price
 HAVING COUNT(r.review_id) >= 50
 ORDER BY avg_hours DESC;</code></pre>
 
-    <p>That floor of 50 matters more than it looks. Without it, a game with three reviews and one obsessive player outranks everything else. With it, the top of my list became games with hundreds or thousands of reviews behind their averages, which is the difference between a finding and an artifact. There is more on choosing that number honestly in <a href="../data-driven-thresholds/">data-driven thresholds</a>.</p>
+    <p>Этот 50-й этаж значит больше, чем кажется. Без этого игра с тремя обзорами и одним навязчивым игроком превосходит все остальное. Благодаря этому на вершине моего списка оказались игры, у которых сотни или тысячи обзоров отстают от среднего показателя, что и отличает находку от артефакта. Подробнее о том, как честно выбрать это число, читайте в  <a href="../data-driven-thresholds/">Пороги, управляемые данными</a>.</p>
   </div>
 
   <div class="step">
-    <h2>5. The full before and after</h2>
+    <h2>5. Полное до и после</h2>
 
-    <p>Same two tables, same question. The first version runs and lies. The second runs, tells the truth, and states its own coverage.</p>
+    <p>Те же две таблицы, тот же вопрос. Первая версия работает и лежит. Второй работает, говорит правду и излагает собственное освещение.</p>
 
     <h3>Before</h3>
     <pre><code>SELECT g.Name,
@@ -376,7 +374,7 @@ JOIN recommendations AS r ON g.AppID = r.app_id
 GROUP BY g.AppID, g.Name
 ORDER BY avg_hours DESC;</code></pre>
 
-    <p>Three problems, none of which produce an error. <code>SUM(g.Price)</code> is multiplied by the review count. The inner join has removed every game with no reviews, unmentioned. And with no minimum review count, a game with two reviews can top the ranking.</p>
+    <p>Три проблемы, ни одна из которых не приводит к ошибке.  <code>SUM(g.Price)</code>  умножается на количество отзывов. Внутреннее объединение удалило все игры без обзоров, не говоря уже о них. А без минимального количества обзоров игра с двумя отзывами может возглавить рейтинг.</p>
 
     <h3>After</h3>
     <pre><code>-- ============================================================
@@ -407,122 +405,122 @@ GROUP BY g.AppID, g.Name, g.Price
 HAVING COUNT(r.review_id) >= 50
 ORDER BY avg_hours DESC;</code></pre>
 
-    <p>The price column is grouped rather than summed, so it stays $3.49. The coverage line names what the join removed, so a reader knows the scope. The floor stops the ranking from being decided by a sample of two. The comment format is the one from <a href="../sql-teaching-comments/">how to comment SQL so it teaches</a>.</p>
+    <p>Столбец цен сгруппирован, а не суммирован, поэтому он остается равным 3,49 доллара. В строке покрытия указано, что было удалено в результате объединения, чтобы читатель знал масштаб. Нижний этаж не позволяет ранжированию определяться выборкой из двух человек. Формат комментариев тот же, что и у  <a href="../sql-teaching-comments/">Как комментировать SQL, чтобы он обучал</a>.</p>
 
-    <p>Now picture the last join you wrote against your own data. Which of those three problems is most likely already sitting in it, and what would the row count have told you?</p>
+    <p>Теперь представьте себе последнее объединение, которое вы написали для своих собственных данных. Какая из этих трех проблем, скорее всего, уже присутствует в нем и что вам скажет подсчет строк?</p>
   </div>
 
   <div class="step">
-    <h2>6. Edge cases that break joins in real data</h2>
+    <h2>6. Пограничные случаи, нарушающие соединения в реальных данных</h2>
 
-    <p>Before the explanation: a join returns zero rows. Not few. Zero. The tables are both full and the ids look identical on screen. What would you check first?</p>
+    <p>Перед объяснением: соединение возвращает ноль строк. Не мало. Ноль. Обе таблицы заполнены, и идентификаторы на экране выглядят одинаково. Что бы вы проверили в первую очередь?</p>
 
-    <p>Seven things that have each stopped someone for an afternoon.</p>
+    <p>Семь вещей, каждая из которых кого-то остановила на целый день.</p>
 
-    <p><strong>The key columns are named differently.</strong> <code>games_raw.AppID</code> and <code>recommendations.app_id</code> are the same number from the same source, spelled two ways because two people built the datasets. What matters is that they hold the same identifier, not that they share a name.</p>
+    <p><strong>Ключевые столбцы называются по-другому.</strong> <code>games_raw.AppID</code> and <code>recommendations.app_id</code>  — это одно и то же число из одного и того же источника, написанное двумя способами, поскольку наборы данных создавали два человека. Важно то, что они имеют один и тот же идентификатор, а не то, что у них общее имя.</p>
 
-    <p><strong>The key columns have different types.</strong> This is the answer to the prequestion. An id stored as text in one table and a number in the other matches nothing at all, and the result is an empty table rather than an error. If a join returns zero rows and you expected thousands, check the types before anything else.</p>
+    <p><strong>Ключевые столбцы имеют разные типы.</strong>  Это ответ на предварительный вопрос. Идентификатор, хранящийся в виде текста в одной таблице, и число в другой вообще ничему не соответствуют, и в результате получается пустая таблица, а не ошибка. Если соединение возвращает ноль строк, а вы ожидали тысячи, прежде всего проверьте типы.</p>
 
-    <p><strong>A boolean is stored as text.</strong> In the review table, <code>is_recommended</code> holds the lowercase text <code>'true'</code> and <code>'false'</code>, not 1 and 0. Filtering on <code>is_recommended = 1</code> matches nothing and returns a count of zero, which reads as a real answer.</p>
+    <p><strong>Логическое значение сохраняется в виде текста.</strong>  В обзорной таблице  <code>is_recommended</code>  содержит текст в нижнем регистре  <code>'true'</code> and <code>'false'</code>, а не 1 и 0. Фильтрация включена  <code>is_recommended = 1</code>  ничего не соответствует и возвращает нулевое значение, что воспринимается как реальный ответ.</p>
 
-    <p><strong>NULLs in the join key.</strong> A <code>NULL</code> key never matches anything, including another <code>NULL</code>, because <code>NULL</code> means unknown rather than empty. Rows with a missing key drop out of an inner join without a word. Count them first with <code>SELECT COUNT(*) FROM t WHERE key_column IS NULL</code>.</p>
+    <p><strong>NULL в ключе соединения.</strong> A <code>NULL</code>  ключ никогда не соответствует ничему, включая другой  <code>NULL</code>, потому что  <code>NULL</code>  означает неизвестное, а не пустое. Строки с отсутствующим ключом выпадают из внутреннего соединения без слов. Сначала посчитайте их с помощью  <code>SELECT COUNT(*) FROM t WHERE key_column IS NULL</code>.</p>
 
-    <p><strong>Joining many to many.</strong> If both sides hold several rows per key, the output multiplies both ways: three rows on the left and four on the right produce twelve. This is almost never what anyone wants and it is the classic cause of an inflated total. Aggregate one side down to one row per key first, then join.</p>
+    <p><strong>Объединение многих со многими.</strong>  Если обе стороны содержат несколько строк на клавишу, выходные данные умножаются в обе стороны: три строки слева и четыре справа дают двенадцать. Это почти никогда не то, чего кто-либо хочет, и это классическая причина завышения итоговой суммы. Сначала агрегируйте одну сторону вниз до одной строки на ключ, а затем присоединяйтесь.</p>
 
-    <p><strong>The join is slow because one side is huge.</strong> Matching 125,855 rows against 41 million takes real work. An index on the key column of the large table turns a full scan into a lookup: <code>CREATE INDEX idx_rec_appid ON recommendations(app_id);</code>. Build it once and every join afterward is quick. <a href="../handle-large-datasets/">Handling large datasets</a> covers the rest of working at this size.</p>
+    <p><strong>Соединение происходит медленно, потому что одна сторона огромна.</strong>  Сопоставление 125 855 строк с 41 миллионом требует серьезной работы. Индекс ключевого столбца большой таблицы превращает полное сканирование в поиск:  <code>CREATE INDEX idx_rec_appid ON recommendations(app_id);</code>. Создайте его один раз, и каждое последующее соединение будет быстрым.  <a href="../handle-large-datasets/">Обработка больших наборов данных</a>  охватывает остальную часть работы в этом размере.</p>
 
-    <p><strong>The two tables describe different moments.</strong> My game list and my review list were collected at different times, so some unmatched rows are not data errors, they are calendar. A join makes it trivially easy to combine sources that were never meant to be combined, which is exactly why the write-up has to say where each source came from.</p>
+    <p><strong>Две таблицы описывают разные моменты.</strong>  Мой список игр и список обзоров были собраны в разное время, поэтому некоторые несовпадающие строки являются не ошибками данных, а календарем. Объединение упрощает объединение источников, которые никогда не предназначались для объединения, и именно поэтому в описании должно быть указано, откуда взялся каждый источник.</p>
   </div>
 
-  <h2>Why this works</h2>
+  <h2>Почему это работает</h2>
 
-  <p>The behaviour above is not an implementation quirk of one database. It falls out of how the relational model defines the operation. Codd's original formulation defines a join as a derived relation, built from the pairs of rows that satisfy the matching condition (Codd, 1970, <em>Communications of the ACM</em>, 13(6), 377–387). Once the result is defined as the set of matching pairs, both behaviours are forced. A row with no partner contributes no pair, and a row with several partners contributes several. Dropping and multiplying are not edge cases sitting on top of joins. They are what a join is.</p>
+  <p>Описанное выше поведение не является особенностью реализации одной базы данных. Это выходит за рамки того, как реляционная модель определяет операцию. Исходная формулировка Кодда определяет соединение как производное отношение, построенное из пар строк, удовлетворяющих условию сопоставления (Codd, 1970,  <em>Коммуникации ACM</em>, 13(6), 377–387). Как только результат определен как набор совпадающих пар, оба поведения становятся обязательными. Ряд без партнера не дает пары, а ряд с несколькими партнерами дает несколько. Удаление и умножение не являются крайними случаями, находящимися поверх соединений. Они и есть то, что такое соединение.</p>
 
-  <p>That is why the two checks in this guide are counts rather than inspections. You are not hunting for a mistake in the query text. You are measuring how many pairs the operation produced, which is the one thing the syntax will never show you.</p>
+  <p>Вот почему две проверки в этом руководстве являются подсчетами, а не проверками. Вы не ищете ошибку в тексте запроса. Вы измеряете, сколько пар создала операция, а это единственное, чего синтаксис вам никогда не покажет.</p>
 
-  <p>There is a second reason this page keeps asking you to say things out loud rather than only read them. Learners who explain a worked example to themselves as they go understand it substantially better, and transfer it to new problems better, than learners who read the same example without explaining it (Chi, Bassok, Lewis, Reimann, &amp; Glaser, 1989, <em>Cognitive Science</em>, 13(2), 145–182). Joins are where that pays off most, because the mistake is never in a keyword. It is in what you believe one row means.</p>
+  <p>Есть и вторая причина, по которой эта страница постоянно просит вас произносить слова вслух, а не просто читать их. Учащиеся, которые объясняют себе проработанный пример по ходу дела, понимают его значительно лучше и лучше переносят его на новые задачи, чем учащиеся, которые читают тот же пример, не объясняя его (Chi, Bassok, Lewis, Reimann &amp; Glaser, 1989,  <em>Когнитивная наука</em>, 13(2), 145–182). Соединения — это то, где это окупается больше всего, потому что ошибка никогда не бывает в ключевом слове. Это то, что, по вашему мнению, означает одна строка.</p>
 
-  <h2>Using this on your own project</h2>
+  <h2>Использование этого в вашем собственном проекте</h2>
 
-  <p>Think of a query you have already written and shipped. Can you say, right now, what one row of its result means, and whether that is the same thing one row meant before the join? If that takes more than a few seconds, that query is the one to check first.</p>
+  <p>Подумайте о запросе, который вы уже написали и отправили. Можете ли вы прямо сейчас сказать, что означает одна строка его результата и является ли это тем же самым, что означала одна строка до объединения? Если это занимает больше нескольких секунд, этот запрос следует проверить в первую очередь.</p>
 
-  <p>Auditing every join in an existing project at once is grim work and you will stop halfway. Do this instead, in order.</p>
+  <p>Аудит каждого соединения в существующем проекте одновременно — мрачная работа, и вы остановитесь на полпути. Вместо этого сделайте это по порядку.</p>
 
   <ol>
-    <li><strong>Say the grain of both tables out loud</strong> before you write the join. "One row per customer" and "one row per order." Ten seconds, and it predicts the shape of the result.</li>
-    <li><strong>Run the two counts.</strong> Rows in against distinct keys out for the drop check. Total rows against distinct keys for the multiply check. Two queries.</li>
-    <li><strong>Write the match rate into the file</strong> as a comment, in the same pass. Not later. Later never happens, and this is the number a reviewer asks about first.</li>
-    <li><strong>Check every aggregate against the grain.</strong> Anything from the one side goes in <code>GROUP BY</code>. Anything from the many side can be counted or averaged. Go through them one at a time.</li>
-    <li><strong>Run the anti-join once</strong>, even when you plan to use an inner join. If the unmatched rows have a pattern, that pattern is a finding about your data, and you would rather learn it now than in a review.</li>
+    <li><strong>Произнесите вслух суть обеих таблиц.</strong>  прежде чем писать соединение. «Одна строка на каждого клиента» и «Одна строка на заказ». Десять секунд, и он предсказывает форму результата.</li>
+    <li><strong>Проведите два счета.</strong>  Строки вводятся по отдельным ключам для проверки на отбрасывание. Общее количество строк по отдельным ключам для проверки умножения. Два запроса.</li>
+    <li><strong>Запишите коэффициент совпадения в файл</strong>  в качестве комментария в том же проходе. Не позже. Позже никогда не бывает, и рецензент спрашивает об этом числе в первую очередь.</li>
+    <li><strong>Проверьте каждый агрегат на соответствие зерну.</strong>  Все, что с одной стороны, входит  <code>GROUP BY</code>. Все, что касается многих, можно посчитать или усреднить. Проходите их по одному.</li>
+    <li><strong>Запустите анти-соединение один раз</strong>, даже если вы планируете использовать внутреннее соединение. Если в несовпадающих строках есть закономерность, эта закономерность является выводом о ваших данных, и вам лучше изучить ее сейчас, чем при просмотре.</li>
   </ol>
 
-  <p>If you are starting fresh rather than auditing, do step one and step two before writing the real query. A join you have already predicted the row count of is a join that cannot surprise you.</p>
+  <p>Если вы начинаете с нуля, а не проводите аудит, выполните первый и второй шаги, прежде чем писать настоящий запрос. Соединение, количество строк которого вы уже предсказали, — это соединение, которое не может вас удивить.</p>
 
-  <p>If you have paper nearby and a spare five minutes, there is one drawing worth doing, and it is optional. Draw three rows on the left, four on the right, connect them the way the picture at the top does, and count the output rows yourself. It is the concept everything else here rests on, and drawing it from memory is both a retrieval attempt and a check on whether you actually have it.</p>
+  <p>Если у вас под рукой есть бумага и свободные пять минут, стоит сделать один рисунок, и он не является обязательным. Нарисуйте три ряда слева, четыре справа, соедините их так, как показано на картинке вверху, и сами посчитайте выходные ряды. На этой концепции основано все остальное, и рисование ее по памяти — это одновременно и попытка восстановления, и проверка того, действительно ли она у вас есть.</p>
 
-  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: SQL, Tableau, data migration, and the working habits around them.</div>
+  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: SQL, Tableau, миграция данных и связанные с ними рабочие привычки.</div>
 
-  <h2>The whole thing on one screen</h2>
+  <h2>Все на одном экране</h2>
 
-  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
+  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
 
   <table>
-    <tr><th>Concept</th><th>What it does</th></tr>
-    <tr><td>The pair rule</td><td>For every left row, find every matching right row, write one output row per pair.</td></tr>
-    <tr><td>Grain</td><td>What one row means. The grain of a join result is usually the many side.</td></tr>
-    <tr><td>Plain <code>JOIN</code></td><td>An <code>INNER JOIN</code>. That default causes the silent delete.</td></tr>
-    <tr><td><code>INNER JOIN</code></td><td>Only matched pairs. Unmatched rows from both sides are gone.</td></tr>
-    <tr><td><code>LEFT JOIN</code></td><td>Every left row kept. Right columns are <code>NULL</code> where nothing matched.</td></tr>
-    <tr><td><code>RIGHT JOIN</code></td><td>Every right row kept. Usually rewritten as a <code>LEFT JOIN</code> with the tables swapped.</td></tr>
-    <tr><td><code>FULL OUTER JOIN</code></td><td>Unmatched rows kept from both sides.</td></tr>
-    <tr><td><code>CROSS JOIN</code></td><td>Every left row paired with every right row. No key. 1,000 by 1,000 is a million rows.</td></tr>
-    <tr><td>Self join</td><td>A table joined to itself under two aliases. Employees and managers.</td></tr>
-    <tr><td>Anti-join</td><td><code>LEFT JOIN</code> plus <code>WHERE right.key IS NULL</code>. Lists the rows that found nothing.</td></tr>
-    <tr><td>The silent delete</td><td>Unmatched rows vanish from an inner join with no error.</td></tr>
-    <tr><td>Check for it</td><td>Rows in, against <code>COUNT(DISTINCT key)</code> out.</td></tr>
-    <tr><td>Fan-out</td><td>One row matching many becomes many rows, repeating the one side's values.</td></tr>
-    <tr><td>Check for it</td><td><code>COUNT(*)</code> against <code>COUNT(DISTINCT key)</code> in the joined result.</td></tr>
-    <tr><td>The aggregate rule</td><td>Many-side columns can be summed or averaged. One-side columns go in <code>GROUP BY</code>.</td></tr>
-    <tr><td><code>WHERE</code> against <code>HAVING</code></td><td><code>WHERE</code> filters rows before grouping. <code>HAVING</code> filters groups after, and is the only one that sees an aggregate.</td></tr>
-    <tr><td>Join returns zero rows</td><td>Usually a type mismatch on the key. Check the stored type on both sides.</td></tr>
-    <tr><td><code>NULL</code> in the key</td><td>Never matches anything, including another <code>NULL</code>. Those rows drop out silently.</td></tr>
-    <tr><td>Many-to-many join</td><td>Three left and four right becomes twelve. Aggregate one side to one row per key first.</td></tr>
-    <tr><td>Slow join</td><td>The large side is being scanned in full. Index the key column.</td></tr>
-    <tr><td>Match rate</td><td>The share of your population that survived the join. Write it into the file, every time.</td></tr>
+    <tr><th>Concept</th><th>Что он делает</th></tr>
+    <tr><td>Правило пары</td><td>Для каждой левой строки найдите каждую совпадающую правую строку и напишите по одной выходной строке для каждой пары.</td></tr>
+    <tr><td>Grain</td><td>Что означает одна строка. Зернистостью результата соединения обычно является множественная сторона.</td></tr>
+    <tr><td>Plain <code>JOIN</code></td><td>An <code>INNER JOIN</code>. Это значение по умолчанию вызывает автоматическое удаление.</td></tr>
+    <tr><td><code>INNER JOIN</code></td><td>Только совпадающие пары. Несовпадающие строки с обеих сторон исчезли.</td></tr>
+    <tr><td><code>LEFT JOIN</code></td><td>Каждый левый ряд сохранен. Правые столбцы  <code>NULL</code>  где ничего не совпало. </td></tr>
+    <tr><td><code>RIGHT JOIN</code></td><td>Каждый правый ряд сохранен. Обычно переписывается как  <code>LEFT JOIN</code>  с заменой столов.</td></tr>
+    <tr><td><code>FULL OUTER JOIN</code></td><td>Несовпадающие ряды сохранены с обеих сторон.</td></tr>
+    <tr><td><code>CROSS JOIN</code></td><td>Каждый левый ряд в паре с каждым правым рядом. Нет ключа. 1000 на 1000 — это миллион строк.</td></tr>
+    <tr><td>Самостоятельное присоединение</td><td>Таблица, присоединенная сама к себе под двумя псевдонимами. Сотрудники и менеджеры.</td></tr>
+    <tr><td>Anti-join</td><td><code>LEFT JOIN</code> plus <code>WHERE right.key IS NULL</code>. Перечисляет строки, в которых ничего не найдено.</td></tr>
+    <tr><td>Тихое удаление</td><td>Несовпадающие строки исчезают из внутреннего соединения без ошибок.</td></tr>
+    <tr><td>Проверьте это</td><td>Гребет против  <code>COUNT(DISTINCT key)</code>  вне.</td></tr>
+    <tr><td>Fan-out</td><td>Одна строка, совпадающая со многими, становится множеством строк, повторяя значения одной стороны.</td></tr>
+    <tr><td>Проверьте это</td><td><code>COUNT(*)</code> against <code>COUNT(DISTINCT key)</code>  в объединенном результате.</td></tr>
+    <tr><td>Агрегатное правило</td><td>Многосторонние столбцы можно суммировать или усреднять. Входят односторонние колонны  <code>GROUP BY</code>.</td></tr>
+    <tr><td><code>WHERE</code> against <code>HAVING</code></td><td><code>WHERE</code>  фильтрует строки перед группировкой.  <code>HAVING</code>  фильтрует группы после и является единственным, кто видит агрегат.</td></tr>
+    <tr><td>Соединение возвращает ноль строк</td><td>Обычно несовпадение типа на ключе. Проверьте сохраненный тип с обеих сторон.</td></tr>
+    <tr><td><code>NULL</code>  в ключе</td><td>Никогда не совпадает ни с чем, включая другое  <code>NULL</code>. Эти строки исчезают бесшумно.</td></tr>
+    <tr><td>Присоединение «многие ко многим»</td><td>Три левых и четыре правых становятся двенадцатью. Сначала агрегируйте одну сторону в одну строку для каждого ключа.</td></tr>
+    <tr><td>Медленное присоединение</td><td>Большая сторона сканируется полностью. Индексируйте ключевой столбец.</td></tr>
+    <tr><td>Коэффициент соответствия</td><td>Доля вашего населения, пережившая присоединение. Записывайте это в файл каждый раз.</td></tr>
   </table>
 
-  <div class="note"><strong>The one habit to keep.</strong> If you take nothing else from this page, count your rows before and after every join and write the match rate down. Both failures here are invisible in the query text and obvious in the row count. If a join goes wrong in a way this page does not cover, there is a general <a href="../technical-tenacity/">diagnosis loop for being stuck</a>.</div>
+  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Если вы больше ничего не берете с этой страницы, подсчитайте свои строки до и после каждого соединения и запишите коэффициент соответствия. Обе ошибки здесь невидимы в тексте запроса и очевидны в количестве строк. Если соединение идет не так, как описано на этой странице, существует общая ошибка.  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>.</div>
 
-  <p>One last thought, and I would genuinely like other people's answers. The 57 games my join dropped turned out to be the most useful thing in the whole analysis, because the reason they were missing was itself the story. What has an anti-join surfaced in your data that you would not have found any other way?</p>
+  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. 57 игр, которые я пропустил, оказались самыми полезными во всем анализе, потому что причина их отсутствия заключалась в самой истории. Что в ваших данных обнаружилось в антиобъединении, которое вы не нашли бы другим способом?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Codd, E. F. (1970). A relational model of data for large shared data banks. <em>Communications of the ACM</em>, 13(6), 377–387.</li>
-    <li>Chi, M. T. H., Bassok, M., Lewis, M. W., Reimann, P., &amp; Glaser, R. (1989). Self-explanations: How students study and use examples in learning to solve problems. <em>Cognitive Science</em>, 13(2), 145–182.</li>
+    <li>Кодд, EF (1970). Реляционная модель данных для крупных общих банков данных.  <em>Коммуникации ACM</em>, 13(6), 377–387.</li>
+    <li>Чи, М.Т.Х., Бассок, М., Льюис, М.В., Рейманн, П. и Глейзер, Р. (1989). Самообъяснения: как учащиеся изучают и используют примеры при обучении решению проблем.  <em>Когнитивная наука</em>, 13(2), 145–182.</li>
   </ul>
 
   <div class="book">
-    <strong>The join ran clean and the row count went up, which means something matched twice.</strong>
-    <p><em>SQL for Analysts</em> is 458 pages, every join read line by line, with the row counts printed before and after.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-joins'})">SQL for Analysts, $19 &rarr;</a>
+    <strong>Соединение прошло успешно, а количество строк увеличилось, что означает, что что-то совпало дважды.</strong>
+    <p><em>SQL для аналитиков</em>  составляет 458 страниц, каждое объединение читается построчно, а количество строк печатается до и после.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-joins'})">SQL для аналитиков, 19 $ →</a>
   </div>
 
   <div class="cta">
-    <strong>Practice joins with the data in front of you.</strong>
-    <p style="margin:6px 0 0">The joins ladder in <a href="../../drill/?ladder=joins">SQL Drill</a> is thirteen queries against a half migrated customer system: match the two sides, find the six customers that never landed, watch a one to many table turn 40 customers into 78 rows, then fix it. Every query runs in the browser. Nothing to install, no account needed.</p>
-    <a class="btn" href="../../drill/?ladder=joins">Drill the joins ladder →</a>
-    <p style="margin:10px 0 0;font-size:14.5px">Prefer worked examples, flash cards and a mock exam? The <a href="../../sql/">SQL Kit</a> has a JOIN Lab too.</p>
+    <strong>Практика соединяется с данными, которые находятся перед вами.</strong>
+    <p style="margin:6px 0 0">Лестница соединений в  <a href="../../drill/?ladder=joins">SQL-детализация</a>  — это тринадцать запросов к наполовину перенесенной клиентской системе: сопоставьте две стороны, найдите шесть клиентов, которые так и не появились, посмотрите, как таблица «один ко многим» превращает 40 клиентов в 78 строк, а затем исправляете это. Каждый запрос выполняется в браузере. Ничего устанавливать, учетная запись не требуется.</p>
+    <a class="btn" href="../../drill/?ladder=joins">Просверлите лестницу соединений →</a>
+    <p style="margin:10px 0 0;font-size:14.5px">Предпочитаете проработанные примеры, карточки и пробный экзамен?  <a href="../../sql/">SQL-комплект</a>  также есть JOIN Lab.</p>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> · <a href="../sql-foundations/">SQL Foundations</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../sql-ctes/">SQL CTEs</a> · <a href="../sql-window-functions/">Window Functions</a> · <a href="../tableau-relationships/">Tableau Relationships</a> · <a href="../tableau-sets/">Tableau Sets</a> · <a href="../../drill/">SQL Drill</a> · <a href="../what-is-data-analysis/">What Is Data Analysis?</a> · <a href="../sql-teaching-comments/">Comment SQL So It Teaches</a> · <a href="../sql-count-function/">COUNT in SQL</a> · <a href="../sql-case-expression/">The CASE Expression</a> · <a href="../sql-aliasing/">SQL Aliases</a> · <a href="../set-up-a-sql-database/">Set Up a SQL Database</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../git-for-analysts/">Git for Analysts</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../data-driven-thresholds/">Data-Driven Thresholds</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../entity-resolution/">Entity Resolution</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../tableau-concepts/">Tableau Concepts</a> · <a href="../build-a-tableau-dashboard/">Build a Tableau Dashboard</a> · <a href="../../sql/">SQL Kit</a> · <a href="../../projects/">Portfolio Projects</a>
+    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../sql-foundations/">Основы SQL</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-ctes/">SQL CTE</a> · <a href="../sql-window-functions/">Оконные функции</a> · <a href="../tableau-relationships/">Табличные отношения</a> · <a href="../tableau-sets/">Наборы таблиц</a> · <a href="../../drill/">SQL-детализация</a> · <a href="../what-is-data-analysis/">Что такое анализ данных?</a> · <a href="../sql-teaching-comments/">Комментарий SQL, чтобы он научился</a> · <a href="../sql-count-function/">СЧЕТ в SQL</a> · <a href="../sql-case-expression/">Выражение CASE</a> · <a href="../sql-aliasing/">SQL-псевдонимы</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../git-for-analysts/">Git для аналитиков</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../data-driven-thresholds/">Пороги, управляемые данными</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../tableau-concepts/">Концепции таблиц</a> · <a href="../build-a-tableau-dashboard/">Создайте панель управления Tableau</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../../projects/">Портфельные проекты</a>
     
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-<script src="../../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

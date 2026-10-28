@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SQL Aliases: How to Read a Query Out Loud — Analyst Prep Kit</title>
-<meta name="description" content="What AS actually changes, why tables get one-letter nicknames, and the scope rule that makes an alias work in ORDER BY and fail in WHERE. With the literal sentence to say for every shape, and the real error messages.">
+<title>Псевдонимы SQL: как прочитать запрос вслух — комплект для подготовки аналитика</title>
+<meta name="description" content="Что на самом деле меняется в AS, почему таблицы получают однобуквенные псевдонимы и правило области действия, которое заставляет псевдоним работать в ORDER BY и не работать в WHERE. С буквальным предложением для каждой формы и реальными сообщениями об ошибках.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-aliasing/">
-<meta property="og:title" content="SQL Aliases: How to Read a Query Out Loud">
-<meta property="og:description" content="AS renames a column in the output and nothing else. A table alias is a nickname you invent. Here is what each one changes, where it stops working, and the sentence to say for every shape.">
+<meta property="og:title" content="Псевдонимы SQL: как прочитать запрос вслух">
+<meta property="og:description" content="AS переименовывает столбец в выходных данных и ничего больше. Псевдоним таблицы — это придуманный вами псевдоним. Вот что каждый из них меняет, где он перестает работать, и какое предложение следует сказать для каждой формы.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/sql-joins.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-aliasing/">
@@ -78,12 +78,11 @@
   .figcap{color:var(--muted);font-size:13.5px;margin:8px 2px 0}
 </style>
 <!-- SEO:JSONLD:START -->
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "SQL Aliases: How to Read a Query Out Loud",
-  "description": "What AS actually changes, why tables get one-letter nicknames, and the scope rule that makes an alias work in ORDER BY and fail in WHERE. With the literal sentence to say for every shape, and the real error messages.",
+  "headline": "Псевдонимы SQL: как прочитать запрос вслух",
+  "description": "Что на самом деле меняется в AS, почему таблицы получают однобуквенные псевдонимы и правило области действия, которое заставляет псевдоним работать в ORDER BY и не работать в WHERE. С буквальным предложением для каждой формы и реальными сообщениями об ошибках.",
   "url": "https://michaelnocito.github.io/analyst-prep-kit/guides/sql-aliasing/",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -91,12 +90,12 @@
   },
   "author": {
     "@type": "Person",
-    "name": "Michael Nocito",
+    "name": "Майкл Носито",
     "url": "https://michaelnocito.github.io"
   },
   "publisher": {
     "@type": "Person",
-    "name": "Michael Nocito"
+    "name": "Майкл Носито"
   },
   "inLanguage": "en",
   "datePublished": "2026-07-27",
@@ -104,8 +103,7 @@
   "image": "https://michaelnocito.github.io/analyst-prep-kit/assets/social/sql-joins.png"
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
@@ -124,7 +122,7 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "SQL Aliases: How to Read a Query Out Loud",
+      "name": "Псевдонимы SQL: как прочитать запрос вслух",
       "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/sql-aliasing/"
     }
   ]
@@ -134,16 +132,16 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../sql/">SQL Kit</a> · <a href="../">All guides</a></p>
-  <h1>SQL Aliases: How to Read a Query Out Loud</h1>
-  <p class="meta">What <code>AS</code> changes, why tables get one-letter nicknames, and the scope rule that trips people · Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Updated <time datetime="2026-07-29">July 29, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../">Все руководства</a></p>
+  <h1>Псевдонимы SQL: как прочитать запрос вслух</h1>
+  <p class="meta">What <code>AS</code>  изменения, почему таблицам присваиваются однобуквенные псевдонимы, а также правило области действия, которое сбивает людей с толку. · Часть  <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Обновлено  <time datetime="2026-07-29">29 июля 2026 г.</time></p>
 
-  <p>After this page you can read any query out loud and know what every name in it refers to. You will also name things the way a reviewer expects. That is most of what makes a query look like the work of someone who does this for a living.</p>
+  <p>После этой страницы вы можете прочитать вслух любой запрос и узнать, к чему относится каждое имя в нем. Вы также будете называть вещи так, как ожидает рецензент. Именно это делает запрос похожим на работу человека, который этим зарабатывает на жизнь.</p>
 
-  <p>Here is what you do. Give every calculated column a name with <code>AS</code>. Give every table a one-letter nickname once a query touches two of them. Then put that nickname in front of each column, so a reader never has to guess which table a column came from. Three habits, and they take about a minute to learn.</p>
+  <p>Вот что вы делаете. Дайте каждому вычисляемому столбцу имя с помощью  <code>AS</code>. Присвойте каждой таблице однобуквенное имя, как только запрос коснется двух из них. Затем поместите этот псевдоним перед каждым столбцом, чтобы читателю никогда не приходилось догадываться, из какой таблицы взят тот или иной столбец. Три привычки, на освоение которых уходит около минуты.</p>
 
-  <div class="note"><strong>The short version.</strong> An alias is a name you invent. <code>AS</code> on a column changes the label on the output and nothing else. A nickname on a table lets you say which table a column belongs to.</div>
+  <div class="note"><strong>Краткая версия.</strong>  Псевдоним — это имя, которое вы придумываете.  <code>AS</code>  в столбце меняет метку на выходе и ничего больше. Псевдоним таблицы позволяет указать, какой таблице принадлежит столбец.</div>
 
   <div class="figure">
     <svg viewBox="0 0 760 300" role="img" aria-labelledby="aliasTagTitle aliasTagDesc" xmlns="http://www.w3.org/2000/svg">
@@ -189,75 +187,75 @@
         <rect x="574" y="254" width="40" height="8" rx="4" fill="#E4E7EA"/>
       </g>
     </svg>
-    <p class="figcap">A name tag does not change what it is attached to. It only gives you a shorter or clearer way to point at it.</p>
+    <p class="figcap">Бирка с именем не меняет того, к чему она прикреплена. Это лишь дает вам более короткий и ясный способ указать на это.</p>
   </div>
 
   <div class="toc">
-    <strong>What's here</strong>
+    <strong>Что здесь</strong>
     <ol>
-      <li>What a column alias changes</li>
-      <li>Why an unnamed calculated column is a defect</li>
-      <li>Table aliases, and the ambiguity they fix</li>
-      <li>The scope rule: ORDER BY yes, WHERE no</li>
-      <li>How to read each shape out loud</li>
-      <li>When to alias and when to leave a name alone</li>
-      <li>AS is optional and you should still type it</li>
-      <li>The full before and after</li>
-      <li>Where this came from and why it works</li>
-      <li>Using this on your own queries</li>
-      <li>A cheat sheet</li>
+      <li>Что меняет псевдоним столбца</li>
+      <li>Почему безымянный вычисляемый столбец — дефект</li>
+      <li>Псевдонимы таблиц и двусмысленность, которую они устраняют</li>
+      <li>Правило области действия: ORDER BY да, WHERE нет</li>
+      <li>Как читать каждую фигуру вслух</li>
+      <li>Когда использовать псевдоним, а когда оставить имя в покое</li>
+      <li>AS не является обязательным, и вам все равно следует его ввести.</li>
+      <li>Полное до и после</li>
+      <li>Откуда это взялось и почему это работает</li>
+      <li>Использование этого в ваших собственных запросах</li>
+      <li>Шпаргалка</li>
     </ol>
   </div>
 
-  <h2>What a column alias changes</h2>
+  <h2>Что меняет псевдоним столбца</h2>
 
-  <p>Before the answer: if you write <code>SELECT title AS gem FROM gem_page</code>, has anything in the <code>gem_page</code> table changed?</p>
+  <p>Перед ответом: если вы напишете  <code>SELECT title AS gem FROM gem_page</code>, есть что-нибудь в  <code>gem_page</code>  таблица изменилась?</p>
 
-  <p>No. Nothing in the stored table moves. An alias is a label on the result you are handed back, and the result is a temporary thing that stops existing when you close the window. The column in the database is still called <code>title</code> tomorrow.</p>
+  <p>Нет. Ничего в сохраненной таблице не перемещается. Псевдоним — это метка возвращаемого вам результата, а результат — это временная вещь, которая перестает существовать, когда вы закрываете окно. Столбец в базе данных по-прежнему называется  <code>title</code>  завтра.</p>
 
-  <p>The word <strong>alias</strong> means an extra name for something that already exists. That is the whole idea, and it is why the same word covers columns and tables. Here is the column version:</p>
+  <p>Слово  <strong>alias</strong>  означает дополнительное имя для чего-то, что уже существует. В этом вся идея, и именно поэтому одно и то же слово обозначает столбцы и таблицы. Вот версия колонки:</p>
 
   <pre><code>SELECT title AS gem
 FROM gem_page;</code></pre>
 
-  <p>The result comes back with a column header that reads <code>gem</code> instead of <code>title</code>. Same values, same row count, different label. If you export that result to a spreadsheet, the spreadsheet's header row says <code>gem</code>, because the header row is exactly the thing the alias set.</p>
+  <p>Результат возвращается с заголовком столбца, который читается  <code>gem</code>  вместо  <code>title</code>. Те же значения, то же количество строк, другая метка. Если вы экспортируете этот результат в электронную таблицу, в строке заголовка таблицы будет написано:  <code>gem</code>, потому что строка заголовка — это именно то, что установил псевдоним.</p>
 
-  <p>That is the entire effect of a column alias. It renames the output. It does not rename the column, it does not filter, it does not change a single value.</p>
+  <p>Вот и весь эффект псевдонима столбца. Он переименовывает вывод. Он не переименовывает столбец, не фильтрует, не меняет ни одного значения.</p>
 
-  <h2>Why an unnamed calculated column is a defect</h2>
+  <h2>Почему безымянный вычисляемый столбец — дефект</h2>
 
-  <p>A calculated column is one the database works out on the spot rather than reading from disk. It has no name of its own, because nothing in the table is called that. So the database invents a header for you, and what it invents is not usable.</p>
+  <p>Вычисляемый столбец — это столбец, который база данных обрабатывает на месте, а не считывает с диска. Своего имени у него нет, потому что в таблице ничего так не называется. Таким образом, база данных изобретает за вас заголовок, а то, что она изобретает, непригодно для использования.</p>
 
   <pre><code>SELECT title,
        ROUND(CAST(up AS REAL) / (up + down) * 100, 1)
 FROM gem_page;</code></pre>
 
-  <p>SQLite hands that back with a column header of <code>ROUND(CAST(up AS REAL) / (up + down) * 100, 1)</code>. The header is the entire expression, punctuation and all. PostgreSQL takes a different route and heads it <code>round</code>, after the outermost function. Neither is a name anybody can use.</p>
+  <p>SQLite возвращает это с заголовком столбца  <code>ROUND(CAST(up AS REAL) / (up + down) * 100, 1)</code>. Заголовок — это все выражение, знаки препинания и все такое. PostgreSQL идет другим путем и идет вперед.  <code>round</code>, после самой внешней функции. Это имя не может использовать каждый.</p>
 
-  <p>That matters for three concrete reasons, and every one of them shows up in a real report:</p>
+  <p>Это важно по трем конкретным причинам, и каждая из них проявляется в реальном отчете:</p>
 
   <ul>
-    <li><strong>You cannot sort by it.</strong> <code>ORDER BY</code> needs something to refer to, and a punctuation-heavy expression is not it. You end up retyping the whole calculation in the <code>ORDER BY</code> line.</li>
-    <li><strong>Two calculations collide.</strong> Add a second <code>ROUND</code> to the same query in PostgreSQL and you have two columns both headed <code>round</code>. Whatever reads that result next has to guess which is which.</li>
-    <li><strong>The export is unreadable.</strong> The header row of the CSV you send a stakeholder contains a SQL expression. That is the version of your work they see.</li>
+    <li><strong>Вы не можете сортировать по нему.</strong> <code>ORDER BY</code>  нужно что-то, на что можно сослаться, и это не слишком пунктуационное выражение. В конечном итоге вы перепечатываете весь расчет в  <code>ORDER BY</code>  линия.</li>
+    <li><strong>Два расчета сталкиваются.</strong>  Добавить второй  <code>ROUND</code>  к одному и тому же запросу в PostgreSQL, и у вас есть два столбца, оба заголовка  <code>round</code>. Кто бы ни прочитал этот результат дальше, он должен угадать, что есть что.</li>
+    <li><strong>Экспорт не читается.</strong>  Строка заголовка CSV-файла, который вы отправляете заинтересованной стороне, содержит выражение SQL. Это версия вашей работы, которую они видят.</li>
   </ul>
 
-  <p>The fix is one word plus a name you choose:</p>
+  <p>Исправление — одно слово плюс выбранное вами имя:</p>
 
   <pre><code>SELECT title,
        ROUND(CAST(up AS REAL) / (up + down) * 100, 1) AS pct_positive
 FROM gem_page
 ORDER BY pct_positive DESC;</code></pre>
 
-  <p>Now the header says <code>pct_positive</code>, the sort line refers to it by that name, and the spreadsheet you hand over reads like something a person wrote.</p>
+  <p>Теперь в заголовке написано  <code>pct_positive</code>, строка сортировки относится к нему по этому имени, и передаваемая вами электронная таблица читается как написанная человеком.</p>
 
-  <div class="note"><strong>The rule.</strong> Every calculated column gets a name. If the database had to invent the header, the query is not finished.</div>
+  <div class="note"><strong>Правило.</strong>  Каждый вычисляемый столбец получает имя. Если базе данных пришлось придумать заголовок, запрос не завершен.</div>
 
-  <h2>Table aliases, and the ambiguity they fix</h2>
+  <h2>Псевдонимы таблиц и двусмысленность, которую они устраняют</h2>
 
-  <p>Before the answer: two tables both have a column called <code>id</code>. You join them and ask for <code>id</code>. What should the database do?</p>
+  <p>Перед ответом: в двух таблицах есть столбец с именем  <code>id</code>. Вы присоединяетесь к ним и просите  <code>id</code>. Что должна делать база данных?</p>
 
-  <p>It refuses, and it is right to. Say your two tables are <code>gem_page</code>, one row per music gem, and <code>gem_vote</code>, one row per reader vote. Both carry a column named <code>id</code>. This query has no answer:</p>
+  <p>Он отказывается, и это правильно. Скажем, ваши две таблицы  <code>gem_page</code>, одна строка на каждый музыкальный камень и  <code>gem_vote</code>, одна строка на голос читателя. Оба содержат столбец с именем  <code>id</code>. Этот запрос не имеет ответа:</p>
 
   <pre><code>SELECT id, title
 FROM gem_page
@@ -265,27 +263,27 @@ JOIN gem_vote ON gem_page.id = gem_vote.page_id;</code></pre>
 
   <pre><code>Error: ambiguous column name: id</code></pre>
 
-  <p>Ambiguous means the database found the name in more than one place and will not choose for you. The way you answer it is to say which table you meant, by putting the table's name in front of the column with a dot between them. That is a <strong>prefix</strong>.</p>
+  <p>Неоднозначность означает, что база данных нашла имя более чем в одном месте и не выберет его за вас. Чтобы ответить на этот вопрос, нужно сказать, какую таблицу вы имели в виду, поместив имя таблицы перед столбцом с точкой между ними. Это  <strong>prefix</strong>.</p>
 
   <pre><code>SELECT gem_page.id, gem_page.title
 FROM gem_page
 JOIN gem_vote ON gem_page.id = gem_vote.page_id;</code></pre>
 
-  <p>That works, and it gets long fast. A table alias is a short nickname you give the table once, at the point you name it, and then use everywhere else:</p>
+  <p>Это работает, и это быстро растягивается. Псевдоним таблицы — это короткое прозвище, которое вы даете таблице один раз, в тот момент, когда вы ее называете, а затем используете везде:</p>
 
   <pre><code>SELECT g.id, g.title, v.voter
 FROM gem_page AS g
 JOIN gem_vote AS v ON g.id = v.page_id;</code></pre>
 
-  <p><code>FROM gem_page AS g</code> says: for the rest of this query, <code>g</code> means the <code>gem_page</code> table. From that point on <code>g.title</code> is the title column of <code>gem_page</code>, and <code>v.voter</code> is the voter column of <code>gem_vote</code>. Two letters replaced twenty.</p>
+  <p><code>FROM gem_page AS g</code>  говорит: для остальной части этого запроса,  <code>g</code>  означает  <code>gem_page</code>  стол. С этого момента  <code>g.title</code>  это заголовок столбца  <code>gem_page</code>, и  <code>v.voter</code>  это столбец избирателей  <code>gem_vote</code>. Две буквы заменили двадцать.</p>
 
-  <p>Say why that is worth doing before reading on. It is not really about typing less. The reason is that a reader can now answer "which table is this column from?" for every column in the query, without scrolling and without knowing the schema. In a three-table query that question comes up on every line.</p>
+  <p>Прежде чем читать дальше, скажите, почему это стоит сделать. Речь не идет о том, чтобы меньше печатать. Причина в том, что теперь читатель может ответить: «Из какой таблицы этот столбец?» для каждого столбца запроса, без прокрутки и без знания схемы. В запросе из трех таблиц этот вопрос возникает в каждой строке.</p>
 
-  <div class="note"><strong>Once a table has an alias, the alias is its only name.</strong> After <code>FROM gem_page AS g</code>, writing <code>gem_page.title</code> lower down is an error in PostgreSQL and MySQL. The nickname replaces the name for the length of the query. Pick it, then use it everywhere.</div>
+  <div class="note"><strong>Если у таблицы есть псевдоним, этот псевдоним является ее единственным именем.</strong> After <code>FROM gem_page AS g</code>, письмо  <code>gem_page.title</code>  ниже — ошибка в PostgreSQL и MySQL. Псевдоним заменяет имя на всю длину запроса. Выберите его, а затем используйте повсюду.</div>
 
-  <h2>The scope rule: ORDER BY yes, WHERE no</h2>
+  <h2>Правило области действия: ORDER BY да, WHERE нет</h2>
 
-  <p>This is the part that produces a real error message on a query that looks correct. It is worth the two minutes.</p>
+  <p>Это та часть, которая выдает реальное сообщение об ошибке в запросе, который выглядит правильно. Это стоит двух минут.</p>
 
   <pre><code>SELECT title,
        up + down AS total_votes
@@ -294,9 +292,9 @@ WHERE total_votes > 10;</code></pre>
 
   <pre><code>ERROR:  column "total_votes" does not exist</code></pre>
 
-  <p>The name is right there, four lines up. PostgreSQL says it does not exist. MySQL says <code>Unknown column 'total_votes' in 'where clause'</code>. Both are telling you the truth, and the reason is about order.</p>
+  <p>Имя тут же, в четыре строки вверх. PostgreSQL говорит, что его не существует. MySQL говорит  <code>Unknown column 'total_votes' in 'where clause'</code>. Оба говорят вам правду, и причина в порядке.</p>
 
-  <p>A database does not run a query top to bottom the way you read it. It runs the clauses in a fixed order of its own, and <code>SELECT</code> comes late in that order:</p>
+  <p>База данных не выполняет запрос сверху вниз так, как вы его читаете. Он выполняет положения в своем собственном фиксированном порядке и  <code>SELECT</code>  приходит с опозданием в таком порядке:</p>
 
   <div class="figure">
     <svg viewBox="0 0 760 250" role="img" aria-labelledby="aliasScopeTitle aliasScopeDesc" xmlns="http://www.w3.org/2000/svg">
@@ -340,10 +338,10 @@ WHERE total_votes > 10;</code></pre>
         <text x="616" y="96" font-size="22" font-weight="700" fill="#0E7490">✓</text>
       </g>
     </svg>
-    <p class="figcap">The name comes into existence at SELECT. Clauses that already ran cannot see it. Clauses that come after can.</p>
+    <p class="figcap">Имя возникает при выборе SELECT. Предложения, которые уже выполнялись, не видят этого. Предложения, которые идут после can.</p>
   </div>
 
-  <p>So the rule falls out on its own. <code>WHERE</code> runs before <code>SELECT</code>, so when the filter is being applied the name <code>total_votes</code> has not been invented yet. <code>ORDER BY</code> runs after <code>SELECT</code>, so by then the name exists and you can sort by it:</p>
+  <p>Таким образом, правило выпадает само по себе.  <code>WHERE</code>  бежит раньше  <code>SELECT</code>, поэтому при применении фильтра имя  <code>total_votes</code>  еще не изобретено.  <code>ORDER BY</code>  бежит за  <code>SELECT</code>, поэтому к тому времени имя уже существует, и вы можете сортировать по нему:</p>
 
   <pre><code>SELECT title,
        up + down AS total_votes
@@ -351,27 +349,27 @@ FROM gem_page
 WHERE up + down > 10
 ORDER BY total_votes DESC;</code></pre>
 
-  <p>In <code>WHERE</code> you repeat the calculation. In <code>ORDER BY</code> you use the name. The same reasoning covers <code>GROUP BY</code> and <code>HAVING</code>, which also run before <code>SELECT</code>, so repeat the expression there too and you will be right in every database.</p>
+  <p>In <code>WHERE</code>  вы повторяете расчет. В  <code>ORDER BY</code>  вы используете имя. Эти же рассуждения охватывают  <code>GROUP BY</code> and <code>HAVING</code>, которые также выполняются перед  <code>SELECT</code>, поэтому повторите выражение и там, и вы будете правы в каждой базе данных.</p>
 
-  <div class="note"><strong>One thing that will mislead you locally.</strong> SQLite is more relaxed than the standard and does accept an alias in <code>WHERE</code>. If you practise on a SQLite file, a query can work on your laptop and fail on the PostgreSQL or MySQL database at work. Write the expression out in <code>WHERE</code> and the query runs everywhere.</div>
+  <div class="note"><strong>Одна вещь, которая введет вас в заблуждение на местном уровне.</strong>  SQLite более свободен, чем стандарт, и принимает псевдонимы в  <code>WHERE</code>. Если вы практикуетесь с файлом SQLite, запрос может работать на вашем ноутбуке и не работать в базе данных PostgreSQL или MySQL на работе. Запишите выражение в  <code>WHERE</code>  и запрос выполняется везде.</div>
 
-  <h2>How to read each shape out loud</h2>
+  <h2>Как читать каждую фигуру вслух</h2>
 
-  <p>Reading a query aloud is the fastest way to find out whether you actually follow it. These are the literal sentences. Say them exactly, including the boring parts.</p>
+  <p>Чтение запроса вслух — это самый быстрый способ узнать, действительно ли вы ему следуете. Это буквальные предложения. Произнесите их точно, включая скучные части.</p>
 
   <table>
-    <tr><th>What you see</th><th>What you say</th></tr>
-    <tr><td><code>SELECT title AS gem</code></td><td>select title, and call it gem in the output</td></tr>
-    <tr><td><code>ROUND(AVG(score), 1) AS avg_score</code></td><td>the average score, rounded to one decimal place, called avg_score</td></tr>
-    <tr><td><code>FROM gem_page AS g</code></td><td>from the gem_page table, which I will call g for the rest of this query</td></tr>
-    <tr><td><code>g.artist</code></td><td>the artist column of gem_page</td></tr>
-    <tr><td><code>JOIN gem_vote AS v ON g.id = v.page_id</code></td><td>bring in gem_vote, call it v, and match where gem_page's id equals gem_vote's page_id</td></tr>
-    <tr><td><code>ORDER BY avg_score DESC</code></td><td>sort by the column I named avg_score, largest first</td></tr>
+    <tr><th>Что ты видишь</th><th>Что вы говорите</th></tr>
+    <tr><td><code>SELECT title AS gem</code></td><td>выберите заголовок и назовите его драгоценным камнем на выходе</td></tr>
+    <tr><td><code>ROUND(AVG(score), 1) AS avg_score</code></td><td>средний балл, округленный до одного десятичного знака, называемый avg_score</td></tr>
+    <tr><td><code>FROM gem_page AS g</code></td><td>из таблицы gem_page, которую в оставшейся части запроса я буду называть g.</td></tr>
+    <tr><td><code>g.artist</code></td><td>столбец художника на странице gem_page</td></tr>
+    <tr><td><code>JOIN gem_vote AS v ON g.id = v.page_id</code></td><td>добавьте gem_vote, назовите его v и сопоставьте, где идентификатор драгоценной страницы равен идентификатору страницы gem_vote.</td></tr>
+    <tr><td><code>ORDER BY avg_score DESC</code></td><td>сортировать по столбцу, который я назвал avg_score, сначала по величине</td></tr>
   </table>
 
-  <p>Two of those sentences are doing the work. "which I will call g for the rest of this query" is the one that makes a table alias stop being mysterious. "the artist column of gem_page" is the one that turns a dot into everyday speech.</p>
+  <p>Два из этих предложений делают свое дело. «который я буду называть g для оставшейся части этого запроса» — это тот, который заставляет псевдоним таблицы перестать быть загадочным. «Колонка художника на странице gem_page» — это та, которая превращает точку в повседневную речь.</p>
 
-  <p>Now picture running this on a table of your own, one you have actually opened. Say the two sentences for its name and one of its columns out loud. What does the header row of the result look like?</p>
+  <p>А теперь представьте, что вы запускаете это на своем собственном столе, который вы уже открыли. Произнесите вслух два предложения, соответствующие его названию и одному из его столбцов. Как выглядит строка заголовка результата?</p>
 
   <pre><code>SELECT g.artist,
        COUNT(v.id) AS vote_count,
@@ -381,55 +379,55 @@ JOIN gem_vote AS v ON g.id = v.page_id
 GROUP BY g.artist
 ORDER BY avg_score DESC;</code></pre>
 
-  <p>Out loud, start to finish: select the artist column of gem_page, a count of gem_vote's id rows called vote_count, and the average score rounded to one decimal called avg_score. From the gem_page table, which I will call g. Bring in gem_vote, call it v, matching where g's id equals v's page_id. Group by the artist column of gem_page. Sort by the column I named avg_score, largest first.</p>
+  <p>Вслух, от начала до конца: выберите столбец Artist на странице gem_page, количество строк идентификаторов gem_vote, называемое voice_count, и средний балл, округленный до одного десятичного знака, называемый avg_score. Из таблицы gem_page, которую я назову g. Добавьте gem_vote, назовите его v, сопоставив, где идентификатор g равен page_id v. Группировка по столбцу художника на странице gem_page. Сортировка по столбцу, который я назвал avg_score, сначала по величине.</p>
 
-  <p>That is a sentence. Nothing in it stops parsing, and none of it needed you to know the schema in advance.</p>
+  <p>Это приговор. Ничто в нем не мешает синтаксическому анализу, и ничто из этого не требует от вас предварительного знания схемы.</p>
 
-  <h2>When to alias and when to leave a name alone</h2>
+  <h2>Когда использовать псевдоним, а когда оставить имя в покое</h2>
 
-  <p>Aliasing everything is its own kind of unreadable. Four working rules cover almost every query you will write.</p>
+  <p>Псевдоним всего - это своего рода нечитабельность. Четыре рабочих правила охватывают почти каждый запрос, который вы напишете.</p>
 
   <div class="step">
-    <h2>One table: no table alias needed</h2>
-    <p>With a single table in the query, no column can be ambiguous, so a prefix carries no information. <code>SELECT title, up FROM gem_page</code> is finished. Adding <code>g.</code> to it is noise.</p>
+    <h2>Одна таблица: псевдоним таблицы не требуется</h2>
+    <p>Если в запросе используется одна таблица, ни один столбец не может быть неоднозначным, поэтому префикс не несет никакой информации.  <code>SELECT title, up FROM gem_page</code>  закончено. Добавление  <code>g.</code>  для этого это шум.</p>
   </div>
 
   <div class="step">
-    <h2>Two or more tables: alias every one of them, with single letters</h2>
-    <p>Once a second table joins in, alias both and prefix every column, including the ones that are not ambiguous yet. Use the first letter of the table: <code>g</code> for <code>gem_page</code>, <code>v</code> for <code>gem_vote</code>. Two tables that start with the same letter get two letters, such as <code>gp</code> and <code>gv</code>. Prefix even the columns that are safe today. A column that is unique now stops being unique the moment someone adds a third table. Then the query breaks in a way nobody planned for.</p>
+    <h2>Две или более таблиц: псевдонимы каждой из них, состоящие из отдельных букв.</h2>
+    <p>После присоединения второй таблицы назначьте псевдоним обеим и префикс каждого столбца, включая те, которые еще не являются неоднозначными. Используйте первую букву таблицы:  <code>g</code> for <code>gem_page</code>, <code>v</code> for <code>gem_vote</code>. Две таблицы, начинающиеся с одной и той же буквы, получают две буквы, например:  <code>gp</code> and <code>gv</code>. Префиксируйте даже те столбцы, которые сегодня безопасны. Уникальный столбец теперь перестает быть уникальным в тот момент, когда кто-то добавляет третью таблицу. Затем запрос прерывается так, как никто не планировал.</p>
   </div>
 
   <div class="step">
-    <h2>Calculated columns: meaningful names, not letters</h2>
-    <p>A table alias is short on purpose, because it repeats on every line. A column alias goes in the header a stakeholder reads, so it gets a real name. <code>pct_positive</code>, <code>vote_count</code>, <code>avg_score</code>. Lowercase with underscores, no spaces, and it says what the number is. <code>a</code>, <code>col1</code> and <code>x</code> are the same defect as no name at all.</p>
+    <h2>Вычисляемые столбцы: осмысленные имена, а не буквы</h2>
+    <p>Псевдоним таблицы намеренно короткий, поскольку он повторяется в каждой строке. Псевдоним столбца указывается в заголовке, который читает заинтересованная сторона, поэтому он получает настоящее имя.  <code>pct_positive</code>, <code>vote_count</code>, <code>avg_score</code>. В нижнем регистре с подчеркиванием, без пробелов и указывается число.  <code>a</code>, <code>col1</code> and <code>x</code>  — это тот же недостаток, что и полное отсутствие имени.</p>
   </div>
 
   <div class="step">
-    <h2>Never rename a plain column just to rename it</h2>
-    <p>If the column is already called <code>artist</code>, leave it called <code>artist</code>. Writing <code>artist AS artist_name</code> gains nothing and costs something real. The name in your query no longer matches the name in the table. Anyone tracing a number back through your work now has to translate. Rename a plain column only when the output genuinely needs a different word, for example when a report has to say <code>region</code> and the table calls it <code>terr_cd</code>.</p>
+    <h2>Никогда не переименовывайте простой столбец только для того, чтобы переименовать его.</h2>
+    <p>Если столбец уже вызван  <code>artist</code>, оставь это под названием  <code>artist</code>. Письмо  <code>artist AS artist_name</code>  ничего не получает и стоит чего-то реального. Имя в вашем запросе больше не соответствует имени в таблице. Любой, кто отслеживает число в вашей работе, теперь должен переводить. Переименовывайте простой столбец только в том случае, если для вывода действительно требуется другое слово, например, когда в отчете должно быть указано  <code>region</code>  и таблица называет это  <code>terr_cd</code>.</p>
   </div>
 
-  <h2>AS is optional and you should still type it</h2>
+  <h2>AS не является обязательным, и вам все равно следует его ввести.</h2>
 
-  <p>Every example on this page works without the word <code>AS</code>. These two lines do the same thing, and so do these two:</p>
+  <p>Каждый пример на этой странице работает без слова  <code>AS</code>. Эти две строки делают одно и то же, как и эти две:</p>
 
   <pre><code>SELECT title AS gem FROM gem_page AS g;
 SELECT title    gem FROM gem_page    g;</code></pre>
 
-  <p>You will meet the second style constantly, because a lot of production SQL leaves <code>AS</code> out. Read it as if the word were there. Type it anyway, for a reason that is not style.</p>
+  <p>Второй стиль вы будете встречать постоянно, потому что уходит много производственного SQL.  <code>AS</code>  вне. Прочитайте это так, как если бы это слово было там. В любом случае напечатайте это по причине, не связанной со стилем.</p>
 
-  <p>Leaving <code>AS</code> out makes one mistake invisible. Drop a comma in a <code>SELECT</code> list and the two columns silently become one column with an alias:</p>
+  <p>Leaving <code>AS</code>  out делает одну ошибку невидимой. Поставьте запятую в  <code>SELECT</code>  list, и два столбца молча становятся одним столбцом с псевдонимом:</p>
 
   <pre><code>SELECT title, artist year
 FROM gem_page;</code></pre>
 
-  <p>You meant three columns. You get two: <code>title</code>, and the <code>artist</code> column labelled <code>year</code>. No error, and a header that reads <code>year</code> above text values. With <code>AS</code> in your habits, the missing comma reads wrong on sight. This is the same class of failure as the joins that <a href="../sql-joins/">drop or duplicate rows</a> without erroring, and it gets caught the same way, by making the intent explicit.</p>
+  <p>Вы имели в виду три столбца. Вы получаете два:  <code>title</code>и  <code>artist</code>  столбец с надписью  <code>year</code>. Никакой ошибки и заголовок, который читает  <code>year</code>  выше текстовых значений. С  <code>AS</code>  в ваших привычках пропущенная запятая с первого взгляда читается неправильно. Это тот же класс отказов, что и соединения, которые  <a href="../sql-joins/">удалить или дублировать строки</a>  без ошибок, и его перехватывают таким же образом, делая намерение явным.</p>
 
-  <p>One place <code>AS</code> is not optional: naming a table in PostgreSQL sometimes needs it, and a name that would otherwise be read as a keyword always does. Typing it every time removes the question.</p>
+  <p>Одно место  <code>AS</code>  не является обязательным: иногда оно требуется для именования таблицы в PostgreSQL, а имя, которое в противном случае было бы прочитано как ключевое слово, всегда требуется. Если набирать его каждый раз, вопрос снимается.</p>
 
-  <h2>The full before and after</h2>
+  <h2>Полное до и после</h2>
 
-  <p>Same tables, same question, both versions run. The difference is whether a person can read the result.</p>
+  <p>Те же таблицы, тот же вопрос, обе версии работают. Разница в том, сможет ли человек прочитать результат.</p>
 
   <h3>Before</h3>
   <pre><code>SELECT gem_page.artist,
@@ -440,7 +438,7 @@ JOIN gem_vote ON gem_page.id = gem_vote.page_id
 GROUP BY gem_page.artist
 ORDER BY ROUND(AVG(gem_vote.score), 1) DESC;</code></pre>
 
-  <p>Two of the three columns come back with headers nobody can use, so the <code>ORDER BY</code> has to repeat the whole calculation. Every line carries a full table name. The query is correct and tiring.</p>
+  <p>Два из трех столбцов возвращаются с заголовками, которые никто не может использовать, поэтому  <code>ORDER BY</code>  придется повторить весь расчет. Каждая строка содержит полное имя таблицы. Запрос правильный и утомительный.</p>
 
   <h3>After</h3>
   <pre><code>SELECT g.artist,
@@ -452,82 +450,82 @@ GROUP BY g.artist
 HAVING COUNT(v.id) >= 10
 ORDER BY avg_score DESC;</code></pre>
 
-  <p>Three named columns, two nicknamed tables, and a sort line that refers to a name instead of repeating a calculation. Note that <code>HAVING</code> still spells out <code>COUNT(v.id)</code>, because <code>HAVING</code> runs before <code>SELECT</code> and the name does not exist yet. The comment block that belongs above a query like this is in <a href="../sql-teaching-comments/">How to Comment SQL So It Teaches</a>.</p>
+  <p>Три именованных столбца, две таблицы с именами и строка сортировки, которая ссылается на имя, а не повторяет вычисление. Обратите внимание, что  <code>HAVING</code>  все еще пишется  <code>COUNT(v.id)</code>, потому что  <code>HAVING</code>  бежит раньше  <code>SELECT</code>  и имени еще не существует. Блок комментариев, расположенный над таким запросом, находится в  <a href="../sql-teaching-comments/">Как комментировать SQL, чтобы он обучал</a>.</p>
 
-  <h2>Where this came from and why it works</h2>
+  <h2>Откуда это взялось и почему это работает</h2>
 
-  <p>The idea is older than SQL. In the relational model that databases are built on, renaming is one of the basic operations you may perform on a table. It sits alongside selecting rows and picking columns (Codd, 1970, <em>Communications of the ACM</em>, 13(6), 377–387). Being able to give something a second name is part of the theory, not a convenience someone bolted on later.</p>
+  <p>Идея старше SQL. В реляционной модели, на которой построены базы данных, переименование является одной из основных операций, которые вы можете выполнять с таблицей. Он находится рядом с выбором строк и столбцов (Codd, 1970,  <em>Коммуникации ACM</em>, 13(6), 377–387). Возможность дать чему-то второе имя — это часть теории, а не удобство, к которому кто-то прикрутил позже.</p>
 
-  <p>The specific syntax comes from SEQUEL, the language IBM built in 1974 that became SQL. Donald Chamberlin and Raymond Boyce designed it to be readable by people who were not programmers. The table nickname was there in the first paper (Chamberlin &amp; Boyce, 1974, <em>Proceedings of the 1974 ACM SIGFIDET Workshop</em>, 249–264). They called it a <em>correlation name</em>, and you will still see that phrase in database documentation today. It means exactly what this page calls a table alias.</p>
+  <p>Конкретный синтаксис взят из SEQUEL, языка, созданного IBM в 1974 году и ставшего впоследствии SQL. Дональд Чемберлин и Рэймонд Бойс разработали его так, чтобы его могли читать люди, не являющиеся программистами. Застольное прозвище было в первой статье (Чемберлин и Бойс, 1974,  <em>Материалы семинара ACM SIGFIDET 1974 г.</em>, 249–264). Они назвали это  <em>имя корреляции</em>, и вы до сих пор увидите эту фразу в документации по базе данных. Это означает именно то, что на этой странице называется псевдонимом таблицы.</p>
 
-  <p>The reason naming helps a reader is better understood than it used to be. Learners who explain a worked example to themselves as they go understand it substantially better. They also transfer it better than learners who read the same example without explaining it (Chi, Bassok, Lewis, Reimann &amp; Glaser, 1989, <em>Cognitive Science</em>, 13(2), 145–182). A query full of named columns and prefixed tables is a query you can explain to yourself while reading. One without them makes you hold the schema in your head at the same time, which is the working memory you needed for the actual question.</p>
+  <p>Причина, по которой именование помогает читателю лучше понять, чем раньше. Учащиеся, которые объясняют себе проработанный пример по ходу дела, понимают его значительно лучше. Они также передают его лучше, чем учащиеся, которые читают тот же пример, не объясняя его (Chi, Bassok, Lewis, Reimann &amp; Glaser, 1989,  <em>Когнитивная наука</em>, 13(2), 145–182). Запрос, полный именованных столбцов и таблиц с префиксами, — это запрос, который вы можете объяснить себе во время чтения. Один без них заставляет вас одновременно удерживать схему в голове, что является рабочей памятью, необходимой вам для реального вопроса.</p>
 
-  <p>That is also why "I know what my own columns mean" is not a reason to skip the names. The reader who is short of working memory is you, six months from now, opening a file you do not remember writing.</p>
+  <p>Именно поэтому фраза «Я знаю, что означают мои собственные колонки» — не повод пропускать имена. Читатель, у которого не хватает рабочей памяти, — это вы через шесть месяцев открываете файл, который не помните, как писали.</p>
 
-  <h2>Using this on your own queries</h2>
+  <h2>Использование этого в ваших собственных запросах</h2>
 
-  <p>Bring to mind a query you have already written and shared. Can you say, out loud, what each of its output columns is called and why? If a header on it reads <code>round</code> or <code>COUNT(*)</code>, that is the one to fix first.</p>
+  <p>Вспомните вопрос, который вы уже написали и которым поделились. Можете ли вы сказать вслух, как называется каждый из его выходных столбцов и почему? Если заголовок на нем читается  <code>round</code> or <code>COUNT(*)</code>, это то, что нужно исправить в первую очередь.</p>
 
-  <p>Going through a whole project in one sitting is miserable and you will stop halfway. Do this instead, in order:</p>
+  <p>Проходить весь проект за один присест – это ужасно, и вы остановитесь на полпути. Вместо этого сделайте это по порядку:</p>
 
   <ol>
-    <li><strong>Name every calculated column, in the file you have open right now.</strong> Search for <code>ROUND</code>, <code>SUM</code>, <code>COUNT</code> and <code>AVG</code>, and check each one has an <code>AS</code> after it. This is ten minutes and it is most of the benefit.</li>
-    <li><strong>Alias the tables in any query that touches two of them.</strong> First letter of each table, prefix on every column. Do the multi-table queries only. Single-table queries are already fine.</li>
-    <li><strong>Read one query out loud</strong>, using the sentences in the table above. The line where you hesitate is the line whose names are not carrying their weight.</li>
-    <li><strong>Move calculations out of <code>ORDER BY</code>.</strong> Anywhere the sort line repeats an expression from <code>SELECT</code>, replace it with the alias. The query gets shorter and there is now one place to change the calculation instead of two.</li>
-    <li><strong>Leave the plain columns alone.</strong> Resist the urge to rename <code>artist</code> to <code>artist_name</code> while you are in there. Renaming for its own sake is work that makes the file harder to trace.</li>
+    <li><strong>Назовите каждый вычисляемый столбец в файле, который вы сейчас открыли.</strong> Искать  <code>ROUND</code>, <code>SUM</code>, <code>COUNT</code> and <code>AVG</code>, и проверьте, что у каждого из них есть  <code>AS</code>  после этого. Это десять минут и это большая часть пользы.</li>
+    <li><strong>Присвойте таблицам псевдонимы в любом запросе, касающемся двух из них.</strong>  Первая буква каждой таблицы, префикс в каждом столбце. Выполняйте только запросы к нескольким таблицам. Запросы к одной таблице уже подходят.</li>
+    <li><strong>Прочитайте один вопрос вслух</strong>, используя предложения из таблицы выше. Строка, в которой вы колеблетесь, — это линия, имена которой не имеют никакого значения.</li>
+    <li><strong>Перенести расчеты из  <code>ORDER BY</code>.</strong>  В любом месте строка сортировки повторяет выражение из  <code>SELECT</code>, замените его псевдонимом. Запрос стал короче, и теперь есть одно место для изменения вычислений вместо двух.</li>
+    <li><strong>Оставьте простые столбцы в покое.</strong>  Не поддавайтесь желанию переименовать  <code>artist</code> to <code>artist_name</code>  пока ты там. Переименование само по себе — это работа, из-за которой файл сложнее отследить.</li>
   </ol>
 
-  <p>If you have paper nearby, this one is worth drawing once. Write out a query, then draw an arrow from every alias to the thing it names. The arrows that are hard to draw are the names that are not pulling their weight.</p>
+  <p>Если у вас под рукой есть бумага, стоит один раз нарисовать эту. Напишите запрос, затем нарисуйте стрелку от каждого псевдонима к объекту, который он называет. Стрелки, которые трудно нарисовать, — это имена, которые не тянут своего веса.</p>
 
-  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: SQL, Tableau, data migration, and the working habits around them.</div>
+  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: SQL, Tableau, миграция данных и связанные с ними рабочие привычки.</div>
 
-  <h2>A cheat sheet</h2>
+  <h2>Шпаргалка</h2>
   <table>
-    <tr><th>Shape</th><th>What it does</th><th>Say it as</th></tr>
-    <tr><td><code>col AS name</code></td><td>Sets the output header. Changes nothing else</td><td>select col, and call it name in the output</td></tr>
-    <tr><td><code>CALC(...) AS name</code></td><td>Gives a calculated column a usable header</td><td>the calculation, called name</td></tr>
-    <tr><td><code>FROM table AS t</code></td><td>Nicknames the table for this query only</td><td>from table, which I will call t</td></tr>
-    <tr><td><code>t.col</code></td><td>Says which table the column came from</td><td>the col column of table</td></tr>
-    <tr><td>Alias in <code>ORDER BY</code></td><td>Works. ORDER BY runs after SELECT</td><td>sort by the column I named</td></tr>
-    <tr><td>Alias in <code>WHERE</code></td><td>Fails in PostgreSQL and MySQL. Repeat the expression</td><td>filter on the calculation itself</td></tr>
-    <tr><td>Alias in <code>GROUP BY</code> or <code>HAVING</code></td><td>Both run before SELECT. Repeat the expression</td><td>group on the calculation itself</td></tr>
-    <tr><td>No alias on a calculation</td><td>The header becomes the expression, or <code>round</code></td><td>a header nobody can use</td></tr>
-    <tr><td><code>AS</code> left out</td><td>Legal and common. Read it as if it were there</td><td>same sentence, one word quieter</td></tr>
+    <tr><th>Shape</th><th>Что он делает</th><th>Скажи это как</th></tr>
+    <tr><td><code>col AS name</code></td><td>Устанавливает выходной заголовок. Больше ничего не меняет</td><td>выберите col и назовите его имя на выходе</td></tr>
+    <tr><td><code>CALC(...) AS name</code></td><td>Дает вычисляемому столбцу полезный заголовок</td><td>расчет, названное имя</td></tr>
+    <tr><td><code>FROM table AS t</code></td><td>Называет таблицу только для этого запроса.</td><td>из таблицы, которую я назову t</td></tr>
+    <tr><td><code>t.col</code></td><td>Сообщает, из какой таблицы взят столбец</td><td>столбец col таблицы</td></tr>
+    <tr><td>Псевдоним в  <code>ORDER BY</code></td><td>Работает. ORDER BY выполняется после SELECT.</td><td>сортировать по столбцу, который я назвал</td></tr>
+    <tr><td>Псевдоним в  <code>WHERE</code></td><td>Сбой в PostgreSQL и MySQL. Повторите выражение</td><td>фильтровать сам расчет</td></tr>
+    <tr><td>Псевдоним в  <code>GROUP BY</code> or <code>HAVING</code></td><td>Оба выполняются до SELECT. Повторите выражение</td><td>группа на самом расчете</td></tr>
+    <tr><td>Нет псевдонима в расчете</td><td>Заголовок становится выражением, или  <code>round</code></td><td>заголовок, который никто не может использовать</td></tr>
+    <tr><td><code>AS</code>  оставленный без внимания</td><td>Законно и обычно. Прочтите это так, как будто оно было там.</td><td>то же предложение, на одно слово тише</td></tr>
   </table>
 
-  <div class="note"><strong>The one habit to keep.</strong> If you take nothing else from this page, put a name on every calculated column. It is one word, it decides what the header of your export says, and it is the difference between a result someone can use and a result they have to decode.</div>
+  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Если вы больше ничего не берете с этой страницы, укажите имя для каждого вычисляемого столбца. Это одно слово, оно определяет, что говорится в заголовке вашего экспорта, и это разница между результатом, который кто-то может использовать, и результатом, который ему нужно декодировать.</div>
 
-  <p>One last thing, and I would like other people's answers. The habit I picked up latest was prefixing columns that were not ambiguous yet, because it felt like clutter until a third table arrived and proved it was not. What is the naming habit you resisted longest before it earned its place?</p>
+  <p>И последнее, и мне хотелось бы услышать ответы других людей. Недавно я приобрел привычку добавлять префиксы к столбцам, которые еще не были двусмысленными, потому что это казалось беспорядком, пока не прибыла третья таблица и не доказала, что это не так. Какой привычке давать имена вы сопротивлялись дольше всего, прежде чем она завоевала свое место?</p>
 
   <div class="book">
-    <strong>The query runs and the result set has three columns nobody can name.</strong>
-    <p><em>SQL for Analysts</em> is 458 pages, aliases and readability, so a query you wrote in March still explains itself in June.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-aliasing'})">SQL for Analysts, $19 &rarr;</a>
+    <strong>Запрос выполняется, и в наборе результатов есть три столбца, имена которых никто не может назвать.</strong>
+    <p><em>SQL для аналитиков</em>  это 458 страниц, псевдонимы и читабельность, поэтому запрос, который вы написали в марте, все еще объясняет себя в июне.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-aliasing'})">SQL для аналитиков, 19 $ →</a>
   </div>
 
   <div class="cta">
-    <strong>Practice this with the data in front of you.</strong>
-    <p style="margin:6px 0 0">The <a href="../../sql/">SQL Kit</a> runs SQLite in the browser, so you write a join, name the columns, and watch the headers change. Worked examples, flash cards, and a mock exam sit alongside it. Nothing to install, no account needed.</p>
-    <a class="btn" href="../../sql/">Open the SQL Kit →</a>
+    <strong>Попрактикуйтесь в этом, используя данные перед собой.</strong>
+    <p style="margin:6px 0 0">The <a href="../../sql/">SQL-комплект</a>  запускает SQLite в браузере, поэтому вы пишете соединение, даете имена столбцам и наблюдаете за изменением заголовков. Рядом с ним лежат рабочие примеры, карточки и пробный экзамен. Ничего устанавливать, учетная запись не требуется.</p>
+    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
   </div>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Codd, E. F. (1970). A relational model of data for large shared data banks. <em>Communications of the ACM</em>, 13(6), 377–387.</li>
-    <li>Chamberlin, D. D., &amp; Boyce, R. F. (1974). SEQUEL: A structured English query language. <em>Proceedings of the 1974 ACM SIGFIDET Workshop on Data Description, Access and Control</em>, 249–264.</li>
-    <li>Chi, M. T. H., Bassok, M., Lewis, M. W., Reimann, P., &amp; Glaser, R. (1989). Self-explanations: How students study and use examples in learning to solve problems. <em>Cognitive Science</em>, 13(2), 145–182.</li>
+    <li>Кодд, EF (1970). Реляционная модель данных для крупных общих банков данных.  <em>Коммуникации ACM</em>, 13(6), 377–387.</li>
+    <li>Чемберлин Д.Д. и Бойс Р.Ф. (1974). ПРОДОЛЖЕНИЕ: структурированный английский язык запросов.  <em>Материалы семинара ACM SIGFIDET 1974 г. по описанию данных, доступу и контролю.</em>, 249–264.</li>
+    <li>Чи, М.Т.Х., Бассок, М., Льюис, М.В., Рейманн, П. и Глейзер, Р. (1989). Самообъяснения: как учащиеся изучают и используют примеры при обучении решению проблем.  <em>Когнитивная наука</em>, 13(2), 145–182.</li>
   </ul>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> &middot; <a href="../sql-foundations/">SQL Foundations</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../sql-ctes/">SQL CTEs</a> · <a href="../sql-window-functions/">Window Functions</a> · <a href="../tableau-relationships/">Tableau Relationships</a> · <a href="../tableau-sets/">Tableau Sets</a> · <a href="../../drill/">SQL Drill</a> · <a href="../what-is-data-analysis/">What Is Data Analysis?</a> · <a href="../sql-joins/">SQL JOINs</a> · <a href="../sql-teaching-comments/">Comment SQL So It Teaches</a> · <a href="../sql-count-function/">COUNT in SQL</a> · <a href="../sql-case-expression/">The CASE Expression</a> · <a href="../set-up-a-sql-database/">Set Up a SQL Database</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../git-for-analysts/">Git for Analysts</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../data-driven-thresholds/">Data-Driven Thresholds</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../entity-resolution/">Entity Resolution</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../build-a-tableau-dashboard/">Build a Tableau Dashboard</a> · <a href="../../sql/">SQL Kit</a> · <a href="../../projects/">Portfolio Projects</a>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql-foundations/">Основы SQL</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-ctes/">SQL CTE</a> · <a href="../sql-window-functions/">Оконные функции</a> · <a href="../tableau-relationships/">Табличные отношения</a> · <a href="../tableau-sets/">Наборы таблиц</a> · <a href="../../drill/">SQL-детализация</a> · <a href="../what-is-data-analysis/">Что такое анализ данных?</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-teaching-comments/">Комментарий SQL, чтобы он научился</a> · <a href="../sql-count-function/">СЧЕТ в SQL</a> · <a href="../sql-case-expression/">Выражение CASE</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../git-for-analysts/">Git для аналитиков</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../data-driven-thresholds/">Пороги, управляемые данными</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../build-a-tableau-dashboard/">Создайте панель управления Tableau</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../../projects/">Портфельные проекты</a>
     
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-<script src="../../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

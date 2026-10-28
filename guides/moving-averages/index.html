@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Moving Averages: Smoothing a Series Without Smoothing Away the Truth — Analyst Prep Kit</title>
-<meta name="description" content="A 3-week average cuts the wobble from 237 to 101 and a 5-week one to 62. How to pick the window, when to centre it, and the missing weeks that quietly corrupt it.">
+<title>Скользящие средние: сглаживание серии без сглаживания истины — комплект для подготовки аналитика</title>
+<meta name="description" content="Среднее значение за 3 недели сокращает колебание с 237 до 101, а за 5 недель — до 62. Как выбрать окно, когда его центрировать, а также недостающие недели, которые незаметно его портят.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/moving-averages/">
-<meta property="og:title" content="Moving Averages: Smoothing a Series Without Smoothing Away the Truth">
-<meta property="og:description" content="A 3-week average cuts the wobble from 237 to 101 and a 5-week one to 62. How to pick the window, when to centre it, and the missing weeks that quietly corrupt it.">
+<meta property="og:title" content="Скользящие средние: сглаживание серии без сглаживания истины">
+<meta property="og:description" content="Среднее значение за 3 недели сокращает колебание с 237 до 101, а за 5 недель — до 62. Как выбрать окно, когда его центрировать, а также недостающие недели, которые незаметно его портят.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/moving-averages.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/moving-averages/">
@@ -78,12 +78,11 @@
   .figure figcaption{color:var(--muted);font-size:14px;margin-top:10px}
 </style>
 <!-- SEO:JSONLD:START -->
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "Moving Averages: Smoothing a Series Without Smoothing Away the Truth",
-  "description": "A 3-week average cuts the wobble from 237 to 101 and a 5-week one to 62. How to pick the window, when to centre it, and the missing weeks that quietly corrupt it.",
+  "headline": "Скользящие средние: сглаживание серии без сглаживания истины",
+  "description": "Среднее значение за 3 недели сокращает колебание с 237 до 101, а за 5 недель — до 62. Как выбрать окно, когда его центрировать, а также недостающие недели, которые незаметно его портят.",
   "url": "https://michaelnocito.github.io/analyst-prep-kit/guides/moving-averages/",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -91,12 +90,12 @@
   },
   "author": {
     "@type": "Person",
-    "name": "Michael Nocito",
+    "name": "Майкл Носито",
     "url": "https://michaelnocito.github.io"
   },
   "publisher": {
     "@type": "Person",
-    "name": "Michael Nocito"
+    "name": "Майкл Носито"
   },
   "inLanguage": "en",
   "datePublished": "2026-08-09",
@@ -104,8 +103,7 @@
   "image": "https://michaelnocito.github.io/analyst-prep-kit/assets/social/moving-averages.png"
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
@@ -124,7 +122,7 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Moving Averages: Smoothing a Series Without Smoothing Away the Truth",
+      "name": "Скользящие средние: сглаживание серии без сглаживания истины",
       "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/moving-averages/"
     }
   ]
@@ -134,18 +132,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../forecasting/">Forecasting Kit</a> · <a href="../">All guides</a></p>
-  <h1>Moving Averages: Smoothing a Series Without Smoothing Away the Truth</h1>
-  <p class="meta">Picking the window, reading the lag, and the missing weeks · Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-09">August 9, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../forecasting/">Комплект прогнозирования</a> · <a href="../">Все руководства</a></p>
+  <h1>Скользящие средние: сглаживание серии без сглаживания истины</h1>
+  <p class="meta">Выбор окна, чтение отставания и недостающих недель · Часть  <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-09">9 августа 2026 г.</time></p>
 
-  <p>By the end of this page you can build a moving average by hand, choose a window length on purpose rather than by habit, explain the lag it introduces, and spot the one data problem that silently corrupts every moving average you will ever compute. On the sixteen weeks below, the raw series wobbles with a standard deviation of 237. A three-week average brings that to 101, and a five-week to 62.</p>
+  <p>К концу этой страницы вы сможете построить скользящее среднее вручную, выбрать длину окна намеренно, а не по привычке, объяснить возникающую при этом задержку и обнаружить единственную проблему с данными, которая незаметно искажает каждое скользящее среднее, которое вы когда-либо вычисляли. На шестнадцати неделях ниже необработанный ряд колеблется со стандартным отклонением 237. Среднее значение за три недели доводит это значение до 101, а за пять недель — до 62.</p>
 
-  <p>Here is what to actually do today. Add a moving average to your busiest weekly or daily chart, using a window that matches your cycle: 7 for daily data with a weekday pattern, 4 or 13 for weekly, 12 for monthly. Then plot it on top of the raw series rather than instead of it, so the reader can see both the noise and the trend.</p>
+  <p>Вот чем на самом деле заняться сегодня. Добавьте скользящее среднее к вашему самому загруженному недельному или дневному графику, используя окно, соответствующее вашему циклу: 7 для ежедневных данных с графиком рабочих дней, 4 или 13 для недельных, 12 для месячных. Затем постройте его поверх необработанного ряда, а не вместо него, чтобы читатель мог видеть и шум, и тенденцию.</p>
 
-  <p>The short version: a moving average replaces each point with the average of it and the points around it. Wobble cancels out, trend survives, and the price is that the smoothed line reacts late.</p>
+  <p>Краткая версия: скользящая средняя заменяет каждую точку ее средним значением и точками вокруг нее. Колебание уравновешивается, тренд сохраняется, а цена в том, что сглаженная линия реагирует поздно.</p>
 
-  <p>The effect is easier to see than to describe, so it gets the picture.</p>
+  <p>Эффект легче увидеть, чем описать, поэтому картина становится понятной.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 330" role="img" aria-labelledby="maTitle maDesc" xmlns="http://www.w3.org/2000/svg">
@@ -173,33 +171,33 @@
         <path d="M496 54 L510 148" stroke="#0E7490" stroke-width="1.4" fill="none"/>
       </g>
     </svg>
-    <figcaption>Sixteen weeks of real order revenue, and the three-week average drawn over it. The thin line swings between 240 and 1,100. The thick one stays between 395 and 797. The spike at week ten barely lifts the smooth line, and what lift there is arrives a week late.</figcaption>
+    <figcaption>Шестнадцать недель реального дохода от заказов и среднее значение за три недели, полученное на основе этого дохода. Тонкая линия колеблется между 240 и 1100. Толстый остается между 395 и 797. Пик на десятой неделе едва поднимает гладкую линию, а тот подъем, который есть, наступает на неделю позже.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>What you'll learn</strong>
+    <strong>Что вы узнаете</strong>
     <ol>
-      <li>What a moving average is doing to your numbers</li>
-      <li>Building a three-week average by hand</li>
-      <li>Choosing the window, and what each length costs</li>
-      <li>Trailing against centred, and the lag</li>
-      <li>The missing weeks that corrupt it silently</li>
-      <li>Weighted and exponential versions</li>
-      <li>What a moving average must not be used for</li>
-      <li>The full before and after</li>
-      <li>Edge cases that catch people out</li>
-      <li>Why this works</li>
-      <li>Using this on your own work</li>
-      <li>The whole thing on one screen</li>
+      <li>Что скользящее среднее делает с вашими числами</li>
+      <li>Построение среднего показателя за три недели вручную</li>
+      <li>Выбор окна и стоимость каждой длины</li>
+      <li>Трейлинг по центру и отставание</li>
+      <li>Недостающие недели, которые молча портят его.</li>
+      <li>Взвешенная и экспоненциальная версии</li>
+      <li>Для чего нельзя использовать скользящую среднюю</li>
+      <li>Полное до и после</li>
+      <li>Крайние случаи, которые застают людей врасплох</li>
+      <li>Почему это работает</li>
+      <li>Использование этого в своей работе</li>
+      <li>Все на одном экране</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Every number on this page is real.</strong> The same sixteen orders used across these guides, this time read as a weekly series because the orders fall one per week. There is a real five-week gap in the middle where no orders exist, and section five is about what that does. The companion page on judging a forecast once you have made one is <a href="../forecast-accuracy/">forecast accuracy</a>.</div>
+  <div class="note"><strong>Каждое число на этой странице является реальным.</strong>  Те же шестнадцать заказов, которые используются в этих руководствах, на этот раз читаются как еженедельные серии, поскольку заказы падают по одному в неделю. В середине есть реальный пятинедельный перерыв, когда заказов нет, и пятый раздел посвящен тому, что он делает. Сопутствующая страница, посвященная оценке прогноза после его составления:  <a href="../forecast-accuracy/">Точность прогноза</a>.</div>
 
-  <p>Here is the series. One order per week, from 5 January to 25 May 2026, with nothing at all between 23 March and 4 May.</p>
+  <p>Вот сериал. Один заказ в неделю, с 5 января по 25 мая 2026 года, и вообще ничего с 23 марта по 4 мая.</p>
 
   <table>
-    <tr><th>Week beginning</th><th>Revenue</th><th>Week beginning</th><th>Revenue</th></tr>
+    <tr><th>Начало недели</th><th>Revenue</th><th>Начало недели</th><th>Revenue</th></tr>
     <tr><td>2026-01-05</td><td>880</td><td>2026-03-02</td><td>280</td></tr>
     <tr><td>2026-01-12</td><td>850</td><td>2026-03-09</td><td>1,100</td></tr>
     <tr><td>2026-01-19</td><td>660</td><td>2026-03-16</td><td>440</td></tr>
@@ -211,28 +209,28 @@
   </table>
 
   <div class="step">
-    <h2>1. What a moving average is doing to your numbers</h2>
+    <h2>1. Как скользящее среднее влияет на ваши цифры</h2>
 
-    <p>Before the explanation: look at weeks three, four and five in that table: 660, 240, 660. Decide whether the 240 tells you the business dropped, before reading on.</p>
+    <p>Перед объяснением: посмотрите на третью, четвертую и пятую недели в этой таблице: 660, 240, 660. Решите, говорит ли вам цифра 240 о падении бизнеса, прежде чем читать дальше.</p>
 
-    <p>It does not, and that is the problem a moving average solves. Any single period contains two things mixed together: whatever is genuinely going on, and the accident of which orders happened to land in that week. Week four's 240 is one small lamp order. It is not a collapse in demand, it is a Tuesday.</p>
+    <p>Это не так, и именно эту проблему решает скользящая средняя. Любой отдельный период содержит две вещи, смешанные воедино: то, что происходит на самом деле, и случайность того, какие приказы поступили на этой неделе. 240 штук четвертой недели — это заказ на одну небольшую лампу. Это не обвал спроса, это вторник.</p>
 
-    <p>A <strong>moving average</strong> separates them by averaging over a window of consecutive periods. Random ups and downs partly cancel, because the high accidents and the low accidents sit in the same window. Anything sustained does not cancel, because it is present in every period of the window. What comes out is the sustained part, with the accidents damped.</p>
+    <p>A <strong>Скользящее среднее</strong>  разделяет их путем усреднения по окну последовательных периодов. Случайные взлеты и падения частично компенсируются, потому что высокие и низкие несчастные случаи находятся в одном окне. Ничего продолжительного не отменяется, поскольку оно присутствует в каждом периоде окна. На выходе получается устойчивая часть с затухающими авариями.</p>
 
-    <p>The damping is measurable. Our raw weekly numbers have a standard deviation of 236.81. The three-week average has 100.56, and the five-week average has 61.95. The wider the window, the more cancelling happens, and section three is about what that costs.</p>
+    <p>Демпфирование можно измерить. Наши необработанные недельные показатели имеют стандартное отклонение 236,81. Среднее значение за три недели составляет 100,56, а среднее значение за пять недель — 61,95. Чем шире окно, тем чаще происходит отмена, и в третьем разделе рассказывается о том, сколько это стоит.</p>
   </div>
 
   <div class="step">
-    <h2>2. Building a three-week average by hand</h2>
+    <h2>2. Построение среднего показателя за три недели вручную</h2>
 
-    <p>Before the arithmetic: you want a three-week average for the week beginning 19 January. Say which three weeks go into it, before reading on. There are two defensible answers and the difference matters.</p>
+    <p>Перед арифметикой: вам нужен средний показатель за три недели за неделю, начинающуюся 19 января. Прежде чем читать дальше, скажите, какие три недели на это уйдут. Есть два оправданных ответа, и разница имеет значение.</p>
 
-    <p>The common answer is a <strong>trailing</strong> window: this week and the two before it. That is 660, 850 and 880, which average to (660 + 850 + 880) ÷ 3 = <strong>796.67</strong>. Then you slide the window forward one week at a time, dropping the oldest and picking up the newest.</p>
+    <p>Общий ответ -  <strong>trailing</strong>  окно: эта неделя и две до нее. Это 660, 850 и 880, что в среднем равно (660 + 850 + 880) ÷ 3 =  <strong>796.67</strong>. Затем вы перемещаете окно вперед на одну неделю, удаляя самые старые и поднимая самые новые.</p>
 
     <table>
-      <tr><th>Week</th><th>Revenue</th><th>The three weeks averaged</th><th>3-week average</th></tr>
-      <tr><td>2026-01-05</td><td>880</td><td>not enough history</td><td>–</td></tr>
-      <tr><td>2026-01-12</td><td>850</td><td>not enough history</td><td>–</td></tr>
+      <tr><th>Week</th><th>Revenue</th><th>В среднем за три недели</th><th>в среднем за 3 недели</th></tr>
+      <tr><td>2026-01-05</td><td>880</td><td>недостаточно истории</td><td>–</td></tr>
+      <tr><td>2026-01-12</td><td>850</td><td>недостаточно истории</td><td>–</td></tr>
       <tr><td>2026-01-19</td><td>660</td><td>880, 850, 660</td><td>796.67</td></tr>
       <tr><td>2026-01-26</td><td>240</td><td>850, 660, 240</td><td>583.33</td></tr>
       <tr><td>2026-02-02</td><td>660</td><td>660, 240, 660</td><td>520.00</td></tr>
@@ -245,7 +243,7 @@
       <tr><td>2026-03-23</td><td>765</td><td>1,100, 440, 765</td><td>768.33</td></tr>
     </table>
 
-    <p>Two things to read off that table. The first two weeks have no value at all, because a three-week window needs three weeks, and every moving average starts late by window length minus one. And the 1,100 spike in the week of 9 March never appears in the smooth series; the closest it gets is lifting three consecutive averages to 620, 606.67 and 768.33.</p>
+    <p>Из этой таблицы следует прочитать две вещи. Первые две недели не имеют вообще никакой ценности, потому что для трехнедельного окна требуется три недели, а каждая скользящая средняя начинается с опозданием на длину окна минус одна. А скачок в 1100 человек на неделе с 9 марта никогда не появляется в гладком ряду; самое близкое к этому - это повышение трех средних значений подряд до 620, 606,67 и 768,33.</p>
 
     <pre><code># pandas
 s.rolling(3).mean()              # trailing, needs 3 values
@@ -262,48 +260,48 @@ ORDER BY OrderDate;</code></pre>
     <pre><code>' Excel, with revenue in B2:B17 and the formula from B4's row
 =IF(ROW()-ROW($B$2)&lt;2, "", AVERAGE(B2:B4))</code></pre>
 
-    <p>The SQL version is worth a second look, because <code>ROWS BETWEEN 2 PRECEDING AND CURRENT ROW</code> is the definition written out in words. If window frames are new, <a href="../sql-window-functions/">window functions</a> covers the whole family, and <a href="../sql-running-total/">running totals</a> is the same machinery with a different frame.</p>
+    <p>Версия SQL заслуживает второго взгляда, потому что  <code>ROWS BETWEEN 2 PRECEDING AND CURRENT ROW</code>  это определение, записанное словами. Если оконные рамы новые,  <a href="../sql-window-functions/">Оконные функции</a>  охватывает всю семью и  <a href="../sql-running-total/">текущие итоги</a>  это та же машина с другой рамой.</p>
   </div>
 
   <div class="step">
-    <h2>3. Choosing the window, and what each length costs</h2>
+    <h2>3. Выбор окна и стоимость каждой длины.</h2>
 
-    <p>Before the trade: a longer window smooths more. Name what you give up for that, before reading on.</p>
+    <p>Перед сделкой: более длинное окно сглаживает больше. Назовите, от чего вы ради этого отказываетесь, прежде чем читать дальше.</p>
 
-    <p>You give up responsiveness and you give up data at the start. Here are the three numbers that make the trade concrete on our series.</p>
+    <p>Вы отказываетесь от оперативности и отказываетесь от данных в самом начале. Вот три цифры, которые делают сделку конкретной в нашей серии.</p>
 
     <table>
-      <tr><th>Series</th><th>Standard deviation</th><th>Range</th><th>Weeks lost at the start</th></tr>
-      <tr><td>Raw weekly</td><td>236.81</td><td>240 to 1,100</td><td>0</td></tr>
-      <tr><td>3-week average</td><td>100.56</td><td>395.00 to 796.67</td><td>2</td></tr>
-      <tr><td>5-week average</td><td>61.95</td><td>497.00 to 683.00</td><td>4</td></tr>
+      <tr><th>Series</th><th>Стандартное отклонение</th><th>Range</th><th>Недели, потерянные в начале</th></tr>
+      <tr><td>Сырой еженедельник</td><td>236.81</td><td>от 240 до 1100</td><td>0</td></tr>
+      <tr><td>в среднем за 3 недели</td><td>100.56</td><td>от 395,00 до 796,67</td><td>2</td></tr>
+      <tr><td>в среднем за 5 недель</td><td>61.95</td><td>с 497,00 до 683,00</td><td>4</td></tr>
     </table>
 
-    <p>The five-week version is beautifully smooth and it has thrown away four of your sixteen weeks and compressed a real 860-wide range into 186. If something genuinely changed in the last fortnight, a five-week average will show you about two fifths of it.</p>
+    <p>Пятинедельная версия очень гладкая: она выбрасывает четыре из ваших шестнадцати недель и сжимает реальный диапазон шириной 860 до 186. Если что-то действительно изменилось за последние две недели, среднее значение за пять недель покажет вам примерно две пятых этого.</p>
 
-    <p>The rule that beats taste: <strong>match the window to the cycle you want removed</strong>.</p>
+    <p>Правило, которое побеждает вкус:  <strong>сопоставьте окно с циклом, который вы хотите удалить</strong>.</p>
 
     <ul>
-      <li><strong>Daily data with a weekday pattern:</strong> use 7. A seven-day average always contains exactly one of each weekday, so the weekday effect cancels completely rather than partly.</li>
-      <li><strong>Weekly data:</strong> 4 for a month-ish view, 13 for a quarter.</li>
-      <li><strong>Monthly data with a seasonal pattern:</strong> use 12, for the same reason as 7 on daily data.</li>
-      <li><strong>No cycle, just noise:</strong> pick the shortest window that makes the chart readable, and say what it is.</li>
+      <li><strong>Ежедневные данные с графиком будних дней:</strong>  используйте 7. Среднее значение за семь дней всегда содержит ровно один день недели, поэтому эффект дня недели отменяется полностью, а не частично.</li>
+      <li><strong>Еженедельные данные:</strong>  4 за месяц, 13 за квартал.</li>
+      <li><strong>Ежемесячные данные с сезонным характером:</strong>  используйте 12 по той же причине, что и 7 для ежедневных данных.</li>
+      <li><strong>Никакого цикла, просто шум:</strong>  выберите самое короткое окно, в котором диаграмма будет читабельной, и скажите, что это такое.</li>
     </ul>
 
-    <p>Say out loud why a 6-day average on daily data is worse than a 7-day one, even though it is nearly as smooth. A six-day window contains two of one weekday and none of another, and which ones changes as the window slides. The averaged line then carries a wobble the raw data does not have, which is the worst possible outcome from a smoothing step.</p>
+    <p>Скажите вслух, почему 6-дневное среднее значение ежедневных данных хуже, чем 7-дневное, хотя оно почти такое же гладкое. Шестидневное окно содержит два дня недели и ни одного другого, и какие из них меняются по мере скольжения окна. Усредненная линия тогда несет в себе колебание, которого нет у необработанных данных, что является наихудшим возможным результатом этапа сглаживания.</p>
 
-    <p>Now picture your own busiest chart. What cycle is in it, and does the window you use, if you use one, actually match that cycle?</p>
+    <p>Теперь представьте себе самый загруженный график. Какой цикл в нем содержится, и соответствует ли окно, которое вы используете, если вы его используете, этому циклу?</p>
   </div>
 
   <div class="step">
-    <h2>4. Trailing against centred, and the lag</h2>
+    <h2>4. Трейлинг по центру и отставание</h2>
 
-    <p>Before the comparison: our trailing average puts the value 796.67 on the week of 19 January, but it was computed from 5, 12 and 19 January. Say where that number really belongs on the timeline.</p>
+    <p>Перед сравнением: наше скользящее среднее значение 796,67 соответствует неделе 19 января, но оно было рассчитано для 5, 12 и 19 января. Скажите, где на временной шкале действительно находится это число.</p>
 
-    <p>In the middle, on 12 January. A trailing average is systematically late, by half the window, because it labels a window with its right-hand edge. That is the <strong>lag</strong>, and it is not an error, it is the direct cost of using only information you would actually have had at the time.</p>
+    <p>В середине, 12 января. Скользящее среднее систематически запаздывает на половину окна, потому что оно отмечает окно своим правым краем. Это  <strong>lag</strong>, и это не ошибка, это прямые затраты на использование только той информации, которая у вас действительно была на тот момент.</p>
 
     <table>
-      <tr><th>Week</th><th>Revenue</th><th>Trailing 3-week</th><th>Centred 3-week</th></tr>
+      <tr><th>Week</th><th>Revenue</th><th>Трейлинг-3 недели</th><th>Центрированный 3-недельный</th></tr>
       <tr><td>2026-01-05</td><td>880</td><td>–</td><td>–</td></tr>
       <tr><td>2026-01-12</td><td>850</td><td>–</td><td>796.67</td></tr>
       <tr><td>2026-01-19</td><td>660</td><td>796.67</td><td>583.33</td></tr>
@@ -311,34 +309,34 @@ ORDER BY OrderDate;</code></pre>
       <tr><td>2026-02-02</td><td>660</td><td>520.00</td><td>526.67</td></tr>
     </table>
 
-    <p>The centred column is the same numbers shifted one row up. Nothing was recomputed, only relabelled, and that relabelling is what removes the lag.</p>
+    <p>Центральный столбец представляет собой те же числа, сдвинутые на одну строку вверх. Ничего не пересчитывалось, только переименовывалось, и именно перемаркировка устраняет задержку.</p>
 
-    <p>Which one to use comes down to one question: does the value need to be honest about what you knew at the time?</p>
+    <p>Какой из них использовать, сводится к одному вопросу: должно ли значение быть честным в отношении того, что вы знали на тот момент?</p>
 
-    <p><strong>Use trailing</strong> for anything operational or forward-looking. A dashboard, an alert, a forecast input. A centred average uses future data, so a centred line on a live dashboard is claiming knowledge you do not have, and it will change under you as new data arrives.</p>
+    <p><strong>Использовать трейлинг</strong>  для чего-либо оперативного или перспективного. Панель мониторинга, оповещение, ввод прогноза. Центрированное среднее значение использует будущие данные, поэтому центрированная линия на интерактивной информационной панели указывает на знания, которых у вас нет, и они будут меняться под вашим руководством по мере поступления новых данных.</p>
 
-    <p><strong>Use centred</strong> for historical description, where all the data already exists and you want the trend line to sit correctly on the timeline. Seasonal decomposition uses centred averages for exactly this reason.</p>
+    <p><strong>Использовать по центру</strong>  для исторического описания, когда все данные уже существуют и вы хотите, чтобы линия тренда правильно располагалась на временной шкале. Именно по этой причине при сезонной декомпозиции используются центрированные средние значения.</p>
 
-    <p>Centred windows also want an odd length, so there is a genuine middle period. With an even window you end up averaging two adjacent centred averages, which is a real technique and a fiddly one, and is the main practical reason to prefer 3, 5, 7 and 13 over 4, 6 and 12.</p>
+    <p>Центрированные окна также требуют нечетной длины, поэтому получается настоящий средний период. При равномерном окне вы в конечном итоге усредняете два соседних центрированных средних, что является реальной, но неудобной техникой и является основной практической причиной предпочтения 3, 5, 7 и 13, а не 4, 6 и 12.</p>
   </div>
 
   <div class="step">
-    <h2>5. The missing weeks that corrupt it silently</h2>
+    <h2>5. Недостающие недели, которые молча портят его</h2>
 
-    <p>Before the trap: our series jumps from 23 March straight to 4 May. Five weeks with no orders. Say what <code>rolling(3)</code> will do with that, before reading on.</p>
+    <p>Перед ловушкой: наша серия перескакивает с 23 марта на 4 мая. Пять недель без заказов. Чего-чего  <code>rolling(3)</code>  сделаем с этим, прежде чем читать дальше.</p>
 
-    <p>It will average across the hole and tell you nothing happened. Look at what the trailing three-week average produces for the week of 4 May if the gap is not represented in the data.</p>
+    <p>Он будет усредняться по всей дыре и сообщать вам, что ничего не произошло. Посмотрите, что дает скользящее трехнедельное среднее за неделю с 4 мая, если разрыв не представлен в данных.</p>
 
     <pre><code>Week of 2026-05-04, 3-week trailing average = 601.67
   built from: 2026-03-16   440
               2026-03-23   765
               2026-05-04   600</code></pre>
 
-    <p>Those three "consecutive" weeks span nine weeks of calendar. The number 601.67 looks entirely ordinary sitting in a column, and it is an average of March and May with five weeks of nothing quietly deleted. Nothing errors, nothing warns, and the smooth line glides straight through a two-month hole.</p>
+    <p>Эти три «последовательные» недели охватывают девять недель календаря. Число 601,67 выглядит совершенно обычным, сидя в колонке, и это среднее значение за март и май с пятью неделями, когда ничего не было незаметно удалено. Ничего не ошибается, ничего не предупреждает, и плавная линия скользит прямо через двухмесячную дыру.</p>
 
-    <p>The reason is worth stating plainly: <code>rolling</code> in pandas and <code>ROWS BETWEEN</code> in SQL both count <strong>rows</strong>, not time. If a period has no rows, it has no row, so it is not in your table, so it cannot be counted. Grouping never invents the periods it did not see.</p>
+    <p>Причину стоит указать прямо:  <code>rolling</code>  у панд и  <code>ROWS BETWEEN</code>  в SQL оба учитываются  <strong>rows</strong>, а не время. Если у периода нет строк, значит, у него нет строк, поэтому его нет в вашей таблице, поэтому его нельзя посчитать. Группировка никогда не изобретает периоды, которых она не видела.</p>
 
-    <p>The fix is the same one every time-based calculation needs. Build the full set of periods, join your data onto it, and decide what the empty ones mean.</p>
+    <p>Исправление одно и то же, что требуется для каждого расчета, основанного на времени. Создайте полный набор периодов, объедините с ним свои данные и решите, что означают пустые.</p>
 
     <pre><code># reindex onto every Monday in the range
 full = s.asfreq('W-MON')          # missing weeks appear as NaN
@@ -346,67 +344,67 @@ full.rolling(3).mean()            # now NaN through the gap: correct and visible
 full.fillna(0).rolling(3).mean()  # gap treated as zero sales</code></pre>
 
     <table>
-      <tr><th>Week</th><th>Ignoring the gap</th><th>Real calendar, gap as no data</th><th>Real calendar, gap as zero</th></tr>
+      <tr><th>Week</th><th>Игнорирование разрыва</th><th>Реальный календарь, пробел, так как нет данных</th><th>Реальный календарь, разрыв равен нулю</th></tr>
       <tr><td>2026-03-23</td><td>768.33</td><td>768.33</td><td>768.33</td></tr>
-      <tr><td>2026-03-30</td><td>not drawn</td><td>–</td><td>401.67</td></tr>
-      <tr><td>2026-04-13</td><td>not drawn</td><td>–</td><td>0.00</td></tr>
+      <tr><td>2026-03-30</td><td>не нарисовано</td><td>–</td><td>401.67</td></tr>
+      <tr><td>2026-04-13</td><td>не нарисовано</td><td>–</td><td>0.00</td></tr>
       <tr><td>2026-05-04</td><td>601.67</td><td>–</td><td>200.00</td></tr>
       <tr><td>2026-05-11</td><td>625.00</td><td>–</td><td>370.00</td></tr>
       <tr><td>2026-05-18</td><td>663.33</td><td>663.33</td><td>663.33</td></tr>
     </table>
 
-    <p>Three defensible answers and one indefensible one. Treating the gap as zero says the business made no sales, which is right if the shop was shut and wrong if the data simply did not arrive. Leaving it as no data says you cannot compute an average there, which is right if you do not know. Ignoring the calendar entirely, the first column, says the five weeks never existed, and that is the one nobody chose on purpose.</p>
+    <p>Три оправданных ответа и один неоправданный. Если считать разницу равной нулю, это означает, что у компании не было продаж, что верно, если магазин был закрыт, и неверно, если данные просто не поступили. Если оставить это как отсутствие данных, это означает, что вы не можете вычислить среднее значение, и это правильно, если вы не знаете. Полностью игнорируя календарь, в первой колонке говорится, что пяти недель никогда не существовало, и что их никто не выбрал намеренно.</p>
 
-    <p>Deciding which of the first two applies is a data question, not a statistics question, and it is the same decision as in <a href="../pandas-fillna-dropna/">handling missing values</a>. What matters is that you make it rather than let <code>rolling</code> make it for you.</p>
+    <p>Решение о том, какой из первых двух вариантов применим, — это вопрос данных, а не вопроса статистики, и это то же самое решение, что и в  <a href="../pandas-fillna-dropna/">обработка пропущенных значений</a>. Важно то, что вы делаете это, а не позволяете  <code>rolling</code>  сделать это для тебя.</p>
   </div>
 
   <div class="step">
-    <h2>6. Weighted and exponential versions</h2>
+    <h2>6. Взвешенная и экспоненциальная версии.</h2>
 
-    <p>Before the idea: a plain three-week average treats last week and the week before last as equally informative. Say whether you believe that, before reading on.</p>
+    <p>Перед идеей: простое среднее значение за три недели рассматривает прошлую и позапрошлую неделю как одинаково информативные. Скажите, верите ли вы в это, прежде чем читать дальше.</p>
 
-    <p>Usually not. Recent periods are normally more relevant, and there are two standard ways to say so.</p>
+    <p>Обычно нет. Последние периоды обычно более актуальны, и есть два стандартных способа сказать это.</p>
 
-    <p>A <strong>weighted moving average</strong> assigns explicit weights that add to one. Weights of 0.5, 0.3 and 0.2 on the most recent three weeks give, for the week of 23 March: 0.5 × 765 + 0.3 × 440 + 0.2 × 1,100 = 382.5 + 132 + 220 = <strong>734.50</strong>, against the plain average's 768.33. It is transparent, and it needs you to invent the weights.</p>
+    <p>A <strong>взвешенное скользящее среднее</strong>  присваивает явные веса, которые добавляются к единице. Веса 0,5, 0,3 и 0,2 за последние три недели дают для недели с 23 марта: 0,5 × 765 + 0,3 × 440 + 0,2 × 1100 = 382,5 + 132 + 220 =  <strong>734.50</strong>, против обычного среднего значения 768,33. Он прозрачен, и вам нужно придумать веса.</p>
 
-    <p>An <strong>exponentially weighted average</strong> avoids inventing them. It uses one number, usually called alpha, and blends each new value into the running average by that fraction.</p>
+    <p>An <strong>экспоненциально взвешенное среднее</strong>  избегает их придумывать. Он использует одно число, обычно называемое альфа, и смешивает каждое новое значение с скользящим средним по этой дроби.</p>
 
     <pre><code>new average = alpha × this week + (1 − alpha) × last week's average</code></pre>
 
-    <p>With alpha = 0.3 on our series, the first value is 880, then 0.3 × 850 + 0.7 × 880 = 871.00, then 0.3 × 660 + 0.7 × 871 = 807.70, and so on. Every past week still contributes, and its influence shrinks the further back it is. It never fully forgets and it never gives an old week much say.</p>
+    <p>Если в нашей серии альфа = 0,3, первое значение равно 880, затем 0,3 × 850 + 0,7 × 880 = 871,00, затем 0,3 × 660 + 0,7 × 871 = 807,70 и так далее. Каждая прошедшая неделя по-прежнему вносит свой вклад, и ее влияние уменьшается по мере отдаления назад. Он никогда полностью не забывает и никогда не дает старой неделе много сказать.</p>
 
     <pre><code>s.ewm(alpha=0.3, adjust=False).mean()
 # 880.00, 871.00, 807.70, 637.39, 644.17, 654.92, ...</code></pre>
 
-    <p>Two practical advantages over a plain window. There is no start-up gap, because the first value is simply the first observation. And there is no window length to defend, only alpha, where higher means more responsive and lower means smoother. Alpha around 0.2 to 0.3 is a reasonable starting point for weekly business data.</p>
+    <p>Два практических преимущества перед обычным окном. Начального разрыва нет, потому что первое значение — это просто первое наблюдение. И здесь нет никакой длины окна, которую нужно защищать, только альфа, где более высокое значение означает более отзывчивое, а более низкое означает более плавное. Альфа от 0,2 до 0,3 является разумной отправной точкой для еженедельных бизнес-данных.</p>
 
-    <p>One caution that applies to all three. Exponential smoothing counts every past value, so a spike never leaves the series entirely, it only fades. On a plain three-week window the 1,100 spike is gone after three weeks, cleanly. Which behaviour you want is a real choice, not a detail.</p>
+    <p>Одно предостережение, которое применимо ко всем трем. Экспоненциальное сглаживание учитывает все прошлые значения, поэтому всплеск никогда не покидает ряд полностью, а только затухает. В обычном трехнедельном окне скачок в 1100 пунктов полностью исчез через три недели. Какое поведение вы хотите — это реальный выбор, а не деталь.</p>
   </div>
 
   <div class="step">
-    <h2>7. What a moving average must not be used for</h2>
+    <h2>7. Для чего нельзя использовать скользящую среднюю</h2>
 
-    <p>Before the warning: a smooth line is very persuasive. Name something a moving average cannot tell you, before reading on.</p>
+    <p>Прежде чем предупредить: плавная линия очень убедительна. Прежде чем читать дальше, назовите что-нибудь, что скользящая средняя не может вам сказать.</p>
 
-    <p><strong>It is not a forecast.</strong> A trailing average tells you where the recent past sat, and extending it flat into the future is a forecast method, but a weak one that assumes no trend and no seasonality. It is worth computing precisely because it is the baseline anything fancier has to beat, and <a href="../forecast-accuracy/">forecast accuracy</a> is how you check whether it did.</p>
+    <p><strong>Это не прогноз.</strong>  Скользящее среднее говорит вам, где находилось недавнее прошлое, и продление его на будущее — это метод прогнозирования, но слабый, не предполагающий ни тренда, ни сезонности. Его стоит вычислять именно потому, что это базовый уровень, который должен превзойти все, что более продвинуто, и  <a href="../forecast-accuracy/">Точность прогноза</a>  это то, как вы проверяете, произошло ли это.</p>
 
-    <p><strong>It does not make a trend real.</strong> A moving average will produce a smooth, convincing rising line from data that is pure noise, because averaging adjacent random numbers creates apparent runs. Three rising points on a smoothed line is not evidence of anything.</p>
+    <p><strong>Это не делает тренд реальным.</strong>  Скользящее среднее создает плавную, убедительную восходящую линию на основе данных, которые представляют собой чистый шум, поскольку усреднение соседних случайных чисел создает видимые пробеги. Три точки роста на сглаженной линии ни о чем не свидетельствуют.</p>
 
-    <p><strong>It cannot detect a change point in the last few periods.</strong> By construction the most recent value is diluted by older ones, so a genuine shift last week shows up as a small nudge. If detecting recent change is the job, look at the raw series with a control limit, not at the smooth line.</p>
+    <p><strong>Он не может обнаружить точку изменения за последние несколько периодов.</strong>  По своей конструкции самое последнее значение разбавляется более старыми, поэтому настоящий сдвиг на прошлой неделе проявляется как небольшой толчок. Если задача состоит в обнаружении недавних изменений, смотрите на необработанную серию с контрольным пределом, а не на плавную линию.</p>
 
-    <p><strong>It should not replace the raw data on a chart.</strong> Plot both. A reader shown only the smooth line has no way to judge how much was smoothed away, and the difference between a wobble of 237 and one of 62 is information they need.</p>
+    <p><strong>Он не должен заменять необработанные данные на графике.</strong>  Постройте оба. Читатель, которому показана только гладкая линия, не может судить, насколько она была сглажена, а разница между колебанием 237 и колебанием 62 — это информация, которая ему нужна.</p>
 
-    <p>Say in one sentence why the smooth line alone is the version most likely to mislead. It is because smoothness reads as certainty, and the smoothing step is exactly the step that removed the evidence of uncertainty. That is the same argument as in <a href="../how-charts-mislead/">how charts mislead</a>, applied to a technique rather than an axis.</p>
+    <p>Скажите в одном предложении, почему сама по себе плавная линия — это версия, которая, скорее всего, введет в заблуждение. Это потому, что гладкость воспринимается как уверенность, а этап сглаживания — это именно тот шаг, который устраняет признаки неопределенности. Это тот же аргумент, что и в  <a href="../how-charts-mislead/">Как графики вводят в заблуждение</a>, применяется к технике, а не к оси.</p>
   </div>
 
-  <h2>The full before and after</h2>
+  <h2>Полное до и после</h2>
 
-  <p>Same series, same question: how is revenue trending?</p>
+  <p>Та же серия, тот же вопрос: какова динамика доходов?</p>
 
   <h3>Before</h3>
   <pre><code>df['ma3'] = df['Revenue'].rolling(3).mean()
 # then chart ma3 alone</code></pre>
-  <p>Three problems, none of which errors. The five missing weeks are averaged straight across, so the week of 4 May shows 601.67 built partly from March. The raw series is not on the chart, so nobody can see how much wobble was removed. And the window of 3 was chosen because it is the number people type, not because anything in the business has a three-week cycle.</p>
+  <p>Три проблемы, ни одна из которых не содержит ошибок. Пять недостающих недель усреднены, поэтому за неделю с 4 мая видно, что 601,67 построено частично по сравнению с мартом. Необработанный ряд отсутствует на графике, поэтому никто не может увидеть, насколько сильно было удалено колебание. И окно 3 было выбрано потому, что это число людей, а не потому, что что-либо в бизнесе имеет трехнедельный цикл.</p>
 
   <h3>After</h3>
   <pre><code># 1. put every week on the calendar, including the empty ones
@@ -421,107 +419,107 @@ full_ma = full.rolling(4).mean()
 
 # 4. chart both lines, and label the window
 </code></pre>
-  <p>The gap is now visible as a real trough instead of being deleted, the choice to call it zero is written where the next person will read it, the window is a stated decision, and the chart shows the raw series underneath so the reader can see what was smoothed. Same technique, four decisions made rather than defaulted.</p>
+  <p>Разрыв теперь виден как настоящая впадина, а не удален, выбор назвать его нулевым записывается там, где его прочитает следующий человек, окно представляет собой заявленное решение, а на диаграмме внизу показаны необработанные ряды, чтобы читатель мог видеть, что было сглажено. Та же техника, четыре решения приняты, а не дефолт.</p>
 
   <div class="step">
-    <h2>Edge cases that catch people out</h2>
+    <h2>Крайние случаи, которые застают людей врасплох</h2>
 
-    <p>Six that each cost somebody an afternoon.</p>
+    <p>Шесть, каждая из которых стоила кому-то дня.</p>
 
-    <p><strong><code>min_periods</code> quietly changes the meaning.</strong> <code>rolling(3, min_periods=1)</code> gives you a value from the very first row, but that value is a one-row average sitting in a column labelled three-week. Convenient for charts, misleading in a table.</p>
+    <p><strong><code>min_periods</code>  незаметно меняет смысл.</strong> <code>rolling(3, min_periods=1)</code>  дает вам значение из самой первой строки, но это значение представляет собой среднее значение по одной строке, указанное в столбце с надписью «три недели». Удобен для графиков, вводит в заблуждение в виде таблицы.</p>
 
-    <p><strong>Duplicate rows in the same period.</strong> If two orders share a date and you have not aggregated first, a row-based window is averaging orders rather than days, and the window length no longer means what its name says. Aggregate to one row per period before smoothing, always.</p>
+    <p><strong>Повторяющиеся строки за один и тот же период.</strong>  Если у двух заказов одна и та же дата, и вы сначала не агрегировали данные, окно на основе строк усредняет заказы, а не дни, и длина окна больше не означает то, что говорит его название. Всегда агрегируйте по одной строке за период перед сглаживанием.</p>
 
-    <p><strong>Sorting.</strong> A window function with no <code>ORDER BY</code>, or a DataFrame not sorted by date, produces a moving average of whatever order the rows happened to be in. It will not error and it will look plausible.</p>
+    <p><strong>Сортировка.</strong>  Оконная функция без  <code>ORDER BY</code>или DataFrame, не отсортированный по дате, выдает скользящее среднее в любом порядке, в котором находились строки. Это не приведет к ошибкам и будет выглядеть правдоподобно.</p>
 
-    <p><strong>Averaging a rate.</strong> A moving average of a conversion rate weights every period equally regardless of traffic. If you want a smoothed rate, smooth the numerator and denominator separately and divide at the end.</p>
+    <p><strong>Усреднение курса.</strong>  Скользящее среднее коэффициента конверсии одинаково влияет на каждый период независимо от трафика. Если вам нужен сглаженный коэффициент, сгладьте числитель и знаменатель отдельно и разделите в конце.</p>
 
-    <p><strong>The last point moves.</strong> Yesterday's three-day average changes when today's data arrives if the window is centred, and does not if it is trailing. A dashboard whose historical numbers change overnight is usually a centred average that should have been trailing.</p>
+    <p><strong>Последняя точка перемещается.</strong>  Вчерашнее трехдневное среднее значение меняется при поступлении сегодняшних данных, если окно расположено по центру, и не меняется, если оно скользящее. Панель мониторинга, исторические цифры которой меняются в одночасье, обычно представляет собой центрированное среднее значение, которое должно было бы отставать.</p>
 
-    <p><strong>Comparing two series smoothed differently.</strong> A 7-day average and a 30-day average of the same data will cross each other constantly, and those crossings mean nothing about the business. If you are showing two windows, say what each one is for.</p>
+    <p><strong>Сравнение двух серий сгладилось по-разному.</strong>  Среднее значение за 7 и 30 дней одних и тех же данных будут постоянно пересекаться, и эти пересечения ничего не значат для бизнеса. Если вы показываете два окна, скажите, для чего предназначено каждое из них.</p>
   </div>
 
-  <h2>Why this works</h2>
+  <h2>Почему это работает</h2>
 
-  <p>Averaging adjacent periods works because an observation can be thought of as a signal plus an error, and errors from different periods are largely unrelated to each other while the signal is not. Averaging leaves the signal alone and shrinks the error, and the amount it shrinks by is the square root of the window length, which is the same relationship behind the <a href="../confidence-intervals/">standard error</a>. Our numbers bear that out approximately: 236.81 divided by the square root of 3 is 136.7 against an observed 100.56, and divided by the square root of 5 is 105.9 against an observed 61.95. The observed smoothing is stronger than the simple rule predicts, because the rule assumes the raw values are independent, and consecutive weeks in real business data are not.</p>
+  <p>Усреднение соседних периодов работает, потому что наблюдение можно рассматривать как сигнал плюс ошибка, а ошибки разных периодов в значительной степени не связаны друг с другом, а сигнал — нет. Усреднение оставляет сигнал в покое и уменьшает ошибку, а величина, на которую она уменьшается, равна квадратному корню из длины окна, что является тем же соотношением, что и  <a href="../confidence-intervals/">стандартная ошибка</a>. Наши цифры примерно это подтверждают: 236,81, разделенное на квадратный корень из 3, равно 136,7 против наблюдаемого 100,56, а разделенное на квадратный корень из 5, равно 105,9 против наблюдаемого 61,95. Наблюдаемое сглаживание оказывается сильнее, чем предсказывает простое правило, поскольку правило предполагает, что исходные значения независимы, а последовательные недели в реальных бизнес-данных — нет.</p>
 
-  <p>The reason to bother with the plainest possible methods first is empirical rather than aesthetic. The M-competitions ran thousands of real series through dozens of forecasting methods and repeatedly found that simple methods, including moving averages and exponential smoothing, match or beat far more elaborate ones on out-of-sample accuracy, and that combining a few simple methods beats picking one (Makridakis, Spiliotis, &amp; Assimakopoulos, 2020, <em>International Journal of Forecasting</em>, 36(1), 54–74). Gardner's review of exponential smoothing covers why the single-parameter version in section six holds up so well across so many series, and where its extensions for trend and seasonality become worth the extra parameters (Gardner, 2006, <em>International Journal of Forecasting</em>, 22(4), 637–666).</p>
+  <p>Причина, по которой стоит в первую очередь заняться простейшими методами, скорее эмпирическая, чем эстетическая. М-соревнования провели тысячи реальных серий с использованием десятков методов прогнозирования и неоднократно обнаруживали, что простые методы, включая скользящие средние и экспоненциальное сглаживание, соответствуют или превосходят гораздо более сложные по точности за пределами выборки, и что объединение нескольких простых методов лучше, чем выбор одного (Макридакис, Спилиотис и Ассимакопулос, 2020,  <em>Международный журнал прогнозирования</em>, 36(1), 54–74). В обзоре экспоненциального сглаживания, сделанном Гарднером, объясняется, почему однопараметрическая версия из шестого раздела так хорошо работает во многих рядах и почему ее расширения для тренда и сезонности оправдывают дополнительные параметры (Gardner, 2006,  <em>Международный журнал прогнозирования</em>, 22(4), 637–666).</p>
 
-  <p>One note on why this page kept asking you to answer before showing you the answer. Attempting an answer before seeing the correct one reliably improves how well the correct one is retained, even when the attempt is wrong (Bisra, Liu, Nesbit, Salimi, &amp; Winne, 2018, <em>Educational Psychology Review</em>, 30(3), 703–725). The 601.67 across the gap sticks because you were asked to predict what <code>rolling</code> would do first.</p>
+  <p>Одно замечание о том, почему эта страница продолжает просить вас ответить, прежде чем показать вам ответ. Попытка дать ответ до того, как вы увидите правильный, достоверно повышает, насколько хорошо сохраняется правильный ответ, даже если попытка неверна (Бисра, Лю, Несбит, Салими и Винн, 2018,  <em>Обзор педагогической психологии</em>, 30(3), 703–725). 601,67 через разрыв остается неизменным, потому что вас попросили предсказать, что  <code>rolling</code>  сделал бы в первую очередь.</p>
 
-  <h2>Using this on your own work</h2>
+  <h2>Использование этого в своей работе</h2>
 
-  <p>Adding smoothing to every chart you own is miserable and unnecessary. Do this instead, in order.</p>
+  <p>Добавлять сглаживание к каждому графику, который у вас есть, — это жалкое и ненужное занятие. Вместо этого сделайте это по порядку.</p>
 
   <ol>
-    <li><strong>Check for missing periods first.</strong> Count the distinct periods in your data and compare with the number of periods in the date range. If they differ, fix that before smoothing anything.</li>
-    <li><strong>Pick the window from the cycle</strong>, not from habit. 7 for daily, 4 or 13 for weekly, 12 for monthly.</li>
-    <li><strong>Use trailing on anything live</strong>, and centred only for finished history.</li>
-    <li><strong>Plot both lines</strong>, raw and smoothed, and put the window in the axis label or the legend.</li>
-    <li><strong>Say what the smooth line is for</strong> in one sentence. If the answer is "so the chart looks tidier", the chart may not need it.</li>
+    <li><strong>Сначала проверьте отсутствие месячных.</strong>  Подсчитайте отдельные периоды в ваших данных и сравните их с количеством периодов в диапазоне дат. Если они отличаются, исправьте это, прежде чем что-либо сглаживать.</li>
+    <li><strong>Выберите окно из цикла</strong>, не по привычке. 7 на день, 4 или 13 на неделю, 12 на месяц.</li>
+    <li><strong>Используйте трейлинг для всего живого</strong>и центрируется только для законченной истории.</li>
+    <li><strong>Постройте обе линии</strong>, необработанный и сглаженный, и поместите окно в метку оси или легенду.</li>
+    <li><strong>Скажи, для чего нужна плавная линия</strong>  в одном предложении. Если ответ «чтобы диаграмма выглядела аккуратнее», возможно, диаграмме это не нужно.</li>
   </ol>
 
-  <p>If you have paper nearby, one optional drawing is worth five minutes. Write your own last twelve periods in a row, then slide a three-wide window along them with a finger, writing each average underneath. Doing it by hand once makes the start-up gap and the lag obvious in a way that no explanation of them does.</p>
+  <p>Если у вас под рукой есть бумага, один дополнительный рисунок стоит пяти минут. Напишите свои последние двенадцать периодов подряд, затем проведите пальцем по окну шириной в три раза, записывая каждое среднее значение внизу. Если сделать это вручную, то пробелы в запуске и отставание становятся очевидными, чего не делает никакое их объяснение.</p>
 
-  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: SQL, Python, Excel, statistics and the working habits around them.</div>
+  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: SQL, Python, Excel, статистика и методы работы с ними.</div>
 
-  <h2>The whole thing on one screen</h2>
+  <h2>Все на одном экране</h2>
 
-  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
+  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
 
   <table>
-    <tr><th>Idea</th><th>What it means</th></tr>
-    <tr><td>Moving average</td><td>Replace each period with the average of it and its neighbours.</td></tr>
-    <tr><td>What it removes</td><td>Wobble that does not repeat. sd 236.81 raw, 100.56 at 3 weeks, 61.95 at 5.</td></tr>
-    <tr><td>Trailing window</td><td>This period and the ones before it. Uses only what you knew at the time.</td></tr>
-    <tr><td>Centred window</td><td>Same numbers relabelled to the middle period. Uses future data.</td></tr>
-    <tr><td>Which to use</td><td>Trailing for anything live. Centred for finished history only.</td></tr>
-    <tr><td>The lag</td><td>A trailing average is late by about half the window. Not a bug, the price.</td></tr>
-    <tr><td>Start-up gap</td><td>You lose window minus one periods at the beginning.</td></tr>
-    <tr><td>Choosing the window</td><td>Match the cycle: 7 daily, 4 or 13 weekly, 12 monthly. Odd lengths for centred.</td></tr>
-    <tr><td>Why 6 is worse than 7</td><td>It contains two of one weekday and none of another, adding a wobble.</td></tr>
+    <tr><th>Idea</th><th>Что это значит</th></tr>
+    <tr><td>Скользящее среднее</td><td>Замените каждый период средним значением для него и его соседей.</td></tr>
+    <tr><td>Что он удаляет</td><td>Колебание, которое не повторяется. стандартное отклонение 236,81 в сыром виде, 100,56 через 3 недели, 61,95 через 5 недель.</td></tr>
+    <tr><td>Следующее окно</td><td>Этот период и предшествующие ему. Использует только то, что вы знали на тот момент.</td></tr>
+    <tr><td>Центрированное окно</td><td>Те же цифры перенесены на средний период. Использует будущие данные.</td></tr>
+    <tr><td>Что использовать</td><td>Следуя за чем-нибудь живым. Центрировано только для законченной истории.</td></tr>
+    <tr><td>Отставание</td><td>Скользящая средняя запаздывает примерно на половину окна. Не баг, цена.</td></tr>
+    <tr><td>Стартовый разрыв</td><td>Вы теряете окно минус один период в начале.</td></tr>
+    <tr><td>Выбор окна</td><td>Соблюдайте цикл: 7 ежедневных, 4 или 13 еженедельных, 12 ежемесячных. Нечетная длина для центрирования.</td></tr>
+    <tr><td>Почему 6 хуже 7</td><td>Он содержит два дня недели и ни одного другого, что добавляет колебания.</td></tr>
     <tr><td>SQL</td><td><code>AVG(x) OVER (ORDER BY d ROWS BETWEEN 2 PRECEDING AND CURRENT ROW)</code>.</td></tr>
-    <tr><td>The gap trap</td><td>rolling counts rows, not time. Our 601.67 spanned nine calendar weeks.</td></tr>
-    <tr><td>The fix</td><td>Reindex onto every period, then decide what an empty one means.</td></tr>
-    <tr><td>Weighted</td><td>Explicit weights summing to one. 0.5/0.3/0.2 gave 734.50 against 768.33.</td></tr>
-    <tr><td>Exponential</td><td>alpha × now + (1 − alpha) × previous average. No start-up gap, one parameter.</td></tr>
-    <tr><td>Not a forecast</td><td>It is a description of the recent past, and the baseline to beat.</td></tr>
-    <tr><td>Always plot both</td><td>Smooth alone hides how much was smoothed. Show the raw series underneath.</td></tr>
+    <tr><td>Ловушка разрыва</td><td>прокатка считает строки, а не время. Наш 601,67 длился девять календарных недель.</td></tr>
+    <tr><td>Исправление</td><td>Переиндексируйте каждую точку, а затем решите, что означает пустая точка.</td></tr>
+    <tr><td>Weighted</td><td>Явные веса, суммирующиеся до единицы. 0,5/0,3/0,2 дали 734,50 против 768,33.</td></tr>
+    <tr><td>Exponential</td><td>альфа × сейчас + (1 − альфа) × предыдущее среднее значение. Никакого стартового зазора, один параметр.</td></tr>
+    <tr><td>Не прогноз</td><td>Это описание недавнего прошлого и базового уровня, который необходимо преодолеть.</td></tr>
+    <tr><td>Всегда стройте оба</td><td>Только «Сглаживание» скрывает, насколько сильно было сглажено. Покажите необработанную серию внизу.</td></tr>
   </table>
 
-  <div class="note"><strong>The one habit to keep.</strong> Before smoothing anything, check that every period exists in your data, and after smoothing, plot the raw series underneath. Those two steps prevent the silent gap and the false certainty, which are the only two ways this technique really goes wrong. If a series breaks in a way this page does not cover, there is a general <a href="../technical-tenacity/">diagnosis loop for being stuck</a>.</div>
+  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Прежде чем что-либо сглаживать, убедитесь, что в ваших данных существует каждый период, и после сглаживания постройте под ним необработанный ряд. Эти два шага предотвращают молчаливый разрыв и ложную уверенность, которые являются единственными двумя причинами, в которых эта техника действительно дает сбой. Если серия прерывается таким образом, что это не отражено на этой странице, существует общая  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>.</div>
 
-  <p>One last thought, and I would genuinely like other people's answers. The first moving average I shipped smoothed straight across a week when our tracking was broken, so the outage looked like a mild dip and nobody investigated for a month. What has your smooth line quietly averaged away?</p>
+  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Первая скользящая средняя, ​​которую я отправил, сгладилась в течение недели, когда наше отслеживание было нарушено, поэтому сбой выглядел как небольшой спад, и в течение месяца никто не проводил расследования. Что ваша плавная линия незаметно усреднила?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Makridakis, S., Spiliotis, E., &amp; Assimakopoulos, V. (2020). The M4 Competition: 100,000 time series and 61 forecasting methods. <em>International Journal of Forecasting</em>, 36(1), 54–74.</li>
-    <li>Gardner, E. S. (2006). Exponential smoothing: The state of the art, Part II. <em>International Journal of Forecasting</em>, 22(4), 637–666.</li>
-    <li>Makridakis, S., &amp; Hibon, M. (2000). The M3-Competition: Results, conclusions and implications. <em>International Journal of Forecasting</em>, 16(4), 451–476.</li>
-    <li>Bisra, K., Liu, Q., Nesbit, J. C., Salimi, F., &amp; Winne, P. H. (2018). Inducing self-explanation: A meta-analysis. <em>Educational Psychology Review</em>, 30(3), 703–725.</li>
+    <li>Макридакис С., Спилиотис Э. и Ассимакопулос В. (2020). Конкурс M4: 100 000 временных рядов и 61 метод прогнозирования.  <em>Международный журнал прогнозирования</em>, 36(1), 54–74.</li>
+    <li>Гарднер, ES (2006). Экспоненциальное сглаживание: современное состояние, часть II.  <em>Международный журнал прогнозирования</em>, 22(4), 637–666.</li>
+    <li>Макридакис С. и Хибон М. (2000). Конкурс М3: результаты, выводы и последствия.  <em>Международный журнал прогнозирования</em>, 16(4), 451–476.</li>
+    <li>Бисра К., Лю К., Несбит Дж. К., Салими Ф. и Винн П. Х. (2018). Побуждение к самообъяснению: метаанализ.  <em>Обзор педагогической психологии</em>, 30(3), 703–725.</li>
   </ul>
 
   <div class="book">
-    <strong>The line is jumpy, so somebody smoothed it, and now the spike nobody wanted to see is gone.</strong>
-    <p><em>Forecasting for Analysts</em> is 43 pages, moving averages and seasonality, including what a window length quietly does to the story.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/forecasting-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=forecasting-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-moving-averages'})">Forecasting for Analysts, $12 &rarr;</a>
+    <strong>Линия дергается, поэтому кто-то ее сгладил, и теперь пик, который никто не хотел видеть, исчез.</strong>
+    <p><em>Прогнозирование для аналитиков</em>  составляет 43 страницы, скользящие средние и сезонность, включая то, как длина окна незаметно влияет на историю.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/forecasting-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=forecasting-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-moving-averages'})">Прогнозирование для аналитиков, $12 →</a>
   </div>
 
   <div class="cta">
-    <strong>Practice this with a real series in front of you.</strong>
-    <p style="margin:6px 0 0">The <a href="../../forecasting/">Forecasting Kit</a> gives you the repetitions: series to smooth, flash cards on trailing against centred and on window choice, and questions that ask you to predict what a window will do before you compute it. You now own the method; the kit is the practice. Nothing to install, no account needed.</p>
-    <a class="btn" href="../../forecasting/">Open the Forecasting Kit →</a>
+    <strong>Потренируйтесь в этом на реальном сериале перед вами.</strong>
+    <p style="margin:6px 0 0">The <a href="../../forecasting/">Комплект прогнозирования</a>  дает вам повторения: серии для сглаживания, флэш-карточки по движению по центру и по выбору окна, а также вопросы, которые просят вас предсказать, что будет делать окно, прежде чем вы его вычислите. Теперь вы владеете методом; комплект - это практика. Ничего устанавливать, учетная запись не требуется.</p>
+    <a class="btn" href="../../forecasting/">Откройте Набор прогнозов →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> · <a href="../forecast-accuracy/">Forecast Accuracy</a> · <a href="../sql-running-total/">Running Total in SQL</a> · <a href="../sql-window-functions/">Window Functions</a> · <a href="../sql-month-over-month/">Month-over-Month in SQL</a> · <a href="../excel-month-over-month/">Month-over-Month in Excel</a> · <a href="../pandas-pct-change-cumsum/">pandas pct_change and cumsum</a> · <a href="../how-charts-mislead/">How Charts Mislead</a> · <a href="../choose-the-right-chart/">Choose the Right Chart</a> · <a href="../standard-deviation/">Standard Deviation</a> · <a href="../confidence-intervals/">Confidence Intervals</a> · <a href="../sql-dates/">SQL Date Functions</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../forecasting/">Forecasting Kit</a> · <a href="../../projects/">Portfolio Projects</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../forecast-accuracy/">Точность прогноза</a> · <a href="../sql-running-total/">Проведение итогов в SQL</a> · <a href="../sql-window-functions/">Оконные функции</a> · <a href="../sql-month-over-month/">Месяц за месяцем в SQL</a> · <a href="../excel-month-over-month/">Месяц за месяцем в Excel</a> · <a href="../pandas-pct-change-cumsum/">панды pct_change и cumsum</a> · <a href="../how-charts-mislead/">Как графики вводят в заблуждение</a> · <a href="../choose-the-right-chart/">Выберите правильный график</a> · <a href="../standard-deviation/">Стандартное отклонение</a> · <a href="../confidence-intervals/">доверительные интервалы</a> · <a href="../sql-dates/">Функции даты SQL</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../forecasting/">Комплект прогнозирования</a> · <a href="../../projects/">Портфельные проекты</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-<script src="../../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

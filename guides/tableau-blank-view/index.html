@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tableau Shows No Data or a Blank View: Seven Causes &mdash; Analyst Prep Kit</title>
-<meta name="description" content="Empty view, or a wall of nulls, or every number identical. Seven causes in the order they are worth checking: filters, the join, the relationship direction, aggregation, nulls in a measure, the data source refresh, and marks with nothing to draw.">
+<title>В таблице отсутствуют данные или отсутствует представление: семь причин — комплект для подготовки аналитика</title>
+<meta name="description" content="Пустое представление, или стена нулей, или все числа одинаковы. Семь причин в том порядке, в котором они заслуживают проверки: фильтры, соединение, направление связи, агрегирование, нули в мере, обновление источника данных и метки, в которых нечего рисовать.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/tableau-blank-view/">
-<meta property="og:title" content="The Tableau View Is Blank: Working Through the Causes in Order">
-<meta property="og:description" content="Seven reasons a Tableau view comes back empty, in the order worth checking them.">
+<meta property="og:title" content="Табличное представление пусто: работа над причинами по порядку">
+<meta property="og:description" content="Семь причин, по которым представление Tableau возвращается пустым, в том порядке, в котором стоит их проверить.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/tableau-blank-view/">
 <meta name="twitter:card" content="summary_large_image">
@@ -69,12 +69,11 @@
   figcaption{font-size:13.5px;color:var(--muted);margin-top:6px}
 </style>
 <!-- SEO:JSONLD:START -->
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "The Tableau View Is Blank: Working Through the Causes in Order",
-  "description": "Empty view, or a wall of nulls, or every number identical. Seven causes in the order they are worth checking: filters, the join, the relationship direction, aggregation, nulls in a measure, the data source refresh, and marks with nothing to draw.",
+  "headline": "Табличное представление пусто: работа над причинами по порядку",
+  "description": "Пустое представление, или стена нулей, или все числа одинаковы. Семь причин в том порядке, в котором они заслуживают проверки: фильтры, соединение, направление связи, агрегирование, нули в мере, обновление источника данных и метки, в которых нечего рисовать.",
   "url": "https://michaelnocito.github.io/analyst-prep-kit/guides/tableau-blank-view/",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -82,20 +81,19 @@
   },
   "author": {
     "@type": "Person",
-    "name": "Michael Nocito",
+    "name": "Майкл Носито",
     "url": "https://michaelnocito.github.io"
   },
   "publisher": {
     "@type": "Person",
-    "name": "Michael Nocito"
+    "name": "Майкл Носито"
   },
   "inLanguage": "en",
   "datePublished": "2026-08-23",
   "dateModified": "2026-08-23"
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
@@ -114,47 +112,46 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "When the View Is Blank",
+      "name": "Когда представление пусто",
       "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/tableau-blank-view/"
     }
   ]
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Why is my Tableau view blank?",
+      "name": "Почему мое представление Tableau пусто?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Work through: a filter excluding everything, a join that matched no rows, a relationship pointing the wrong way, a measure that is all null, hidden members, and a mark type with nothing to draw. Check the filter shelf first, then View Data on the sheet."
+        "text": "Проработайте: фильтр, исключающий все, соединение, не совпадающее ни с одной строкой, связь, указывающую неверный путь, меру, которая полностью равна нулю, скрытые элементы и тип метки, в котором нечего рисовать. Сначала проверьте полку фильтра, а затем просмотрите данные на листе."
       }
     },
     {
       "@type": "Question",
-      "name": "How do I see the rows behind a Tableau view?",
+      "name": "Как увидеть строки в представлении Tableau?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Right click the sheet and choose View Data, or click a mark and use the View Data icon. It shows the underlying rows for the marks, which immediately tells you whether the problem is no data or a display setting."
+        "text": "Щелкните лист правой кнопкой мыши и выберите «Просмотреть данные» или щелкните отметку и используйте значок «Просмотреть данные». Он показывает основные строки для меток, что сразу же сообщает вам, связана ли проблема с отсутствием данных или настройкой отображения."
       }
     },
     {
       "@type": "Question",
-      "name": "Why does my Tableau join return no rows?",
+      "name": "Почему мое объединение в Таблице не возвращает строк?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Usually the key types differ, one side has trailing spaces, or the join is inner and the keys genuinely do not overlap. Check the join clause and look at the row counts each side of it on the data source page."
+        "text": "Обычно типы ключей различаются, на одной стороне есть конечные пробелы, или соединение является внутренним, и ключи действительно не перекрываются. Проверьте предложение соединения и посмотрите на количество строк с каждой его стороны на странице источника данных."
       }
     },
     {
       "@type": "Question",
-      "name": "Why does every row show the same number?",
+      "name": "Почему в каждой строке указано одно и то же число?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "A relationship or join is missing, so the measure is being repeated at the wrong grain, or a FIXED level of detail expression is computing at a grain that ignores the view."
+        "text": "Связь или соединение отсутствуют, поэтому мера повторяется с неправильной степенью детализации, или выражение ФИКСИРОВАННОГО уровня детализации вычисляется с зернистостью, игнорирующей представление."
       }
     }
   ]
@@ -164,92 +161,92 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../../tableau/">Tableau Kit</a></p>
-  <h1>The Tableau View Is Blank: Working Through the Causes in Order</h1>
-  <p class="meta">Michael Nocito &middot; Updated August 2026 &middot; Every number on this page was worked before it was published</p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../../tableau/">Табличный комплект</a></p>
+  <h1>Табличное представление пусто: работа над причинами по порядку</h1>
+  <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Все числа на этой странице были обработаны до их публикации.</p>
 
-  <p>The sheet is empty. Or it shows a column of nulls, or the same number repeated down every row. All three are the same class of problem: the marks Tableau was asked to draw have nothing behind them.</p>
+  <p>Лист пуст. Или он показывает столбец с нулями или одно и то же число, повторяющееся в каждой строке. Все три задачи относятся к одному и тому же классу: за отметками, которые попросили нарисовать Tableau, ничего не стоит.</p>
 
-  <p>What you do: right click the sheet and choose View Data before changing anything. That single step splits the causes in two, because it tells you whether rows exist at all.</p>
+  <p>Что вы делаете: щелкните лист правой кнопкой мыши и выберите «Просмотреть данные», прежде чем что-либо менять. Этот единственный шаг разделяет причины на две части, поскольку он сообщает вам, существуют ли вообще строки.</p>
 
-  <p><strong>The short version.</strong> Find out whether there is no data or no drawing, before you start fixing.</p>
+  <p><strong>Краткая версия.</strong>  Прежде чем приступать к исправлению, выясните, нет ли данных или чертежа.</p>
 
-  <h2>Check in this order</h2>
-  <h3>1. The filter shelf</h3>
-  <p>Read every pill, including the ones that are collapsed. Look for a date filter with a range that ended, a relative date filter such as last 30 days on data that stops in June, and a filter set on a different sheet with Apply to All Using This Data Source.</p>
-  <p>Also check hidden members with Analysis, Reveal Hidden Data. Hidden rows do not appear anywhere on the filter shelf, so nothing on screen says they exist.</p>
+  <h2>Проверьте в этом порядке</h2>
+  <h3>1. Фильтровальная полка</h3>
+  <p>Прочтите каждую таблетку, включая те, которые свернуты. Найдите фильтр даты с закончившимся диапазоном, фильтр относительной даты, например, за последние 30 дней для данных, заканчивающихся в июне, и фильтр, установленный на другом листе с функцией «Применить ко всем, используя этот источник данных».</p>
+  <p>Также проверьте скрытых участников с помощью «Анализ», «Показать скрытые данные». Скрытые строки не отображаются нигде на полке фильтров, поэтому на экране ничего не сообщает об их существовании.</p>
 
-  <h3>2. The join</h3>
-  <p>On the Data Source page, look at the join type and the clause. An inner join returns nothing when the keys do not overlap, and the two usual reasons are a type difference, such as a number against text, and trailing spaces. Change it to a left join temporarily: if rows appear with nulls on the right, you have confirmed a key problem rather than a data problem.</p>
-  <p>The equivalent problems in SQL are the same ones, and the diagnosis is in <a href="../sql-joins/">SQL JOINs</a> and <a href="../lookup-returns-na/">lookups that return not-found</a>.</p>
+  <h3>2. Соединение</h3>
+  <p>На странице «Источник данных» просмотрите тип соединения и предложение. Внутреннее соединение ничего не возвращает, если ключи не перекрываются, и двумя обычными причинами являются различия в типах, например число против текста, и конечные пробелы. Временно измените его на левое соединение: если справа появляются строки с нулями, вы подтверждаете наличие ключевой проблемы, а не проблемы с данными.</p>
+  <p>Эквивалентные проблемы в SQL одни и те же, и диагноз находится в  <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> and <a href="../lookup-returns-na/">поиск, который возвращает не найдено</a>.</p>
 
-  <h3>3. The relationship direction</h3>
-  <p>Relationships, the noodle lines on the newer data model, keep tables separate and join them per view. Cardinality and referential integrity settings on a relationship tell Tableau what it may assume, and setting them wrongly can drop rows. If a view lost data after you changed those settings, put them back to Many and Some records.</p>
-  <p>Related tables also mean that a measure from one table can be filtered by a dimension from another only if the path between them supports it. A view combining two fact tables with no shared dimension is a common cause of a blank result. See <a href="../tableau-relationships/">relationships</a>.</p>
+  <h3>3. Направление отношений</h3>
+  <p>Отношения, тонкие линии в новой модели данных, позволяют разделять таблицы и объединять их для каждого представления. Настройки кардинальности и ссылочной целостности отношений сообщают Tableau, что она может предположить, и их неправильная установка может привести к потере строк. Если представление потеряло данные после того, как вы изменили эти настройки, верните их в записи «Многие» и «Некоторые».</p>
+  <p>Связанные таблицы также означают, что меру из одной таблицы можно фильтровать по измерению из другой, только если путь между ними поддерживает это. Представление, объединяющее две таблицы фактов без общего измерения, является частой причиной пустого результата. Видеть  <a href="../tableau-relationships/">relationships</a>.</p>
 
-  <h3>4. The aggregation and the grain</h3>
-  <p>If every row shows the same number, a measure is being computed at a grain that does not vary with the view. Check for a <code>FIXED</code> expression: it ignores the view by design, and that is usually the answer. Check too whether Analysis, Aggregate Measures has been switched off, which puts every underlying row on the view and can produce a wall of marks or a very slow, unreadable sheet.</p>
+  <h3>4. Агрегация и зернистость</h3>
+  <p>Если в каждой строке отображается одно и то же число, мера вычисляется с точностью до уровня, не меняющимся в зависимости от представления. Проверьте наличие  <code>FIXED</code>  выражение: оно игнорирует представление по замыслу, и обычно это и есть ответ. Также проверьте, отключены ли «Анализ», «Совокупные показатели», в результате чего каждая базовая строка отображается в представлении и может создать стену отметок или очень медленный, нечитаемый лист.</p>
 
-  <h3>5. Nulls in the measure</h3>
-  <p>A measure that is entirely null draws nothing. In the bottom right corner Tableau reports the number of null marks, and it is easy to miss. Nulls arrive from a failed type conversion, a division by zero, or a calculation where one input was null and no <code>ZN</code> was applied.</p>
+  <h3>5. Нули в мере</h3>
+  <p>Мера, которая полностью равна нулю, ничего не рисует. В правом нижнем углу Tableau сообщает количество нулевых отметок, и их легко пропустить. Нулевые значения поступают в результате неудачного преобразования типа, деления на ноль или вычислений, в которых один из входных данных был нулевым и не  <code>ZN</code>  был применен.</p>
   <pre><code>ZN(SUM([Sales]))                       // null becomes 0
 IFNULL([Region], "Unknown")            // label the nulls
 IIF([Sales] = 0, NULL, [Profit]/[Sales])  // avoid dividing by zero</code></pre>
 
-  <h3>6. The data source itself</h3>
-  <p>An extract that failed to refresh keeps the last successful data, or none. Check the extract date on the Data Source page. For a live connection, check the credentials and whether the underlying table was renamed. A custom SQL query that now returns nothing produces exactly this symptom and gives no hint of it in the view.</p>
+  <h3>6. Сам источник данных</h3>
+  <p>Экстракт, который не удалось обновить, сохраняет последние успешные данные или не сохраняет их. Проверьте дату извлечения на странице источника данных. Для живого соединения проверьте учетные данные и была ли переименована базовая таблица. Пользовательский SQL-запрос, который теперь ничего не возвращает, вызывает именно этот симптом и не дает на него никакого намека в представлении.</p>
 
-  <h3>7. The mark type has nothing to draw</h3>
-  <p>A line chart needs at least two points per line, so a single date renders as nothing visible. A map needs a recognised geographic role. A shape mark with no shape assigned draws an empty area. And a mark whose colour matches the background is invisible while being perfectly present.</p>
+  <h3>7. Тип отметки нечего рисовать</h3>
+  <p>Линейному графику требуется как минимум две точки на линию, поэтому одна дата отображается как ничего не видимая. Карте нужна признанная географическая роль. Метка формы, которой не назначена форма, рисует пустую область. А метка, цвет которой соответствует фону, невидима, но при этом совершенно присутствует.</p>
 
-  <div class="note"><strong>The empty result is a finding, not only a fault.</strong> Sometimes there genuinely are no rows: no orders in that region last month, no tickets of that type. Before reporting nothing, count the unfiltered total, exactly as with <a href="../sql-anti-join/">an anti-join that returns zero rows</a>. Empty is the one answer that looks the same whether you asked correctly or not.</div>
+  <div class="note"><strong>Пустой результат — это находка, а не только неисправность.</strong>  Иногда скандалов действительно нет: ни заказов в этом регионе в прошлом месяце, ни билетов такого типа. Прежде чем ничего не сообщать, подсчитайте нефильтрованную сумму, точно так же, как и в случае с  <a href="../sql-anti-join/">анти-соединение, которое возвращает ноль строк</a>. Пусто — это единственный ответ, который выглядит одинаково независимо от того, правильно вы спросили или нет.</div>
 
-  <h2>The two-minute triage</h2>
+  <h2>Двухминутная сортировка</h2>
   <table>
-    <tr><th>Symptom</th><th>Most likely</th><th>Check</th></tr>
-    <tr><td>Completely empty</td><td>Filter or inner join</td><td>Filter shelf, then View Data</td></tr>
-    <tr><td>Rows but all null</td><td>Calculation or type</td><td>The measure, and the null count</td></tr>
-    <tr><td>Every number identical</td><td>Grain, or a FIXED expression</td><td>Relationships and calculations</td></tr>
-    <tr><td>Fewer rows than expected</td><td>Inner join, or hidden members</td><td>Join type, Reveal Hidden Data</td></tr>
-    <tr><td>Was fine yesterday</td><td>Refresh or a schema change</td><td>Extract date, source columns</td></tr>
+    <tr><th>Symptom</th><th>Вероятно</th><th>Check</th></tr>
+    <tr><td>Совершенно пустой</td><td>Фильтр или внутреннее объединение</td><td>Фильтрация полки, затем просмотр данных</td></tr>
+    <tr><td>Строки, но все пустые</td><td>Расчет или тип</td><td>Мера и нулевой счетчик</td></tr>
+    <tr><td>Все числа идентичны</td><td>Зерно, или ФИКСИРОВАННОЕ выражение</td><td>Отношения и расчеты</td></tr>
+    <tr><td>Меньше строк, чем ожидалось</td><td>Внутреннее объединение или скрытые участники</td><td>Тип соединения, показать скрытые данные</td></tr>
+    <tr><td>Вчера было хорошо</td><td>Обновление или изменение схемы</td><td>Дата извлечения, исходные столбцы</td></tr>
   </table>
 
-  <h2>How to apply this to your own work</h2>
+  <h2>Как применить это в своей работе</h2>
   <ol>
-    <li>Make View Data your first move on any surprising sheet. It answers the only question that matters at that point.</li>
-    <li>Test key columns for type and whitespace before building on a join.</li>
-    <li>Prefer left joins while developing, so missing matches show up as nulls rather than as absence.</li>
-    <li>Put a row-count sheet in every workbook, hidden or not, so an empty load is visible.</li>
-    <li>Before reporting a zero, run the unfiltered count and say which of the two you have.</li>
+    <li>Сделайте просмотр данных своим первым шагом на любом удивительном листе. Это ответ на единственный вопрос, который имеет значение на данный момент.</li>
+    <li>Прежде чем создавать соединение, проверьте ключевые столбцы на предмет типа и пробелов.</li>
+    <li>При разработке отдавайте предпочтение левым соединениям, чтобы отсутствующие совпадения отображались как нули, а не как отсутствие.</li>
+    <li>Поместите лист с подсчетом строк в каждую книгу, скрытую или нет, чтобы пустая загрузка была видна.</li>
+    <li>Прежде чем сообщать о нуле, запустите нефильтрованный подсчет и скажите, какой из двух у вас есть.</li>
   </ol>
 
-  <h2>The one habit to keep</h2>
-  <p>Treat blank as a result. It has a cause, and the cause is either in your data or in your build. Deciding which one takes thirty seconds and saves an hour of rebuilding a sheet that was correct.</p>
+  <h2>Единственная привычка, которую нужно сохранить</h2>
+  <p>В результате считайте пустым. У этого есть причина, и причина кроется либо в ваших данных, либо в вашей сборке. Решение о том, какой из них, занимает тридцать секунд и экономит час на восстановление правильного листа.</p>
 
-  <p>When a view of yours came back empty, did you check the unfiltered count?</p>
+  <p>Когда ваше представление оказалось пустым, вы проверили количество нефильтрованных изображений?</p>
 
-  <div class="note"><strong>Written from the tool as it ships.</strong> View Data, Reveal Hidden Data, Aggregate Measures, the null mark counter and relationship cardinality settings are all current Tableau Desktop features.</div>
+  <div class="note"><strong>Написано с помощью инструмента в момент его поставки.</strong>  Просмотр данных, отображение скрытых данных, агрегированные показатели, счетчик нулевых меток и настройки мощности отношений — все это текущие функции Tableau Desktop.</div>
 
   <div class="book">
-    <strong>An empty view is a result. It deserves the same scrutiny as a surprising number.</strong>
-    <p><em>Tableau for Analysts</em> is 110 pages on how Tableau actually thinks: dimensions against measures, relationships against joins, sets, and level of detail. Enough that you stop dragging fields until it looks right.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/tableau-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=tableau-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-tableau-blank-view'})">Tableau for Analysts, $19 &rarr;</a>
+    <strong>Результатом является пустое представление. Оно заслуживает такого же внимания, как и удивительное число.</strong>
+    <p><em>Таблица для аналитиков</em>  это 110 страниц о том, как на самом деле думает Tableau: измерения против мер, отношения против объединений, наборы и уровень детализации. Достаточно того, что вы перестанете перетаскивать поля, пока все не станет выглядеть правильно.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/tableau-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=tableau-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-tableau-blank-view'})">Таблица для аналитиков, $19 →</a>
   </div>
 
   <div class="cta">
-    <strong>Most blank views are a join or a filter.</strong>
-    <p style="margin:6px 0 0"><a href="../tableau-relationships/">Relationships</a> covers the join side, and <a href="../tableau-filter-order-of-operations/">the order of operations</a> covers the filter side. The <a href="../../tableau/">Tableau Kit</a> has the drills.</p>
-    <a class="btn" href="../tableau-relationships/">Read Relationships &rarr;</a>
+    <strong>Большинство пустых представлений представляют собой объединение или фильтр.</strong>
+    <p style="margin:6px 0 0"><a href="../tableau-relationships/">Relationships</a>  охватывает сторону соединения, и  <a href="../tableau-filter-order-of-operations/">Порядок операций</a>  закрывает сторону фильтра.  <a href="../../tableau/">Табличный комплект</a>  есть дрели.</p>
+    <a class="btn" href="../tableau-relationships/">Читать Отношения →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../tableau-relationships/">Relationships</a> &middot; <a href="../tableau-filter-order-of-operations/">Filter Order</a> &middot; <a href="../tableau-calculated-fields/">Calculated Fields</a> &middot; <a href="../connect-tableau-to-your-data/">Connect Tableau to Your Data</a> &middot; <a href="../sql-joins/">SQL JOINs</a> &middot; <a href="../../tableau/">Tableau Kit</a>
-    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../tableau-relationships/">Relationships</a> &middot; <a href="../tableau-filter-order-of-operations/">Порядок фильтра</a> &middot; <a href="../tableau-calculated-fields/">Вычисляемые поля</a> &middot; <a href="../connect-tableau-to-your-data/">Подключите Tableau к вашим данным</a> &middot; <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> &middot; <a href="../../tableau/">Табличный комплект</a>
+    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-<script src="../../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

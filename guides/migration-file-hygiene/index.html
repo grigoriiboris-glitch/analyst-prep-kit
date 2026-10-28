@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Keeping Your Own Files Straight During a Migration &mdash; Analyst Prep Kit</title>
-<meta name="description" content="A working file structure for data migration projects: naming that sorts itself, one folder per stage, never overwriting an extract, keeping rejected-row files, and logging bulk loader problems as evidence.">
+<title>Сохранение собственных файлов во время миграции — комплект подготовки аналитика</title>
+<meta name="description" content="Рабочая файловая структура для проектов миграции данных: присваивание имен, которые сортируются автоматически, по одной папке на этап, никогда не перезаписываемые фрагменты, сохранение файлов отклоненных строк и регистрация проблем массовой загрузки в качестве доказательства.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/migration-file-hygiene/">
-<meta property="og:title" content="Keeping Your Own Files Straight">
-<meta property="og:description" content="A working file structure for data migration projects: naming that sorts itself, one folder per stage, never overwriting an extract, keeping rejected-row files, and logging bulk loader problems as evidence.">
+<meta property="og:title" content="Храните свои файлы в порядке">
+<meta property="og:description" content="Рабочая файловая структура для проектов миграции данных: присваивание имен, которые сортируются автоматически, по одной папке на этап, никогда не перезаписываемые фрагменты, сохранение файлов отклоненных строк и регистрация проблем массовой загрузки в качестве доказательства.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/migration-file-hygiene/">
 <meta name="twitter:card" content="summary_large_image">
@@ -78,12 +78,11 @@
   @media (max-width:520px){.seriesnav a.next{font-size:20px}}
 </style>
 <!-- SEO:JSONLD:START -->
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "Keeping Your Own Files Straight",
-  "description": "A working file structure for data migration projects: naming that sorts itself, one folder per stage, never overwriting an extract, keeping rejected-row files, and logging bulk loader problems as evidence.",
+  "headline": "Храните свои файлы в порядке",
+  "description": "Рабочая файловая структура для проектов миграции данных: присваивание имен, которые сортируются автоматически, по одной папке на этап, никогда не перезаписываемые фрагменты, сохранение файлов отклоненных строк и регистрация проблем массовой загрузки в качестве доказательства.",
   "url": "https://michaelnocito.github.io/analyst-prep-kit/guides/migration-file-hygiene/",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -91,20 +90,19 @@
   },
   "author": {
     "@type": "Person",
-    "name": "Michael Nocito",
+    "name": "Майкл Носито",
     "url": "https://michaelnocito.github.io"
   },
   "publisher": {
     "@type": "Person",
-    "name": "Michael Nocito"
+    "name": "Майкл Носито"
   },
   "inLanguage": "en",
   "datePublished": "2026-07-30",
   "dateModified": "2026-07-30"
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
@@ -123,7 +121,7 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Keeping Your Own Files Straight",
+      "name": "Храните свои файлы в порядке",
       "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/migration-file-hygiene/"
     }
   ]
@@ -133,16 +131,16 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../">All Guides</a> &middot; <a href="../data-migration-stages/">Data Migration Series</a></p>
-  <h1>Keeping Your Own Files Straight</h1>
-  <p class="meta">The unglamorous half of the job that gives you time back every day &middot; Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-07-30">July 30, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../">Все руководства</a> &middot; <a href="../data-migration-stages/">Серия «Миграция данных»</a></p>
+  <h1>Храните свои файлы в порядке</h1>
+  <p class="meta">Негламурная половина работы, которая каждый день возвращает вам время · Часть  <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-07-30">30 июля 2026 г.</time></p>
 
-  <p>A migration produces hundreds of files: extracts, load files, rejected rows, mapping versions, exception lists. Losing track of which sheet is current costs an hour and, worse, it costs your confidence in your own numbers. This is the structure I use and the three rules that matter most.</p>
+  <p>В результате миграции создаются сотни файлов: экстракты, файлы загрузки, отклоненные строки, версии сопоставления, списки исключений. Потеря отслеживания того, какой лист является текущим, стоит часа и, что еще хуже, стоит вашей уверенности в своих собственных цифрах. Это структура, которую я использую, и три правила, которые имеют наибольшее значение.</p>
 
-  <p><strong>The short version.</strong> One folder per stage, dates at the front of file names, never overwrite an extract, and keep every rejected rows file.</p>
+  <p><strong>Краткая версия.</strong>  Одна папка на этап, даты в начале имен файлов, никогда не перезаписывайте фрагменты и сохраняйте каждый файл отклоненных строк.</p>
 
-  <h2>The folder structure</h2>
+  <h2>Структура папок</h2>
   <pre><code>client-name/
   00-admin/          contract dates, plan, contacts, meeting notes
   01-extracts/       raw exports, never edited, never overwritten
@@ -154,75 +152,75 @@
   07-reconciliation/ before and after counts, the final report
   08-handover/       what goes to the client and to support
 </code></pre>
-  <p>Numbering the folders makes them sort in the order the work happens, so the folder list is the project status. Anyone opening it, including you in six weeks, can see where things are.</p>
+  <p>Нумерация папок позволяет сортировать их в порядке выполнения работы, поэтому список папок является статусом проекта. Любой, кто откроет его, включая вас через шесть недель, сможет увидеть, где что находится.</p>
 
-  <h2>Naming that sorts itself</h2>
-  <p>Put the date first, in year month day order, then what it is, then the version.</p>
-  <p><code>2026-07-14_client-extract_full.csv</code> sorts chronologically without you doing anything. <code>final_v2_REALFINAL.xlsx</code> does not, and you know exactly which of those two you have created.</p>
-  <p>What do you think goes wrong first with a name like <code>mapping_final.xlsx</code>? It stops being final, and nothing in the name tells you when it stopped.</p>
+  <h2>Именование, которое сортируется само собой</h2>
+  <p>Сначала укажите дату в порядке года, месяца, дня, затем что это такое, затем версию.</p>
+  <p><code>2026-07-14_client-extract_full.csv</code>  сортируется в хронологическом порядке без каких-либо действий.  <code>final_v2_REALFINAL.xlsx</code>  нет, и вы точно знаете, какой из этих двух вы создали.</p>
+  <p>Как вы думаете, что в первую очередь идет не так с таким именем, как  <code>mapping_final.xlsx</code>? Он перестает быть окончательным, и ничто в названии не говорит вам, когда оно прекратилось.</p>
 
-  <h2>Three rules that matter more than the structure</h2>
-  <p><strong>Never edit an extract in place.</strong> The raw export is evidence. Copy it into the working folder and edit the copy. When a number is questioned three weeks later, the untouched original is what settles it.</p>
-  <p><strong>Never overwrite a load file.</strong> Every attempt gets its own dated file. Attempt three failing differently from attempt two is information, and it is gone if you saved over it.</p>
-  <p><strong>Keep every rejected rows file.</strong> These are the most useful files in the project and the ones people delete first. They tell you what the loader hates, and they are the evidence behind a schedule change or a support ticket.</p>
+  <h2>Три правила, которые важнее структуры</h2>
+  <p><strong>Никогда не редактируйте отрывок на месте.</strong>  Экспорт сырья является тому подтверждением. Скопируйте его в рабочую папку и отредактируйте копию. Когда три недели спустя число подвергается сомнению, все решает нетронутый оригинал.</p>
+  <p><strong>Никогда не перезаписывайте загрузочный файл.</strong>  Каждая попытка получает свой собственный датированный файл. Третья попытка, провалившаяся иначе, чем вторая, является информацией, и она исчезнет, ​​если вы сохраните ее.</p>
+  <p><strong>Сохраняйте каждый файл отклоненных строк.</strong>  Это самые полезные файлы в проекте, и люди удаляют их в первую очередь. Они расскажут вам, что ненавидит загрузчик, и являются доказательством изменения расписания или обращения в службу поддержки.</p>
 
-  <h2>Log the loader's behaviour as you learn it</h2>
-  <p>Bulk loaders are strict, quiet about failures, and slow to say which row broke. Nobody documents their quirks for you, and you will meet the same ones on the next client.</p>
-  <p>Keep one file. Date, what you tried, what it did, how long it took, what fixed it.</p>
+  <h2>Записывайте поведение загрузчика по мере его изучения.</h2>
+  <p>Массовые погрузчики строгие, молчат о сбоях и не спешат сказать, какой ряд сломался. Никто не документирует за вас свои причуды, и вы встретите такие же при следующем клиенте.</p>
+  <p>Держите один файл. Дата, что вы пробовали, что получилось, сколько времени это заняло, что исправило.</p>
   <table>
-    <tr><th>Date</th><th>What happened</th><th>Fix</th><th>Timing</th></tr>
-    <tr><td>2026-07-14</td><td>Rejected all rows with an apostrophe, no message</td><td>Escape on export</td><td>Lost half a day</td></tr>
-    <tr><td>2026-07-16</td><td>50k row file took 4h, expected 30m</td><td>Split into 5k batches, 40m total</td><td>Reported to vendor</td></tr>
+    <tr><th>Date</th><th>Что случилось</th><th>Fix</th><th>Timing</th></tr>
+    <tr><td>2026-07-14</td><td>Отклонены все строки с апострофом, нет сообщения</td><td>Побег на экспорт</td><td>Потерял полдня</td></tr>
+    <tr><td>2026-07-16</td><td>Файл из 50 тысяч строк занял 4 часа, ожидалось 30 минут</td><td>Разделено на партии по 5 тыс., всего 40 млн.</td><td>Сообщено продавцу</td></tr>
   </table>
-  <p>Two reasons this is worth the minute it takes. It makes you faster on the next client. And poor performance you can evidence with dates and timings is a business finding, whereas the same complaint without timings is folklore.</p>
+  <p>Две причины, по которым это стоит потраченной минуты. Это ускоряет работу со следующим клиентом. А плохая работа, которую можно доказать с помощью дат и сроков, — это бизнес-находка, тогда как та же жалоба без сроков — это фольклор.</p>
 
-  <h2>Version the map, keep the signed copy separate</h2>
-  <p>The <a href="../migration-field-mapping/">field map</a> changes through the project and one version of it is the one the client agreed to.</p>
-  <p>Keep that copy in its own file, named with the date it was signed off, and never edit it. Later versions live alongside it. When somebody says the data is wrong, you open the signed copy, and the question becomes whether the load matches the agreement, which you can answer in seconds.</p>
+  <h2>Версируйте карту, храните подписанную копию отдельно.</h2>
+  <p>The <a href="../migration-field-mapping/">карта поля</a>  изменения в рамках проекта, и одной из его версий является та, с которой согласился клиент.</p>
+  <p>Храните эту копию в отдельном файле с именем, соответствующим дате ее подписания, и никогда не редактируйте ее. Более поздние версии живут рядом с ним. Когда кто-то говорит, что данные неверны, вы открываете подписанную копию, и возникает вопрос, соответствует ли нагрузка соглашению, на который вы можете ответить за считанные секунды.</p>
 
-  <h2>One more thing you will thank yourself for</h2>
-  <p>Keep a running note of decisions with dates. Not a formal log, one file, one line per decision, who made it.</p>
-  <p>Almost every dispute in a project is about a decision somebody does not remember making. A line saying who chose what and when ends it without anyone having to be wrong in front of their manager.</p>
+  <h2>Еще одна вещь, за которую вы поблагодарите себя</h2>
+  <p>Постоянно записывайте решения с датами. Не формальный журнал, один файл, одна строка на каждое решение, кто его принял.</p>
+  <p>Почти каждый спор в проекте связан с решением, которое кто-то не помнит. Строка, говорящая, кто, что и когда выбрал, завершает это, и никому не придется ошибаться перед своим менеджером.</p>
 
-  <h2>The one habit</h2>
-  <p>Date at the front of every file name. It is a two second habit that removes a whole category of confusion.</p>
-  <p>What is your own worst file naming crime?</p>
+  <h2>Одна привычка</h2>
+  <p>Дата перед каждым именем файла. Это двухсекундная привычка, которая устраняет целую категорию путаницы.</p>
+  <p>Какое самое худшее преступление, связанное с именованием файлов, вы считаете?</p>
 
 <div class="seriesnav">
-  <p class="up">Up next</p>
-  <a class="next" href="../migration-walkthrough/">One Migration, Start to Finish &rarr;</a>
-  <p class="then">Previously: <a href="../migration-emails/">The Emails That Keep a Migration Moving</a> &nbsp;&middot;&nbsp; <a href="../data-migration-stages/">All eight stages</a></p>
+  <p class="up">Дальше</p>
+  <a class="next" href="../migration-walkthrough/">Одна миграция, от начала до конца →</a>
+  <p class="then">Ранее:  <a href="../migration-emails/">Письма, которые поддерживают миграцию</a> &nbsp;&middot;&nbsp; <a href="../data-migration-stages/">Все восемь этапов</a></p>
 </div>
 
   <div class="cta">
-    <strong>The checking work is SQL, and it is not advanced SQL.</strong>
-    <p style="margin:6px 0 0">Counting rows, grouping to find duplicates, and joining to find orphans covers most of what a migration asks of you. The <a href="../../sql/">SQL Kit</a> teaches those moves in order, with the data in front of you.</p>
-    <a class="btn" href="../../sql/">Open the SQL Kit &rarr;</a>
-    <p style="margin:10px 0 0;font-size:15px">Or start typing straight away: <a href="../../drill/">open SQL Drill</a>, thirteen queries that each add one thing to the last.</p>
+    <strong>Проверочная работа выполняется на языке SQL, а не на продвинутом уровне SQL.</strong>
+    <p style="margin:6px 0 0">Подсчет строк, группировка для поиска дубликатов и объединение для поиска потерянных строк покрывает большую часть того, что требует от вас миграция.  <a href="../../sql/">SQL-комплект</a>  обучает этим движениям по порядку, имея данные перед вами.</p>
+    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
+    <p style="margin:10px 0 0;font-size:15px">Или сразу начните вводить:  <a href="../../drill/">открыть SQL Drill</a>, тринадцать запросов, каждый из которых добавляет что-то одно к последнему.</p>
   </div>
 
   <div class="book">
-    <strong>The whole run, in one place.</strong>
-    <p>You are moving a client’s records into a new system, and the part that worries you is the week the client goes quiet. <em>The Data Migration Playbook</em> is all eight stages in order, 63 pages, from the first kickoff meeting through hypercare, so you can run one without finding the important question three weeks too late.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/data-migration-playbook?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=data-migration-playbook" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-migration-file-hygiene'})">The Data Migration Playbook, $29 &rarr;</a>
+    <strong>Весь пробег в одном месте.</strong>
+    <p>Вы переносите записи клиента в новую систему, и вас беспокоит та неделя, когда клиент замолкает.  <em>Руководство по миграции данных</em>  это все восемь этапов по порядку, 63 страницы, от первой стартовой встречи до гиперпомощи, так что вы можете пройти один, не опоздав на три недели с важным вопросом.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/data-migration-playbook?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=data-migration-playbook" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-migration-file-hygiene'})">Руководство по миграции данных, 29 долларов США →</a>
   </div>
 
 
   <h2>References</h2>
   <ol class="refs">
-    <li>Wang, R. Y., &amp; Strong, D. M. (1996). Beyond accuracy: What data quality means to data consumers. <em>Journal of Management Information Systems, 12</em>(4), 5&ndash;33.</li>
-    <li>Matthes, F., Schulz, C., &amp; Haller, K. (2011). Testing &amp; quality assurance in data migration projects. <em>27th IEEE International Conference on Software Maintenance (ICSM)</em>, 438&ndash;447.</li>
+    <li>Ван, Р.Ю., и Стронг, Д.М. (1996). За пределами точности: что качество данных означает для потребителей данных.  <em>Журнал информационных систем управления, 12</em>(4), 5&ndash;33.</li>
+    <li>Маттес Ф., Шульц К. и Халлер К. (2011). Тестирование и обеспечение качества в проектах миграции данных.  <em>27-я Международная конференция IEEE по сопровождению программного обеспечения (ICSM)</em>, 438&ndash;447.</li>
   </ol>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../entity-resolution/">Entity Resolution</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../sql-count-function/">COUNT in SQL</a> · <a href="../sql-joins/">SQL JOINs</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../sql/">SQL Kit</a> · <a href="../../projects/">Portfolio Projects</a>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../sql-count-function/">СЧЕТ в SQL</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../../projects/">Портфельные проекты</a>
     
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-<script src="../../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

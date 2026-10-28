@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Data Migration Dry Run: Rehearse It Before You Mean It &mdash; Analyst Prep Kit</title>
-<meta name="description" content="How to run a data migration dry run in a sandbox: what to load, the four reconciliation checks that have to pass, how to log issues so the second run is faster, and why manual fixes during a dry run are a failure signal.">
+<title>Пробный прогон миграции данных: отрепетируйте, прежде чем приступить к делу — комплект для подготовки аналитика</title>
+<meta name="description" content="Как запустить пробный прогон миграции данных в «песочнице»: что загружать, четыре проверки согласования, которые необходимо пройти, как регистрировать проблемы, чтобы второй прогон был быстрее, и почему ручные исправления во время пробного прогона являются сигналом сбоя.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/migration-dry-run/">
-<meta property="og:title" content="Stage 5: The Dry Run">
-<meta property="og:description" content="How to run a data migration dry run in a sandbox: what to load, the four reconciliation checks that have to pass, how to log issues so the second run is faster, and why manual fixes during a dry run are a failure signal.">
+<meta property="og:title" content="Этап 5: Пробный прогон">
+<meta property="og:description" content="Как запустить пробный прогон миграции данных в «песочнице»: что загружать, четыре проверки согласования, которые необходимо пройти, как регистрировать проблемы, чтобы второй прогон был быстрее, и почему ручные исправления во время пробного прогона являются сигналом сбоя.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/migration-dry-run/">
 <meta name="twitter:card" content="summary_large_image">
@@ -78,12 +78,11 @@
   @media (max-width:520px){.seriesnav a.next{font-size:20px}}
 </style>
 <!-- SEO:JSONLD:START -->
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "Stage 5: The Dry Run",
-  "description": "How to run a data migration dry run in a sandbox: what to load, the four reconciliation checks that have to pass, how to log issues so the second run is faster, and why manual fixes during a dry run are a failure signal.",
+  "headline": "Этап 5: Пробный прогон",
+  "description": "Как запустить пробный прогон миграции данных в «песочнице»: что загружать, четыре проверки согласования, которые необходимо пройти, как регистрировать проблемы, чтобы второй прогон был быстрее, и почему ручные исправления во время пробного прогона являются сигналом сбоя.",
   "url": "https://michaelnocito.github.io/analyst-prep-kit/guides/migration-dry-run/",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -91,20 +90,19 @@
   },
   "author": {
     "@type": "Person",
-    "name": "Michael Nocito",
+    "name": "Майкл Носито",
     "url": "https://michaelnocito.github.io"
   },
   "publisher": {
     "@type": "Person",
-    "name": "Michael Nocito"
+    "name": "Майкл Носито"
   },
   "inLanguage": "en",
   "datePublished": "2026-07-30",
   "dateModified": "2026-07-30"
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
@@ -123,7 +121,7 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Stage 5: The Dry Run",
+      "name": "Этап 5: Пробный прогон",
       "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/migration-dry-run/"
     }
   ]
@@ -133,90 +131,90 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../">All Guides</a> &middot; <a href="../data-migration-stages/">Data Migration Series</a></p>
-  <h1>Stage 5: The Dry Run</h1>
-  <p class="meta">Stage 5 of 8 &middot; Load the whole thing somewhere safe and prove it worked &middot; Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-07-30">July 30, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../">Все руководства</a> &middot; <a href="../data-migration-stages/">Серия «Миграция данных»</a></p>
+  <h1>Этап 5: Пробный прогон</h1>
+  <p class="meta">Этап 5 из 8 · Загрузите все это в безопасное место и докажите, что оно работает · Часть  <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-07-30">30 июля 2026 г.</time></p>
 
-  <p>The dry run is a full load into a sandbox, followed by reconciliation. It is the stage the research is loudest about, and it is the one that decides whether your go-live is calm. This article covers what to load, the six checks that have to pass, and how to log what breaks so the second run is faster.</p>
+  <p>Пробный прогон — это полная загрузка в песочницу с последующей сверкой. Это этап, на котором исследования звучат наиболее громко, и именно он решает, будет ли ваша жизнь спокойной. В этой статье рассказывается, что загружать, шесть проверок, которые необходимо пройти, и как регистрировать сбои, чтобы второй запуск был быстрее.</p>
 
-  <p><strong>The short version.</strong> Load everything, reconcile it four ways, and log every fix. If the run needed you to intervene by hand, it is not finished.</p>
+  <p><strong>Краткая версия.</strong>  Загрузите все, согласуйте четыре способа и запишите каждое исправление. Если прогон потребовал от вас вмешательства вручную, он не завершен.</p>
 
-  <h2>Load everything, not a sample</h2>
-  <p>What do you think a sample load fails to find? Answer before reading on.</p>
-  <p>A sample proves the mapping. A full load proves the mapping, the volume, the timing, and the long tail of weird values that only exist a few hundred times in a million rows. Those are what break a go-live, and a sample cannot see them.</p>
-  <p>The full load also tells you how long the real one takes. That number goes on the plan and it drives the freeze window.</p>
+  <h2>Загружайте все, а не образец</h2>
+  <p>Как вы думаете, что не может найти образец загрузки? Ответьте, прежде чем читать дальше.</p>
+  <p>Пример подтверждает отображение. Полная загрузка подтверждает сопоставление, объем, время и длинный хвост странных значений, которые существуют всего несколько сотен раз в миллионе строк. Это то, что мешает запуску, и образец не может их увидеть.</p>
+  <p>Полная загрузка также говорит вам, сколько времени занимает реальная загрузка. Это число входит в план и определяет окно заморозки.</p>
 
-  <h2>The six checks</h2>
-  <p><strong>1. Counts.</strong> Rows in the source against rows in the target, per table. They match, or you can explain the difference with a number. "We are 412 short because 412 records were excluded on the exception list" is an explanation. "Roughly the same" is not.</p>
-  <p><strong>2. Totals.</strong> Sum the numbers that matter. Visit hours, invoice amounts, balances. Counts can match while values are wrong, and a total catches a transformation that shifted a decimal.</p>
-  <p><strong>3. Orphans.</strong> Zero. Every document attached to a client, every visit attached to a staff member. This is a <a href="../sql-joins/">left join where the right side is null</a>, and the answer has to be an empty result.</p>
-  <p><strong>4. Spot checks on real records.</strong> Pick ten clients, including the two most complicated, and compare them field by field against the old system. This is the check that finds what the aggregates hide.</p>
-  <p><strong>5. Processability.</strong> The data loaded and it looks right on screen. Now make the target system actually <em>use</em> it. Run a real workflow end to end: generate an invoice, schedule a visit, produce the report the client runs every Monday. Data can display perfectly and still be unusable, because the loader wrote straight into the tables and skipped a value the application expects to be there.</p>
-  <p><strong>6. Integration.</strong> Everything that talks to this system still works. The payroll export, the reporting feed, the billing handoff. Those break quietly, and they break after go-live, in front of somebody else.</p>
-  <p>Checks 1 to 4 ask whether the data arrived. Checks 5 and 6 ask whether it works. Those are different questions and a clean reconciliation only answers the first one.</p>
+  <h2>Шесть проверок</h2>
+  <p><strong>1. Считает.</strong>  Строки в источнике и строки в целевом объекте для каждой таблицы. Они совпадают, или вы можете объяснить разницу цифрами. «Нам не хватает 412 записей, потому что 412 записей были исключены из списка исключений», — таково объяснение. «Примерно то же самое» — нет.</p>
+  <p><strong>2. Итоги.</strong>  Суммируйте числа, которые имеют значение. Часы посещения, суммы счетов, остатки. Счетчики могут совпадать, хотя значения неверны, и итоговая сумма улавливает преобразование, которое сдвигает десятичную дробь.</p>
+  <p><strong>3. Сироты.</strong>  Ноль. Каждый документ, прикрепленный к клиенту, каждый визит, прикрепленный к сотруднику. Это  <a href="../sql-joins/">левое соединение, где правая часть равна нулю</a>, и ответ должен быть пустым.</p>
+  <p><strong>4. Выборочные проверки реальных записей.</strong>  Выберите десять клиентов, включая двух самых сложных, и сравните их по полю со старой системой. Это проверка, которая находит то, что скрывают агрегаты.</p>
+  <p><strong>5. Технологичность.</strong>  Данные загружены и выглядят прямо на экране. Теперь создайте целевую систему на самом деле  <em>use</em>  это. Запустите полноценный рабочий процесс: создайте счет, запланируйте визит, создайте отчет, который клиент запускает каждый понедельник. Данные могут отображаться идеально, но при этом оставаться непригодными для использования, поскольку загрузчик записывал данные прямо в таблицы и пропускал значение, которое приложение ожидало там разместить.</p>
+  <p><strong>6. Интеграция.</strong>  Все, что общается с этой системой, по-прежнему работает. Экспорт заработной платы, подача отчетов, передача счетов. Они ломаются тихо и ломаются после запуска в эксплуатацию на глазах у кого-то другого.</p>
+  <p>Проверки с 1 по 4 спрашивают, прибыли ли данные. Проверки 5 и 6 спрашивают, работает ли это. Это разные вопросы, и чистое примирение дает ответ только на первый.</p>
 
-  <p>Picture a load where counts match perfectly and totals are ten percent low. Say what could cause that before you read the next sentence. A currency or unit conversion applied to some rows and not others is the usual answer, and only the totals check finds it.</p>
+  <p>Представьте себе нагрузку, в которой значения идеально совпадают, а общие суммы на десять процентов ниже. Скажите, что могло стать причиной этого, прежде чем читать следующее предложение. Преобразование валюты или единиц измерения, примененное к некоторым строкам, а не к другим, является обычным ответом, и его находит только проверка итогов.</p>
 
-  <h2>Log everything that breaks</h2>
-  <p>The dry run's real output is not the loaded sandbox. It is the issue log.</p>
-  <p>Every issue gets the same four things: what happened, which records, what fixed it, and whether the fix is now part of the process. That last one is the important one. A fix that lives in your head is a fix that will not happen on the night.</p>
+  <h2>Записывайте все, что ломается</h2>
+  <p>Реальный результат пробного прогона — это не загруженная песочница. Это журнал проблем.</p>
+  <p>Каждая проблема получает одни и те же четыре вещи: что произошло, какие записи, что исправлено и является ли исправление частью процесса. Последнее является важным. Исправление, которое живет в вашей голове, — это исправление, которое не произойдет ночью.</p>
   <table>
-    <tr><th>Issue</th><th>Records</th><th>Fix</th><th>In the process now?</th></tr>
-    <tr><td>Loader rejected rows with an apostrophe in the name</td><td>1,840</td><td>Escape before export</td><td>Yes, in the extract step</td></tr>
-    <tr><td>Document dates arrived as 1900-01-01</td><td>612</td><td>Blank source dates now excluded</td><td>Yes, in the transform</td></tr>
+    <tr><th>Issue</th><th>Records</th><th>Fix</th><th>Сейчас в процессе?</th></tr>
+    <tr><td>Загрузчик отклонил строки с апострофом в названии</td><td>1,840</td><td>Побег перед экспортом</td><td>Да, на этапе извлечения</td></tr>
+    <tr><td>Даты документов поступили: 1 января 1900 г.</td><td>612</td><td>Пустые исходные даты теперь исключены.</td><td>Да, в трансформации</td></tr>
   </table>
 
-  <h2>Bulk loaders and their moods</h2>
-  <p>The loader is where the time goes. They are strict, they are quiet about why they rejected something, and they will fail a hundred thousand row file because of one bad character.</p>
-  <p>Three habits make it survivable. Load in batches small enough that a failure tells you something. Keep the rejected rows file from every attempt, dated. And write down the loader's specific complaints as you learn them, because you will meet the same ones on the next client and nobody documents this for you.</p>
-  <p>Poor loader performance is also a reportable finding. If a load that should take an hour takes nine, that belongs in your notes with timings, because it is the evidence behind either a schedule change or a support ticket.</p>
+  <h2>Бестарные погрузчики и их настроения</h2>
+  <p>Загрузчик — это то, где идет время. Они строгие, молчат о том, почему что-то забраковали, и провалят сто тысяч строк из-за одного плохого персонажа.</p>
+  <p>Три привычки делают его выживающим. Загружайте достаточно небольшими партиями, чтобы сбой вам о чем-то сказал. Сохраняйте датированный файл отклоненных строк для каждой попытки. И записывайте конкретные жалобы грузчика по мере их изучения, потому что такие же вы встретите на следующем клиенте и никто за вас это не документирует.</p>
+  <p>Плохая производительность загрузчика также является заслуживающим внимания фактом. Если загрузка, которая должна занимать час, занимает девять, это должно быть в ваших заметках с указанием времени, поскольку это является свидетельством либо изменения расписания, либо обращения в службу поддержки.</p>
 
-  <h2>The gate</h2>
-  <p>The stage closes when a full load reconciles clean, the issue log has a fix against every entry, and no fix required a human hand during the run. Treat the dry run as the real migration and go-live as a repeat performance. If you cannot repeat it, you are not ready.</p>
+  <h2>Ворота</h2>
+  <p>Этап закрывается, когда полная загрузка полностью согласовывается, в журнале проблем есть исправления для каждой записи, и никакое исправление не требует вмешательства человека во время выполнения. Относитесь к пробному прогону как к настоящей миграции, а к вводу в эксплуатацию — как к повторному выполнению. Если вы не можете повторить это, вы не готовы.</p>
 
-  <h2>Where this comes from</h2>
-  <p>Matthes, Schulz and Haller's paper on testing and quality assurance in migration projects makes the case directly: the quality assurance activity, not the loading, is what determines whether a migration succeeds. Their process model puts a full rehearsal before cutover for the same reason.</p>
+  <h2>Откуда это взялось</h2>
+  <p>В статье Маттеса, Шульца и Халлера о тестировании и обеспечении качества в проектах миграции прямо говорится: именно деятельность по обеспечению качества, а не загрузка, определяет, будет ли миграция успешной. По той же причине их модель процесса требует полной репетиции перед переключением.</p>
 
-  <h2>The one habit</h2>
-  <p>If the dry run needed a manual fix, run it again. The second run is the one that tells you the truth.</p>
-  <p>What is the strangest reason a load has ever failed on you?</p>
+  <h2>Одна привычка</h2>
+  <p>Если пробный прогон потребовал исправления вручную, запустите его еще раз. Второй прогон расскажет вам правду.</p>
+  <p>Какова самая странная причина, по которой у вас когда-либо выходил из строя груз?</p>
 
 <div class="seriesnav">
-  <p class="up">Up next</p>
-  <a class="next" href="../migration-uat/">Stage 6: User Acceptance Testing &rarr;</a>
-  <p class="then">Previously: <a href="../migration-cleaning/">Stage 4: Clean and De-dupe</a> &nbsp;&middot;&nbsp; <a href="../data-migration-stages/">All eight stages</a></p>
+  <p class="up">Дальше</p>
+  <a class="next" href="../migration-uat/">Этап 6: Приемочное тестирование пользователя →</a>
+  <p class="then">Ранее:  <a href="../migration-cleaning/">Этап 4. Очистка и устранение дублирования</a> &nbsp;&middot;&nbsp; <a href="../data-migration-stages/">Все восемь этапов</a></p>
 </div>
 
   <div class="cta">
-    <strong>The checking work is SQL, and it is not advanced SQL.</strong>
-    <p style="margin:6px 0 0">Counting rows, grouping to find duplicates, and joining to find orphans covers most of what a migration asks of you. The <a href="../../sql/">SQL Kit</a> teaches those moves in order, with the data in front of you.</p>
-    <a class="btn" href="../../sql/">Open the SQL Kit &rarr;</a>
-    <p style="margin:10px 0 0;font-size:15px">Or start typing straight away: <a href="../../drill/">open SQL Drill</a>, thirteen queries that each add one thing to the last.</p>
+    <strong>Проверочная работа выполняется на языке SQL, а не на продвинутом уровне SQL.</strong>
+    <p style="margin:6px 0 0">Подсчет строк, группировка для поиска дубликатов и объединение для поиска потерянных строк покрывает большую часть того, что требует от вас миграция.  <a href="../../sql/">SQL-комплект</a>  обучает этим движениям по порядку, имея данные перед вами.</p>
+    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
+    <p style="margin:10px 0 0;font-size:15px">Или сразу начните вводить:  <a href="../../drill/">открыть SQL Drill</a>, тринадцать запросов, каждый из которых добавляет что-то одно к последнему.</p>
   </div>
 
   <div class="book">
-    <strong>The whole run, in one place.</strong>
-    <p>You are moving a client’s records into a new system, and the part that worries you is the week the client goes quiet. <em>The Data Migration Playbook</em> is all eight stages in order, 63 pages, from the first kickoff meeting through hypercare, so you can run one without finding the important question three weeks too late.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/data-migration-playbook?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=data-migration-playbook" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-migration-dry-run'})">The Data Migration Playbook, $29 &rarr;</a>
+    <strong>Весь пробег в одном месте.</strong>
+    <p>Вы переносите записи клиента в новую систему, и вас беспокоит та неделя, когда клиент замолкает.  <em>Руководство по миграции данных</em>  это все восемь этапов по порядку, 63 страницы, от первой стартовой встречи до гиперпомощи, так что вы можете пройти один, не опоздав на три недели с важным вопросом.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/data-migration-playbook?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=data-migration-playbook" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-migration-dry-run'})">Руководство по миграции данных, 29 долларов США →</a>
   </div>
 
 
   <h2>References</h2>
   <ol class="refs">
-    <li>Matthes, F., Schulz, C., &amp; Haller, K. (2011). Testing &amp; quality assurance in data migration projects. <em>27th IEEE International Conference on Software Maintenance (ICSM)</em>, 438&ndash;447.</li>
-    <li>Haller, K., Matthes, F., &amp; Schulz, C. (2012). A detailed process model for large scale data migration projects. <em>Business Information Systems (BIS 2012), Lecture Notes in Business Information Processing, 117</em>. Springer.</li>
+    <li>Маттес Ф., Шульц К. и Халлер К. (2011). Тестирование и обеспечение качества в проектах миграции данных.  <em>27-я Международная конференция IEEE по сопровождению программного обеспечения (ICSM)</em>, 438&ndash;447.</li>
+    <li>Халлер К., Маттес Ф. и Шульц К. (2012). Подробная модель процесса для крупномасштабных проектов миграции данных.  <em>Системы бизнес-информации (BIS 2012), Конспекты лекций по обработке бизнес-информации, 117</em>. Спрингер.</li>
   </ol>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../entity-resolution/">Entity Resolution</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../sql-count-function/">COUNT in SQL</a> · <a href="../sql-joins/">SQL JOINs</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../sql/">SQL Kit</a> · <a href="../../projects/">Portfolio Projects</a>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../sql-count-function/">СЧЕТ в SQL</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../../projects/">Портфельные проекты</a>
     
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-<script src="../../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

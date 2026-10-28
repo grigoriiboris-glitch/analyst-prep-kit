@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Build a Risk Index That Colors Itself — Analyst Prep Kit</title>
-<meta name="description" content="Scored spreadsheets drift because the rule lives in the formatting instead of in a column. Beginner guide to building a composite index in Excel where the score decides the band, the band decides the color, and one edit updates the whole workbook. Free template included.">
+<title>Постройте индекс риска, который сам меняет цвет — комплект для подготовки аналитика</title>
+<meta name="description" content="Оцененные таблицы смещаются, потому что правило живет в форматировании, а не в столбце. Руководство для начинающих по созданию составного индекса в Excel, где оценка определяет полосу, полоса определяет цвет, а одно редактирование обновляет всю книгу. Бесплатный шаблон включен.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/build-a-risk-index/">
-<meta property="og:title" content="Build a Risk Index That Colors Itself">
-<meta property="og:description" content="Two rows with the same score, two different colors. The fix is to move the rule out of the formatting and into a column.">
+<meta property="og:title" content="Создайте индекс риска, который меняет свой цвет">
+<meta property="og:description" content="Два ряда с одинаковым счетом, два разных цвета. Исправление состоит в том, чтобы переместить правило из форматирования в столбец.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/build-a-risk-index.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/build-a-risk-index/">
@@ -75,12 +75,11 @@
   .swatch td{text-align:center;font-weight:600}
 </style>
 <!-- SEO:JSONLD:START -->
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "Build a Risk Index That Colors Itself",
-  "description": "Scored spreadsheets drift because the rule lives in the formatting instead of in a column. Beginner guide to building a composite index in Excel where the score decides the band, the band decides the color, and one edit updates the whole workbook.",
+  "headline": "Создайте индекс риска, который меняет свой цвет",
+  "description": "Оцененные таблицы смещаются, потому что правило живет в форматировании, а не в столбце. Руководство для начинающих по созданию составного индекса в Excel, где оценка определяет полосу, полоса определяет цвет, а одно редактирование обновляет всю книгу.",
   "url": "https://michaelnocito.github.io/analyst-prep-kit/guides/build-a-risk-index/",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -88,12 +87,12 @@
   },
   "author": {
     "@type": "Person",
-    "name": "Michael Nocito",
+    "name": "Майкл Носито",
     "url": "https://michaelnocito.github.io"
   },
   "publisher": {
     "@type": "Person",
-    "name": "Michael Nocito"
+    "name": "Майкл Носито"
   },
   "inLanguage": "en",
   "datePublished": "2026-08-03",
@@ -101,8 +100,7 @@
   "image": "https://michaelnocito.github.io/analyst-prep-kit/assets/social/build-a-risk-index.png"
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
@@ -121,7 +119,7 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Build a Risk Index That Colors Itself",
+      "name": "Создайте индекс риска, который меняет свой цвет",
       "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/build-a-risk-index/"
     }
   ]
@@ -131,117 +129,117 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../data-driven-thresholds/">Data-Driven Thresholds</a> · <a href="../defining-metrics/">Defining Metrics</a></p>
-  <h1>Build a Risk Index That Colors Itself</h1>
-  <p class="meta">Because two rows with the same score should never be two different colors · Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-03">August 3, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../data-driven-thresholds/">Пороги, управляемые данными</a> · <a href="../defining-metrics/">Определение метрик</a></p>
+  <h1>Создайте индекс риска, который меняет свой цвет</h1>
+  <p class="meta">Потому что две строки с одинаковым количеством очков никогда не должны быть разных цветов. · Часть  <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-03">3 августа 2026 г.</time></p>
 
-  <p>When this workbook is finished, you can change one number and watch the whole thing follow. Move a cut-off from 65 to 70 and every row re-bands, every fill recolors, every count updates, and the legend still matches the map. Nobody can color a cell by hand, because no cell has a color of its own. That is the whole trick, and it takes about twenty minutes to build.</p>
+  <p>Когда эта рабочая тетрадь будет закончена, вы можете изменить одно число и посмотреть, как все будет дальше. Переместите отсечку с 65 на 70, и каждая строка будет перегруппирована, каждая заливка изменит цвет, каждый счетчик обновится, а легенда по-прежнему будет соответствовать карте. Никто не может раскрасить клетку вручную, потому что ни одна клетка не имеет собственного цвета. В этом и весь фокус, а сборка занимает около двадцати минут.</p>
 
-  <p>The example here is a security risk index across twenty sites. The same shape works for vendor scoring, lead scoring, incident triage, or any list where a number has to turn into a label and a color.</p>
+  <p>В качестве примера можно привести индекс рисков безопасности для двадцати сайтов. Та же самая форма работает для оценки поставщиков, оценки потенциальных клиентов, сортировки инцидентов или любого списка, в котором число должно превращаться в метку и цвет.</p>
 
   <div class="toc">
-    <strong>What's here</strong>
+    <strong>Что здесь</strong>
     <ol>
-      <li>The fault, and where it actually comes from</li>
-      <li>The chain: score, then band, then color</li>
-      <li>Step 1: weights in one row</li>
-      <li>Step 2: cut-offs in one table</li>
-      <li>Step 3: look the band up, never type it</li>
-      <li>Step 4: let the color follow the band</li>
-      <li>Step 5: two checks that catch the rest</li>
-      <li>Step 6: the change log</li>
-      <li>Choosing the five colors</li>
-      <li>Download the workbook</li>
+      <li>Неисправность и откуда она на самом деле берется</li>
+      <li>Цепочка: счет, затем полоса, затем цвет.</li>
+      <li>Шаг 1: веса в одном ряду</li>
+      <li>Шаг 2. Отсечки в одной таблице</li>
+      <li>Шаг 3: найдите группу, никогда не вводите ее</li>
+      <li>Шаг 4: позвольте цвету следовать за полосой</li>
+      <li>Шаг 5: две проверки, которые улавливают остальное</li>
+      <li>Шаг 6: журнал изменений</li>
+      <li>Выбор пяти цветов</li>
+      <li>Загрузите рабочую тетрадь</li>
       <li>References</li>
     </ol>
   </div>
 
-  <h2>The fault, and where it actually comes from</h2>
-  <p>You have met this file. A scored list, colored by hand, that nobody quite trusts any more. Look closely and the same faults turn up every time:</p>
+  <h2>Неисправность и откуда она на самом деле берется</h2>
+  <p>Вы познакомились с этим файлом. Оцененный список, раскрашенный вручную, которому больше никто не доверяет. Присмотритесь и каждый раз выявляются одни и те же неисправности:</p>
   <ul>
-    <li>Two rows score 61.4. One is amber, one is yellow.</li>
-    <li>The same band is drawn in two shades, because two people picked from the palette on two different days.</li>
-    <li>A row sits below the cut-off and is colored red anyway, because somebody knew that site was a problem.</li>
-    <li>A score lands exactly on 65, which appears in two bands, so the answer depends on who typed it.</li>
-    <li>One row has no band at all. It quietly drops out of every count.</li>
+    <li>Два ряда имеют оценку 61,4. Один янтарный, другой желтый.</li>
+    <li>Одна и та же полоса нарисована двумя оттенками, потому что палитру выбрали два человека в два разных дня.</li>
+    <li>Строка находится ниже границы и в любом случае окрашена в красный цвет, потому что кто-то знал, что на этом сайте есть проблема.</li>
+    <li>Результат равен ровно 65, который отображается в двух полосах, поэтому ответ зависит от того, кто его набрал.</li>
+    <li>В одном ряду полоса вообще отсутствует. Оно незаметно выпадает из каждого счета.</li>
   </ul>
-  <p>These look like five separate mistakes. They are one mistake, five times. <strong>The rule lives in the formatting instead of in a column.</strong> A color is not a value you can test. You cannot write a formula that asks "is this row the right shade of amber," so nothing checks it, and it drifts.</p>
-  <div class="note"><strong>The test:</strong> can you sort by band? If the band is only a color, you cannot sort it, count it, or filter it, and neither can anybody else. That is the tell.</div>
+  <p>Это выглядит как пять отдельных ошибок. Это одна ошибка, пять раз.  <strong>Правило находится в форматировании, а не в столбце.</strong>  Цвет — это не значение, которое можно проверить. Вы не можете написать формулу, которая задает вопрос «имеет ли эта строка правильный оттенок янтаря», поэтому ее ничто не проверяет, и она отклоняется.</p>
+  <div class="note"><strong>Тест:</strong>  можешь отсортировать по группам? Если полоса представляет собой всего лишь цвет, вы не сможете ее сортировать, подсчитывать или фильтровать, как и никто другой. Вот в чем суть.</div>
 
-  <h2>The chain: score, then band, then color</h2>
-  <p>Everything below is one idea applied three times. Each thing is derived from the thing before it, and only the first one is typed.</p>
+  <h2>Цепочка: счет, затем полоса, затем цвет.</h2>
+  <p>Все, что ниже, — это одна идея, примененная трижды. Каждая вещь является производной от предыдущей, и типизируется только первая.</p>
   <table>
-    <tr><th>Layer</th><th>Where it lives</th><th>Who decides it</th></tr>
-    <tr><td>Sub-scores</td><td>Four columns, one per category</td><td>Your source data. Typed once.</td></tr>
-    <tr><td>Composite score</td><td>A formula, from the sub-scores and the weights</td><td>The weights row</td></tr>
-    <tr><td>Band</td><td>A formula, from the score</td><td>The cut-off table</td></tr>
-    <tr><td>Color</td><td>A conditional format, from the band</td><td>The band column</td></tr>
+    <tr><th>Layer</th><th>Где он живет</th><th>Кто это решает</th></tr>
+    <tr><td>Sub-scores</td><td>Четыре столбца, по одному на категорию</td><td>Ваши исходные данные. Напечатал один раз.</td></tr>
+    <tr><td>Суммарный балл</td><td>Формула, основанная на подоценках и весах</td><td>Строка весов</td></tr>
+    <tr><td>Band</td><td>Формула, исходя из оценки</td><td>Стол для обрезки</td></tr>
+    <tr><td>Color</td><td>Условный формат, от группы</td><td>Колонка группы</td></tr>
   </table>
-  <p>Read that bottom-up and you get the promise: change the cut-off table, and the colors move. There is no step where a human picks a fill.</p>
+  <p>Прочтите это снизу вверх, и вы получите обещание: измените таблицу границ, и цвета изменятся. Нет ни одного шага, на котором человек выбирает заливку.</p>
 
   <div class="step">
-    <h2>Step 1: weights in one row</h2>
-    <p>Put the four category weights in four cells on a Rules sheet, and nowhere else. Name the sheet Rules so it is obvious which tab holds the decisions.</p>
+    <h2>Шаг 1: веса в одном ряду</h2>
+    <p>Поместите четыре веса категорий в четыре ячейки на листе правил и больше нигде. Назовите лист «Правила», чтобы было очевидно, на какой вкладке хранятся решения.</p>
     <pre><code>Rules!B7:E7   0.30   0.30   0.20   0.20</code></pre>
-    <p>Now the composite score on each row is one formula, pointing at that row:</p>
+    <p>Теперь совокупный балл в каждой строке представляет собой одну формулу, указывающую на эту строку:</p>
     <pre><code>=ROUND(SUMPRODUCT(E6:H6, Rules!$B$7:$E$7), 1)</code></pre>
-    <p><code>SUMPRODUCT</code> multiplies each sub-score by its weight and adds the results. The dollar signs lock the weights row, so you can fill this formula down twenty rows and every one still reads the same weights.</p>
-    <p>The temptation is to write <code>=E6*0.3+F6*0.3+G6*0.2+H6*0.2</code> instead. Do not. That buries the weights in twenty formulas, so changing them means twenty edits, which means it never happens, which means the weights in the file stop matching the weights in the policy.</p>
+    <p><code>SUMPRODUCT</code>  умножает каждую подоценку на ее вес и складывает результаты. Знаки доллара блокируют строку весов, поэтому вы можете заполнить эту формулу двадцать строк, и все они по-прежнему будут иметь одинаковые веса.</p>
+    <p>Есть искушение написать  <code>=E6*0.3+F6*0.3+G6*0.2+H6*0.2</code>  вместо. Не. Это скрывает веса в двадцати формулах, поэтому их изменение означает двадцать изменений, а это означает, что этого никогда не произойдет, что означает, что веса в файле перестают соответствовать весам в политике.</p>
   </div>
 
   <div class="step">
-    <h2>Step 2: cut-offs in one table</h2>
-    <p>Five bands, five rows, with a lower bound and an upper bound written down. The bounds must climb in order, and they must touch with no gap and no overlap.</p>
+    <h2>Шаг 2. Отсечки в одной таблице</h2>
+    <p>Пять полос, пять рядов, с записанной нижней и верхней границей. Границы должны подниматься по порядку и соприкасаться без зазоров и перекрытий.</p>
     <table>
-      <tr><th>Band</th><th>Lower</th><th>Upper</th><th>What it requires</th></tr>
-      <tr><td>Low</td><td>0</td><td>24</td><td>Monitor on the normal cycle</td></tr>
-      <tr><td>Guarded</td><td>25</td><td>44</td><td>Fix inside the annual plan</td></tr>
-      <tr><td>Elevated</td><td>45</td><td>64</td><td>Named owner and a dated plan</td></tr>
-      <tr><td>High</td><td>65</td><td>79</td><td>Quarterly review until it drops</td></tr>
-      <tr><td>Severe</td><td>80</td><td>100</td><td>Escalate now</td></tr>
+      <tr><th>Band</th><th>Lower</th><th>Upper</th><th>Что для этого требуется</th></tr>
+      <tr><td>Low</td><td>0</td><td>24</td><td>Монитор в обычном цикле</td></tr>
+      <tr><td>Guarded</td><td>25</td><td>44</td><td>Исправление внутри годового плана</td></tr>
+      <tr><td>Elevated</td><td>45</td><td>64</td><td>Названный владелец и датированный план</td></tr>
+      <tr><td>High</td><td>65</td><td>79</td><td>Ежеквартальный обзор, пока он не упадет</td></tr>
+      <tr><td>Severe</td><td>80</td><td>100</td><td>Эскалация сейчас</td></tr>
     </table>
-    <p>An overlap is the fault that produced the 65 problem earlier. If High starts at 65 and Elevated ends at 65, the band depends on which rule got evaluated first, which is not a policy anyone wrote down.</p>
-    <p>Where these five numbers come from is its own question, and a bigger one than the spreadsheet. If you picked them because they were round, read <a href="../data-driven-thresholds/">how to choose cut-offs from the data</a> before you defend them to anyone.</p>
+    <p>Перекрытие — это ошибка, которая ранее вызвала проблему 65. Если High начинается с 65, а Elevated заканчивается на 65, диапазон зависит от того, какое правило было оценено первым, и это не политика, которую кто-то записал.</p>
+    <p>Откуда взялись эти пять цифр — это отдельный вопрос, и более важный, чем электронная таблица. Если вы выбрали их потому, что они круглые, прочтите  <a href="../data-driven-thresholds/">как выбрать пороговые значения из данных</a>  прежде чем защищать их перед кем-либо.</p>
   </div>
 
   <div class="step">
-    <h2>Step 3: look the band up, never type it</h2>
-    <p>The band column is a formula. It reads the score and finds the last cut-off the score clears.</p>
+    <h2>Шаг 3: найдите группу, никогда не вводите ее</h2>
+    <p>Столбец полосы представляет собой формулу. Он считывает счет и находит последнюю точку, после которой счет очищается.</p>
     <pre><code>=INDEX(Rules!$B$12:$B$16, MATCH(I6, Rules!$C$12:$C$16, 1))</code></pre>
-    <p>Read it right to left. <code>MATCH</code> with a third argument of <code>1</code> means "find the largest value that is less than or equal to mine, and tell me its position." A score of 61.4 clears 0, 25 and 45, but not 65, so it stops at 45, the third row. <code>INDEX</code> then returns the third band name, Elevated.</p>
-    <p><strong>The one rule this depends on:</strong> the lower bounds must be sorted ascending. <code>MATCH</code> with a <code>1</code> walks the list assuming order. Out of order, it returns a wrong answer confidently and without an error, which is the worst kind of wrong.</p>
-    <p>The gain is bigger than saving typing. Once the band is text in a column, you can sort by it, count it, filter it, and pivot on it. It became data.</p>
+    <p>Прочитайте справа налево.  <code>MATCH</code>  с третьим аргументом  <code>1</code>  означает «найти наибольшее значение, которое меньше или равно моему, и сообщить мне его положение». Оценка 61,4 очищает 0, 25 и 45, но не 65, поэтому она останавливается на 45, третьей строке.  <code>INDEX</code>  затем возвращает третье имя группы, Elevated.</p>
+    <p><strong>Единственное правило, от которого это зависит:</strong>  нижние границы должны быть отсортированы по возрастанию.  <code>MATCH</code>  с  <code>1</code>  ходит по списку, принимая порядок. Вне порядка он уверенно и без ошибки возвращает неправильный ответ, что является худшим видом ошибки.</p>
+    <p>Выигрыш больше, чем экономия на наборе текста. Когда полоса представляет собой текст в столбце, вы можете сортировать по ней, подсчитывать, фильтровать и поворачивать ее. Это стало данными.</p>
   </div>
 
   <div class="step">
-    <h2>Step 4: let the color follow the band</h2>
-    <p>Select the whole data area, columns and all, then add one conditional formatting rule per band using a formula rule:</p>
+    <h2>Шаг 4: позвольте цвету следовать за полосой</h2>
+    <p>Выделите всю область данных, столбцы и все остальное, затем добавьте по одному правилу условного форматирования для каждой полосы, используя правило формулы:</p>
     <pre><code>=$J6="Severe"</code></pre>
-    <p>The single dollar sign is the entire mechanism. <code>$J</code> locks the column, so every cell across the row asks the same question. The bare <code>6</code> stays relative, so row 7 asks about <code>$J7</code>, row 8 about <code>$J8</code>, and so on down. One rule colors a whole row, and twenty rows need no extra work.</p>
-    <p>Repeat for the other four bands. Five rules, five fills, and that is every color in the workbook. There is no sixth place a color can come from, which is exactly why the two-ambers problem cannot happen again.</p>
-    <p>Anchor the rule to the row that starts your data. Write it while sitting on row 6 and the reference is <code>$J6</code>. Write it while sitting somewhere else and every row will be off by the difference, which looks like the colors slipped by one.</p>
+    <p>Один знак доллара – это весь механизм.  <code>$J</code>  блокирует столбец, поэтому в каждой ячейке строки задается один и тот же вопрос. Голый  <code>6</code>  остается относительным, поэтому в строке 7 задается вопрос о  <code>$J7</code>, ряд 8 примерно  <code>$J8</code>, и так далее вниз. Одно правило окрашивает целую строку, а двадцать строк не требуют дополнительной обработки.</p>
+    <p>Повторите то же самое для остальных четырех полос. Пять правил, пять заливок — и это все цвета в книге. Не существует шестого места, откуда может появиться цвет, и именно поэтому проблема двух янтарей не может повториться.</p>
+    <p>Привяжите правило к строке, с которой начинаются ваши данные. Напишите это, сидя в строке 6, и ссылка будет  <code>$J6</code>. Напишите это, сидя где-нибудь в другом месте, и каждая строка будет отличаться из-за разницы, которая выглядит так, как будто цвета сдвинулись на один.</p>
   </div>
 
   <div class="step">
-    <h2>Step 5: two checks that catch the rest</h2>
-    <p>Two formulas on the Rules sheet, in plain sight, doing the checking nobody remembers to do.</p>
+    <h2>Шаг 5: две проверки, которые улавливают остальное</h2>
+    <p>Две формулы на листе правил, на виду, проверяют, о чем никто не помнит.</p>
     <pre><code>=IF(ROUND(SUM(B7:E7),4)=1, "Weights balance", "Fix the weights, they must total 100%")</code></pre>
-    <p>Weights that total 96% still produce a score. It just quietly understates every row, and nothing looks broken.</p>
+    <p>Веса, составляющие в сумме 96%, по-прежнему дают оценку. Он просто незаметно занижает каждую строку, и ничего не выглядит сломанным.</p>
     <pre><code>=IF(F17=COUNTA('Risk Index'!$A$6:$A$25), "Every site lands in one band", "Banding gap, check the cut-offs")</code></pre>
-    <p>Here <code>F17</code> totals the per-band counts, each one a <code>COUNTIF</code> against the band column. If the two numbers disagree, a row fell through a gap in your cut-offs. That is the row that used to vanish from the report with nobody noticing.</p>
-    <p>Both checks read as a sentence, not a number. A reader who has never opened this file can tell whether it is healthy without knowing how it works.</p>
+    <p>Here <code>F17</code>  суммирует подсчеты по полосам, каждый из которых  <code>COUNTIF</code>  против колонны группы. Если эти два числа не совпадают, значит, ряд провалился из-за пробела в ваших отсечках. Эта строка раньше исчезала из отчета, и никто этого не замечал.</p>
+    <p>Оба чека читаются как предложение, а не число. Читатель, который никогда не открывал этот файл, может сказать, исправен ли он, не зная, как он работает.</p>
   </div>
 
   <div class="step">
-    <h2>Step 6: the change log</h2>
-    <p>One tab, three columns: what I found, what I changed, why. Every correction gets a row.</p>
-    <p>This is the tab that turns a rebuild into something a client can approve. Without it, you hand back a file that looks different and they have to take your word for it. With it, they can disagree with any single decision without reopening all of them.</p>
-    <p>One entry type matters more than the others. When two source files disagree, the change log is where you say so rather than quietly picking a winner. "This site appears on two maps with two scores, flagged for your decision" is a better line than any silent fix, because <a href="../documenting-data-limitations/">which source wins is a policy call, not a spreadsheet one</a>.</p>
+    <h2>Шаг 6: журнал изменений</h2>
+    <p>Одна вкладка, три колонки: что нашел, что изменил, почему. Каждое исправление получает строку.</p>
+    <p>Это вкладка, которая превращает перестройку в нечто, что клиент может одобрить. Без него вы возвращаете файл, который выглядит по-другому, и им придется поверить вам на слово. С его помощью они могут не согласиться с каким-либо отдельным решением, не открывая их все заново.</p>
+    <p>Один тип записи имеет большее значение, чем другие. Если два исходных файла расходятся во мнениях, вы говорите об этом в журнале изменений, а не тихо выбираете победителя. «Этот сайт появляется на двух картах с двумя оценками, помеченными на ваше решение» — это лучшая фраза, чем любое молчаливое исправление, потому что  <a href="../documenting-data-limitations/">какой источник побеждает, это вызов политики, а не таблицы</a>.</p>
   </div>
 
-  <h2>Choosing the five colors</h2>
-  <p>The palette in the template is the five-class RdYlBu scheme from ColorBrewer, a tool built from map-design research by Cynthia Brewer and Mark Harrower (Harrower &amp; Brewer, 2003). It is listed as colorblind safe, which matters more here than it looks: red and green are the two colors a large minority of readers cannot reliably separate, and risk maps reach for exactly that pair.</p>
+  <h2>Выбор пяти цветов</h2>
+  <p>Палитра в шаблоне представляет собой пятиклассовую схему RdYlBu от ColorBrewer, инструмента, созданного на основе исследований в области дизайна карт, проведенных Синтией Брюэр и Марком Харроуером (Harrower &amp; Brewer, 2003). Он указан как безопасный для дальтоников, что здесь важнее, чем кажется: красный и зеленый — это два цвета, которые значительное меньшинство читателей не может надежно разделить, и карты рисков охватывают именно эту пару.</p>
   <table class="swatch">
     <tr><th>Band</th><th>Fill</th><th>Text</th></tr>
     <tr><td>Low</td><td style="background:#2C7BB6;color:#fff">#2C7BB6</td><td style="color:#fff;background:#2C7BB6">white</td></tr>
@@ -250,39 +248,39 @@
     <tr><td>High</td><td style="background:#FDAE61">#FDAE61</td><td>dark</td></tr>
     <tr><td>Severe</td><td style="background:#D7191C;color:#fff">#D7191C</td><td style="color:#fff;background:#D7191C">white</td></tr>
   </table>
-  <p>Two rules go with it. Severity must run in one direction, so a reader learns the order once and never re-learns it. And the score stays visible in its own column next to the color, because color is a weak channel for judging how much bigger one value is than another. Position and length beat it decisively, a result Cleveland and McGill measured directly (Cleveland &amp; McGill, 1984). The color is for scanning the map. The number is for answering the question.</p>
+  <p>С этим связаны два правила. Строгость должна быть направлена ​​в одном направлении, поэтому читатель выучит порядок один раз и никогда не выучит его заново. И оценка остается видимой в отдельном столбце рядом с цветом, потому что цвет — слабый канал для оценки того, насколько одно значение больше другого. Позиция и длина решительно превзошли его, результат, измеренный Кливлендом и МакГиллом напрямую (Cleveland &amp; McGill, 1984). Цвет предназначен для сканирования карты. Номер предназначен для ответа на вопрос.</p>
 
   <div class="cta">
-    <strong>Download the workbook.</strong>
-    <p style="margin:6px 0 0">Five tabs on invented data: a Before tab showing the faults, the Rules sheet, the working index, and the change log. Every formula on this page is live in it. Change a cut-off on Rules and watch the index re-band.</p>
-    <a class="btn" href="workbook/Composite-Risk-Index-SAMPLE.xlsx">Get the sample workbook →</a>
+    <strong>Загрузите рабочую тетрадь.</strong>
+    <p style="margin:6px 0 0">Пять вкладок с придуманными данными: вкладка «До», показывающая ошибки, лист «Правила», рабочий указатель и журнал изменений. Каждая формула на этой странице жива. Измените пороговое значение в Правилах и наблюдайте за изменением диапазона индекса.</p>
+    <a class="btn" href="workbook/Composite-Risk-Index-SAMPLE.xlsx">Получить образец рабочей тетради →</a>
   </div>
 
-  <h2>Where else this shape fits</h2>
-  <p>Nothing above is about security. Any time a number becomes a label, the same chain applies: vendor scoring, lead scoring, incident triage, credit tiers, health scores on accounts. Swap the four categories and the five band names and the mechanics are unchanged.</p>
-  <p>The part worth carrying to all of them is the sentence at the top. The rule belongs in a column. Once it is in a column, it can be sorted, counted, checked, and argued with, and a rule you can argue with is the only kind that survives contact with a second person.</p>
+  <h2>Куда еще подходит эта форма</h2>
+  <p>Ничто из вышеперечисленного не касается безопасности. Каждый раз, когда число становится ярлыком, применяется одна и та же цепочка: оценка поставщиков, оценка потенциальных клиентов, сортировка инцидентов, кредитные уровни, оценки работоспособности учетных записей. Поменяйте местами четыре категории и пять названий групп, и механика не изменится.</p>
+  <p>Часть, которую стоит донести до всех, — это предложение вверху. Правило принадлежит столбцу. Как только оно окажется в столбце, его можно будет сортировать, подсчитывать, проверять и оспаривать, а правило, с которым можно спорить, — единственное правило, которое выдерживает контакт со вторым человеком.</p>
 
   <div class="book">
-    <strong>You can do the work once somebody tells you what the work is. A vague question is the part that stalls you.</strong>
-    <p><em>Thinking Like an Analyst</em> is 64 pages on the judgment half of the job: defining a metric, telling a report from an analysis, exploring data before you trust it, and saying out loud what your data cannot tell you.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/thinking-like-an-analyst?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=thinking-like-an-analyst" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-build-a-risk-index'})">Thinking Like an Analyst, $19 &rarr;</a>
+    <strong>Вы можете выполнять работу, как только кто-то скажет вам, в чем она заключается. Расплывчатый вопрос — это та часть, которая вас останавливает.</strong>
+    <p><em>Думать как аналитик</em>  Это 64 страницы, посвященные половине работы: определение показателя, составление отчета по результатам анализа, изучение данных, прежде чем вы им поверите, и высказывание вслух того, о чем ваши данные не могут вам сказать.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/thinking-like-an-analyst?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=thinking-like-an-analyst" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-build-a-risk-index'})">Думать как аналитик, 19 $ →</a>
   </div>
 
   <h2>References</h2>
   <ol class="refs">
-    <li>Harrower, M., &amp; Brewer, C. A. (2003). ColorBrewer.org: An online tool for selecting colour schemes for maps. <em>The Cartographic Journal, 40</em>(1), 27–37. doi:10.1179/000870403235002042</li>
-    <li>Cleveland, W. S., &amp; McGill, R. (1984). Graphical perception: Theory, experimentation, and application to the development of graphical methods. <em>Journal of the American Statistical Association, 79</em>(387), 531–554. doi:10.1080/01621459.1984.10478080</li>
-    <li>Brewer, C. A. (1994). Color use guidelines for mapping and visualization. In A. M. MacEachren &amp; D. R. F. Taylor (Eds.), <em>Visualization in Modern Cartography</em> (pp. 123–147). Pergamon. (Where the one-direction rule for ordered data comes from.)</li>
+    <li>Харроуер М. и Брюэр Калифорния (2003). ColorBrewer.org: онлайн-инструмент для выбора цветовых схем для карт.  <em>Картографический журнал, 40</em>(1), 27–37. дои: 10.1179/000870403235002042</li>
+    <li>Кливленд, У.С., и МакГилл, Р. (1984). Графическое восприятие: теория, эксперименты и применение к разработке графических методов.  <em>Журнал Американской статистической ассоциации, 79.</em>(387), 531–554. doi:10.1080/01621459.1984.10478080</li>
+    <li>Брюэр, Калифорния (1994). Рекомендации по использованию цвета для картографирования и визуализации. В AM MacEachren и DRF Taylor (ред.),  <em>Визуализация в современной картографии</em>  (стр. 123–147). Пергамон. (Откуда взялось правило однонаправленности для упорядоченных данных.)</li>
   </ol>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> · <a href="../data-driven-thresholds/">Data-Driven Thresholds</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../build-a-tableau-dashboard/">Build a Tableau Dashboard</a> · <a href="../report-vs-analysis/">Report vs Analysis</a> · <a href="../migration-profiling/">Migration Profiling</a> · <a href="../data-migration-stages/">Data Migration Stages</a> · <a href="../sql-case-expression/">SQL CASE Expression</a> · <a href="../sql-count-function/">COUNT in SQL</a> · <a href="../../sql/">SQL Kit</a> · <a href="../../excel/">Excel Kit</a> · <a href="../../projects/">Portfolio Projects</a>
+    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../data-driven-thresholds/">Пороги, управляемые данными</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../build-a-tableau-dashboard/">Создайте панель управления Tableau</a> · <a href="../report-vs-analysis/">Отчет против анализа</a> · <a href="../migration-profiling/">Профилирование миграции</a> · <a href="../data-migration-stages/">Этапы миграции данных</a> · <a href="../sql-case-expression/">SQL-выражение CASE</a> · <a href="../sql-count-function/">СЧЕТ в SQL</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../../excel/">Excel комплект</a> · <a href="../../projects/">Портфельные проекты</a>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-<script src="../../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

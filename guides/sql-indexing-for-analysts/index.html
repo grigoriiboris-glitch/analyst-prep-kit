@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>When to Index a Table: A Practical Guide for Analysts — Analyst Prep Kit</title>
-<meta name="description" content="Read the query plan, add the index, measure. 90.9 ms to 0.2 ms on half a million rows, the three ways to lose an index you already have, and the 7x it costs on writes.">
+<title>Когда индексировать таблицу: Практическое руководство для аналитиков — Подготовительный комплект для аналитиков</title>
+<meta name="description" content="Прочтите план запроса, добавьте индекс, измерьте. От 90,9 мс до 0,2 мс для полумиллиона строк, три способа потерять индекс, который у вас уже есть, и 7-кратное увеличение затрат на запись.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-indexing-for-analysts/">
-<meta property="og:title" content="When to Index a Table: A Practical Guide for Analysts">
-<meta property="og:description" content="One index took a lookup from 90.9 ms to 0.2 ms on 500,000 rows. Then the parts nobody mentions: wrapping the column in a function loses it, and three indexes made inserts 7 times slower.">
+<meta property="og:title" content="Когда индексировать таблицу: Практическое руководство для аналитиков">
+<meta property="og:description" content="Один индекс проводил поиск с 90,9 мс до 0,2 мс по 500 000 строк. Затем детали, о которых никто не упоминает: перенос столбца в функцию теряет его, а три индекса делают вставки в 7 раз медленнее.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/sql-indexing-for-analysts.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-indexing-for-analysts/">
@@ -78,12 +78,11 @@
   .figure figcaption{color:var(--muted);font-size:14px;margin-top:10px}
 </style>
 <!-- SEO:JSONLD:START -->
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "When to Index a Table: A Practical Guide for Analysts",
-  "description": "Read the query plan, add the index, measure. 90.9 ms to 0.2 ms on half a million rows, the three ways to lose an index you already have, and the 7x it costs on writes.",
+  "headline": "Когда индексировать таблицу: Практическое руководство для аналитиков",
+  "description": "Прочтите план запроса, добавьте индекс, измерьте. От 90,9 мс до 0,2 мс для полумиллиона строк, три способа потерять индекс, который у вас уже есть, и 7-кратное увеличение затрат на запись.",
   "url": "https://michaelnocito.github.io/analyst-prep-kit/guides/sql-indexing-for-analysts/",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -91,12 +90,12 @@
   },
   "author": {
     "@type": "Person",
-    "name": "Michael Nocito",
+    "name": "Майкл Носито",
     "url": "https://michaelnocito.github.io"
   },
   "publisher": {
     "@type": "Person",
-    "name": "Michael Nocito"
+    "name": "Майкл Носито"
   },
   "inLanguage": "en",
   "datePublished": "2026-08-08",
@@ -104,8 +103,7 @@
   "image": "https://michaelnocito.github.io/analyst-prep-kit/assets/social/sql-indexing-for-analysts.png"
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
@@ -124,7 +122,7 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "When to Index a Table: A Practical Guide for Analysts",
+      "name": "Когда индексировать таблицу: Практическое руководство для аналитиков",
       "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/sql-indexing-for-analysts/"
     }
   ]
@@ -134,18 +132,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../sql/">SQL Kit</a> · <a href="../">All guides</a></p>
-  <h1>When to Index a Table: A Practical Guide for Analysts</h1>
-  <p class="meta">Read the plan, add the index, measure the difference · Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-08">August 8, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../">Все руководства</a></p>
+  <h1>Когда индексировать таблицу: Практическое руководство для аналитиков</h1>
+  <p class="meta">Прочитайте план, добавьте индекс, измерьте разницу · Часть  <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-08">8 августа 2026 г.</time></p>
 
-  <p>By the end of this page you can tell whether a query is reading your whole table or jumping straight to what it needs, add an index that changes which of those happens, recognise the three common ways a query throws away an index it already has, and say what indexes cost so you can argue for one honestly. It is about twenty-five minutes, and every timing below was measured on half a million rows.</p>
+  <p>К концу этой страницы вы сможете определить, читает ли запрос всю вашу таблицу или сразу переходит к тому, что ему нужно, добавить индекс, который меняет то, что из этого происходит, узнать три распространенных способа, которыми запрос выбрасывает уже имеющийся индекс, и сказать, сколько стоят индексы, чтобы вы могли честно аргументировать свою позицию. Это около двадцати пяти минут, и каждый приведенный ниже тайминг измерялся на полумиллионе строк.</p>
 
-  <p>Here is what to do today, on the query that is too slow. Put <code>EXPLAIN QUERY PLAN</code> in front of it, or <code>EXPLAIN</code> on Postgres and most others. If the answer contains the word <em>scan</em> against a large table, the engine is reading every row, and that is the fact worth having before you change anything.</p>
+  <p>Вот что делать сегодня с запросом, который выполняется слишком медленно. Помещать  <code>EXPLAIN QUERY PLAN</code>  перед ним или  <code>EXPLAIN</code>  на Postgres и большинстве других. Если в ответе есть слово  <em>scan</em>  в отношении большой таблицы движок считывает каждую строку, и это факт, который стоит учитывать, прежде чем что-либо менять.</p>
 
-  <p>The short version: an index is a sorted copy of one or more columns kept alongside the table, so the engine can jump to a value instead of walking past every row looking for it.</p>
+  <p>Краткая версия: индекс — это отсортированная копия одного или нескольких столбцов, хранящихся рядом с таблицей, поэтому движок может перейти к значению, а не проходить мимо каждой строки в поисках его.</p>
 
-  <p>Walking against jumping is the idea, so it gets the picture.</p>
+  <p>Идея состоит в том, чтобы идти против прыжков, поэтому она дает представление о картине.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 300" role="img" aria-labelledby="ixTitle ixDesc" xmlns="http://www.w3.org/2000/svg">
@@ -194,195 +192,195 @@
         <path d="M496 247 L484 240 M496 247 L484 254" stroke="#B45309" stroke-width="2.6" fill="none"/>
       </g>
     </svg>
-    <figcaption>Same table, same row wanted. On the left the engine reads every row until it finds the match. On the right it goes straight into a sorted copy of the column, lands on the entry, and follows it to the row.</figcaption>
+    <figcaption>Требуется та же таблица, та же строка. Слева механизм считывает каждую строку, пока не найдет совпадение. Справа он попадает прямо в отсортированную копию столбца, попадает на запись и следует за ней к строке.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>What you'll learn</strong>
+    <strong>Что вы узнаете</strong>
     <ol>
-      <li>What an index actually is</li>
-      <li>Reading the plan: scan against search</li>
-      <li>The measurement</li>
-      <li>What an index costs</li>
-      <li>Three ways to lose an index you have</li>
-      <li>Composite indexes and the leftmost rule</li>
-      <li>Selectivity: the same index, 130 times apart</li>
-      <li>What to index, and what not to</li>
-      <li>The full before and after</li>
-      <li>Edge cases worth knowing</li>
-      <li>Why this works</li>
-      <li>Using this on your own project</li>
-      <li>The whole thing on one screen</li>
+      <li>Что такое индекс на самом деле</li>
+      <li>Чтение плана: сканирование по поиску</li>
+      <li>Измерение</li>
+      <li>Сколько стоит индекс</li>
+      <li>Три способа потерять имеющийся у вас индекс</li>
+      <li>Составные индексы и самое левое правило</li>
+      <li>Селективность: тот же индекс, с разницей в 130 раз.</li>
+      <li>Что индексировать, а что нет</li>
+      <li>Полное до и после</li>
+      <li>Пограничные случаи, которые стоит знать</li>
+      <li>Почему это работает</li>
+      <li>Использование этого в вашем собственном проекте</li>
+      <li>Все на одном экране</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Every number on this page was measured.</strong> A 500,000-row orders table in SQLite, each query run five times with the fastest run reported, and the query plans read out of the engine rather than guessed. SQLite is used because its plans say <em>SCAN</em> or <em>SEARCH</em> in words; Postgres calls the same two things a sequential scan and an index scan, and everything here transfers.</div>
+  <div class="note"><strong>Каждое число на этой странице было измерено.</strong>  Таблица заказов на 500 000 строк в SQLite, каждый запрос выполняется пять раз, сообщается о самом быстром выполнении, а планы запросов считываются из механизма, а не угадываются. SQLite используется, потому что в его планах указано  <em>SCAN</em> or <em>SEARCH</em>  словами; Postgres называет одни и те же две вещи последовательным сканированием и сканированием индекса, и здесь все переносится.</div>
 
   <div class="step">
-    <h2>1. What an index actually is</h2>
+    <h2>1. Что такое индекс на самом деле</h2>
 
-    <p>Before the explanation: your table has 500,000 rows and you ask for one customer. Say how many rows the engine has to look at.</p>
+    <p>Перед пояснением: в вашей таблице 500 000 строк, и вы запрашиваете одного клиента. Скажите, сколько строк должен просмотреть движок.</p>
 
-    <p>All of them, unless something tells it where to stop. A table is a heap of rows in no particular order, so the only way to be sure you have found every match is to check every row. That is a <strong>full table scan</strong>, and it is not a mistake; it is the only correct thing to do without more information.</p>
+    <p>Все, если только что-то не подскажет, где остановиться. Таблица представляет собой кучу строк, расположенных в произвольном порядке, поэтому единственный способ убедиться, что вы нашли все совпадения, — это проверить каждую строку. Это  <strong>полное сканирование таблицы</strong>, и это не ошибка; это единственное правильное решение без дополнительной информации.</p>
 
-    <p>An index is that extra information. It is a separate structure holding the values of one or more columns, kept in sorted order, with a pointer from each value back to its row. Because it is sorted, the engine can find a value the way you find a word in a dictionary: not by reading every page, but by repeatedly discarding the half that cannot contain it.</p>
+    <p>Индекс — это дополнительная информация. Это отдельная структура, содержащая значения одного или нескольких столбцов, хранящиеся в отсортированном порядке, с указателем от каждого значения обратно на соответствующую строку. Поскольку оно отсортировано, движок может найти значение так же, как вы находите слово в словаре: не читая каждую страницу, а многократно отбрасывая ту половину, которая не может его содержать.</p>
 
-    <p>Two consequences follow immediately and explain most of this page. An index only helps for the columns it covers, so an index on <code>customer_id</code> does nothing for a query about <code>region</code>. And it only helps if the query asks about the value in a way that the sorted order can answer, which is why section five exists.</p>
+    <p>Сразу следуют два следствия, которые объясняют большую часть этой страницы. Индекс полезен только для охватываемых им столбцов, поэтому индекс для  <code>customer_id</code>  ничего не делает для запроса о  <code>region</code>. И это помогает только в том случае, если запрос задает значение таким образом, чтобы отсортированный порядок мог ответить, поэтому существует пятый раздел.</p>
   </div>
 
   <div class="step">
-    <h2>2. Reading the plan: scan against search</h2>
+    <h2>2. Чтение плана: сканирование с помощью поиска</h2>
 
-    <p>You never have to guess which one is happening. Every engine will tell you, and on SQLite it is one word in front of the query.</p>
+    <p>Вам никогда не придется угадывать, что из этого происходит. Любой движок подскажет вам это, а в SQLite это одно слово перед запросом.</p>
 
     <pre><code>EXPLAIN QUERY PLAN
 SELECT COUNT(*), SUM(units*unit_price) FROM orders WHERE customer_id = 41234;
 
 SCAN orders</code></pre>
 
-    <p><strong>SCAN</strong> means every row. After adding an index on that column, the same query reports:</p>
+    <p><strong>SCAN</strong>  означает каждую строку. После добавления индекса в этот столбец тот же запрос сообщает:</p>
 
     <pre><code>SEARCH orders USING INDEX idx_customer (customer_id=?)</code></pre>
 
-    <p><strong>SEARCH</strong> means it went in through the index. The name of the index is right there, which is how you confirm the one you added is the one being used rather than a different one.</p>
+    <p><strong>SEARCH</strong>  означает, что он прошел через индекс. Имя индекса находится прямо здесь, и таким образом вы подтверждаете, что тот, который вы добавили, используется, а не другой.</p>
 
-    <p>A third phrase turns up constantly and is worth recognising: <strong>COVERING INDEX</strong>. It means every column the query needed was inside the index, so the engine never had to go back to the table at all. That is the fastest case there is, and it is why an index that includes the column you are counting can outperform one that only includes the column you are filtering on.</p>
+    <p>Третья фраза появляется постоянно и заслуживает внимания:  <strong>COVERING INDEX</strong>. Это означает, что каждый столбец, необходимый запросу, находился внутри индекса, поэтому движку вообще не приходилось возвращаться к таблице. Это самый быстрый случай, и именно поэтому индекс, включающий столбец, который вы считаете, может превзойти индекс, включающий только столбец, по которому вы фильтруете.</p>
 
-    <p>On Postgres the same three ideas read as <code>Seq Scan</code>, <code>Index Scan</code> and <code>Index Only Scan</code>. Different words, same distinction, and <code>EXPLAIN ANALYZE</code> there gives you the timings as well.</p>
+    <p>В Postgres те же три идеи читаются как  <code>Seq Scan</code>, <code>Index Scan</code> and <code>Index Only Scan</code>. Разные слова, одно и то же различие и  <code>EXPLAIN ANALYZE</code>  там также указано время.</p>
   </div>
 
   <div class="step">
-    <h2>3. The measurement</h2>
+    <h2>3. Измерение</h2>
 
-    <p>Here is the same query before and after one index, on 500,000 rows, best of five runs.</p>
+    <p>Вот один и тот же запрос до и после одного индекса, на 500 000 строк, лучший из пяти прогонов.</p>
 
     <pre><code>SELECT COUNT(*), SUM(units*unit_price) FROM orders WHERE customer_id = 41234;
 
 no index    SCAN orders                                        90.9 ms
 index       SEARCH orders USING INDEX idx_customer (id=?)       0.2 ms</code></pre>
 
-    <p>The result is identical, nine rows totalling 8,415, in both cases. Only the route changed. That is the whole promise of an index and the reason people reach for one first.</p>
+    <p>Результат идентичен: девять строк в сумме составляют 8415 в обоих случаях. Изменился только маршрут. В этом вся суть индекса и причина, по которой люди обращаются к нему в первую очередь.</p>
 
-    <p>A range works the same way. Filtering a month out of a year of dates:</p>
+    <p>Диапазон работает таким же образом. Фильтрация месяца из года по датам:</p>
 
     <pre><code>WHERE order_date &gt;= '2026-03-01' AND order_date &lt; '2026-04-01'
 
 no index    SCAN orders                                       123.5 ms
 index       SEARCH orders USING COVERING INDEX idx_date        3.9 ms</code></pre>
 
-    <p>42,470 rows either way. Notice that this one came back as a covering index: the query only needed the date, and the date is in the index, so the table was never touched.</p>
+    <p>В любом случае 42 470 строк. Обратите внимание, что этот индекс вернулся в качестве покрывающего индекса: запросу требовалась только дата, а дата находится в индексе, поэтому таблица не была затронута.</p>
 
-    <p>Say out loud why the range case is slower than the point lookup even with an index. It is returning 42,470 matches rather than nine, and the index gets you to the start of the matches quickly but the engine still has to walk them. An index removes the cost of finding rows, not the cost of reading the ones you asked for.</p>
+    <p>Скажите вслух, почему анализ диапазона выполняется медленнее, чем поиск точки, даже с индексом. Он возвращает 42 470 совпадений, а не девять, и индекс быстро приводит вас к началу совпадений, но движку все равно приходится их проходить. Индекс устраняет затраты на поиск строк, а не затраты на чтение тех, которые вы запросили.</p>
   </div>
 
   <div class="step">
-    <h2>4. What an index costs</h2>
+    <h2>4. Сколько стоит индекс</h2>
 
-    <p>Indexes are not free, and knowing the price is what lets you ask for one without being waved away.</p>
+    <p>Индексы не бесплатны, и знание цены — это то, что позволяет вам попросить их, не отмахиваясь.</p>
 
-    <p><strong>Time to build.</strong> Creating the index on 500,000 rows took 572 ms. On a hundred million rows it is minutes, and on some engines it locks the table while it runs.</p>
+    <p><strong>Время строить.</strong>  Создание индекса на 500 000 строк заняло 572 мс. Для ста миллионов строк это считанные минуты, а на некоторых движках таблица блокируется во время работы.</p>
 
-    <p><strong>Disk.</strong> The database file was 25.1 MB with the first index in place. Every index is a second copy of its columns plus pointers, so a table with six indexes can be several times its own size.</p>
+    <p><strong>Диск.</strong>  Размер файла базы данных составлял 25,1 МБ с первым индексом. Каждый индекс представляет собой вторую копию своих столбцов плюс указатели, поэтому таблица с шестью индексами может быть в несколько раз больше ее собственного размера.</p>
 
-    <p><strong>Writes.</strong> This is the one people underestimate. Every insert, update and delete has to maintain every index on the table. Measured on the same machine, inserting 200,000 rows:</p>
+    <p><strong>Пишет.</strong>  Это то, что люди недооценивают. Каждая вставка, обновление и удаление должны поддерживать каждый индекс таблицы. Измерено на той же машине со вставкой 200 000 строк:</p>
 
     <pre><code>no indexes        449 ms
 three indexes    3124 ms      7.0x slower</code></pre>
 
-    <p>Seven times, for three indexes. That is the trade in one number: reads get faster and writes get slower, and which matters depends entirely on what the table is for. A reporting table loaded once a night can carry a lot of indexes. A table taking a write per user action cannot.</p>
+    <p>Семь раз по трем индексам. Это сделка в одном числе: чтение становится быстрее, а запись медленнее, и что имеет значение, полностью зависит от того, для чего предназначена таблица. Таблица отчетов, загружаемая один раз за ночь, может содержать множество индексов. Таблица, выполняющая запись для каждого действия пользователя, не может.</p>
 
-    <p>It also explains a piece of advice that sounds odd until you have seen this: when bulk loading a large table, drop the indexes, load, then rebuild them. Building an index once over finished data is much cheaper than maintaining it through every row.</p>
+    <p>Здесь также объясняется совет, который звучит странно, пока вы не увидите это: при массовой загрузке большой таблицы отбросьте индексы, загрузите их, а затем перестройте. Построить индекс один раз по готовым данным гораздо дешевле, чем поддерживать его для каждой строки.</p>
   </div>
 
   <div class="step">
-    <h2>5. Three ways to lose an index you have</h2>
+    <h2>5. Три способа потерять имеющийся у вас индекс</h2>
 
-    <p>Before the explanation: the index on <code>customer_id</code> exists and the query filters on <code>customer_id</code>. Say whether that guarantees it will be used.</p>
+    <p>Перед пояснением: указатель на  <code>customer_id</code>  существует, и фильтры запросов на  <code>customer_id</code>. Скажите, гарантирует ли это, что он будет использоваться.</p>
 
-    <p>It does not, and all three of these were measured on a table where the index existed.</p>
+    <p>Это не так, и все три показателя были измерены на основе таблицы, в которой существовал индекс.</p>
 
-    <p><strong>A function or arithmetic on the column.</strong></p>
+    <p><strong>Функция или арифметика в столбце.</strong></p>
 
     <pre><code>WHERE customer_id = 41234        SEARCH ... (customer_id=?)     0.2 ms
 WHERE customer_id + 0 = 41234    SCAN                          57.9 ms</code></pre>
 
-    <p>The index is sorted by <code>customer_id</code>, not by <code>customer_id + 0</code>. As far as the engine is concerned that is a different expression, and it has no sorted copy of it, so it computes it for every row. The date version is worse:</p>
+    <p>Индекс сортируется по  <code>customer_id</code>, а не по  <code>customer_id + 0</code>. С точки зрения движка это другое выражение, и у него нет его отсортированной копии, поэтому он вычисляет его для каждой строки. Версия с датой хуже:</p>
 
     <pre><code>WHERE order_date &gt;= '2026-03-01' AND order_date &lt; '2026-04-01'    3.9 ms
 WHERE strftime('%Y-%m', order_date) = '2026-03'                 488.8 ms</code></pre>
 
-    <p>Same 42,470 rows, 125 times slower, and slower than having no index at all was, because now it is doing a full pass <em>and</em> calling a function half a million times. This is the concrete reason behind the advice in <a href="../sql-dates/">the date guide</a> to compare the raw column to a range rather than wrapping it.</p>
+    <p>Те же 42 470 строк, в 125 раз медленнее и медленнее, чем было при отсутствии индекса вообще, потому что теперь он выполняет полный проход.  <em>and</em>  вызов функции полмиллиона раз. Это конкретная причина рекомендаций в  <a href="../sql-dates/">руководство по датам</a>  для сравнения необработанного столбца с диапазоном, а не для его переноса.</p>
 
-    <p><strong>A leading wildcard.</strong> <code>LIKE 'Nor%'</code> can in principle use a sorted index, because everything starting with those three letters sits together. <code>LIKE '%orth'</code> cannot, in any engine, because a sorted list gives no starting point for an unknown prefix. On the engine used here neither form used the index and both scanned, at around 80 to 96 ms, while plain equality on the same column ran as a SEARCH in 16.0 ms. The rule to take away: an equality or a prefix range is index-friendly, and text matching in the middle of a value is a different problem needing a different kind of index.</p>
+    <p><strong>Ведущий подстановочный знак.</strong> <code>LIKE 'Nor%'</code>  в принципе можно использовать отсортированный индекс, потому что все, что начинается с этих трех букв, находится вместе.  <code>LIKE '%orth'</code>  не может ни в одном движке, потому что отсортированный список не дает отправной точки для неизвестного префикса. На используемом здесь движке ни одна форма не использовала индекс, и обе сканировались примерно за 80–96 мс, в то время как простое равенство в том же столбце выполнялось как ПОИСК за 16,0 мс. Правило, которое следует принять: равенство или диапазон префиксов удобны для индексирования, а сопоставление текста в середине значения — это другая проблема, требующая другого типа индекса.</p>
 
-    <p><strong>A type mismatch.</strong> Comparing an indexed number to a quoted string, or an indexed string to a number, makes the engine convert one side per row, which is a function on the column wearing a disguise. If a query is unexpectedly scanning, check that both sides of the comparison are the same type before checking anything else.</p>
+    <p><strong>Несоответствие типов.</strong>  Сравнение индексированного числа со строкой в ​​кавычках или индексированной строки с числом заставляет движок конвертировать одну сторону в строке, что является замаскированной функцией для столбца. Если запрос неожиданно сканируется, прежде чем проверять что-либо еще, убедитесь, что обе стороны сравнения имеют один и тот же тип.</p>
   </div>
 
   <div class="step">
-    <h2>6. Composite indexes and the leftmost rule</h2>
+    <h2>6. Составные индексы и самое левое правило</h2>
 
-    <p>An index can cover several columns, and the order you list them in decides what it can be used for. One index on <code>(region, product)</code>, three queries, all measured:</p>
+    <p>Индекс может охватывать несколько столбцов, и порядок их перечисления определяет, для чего его можно использовать. Один индекс на  <code>(region, product)</code>, три запроса, все измеренные:</p>
 
     <pre><code>WHERE region = 'North'                         SEARCH (region=?)              16.1 ms
 WHERE region = 'North' AND product = 'Desk'    SEARCH (region=? AND product=?)  4.7 ms
 WHERE product = 'Desk'                         SCAN                            77.1 ms</code></pre>
 
-    <p>The first two use it and the third does not. The reason is what the sorting means: the index is sorted by region first, and by product only within each region. Ask for a region and you know where to start. Ask for a product without a region and the matching entries are scattered through the whole index, so there is nothing to jump to.</p>
+    <p>Первые два используют его, а третий нет. Причина в том, что означает сортировка: индекс сортируется сначала по регионам, а по продуктам только внутри каждого региона. Спросите регион, и вы знаете, с чего начать. Запросите товар без региона, и соответствующие записи разбросаны по всему индексу, поэтому переходить не к чему.</p>
 
-    <p>That is the <strong>leftmost prefix rule</strong>, and it is the single most useful thing to know about composite indexes. An index on <code>(a, b, c)</code> serves queries on <code>a</code>, on <code>a and b</code>, and on <code>a, b and c</code>. It does nothing for a query on <code>b</code> alone.</p>
+    <p>Это  <strong>правило крайнего левого префикса</strong>, и это самая полезная вещь, которую нужно знать о составных индексах. Индекс на  <code>(a, b, c)</code>  обслуживает запросы по  <code>a</code>, на  <code>a and b</code>и дальше  <code>a, b and c</code>. Он ничего не делает для запроса  <code>b</code>  один.</p>
 
-    <p>Which gives a practical ordering rule: put the column you always filter on first, and the one you sometimes add second. If you genuinely need both directions, that is two indexes, and now you are back in section four deciding whether the write cost is worth it.</p>
+    <p>Это дает практическое правило упорядочивания: первым ставьте столбец, по которому вы всегда фильтруете, а вторым — тот, который вы иногда добавляете. Если вам действительно нужны оба направления, то это два индекса, и теперь вы вернулись в четвертый раздел, решая, стоит ли затрат на запись того.</p>
   </div>
 
   <div class="step">
-    <h2>7. Selectivity: the same index, 130 times apart</h2>
+    <h2>7. Селективность: тот же индекс, с разницей в 130 раз.</h2>
 
-    <p>Before the explanation: one index, one column, two queries that differ only in the number in them. Predict whether they take similar time.</p>
+    <p>До пояснения: один индекс, один столбец, два запроса, отличающиеся только количеством в них. Предскажите, займут ли они одинаковое время.</p>
 
     <pre><code>WHERE customer_id &gt; 100        499,157 rows match      26.1 ms
 WHERE customer_id &gt; 59990           74 rows match       0.2 ms</code></pre>
 
-    <p>Both used the index. One is 130 times slower than the other, and nothing about the query or the index changed except how much of the table matched.</p>
+    <p>Оба использовали индекс. Один из них в 130 раз медленнее другого, и ничего в запросе или индексе не изменилось, кроме того, какая часть таблицы совпала.</p>
 
-    <p>That property has a name, <strong>selectivity</strong>: what fraction of the table a condition keeps. An index is worth having when the condition is selective, and does little when it is not, because returning most of the table means reading most of the table however you got there. The same effect shows on a column with only two values:</p>
+    <p>У этого свойства есть имя,  <strong>selectivity</strong>: какую часть таблицы сохраняет условие. Индекс имеет смысл иметь, когда условие является выборочным, и мало что дает, если это не так, поскольку возврат большей части таблицы означает чтение большей части таблицы, как бы вы туда ни попали. Тот же эффект проявляется в столбце только с двумя значениями:</p>
 
     <pre><code>WHERE is_returned = 0     490,000 rows      45.2 ms
 WHERE is_returned = 1      10,000 rows       0.9 ms</code></pre>
 
-    <p>The identical index, on the identical column, is excellent for the rare value and nearly pointless for the common one. This is why "index every column" is bad advice: an index on a flag that is 98% one value pays the full write cost and earns almost nothing on the query people actually run.</p>
+    <p>Идентичный индекс в одном и том же столбце отлично подходит для редких значений и почти бессмысленен для обычных. Вот почему «индексировать каждый столбец» — плохой совет: индекс для флага, который составляет 98% от одного значения, оплачивает полную стоимость записи и почти ничего не приносит от запроса, который люди фактически выполняют.</p>
 
-    <p>It is also why engines keep statistics about the distribution of values, and why a query that was fast last month can be slow today without anybody changing it: the data changed shape, and the optimiser now makes a different choice.</p>
+    <p>Именно поэтому движки ведут статистику распределения значений и почему запрос, который был быстрым в прошлом месяце, сегодня может быть медленным, и его никто не меняет: данные изменили форму, и оптимизатор теперь делает другой выбор.</p>
   </div>
 
   <div class="step">
-    <h2>8. What to index, and what not to</h2>
+    <h2>8. Что индексировать, а что нет</h2>
 
-    <p>The short list, in the order I would work through it.</p>
+    <p>Краткий список в том порядке, в котором я бы его проработал.</p>
 
     <table>
-      <tr><th>Index this</th><th>Why</th></tr>
-      <tr><td>Primary keys</td><td>Already done for you in most engines.</td></tr>
-      <tr><td>Foreign keys, the columns you join on</td><td>Often the largest single win, because a join without one is a scan per lookup.</td></tr>
-      <tr><td>Columns in <code>WHERE</code> on big tables</td><td>Especially dates, when you filter a period out of history.</td></tr>
-      <tr><td>Columns you sort by, on big results</td><td>A sorted index can supply the order without a sort step.</td></tr>
+      <tr><th>Проиндексируйте это</th><th>Why</th></tr>
+      <tr><td>Первичные ключи</td><td>Уже сделано за вас в большинстве двигателей.</td></tr>
+      <tr><td>Внешние ключи, столбцы, к которым вы присоединяетесь</td><td>Часто это самый крупный выигрыш, поскольку соединение без него представляет собой сканирование за поиск.</td></tr>
+      <tr><td>Столбцы в  <code>WHERE</code>  на больших столах</td><td>Особенно даты, когда вы фильтруете период из истории.</td></tr>
+      <tr><td>Столбцы, по которым вы сортируете, для получения важных результатов</td><td>Сортированный индекс может предоставлять порядок без этапа сортировки.</td></tr>
     </table>
 
     <table>
-      <tr><th>Do not bother</th><th>Why</th></tr>
-      <tr><td>Small tables</td><td>Reading a few thousand rows is already fast. The engine may ignore the index anyway.</td></tr>
-      <tr><td>Low-cardinality columns</td><td>Section seven. A flag with two values earns little and costs the same.</td></tr>
-      <tr><td>Columns that are written constantly</td><td>Every update maintains the index too.</td></tr>
-      <tr><td>Every column, defensively</td><td>Seven times slower writes and a much larger file, for indexes nothing uses.</td></tr>
+      <tr><th>Не беспокоить</th><th>Why</th></tr>
+      <tr><td>Маленькие столики</td><td>Чтение нескольких тысяч строк — это уже быстро. В любом случае движок может игнорировать индекс.</td></tr>
+      <tr><td>Столбцы с низкой мощностью</td><td>Раздел седьмой. Флаг с двумя значениями мало зарабатывает и стоит столько же.</td></tr>
+      <tr><td>Столбцы, которые пишутся постоянно</td><td>Каждое обновление также поддерживает индекс.</td></tr>
+      <tr><td>Каждая колонна, обороняясь</td><td>В семь раз медленнее пишет и файл гораздо большего размера, для индексов ничего не использует.</td></tr>
     </table>
 
-    <p>One more piece of advice that matters more than any of the above: as an analyst you frequently cannot create an index, because you have read access to somebody else's database. That is not a dead end. The plan output is still available to you, and "this query scans a hundred million rows because there is no index on <code>order_date</code>" is a specific, actionable request that a database owner can act on in a minute. Vague requests to make it faster get nothing; a plan output and a measured timing get an index.</p>
+    <p>Еще один совет, который важнее любого из вышеперечисленных: как аналитик вы часто не можете создать индекс, потому что у вас есть доступ на чтение к чужой базе данных. Это не тупик. Вывод плана по-прежнему доступен вам, и «этот запрос сканирует сто миллионов строк, потому что в нем нет индекса».  <code>order_date</code>« — это конкретный, практически осуществимый запрос, который владелец базы данных может выполнить за минуту. Расплывчатые запросы на ускорение ничего не дают; результат плана и измеренное время получают индекс.</p>
 
-    <p>And when the answer is genuinely no, the remaining moves are the ones in <a href="../handle-large-datasets/">handling large datasets</a>: filter earlier, aggregate in the database, sample while developing, and materialise the result once instead of re-querying it.</p>
+    <p>И когда ответ на самом деле отрицательный, оставшиеся ходы — те, которые нужно сделать.  <a href="../handle-large-datasets/">Обработка больших наборов данных</a>: фильтровать ранее, агрегировать в базе данных, выполнять выборку во время разработки и материализовать результат один раз, вместо повторного запроса.</p>
   </div>
 
-  <h2>The full before and after</h2>
+  <h2>Полное до и после</h2>
 
-  <p>Same question: what did one customer buy, out of half a million orders?</p>
+  <p>Тот же вопрос: что из полумиллиона заказов купил один покупатель?</p>
 
   <h3>Before</h3>
   <pre><code>SELECT COUNT(*), SUM(units*unit_price)
@@ -390,7 +388,7 @@ FROM orders WHERE customer_id = 41234;
 
 plan : SCAN orders
 time : 90.9 ms</code></pre>
-  <p>Correct, and it read all 500,000 rows to return nine of them. On a dashboard that runs this once per customer per page load, that is the entire performance problem, and nothing in the query looks wrong.</p>
+  <p>Правильно, и он прочитал все 500 000 строк и вернул девять из них. На информационной панели, которая запускает это один раз для каждого клиента при загрузке страницы, это вся проблема с производительностью, и ничто в запросе не выглядит неправильным.</p>
 
   <h3>After</h3>
   <pre><code>CREATE INDEX idx_customer ON orders(customer_id);     -- 572 ms, once
@@ -401,112 +399,112 @@ FROM orders WHERE customer_id = 41234;
 plan : SEARCH orders USING INDEX idx_customer (customer_id=?)
 time : 0.2 ms</code></pre>
 
-  <p>Same nine rows, same 8,415. One statement, run once, and the cost is 25 MB of file, half a second of build time, and slower writes on a table that is loaded in batches anyway.</p>
+  <p>Те же девять рядов, те же 8415. Один оператор, выполняется один раз, и его стоимость составляет 25 МБ файла, полсекунды времени сборки и более медленная запись в таблицу, которая в любом случае загружается пакетно.</p>
 
-  <p>The claim, and it is the reason to read a plan before optimising anything: <strong>the query did not change, the data did not change, and the same result went from 90.9 ms to 0.2 ms because the engine stopped reading rows it was never going to return.</strong></p>
+  <p>Претензия, и это повод прочитать план, прежде чем что-либо оптимизировать:  <strong>запрос не изменился, данные не изменились, и тот же результат изменился с 90,9 мс до 0,2 мс, потому что движок перестал читать строки, которые он никогда не собирался возвращать.</strong></p>
 
   <div class="step">
-    <h2>Edge cases worth knowing</h2>
+    <h2>Пограничные случаи, которые стоит знать</h2>
 
-    <p>Six that come up.</p>
+    <p>Шесть, которые появятся.</p>
 
-    <p><strong>The optimiser ignores your index on purpose.</strong> If it estimates that most of the table matches, a scan is genuinely cheaper than jumping around, and it will scan. That is usually correct, and when it is wrong it is because the statistics are stale.</p>
+    <p><strong>Оптимизатор намеренно игнорирует ваш индекс.</strong>  Если он считает, что большая часть таблицы совпадает, сканирование действительно обходится дешевле, чем прыгать по нему, и оно будет сканировать. Обычно это правильно, а если и неверно, то это потому, что статистика устарела.</p>
 
-    <p><strong>Stale statistics.</strong> Engines choose plans from summaries of the data that are refreshed periodically. After a big load, run the engine's update command, <code>ANALYZE</code> on both SQLite and Postgres, or the plan may be based on a table that no longer exists in that shape.</p>
+    <p><strong>Устаревшая статистика.</strong>  Механизмы выбирают планы из сводок данных, которые периодически обновляются. После большой нагрузки запустите команду обновления движка,  <code>ANALYZE</code>  как на SQLite, так и на Postgres, или план может быть основан на таблице, которая больше не существует в этой форме.</p>
 
-    <p><strong>Indexes on a view.</strong> A plain view has no data and cannot be indexed. You index the underlying tables, or you need a materialised view, which is a real stored result.</p>
+    <p><strong>Индексы в представлении.</strong>  Простое представление не содержит данных и не может быть проиндексировано. Вы индексируете базовые таблицы или вам нужно материализованное представление, которое представляет собой реальный сохраненный результат.</p>
 
-    <p><strong>NULLs.</strong> Whether nulls are stored in an index and whether <code>IS NULL</code> can use it varies by engine. If you filter for missing values often, test it rather than assuming.</p>
+    <p><strong>НУЛИ.</strong>  Сохраняются ли нули в индексе и есть ли  <code>IS NULL</code>  возможность его использования зависит от двигателя. Если вы часто фильтруете пропущенные значения, проверьте это, а не предполагайте.</p>
 
-    <p><strong>An index that duplicates another.</strong> An index on <code>(a)</code> is redundant when an index on <code>(a, b)</code> already exists, by the leftmost rule. It is pure write cost. Look for these before adding more.</p>
+    <p><strong>Индекс, который дублирует другой.</strong>  Индекс на  <code>(a)</code>  является избыточным, когда индекс на  <code>(a, b)</code>  уже существует по крайнему левому правилу. Это чистая стоимость записи. Найдите их, прежде чем добавлять больше.</p>
 
-    <p><strong>Joins.</strong> An unindexed join key is the most expensive thing in most slow queries, because the lookup happens once per row of the other table. If a join is slow, index the key on the larger side first; the mechanics of what a join is doing are in <a href="../sql-joins/">the joins guide</a>.</p>
+    <p><strong>Присоединяется.</strong> An unindexed join key is the most expensive thing in most slow queries, because the lookup happens once per row of the other table. If a join is slow, index the key on the larger side first; the mechanics of what a join is doing are in <a href="../sql-joins/">руководство по объединениям</a>.</p>
   </div>
 
-  <h2>Why this works</h2>
+  <h2>Почему это работает</h2>
 
-  <p>The reason a lookup can go from ninety milliseconds to a fraction of one is that the two routes have different growth curves rather than different constants. Scanning is proportional to the number of rows: double the table and you double the time. Searching a sorted structure grows with the logarithm of the size, because each step discards a large fraction of what remains. The structure that made this practical for data on disk is the B-tree, designed to keep a large ordered index balanced and shallow so that any value can be reached in a handful of page reads even as the file grows (Bayer &amp; McCreight, 1972, <em>Acta Informatica</em>, 1(3), 173–189). Almost every index you will meet is a variation of it, and its shape is why the win gets bigger as the table gets bigger, not smaller.</p>
+  <p>Причина, по которой поиск может сократиться с девяноста миллисекунд до долей одной, заключается в том, что эти два маршрута имеют разные кривые роста, а не разные константы. Сканирование пропорционально количеству строк: удвойте таблицу, и вы удвоите время. Поиск в отсортированной структуре увеличивается с логарифмом размера, поскольку на каждом шаге отбрасывается большая часть того, что осталось. Структурой, которая сделала это практичным для данных на диске, является B-дерево, предназначенное для поддержания сбалансированного и мелкого большого упорядоченного индекса, так что любое значение может быть достигнуто за несколько чтений страниц, даже по мере роста файла (Bayer &amp; МакКрайт, 1972 г.,  <em>Закон об информатике</em>, 1(3), 173–189). Почти каждый индекс, который вы встретите, является его разновидностью, и именно из-за его формы выигрыш становится больше по мере того, как таблица становится больше, а не меньше.</p>
 
-  <p>The second half of the page is about the fact that having an index is not the same as using one. The database decides, per query, which route is cheaper, by estimating how many rows each option would touch and costing them; that estimate is why the same index is chosen for one value and ignored for another. The framework for making that decision, including the idea of estimating a condition's selectivity and choosing an access path from it, was set out early and is still the shape of what optimisers do (Selinger, Astrahan, Chamberlin, Lorie, &amp; Price, 1979, <em>Proceedings of the 1979 ACM SIGMOD International Conference on Management of Data</em>, 23–34). Section seven's 130-fold difference is that machinery working correctly, and section five's failures are it working correctly on an expression you did not mean to write.</p>
+  <p>The second half of the page is about the fact that having an index is not the same as using one. The database decides, per query, which route is cheaper, by estimating how many rows each option would touch and costing them; that estimate is why the same index is chosen for one value and ignored for another. The framework for making that decision, including the idea of estimating a condition's selectivity and choosing an access path from it, was set out early and is still the shape of what optimisers do (Selinger, Astrahan, Chamberlin, Lorie, &amp; Price, 1979, <em>Материалы Международной конференции ACM SIGMOD 1979 г. по управлению данными.</em>, 23–34). 130-кратное отличие седьмого раздела заключается в том, что механизмы работают правильно, а сбои в пятом разделе заключаются в том, что они работают правильно с выражением, которое вы не хотели писать.</p>
 
-  <p>One note on the cheat sheet below. It is built to be covered and recalled rather than reread, because practice testing comes out ahead of restudying across a very large body of comparisons, including ones run in real courses rather than laboratories (Adesope, Trevisan, &amp; Sundararajan, 2017, <em>Review of Educational Research</em>, 87(3), 659–701).</p>
+  <p>Одно замечание в шпаргалке ниже. Он создан для того, чтобы его просматривали и вспоминали, а не перечитывали, поскольку практическое тестирование опережает повторное изучение очень большого количества сравнений, в том числе проводимых на реальных курсах, а не в лабораториях (Adesope, Trevisan &amp; Sundararajan, 2017,  <em>Обзор образовательных исследований</em>, 87(3), 659–701).</p>
 
-  <h2>Using this on your own project</h2>
+  <h2>Использование этого в вашем собственном проекте</h2>
 
-  <p>Indexing everything is worse than indexing nothing. Do this instead, in order.</p>
+  <p>Индексировать все хуже, чем ничего не индексировать. Вместо этого сделайте это по порядку.</p>
 
   <ol>
-    <li><strong>Find the query that is actually slow</strong>, by timing rather than by feel. One query is usually most of the problem.</li>
-    <li><strong>Read its plan.</strong> If there is no scan against a large table, the problem is not indexing and you would have spent a day on the wrong thing.</li>
-    <li><strong>Check the query is not defeating an index it already has</strong>: a function on the column, a type mismatch, a leading wildcard.</li>
-    <li><strong>Index the join keys first</strong>, then the columns in <code>WHERE</code> on the biggest tables.</li>
-    <li><strong>Measure before and after</strong>, best of several runs, and write both numbers down. That pair is the whole argument for keeping the index.</li>
-    <li><strong>If you cannot create indexes</strong>, send the plan and the two timings to whoever can. A specific request gets acted on; a slow report does not.</li>
+    <li><strong>Найдите запрос, который действительно медленный</strong>, скорее по времени, чем по ощущениям. Обычно большая часть проблемы заключается в одном запросе.</li>
+    <li><strong>Прочитайте его план.</strong>  Если нет сканирования большой таблицы, проблема не в индексации, и вы бы потратили день не на то.</li>
+    <li><strong>Убедитесь, что запрос не уничтожает уже имеющийся у него индекс.</strong>: функция в столбце, несоответствие типа, ведущий подстановочный знак.</li>
+    <li><strong>Сначала индексируйте ключи соединения</strong>, то столбцы в  <code>WHERE</code>  на самых больших столах.</li>
+    <li><strong>Измерьте до и после</strong>, лучший из нескольких прогонов, и запишите оба числа. Эта пара — единственный аргумент в пользу сохранения индекса.</li>
+    <li><strong>Если вы не можете создавать индексы</strong>, пришлите план и два тайминга тому, кто может. Конкретный запрос выполняется; медленный отчет – нет.</li>
   </ol>
 
-  <p>If you have paper nearby, one optional sketch is worth five minutes. Write out your slow query and circle every column that appears in <code>WHERE</code>, in <code>JOIN ... ON</code>, and in <code>ORDER BY</code>. Those circles are the entire candidate list for an index, in that order of priority, and most people find there are only two or three.</p>
+  <p>Если у вас под рукой есть бумага, один дополнительный эскиз стоит пяти минут. Напишите свой медленный запрос и обведите каждый столбец, который появляется в  <code>WHERE</code>, в  <code>JOIN ... ON</code>и в  <code>ORDER BY</code>. Эти круги представляют собой весь список кандидатов на индекс в указанном порядке приоритета, и большинство людей считают, что их только два или три.</p>
 
-  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>. If you would rather type queries than read about them, the <a href="../../drill/">SQL Drill</a> gives you one runnable query at a time against a real database.</div>
+  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>. Если вы предпочитаете вводить запросы, а не читать о них,  <a href="../../drill/">SQL-детализация</a>  дает вам по одному выполняемому запросу к реальной базе данных.</div>
 
-  <h2>The whole thing on one screen</h2>
+  <h2>Все на одном экране</h2>
 
-  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
+  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
 
   <table>
-    <tr><th>Thing</th><th>What it does</th></tr>
-    <tr><td>An index</td><td>A sorted copy of some columns, with pointers back to the rows.</td></tr>
-    <tr><td>No index</td><td>Full table scan. Correct, and proportional to the row count.</td></tr>
-    <tr><td>See which is happening</td><td><code>EXPLAIN QUERY PLAN</code>, or <code>EXPLAIN</code> on most engines.</td></tr>
-    <tr><td>SCAN</td><td>Every row. Postgres calls it a Seq Scan.</td></tr>
-    <tr><td>SEARCH</td><td>Went in through the index. Postgres calls it an Index Scan.</td></tr>
-    <tr><td>COVERING INDEX</td><td>Everything needed was in the index. The table was never read.</td></tr>
-    <tr><td>The measured win</td><td>90.9 ms to 0.2 ms on 500,000 rows, same result.</td></tr>
-    <tr><td>Build cost</td><td>572 ms here. Minutes on a very large table.</td></tr>
-    <tr><td>Write cost</td><td>Three indexes made 200,000 inserts 7 times slower.</td></tr>
-    <tr><td>Bulk loading</td><td>Drop the indexes, load, rebuild.</td></tr>
-    <tr><td>Function on the column</td><td>Loses the index. <code>strftime(date)</code> was 125 times slower than a range.</td></tr>
-    <tr><td>Leading wildcard</td><td>Cannot use a sorted index, in any engine.</td></tr>
-    <tr><td>Type mismatch</td><td>A conversion per row. A function in disguise.</td></tr>
-    <tr><td>Composite index</td><td>Sorted by the first column, then within it by the second.</td></tr>
-    <tr><td>Leftmost prefix rule</td><td><code>(a,b)</code> serves a, and a with b. Not b alone.</td></tr>
-    <tr><td>Selectivity</td><td>How much of the table a condition keeps. Rare values win.</td></tr>
-    <tr><td>Same index, two values</td><td>490,000 matches 45.2 ms, 10,000 matches 0.9 ms.</td></tr>
-    <tr><td>Index first</td><td>Join keys, then WHERE columns on big tables.</td></tr>
-    <tr><td>Do not index</td><td>Small tables, two-value flags, heavily written columns.</td></tr>
+    <tr><th>Thing</th><th>Что он делает</th></tr>
+    <tr><td>Индекс</td><td>Отсортированная копия некоторых столбцов с указателями на строки.</td></tr>
+    <tr><td>Нет индекса</td><td>Полное сканирование таблицы. Правильно и пропорционально количеству строк.</td></tr>
+    <tr><td>Посмотрите, что происходит</td><td><code>EXPLAIN QUERY PLAN</code>, или  <code>EXPLAIN</code>  на большинстве двигателей.</td></tr>
+    <tr><td>SCAN</td><td>Каждый ряд. В Postgres это называется Seq Scan.</td></tr>
+    <tr><td>SEARCH</td><td>Зашёл через индекс. Postgres называет это сканированием индекса.</td></tr>
+    <tr><td>COVERING INDEX</td><td>Все необходимое было в индексе. Таблица ни разу не читалась.</td></tr>
+    <tr><td>Размеренная победа</td><td>От 90,9 до 0,2 мс для 500 000 строк, результат тот же.</td></tr>
+    <tr><td>Стоимость сборки</td><td>Здесь 572 мс. Минуты на очень большом столе.</td></tr>
+    <tr><td>Стоимость записи</td><td>Три индекса сделали 200 000 вставок в 7 раз медленнее.</td></tr>
+    <tr><td>Массовая загрузка</td><td>Отбросьте индексы, загрузите, перестройте.</td></tr>
+    <tr><td>Функция на столбце</td><td>Теряет индекс.  <code>strftime(date)</code>  был в 125 раз медленнее диапазона.</td></tr>
+    <tr><td>Ведущий подстановочный знак</td><td>Невозможно использовать отсортированный индекс ни в одном движке.</td></tr>
+    <tr><td>Несоответствие типа</td><td>Преобразование на строку. Скрытая функция.</td></tr>
+    <tr><td>Составной индекс</td><td>Сортируется по первому столбцу, затем внутри него по второму.</td></tr>
+    <tr><td>правило крайнего левого префикса</td><td><code>(a,b)</code>  обслуживает a, а a с b. Не б один.</td></tr>
+    <tr><td>Selectivity</td><td>Какую часть таблицы сохраняет условие. Редкие ценности побеждают.</td></tr>
+    <tr><td>Тот же индекс, два значения</td><td>490 000 совпадений 45,2 мс, 10 000 совпадений 0,9 мс.</td></tr>
+    <tr><td>Индексировать сначала</td><td>Объедините ключи, а затем столбцы WHERE в больших таблицах.</td></tr>
+    <tr><td>Не индексировать</td><td>Маленькие таблицы, флаги с двумя значениями, столбцы с большим количеством текста.</td></tr>
   </table>
 
-  <div class="note"><strong>The one habit to keep.</strong> Read the plan before changing anything, and measure before and after. An index added on a hunch is a permanent write cost paid for an unmeasured benefit, and the plan takes ten seconds to read. If a query is slow in a way this page does not cover, there is a general <a href="../technical-tenacity/">diagnosis loop for being stuck</a>.</div>
+  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Прежде чем что-либо менять, прочтите план и измерьте до и после. Индекс, добавленный интуитивно, представляет собой постоянную стоимость записи, уплачиваемую за неизмеримую выгоду, а чтение плана занимает десять секунд. Если запрос медленный, что не описано на этой странице, существует общая  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>.</div>
 
-  <p>One last thought, and I would genuinely like other people's answers. The one I remember was a nightly report that had crept from four minutes to fifty over a year, where the fix was a single index on a date column and the reason nobody had found it was that everyone assumed the query had simply got more data to chew. What turned out to be the one-line fix for something slow you inherited?</p>
+  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Тот, который я помню, был ночным отчетом, который за год увеличился с четырех минут до пятидесяти, где исправлением был единственный индекс в столбце даты, и причина, по которой никто его не нашел, заключалась в том, что все предполагали, что запрос просто получил больше данных для обработки. Что оказалось однострочным исправлением чего-то медленного, которое вы унаследовали?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Bayer, R., &amp; McCreight, E. (1972). Organization and maintenance of large ordered indices. <em>Acta Informatica</em>, 1(3), 173–189.</li>
-    <li>Selinger, P. G., Astrahan, M. M., Chamberlin, D. D., Lorie, R. A., &amp; Price, T. G. (1979). Access path selection in a relational database management system. <em>Proceedings of the 1979 ACM SIGMOD International Conference on Management of Data</em>, 23–34.</li>
-    <li>Adesope, O. O., Trevisan, D. A., &amp; Sundararajan, N. (2017). Rethinking the use of tests: A meta-analysis of practice testing. <em>Review of Educational Research</em>, 87(3), 659–701.</li>
+    <li>Байер Р. и МакКрайт Э. (1972). Организация и ведение крупных упорядоченных индексов.  <em>Закон об информатике</em>, 1(3), 173–189.</li>
+    <li>Селинджер П.Г., Астрахан М.М., Чемберлин Д.Д., Лори Р.А. и Прайс Т.Г. (1979). Выбор пути доступа в системе управления реляционными базами данных.  <em>Материалы Международной конференции ACM SIGMOD 1979 г. по управлению данными.</em>, 23–34.</li>
+    <li>Адесоп О.О., Тревизан Д.А. и Сундарараджан Н. (2017). Переосмысление использования тестов: метаанализ практического тестирования.  <em>Обзор образовательных исследований</em>, 87(3), 659–701.</li>
   </ul>
 
   <div class="book">
-    <strong>The query took four minutes and nobody can tell you what it spent them on.</strong>
-    <p><em>SQL for Analysts</em> is 458 pages, indexes explained from the analyst's side, so you can ask for the right one and know why.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-indexing-for-analysts'})">SQL for Analysts, $19 &rarr;</a>
+    <strong>Запрос занял четыре минуты, и никто не может вам сказать, на что они были потрачены.</strong>
+    <p><em>SQL для аналитиков</em>  составляет 458 страниц, индексы объяснены со стороны аналитика, так что вы можете запросить нужную и узнать, почему.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-indexing-for-analysts'})">SQL для аналитиков, 19 $ →</a>
   </div>
 
   <div class="cta">
-    <strong>Practice reading plans on queries you can time.</strong>
-    <p style="margin:6px 0 0">The <a href="../../sql/">SQL Kit</a> gives you the repetitions: plans to interpret, queries that defeat their own indexes, and composite indexes to reason about, plus flash cards on which conditions a sorted index can answer. You now own the method; the kit is the practice. Nothing to install, no account needed.</p>
-    <a class="btn" href="../../sql/">Open the SQL Kit →</a>
+    <strong>Практикуйтесь в чтении планов по вопросам, на которые вы можете рассчитывать время.</strong>
+    <p style="margin:6px 0 0">The <a href="../../sql/">SQL-комплект</a>  дает вам повторения: планы интерпретации, запросы, которые превосходят собственные индексы, и составные индексы, о которых нужно рассуждать, а также карточки с условиями, на которые может ответить отсортированный индекс. Теперь вы владеете методом; комплект - это практика. Ничего устанавливать, учетная запись не требуется.</p>
+    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Analyst Prep Kit</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../sql-joins/">SQL JOINs</a> · <a href="../sql-dates/">SQL Date Functions</a> · <a href="../sql-subqueries/">Subquery vs CTE</a> · <a href="../sql-running-total/">Running Total in SQL</a> · <a href="../sql-foundations/">SQL Foundations</a> · <a href="../which-sql-database-to-install/">Which SQL Database to Install</a> · <a href="../set-up-duckdb/">Set Up DuckDB</a> · <a href="../../sql/">SQL Kit</a> · <a href="../install-postgresql-for-beginners/">Install PostgreSQL</a> · <a href="../connect-python-to-a-sql-database/">Connect Python to a Database</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../projects/">Portfolio Projects</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
+    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-dates/">Функции даты SQL</a> · <a href="../sql-subqueries/">Подзапрос против CTE</a> · <a href="../sql-running-total/">Проведение итогов в SQL</a> · <a href="../sql-foundations/">Основы SQL</a> · <a href="../which-sql-database-to-install/">Какую базу данных SQL установить</a> · <a href="../set-up-duckdb/">Настройте DuckDB</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../install-postgresql-for-beginners/">Установить PostgreSQL</a> · <a href="../connect-python-to-a-sql-database/">Подключите Python к базе данных</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../projects/">Портфельные проекты</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-<script src="../../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

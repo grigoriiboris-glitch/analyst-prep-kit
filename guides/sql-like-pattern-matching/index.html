@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head><script src="../../assets/ru-localization-boot.js"></script>
+<html lang="ru" data-static-ru="true">
+<head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LIKE in SQL: Wildcards and Pattern Matching, for Beginners &mdash; Analyst Prep Kit</title>
-<meta name="description" content="Beginner guide to SQL LIKE: what the % and _ wildcards do, how moving the wildcard changes the question, case sensitivity by database, the over-matching trap, NOT LIKE, escaping a literal percent sign, and why LIKE '%text%' gets slow.">
+<title>LIKE в SQL: подстановочные знаки и сопоставление с образцом, для начинающих — комплект подготовки аналитика</title>
+<meta name="description" content="Руководство для начинающих по SQL LIKE: что делают подстановочные знаки % и _, как перемещение подстановочного знака меняет вопрос, чувствительность к регистру в зависимости от базы данных, ловушка чрезмерного совпадения, NOT LIKE, экранирование буквального знака процента и почему LIKE '%text%' работает медленно.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-like-pattern-matching/">
-<meta property="og:title" content="LIKE in SQL, Explained for Beginners">
-<meta property="og:description" content="What % and _ actually do, how wildcard placement changes the question, case sensitivity by database, and the over-matching trap that silently doubles your results.">
+<meta property="og:title" content="LIKE в SQL, объяснение для начинающих">
+<meta property="og:description" content="Что на самом деле делают % и _, как размещение подстановочных знаков меняет вопрос, чувствительность к регистру в базе данных и ловушка чрезмерного совпадения, которая молча удваивает ваши результаты.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/sql-like-pattern-matching.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-like-pattern-matching/">
@@ -73,12 +73,11 @@
   .toc ol{margin:6px 0 4px;padding-left:22px}
 </style>
 <!-- SEO:JSONLD:START -->
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "LIKE in SQL, Explained for Beginners",
-  "description": "Beginner guide to SQL LIKE: what the % and _ wildcards do, how moving the wildcard changes the question, case sensitivity by database, the over-matching trap, NOT LIKE, escaping a literal percent sign, and why LIKE '%text%' gets slow.",
+  "headline": "LIKE в SQL, объяснение для начинающих",
+  "description": "Руководство для начинающих по SQL LIKE: что делают подстановочные знаки % и _, как перемещение подстановочного знака меняет вопрос, чувствительность к регистру в зависимости от базы данных, ловушка чрезмерного совпадения, NOT LIKE, экранирование буквального знака процента и почему LIKE '%text%' работает медленно.",
   "url": "https://michaelnocito.github.io/analyst-prep-kit/guides/sql-like-pattern-matching/",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -86,12 +85,12 @@
   },
   "author": {
     "@type": "Person",
-    "name": "Michael Nocito",
+    "name": "Майкл Носито",
     "url": "https://michaelnocito.github.io"
   },
   "publisher": {
     "@type": "Person",
-    "name": "Michael Nocito"
+    "name": "Майкл Носито"
   },
   "inLanguage": "en",
   "datePublished": "2026-08-19",
@@ -99,8 +98,7 @@
   "image": "https://michaelnocito.github.io/analyst-prep-kit/assets/social/sql-like-pattern-matching.png"
 }
 </script>
-<script type="application/ld+json">
-{
+<script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
@@ -119,7 +117,7 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "LIKE in SQL, Explained for Beginners",
+      "name": "LIKE в SQL, объяснение для начинающих",
       "item": "https://michaelnocito.github.io/analyst-prep-kit/guides/sql-like-pattern-matching/"
     }
   ]
@@ -129,188 +127,188 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../../sql/">SQL Kit</a></p>
-  <h1>LIKE in SQL: Pattern Matching for Beginners</h1>
-  <p class="meta">The tool for searching inside a text column, not just matching it &middot; Part of the <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst &middot; Updated <time datetime="2026-08-19">August 19, 2026</time></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../../sql/">SQL-комплект</a></p>
+  <h1>LIKE в SQL: сопоставление с образцом для начинающих</h1>
+  <p class="meta">Инструмент для поиска внутри текстового столбца, а не просто сопоставления с ним. · Часть  <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Обновлено  <time datetime="2026-08-19">19 августа 2026 г.</time></p>
 
-  <p>Most of the time you ask SQL for an exact value. <code>WHERE status = 'Active'</code> is a closed question with a yes or no answer. But a lot of real columns do not hold one tidy value. They hold a sentence, a product name with a code stuck on the front, an email address, or a list of tags jammed into a single cell. For those you need a looser question, and <code>LIKE</code> is how you ask it. It is a small piece of syntax with exactly two moving parts, and once those click you can search inside text instead of only matching it.</p>
+  <p>Большую часть времени вы запрашиваете у SQL точное значение.  <code>WHERE status = 'Active'</code>  Закрытый вопрос с ответом да или нет. Но многие реальные столбцы не содержат одного и того же значения. Они содержат предложение, название продукта с кодом, прикрепленным спереди, адрес электронной почты или список тегов, помещенных в одну ячейку. Для тех вам нужен более свободный вопрос, и  <code>LIKE</code>  это то, как вы это спрашиваете. Это небольшой фрагмент синтаксиса, состоящий ровно из двух движущихся частей, и как только они щелкнут, вы сможете искать внутри текста, а не просто сопоставлять его.</p>
 
-  <div class="note"><strong>The one-sentence version.</strong> <code>=</code> asks "is this value exactly this?" <code>LIKE</code> asks "does this value match this shape?" The shape is written with two wildcards: <code>%</code> stands for any run of characters including none, and <code>_</code> stands for exactly one character.</div>
+  <div class="note"><strong>Версия из одного предложения.</strong> <code>=</code>  спрашивает: «Это именно то значение?»  <code>LIKE</code>  спрашивает: «Соответствует ли это значение этой форме?» Форма записывается с двумя подстановочными знаками:  <code>%</code>  означает любой набор символов, включая отсутствие, и  <code>_</code>  обозначает ровно один символ.</div>
 
   <div class="toc">
-    <strong>What's here</strong>
+    <strong>Что здесь</strong>
     <ol>
-      <li>Why equals asks a stricter question than you want</li>
-      <li>The two wildcards, % and _</li>
-      <li>Where you put the % is the whole question</li>
-      <li>NOT LIKE, and finding what is missing</li>
-      <li>Case sensitivity, which changes by database</li>
-      <li>The over-matching trap</li>
-      <li>Searching a column that holds a list</li>
-      <li>Matching a literal % or _</li>
-      <li>Why LIKE '%text%' gets slow</li>
-      <li>A LIKE cheat sheet</li>
+      <li>Почему «равно» задает более строгий вопрос, чем вы хотите</li>
+      <li>Два подстановочных знака, % и _</li>
+      <li>Куда поставить %, вот и весь вопрос</li>
+      <li>НЕ НРАВИТСЯ и нахожу то, чего не хватает</li>
+      <li>Чувствительность к регистру, которая меняется в зависимости от базы данных.</li>
+      <li>Ловушка чрезмерного соответствия</li>
+      <li>Поиск столбца, содержащего список</li>
+      <li>Соответствие буквальному % или _</li>
+      <li>Почему LIKE '%text%' работает медленно</li>
+      <li>Шпаргалка НРАВИТСЯ</li>
     </ol>
   </div>
 
-  <h2>Why equals asks a stricter question than you want</h2>
-  <p>Take a <code>products</code> table with a <code>name</code> column:</p>
+  <h2>Почему «равно» задает более строгий вопрос, чем вы хотите</h2>
+  <p>Возьмите  <code>products</code>  стол с  <code>name</code>  столбец:</p>
   <table>
     <tr><th>id</th><th>name</th></tr>
-    <tr><td>1</td><td>Blue Cotton Shirt</td></tr>
-    <tr><td>2</td><td>Shirt Stay Clips</td></tr>
-    <tr><td>3</td><td>Red Wool Sweater</td></tr>
+    <tr><td>1</td><td>Синяя хлопковая рубашка</td></tr>
+    <tr><td>2</td><td>Зажимы для рубашек</td></tr>
+    <tr><td>3</td><td>Красный шерстяной свитер</td></tr>
     <tr><td>4</td><td>Shirt</td></tr>
   </table>
-  <p>You want the shirts. The obvious thing fails:</p>
+  <p>Тебе нужны рубашки. Очевидная вещь терпит неудачу:</p>
   <pre><code>SELECT name
 FROM products
 WHERE name = 'Shirt';</code></pre>
-  <p>That returns one row, id 4, because <code>=</code> compares the whole value start to finish. <code>Blue Cotton Shirt</code> is not the same string as <code>Shirt</code>, so it is excluded, and correctly so. Equals is doing its job. It is just the wrong question.</p>
-  <p>The question you actually have is "does the name contain the word Shirt anywhere in it?" That is a pattern, and patterns are what <code>LIKE</code> is for:</p>
+  <p>Это возвращает одну строку с идентификатором 4, потому что  <code>=</code>  сравнивает все значение от начала до конца.  <code>Blue Cotton Shirt</code>  это не та же строка, что и  <code>Shirt</code>, так что исключено, и это правильно. Equals делает свою работу. Это просто неправильный вопрос.</p>
+  <p>На самом деле у вас возникает вопрос: «Содержит ли имя где-нибудь слово «Рубашка»?» Это закономерность, а закономерности – это то, что  <code>LIKE</code>  предназначен для:</p>
   <pre><code>SELECT name
 FROM products
 WHERE name LIKE '%Shirt%';</code></pre>
-  <p>Three rows come back: <code>Blue Cotton Shirt</code>, <code>Shirt Stay Clips</code>, and <code>Shirt</code>.</p>
+  <p>Возвращаются три строки:  <code>Blue Cotton Shirt</code>, <code>Shirt Stay Clips</code>, и  <code>Shirt</code>.</p>
 
-  <h2>The two wildcards, % and _</h2>
-  <p>Everything <code>LIKE</code> can do comes from two characters.</p>
+  <h2>Два подстановочных знака, % и _</h2>
+  <p>Everything <code>LIKE</code>  can do состоит из двух символов.</p>
   <table>
     <tr><th>Wildcard</th><th>Means</th><th>Example</th><th>Matches</th></tr>
-    <tr><td><code>%</code></td><td>Any run of characters, including none at all</td><td><code>'S%'</code></td><td><code>S</code>, <code>Sam</code>, <code>Sweater</code></td></tr>
-    <tr><td><code>_</code></td><td>Exactly one character, no more, no fewer</td><td><code>'S_m'</code></td><td><code>Sam</code>, <code>Sum</code>, but not <code>Steam</code></td></tr>
+    <tr><td><code>%</code></td><td>Любой набор символов, включая отсутствие вообще</td><td><code>'S%'</code></td><td><code>S</code>, <code>Sam</code>, <code>Sweater</code></td></tr>
+    <tr><td><code>_</code></td><td>Ровно один символ, ни больше, ни меньше.</td><td><code>'S_m'</code></td><td><code>Sam</code>, <code>Sum</code>, но не  <code>Steam</code></td></tr>
   </table>
-  <p>The "including none at all" part of <code>%</code> is the bit people miss. <code>'S%'</code> matches the single letter <code>S</code>, because <code>%</code> is allowed to stand for nothing. The underscore is not so forgiving. It demands a character be there.</p>
-  <p>Say this one out loud before you read the answer: what would <code>'_at'</code> match, and would <code>flat</code> be in the list? Commit to an answer first.</p>
-  <p>It matches three-character values ending in <code>at</code>, so <code>cat</code>, <code>hat</code>, <code>bat</code>. <code>flat</code> is out, because <code>_</code> covers one character and <code>flat</code> has two before the <code>at</code>. If you wanted both you would write <code>'%at'</code>.</p>
-  <p>You can mix them. <code>'A__-%'</code> matches a value that starts with <code>A</code>, has exactly two more characters, then a hyphen, then anything. That is a useful shape for product codes and account numbers, where the format is fixed but the content is not.</p>
+  <p>Часть «включая ничего вообще»  <code>%</code>  это то, чего людям не хватает.  <code>'S%'</code>  соответствует одной букве  <code>S</code>, потому что  <code>%</code>  разрешено стоять ни за что. Подчеркивание не так уж и снисходительно. Это требует присутствия персонажа.</p>
+  <p>Прежде чем прочитать ответ, произнесите это вслух: что бы  <code>'_at'</code>  соответствовать, и будет  <code>flat</code>  быть в списке? Сначала обязуйтесь ответить.</p>
+  <p>Он соответствует трехсимвольным значениям, оканчивающимся на  <code>at</code>, так  <code>cat</code>, <code>hat</code>, <code>bat</code>. <code>flat</code>  отсутствует, потому что  <code>_</code>  охватывает один символ и  <code>flat</code>  имеет два перед  <code>at</code>. Если бы вы хотели и то, и другое, вы бы написали  <code>'%at'</code>.</p>
+  <p>Вы можете смешивать их.  <code>'A__-%'</code>  соответствует значению, которое начинается с  <code>A</code>, есть еще ровно два символа, потом дефис, потом что угодно. Это полезная форма для кодов продуктов и номеров счетов, где формат фиксирован, а содержимое — нет.</p>
 
-  <h2>Where you put the % is the whole question</h2>
-  <p>Same wildcard, four positions, four completely different questions. This is the table worth memorising:</p>
+  <h2>Куда поставить %, вот и весь вопрос</h2>
+  <p>Один и тот же подстановочный знак, четыре позиции, четыре совершенно разных вопроса. Эту таблицу стоит запомнить:</p>
   <table>
-    <tr><th>You write</th><th>You are asking</th><th>Matches "Blue Cotton Shirt"?</th></tr>
-    <tr><td><code>LIKE 'Shirt'</code></td><td>Is it exactly Shirt (same as <code>=</code>)</td><td>No</td></tr>
-    <tr><td><code>LIKE 'Blue%'</code></td><td>Does it start with Blue</td><td>Yes</td></tr>
-    <tr><td><code>LIKE '%Shirt'</code></td><td>Does it end with Shirt</td><td>Yes</td></tr>
-    <tr><td><code>LIKE '%Cotton%'</code></td><td>Does it contain Cotton anywhere</td><td>Yes</td></tr>
+    <tr><th>Ты пишешь</th><th>Вы спрашиваете</th><th>Соответствует «Синей хлопковой рубашке»?</th></tr>
+    <tr><td><code>LIKE 'Shirt'</code></td><td>Это именно Рубашка (то же, что и  <code>=</code>)</td><td>No</td></tr>
+    <tr><td><code>LIKE 'Blue%'</code></td><td>Это начинается с синего?</td><td>Yes</td></tr>
+    <tr><td><code>LIKE '%Shirt'</code></td><td>Это заканчивается рубашкой?</td><td>Yes</td></tr>
+    <tr><td><code>LIKE '%Cotton%'</code></td><td>Содержит ли он где-нибудь хлопок?</td><td>Yes</td></tr>
   </table>
-  <p>A <code>LIKE</code> pattern with no wildcard in it is just a slower <code>=</code>. If you write <code>LIKE 'Shirt'</code> you have asked for an exact match and should use <code>=</code> instead, which is clearer to whoever reads the query next.</p>
-  <div class="note"><strong>Read the pattern left to right, in words.</strong> <code>'%Cotton%'</code> reads as "anything, then Cotton, then anything." <code>'Blue%'</code> reads as "Blue, then anything." If you can say the pattern as a sentence, you will not put the percent signs in the wrong place.</div>
+  <p>A <code>LIKE</code>  шаблон без подстановочных знаков просто медленнее  <code>=</code>. Если ты напишешь  <code>LIKE 'Shirt'</code>  вы запросили точное совпадение и должны использовать  <code>=</code>  вместо этого это будет более понятно тому, кто прочитает запрос следующим.</p>
+  <div class="note"><strong>Прочитайте схему слева направо, прописью.</strong> <code>'%Cotton%'</code>  читается как «что угодно, потом Коттон, потом что угодно».  <code>'Blue%'</code>  читается как «Синий, потом что угодно». Если вы сможете произнести образец в виде предложения, вы не поставите знаки процента не в том месте.</div>
 
-  <h2>NOT LIKE, and finding what is missing</h2>
-  <p>Put <code>NOT</code> in front and you get the opposite set:</p>
+  <h2>НЕ НРАВИТСЯ и нахожу то, чего не хватает</h2>
+  <p>Put <code>NOT</code>  впереди и вы получите противоположный набор:</p>
   <pre><code>SELECT name
 FROM products
 WHERE name NOT LIKE '%Shirt%';</code></pre>
-  <p>That returns the rows with no <code>Shirt</code> in them. This is more useful than it first looks, because "which rows do <em>not</em> fit the expected shape" is one of the most productive questions in data cleaning. Emails with no at sign, product codes missing their prefix, a text column where some rows hold a list and some do not. <code>NOT LIKE</code> finds the odd ones out.</p>
-  <div class="note"><strong>One catch worth knowing now.</strong> A row where the column is <code>NULL</code> is returned by neither <code>LIKE</code> nor <code>NOT LIKE</code>. NULL means unknown, and SQL will not claim an unknown value matches or fails to match a pattern. If you want the blanks too, ask for them: <code>WHERE name NOT LIKE '%Shirt%' OR name IS NULL</code>. The full story is in <a href="../sql-null/">NULL in SQL</a>.</div>
+  <p>Это возвращает строки без  <code>Shirt</code>  в них. Это более полезно, чем кажется на первый взгляд, потому что «какие строки  <em>not</em>  соответствуют ожидаемой форме» — один из самых продуктивных вопросов при очистке данных. Электронные письма без знака «at», коды продуктов без префикса, текстовый столбец, в некоторых строках которого содержится список, а в некоторых — нет.  <code>NOT LIKE</code>  находит лишние.</p>
+  <div class="note"><strong>Одна загвоздка, о которой стоит знать сейчас.</strong>  Строка, в которой находится столбец  <code>NULL</code>  не возвращается ни  <code>LIKE</code> nor <code>NOT LIKE</code>. NULL означает неизвестное, и SQL не будет утверждать, что неизвестное значение соответствует или не соответствует шаблону. Если вам тоже нужны заготовки, попросите их:  <code>WHERE name NOT LIKE '%Shirt%' OR name IS NULL</code>. Полная история находится в  <a href="../sql-null/">NULL в SQL</a>.</div>
 
-  <h2>Case sensitivity, which changes by database</h2>
-  <p>Whether <code>'%shirt%'</code> finds <code>Blue Cotton Shirt</code> depends on which database you are sitting in. This surprises people who move between two of them, so it is worth checking once rather than assuming.</p>
+  <h2>Чувствительность к регистру, которая меняется в зависимости от базы данных.</h2>
+  <p>Whether <code>'%shirt%'</code> finds <code>Blue Cotton Shirt</code>  зависит от того, в какой базе данных вы находитесь. Это удивляет людей, которые перемещаются между двумя из них, поэтому стоит один раз проверить, а не предполагать.</p>
   <table>
-    <tr><th>Database</th><th>Is LIKE case sensitive?</th><th>How to force insensitive</th></tr>
-    <tr><td>SQLite</td><td>No for plain A-Z letters, yes for accented and non-English ones</td><td>Already insensitive for A-Z</td></tr>
+    <tr><th>Database</th><th>LIKE чувствителен к регистру?</th><th>Как заставить нечувствительного</th></tr>
+    <tr><td>SQLite</td><td>Нет для простых букв от A до Z, да для букв с акцентом и неанглийских букв.</td><td>Уже нечувствителен к А-Я</td></tr>
     <tr><td>PostgreSQL</td><td>Yes</td><td>Use <code>ILIKE</code></td></tr>
-    <tr><td>MySQL</td><td>Depends on the column collation, usually no</td><td>Usually already insensitive</td></tr>
-    <tr><td>SQL Server</td><td>Depends on the collation, usually no</td><td>Usually already insensitive</td></tr>
+    <tr><td>MySQL</td><td>Зависит от параметров сортировки столбцов, обычно нет</td><td>Обычно уже нечувствителен</td></tr>
+    <tr><td>SQL-сервер</td><td>Зависит от сортировки, обычно нет</td><td>Обычно уже нечувствителен</td></tr>
   </table>
-  <p>The portable move, if you want the same answer everywhere, is to flatten both sides yourself:</p>
+  <p>Переносной ход, если вы хотите, чтобы везде был один и тот же ответ, — это сгладить обе стороны самостоятельно:</p>
   <pre><code>SELECT name
 FROM products
 WHERE LOWER(name) LIKE '%shirt%';</code></pre>
-  <p>That works in every database listed above, at the cost of a little speed. See the last section for why.</p>
+  <p>Это работает в каждой базе данных, перечисленной выше, ценой небольшого снижения скорости. См. последний раздел, чтобы узнать, почему.</p>
 
-  <h2>The over-matching trap</h2>
-  <p>Predict this one before reading on. You search a genre column with <code>LIKE '%Video%'</code>. What comes back?</p>
-  <p>In a real Steam games dataset, that pattern matches both <code>Video Production</code> and <code>360 Video</code>, because both contain those five letters. That may be exactly what you wanted, or it may quietly double your result set.</p>
-  <p><code>%</code> does not know about word boundaries. It matches letters, not meaning. Some classics:</p>
+  <h2>Ловушка чрезмерного соответствия</h2>
+  <p>Предскажите это, прежде чем читать дальше. Вы выполняете поиск по жанровому столбцу с помощью  <code>LIKE '%Video%'</code>. Что возвращается?</p>
+  <p>В реальном наборе данных игр Steam этот шаблон соответствует обоим  <code>Video Production</code> and <code>360 Video</code>, потому что оба содержат эти пять букв. Это может быть именно то, что вы хотели, или это может незаметно удвоить ваш набор результатов.</p>
+  <p><code>%</code>  не знает границ слов. Оно соответствует буквам, а не смыслу. Немного классики:</p>
   <table>
-    <tr><th>Pattern</th><th>You meant</th><th>You also get</th></tr>
-    <tr><td><code>'%art%'</code></td><td>art</td><td>cart, start, Bart, particle</td></tr>
-    <tr><td><code>'%man%'</code></td><td>man</td><td>manage, human, Germany</td></tr>
-    <tr><td><code>'%IT%'</code></td><td>the IT department</td><td>credit, exit, monitor (where LIKE is case insensitive)</td></tr>
+    <tr><th>Pattern</th><th>Ты имел в виду</th><th>Вы также получаете</th></tr>
+    <tr><td><code>'%art%'</code></td><td>art</td><td>телега, старт, Барт, частица</td></tr>
+    <tr><td><code>'%man%'</code></td><td>man</td><td>управлять, человек, Германия</td></tr>
+    <tr><td><code>'%IT%'</code></td><td>ИТ-отдел</td><td>кредит, выход, монитор (где LIKE не чувствителен к регистру)</td></tr>
   </table>
-  <p>The fix is to give the pattern more to hold on to. If the values are separated by a known character, include it: <code>'%, Sales%'</code> is far more precise than <code>'%Sales%'</code>. The next section shows the reliable version of that trick.</p>
+  <p>Решение состоит в том, чтобы придать рисунку больше устойчивости. Если значения разделены известным символом, включите его:  <code>'%, Sales%'</code>  гораздо точнее, чем  <code>'%Sales%'</code>. В следующем разделе показана надежная версия этого трюка.</p>
 
-  <h2>Searching a column that holds a list</h2>
-  <p>This is where analysts reach for <code>LIKE</code> most often. Some columns pack several values into one cell, separated by commas:</p>
+  <h2>Поиск столбца, содержащего список</h2>
+  <p>Вот к чему стремятся аналитики  <code>LIKE</code>  чаще всего. Некоторые столбцы упаковывают в одну ячейку несколько значений, разделенных запятыми:</p>
   <table>
     <tr><th>name</th><th>genres</th></tr>
-    <tr><td>Game A</td><td>Action,Indie,RPG</td></tr>
-    <tr><td>Game B</td><td>Casual,Indie</td></tr>
-    <tr><td>Game C</td><td>RPG</td></tr>
+    <tr><td>Игра А</td><td>Экшен, Инди, Ролевая игра</td></tr>
+    <tr><td>Игра Б</td><td>Казуальная игра, Инди</td></tr>
+    <tr><td>Игра С</td><td>RPG</td></tr>
   </table>
-  <p><code>=</code> is useless here, because almost no cell holds only <code>RPG</code>. <code>LIKE</code> handles it without any splitting:</p>
+  <p><code>=</code>  здесь бесполезен, потому что почти ни одна ячейка не содержит только  <code>RPG</code>. <code>LIKE</code>  обрабатывает его без какого-либо разделения:</p>
   <pre><code>SELECT name
 FROM games
 WHERE genres LIKE '%RPG%';</code></pre>
-  <p>That finds Game A and Game C, whether the tag sits first, last, or buried in the middle.</p>
-  <p>The precise version guards against the over-matching trap. Wrap the value in the separator on both sides, then search for the separated tag:</p>
+  <p>Он находит игру A и игру C, независимо от того, находится ли тег первым, последним или скрыт посередине.</p>
+  <p>Точная версия защищает от ловушки чрезмерного совпадения. Оберните значение в разделитель с обеих сторон, затем найдите разделенный тег:</p>
   <pre><code>SELECT name
 FROM games
 WHERE ',' || genres || ',' LIKE '%,RPG,%';</code></pre>
-  <p>The <code>||</code> glues text together, so <code>Action,Indie,RPG</code> temporarily becomes <code>,Action,Indie,RPG,</code>. Now every tag has a comma on both sides, including the first and last, and the pattern <code>'%,RPG,%'</code> can only match a whole tag. A genre called <code>RPGMaker</code> would no longer be a false hit. Use <code>CONCAT(',', genres, ',')</code> instead of <code>||</code> in MySQL and SQL Server.</p>
-  <p>That column shape causes more trouble than just searching, including a distinct count that comes back wrong and never says so. <a href="../sql-multi-value-column/">One Cell, Many Values</a> covers the whole problem.</p>
+  <p>The <code>||</code>  склеивает текст вместе, поэтому  <code>Action,Indie,RPG</code>  временно становится  <code>,Action,Indie,RPG,</code>. Теперь каждый тег имеет запятую с обеих сторон, включая первую и последнюю, а также шаблон  <code>'%,RPG,%'</code>  может соответствовать только целому тегу. Жанр под названием  <code>RPGMaker</code>  больше не будет ложным попаданием. Использовать  <code>CONCAT(',', genres, ',')</code>  вместо  <code>||</code>  в MySQL и SQL Server.</p>
+  <p>Такая форма столбца вызывает больше проблем, чем просто поиск, включая отдельные подсчеты, которые возвращаются неправильно и никогда об этом не говорят.  <a href="../sql-multi-value-column/">Одна ячейка, много значений</a>  охватывает всю проблему.</p>
 
-  <h2>Matching a literal % or _</h2>
-  <p>Every so often the character you are hunting for is a wildcard. Searching a notes column for an actual percent sign with <code>LIKE '%%%'</code> matches every row, which is not useful. Declare an escape character and mark the literal one:</p>
+  <h2>Соответствие буквальному % или _</h2>
+  <p>Время от времени персонаж, за которым вы ищете, является подстановочным знаком. Поиск в столбце примечаний фактического знака процента с помощью  <code>LIKE '%%%'</code>  соответствует каждой строке, что бесполезно. Объявите escape-символ и отметьте буквальный:</p>
   <pre><code>SELECT note
 FROM feedback
 WHERE note LIKE '%!%%' ESCAPE '!';</code></pre>
-  <p>Read that pattern as: anything, then a real percent sign (the one after the <code>!</code>), then anything. The <code>ESCAPE '!'</code> at the end is what tells SQL that <code>!</code> is the marker. You can pick any character for the job as long as it does not appear in your data. The same applies to a literal underscore, which matters more than you would think, because underscores are everywhere in column names and product codes.</p>
+  <p>Прочтите этот шаблон так: что угодно, затем настоящий знак процента (тот, что после  <code>!</code>), тогда ничего.  <code>ESCAPE '!'</code>  в конце то, что сообщает SQL, что  <code>!</code>  это маркер. Вы можете выбрать для задания любого персонажа, если он не указан в ваших данных. То же самое относится и к буквальному подчеркиванию, которое имеет большее значение, чем вы думаете, поскольку подчеркивания присутствуют повсюду в именах столбцов и кодах продуктов.</p>
 
-  <h2>Why LIKE '%text%' gets slow</h2>
-  <p>An index on a text column works like the index at the back of a book: entries sorted alphabetically, so the database can jump straight to the right place. That works when you know how the value starts.</p>
+  <h2>Почему LIKE '%text%' работает медленно</h2>
+  <p>Указатель текстового столбца работает так же, как указатель в конце книги: записи сортируются в алфавитном порядке, поэтому база данных может сразу перейти в нужное место. Это работает, если вы знаете, как начинается значение.</p>
   <table>
-    <tr><th>Pattern</th><th>Can an index help?</th><th>Why</th></tr>
-    <tr><td><code>'Blue%'</code></td><td>Yes</td><td>Everything starting with Blue is filed together</td></tr>
-    <tr><td><code>'%Shirt'</code></td><td>No</td><td>The start is unknown, so there is nowhere to jump to</td></tr>
-    <tr><td><code>'%Cotton%'</code></td><td>No</td><td>Same problem, every row has to be read and checked</td></tr>
+    <tr><th>Pattern</th><th>Может ли индекс помочь?</th><th>Why</th></tr>
+    <tr><td><code>'Blue%'</code></td><td>Yes</td><td>Все, что начинается с Blue, хранится вместе.</td></tr>
+    <tr><td><code>'%Shirt'</code></td><td>No</td><td>Начало неизвестно, поэтому прыгать некуда.</td></tr>
+    <tr><td><code>'%Cotton%'</code></td><td>No</td><td>Та же проблема, каждую строку нужно читать и проверять.</td></tr>
   </table>
-  <p>On a few thousand rows this is invisible. On tens of millions it is the difference between an instant answer and a coffee break. It is not a reason to avoid <code>'%text%'</code>, it is a reason to know why the query got slow when the table grew. If you need fast searching inside text at scale, that is a full text search index, a different tool. <a href="../sql-indexing-for-analysts/">Indexing for Analysts</a> covers what an index can and cannot do.</p>
-  <p>The same logic explains the cost of <code>LOWER(name) LIKE ...</code> from earlier. Wrapping the column in a function means the index on that column no longer applies, because the index stores the original values, not the lowercased ones.</p>
+  <p>На нескольких тысячах строк это незаметно. На десятки миллионов это разница между мгновенным ответом и перерывом на кофе. Это не повод избегать  <code>'%text%'</code>, это повод узнать, почему запрос замедлялся при росте таблицы. Если вам нужен быстрый поиск внутри текста в масштабе, то это индекс полнотекстового поиска, другой инструмент.  <a href="../sql-indexing-for-analysts/">Индексирование для аналитиков</a>  охватывает то, что может и не может делать индекс.</p>
+  <p>Та же логика объясняет стоимость  <code>LOWER(name) LIKE ...</code>  из более раннего. Обертывание столбца в функцию означает, что индекс этого столбца больше не применяется, поскольку в индексе хранятся исходные значения, а не строчные значения.</p>
 
-  <h2>A LIKE cheat sheet</h2>
+  <h2>Шпаргалка НРАВИТСЯ</h2>
   <table>
-    <tr><th>You want&hellip;</th><th>Write</th></tr>
-    <tr><td>Contains a word</td><td><code>LIKE '%word%'</code></td></tr>
-    <tr><td>Starts with</td><td><code>LIKE 'word%'</code></td></tr>
-    <tr><td>Ends with</td><td><code>LIKE '%word'</code></td></tr>
-    <tr><td>Exactly this</td><td><code>= 'word'</code>, not LIKE</td></tr>
-    <tr><td>Does not contain</td><td><code>NOT LIKE '%word%'</code></td></tr>
-    <tr><td>Exactly one unknown character</td><td><code>LIKE 'A_C'</code></td></tr>
-    <tr><td>A fixed format, like three letters then a dash</td><td><code>LIKE '___-%'</code></td></tr>
-    <tr><td>Case insensitive everywhere</td><td><code>LOWER(col) LIKE '%word%'</code></td></tr>
-    <tr><td>Case insensitive in PostgreSQL</td><td><code>ILIKE '%word%'</code></td></tr>
-    <tr><td>One whole tag from a comma separated list</td><td><code>',' || col || ',' LIKE '%,tag,%'</code></td></tr>
-    <tr><td>A literal percent sign</td><td><code>LIKE '%!%%' ESCAPE '!'</code></td></tr>
+    <tr><th>Вы хотите…</th><th>Write</th></tr>
+    <tr><td>Содержит слово</td><td><code>LIKE '%word%'</code></td></tr>
+    <tr><td>Начинается с</td><td><code>LIKE 'word%'</code></td></tr>
+    <tr><td>Заканчивается на</td><td><code>LIKE '%word'</code></td></tr>
+    <tr><td>Именно это</td><td><code>= 'word'</code>, НЕ НРАВИТСЯ</td></tr>
+    <tr><td>Не содержит</td><td><code>NOT LIKE '%word%'</code></td></tr>
+    <tr><td>Ровно один неизвестный персонаж</td><td><code>LIKE 'A_C'</code></td></tr>
+    <tr><td>Фиксированный формат, например три буквы, затем тире.</td><td><code>LIKE '___-%'</code></td></tr>
+    <tr><td>Нечувствителен к регистру везде</td><td><code>LOWER(col) LIKE '%word%'</code></td></tr>
+    <tr><td>Нечувствителен к регистру в PostgreSQL</td><td><code>ILIKE '%word%'</code></td></tr>
+    <tr><td>Один целый тег из списка, разделенного запятыми.</td><td><code>',' || col || ',' LIKE '%,tag,%'</code></td></tr>
+    <tr><td>Буквальный знак процента</td><td><code>LIKE '%!%%' ESCAPE '!'</code></td></tr>
   </table>
-  <div class="note"><strong>Say it out loud before you run it.</strong> Read your pattern left to right as a sentence, swapping "anything" in for every <code>%</code>. If the sentence you say is not the question you meant to ask, the percent signs are in the wrong place. That one habit prevents most <code>LIKE</code> mistakes.</div>
+  <div class="note"><strong>Скажите это вслух, прежде чем запустить.</strong>  Прочтите шаблон слева направо как предложение, заменяя каждое слово «что угодно».  <code>%</code>. Если произнесенное вами предложение не является тем вопросом, который вы хотели задать, знаки процента стоят не на том месте. Эта одна привычка мешает большинству  <code>LIKE</code>  ошибки.</div>
 
-  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: SQL, Tableau, data migration, and the working habits around them.</div>
+  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: SQL, Tableau, миграция данных и связанные с ними рабочие привычки.</div>
 
   <div class="book">
-    <strong>You wrote LIKE '%art%' and got back cart, start and Bart, and no error said a word.</strong>
-    <p><em>SQL for Analysts</em> is 458 pages of the working answers, with the odd cases spelled out instead of skipped.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-like-pattern-matching'})">SQL for Analysts, $19 &rarr;</a>
+    <strong>Вы написали LIKE '%art%' и получили обратно тележку, старт и Барт, и ни одна ошибка не произнесла ни слова.</strong>
+    <p><em>SQL для аналитиков</em>  составляет 458 страниц рабочих ответов, при этом нечетные случаи прописаны, а не пропущены.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-like-pattern-matching'})">SQL для аналитиков, 19 $ →</a>
   </div>
 
   <div class="cta">
-    <strong>Make WHERE, GROUP BY, JOIN, and the rest second nature.</strong>
-    <p style="margin:6px 0 0">The <a href="../../sql/">SQL Kit</a> teaches the core of analyst SQL with worked examples, a live JOIN and Aggregation lab you run in the browser, flash cards, and a mock exam. Nothing to install.</p>
-    <a class="btn" href="../../sql/">Open the SQL Kit &rarr;</a>
-      <p style="margin:10px 0 0;font-size:15px">Or get right into it and learn by writing queries: <a href="../../drill/">open SQL Drill</a>, thirteen queries that each add one thing to the last.</p>
+    <strong>Сделайте WHERE, GROUP BY, JOIN и все остальное привычным.</strong>
+    <p style="margin:6px 0 0">The <a href="../../sql/">SQL-комплект</a>  обучает основам аналитического SQL на рабочих примерах, интерактивной лаборатории JOIN и Aggregation, которую вы запускаете в браузере, флэш-карточках и пробном экзамене. Нечего устанавливать.</p>
+    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
+      <p style="margin:10px 0 0;font-size:15px">Или приступайте к делу и учитесь, написав запросы:  <a href="../../drill/">открыть SQL Drill</a>, тринадцать запросов, каждый из которых добавляет что-то одно к последнему.</p>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../sql-foundations/">SQL Foundations</a> &middot; <a href="../sql-like-pattern-matching/">LIKE and Wildcards</a> &middot; <a href="../sql-multi-value-column/">One Cell, Many Values</a> &middot; <a href="../sql-count-function/">COUNT in SQL</a> &middot; <a href="../sql-null/">NULL in SQL</a> &middot; <a href="../sql-group-by-having/">GROUP BY and HAVING</a> &middot; <a href="../sql-ctes/">SQL CTEs</a> &middot; <a href="../sql-window-functions/">Window Functions</a> &middot; <a href="../sql-joins/">SQL JOINs</a> &middot; <a href="../sql-case-expression/">The CASE Expression</a> &middot; <a href="../sql-find-duplicates/">Find Duplicates</a> &middot; <a href="../sql-indexing-for-analysts/">Indexing for Analysts</a> &middot; <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> &middot; <a href="../documenting-data-limitations/">Documenting Limitations</a> &middot; <a href="../entity-resolution/">Entity Resolution</a> &middot; <a href="../sql-teaching-comments/">Commenting SQL</a> &middot; <a href="../../drill/">SQL Drill</a> &middot; <a href="../../sql/">SQL Kit</a> &middot; <a href="../../projects/">Portfolio Projects</a>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql-foundations/">Основы SQL</a> &middot; <a href="../sql-like-pattern-matching/">НРАВИТСЯ и подстановочные знаки</a> &middot; <a href="../sql-multi-value-column/">Одна ячейка, много значений</a> &middot; <a href="../sql-count-function/">СЧЕТ в SQL</a> &middot; <a href="../sql-null/">NULL в SQL</a> &middot; <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> &middot; <a href="../sql-ctes/">SQL CTE</a> &middot; <a href="../sql-window-functions/">Оконные функции</a> &middot; <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> &middot; <a href="../sql-case-expression/">Выражение CASE</a> &middot; <a href="../sql-find-duplicates/">Найти дубликаты</a> &middot; <a href="../sql-indexing-for-analysts/">Индексирование для аналитиков</a> &middot; <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> &middot; <a href="../documenting-data-limitations/">Документирование ограничений</a> &middot; <a href="../entity-resolution/">Разрешение объекта</a> &middot; <a href="../sql-teaching-comments/">Комментирование SQL</a> &middot; <a href="../../drill/">SQL-детализация</a> &middot; <a href="../../sql/">SQL-комплект</a> &middot; <a href="../../projects/">Портфельные проекты</a>
 
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-<script src="../../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>
