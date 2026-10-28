@@ -10,6 +10,8 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { parse } from "parse5";
 import * as acorn from "acorn";
+import markupGuard from "./static-russian-markup-guard.cjs";
+const { containsHtmlMarkup, shouldPreserveHtmlAttributeFragment } = markupGuard;
 
 const ROOT = process.cwd();
 const CACHE_PATH = path.join(ROOT, "tools", "static-ru-cache.json");
@@ -607,18 +609,26 @@ async function translateJavaScript(source, filename) {
     }
   }
   const replacements = [];
-  async function visit(node, parent = null, context = null) {
+  async function visit(node, parent = null, context = null, insideHtmlConcatenation = false) {
     if (!node || typeof node !== "object") return;
     if (node.type === "AssignmentExpression" && VISIBLE_PROPERTIES.has(memberName(node.left))) {
       await visit(node.left, node, null);
       await visit(node.right, node, "label");
       return;
     }
-    if (node.type === "BinaryExpression" && node.operator === "+" && context) {
-      await Promise.all([visit(node.left, node, context), visit(node.right, node, context)]);
+    if (node.type === "BinaryExpression" && node.operator === "+") {
+      // A concatenated HTML fragment can split one tag across multiple string
+      // literals. Carry that knowledge through the entire + tree so attribute
+      // fragments such as '" height="' are never sent to the translator.
+      const htmlConcat = insideHtmlConcatenation || containsHtmlMarkup(node);
+      await Promise.all([
+        visit(node.left, node, context, htmlConcat),
+        visit(node.right, node, context, htmlConcat)
+      ]);
       return;
     }
     if (node.type === "Literal" && typeof node.value === "string") {
+      if (shouldPreserveHtmlAttributeFragment(node.value, insideHtmlConcatenation)) return;
       const isHuman = (context && HUMAN_KEYS.has(context.toLowerCase())) || directVisibleLiteral(node, parent);
       const hasManualTranslation = Boolean(context) && MANUAL_TRANSLATIONS.has(normalize(node.value));
       const hasHtmlFragment = /<\/?[A-Za-z][^>]*>/.test(node.value);
