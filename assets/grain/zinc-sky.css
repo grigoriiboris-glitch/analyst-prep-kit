@@ -133,16 +133,34 @@ html[data-theme="dark"] #sprint-bar .sb-btn.sb-start { color: #082032; }
 html:not(.light):not([data-theme]) .resume-card .loop-chip,
 html[data-theme="dark"] .resume-card .loop-chip { color: #082032; background: rgba(8, 32, 50, 0.14); }
 
-/* PowerBI kit's extra accent/semantic-background components — dark-mode
-   fills are the light 400 shades (sky/amber/emerald/red), so white text
-   fails contrast; same ink fix. Inline-styled tour/workspace buttons
-   (`style="background:var(--accent);color:#fff"`) need !important to
-   beat the inline declaration. */
-html:not(.light):not([data-theme]) .lesson-num.done,
+/* Lesson number markers are navigation, not secondary metadata. Keep them
+   at full foreground contrast on the subdued track instead of using muted text. */
+html .lesson-num:not(.done) {
+  color: var(--text, var(--color-text)) !important;
+}
+html .pmap-node:not(.done):not(.current) .pmap-dot {
+  color: var(--text, var(--color-text)) !important;
+}
+
+/* The palette has two theme conventions: most SQL pages toggle the `.light`
+   class, while other kits toggle `data-theme`. In dark mode the sky accent is
+   light, so numbers on completed/current nodes need deep ink instead of white.
+   Checking `:not(.light)` also covers pages whose stale `data-theme="light"`
+   attribute does not reflect the actual CSS theme class. */
+html:not(.light) .lesson-num.done,
+html:not(.light) .pmap-node.done .pmap-dot,
+html:not(.light) .pmap-node.current .pmap-dot,
+html[data-theme="dark"] .lesson-num.done,
+html[data-theme="dark"] .pmap-node.done .pmap-dot,
+html[data-theme="dark"] .pmap-node.current .pmap-dot {
+  color: #082032 !important;
+}
+
+/* PowerBI kit's other accent/semantic-background components use light 400
+   shades in dark mode, so white text fails contrast. */
 html:not(.light):not([data-theme]) #toast,
 html:not(.light):not([data-theme]) .conf-chip.is-on,
 html:not(.light):not([data-theme]) .conf-chip.is-on .lucide,
-html[data-theme="dark"] .lesson-num.done,
 html[data-theme="dark"] #toast,
 html[data-theme="dark"] .conf-chip.is-on,
 html[data-theme="dark"] .conf-chip.is-on .lucide { color: #082032; }
