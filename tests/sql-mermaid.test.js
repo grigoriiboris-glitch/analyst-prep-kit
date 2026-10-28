@@ -71,7 +71,10 @@ test("does not create an empty panel when a lesson has no SQL or table example",
 
 test("integrates Mermaid into both SQL lesson render paths without replacing result tables", () => {
   const html = fs.readFileSync(path.join(__dirname, "../sql/index.html"), "utf8");
-  assert.ok(html.includes('src="https://cdn.jsdelivr.net/npm/mermaid@11.17.2/dist/mermaid.min.js"'));
+  assert.ok(!html.includes('src="https://cdn.jsdelivr.net/npm/mermaid@11.17.2/dist/mermaid.min.js"'));
+  const renderer = fs.readFileSync(path.join(__dirname, "../assets/sql-mermaid.js"), "utf8");
+  assert.ok(renderer.includes("https://cdn.jsdelivr.net/npm/mermaid@11.17.2/dist/mermaid.min.js"));
+  assert.ok(renderer.includes("script.async = true"));
   assert.ok(html.includes('src="../assets/sql-mermaid.js?v=1"'));
   assert.equal((html.match(/SqlMermaid\.panelHTML\(l\)/g) || []).length, 2);
   assert.ok(html.includes("function lessonResultHTML(v)"));
