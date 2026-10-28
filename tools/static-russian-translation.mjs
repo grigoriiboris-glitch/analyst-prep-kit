@@ -51,6 +51,7 @@ const PRESERVED_TERMS = new Set([
   "CPA", "CTR", "A/B", "ARIMA", "BPMN", "UML", "URL", "HTTP", "HTTPS",
   "ID", "UUID", "JSONL", "DOM", "SVG", "PDF", "PowerPoint", "GitHub Pages"
 ]);
+const PRESERVED_TERMS_NORMALIZED = new Set([...PRESERVED_TERMS].map(term => term.toLowerCase()));
 const CODE_START = /^\s*(?:SELECT\b[\s\S]*\bFROM\b|INSERT\s+INTO\b|UPDATE\s+\w+\s+SET\b|DELETE\s+FROM\b|CREATE\s+(?:TABLE|VIEW|INDEX)\b|WITH\s+\w+\s+AS\s*\(|function\s*[\w$]*\s*\(|(?:const|let|var)\s+[\w$]+\s*=|return\s+[\w$.(\[{]|if\s*\([^)]*\)\s*\{|for\s*\([^)]*\)\s*\{|import\s+.+\s+from\s+|export\s+(?:default|const|function)\b)/i;
 const cache = new Map();
 const inflight = new Map();
@@ -76,7 +77,8 @@ const preserveWhitespace = (source, translated) => {
 function isTechnicalOnly(text) {
   const value = text.trim();
   if (!value) return true;
-  if (PRESERVED_TERMS.has(value)) return true;
+  if (PRESERVED_TERMS_NORMALIZED.has(value.toLowerCase())) return true;
+  if (/^(?:[A-Z][A-Z0-9_+#.-]*)(?:\s+[A-Z][A-Z0-9_+#.-]*)*$/.test(value)) return true;
   if (/^(?:[A-Z][A-Z0-9_+#.-]*)(?:\s*(?:\/|&|\+|,)\s*[A-Z][A-Z0-9_+#.-]*)*$/.test(value)) return true;
   if (/^(?:https?:\/\/|www\.|[\w.+-]+@[\w.-]+\.[A-Za-z]{2,})/i.test(value)) return true;
   if (/^(?:[\d\s.,:%$€£¥+\-–—/()]+)$/.test(value)) return true;
@@ -295,21 +297,49 @@ async function translateText(text) {
   return parts.join("");
 }
 
+async function translateMixedSegments(value) {
+  const source = String(value);
+  if (!/[А-Яа-яЁё]/.test(source) || !/[A-Za-z]/.test(source)) return translateText(source);
+  const pattern = /[A-Za-z][A-Za-z0-9+#._/-]*(?:[ \\t]+[A-Za-z][A-Za-z0-9+#._/-]*)*/g;
+  const matches = [...source.matchAll(pattern)];
+  if (!matches.length) return source;
+  const pieces = [];
+  let cursor = 0;
+  for (const match of matches) {
+    pieces.push(source.slice(cursor, match.index));
+    const phrase = match[0];
+    const trimmed = phrase.trim();
+    if (PRESERVED_TERMS_NORMALIZED.has(trimmed.toLowerCase()) ||
+        /^(?:[A-Z][A-Z0-9_+#.-]*)(?:\\s+[A-Z][A-Z0-9_+#.-]*)*$/.test(trimmed)) {
+      pieces.push(phrase);
+    } else {
+      pieces.push(await translateText(phrase));
+    }
+    cursor = match.index + phrase.length;
+  }
+  pieces.push(source.slice(cursor));
+  return pieces.join("");
+}
+
 async function translateMarkup(value) {
-  const pieces = String(value).split(/(<\/?[A-Za-z][^>]*>)/g);
+  const pieces = String(value).split(/(<\\/?[A-Za-z][^>]*>)/g);
   const result = [];
   for (const piece of pieces) {
     if (!piece) continue;
-    if (/^<\/?[A-Za-z][^>]*>$/.test(piece)) result.push(piece);
-    else if (candidate(piece, null, true)) result.push(await translateText(piece));
-    else result.push(piece);
+    if (/^<\\/?[A-Za-z][^>]*>$/.test(piece)) result.push(piece);
+    else if (candidate(piece, null, true)) {
+      result.push(/[А-Яа-яЁё]/.test(piece) && /[A-Za-z]/.test(piece)
+        ? await translateMixedSegments(piece)
+        : await translateText(piece));
+    } else result.push(piece);
   }
   return result.join("");
 }
 
 async function translateVisibleString(value, context = null, htmlText = false) {
   if (!candidate(value, context, htmlText)) return value;
-  if (/<\/?[A-Za-z][^>]*>/.test(value)) return translateMarkup(value);
+  if (/<\\/?[A-Za-z][^>]*>/.test(value)) return translateMarkup(value);
+  if (/[А-Яа-яЁё]/.test(value) && /[A-Za-z]/.test(value)) return translateMixedSegments(value);
   return translateText(value);
 }
 
