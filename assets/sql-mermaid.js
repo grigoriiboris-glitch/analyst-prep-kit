@@ -61,6 +61,7 @@
   function diagramSource(lesson) {
     var rawSql = lesson && lesson.ral && lesson.ral.sql || lesson && lesson.sql || '';
     var sql = cleanSql(rawSql);
+    if (!sql.trim() && !collectVizTables(lesson).length) return '';
     var cteNames = new Set();
     var ctePattern = /(?:\bWITH\b|,)\s*(?:RECURSIVE\s+)?([A-Za-z_][\w$]*)\s+AS\s*\(/gi;
     var cteMatch;
@@ -195,7 +196,7 @@
       '<div class="lesson-eyebrow"><i data-lucide="git-merge" aria-hidden="true"></i> Схема данных · Mermaid.js</div>' +
       '<h3 class="sql-mermaid-title" id="sql-mermaid-title-' + safeId + '">Как запрос работает с таблицами</h3>' +
       '<p class="sql-mermaid-intro">Блоки показывают таблицы и поля, которые можно определить по примеру SQL. Ниже приведена таблица с результатом запроса.</p>' +
-      '<div class="sql-mermaid-canvas"><pre class="mermaid sql-mermaid-source" role="img" aria-label="' + escapeHtml('Схема таблиц для урока «' + title + '»') + '">' + escapeHtml(source) + '</pre></div>' +
+      '<div class="sql-mermaid-canvas"><pre class="mermaid sql-mermaid-source" role="img" aria-label="' + escapeHtml('Схема таблиц для урока «' + title + '»') + '">' + escapeHtml(source).replace(/&lt;br\/&gt;/g, '<br/>') + '</pre></div>' +
       '<details class="sql-mermaid-details"><summary>Показать текст схемы</summary><pre class="sql-mermaid-code"><code>' + escapeHtml(source) + '</code></pre></details>' +
       '</section>';
   }
