@@ -376,10 +376,11 @@ async function translateHtmlTemplateFragment(fragment, state) {
   return output.join("");
 }
 function escapeTemplateQuasi(value) {
+  const slash = String.fromCharCode(92);
   return String(value)
-    .replace(/\\\\/g, "\\\\\\\\")
-    .replace(new RegExp(String.fromCharCode(96), "g"), "\\\\" + String.fromCharCode(96))
-    .replace(/\\$\\{/g, "\\\\${");
+    .replace(/\\/g, () => slash + slash)
+    .replace(new RegExp(String.fromCharCode(96), "g"), match => slash + match)
+    .replace(/\$\{/g, match => slash + match);
 }
 function escapeHtmlText(value) {
   return String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
