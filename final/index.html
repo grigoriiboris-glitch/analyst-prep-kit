@@ -257,7 +257,7 @@ state.submittedSections = state.submittedSections || {}; // {sectionKey:true} �
 state.sectionScores = state.sectionScores || {}; // {sectionKey:{correct,total}} — persisted so the hub can show "Exam ✓"
 state.openSections = state.openSections || {};
 // On a cold entry (no URL hash deep-link), always start on Home so the
-// user finds the two big CTAs ("Here's what you should know" + "Take
+// user finds the two big CTAs ("Что нужно знать" + "Take
 // the Exam"). Saved state.view is still used within a session for
 // back-button continuity, but it doesn't carry over across cold visits.
 // Hash routing (#study, #study-sql, #exam, #home, #results) below
@@ -300,7 +300,7 @@ const STUDY = [
       `<strong>Измерения против мер</strong>: размеры категориальны (регион, продукт, дата); меры являются числовыми (доход, количество).`,
       `<strong>Правила типа диаграммы</strong>: тренды → линия; сравнения → бар; отношения → разброс; части целого с несколькими ломтиками → сложенный батончик (пирог почти никогда).`,
       `<strong>Дискретный (синий) и непрерывный (зеленый)</strong>: дискретный создает заголовки; непрерывный создает оси.`,
-      `<strong>Вычисляемые поля</strong>: новые поля, полученные из существующих, например. <code>[Доход] – [Стоимость]</code> ради прибыли.`,
+      `<strong>Вычисляемые поля</strong>: новые поля, полученные из существующих, например. <code>[Revenue] - [Cost]</code> ради прибыли.`,
       `<strong>Полка для фильтров</strong>: фильтры ограничивают количество строк, которые видит визуальный элемент. Контекстные фильтры вычисляются первыми и влияют на последующие фильтры.`,
       `<strong>Визуальная иерархия</strong>: вверху слева = самое важное. Не размещайте на информационной панели 8 диаграмм — выберите 3, которые отвечают на конкретный вопрос.`
     ]},
@@ -436,8 +436,8 @@ const QUESTIONS = [
   {id:'s3', section:'sql', type:'mc', q:`A <code>LEFT JOIN</code> возвращает:`,
     choices:[
       `Только строки, которые совпадают в обеих таблицах.`,
-      `All rows from the left table; matching rows from the right (nulls where no match exists).`,
-      `All rows from the right table; matching rows from the left.`,
+      `Все строки левой таблицы и совпавшие строки правой (при отсутствии совпадения — NULL).`,
+      `Все строки правой таблицы и совпавшие строки левой.`,
       `Все возможные комбинации левых и правых рядов.`
     ], correct:1,
     explain:`<code>LEFT JOIN</code> сохраняет каждую строку с левой стороны независимо от того, есть ли совпадения в правой части — отображаются несоответствия <code>NULL</code>. <code>INNER JOIN</code> полностью отбросит эти строки.`},
@@ -472,7 +472,7 @@ ________</pre>`,
   {id:'p4', section:'python', type:'mc', q:`Какие однострочные группы pandas <code>df</code>К<code>region</code> и суммы <code>revenue</code>?`,
     choices:[`df.groupby('revenue')['region'].sum()`, `df.groupby('region')['revenue'].sum()`, `df.sum('revenue').groupby('region')`, `df['region'].sum().groupby('revenue')`],
     correct:1,
-    explain:`тот<code>groupby → column → aggregation</code> Шаблон — это рабочая лошадка анализа pandas: группировка по РАЗМЕРУ (<code>region</code>), выберите МЕРУ (<code>revenue</code>), затем суммируйте. Первая группа вариантов по размеру — классический своп.`},
+    explain:`тот<code>groupby → столбец → агрегирование</code> Шаблон — это рабочая лошадка анализа pandas: группировка по РАЗМЕРУ (<code>region</code>), выберите МЕРУ (<code>revenue</code>), затем суммируйте. Первая группа вариантов по размеру — классический своп.`},
 
   // TABLEAU
   {id:'t1', section:'tableau', type:'mc', q:`Лучшая диаграмма, показывающая, как метрика меняется с течением времени:`,
@@ -502,7 +502,7 @@ ________</pre>`,
       `Фильтр, примененный к показателю.`,
       `То же, что параметр.`
     ], correct:0,
-    explain:`Вычисляемые поля позволяют получать новые измерения или меры, например <code>[Доход] – [Стоимость]</code> ради прибыли или <code>IF [Region] = "West" THEN ... END</code> для пользовательской группы.`},
+    explain:`Вычисляемые поля позволяют получать новые измерения или меры, например <code>[Revenue] - [Cost]</code> ради прибыли или <code>IF [Region] = "West" THEN ... END</code> для пользовательской группы.`},
 
   // STATS
   {id:'st1', section:'stats', type:'mc', q:`Когда распределение асимметрично вправо (длинный хвост справа), среднее значение обычно равно:`,
@@ -553,7 +553,7 @@ ________</pre>`,
       `<code>SUM</code> работает в DAX, а <code>SUMX</code> — только в Power Query.`,
       `<code>SUMX</code> всегда работает быстрее.`
     ], correct:1,
-    explain:` Использовать <code>SUM</code> когда у вас есть столбец для агрегирования напрямую. Использовать <code>SUMX</code> когда вам сначала нужно вычислить уровень строки (например, <code>SUMX(Sales, Sales[Quantity] * Sales[Price])</code>).`},
+    explain:` Используйте <code>SUM</code>, когда требуется агрегировать готовый столбец напрямую. Используйте <code>SUMX</code>, когда сначала нужно вычислить значение для каждой строки (например, <code>SUMX(Sales, Sales[Quantity] * Sales[Price])</code>).`},
   {id:'b4', section:'powerbi', type:'mc', q:`Power Query (язык M) используется для:`,
     choices:[
       `Напишите меры.`,
