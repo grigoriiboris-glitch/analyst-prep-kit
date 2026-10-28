@@ -18,12 +18,12 @@
   css.textContent =
     '.apk-eco-footer{text-align:center;padding:30px 18px;margin-top:44px;' +
     'border-top:1px solid var(--border,var(--bord,var(--line,#e0d9d2)));color:var(--muted,var(--dim,var(--txt2,#6B7280)));' +
-    'font-size:13px;font-family:inherit;line-height:1.6}' +
+    "размер шрифта: 13 пикселей; семейство шрифтов: наследовать; высота строки: 1,6}" +
     '.apk-eco-footer a{color:var(--muted,var(--dim,var(--txt2,#6B7280)));text-decoration:none;transition:color .15s}' +
     '.apk-eco-footer a:hover{color:var(--accent,#C5511F)}' +
     ".apk-эко-сентябрь{маржа:0 10пикселей;непрозрачность:.7}" +
     '.apk-eco-tm{display:block;margin-top:10px;font-size:11px;opacity:.7;max-width:560px;' +
-    'margin-left:auto;margin-right:auto}';
+    "поле слева: авто; поле справа: авто}";
   document.head.appendChild(css);
 
   /* ----------------------------------------------------------
@@ -216,8 +216,8 @@
   bcss.textContent =
     '.apk-book{max-width:760px;margin:44px auto 0;padding:18px 22px;' +
     'border:1px solid var(--border,var(--bord,var(--line,#e0d9d2)));border-left:4px solid var(--accent,#C5511F);' +
-    'border-radius:12px;font-family:inherit;font-size:15px;line-height:1.6;text-align:left;' +
-    'display:grid;grid-template-columns:1fr;gap:16px}' +
+    "граница-радиус: 12 пикселей; семейство шрифтов: наследовать; размер шрифта: 15 пикселей; высота строки: 1,6; выравнивание текста: по левому краю;" +
+    "дисплей: сетка; сетка-шаблон-столбцы: 1fr; разрыв: 16 пикселей}" +
     ".apk-book-body Strong{display:block;margin-bottom:8px}" +
     '.apk-book-body p{margin:0;color:var(--muted,var(--dim,var(--txt2,#6B7280)));font-size:14px}' +
     '.apk-book a{display:inline-block;margin-top:12px;font-weight:600;' +
@@ -250,10 +250,10 @@
           '<span class="pn">' + esc(pg.p) + '</span></div>' : '') +
     '<div class="apk-book-body">' +
     '<strong>' + book.hook + '</strong>' +
-    '<p><em>' + book.title + '</em> is ' + book.pages + ' pages, ' + book.what + '.</p>' +
+    '<p><em>' + book.title + '</em> is ' + book.pages + " страницы, " + book.what + '.</p>' +
     '<a class="apk-book-link" href="https://michaelnocito.gumroad.com/l/' + book.slug +
     '?utm_source=analyst-prep-kit&utm_medium=kit-hub&utm_campaign=' + book.slug + '" ' +
-    'target="_blank" rel="noopener">' + book.title + ', ' + book.price + ' &rarr;</a>' +
+    'target="_blank" rel="noopener">' + book.title + ', ' + book.price + " →</a>" +
     '</div>';
   document.body.insertBefore(b, f);
 
