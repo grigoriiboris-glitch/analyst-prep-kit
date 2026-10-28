@@ -137,3 +137,29 @@ test("Tableau and DAX field expressions use English identifiers", () => {
   assert.match(powerbi, /SUM\(Sales\[Profit\]\)/);
   assert.doesNotMatch(powerbi, /РАССЧИТАТЬ|РАСЧЕТ|SUM\(Продажи\[Прибыль\]\)/);
 });
+
+
+test("Learner-facing explanations stay Russian while technical expressions stay English", () => {
+  const sql = read("sql/index.html");
+  const excel = read("excel/index.html");
+  const python = read("python/index.html");
+  const powerbi = read("powerbi/index.html");
+  const tableau = read("tableau/index.html");
+  const stats = read("stats/index.html");
+  const exam = read("final/index.html");
+  const simulator = read("simulator/index.html");
+  const excelCert = read("excel-cert/index.html");
+  const powerbiCert = read("powerbi-cert/index.html");
+  const tableauCert = read("tableau-cert/index.html");
+  assert.doesNotMatch(sql, /SELECT \* pulls every column/);
+  assert.doesNotMatch(excel, /SUM can't handle this range|what does this return\?|If B2 is greater than 1000|Return column 2 of the range/);
+  assert.doesNotMatch(python, /How do you get the value 'West'|return sends a value out of the function|df\.shape returns \(25, 7\)\. How do you get/);
+  assert.doesNotMatch(powerbi, /Tap the piece that fills the blank|Select the Revenue column|Those same three wells drive nearly every chart/);
+  assert.doesNotMatch(tableau, /When you have more than 5 categories|When showing change over time or a trend|Set the mark type to Line/);
+  assert.doesNotMatch(stats, /Report a confidence interval for the difference|Both lists have mean = 50|Set the fences:/);
+  assert.doesNotMatch(exam, /Here's what you should know|All rows from the left table; matching rows from the right/);
+  assert.doesNotMatch(simulator, /Manager notes: lead with|HAVING filters after grouping|Slack reply: lead with the answer/);
+  assert.doesNotMatch(excelCert, /Freeze Panes locks everything|MID\(text, start, count\) slices from inside/);
+  assert.doesNotMatch(powerbiCert, /A duplicate is an independent copy|Dashboards are a Service-side canvas/);
+  assert.doesNotMatch(tableauCert, /Objective 2\.3\.1\. A computed sort is a rule/);
+});
