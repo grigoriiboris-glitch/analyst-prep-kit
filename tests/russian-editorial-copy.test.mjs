@@ -8,6 +8,9 @@ test("repairs common mistranslations of product and database names", () => {
   assert.equal(applyEditorialCorrections("Мощность БИ"), "Power BI");
   assert.equal(applyEditorialCorrections("ПостгреSQL"), "PostgreSQL");
   assert.equal(applyEditorialCorrections("Массивы, ANY и пожалуйста"), "Массивы, ANY и ALL");
+  assert.equal(applyEditorialCorrections("ГРУППИРОВАТЬ ПО"), "GROUP BY");
+  assert.equal(applyEditorialCorrections("ЗАКАЗАТЬ ПО"), "ORDER BY");
+  assert.equal(applyEditorialCorrections("ВЫБЕРИТЕ"), "SELECT");
   assert.equal(
     applyEditorialCorrections("УПСЕРТ: ВСТАВЬТЕ... О КОНФЛИКТЕ"),
     "INSERT ... ON CONFLICT: вставка с обработкой конфликта"
