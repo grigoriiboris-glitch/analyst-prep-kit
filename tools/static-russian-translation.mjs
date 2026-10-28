@@ -149,6 +149,9 @@ function isCodeLike(text) {
 function candidate(text, context = null, htmlText = false) {
   const value = String(text ?? "").trim();
   if (!value || !/[A-Za-z]/.test(value)) return false;
+  // Never submit incomplete keyboard shortcut fragments such as "Shift+" to
+  // the translator. They are notation, not interface text, and can trigger 429s.
+  if (/^(?:(?:shift|ctrl|control|alt|option|cmd|command|meta|super)\s*\+\s*)+(?:[a-z0-9]|f(?:[1-9]|1[0-2]))?$/i.test(value)) return false;
   if (isTechnicalOnly(value)) return false;
   if (/^(?:javascript:|data:|mailto:|tel:|https?:\/\/)/i.test(value)) return false;
   if (/^[\w-]+\/[\w./-]+$/.test(value)) return false;
