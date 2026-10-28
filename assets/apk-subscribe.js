@@ -53,14 +53,14 @@
     'border:1px solid var(--line,var(--border,#e0d9d2));border-radius:8px}' +
     '.apk-sub button{padding:9px 16px;font:inherit;font-size:14px;font-weight:600;' +
     'cursor:pointer;color:#fff;background:var(--accent,#C5511F);border:0;border-radius:8px}' +
-    "Кнопка .apk-sub: отключено {непрозрачность: .55; курсор: по умолчанию}" +
+    "Кнопка .апк суб: отключено {непрозрачность: .55; курсор: по умолчанию}" +
     '.apk-sub .apk-sub-consent{flex:1 1 100%;display:flex;gap:8px;align-items:flex-start;' +
     'font-size:13px;color:var(--muted,#888)}' +
     '.apk-sub .apk-sub-consent input{margin-top:3px;flex:0 0 auto}' +
     '.apk-sub a.apk-sub-link{display:inline-block;margin-top:10px;font-weight:600;' +
     'color:var(--accent,#C5511F)}' +
     '.apk-sub .apk-sub-note{margin-top:10px;font-size:13px;color:var(--muted,#888)}' +
-    ".apk-sub .apk-sub-err{цвет:#b3261e;размер шрифта:13px;margin-top:8px}";
+    ".апк суб .apk-под-ошибка{цвет:#б3261е;размер шрифта:13пикселей;маржа-верх:8пикселей}";
   document.head.appendChild(css);
 
   var box = document.createElement('div');
@@ -84,8 +84,8 @@
   } else {
     box.innerHTML = PITCH +
       '<form novalidate>' +
-      "<input type=\"электронная почта\" name=\"" + FIELD + "\" требуется автозаполнение=\"электронная почта\" " +
-      "Placeholder=\"you@example.com\" aria-label=\"Адрес электронной почты\">" +
+      "<тип ввода=\"электронная почта\" имя=\"" + FIELD + "\" требуется автозаполнение=\"электронная почта\" " +
+      "Заполнитель=\"ты@example.com\" aria-метка=\"Адрес электронной почты\">" +
       '<button type="submit">Subscribe</button>' +
       // Unticked, explicit, its own sentence. Consent for progress sync is
       // not consent for this (handoff §2).

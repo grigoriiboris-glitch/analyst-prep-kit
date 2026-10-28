@@ -32,7 +32,7 @@
     {id:'excel',spriteIdx:3,wx:725,wy:595,r:60,biome:'Фермерские угодья',cost:40,title:'Excel',short:'Поля таблиц Excel',icon:'📗',path:'../excel/',tracker:'excel',total:51,unit:'уроков',stage:2,x:657,y:539,desc:'Формулы, поиск, очистка, сводные таблицы, проверка вычислений и аналитические отчёты.',requires:['foundations','quality']},
     {id:'charts',spriteIdx:4,wx:435,wy:215,r:54,biome:'Предгорье',cost:12,title:'Грамотность графиков',short:'Башня визуализации',icon:'📈',path:'../chart-literacy/',tracker:'charts',total:13,unit:'уроков',stage:2,x:367,y:159,desc:'Выбор подходящего графика, правильное чтение визуализаций и поиск вводящих в заблуждение представлений.',requires:['foundations','quality']},
     {id:'python',spriteIdx:5,wx:495,wy:318,r:58,biome:'Мастерские',cost:30,title:"Питон и панды",short:'Кузница Python',icon:'🐍',path:'../python/',tracker:'python',total:42,unit:'уроков',stage:3,x:427,y:269,desc:'Код для повторяемой обработки данных: базовый Python, pandas, преобразования, объединение и проверка результатов.',requires:['sql','excel']},
-    {id:'stats',spriteIdx:6,wx:485,wy:455,r:58,biome:'Фермерские угодья',cost:20,title:'Статистика',short:'Ферма статистики',icon:'🔭',path:'../stats/',tracker:'stats',total:16,unit:'уроков',stage:3,x:407,y:399,desc:'Распределения, выборки, интервалы, A/B-тесты, p-значения и осторожная интерпретация доказательств.',requires:['sql','excel']},
+    {id:'stats',spriteIdx:6,wx:485,wy:455,r:58,biome:'Фермерские угодья',cost:20,title:'Статистика',short:'Ферма статистики',icon:'🔭',path:'../stats/',tracker:'stats',total:16,unit:'уроков',stage:3,x:407,y:399,desc:"Распределения, выборки, интервалы, А/Б-тесты, п-значения и осторожная интерпретация доказательств.",requires:['sql','excel']},
     {id:'forecasting',spriteIdx:7,wx:615,wy:250,r:54,biome:'Ремесленная долина',cost:18,title:'Прогнозирование',short:'Башня прогнозов',icon:'🌦️',path:'../forecasting/',tracker:'forecasting',total:13,unit:'уроков',stage:3,x:537,y:189,desc:'Тренд, сезонность, простые прогнозы, проверка точности и объяснение неопределённости.',requires:['stats','charts']},
     {id:'powerbi',spriteIdx:8,wx:865,wy:320,r:56,biome:'Речной порт',cost:25,title:'Power BI',short:'Центр Power BI',icon:'📊',path:'../powerbi/',tracker:'powerbi',total:39,unit:'уроков',stage:3,x:797,y:279,desc:'Модель данных, связи, меры DAX, визуализация и интерактивные отчёты для бизнес-пользователей.',requires:['sql','excel','charts']},
     {id:'tableau',spriteIdx:9,wx:815,wy:395,r:54,biome:'Ремесленная долина',cost:25,title:'Tableau',short:'Студия дашбордов',icon:'🟦',path:'../tableau/',tracker:'tableau',total:32,unit:'уроков',stage:3,x:737,y:369,desc:'Работа с измерениями и мерами, визуальные исследования, фильтры, наборы, иерархии и дашборды.',requires:['sql','excel','charts']},
@@ -45,20 +45,20 @@
 
   var SPECIALIZATIONS = [
     {id:'project-studio',title:'Проектная мастерская',icon:'🗂️',path:'../projects/',tracker:'projectStudio',catalogId:'projectStudio',total:4,unit:'этапов',cost:18,requires:['portfolio'],desc:'Спланируй собственный проект: сформулируй бизнес-вопрос, критерии, этапы анализа и презентацию.'},
-    {id:'business-analysis',cost:12,title:'Основы бизнес-анализа',icon:'🧭',path:'../business-analysis/',tracker:'businessAnalysis',total:9,unit:'уроков',requires:['foundations'],desc:'Постановка бизнес-проблемы, сбор требований, User Stories, BPMN, критерии приёмки и итоговый кейс.'},
-    {id:'excel-cert',cost:12,title:'Сертификат Excel MO-210',icon:'📗',path:'../excel-cert/',storage:'apk-excelcert',requires:['excel'],desc:'Отдельная подготовка к сертификационному экзамену Excel.'},
-    {id:'excel-expert',walletId:'excel-expert-cert',cost:15,catalogId:'excel-expert-cert',title:'Эксперт Excel MO-211',icon:'🏅',path:'../excel-expert-cert/',storage:'apk-excelexpertcert',requires:['excel-cert'],desc:'Продвинутый уровень Excel после базовой сертификационной ветки.'},
-    {id:'powerbi-cert',cost:15,title:"Мощность БИ ПЛ-300",icon:'📊',path:'../powerbi-cert/',storage:'apk-pbicert',requires:['powerbi'],desc:'Дополнительная подготовка к сертификации Power BI.'},
-    {id:'tableau-cert',cost:15,title:'Настольная версия Tableau',icon:'🟦',path:'../tableau-cert/',storage:'apk-tabcert',requires:['tableau'],desc:'Дополнительная подготовка к сертификации Tableau.'},
-    {id:'alteryx-cert',cost:12,title:'Основы Alteryx',icon:'🔄',path:'../alteryx-cert/',storage:'apk-alteryxcert',requires:['excel','quality'],desc:'Автоматизация подготовки и преобразования данных.'},
-    {id:'azure-data-cert',cost:12,title:'Основы данных Azure DP-900',icon:'☁️',path:'../azure-data-cert/',storage:'apk-dp900cert',requires:['foundations','sql'],desc:'Базовые понятия данных и облачных сервисов Azure.'},
-    {id:'databricks-cert',cost:15,title:'Архитектура озера данных и хранилища в Databricks',icon:'🧱',path:'../databricks-cert/',storage:'apk-dbxcert',requires:['sql','python'],desc:'Дополнительный маршрут по архитектуре озера данных и хранилища, а также аналитической платформе.'},
+    {id:'business-analysis',cost:12,title:'Основы бизнес-анализа',icon:'🧭',path:'../business-analysis/',tracker:'businessAnalysis',total:9,unit:'уроков',requires:['foundations'],desc:"Постановка бизнес-проблемы, сбор требований, Истории пользователей, BPMN, критерии приёмки и итоговый кейс."},
+    {id:'excel-cert',cost:12,title:"Сертификат Эксель МО-210",icon:'📗',path:'../excel-cert/',storage:'apk-excelcert',requires:['excel'],desc:"Отдельная подготовка к сертификационному экзамену Эксель."},
+    {id:'excel-expert',walletId:'excel-expert-cert',cost:15,catalogId:'excel-expert-cert',title:"Эксперт Эксель МО-211",icon:'🏅',path:'../excel-expert-cert/',storage:'apk-excelexpertcert',requires:['excel-cert'],desc:'Продвинутый уровень Excel после базовой сертификационной ветки.'},
+    {id:'powerbi-cert',cost:15,title:"Мощность БИ ПЛ-300",icon:'📊',path:'../powerbi-cert/',storage:'apk-pbicert',requires:['powerbi'],desc:"Дополнительная подготовка к сертификации Мощность БИ."},
+    {id:'tableau-cert',cost:15,title:'Настольная версия Tableau',icon:'🟦',path:'../tableau-cert/',storage:'apk-tabcert',requires:['tableau'],desc:"Дополнительная подготовка к сертификации Таблица."},
+    {id:'alteryx-cert',cost:12,title:"Основы Альтерикс",icon:'🔄',path:'../alteryx-cert/',storage:'apk-alteryxcert',requires:['excel','quality'],desc:'Автоматизация подготовки и преобразования данных.'},
+    {id:'azure-data-cert',cost:12,title:"Основы данных Лазурный ДП-900",icon:'☁️',path:'../azure-data-cert/',storage:'apk-dp900cert',requires:['foundations','sql'],desc:"Базовые понятия данных и облачных сервисов Лазурный."},
+    {id:'databricks-cert',cost:15,title:"Архитектура озера данных и хранилища в Блоки данных",icon:'🧱',path:'../databricks-cert/',storage:'apk-dbxcert',requires:['sql','python'],desc:'Дополнительный маршрут по архитектуре озера данных и хранилища, а также аналитической платформе.'},
     {id:'ga4-cert',cost:12,title:"Гугл Аналитика 4",icon:'📣',path:'../ga4-cert/',storage:'apk-ga4cert',requires:['stats','charts'],desc:'Веб-аналитика, события, конверсии и интерпретация поведения пользователей.'},
-    {id:'docusign',walletId:'docusign-cert',cost:12,catalogId:'docusign-cert',title:'Администратор электронной подписи DocuSign',icon:'✍️',path:'../docusign-cert/',storage:'apk-dscert',requires:['foundations'],desc:'Отдельный профессиональный маршрут по администрированию электронной подписи.'},
-    {id:'docusign-clm',walletId:'docusign-clm-cert',cost:14,catalogId:'docusign-clm-cert',title:'Администратор управления договорами DocuSign (CLM)',icon:'📄',path:'../docusign-clm-cert/',storage:'apk-dsclmcert',requires:['docusign'],desc:'Управление жизненным циклом договоров.'},
-    {id:'docusign-clm-workflow',walletId:'docusign-clm-workflow-cert',cost:15,catalogId:'docusign-clm-workflow-cert',title:'Рабочие процессы управления договорами DocuSign (CLM)',icon:'🔗',path:'../docusign-clm-workflow-cert/',storage:'apk-dsclmwfcert',requires:['docusign-clm'],desc:'Продвинутая специализация по рабочим процессам управления жизненным циклом договоров (CLM).'},
-    {id:'docusign-clm-implementation',walletId:'docusign-clm-implementation-cert',cost:15,catalogId:'docusign-clm-implementation-cert',title:'Внедрение управления договорами DocuSign (CLM)',icon:'🛠️',path:'../docusign-clm-implementation-cert/',storage:'apk-dsclmimplcert',requires:['docusign-clm'],desc:'Внедрение и настройка процессов управления жизненным циклом договоров (CLM).'},
-    {id:'docusign-org',walletId:'docusign-org-cert',cost:14,catalogId:'docusign-org-cert',title:'Управление организацией в DocuSign',icon:'🏢',path:'../docusign-org-cert/',storage:'apk-dsorgcert',requires:['docusign'],desc:'Отдельная специализация по управлению организацией DocuSign.'}
+    {id:'docusign',walletId:'docusign-cert',cost:12,catalogId:'docusign-cert',title:"Администратор электронной подписи Документация",icon:'✍️',path:'../docusign-cert/',storage:'apk-dscert',requires:['foundations'],desc:'Отдельный профессиональный маршрут по администрированию электронной подписи.'},
+    {id:'docusign-clm',walletId:'docusign-clm-cert',cost:14,catalogId:'docusign-clm-cert',title:"Администратор управления договорами Документация (CLM)",icon:'📄',path:'../docusign-clm-cert/',storage:'apk-dsclmcert',requires:['docusign'],desc:'Управление жизненным циклом договоров.'},
+    {id:'docusign-clm-workflow',walletId:'docusign-clm-workflow-cert',cost:15,catalogId:'docusign-clm-workflow-cert',title:"Рабочие процессы управления договорами Документация (CLM)",icon:'🔗',path:'../docusign-clm-workflow-cert/',storage:'apk-dsclmwfcert',requires:['docusign-clm'],desc:'Продвинутая специализация по рабочим процессам управления жизненным циклом договоров (CLM).'},
+    {id:'docusign-clm-implementation',walletId:'docusign-clm-implementation-cert',cost:15,catalogId:'docusign-clm-implementation-cert',title:"Внедрение управления договорами Документация (CLM)",icon:'🛠️',path:'../docusign-clm-implementation-cert/',storage:'apk-dsclmimplcert',requires:['docusign-clm'],desc:'Внедрение и настройка процессов управления жизненным циклом договоров (CLM).'},
+    {id:'docusign-org',walletId:'docusign-org-cert',cost:14,catalogId:'docusign-org-cert',title:"Управление организацией в Документация",icon:'🏢',path:'../docusign-org-cert/',storage:'apk-dsorgcert',requires:['docusign'],desc:"Отдельная специализация по управлению организацией Документ."}
   ];
 
   var BY_ID = {}, ALL = [], selectedId = 'foundations', hoveredId = null, currentFilter = 'all';
@@ -111,7 +111,7 @@
   root.innerHTML =
     '<div class="curriculum-shell">' +
       '<header class="curriculum-head">' +
-        '<div><h2 class="curriculum-title">🗺️ Живая карта мира DataCraft: строй здания из спрайтов за знания</h2>' +
+        "<div><h2 class=\"curriculum-title\">🗺️ Живая карта мира ДатаКрафт: строй здания из спрайтов за знания</h2>" +
         '<p class="curriculum-lead">На базовом битмапе подготовлены строительные площадки, реки, водопад и дороги. Каждое здание дорисовывается из спрайт-листа поверх карты и оживает по мере прохождения: крутятся лопасти мельницы, идёт дым из кузницы, а по открытым дорогам курсируют караваны с данными.</p></div>' +
         '<div class="curriculum-top-actions">' +
           '<span class="curriculum-coins" id="curriculumCoins">🪙 — монет</span>' +
@@ -125,7 +125,7 @@
           '<button type="button" class="curriculum-action primary" id="curriculumNext">▶ Следующий курс</button>' +
         '</div>' +
       '</header>' +
-      '<div class="curriculum-map-scroll"><canvas id="curriculumWorld" width="' + MAP_W + "\"высота=\"" + MAP_H + '" tabindex="0" role="img" aria-label="Интерактивная живая 2D-карта мира DataCraft со спрайтами зданий поверх битмапа."></canvas></div>' +
+      '<div class="curriculum-map-scroll"><canvas id="curriculumWorld" width="' + MAP_W + "\"высота=\"" + MAP_H + "\" табиндекс=\"0\" роль=\"изображение\" aria-метка=\"Интерактивная живая 2D-карта мира ДатаКрафт со спрайтами зданий поверх битмапа.\"></canvas></div>" +
       '<div class="curriculum-legend">' +
         '<span><b class="curriculum-symbol" style="color:#7ed68a">✓</b>Построено (живой спрайт + караваны)</span>' +
         '<span><b class="curriculum-symbol" style="color:#f4d47d">🔨</b>Курс пройден — ждёт постройки за 🪙</span>' +
@@ -686,7 +686,7 @@
       if (course.tracker === 'quality' || course.tracker === 'portfolio') amount = 1;
       if (course.tracker === 'simulator' || course.tracker === 'final') amount = 2;
       if (course.tracker === 'projectStudio' || course.tracker === 'cert') amount = 0;
-      return "<div class=\"curriculum-lesson-row\"" + (done ? ' passed' : '') + (depth ? ' nested' : '') + '"><span class="curriculum-lesson-check">' + (done ? '✓' : '○') + '</span><span class="curriculum-lesson-copy"><span class="curriculum-lesson-title">' + safeText(item.title) + '</span>' + (item.goal ? '<span class="curriculum-lesson-goal">' + safeText(item.goal) + '</span>' : '') + '</span><span class="curriculum-lesson-actions"><span class="curriculum-lesson-reward">' + (done ? 'Зачтено' : (rewardAlreadyClaimed ? 'Монеты получены' : (amount ? '+' + amount + ' 🪙' : 'Этап'))) + '</span><button type="button" class="curriculum-copy-context" title="Скопировать контекст этого урока для ИИ-агента" aria-label="Скопировать контекст урока ' + safeText(item.title) + "\"название-курса-данных=\"" + safeText(course.title) + "\"путь-курса-данных=\"" + safeText(course.path || '') + "\"id-курса-данных=\"" + safeText(course.id) + '" data-lesson-title="' + safeText(item.title) + '" data-lesson-id="' + safeText(item.id) + '" data-lesson-unit="' + safeText(item.unit || '') + "\"цель-урока-данных=\"" + safeText(item.goal || '') + "\"данные-уроки-готовы=\"" + (done ? 'true' : 'false') + '" data-parent-id="' + safeText(parentId || '') + '">⧉ Скопировать контекст</button></span></div>';
+      return "<div class=\"учебный план-урока-строка\"" + (done ? ' passed' : '') + (depth ? ' nested' : '') + '"><span class="curriculum-lesson-check">' + (done ? '✓' : '○') + '</span><span class="curriculum-lesson-copy"><span class="curriculum-lesson-title">' + safeText(item.title) + '</span>' + (item.goal ? '<span class="curriculum-lesson-goal">' + safeText(item.goal) + '</span>' : '') + '</span><span class="curriculum-lesson-actions"><span class="curriculum-lesson-reward">' + (done ? 'Зачтено' : (rewardAlreadyClaimed ? 'Монеты получены' : (amount ? '+' + amount + ' 🪙' : 'Этап'))) + "</span><тип кнопки=\"кнопка\" сорт=\"контекст-копии учебной программы\" заголовок=\"Скопировать контекст этого урока для ИИ-агента\" aria-метка=\"Скопировать контекст урока " + safeText(item.title) + "\"название-курса-данных=\"" + safeText(course.title) + "\"путь-курса-данных=\"" + safeText(course.path || '') + "\"id-курса-данных=\"" + safeText(course.id) + '" data-lesson-title="' + safeText(item.title) + '" data-lesson-id="' + safeText(item.id) + '" data-lesson-unit="' + safeText(item.unit || '') + "\"цель-урока-данных=\"" + safeText(item.goal || '') + "\"данные-уроки-готовы=\"" + (done ? 'true' : 'false') + '" data-parent-id="' + safeText(parentId || '') + '">⧉ Скопировать контекст</button></span></div>';
     }
     if (course.tracker === 'portfolio') {
       catalog.forEach(function(project){
@@ -810,9 +810,9 @@
     detail.innerHTML =
       '<div class="curriculum-detail-eyebrow">' + safeText(stageLabel) + '</div>' +
       '<h3>' + safeText(course.icon || '🏗️') + ' ' + safeText(course.title) + '</h3>' +
-      "<span class=\"статус учебного плана " + st.state + '">' + (st.built ? '✓ ' : st.courseComplete ? '🔨 ' : st.unlocked ? '🏗️ ' : '🔒 ') + safeText(statusText(st)) + '</span>' +
+      "<класс диапазона=\"статус учебного плана " + st.state + '">' + (st.built ? '✓ ' : st.courseComplete ? '🔨 ' : st.unlocked ? '🏗️ ' : '🔒 ') + safeText(statusText(st)) + '</span>' +
       '<p>' + safeText(course.desc || 'Дополнительный учебный маршрут.') + '</p>' +
-      "<div class=\"curriculum-progress\"><i style=\"ширина:" + p.percent + '%"></i></div>' +
+      "<div class=\"curriculum-progress\"><я стиль=\"ширина:" + p.percent + '%"></i></div>' +
       '<p class="curriculum-progress-text">' + safeText(formatProgress(p)) + ' · ' + p.percent + '%</p>' +
       currencyNote +
       '<ul class="curriculum-requirements">' + req + '</ul>' +
@@ -828,7 +828,7 @@
       b.className = 'curriculum-course-card' + (selectedId === c.id ? ' selected' : '');
       b.setAttribute('aria-pressed', selectedId === c.id ? 'true' : 'false');
       var label = st.built ? '✓ ПОСТРОЕНО' : (!st.unlocked ? '🔒 ПУСТОЙ УЧАСТОК' : (st.courseComplete ? '🔨 ГОТОВО К СТРОЙКЕ' : '🏗️ СТРОИТСЯ'));
-      b.innerHTML = '<span class="cc-icon">' + safeText(c.icon) + '</span><span class="cc-copy"><span class="cc-title">' + safeText(c.short) + ' <small style="color:#9ab39f;font-weight:600">(' + safeText(c.title) + ')</small></span><span class="cc-meta"><span>' + safeText(formatProgress(p)) + '</span><span class="cc-state">' + label + "</span></span><span class=\"cc-bar\"><i style=\"ширина:" + p.percent + '%"></i></span><span class="cc-cost">' + (st.built ? 'Спрайт здания возведён на карте' : 'Постройка здания: ' + (c.cost || 0) + ' 🪙') + '</span></span>';
+      b.innerHTML = '<span class="cc-icon">' + safeText(c.icon) + '</span><span class="cc-copy"><span class="cc-title">' + safeText(c.short) + ' <small style="color:#9ab39f;font-weight:600">(' + safeText(c.title) + ')</small></span><span class="cc-meta"><span>' + safeText(formatProgress(p)) + '</span><span class="cc-state">' + label + "</span></span><span class=\"cc-bar\"><я стиль=\"ширина:" + p.percent + '%"></i></span><span class="cc-cost">' + (st.built ? 'Спрайт здания возведён на карте' : 'Постройка здания: ' + (c.cost || 0) + ' 🪙') + '</span></span>';
       b.addEventListener('click', function(){ selectCourse(c.id, false); });
       courseList.appendChild(b);
     });
@@ -991,12 +991,12 @@
       ctx.stroke();
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.font = "21px «Apple Color Emoji», «Segoe UI Emoji», без засечек";
+      ctx.font = "21пикселей «Эмодзи цвета яблока», «Сегоэ UI Эмодзи», без засечек";
       ctx.fillStyle = '#ffffff';
       ctx.fillText(npc.icon, pos.x, pos.y + 1);
       if (hoveredNpcId === npc.id) {
         var label = npc.name + ' · квест';
-        ctx.font = "700 11px системный интерфейс, без засечек";
+        ctx.font = "700 11пикселей системный интерфейс, без засечек";
         var labelW = ctx.measureText(label).width + 16;
         ctx.fillStyle = "rgba(16, 29, 21, 0,94)";
         roundRect(ctx, pos.x - labelW / 2, pos.y - 33, labelW, 19, 7);
@@ -1051,7 +1051,7 @@
         ctx.fill();
       }
       if (locked && opacity > 0.62) {
-        ctx.font = "800 10px системный интерфейс, без засечек";
+        ctx.font = "800 10пикселей системный интерфейс, без засечек";
         ctx.textAlign = 'center';
         ctx.fillStyle = "rgba(239, 248, 241, 0,82)";
         ctx.fillText('НЕИЗВЕДАННАЯ ОБЛАСТЬ', region.x, region.y + region.ry * 0.72);
@@ -1065,7 +1065,7 @@
     ctx.save();
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.font = "900 17px system-ui, «Apple Color Emoji», «Segoe UI Emoji», без засечек";
+    ctx.font = "900 17px системный интерфейс, «Эмодзи цвета яблока», «Сегоэ UI Эмодзи», без засечек";
     ctx.lineWidth = 3.4;
     ctx.lineJoin = 'round';
     animState.floatingTexts.forEach(function(item) {
@@ -1444,7 +1444,7 @@
 
       ctx.textAlign = 'center';
       ctx.fillStyle = '#eff8ec';
-      ctx.font = "800 10px system-ui, -apple-system, без засечек";
+      ctx.font = "800 10px системный интерфейс, -Apple-система, без засечек";
       ctx.fillText(c.short, wx, py + 13);
 
       /* Mini progress bar inside nameplate */
@@ -1460,7 +1460,7 @@
       }
 
       /* Bottom status / coin cost line */
-      ctx.font = "700 9px system-ui, -apple-system, без засечек";
+      ctx.font = "700 9px системный интерфейс, -Apple-система, без засечек";
       ctx.fillStyle = st.built ? '#a8eeae' : (st.unlocked && st.courseComplete ? '#ffe39c' : '#b8cbb9');
       var metaLabel = st.built ? '✓ Построено' : (st.unlocked && st.courseComplete ? '🔨 Строить: ' + c.cost + ' 🪙' : p.done + '/' + p.total + ' · ' + c.cost + ' 🪙');
       ctx.fillText(metaLabel, wx, py + 31);
@@ -1620,7 +1620,7 @@
     try { if (path) materialUrl = new URL(path, window.location.href).href; } catch (e) {}
     var lines = [
       'КОНТЕКСТ ДЛЯ ИИ-АГЕНТА',
-      'Проект: Analyst Prep Kit — DataCraft.',
+      "Проект: Подготовительный комплект для аналитика — ДатаКрафт.",
       'Курс: ' + courseTitle,
       courseId ? 'Идентификатор курса: ' + courseId : '',
       unit ? 'Раздел: ' + unit : '',

@@ -21,7 +21,7 @@ let apkCloudReadyUserId = null;
 const apkPendingSyncTimers = Object.create(null);
 
 function apkProgressApi() {
-  if (!window.APKProgress) throw new Error("Progress-state.js не был загружен до supabase_auth_sync.js");
+  if (!window.APKProgress) throw new Error("Прогресс-state.js не был загружен до supabase_auth_sync.js");
   return window.APKProgress;
 }
 
@@ -42,12 +42,12 @@ async function initSupabase() {
         script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
         script.dataset.apkSupabaseSdk = 'true';
         script.onload = resolve;
-        script.onerror = () => reject(new Error('Не удалось загрузить Supabase SDK'));
+        script.onerror = () => reject(new Error("Не удалось загрузить Супабазовый SDK"));
         document.head.appendChild(script);
       });
     }
     if (!window.supabase || typeof window.supabase.createClient !== 'function') {
-      throw new Error('Supabase SDK недоступен');
+      throw new Error("Супабазовый SDK недоступен");
     }
     supabaseClient = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey, {
       auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
@@ -615,7 +615,7 @@ if (typeof window !== 'undefined') {
   if (!framed) return;
   document.documentElement.classList.add('apk-framed');
   const st = document.createElement('style');
-  st.textContent = ".apk-framed #loginBtn,.apk-framed #logoutBtn,.apk-framed #userEmail,.apk-framed [title=\"Вернуться ко всем наборам\"]{display:none !important}";
+  st.textContent = ".в рамке apk #входBtn,.в рамке apk #выход из системыBtn,.в рамке apk #электронная почта пользователя,.в рамке apk [заголовок=\"Вернуться ко всем наборам\"]{отображать:никто !важный}";
   document.head.appendChild(st);
 })();
 

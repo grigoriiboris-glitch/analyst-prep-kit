@@ -21,7 +21,7 @@
     'font-size:13px;font-family:inherit;line-height:1.6}' +
     '.apk-eco-footer a{color:var(--muted,var(--dim,var(--txt2,#6B7280)));text-decoration:none;transition:color .15s}' +
     '.apk-eco-footer a:hover{color:var(--accent,#C5511F)}' +
-    ".apk-eco-sep{маржа:0 10px;непрозрачность:.7}" +
+    ".apk-эко-сентябрь{маржа:0 10пикселей;непрозрачность:.7}" +
     '.apk-eco-tm{display:block;margin-top:10px;font-size:11px;opacity:.7;max-width:560px;' +
     'margin-left:auto;margin-right:auto}';
   document.head.appendChild(css);
@@ -70,8 +70,8 @@
     "<a class=\"apk-eco-coffee\" href=\"https://buymeacoffee.com/michaelnocito\" target=\"_blank\" rel=\"noopener\">Купи мне кофе ☕</a>" +
     '<span class="apk-eco-sep">·</span>' +
     "<a href=\"../\">← Все комплекты</a>" +
-    "<span class=\"apk-eco-tm\">Power BI и Excel являются товарными знаками Microsoft; Tableau является торговой маркой Salesforce. " +
-    "Используется только для идентификации. Analyst Prep Kit является независимым и не связан с этими компаниями и не одобрен ими.</span>";
+    "<span class=\"apk-eco-tm\">Power BI и Excel являются товарными знаками Майкрософт; Tableau является торговой маркой Сейлфорс. " +
+    "Используется только для идентификации. Подготовительный комплект для аналитика является независимым и не связан с этими компаниями и не одобрен ими.</span>";
   document.body.appendChild(f);
 
   f.querySelector('.apk-eco-coffee').addEventListener('click', function () {
@@ -126,7 +126,7 @@
     stats: {
       slug: 'statistics-for-analysts', title: "Статистика для аналитиков", price: '$19', pages: 123,
       hook: "У вас есть два средних значения. Застой возникает, когда кто-то спрашивает, реальна ли разница между ними.",
-      what: "разброс, значения p, доверительные интервалы и A/B-тесты, написанные для людей, которым нужно дать ответ."
+      what: "разброс, значения п, доверительные интервалы и А/Б-тесты, написанные для людей, которым нужно дать ответ."
     },
     forecasting: {
       slug: 'forecasting-for-analysts', title: "Прогнозирование для аналитиков", price: '$12', pages: 43,
@@ -187,8 +187,8 @@
      ---------------------------------------------------------- */
   var PAGES = {
     'sql-for-analysts': { p: 'p. 212', code: [
-        "ВЫБЕРИТЕ c.имя, СУММА(o.сумма)", "ОТ клиентов c",
-        "ПРИСОЕДИНЯЙТЕСЬ к заказам o ON o.customer_id = c.id", "ГРУППИРОВАТЬ ПО c.name;"],
+        "ВЫБЕРИТЕ в.имя, СУММА(о.сумма)", "ОТ клиентов с",
+        "ПРИСОЕДИНЯЙТЕСЬ к заказам o ВКЛ o.customer_id = c.id", "ГРУППИРОВАТЬ ПО c.имя;"],
       say: "Одна строка на каждого клиента. JOIN может повторить клиента, а GROUP BY складывает эти копии обратно в одну." },
     'excel-for-analysts': { p: 'p. 104', code: ["=СУММИФ(D:D, A:A, \"Запад\", B:B, \">=\"&E2)"],
       say: "Сложите столбец D, но только в тех строках, где столбец A соответствует западу, а дата в столбце B совпадает с E2 или после нее." },
@@ -233,7 +233,7 @@
     'font-size:11.5px;line-height:1.55;color:var(--text,var(--txt,var(--ink,#222)));white-space:pre-wrap;word-break:break-word}' +
     '.apk-book-pg .sy{display:block;margin-top:9px;padding-top:8px;border-top:1px solid var(--border,var(--bord,var(--line,#e0d9d2)));' +
     'font-size:12px;line-height:1.5;color:var(--muted,var(--dim,var(--txt2,#6B7280)));font-style:italic}' +
-    ".apk-book-pg .pn{position:absolute;bottom:5px;right:10px;font-size:10px;интервал между буквами:.05em;" +
+    ".apk-book-pg .пн{позиция:абсолютный;нижний:5пикселей;верно:10пикселей;размер шрифта:10пикселей;интервал между буквами:.05Эм;" +
     'color:var(--muted,var(--dim,var(--txt2,#6B7280)));opacity:.7}' +
     '@media(min-width:660px){.apk-book.has-pg{grid-template-columns:minmax(0,1fr) 250px;align-items:start}' +
     '.apk-book.has-pg .apk-book-pg{order:2}}';

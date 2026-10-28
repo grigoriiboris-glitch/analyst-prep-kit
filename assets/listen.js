@@ -29,8 +29,8 @@
   // ---- What gets read -------------------------------------------------------
   // Blocks in document order. Anything navigational, decorative, or unreadable
   // aloud is excluded here rather than being cleaned up later.
-  var BLOCKS = "h1, h2, h3, p, li, цитата, figcaption";
-  var SKIP_INSIDE = ".crumb, .morelinks, .toc, nav, нижний колонтитул, .listen-bar, .listen-launch";
+  var BLOCKS = "ч1, ч2, h3, п, ли, цитата, рисунок";
+  var SKIP_INSIDE = ".крошка, .больше ссылок, .содержание, навигация, нижний колонтитул, .панель прослушивания, .прослушивание-запуск";
 
   // Code and tables are read as a short marker instead of their contents.
   // A screenful of SQL read character by character is not listening, it is
@@ -67,7 +67,7 @@
         out.push({ el: el, text: marker });
         return;
       }
-      if (el.closest("pre, таблица, ul.refs, ol.refs")) return;
+      if (el.closest("предварительно, таблица, ул.refs, старые ссылки")) return;
 
       var text = (el.innerText || el.textContent || '').replace(/\s+/g, ' ').trim();
       if (text.length < 2) return;
@@ -137,7 +137,7 @@
     // is without turning the page into a karaoke screen.
     '.listen-now{background:var(--accent-soft,#E0F5F9);box-shadow:0 0 0 6px var(--accent-soft,#E0F5F9);',
     'border-radius:3px}',
-    "@media (предпочитает цветовую схему: темную){.listen-now{background:rgba(56,189,248,.14);",
+    "@СМИ (предпочитает цветовую схему: темную){.слушай-сейчас{фон:РГБА(56,189,248,.14);",
     'box-shadow:0 0 0 6px rgba(56,189,248,.14)}}',
     '@media (prefers-reduced-motion:reduce){.listen-now{transition:none}}',
     '@media print{.listen-launch,.listen-bar{display:none}}'

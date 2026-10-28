@@ -185,13 +185,13 @@
     var json = JSON.stringify(data);
     if (typeof btoa === 'function') return 'APK2:' + btoa(unescape(encodeURIComponent(json)));
     if (typeof Buffer !== 'undefined') return 'APK2:' + Buffer.from(json, 'utf8').toString('base64');
-    throw new Error("Кодировка Base64 недоступна.");
+    throw new Error("Кодировка База64 недоступна.");
   }
 
   function decodeBase64(value) {
     if (typeof atob === 'function') return decodeURIComponent(escape(atob(value)));
     if (typeof Buffer !== 'undefined') return Buffer.from(value, 'base64').toString('utf8');
-    throw new Error("Декодирование Base64 недоступно");
+    throw new Error("Декодирование База64 недоступно");
   }
 
   function parseImport(code) {

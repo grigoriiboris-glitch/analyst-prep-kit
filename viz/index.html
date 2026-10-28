@@ -28,10 +28,10 @@
 </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Viz Drill: постройте диаграмму, отвечающую на ваш вопрос — комплект для подготовки аналитика</title>
+<title>Виз Дрель: постройте диаграмму, отвечающую на ваш вопрос — комплект для подготовки аналитика</title>
 <meta name="description" content="Перетащите поля на полки и постройте диаграмму, по одной новой идее на шаг. Два трека: небольшие данные, которые можно проверить на глаз, и 7043 клиента, стоящие за опубликованным проектом оттока. Каждый шаг называет SQL-запрос, на который он отвечает.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/viz/">
-<meta property="og:title" content="Viz Drill: постройте диаграмму, отвечающую на ваш запрос">
+<meta property="og:title" content="Виз Дрель: постройте диаграмму, отвечающую на ваш запрос">
 <meta property="og:description" content="Два пути от списка заголовков до готовой диаграммы, каждый шаг привязан к SQL-запросу, дающему один и тот же ответ. График оттока телекоммуникационных компаний заканчивается на опубликованной диаграмме.">
 <meta property="og:type" content="website">
 <!--
@@ -465,12 +465,12 @@ const $ = id => document.getElementById(id);
 const TRACKS = {
   basic: {
     title: 'Basic',
-    blurb: "Полки, от списка заголовков до готового сравнения. Небольшие данные можно проверить на глаз, и каждый шаг представляет собой один и тот же вопрос, который вводит SQL Drill.",
+    blurb: "Полки, от списка заголовков до готового сравнения. Небольшие данные можно проверить на глаз, и каждый шаг представляет собой один и тот же вопрос, который вводит SQL-тренировка.",
     lead: "Создайте диаграмму, перетаскивая поля по одному небольшому шагу за раз. Прочтите вопрос, попробуйте и нажмите одну кнопку, если хотите получить точные шаги. Ничего не оценивается.",
     rows: ROWS,
     ladder: LADDER,
     table: 'country_gems',
-    fieldsCaption: "52 дорожки драгоценных камней страны, те же строки запросов SQL Drill. Синий — это измерение, то, что вы разрезаете. Зеленый — это мера, то, что вы суммируете.",
+    fieldsCaption: "52 дорожки драгоценных камней страны, те же строки запросов SQL-тренировка. Синий — это измерение, то, что вы разрезаете. Зеленый — это мера, то, что вы суммируете.",
     fields: {
       artist:    {label: 'Artist',            kind: 'dim'},
       track:     {label: 'Track',             kind: 'dim'},
@@ -512,11 +512,11 @@ const TRACKS = {
       head: "Вы только что построили диаграмму, которая опубликована.",
       body: "Полный анализ идет дальше: четыре персоны, контрактный механизм, лежащий в основе разрыва, и три периода удержания, рассчитанные по сравнению с первым годом. Те же 7043 клиента, те же цифры.",
       links: [
-        {text: "Панель управления Tableau Public →",
+        {text: "Панель управления Табло Публичный →",
          href: 'https://public.tableau.com/app/profile/michael.nocito8651/viz/TelcoCustomerChurnRiskPersonas/Story1'},
         {text: "Описание и код →",
          href: 'https://github.com/michaelnocito/telco-churn-analysis'},
-        {text: "Тот же анализ, что и SQL, в SQL Drill →",
+        {text: "Тот же анализ, что и SQL, в SQL-детализация →",
          href: '../drill/?ladder=telco'}
       ]
     }
@@ -603,7 +603,7 @@ let picked = null;   // tap-then-tap, so this works without a mouse
 function fieldWells(){
   const draw = (host, kind) => {
     host.innerHTML = Object.keys(FIELDS).filter(f => FIELDS[f].kind === kind).map(f =>
-      `<button class="чип ${kind}${picked === f ? ' sel' : ''}"перетаскиваемый="истина" поле данных="${f}">${esc(FIELDS[f].label)}</button>`
+      `<класс кнопки="чип ${kind}${picked === f ? ' sel' : ''}"перетаскиваемый="истина" поле данных="${f}">${esc(FIELDS[f].label)}</button>`
     ).join('');
     host.querySelectorAll('.chip').forEach(c => {
       c.addEventListener('dragstart', e => { e.dataTransfer.setData('text/plain', c.dataset.field); });
@@ -659,7 +659,7 @@ SHELVES.forEach(shelf => {
     if(e.key !== 'Enter' && e.key !== ' ') return;
     e.preventDefault();
     if(picked) place(shelf, picked);
-    else say("Сначала выберите поле: перейдите к нему в списке «Измерения» или «Показатели» и нажмите Enter, а затем вернитесь сюда.");
+    else say("Сначала выберите поле: перейдите к нему в списке «Измерения» или «Показатели» и нажмите Входить, а затем вернитесь сюда.");
   });
   el.addEventListener('dragover', e => { e.preventDefault(); el.classList.add('over'); });
   el.addEventListener('dragleave', () => el.classList.remove('over'));
@@ -680,7 +680,7 @@ function onePill(shelf, f){
   const label = kind === 'meas' && shelf !== 'filter'
     ? state.agg + '(' + FIELDS[f].label + ')'
     : FIELDS[f].label;
-  return `<span class="таблетка ${kind}" полка данных="${shelf}"поле данных="${f}" заголовок="${kind === 'meas' ? "Нажмите, чтобы изменить агрегацию" : "Нажмите крестик, чтобы удалить"}">
+  return `<класс диапазона="таблетка ${kind}" полка данных="${shelf}"поле данных="${f}" заголовок="${kind === 'meas' ? "Нажмите, чтобы изменить агрегацию" : "Нажмите крестик, чтобы удалить"}">
             ${esc(label)}<span class="x" data-remove="${shelf}"поле данных="${f}">&times;</span></span>`;
 }
 function pillHTML(shelf){
@@ -873,9 +873,9 @@ function drawChart(){
   if(rs && !rs.measField){
     const keys = [...new Set(rs.rows.map(r => r.key))];
     svg.innerHTML = keys.slice(0, 16).map((k, n) =>
-      `<текст x="16" y="${22 + n * 18}" font-size="12,5" fill="#09090B">${esc(k)}</text>`).join('') +
-      (keys.length > 16 ? `<текст x="16" y="${22 + 16 * 18}" font-size="11.5" fill="#52525B">и ${keys.length - 16} more</text>` : '') +
-      `<текст x="16" y="${22 + Math.min(keys.length, 17) * 18 + 10}" font-size="11,5" fill="#52525B">${keys.length} заголовки, по одному на каждое значение. Добавьте меру, и они станут отметками.</text>`;
+      `<текст х="16" й="${22 + n * 18}" font-size="12,5" fill="#09090B">${esc(k)}</text>`).join('') +
+      (keys.length > 16 ? `<текст х="16" й="${22 + 16 * 18}" размер шрифта="11.5" наполнять="#52525B">и ${keys.length - 16} more</text>` : '') +
+      `<текст х="16" й="${22 + Math.min(keys.length, 17) * 18 + 10}" font-size="11,5" fill="#52525B">${keys.length} заголовки, по одному на каждое значение. Добавьте меру, и они станут отметками.</text>`;
     $('caption').textContent = keys.length + " заголовки из " +
       rs.dimFields.map(f => FIELDS[f].label).join(', then ') + ". Меры пока нет, поэтому ничего не учитывается.";
     return;
@@ -914,7 +914,7 @@ function drawChart(){
   const lineReady = state.mark === 'line' && vertical;
   let fellBack = '';
   if(state.mark === 'scatter' && !scatterReady)
-    fellBack = "Scatter отображает одну меру в сравнении с другой, поэтому ей нужна мера по столбцам и мера по строкам. Рисовать полосы до тех пор, пока не будет обоих.";
+    fellBack = "Разброс отображает одну меру в сравнении с другой, поэтому ей нужна мера по столбцам и мера по строкам. Рисовать полосы до тех пор, пока не будет обоих.";
   else if(state.mark === 'line' && !lineReady)
     fellBack = "Линия проходит вдоль оси, поэтому ей нужны измерения в строках и измерения в столбцах. Рисуем полосы до тех пор.";
 
@@ -944,12 +944,12 @@ function drawChart(){
       // With everything that splits the points sitting on Detail there is no header to read
       // them off, so the point carries its own name.
       const who = p.d.key === 'All' ? (p.d.detail || 'All') : p.d.key;
-      svgHTML += `<круг cx="${cx}" cy="${cy}" r="${r}" fill="${colorOf(p.d)}" fill-opacity=".8">
+      svgHTML += `<круг сх="${cx}" cy="${cy}" r="${r}" fill="${colorOf(p.d)}" fill-opacity=".8">
         <title>${esc(who)}: ${fmtVal(xField, p.x)} by ${fmtVal(yField, p.y)}</title></circle>`;
       const lab = labelOf(p.d) || (p.d.detail || (p.d.key !== 'All' ? p.d.key : ''));
       if(lab) svgHTML += `<текст х="${cx + 7}" y="${cy - 6}" font-size="10" fill="#52525B">${esc(lab)}</text>`;
     });
-    svgHTML += `<текст x="10" у="${padT + 10}" font-size="11" fill="#52525B">${fmtVal(yField, yMax)}</text>`;
+    svgHTML += `<текст х="10" у="${padT + 10}" font-size="11" fill="#52525B">${fmtVal(yField, yMax)}</text>`;
     svgHTML += `<текст х="${W - 60}" y="${H - 10}" font-size="11" fill="#52525B">${fmtVal(xField, xMax)}</text>`;
     svgHTML += `<текст х="${padL}" y="${H - 10}" font-size="11" fill="#52525B">${esc(FIELDS[xField].label)} across, ${esc(FIELDS[yField].label)} up</text>`;
     svg.innerHTML = svgHTML;
@@ -967,13 +967,13 @@ function drawChart(){
         const y = padT + h - (d ? d.value / max * h : 0);
         return x + ',' + y;
       }).join(' ');
-      svgHTML += `<точки полилинии="${pts}" fill="нет" штрих="${PALETTE[ci % PALETTE.length]}"ширина-штриха="2.5"/>`;
+      svgHTML += `<точки полилинии="${pts}" наполнять="нет" штрих="${PALETTE[ci % PALETTE.length]}"ширина-штриха="2.5"/>`;
     });
     keys.forEach((k, idx) => {
       const x = padL + (keys.length === 1 ? w / 2 : idx * w / (keys.length - 1));
       svgHTML += `<текст х="${x}" y="${H - 12}" font-size="11" fill="#52525B" text-anchor="middle">${esc(k)}</text>`;
     });
-    svgHTML += `<текст x="10" у="${padT + 10}" font-size="11" fill="#52525B">${fmt(max)}</text>`;
+    svgHTML += `<текст х="10" у="${padT + 10}" font-size="11" fill="#52525B">${fmt(max)}</text>`;
   } else if(vertical){
     const padL = 60, padB = 34, padT = 14, w = W - padL - 16, h = H - padB - padT;
     const band = w / data.length;
@@ -987,7 +987,7 @@ function drawChart(){
       if(data.length <= 14)
         svgHTML += `<текст х="${padL + idx * band + band / 2}" y="${H - 12}" font-size="11" fill="#52525B" text-anchor="middle">${esc(d.key)}</text>`;
     });
-    svgHTML += `<текст x="10" у="${padT + 10}" font-size="11" fill="#52525B">${fmt(max)}</text>`;
+    svgHTML += `<текст х="10" у="${padT + 10}" font-size="11" fill="#52525B">${fmt(max)}</text>`;
   } else {
     const padL = 150, padT = 10, rowH = Math.min(26, (H - padT) / Math.max(data.length, 1));
     const w = W - padL - 70;
@@ -996,7 +996,7 @@ function drawChart(){
       const y = padT + idx * rowH;
       const th = thickness(d) * .92;
       const lab = labelOf(d);
-      svgHTML += `<текст х="${padL - 8}" y="${y + rowH * .7}" font-size="11" fill="#52525B"
+      svgHTML += `<текст х="${padL - 8}" y="${y + rowH * .7}" размер шрифта="11" наполнять="#52525B"
         текст-якорь="конец">${esc(String(d.key).slice(0, 22))}${d.detail ? ' · ' + esc(String(d.detail)) : ''}</text>`;
       svgHTML += `<прямой х="${padL}" y="${y + rowH * (1 - th) / 2}"ширина="${Math.max(bw, 1)}"высота="${rowH * th}" fill="${colorOf(d)}" rx="3"><title>${esc(d.key)}: ${fmt(d.value)}</title></rect>`;
       svgHTML += `<текст х="${padL + bw + 6}" y="${y + rowH * .72}" font-size="10,5" fill="#52525B">${lab || fmt(d.value, d)}</text>`;

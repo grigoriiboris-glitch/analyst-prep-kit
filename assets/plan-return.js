@@ -22,7 +22,7 @@
                                       : "Вернуться к вашему плану");
     bar.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);bottom:16px;' +
       'z-index:1200;background:' + (ok ? '#15803D' : '#0E7490') + ';color:#fff;' +
-      "текст-декорация: нет; шрифт: 600 14 пикселей/1 system-ui, без засечек; отступ: 12 пикселей 18 пикселей;" +
+      "текст-декорация: нет; шрифт: 600 14 пикселей/1 системный интерфейс, без засечек; отступ: 12 пикселей 18 пикселей;" +
       'border-radius:999px;box-shadow:0 6px 20px rgba(0,0,0,.28)';
     if (ok) {
       bar.addEventListener('click', function (e) {

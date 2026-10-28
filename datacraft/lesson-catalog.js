@@ -325,7 +325,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "13",
-      "title": "Таблицы Excel (Ctrl+T)",
+      "title": "Таблицы Excel (Ctrl+Т)",
       "unit": "Раздел 4: Продвинутые формулы"
     },
     {
@@ -512,7 +512,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "103",
-      "title": "Что такое библиотека и зачем нужен pandas (import)",
+      "title": "Что такое библиотека и зачем нужен pandas (Импорт)",
       "unit": "Раздел 0: Перед написанием кода"
     },
     {
@@ -557,7 +557,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "8",
-      "title": "Группировка (GroupBy) и агрегация",
+      "title": "Группировка (группировка) и агрегация",
       "unit": "Раздел 2: pandas"
     },
     {
@@ -637,12 +637,12 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "604",
-      "title": "Нарастающий итог с помощью cumsum",
+      "title": "Нарастающий итог с помощью когда",
       "unit": "Раздел 5: От вопроса к метрике"
     },
     {
       "id": "605",
-      "title": "Конверсия воронки с nunique",
+      "title": "Конверсия воронки с уникальный",
       "unit": "Раздел 5: От вопроса к метрике"
     },
     {
@@ -734,7 +734,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "1",
-      "title": "Интерфейс — Power BI.",
+      "title": "Интерфейс — Мощность БИ.",
       "unit": "Раздел 1: Интерфейс и данные"
     },
     {
@@ -981,7 +981,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "11",
-      "title": "A/B-тестирование для аналитиков",
+      "title": "А/Б-тестирование для аналитиков",
       "unit": 3
     },
     {
@@ -1503,7 +1503,7 @@ window.DataCraftLessonCatalog = {
       "items": [
         {
           "id": "0",
-          "title": "Проверил уникальность ticket_id"
+          "title": "Проверил уникальность Ticket_id"
         },
         {
           "id": "1",

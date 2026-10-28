@@ -11,8 +11,8 @@
 // asked correctly. That trap is shown once, here, and never repeated.
 
 const LADDER = {
-  name: "JOINs, миграция клиентов",
-  short: "JOINs, миграция данных",
+  name: "ПРИСОЕДИНЯЙТЕСЬ, миграция клиентов",
+  short: "ПРИСОЕДИНЯЙТЕСЬ, миграция данных",
   blurb: "Две системы, один переезд. Сверьте старый список клиентов с новым, найдите то, что не вошло в него, и оцените его ценность.",
   grain: {
     legacy_customer: "одна строка = один клиент в старой системе",
@@ -62,7 +62,7 @@ JOIN new_customer AS n ON n.legacy_id = c.legacy_id;`,
     header:
 `-- Цель: каждый устаревший клиент с новой системной записью рядом с ним, если она есть.
 -- Источник: унаследованный_клиент присоединен к новому_клиенту, одна строка = один устаревший клиент.
--- Примечание: значение new_id NULL означает, что у клиента нет записей в новой системе.`,
+-- Примечание: значение новый_ид НУЛЬ означает, что у клиента нет записей в новой системе.`,
     sql:
 `SELECT c.legacy_id, c.customer_name, c.region, n.new_id
 FROM legacy_customer AS c
@@ -77,7 +77,7 @@ LEFT JOIN new_customer AS n ON n.legacy_id = c.legacy_id;`,
     header:
 `-- Цель: устаревшие клиенты, у которых нет записей в новой системе после загрузки.
 -- Источник: унаследованный_клиент присоединен к новому_клиенту, одна строка = один отсутствующий клиент.
--- Примечание. IS NULL для new_id означает что-либо только после LEFT JOIN, но не после INNER.`,
+-- Примечание. IS NULL для новый_ид означает что-либо только после LEFT JOIN, но не после INNER.`,
     sql:
 `SELECT c.legacy_id, c.customer_name, c.region, c.account_status
 FROM legacy_customer AS c
@@ -92,7 +92,7 @@ WHERE n.new_id IS NULL;`,
     guide: { href: '../guides/sql-count-function/', label: "Читать: COUNT(*) против COUNT(столбец)" },
     header:
 `-- Цель: подсчеты сверки при переключении для таблицы клиентов.
--- Источник: Legacy_customer присоединен к new_customer, одна строка = вся загрузка.
+-- Источник: Legacy_customer присоединен к новый_клиент, одна строка = вся загрузка.
 -- Примечание. COUNT(*) считает каждую строку, COUNT(n.new_id) пропускает NULL, поэтому пробел — это промахи.`,
     sql:
 `SELECT COUNT(*) AS legacy_rows,
@@ -109,7 +109,7 @@ LEFT JOIN new_customer AS n ON n.legacy_id = c.legacy_id;`,
     guide: { href: '../guides/sql-joins/', label: "Читайте: соединения, умножающие строки" },
     header:
 `-- Цель: устаревшие клиенты с каналом связи со службой поддержки.
--- Источник: Heritage_customer присоединен к new_customer и contact_note.
+-- Источник: Heritage_customer присоединен к новый_клиент и contact_note.
 -- Примечание: ЗАПУСТИТЕ ЭТО И ПРОЧИТАЙТЕ ПОДСЧЕТ. Зерно больше не занимает один ряд на одного клиента`,
     sql:
 `SELECT c.legacy_id, c.customer_name, n.new_id, t.channel
@@ -125,7 +125,7 @@ LEFT JOIN contact_note AS t ON t.legacy_id = c.legacy_id;`,
     guide: { href: '../guides/sql-group-by-having/', label: "Читайте: свертывание строк с помощью GROUP BY." },
     header:
 `-- Цель: устаревшие клиенты с указанием их контактов в службе поддержки.
--- Источник: Heritage_customer присоединен к new_customer и contact_note, одна строка = один устаревший клиент.
+-- Источник: Heritage_customer присоединен к новый_клиент и contact_note, одна строка = один устаревший клиент.
 -- Примечание. GROUP BY возвращает зернистость в одну строку для каждого клиента после соединения «один ко многим».`,
     sql:
 `SELECT c.legacy_id, c.customer_name, n.new_id, COUNT(t.note_id) AS notes
@@ -165,7 +165,7 @@ LEFT JOIN order_totals AS o ON o.legacy_id = c.legacy_id;`,
     guide: { href: '../guides/sql-joins/', label: "Читайте: НАПРАВО и в другую сторону." },
     header:
 `-- Цель: новые записи о клиентах системы без соответствующей устаревшей записи.
--- Источник: Heritage_customer присоединен к new_customer, одна строка = одна необъяснимая новая запись.
+-- Источник: Heritage_customer присоединен к новый_клиент, одна строка = одна необъяснимая новая запись.
 -- Примечание: это не ошибки миграции, это записи, созданные новой системой самостоятельно.`,
     sql:
 `SELECT n.new_id, n.customer_name, n.region, c.legacy_id
