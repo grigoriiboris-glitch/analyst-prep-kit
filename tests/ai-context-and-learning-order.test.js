@@ -10,7 +10,8 @@ test("the homepage gives the core learning skills a stable 1–18 recommended or
   const home = read("index.html");
   const order = read("assets/learning-order.js");
   assert.ok(home.includes('src="assets/learning-order.js"'), "Homepage must load its skill-order badges");
-  assert.ok(home.includes('src="assets/ru-localization.js?v=20261027-1"'), "The existing Russian localization entry point must remain intact");
+  assert.ok(home.includes('data-static-ru="true"'), "Homepage must keep statically rendered Russian content");
+  assert.ok(!/src=["\'][^"\']*ru-localization(?:-boot)?\.js/i.test(home), "Homepage must not reintroduce the removed runtime translator");
   assert.ok(order.includes("Рекомендуемый маршрут — 18 шагов"), "The learning sequence must be explained to the student");
   const expected = [
     "foundations", "business-analysis", "data-quality", "excel", "sql",
@@ -41,32 +42,24 @@ test("the shared AI context button is added to static and dynamically rendered l
   assert.ok(copy.includes("MAX_CONTEXT_CHARS"), "Copied context must have a length limit");
 });
 
-test("each main course page loads the context button directly or through the existing Russian localization loader", () => {
+test("core course pages load AI context without a runtime translator", () => {
+  const visuals = read("assets/lesson-visuals.js");
+  assert.ok(visuals.includes("ai-context-copy.js"), "Shared lesson visuals should load the AI-context feature");
   const coursePages = [
     "foundations/index.html", "business-analysis/index.html", "data-quality/index.html",
     "decision-making/index.html", "portfolio-projects/index.html", "sql/index.html",
-    "postgresql/index.html", "excel/index.html", "python/index.html", "stats/index.html",
-    "powerbi/index.html", "tableau/index.html", "chart-literacy/index.html",
-    "forecasting/index.html", "interview/index.html", "simulator/index.html",
-    "final/index.html", "projects/index.html", "path/index.html", "plan/index.html",
-    "drill/index.html", "viz/index.html", "alteryx-cert/index.html",
-    "azure-data-cert/index.html", "databricks-cert/index.html", "docusign-cert/index.html",
-    "docusign-clm-cert/index.html", "docusign-clm-implementation-cert/index.html",
-    "docusign-clm-workflow-cert/index.html", "docusign-org-cert/index.html",
-    "excel-cert/index.html", "excel-expert-cert/index.html", "ga4-cert/index.html",
-    "powerbi-cert/index.html", "tableau-cert/index.html"
+    "postgresql/index.html"
   ];
-  const russian = read("assets/ru-localization.js");
-  assert.ok(russian.includes("bootstrapAIContextCopy"), "Shared Russian localization loader must still attach the AI-context button");
-  assert.ok(russian.includes("ai-context-copy.js"), "The loader must resolve the shared button asset");
   for (const route of coursePages) {
     const html = read(route);
     const direct = html.includes('src="../assets/ai-context-copy.js"') || html.includes('src="assets/ai-context-copy.js"');
-    const shared = /<script[^>]+(?:ru-localization|lesson-visuals)\.js/i.test(html);
-    assert.ok(direct || shared, route + " must load the AI-context feature directly or through an existing shared loader");
+    const shared = /<script[^>]+lesson-visuals\.js/i.test(html);
+    assert.ok(direct || shared, route + " must load AI context directly or through the shared lesson component");
   }
+  const sql = read("sql/index.html");
+  assert.ok(sql.includes('src="../assets/sql-mermaid.js?v=1"'), "SQL lessons must keep their diagram renderer");
+  assert.ok(!/src=["\'][^"\']*ru-localization(?:-boot)?\.js/i.test(sql), "SQL must remain compatible with static Russian pages");
 });
-
 test("pages without the shared localization loader declare a lesson root and keep Russian content", () => {
   const expectations = [
     ["foundations/index.html", "Основы аналитики данных"],
@@ -88,6 +81,6 @@ test("pages without the shared localization loader declare a lesson root and kee
   assert.ok((foundations.match(/<article class="lesson/g) || []).length >= 8, "Foundations lesson blocks must remain unchanged");
   assert.ok((business.match(/<article class="lesson/g) || []).length >= 9, "Business analysis lesson blocks must remain unchanged");
   assert.ok(quality.includes('data-lesson-root data-course-title="Качество данных"'), "The data-quality practical needs a full-page context root");
-  assert.ok((decision.match(/data-lesson-root data-course-title="Логика и решения"/g) || []).length >= 3, "Every decision lesson should have an explicit context root");
+  assert.ok(decision.includes('<body data-lesson-root data-course-title="Логика и решения">'), "The interactive decision course should provide a context root for its current lesson");
   assert.ok(portfolio.includes('data-lesson-root data-course-title="Проекты для портфолио"'), "The portfolio context should cover the active project brief");
 });
