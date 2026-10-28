@@ -141,6 +141,10 @@ assert.ok(datacraft.includes('href="curriculum-map.css"') &&
   datacraft.includes('src="curriculum-map.js"'),
   "DataCraft curriculum map assets are not attached");
 
+const staticRussianTranslator = fs.readFileSync(path.join(root, "tools/static-russian-translation.mjs"), "utf8");
+assert.ok(staticRussianTranslator.includes('"datacraft/curriculum-map.js"'),
+  "DataCraft map markup must be excluded from static text translation");
+
 const curriculum = fs.readFileSync(path.join(root, "datacraft/curriculum-map.js"), "utf8");
 new Function(curriculum);
 assert.ok(curriculum.includes(`width="' + MAP_W + '" height="' + MAP_H + '" tabindex="0" role="img" aria-label="`),
