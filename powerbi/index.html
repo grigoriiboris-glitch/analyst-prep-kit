@@ -1814,7 +1814,7 @@ function renderFlagged(){
 // ─── NAV ───────────────────────────────────────────────────────────────────
 let currentView = 'home';
 function navigate(view, ...args){
-  guided = null; // any normal navigation exits the guided practice flow
+  guided = null; // any normal navigation exits the guided practice flow if(view==='lesson'){ const _lessonId=Number(args[0]); if(DATA.LESSONS.some(l=>l.id===_lessonId)&&state.currentLesson!==_lessonId){state.currentLesson=_lessonId;saveState();} }
   // ...but a hand-off to the Workspace or the DAX Lab is PART of the path, so
   // the return pointer survives exactly one hop, to its own target view. Any
   // other destination means the learner really has left.
@@ -4395,9 +4395,7 @@ navigate('home');
 window.addEventListener('load', function(){
   /* #lesson-<id>-restart (PrepLoop sittings) resets the saved stage so it opens at the beginning */
   var m = location.hash.match(/^#lesson-(\d+)(-restart)?$/);
-  if(m){ try{ if(m[2]) resetLesson(+m[1]); else navigate('lesson', +m[1]); }catch(e){} }
-});
-// Medium #5: one-time "you've unlocked" moment + async account-entitlement hydrate.
+  if(m){ try{ if(m[2]) resetLesson(+m[1]); else navigate('lesson', +m[1]); }catch(e){} } else { const _staged=Object.keys(state.lessonStage||{}).filter(id=>DATA.LESSONS.some(l=>l.id===Number(id))); const _fallback=_staged.length?Number(_staged[_staged.length-1]):(state.doneLessons.length?Number(state.doneLessons[state.doneLessons.length-1]):null); const _resumeId=DATA.LESSONS.some(l=>l.id===Number(state.currentLesson))?Number(state.currentLesson):_fallback; const _resume=DATA.LESSONS.find(l=>l.id===_resumeId); if(_resume)navigate('lesson',_resume.id); } }); // Medium #5: one-time "you've unlocked" moment + async account-entitlement hydrate.
 
 /* -- ONE HELP LADDER ACROSS THE KIT --------------------------------------
    The old hint control had two rungs: the drill's hint, then the whole answer.
