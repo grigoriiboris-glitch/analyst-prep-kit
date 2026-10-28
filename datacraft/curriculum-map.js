@@ -4,6 +4,15 @@
 
   var MAP_W = 1320, MAP_H = 700, NODE_W = 136, NODE_H = 112;
   var SPRITE_CELL = 256;
+  // Recommended skill sequence: prerequisites first, then the tools and portfolio route.
+  var RECOMMENDED_ORDER = {
+    foundations:1,'business-analysis':2,quality:3,excel:4,sql:5,charts:6,postgresql:7,
+    python:8,stats:9,forecasting:10,powerbi:11,tableau:12,decision:13,portfolio:14,
+    'project-studio':15,simulator:16,interview:17,final:18
+  };
+  function recommendedStep(course) { return RECOMMENDED_ORDER[course && course.id] || 0; }
+  function formattedStep(course) { var n = recommendedStep(course); return n ? String(n).padStart(2, '0') : ''; }
+
   var STORE = {
     wallet: 'datacraft-wallet-v1',
     foundations: 'apk-foundations-progress-v1',
@@ -813,7 +822,7 @@
     var currencyNote = '<div class="curriculum-wallet-line"><span>🪙 В кошельке: <strong>' + wallet.balance + '</strong></span><span>Цена постройки: <strong>' + (st.built ? 'оплачено' : (course.cost || 0) + ' 🪙') + '</strong></span><span>Всего заработано: ' + wallet.totalEarned + ' 🪙</span></div>';
     detail.innerHTML =
       '<div class="curriculum-detail-eyebrow">' + safeText(stageLabel) + '</div>' +
-      '<h3>' + safeText(course.icon || '🏗️') + ' ' + safeText(course.title) + '</h3>' +
+      '<h3>' + safeText(course.icon || '🏗️') + ' ' + (recommendedStep(course) ? '<span class="curriculum-order-badge" style="display:inline-block;margin:0 7px 0 2px;padding:3px 8px;border:1px solid #59846a;border-radius:999px;background:#244331;color:#c7f6d8;font-size:11px;vertical-align:middle">ШАГ ' + formattedStep(course) + '</span>' : '') + safeText(course.title) + '</h3>' +
       '<span class="curriculum-status ' + st.state + '">' + (st.built ? '✓ ' : st.courseComplete ? '🔨 ' : st.unlocked ? '🏗️ ' : '🔒 ') + safeText(statusText(st)) + '</span>' +
       '<p>' + safeText(course.desc || 'Дополнительный учебный маршрут.') + '</p>' +
       '<div class="curriculum-progress"><i style="width:' + p.percent + '%"></i></div>' +
@@ -832,7 +841,7 @@
       b.className = 'curriculum-course-card' + (selectedId === c.id ? ' selected' : '');
       b.setAttribute('aria-pressed', selectedId === c.id ? 'true' : 'false');
       var label = st.built ? '✓ ПОСТРОЕНО' : (!st.unlocked ? '🔒 ПУСТОЙ УЧАСТОК' : (st.courseComplete ? '🔨 ГОТОВО К СТРОЙКЕ' : '🏗️ СТРОИТСЯ'));
-      b.innerHTML = '<span class="cc-icon">' + safeText(c.icon) + '</span><span class="cc-copy"><span class="cc-title">' + safeText(c.short) + ' <small style="color:#9ab39f;font-weight:600">(' + safeText(c.title) + ')</small></span><span class="cc-meta"><span>' + safeText(formatProgress(p)) + '</span><span class="cc-state">' + label + '</span></span><span class="cc-bar"><i style="width:' + p.percent + '%"></i></span><span class="cc-cost">' + (st.built ? 'Спрайт здания возведён на карте' : 'Постройка здания: ' + (c.cost || 0) + ' 🪙') + '</span></span>';
+      b.innerHTML = '<span class="cc-icon">' + safeText(c.icon) + '</span><span class="cc-copy"><span class="cc-title">' + (recommendedStep(c) ? '<b style="display:inline-block;margin-right:5px;color:#9be7b5;font-weight:900">' + formattedStep(c) + '.</b>' : '') + safeText(c.short) + ' <small style="color:#9ab39f;font-weight:600">(' + safeText(c.title) + ')</small></span><span class="cc-meta"><span>' + safeText(formatProgress(p)) + '</span><span class="cc-state">' + label + '</span></span><span class="cc-bar"><i style="width:' + p.percent + '%"></i></span><span class="cc-cost">' + (st.built ? 'Спрайт здания возведён на карте' : 'Постройка здания: ' + (c.cost || 0) + ' 🪙') + '</span></span>';
       b.addEventListener('click', function(){ selectCourse(c.id, false); });
       courseList.appendChild(b);
     });
