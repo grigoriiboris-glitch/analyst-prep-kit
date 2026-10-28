@@ -78,8 +78,7 @@ a{color:var(--accent)}.wrap{max-width:1160px;margin:auto;padding:24px}.top{displ
 <script>
 (function(){
   var articles=Array.prototype.slice.call(document.querySelectorAll(".lesson"));
-  var nav=document.getElementById("lessonNav"), active=0, storage="apk-foundations-progress-v1", done={};
-  try{done=JSON.parse(localStorage.getItem(storage)||"{}")||{};}catch(e){done={};}
+  var nav=document.getElementById("lessonNav"), positionKey="apk-foundations-state-v1", active=0, storage="apk-foundations-progress-v1", done={}, position={}; try{done=JSON.parse(localStorage.getItem(storage)||"{}")||{};}catch(e){done={};} try{position=JSON.parse(localStorage.getItem(positionKey)||"{}")||{};}catch(e){position={};} if(Number.isInteger(position.active)&&position.active>=0&&position.active<articles.length)active=position.active;else{var firstIncomplete=articles.findIndex(function(a,i){return !done[i];});if(firstIncomplete>=0)active=firstIncomplete;}
   function save(){try{localStorage.setItem(storage,JSON.stringify(done));}catch(e){} renderProgress();}
   function renderProgress(){
     var count=Object.keys(done).filter(function(k){return done[k];}).length;
@@ -90,9 +89,7 @@ a{color:var(--accent)}.wrap{max-width:1160px;margin:auto;padding:24px}.top{displ
   function renderNav(){
     articles.forEach(function(a,i){var b=document.createElement("button");b.type="button";b.className="lesson-btn";b.innerHTML='<span class="num">'+(i+1)+'</span><span>'+a.dataset.title+'</span>';b.addEventListener("click",function(){show(i);});nav.appendChild(b);});
   }
-  function show(i){
-    active=Math.max(0,Math.min(i,articles.length-1));
-    articles.forEach(function(a,j){a.classList.toggle("active",j===active);});
+  function show(i){ active=Math.max(0,Math.min(i,articles.length-1)); try{localStorage.setItem(positionKey,JSON.stringify({active:active}));}catch(e){} articles.forEach(function(a,j){a.classList.toggle("active",j===active);});
     renderProgress();document.getElementById("prev").disabled=active===0;document.getElementById("next").textContent=active===articles.length-1?"К первому уроку ↻":"Следующий урок →";
     document.getElementById("markDone").textContent=done[active]?"✓ Урок пройден":"Отметить урок пройденным";
   }
@@ -115,7 +112,7 @@ a{color:var(--accent)}.wrap{max-width:1160px;margin:auto;padding:24px}.top{displ
   document.getElementById("next").addEventListener("click",function(){show(active===articles.length-1?0:active+1);});
   document.getElementById("markDone").addEventListener("click",function(){done[active]=true;save();show(active);if(active<articles.length-1)show(active+1);});
   document.getElementById("resetProgress").addEventListener("click",function(){if(confirm("Сбросить весь прогресс этого курса?")){done={};save();show(active);}});
-  renderNav();show(0);renderProgress();
+  renderNav();show(active);renderProgress();
 })();
 </script>
 <script src="../assets/datacraft-economy.js"></script>
