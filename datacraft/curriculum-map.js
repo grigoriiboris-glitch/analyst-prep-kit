@@ -1,14 +1,24 @@
 /* DataCraft curriculum map: animated 2D bitmap world with dynamic building sprites, living environmentFX, and road couriers. */
 (function () {
-  "используйте строгий";
+  'use strict';
 
   var MAP_W = 1320, MAP_H = 700, NODE_W = 136, NODE_H = 112;
   var SPRITE_CELL = 256;
+  // Recommended skill sequence: prerequisites first, then the tools and portfolio route.
+  var RECOMMENDED_ORDER = {
+    foundations:1,'business-analysis':2,quality:3,excel:4,sql:5,charts:6,postgresql:7,
+    python:8,stats:9,forecasting:10,powerbi:11,tableau:12,decision:13,portfolio:14,
+    'project-studio':15,simulator:16,interview:17,final:18
+  };
+  function recommendedStep(course) { return RECOMMENDED_ORDER[course && course.id] || 0; }
+  function formattedStep(course) { var n = recommendedStep(course); return n ? String(n).padStart(2, '0') : ''; }
+
   var STORE = {
     wallet: 'datacraft-wallet-v1',
     foundations: 'apk-foundations-progress-v1',
     quality: 'apk-quality-score',
     sql: 'sqlkit-v1',
+    postgresql: 'apk-postgresql-progress-v1',
     excel: 'epk',
     python: 'ppk',
     charts: 'clk-v1',
@@ -29,10 +39,11 @@
     {id:'foundations',spriteIdx:0,wx:185,wy:595,r:56,biome:'Лагерь у леса',cost:5,title:'Основы аналитики данных',short:'Школа исследователя',icon:'🏕️',path:'../foundations/',tracker:'foundations',total:8,unit:'уроков',stage:0,x:117,y:539,desc:'Базовая грамотность: строки и столбцы, типы данных, ключи, метрики, качество и постановка бизнес-вопроса.',requires:[]},
     {id:'quality',spriteIdx:1,wx:555,wy:555,r:58,biome:'Фермерские угодья',cost:8,title:'Качество данных',short:'Мельница очистки',icon:'🧪',path:'../data-quality/',tracker:'quality',total:5,unit:'категорий',stage:1,x:487,y:499,desc:'Научись обнаруживать пропуски, дубликаты, ошибки форматов и подозрительные значения, не удаляя данные без проверки.',requires:['foundations']},
     {id:'sql',spriteIdx:2,wx:885,wy:135,r:64,biome:'Горный хребет',cost:40,title:'SQL',short:'Шахта и кузница SQL',icon:'⚙️',path:'../sql/',tracker:'sql',total:48,unit:'уроков',stage:2,x:817,y:79,desc:'От SELECT и фильтрации к JOIN, агрегациям, CTE, оконным функциям и проверке качества результата.',requires:['foundations','quality']},
+    {id:'postgresql',spriteIdx:2,wx:1035,wy:455,r:56,biome:'Северное нагорье',cost:22,title:'PostgreSQL',short:'Лаборатория PostgreSQL',icon:'🐘',path:'../postgresql/',tracker:'postgresql',total:30,unit:'уроков',stage:3,x:967,y:399,desc:'PostgreSQL с нуля: типы, JOIN, CTE, оконные функции, JSONB, индексы, планы выполнения и итоговый аналитический кейс.',requires:['sql']},
     {id:'excel',spriteIdx:3,wx:725,wy:595,r:60,biome:'Фермерские угодья',cost:40,title:'Excel',short:'Поля таблиц Excel',icon:'📗',path:'../excel/',tracker:'excel',total:51,unit:'уроков',stage:2,x:657,y:539,desc:'Формулы, поиск, очистка, сводные таблицы, проверка вычислений и аналитические отчёты.',requires:['foundations','quality']},
     {id:'charts',spriteIdx:4,wx:435,wy:215,r:54,biome:'Предгорье',cost:12,title:'Грамотность графиков',short:'Башня визуализации',icon:'📈',path:'../chart-literacy/',tracker:'charts',total:13,unit:'уроков',stage:2,x:367,y:159,desc:'Выбор подходящего графика, правильное чтение визуализаций и поиск вводящих в заблуждение представлений.',requires:['foundations','quality']},
-    {id:'python',spriteIdx:5,wx:495,wy:318,r:58,biome:'Мастерские',cost:30,title:"Питон и панды",short:'Кузница Python',icon:'🐍',path:'../python/',tracker:'python',total:42,unit:'уроков',stage:3,x:427,y:269,desc:'Код для повторяемой обработки данных: базовый Python, pandas, преобразования, объединение и проверка результатов.',requires:['sql','excel']},
-    {id:'stats',spriteIdx:6,wx:485,wy:455,r:58,biome:'Фермерские угодья',cost:20,title:'Статистика',short:'Ферма статистики',icon:'🔭',path:'../stats/',tracker:'stats',total:16,unit:'уроков',stage:3,x:407,y:399,desc:"Распределения, выборки, интервалы, А/Б-тесты, п-значения и осторожная интерпретация доказательств.",requires:['sql','excel']},
+    {id:'python',spriteIdx:5,wx:495,wy:318,r:58,biome:'Мастерские',cost:30,title:'Python и pandas',short:'Кузница Python',icon:'🐍',path:'../python/',tracker:'python',total:42,unit:'уроков',stage:3,x:427,y:269,desc:'Код для повторяемой обработки данных: базовый Python, pandas, преобразования, объединение и проверка результатов.',requires:['sql','excel']},
+    {id:'stats',spriteIdx:6,wx:485,wy:455,r:58,biome:'Фермерские угодья',cost:20,title:'Статистика',short:'Ферма статистики',icon:'🔭',path:'../stats/',tracker:'stats',total:16,unit:'уроков',stage:3,x:407,y:399,desc:'Распределения, выборки, интервалы, A/B-тесты, p-значения и осторожная интерпретация доказательств.',requires:['sql','excel']},
     {id:'forecasting',spriteIdx:7,wx:615,wy:250,r:54,biome:'Ремесленная долина',cost:18,title:'Прогнозирование',short:'Башня прогнозов',icon:'🌦️',path:'../forecasting/',tracker:'forecasting',total:13,unit:'уроков',stage:3,x:537,y:189,desc:'Тренд, сезонность, простые прогнозы, проверка точности и объяснение неопределённости.',requires:['stats','charts']},
     {id:'powerbi',spriteIdx:8,wx:865,wy:320,r:56,biome:'Речной порт',cost:25,title:'Power BI',short:'Центр Power BI',icon:'📊',path:'../powerbi/',tracker:'powerbi',total:39,unit:'уроков',stage:3,x:797,y:279,desc:'Модель данных, связи, меры DAX, визуализация и интерактивные отчёты для бизнес-пользователей.',requires:['sql','excel','charts']},
     {id:'tableau',spriteIdx:9,wx:815,wy:395,r:54,biome:'Ремесленная долина',cost:25,title:'Tableau',short:'Студия дашбордов',icon:'🟦',path:'../tableau/',tracker:'tableau',total:32,unit:'уроков',stage:3,x:737,y:369,desc:'Работа с измерениями и мерами, визуальные исследования, фильтры, наборы, иерархии и дашборды.',requires:['sql','excel','charts']},
@@ -45,26 +56,26 @@
 
   var SPECIALIZATIONS = [
     {id:'project-studio',title:'Проектная мастерская',icon:'🗂️',path:'../projects/',tracker:'projectStudio',catalogId:'projectStudio',total:4,unit:'этапов',cost:18,requires:['portfolio'],desc:'Спланируй собственный проект: сформулируй бизнес-вопрос, критерии, этапы анализа и презентацию.'},
-    {id:'business-analysis',cost:12,title:'Основы бизнес-анализа',icon:'🧭',path:'../business-analysis/',tracker:'businessAnalysis',total:9,unit:'уроков',requires:['foundations'],desc:"Постановка бизнес-проблемы, сбор требований, Истории пользователей, BPMN, критерии приёмки и итоговый кейс."},
-    {id:'excel-cert',cost:12,title:"Сертификат Эксель МО-210",icon:'📗',path:'../excel-cert/',storage:'apk-excelcert',requires:['excel'],desc:"Отдельная подготовка к сертификационному экзамену Эксель."},
-    {id:'excel-expert',walletId:'excel-expert-cert',cost:15,catalogId:'excel-expert-cert',title:"Эксперт Эксель МО-211",icon:'🏅',path:'../excel-expert-cert/',storage:'apk-excelexpertcert',requires:['excel-cert'],desc:'Продвинутый уровень Excel после базовой сертификационной ветки.'},
-    {id:'powerbi-cert',cost:15,title:"Мощность БИ ПЛ-300",icon:'📊',path:'../powerbi-cert/',storage:'apk-pbicert',requires:['powerbi'],desc:"Дополнительная подготовка к сертификации Мощность БИ."},
-    {id:'tableau-cert',cost:15,title:'Настольная версия Tableau',icon:'🟦',path:'../tableau-cert/',storage:'apk-tabcert',requires:['tableau'],desc:"Дополнительная подготовка к сертификации Таблица."},
-    {id:'alteryx-cert',cost:12,title:"Основы Альтерикс",icon:'🔄',path:'../alteryx-cert/',storage:'apk-alteryxcert',requires:['excel','quality'],desc:'Автоматизация подготовки и преобразования данных.'},
-    {id:'azure-data-cert',cost:12,title:"Основы данных Лазурный ДП-900",icon:'☁️',path:'../azure-data-cert/',storage:'apk-dp900cert',requires:['foundations','sql'],desc:"Базовые понятия данных и облачных сервисов Лазурный."},
-    {id:'databricks-cert',cost:15,title:"Архитектура озера данных и хранилища в Блоки данных",icon:'🧱',path:'../databricks-cert/',storage:'apk-dbxcert',requires:['sql','python'],desc:'Дополнительный маршрут по архитектуре озера данных и хранилища, а также аналитической платформе.'},
-    {id:'ga4-cert',cost:12,title:"Гугл Аналитика 4",icon:'📣',path:'../ga4-cert/',storage:'apk-ga4cert',requires:['stats','charts'],desc:'Веб-аналитика, события, конверсии и интерпретация поведения пользователей.'},
-    {id:'docusign',walletId:'docusign-cert',cost:12,catalogId:'docusign-cert',title:"Администратор электронной подписи Документация",icon:'✍️',path:'../docusign-cert/',storage:'apk-dscert',requires:['foundations'],desc:'Отдельный профессиональный маршрут по администрированию электронной подписи.'},
-    {id:'docusign-clm',walletId:'docusign-clm-cert',cost:14,catalogId:'docusign-clm-cert',title:"Администратор управления договорами Документация (CLM)",icon:'📄',path:'../docusign-clm-cert/',storage:'apk-dsclmcert',requires:['docusign'],desc:'Управление жизненным циклом договоров.'},
-    {id:'docusign-clm-workflow',walletId:'docusign-clm-workflow-cert',cost:15,catalogId:'docusign-clm-workflow-cert',title:"Рабочие процессы управления договорами Документация (CLM)",icon:'🔗',path:'../docusign-clm-workflow-cert/',storage:'apk-dsclmwfcert',requires:['docusign-clm'],desc:'Продвинутая специализация по рабочим процессам управления жизненным циклом договоров (CLM).'},
-    {id:'docusign-clm-implementation',walletId:'docusign-clm-implementation-cert',cost:15,catalogId:'docusign-clm-implementation-cert',title:"Внедрение управления договорами Документация (CLM)",icon:'🛠️',path:'../docusign-clm-implementation-cert/',storage:'apk-dsclmimplcert',requires:['docusign-clm'],desc:'Внедрение и настройка процессов управления жизненным циклом договоров (CLM).'},
-    {id:'docusign-org',walletId:'docusign-org-cert',cost:14,catalogId:'docusign-org-cert',title:"Управление организацией в Документация",icon:'🏢',path:'../docusign-org-cert/',storage:'apk-dsorgcert',requires:['docusign'],desc:"Отдельная специализация по управлению организацией Документ."}
+    {id:'business-analysis',cost:12,title:'Основы бизнес-анализа',icon:'🧭',path:'../business-analysis/',tracker:'businessAnalysis',total:9,unit:'уроков',requires:['foundations'],desc:'Постановка бизнес-проблемы, сбор требований, User Stories, BPMN, критерии приёмки и итоговый кейс.'},
+    {id:'excel-cert',cost:12,title:'Сертификат Excel MO-210',icon:'📗',path:'../excel-cert/',storage:'apk-excelcert',requires:['excel'],desc:'Отдельная подготовка к сертификационному экзамену Excel.'},
+    {id:'excel-expert',walletId:'excel-expert-cert',cost:15,catalogId:'excel-expert-cert',title:'Эксперт Excel MO-211',icon:'🏅',path:'../excel-expert-cert/',storage:'apk-excelexpertcert',requires:['excel-cert'],desc:'Продвинутый уровень Excel после базовой сертификационной ветки.'},
+    {id:'powerbi-cert',cost:15,title:'Power BI PL-300',icon:'📊',path:'../powerbi-cert/',storage:'apk-pbicert',requires:['powerbi'],desc:'Дополнительная подготовка к сертификации Power BI.'},
+    {id:'tableau-cert',cost:15,title:'Настольная версия Tableau',icon:'🟦',path:'../tableau-cert/',storage:'apk-tabcert',requires:['tableau'],desc:'Дополнительная подготовка к сертификации Tableau.'},
+    {id:'alteryx-cert',cost:12,title:'Основы Alteryx',icon:'🔄',path:'../alteryx-cert/',storage:'apk-alteryxcert',requires:['excel','quality'],desc:'Автоматизация подготовки и преобразования данных.'},
+    {id:'azure-data-cert',cost:12,title:'Основы данных Azure DP-900',icon:'☁️',path:'../azure-data-cert/',storage:'apk-dp900cert',requires:['foundations','sql'],desc:'Базовые понятия данных и облачных сервисов Azure.'},
+    {id:'databricks-cert',cost:15,title:'Архитектура озера данных и хранилища в Databricks',icon:'🧱',path:'../databricks-cert/',storage:'apk-dbxcert',requires:['sql','python'],desc:'Дополнительный маршрут по архитектуре озера данных и хранилища, а также аналитической платформе.'},
+    {id:'ga4-cert',cost:12,title:'Google Analytics 4',icon:'📣',path:'../ga4-cert/',storage:'apk-ga4cert',requires:['stats','charts'],desc:'Веб-аналитика, события, конверсии и интерпретация поведения пользователей.'},
+    {id:'docusign',walletId:'docusign-cert',cost:12,catalogId:'docusign-cert',title:'Администратор электронной подписи DocuSign',icon:'✍️',path:'../docusign-cert/',storage:'apk-dscert',requires:['foundations'],desc:'Отдельный профессиональный маршрут по администрированию электронной подписи.'},
+    {id:'docusign-clm',walletId:'docusign-clm-cert',cost:14,catalogId:'docusign-clm-cert',title:'Администратор управления договорами DocuSign (CLM)',icon:'📄',path:'../docusign-clm-cert/',storage:'apk-dsclmcert',requires:['docusign'],desc:'Управление жизненным циклом договоров.'},
+    {id:'docusign-clm-workflow',walletId:'docusign-clm-workflow-cert',cost:15,catalogId:'docusign-clm-workflow-cert',title:'Рабочие процессы управления договорами DocuSign (CLM)',icon:'🔗',path:'../docusign-clm-workflow-cert/',storage:'apk-dsclmwfcert',requires:['docusign-clm'],desc:'Продвинутая специализация по рабочим процессам управления жизненным циклом договоров (CLM).'},
+    {id:'docusign-clm-implementation',walletId:'docusign-clm-implementation-cert',cost:15,catalogId:'docusign-clm-implementation-cert',title:'Внедрение управления договорами DocuSign (CLM)',icon:'🛠️',path:'../docusign-clm-implementation-cert/',storage:'apk-dsclmimplcert',requires:['docusign-clm'],desc:'Внедрение и настройка процессов управления жизненным циклом договоров (CLM).'},
+    {id:'docusign-org',walletId:'docusign-org-cert',cost:14,catalogId:'docusign-org-cert',title:'Управление организацией в DocuSign',icon:'🏢',path:'../docusign-org-cert/',storage:'apk-dsorgcert',requires:['docusign'],desc:'Отдельная специализация по управлению организацией DocuSign.'}
   ];
 
   var BY_ID = {}, ALL = [], selectedId = 'foundations', hoveredId = null, currentFilter = 'all';
-  var animEnabled = !(window.matchMedia && window.matchMedia("(предпочитает уменьшенное движение: уменьшить)").matches);
+  var animEnabled = !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   var graph = [
-    ['foundations','quality'],['quality','sql'],['quality','excel'],['quality','charts'],
+    ['foundations','quality'],['quality','sql'],['sql','postgresql'],['quality','excel'],['quality','charts'],
     ['sql','python'],['excel','python'],['sql','stats'],['excel','stats'],
     ['charts','forecasting'],['stats','forecasting'],
     ['sql','powerbi'],['excel','powerbi'],['charts','powerbi'],
@@ -111,7 +122,7 @@
   root.innerHTML =
     '<div class="curriculum-shell">' +
       '<header class="curriculum-head">' +
-        "<div><h2 class=\"curriculum-title\">🗺️ Живая карта мира ДатаКрафт: строй здания из спрайтов за знания</h2>" +
+        '<div><h2 class="curriculum-title">🗺️ Живая карта мира DataCraft: строй здания из спрайтов за знания</h2>' +
         '<p class="curriculum-lead">На базовом битмапе подготовлены строительные площадки, реки, водопад и дороги. Каждое здание дорисовывается из спрайт-листа поверх карты и оживает по мере прохождения: крутятся лопасти мельницы, идёт дым из кузницы, а по открытым дорогам курсируют караваны с данными.</p></div>' +
         '<div class="curriculum-top-actions">' +
           '<span class="curriculum-coins" id="curriculumCoins">🪙 — монет</span>' +
@@ -125,7 +136,7 @@
           '<button type="button" class="curriculum-action primary" id="curriculumNext">▶ Следующий курс</button>' +
         '</div>' +
       '</header>' +
-      '<div class="curriculum-map-scroll"><canvas id="curriculumWorld" width="' + MAP_W + "\"высота=\"" + MAP_H + "\" табиндекс=\"0\" роль=\"изображение\" ария-метка=\"Интерактивная живая 2D-карта мира ДатаКрафт со спрайтами зданий поверх битмапа.\"></canvas></div>" +
+      '<div class="curriculum-map-scroll"><canvas id="curriculumWorld" width="' + MAP_W + '" height="' + MAP_H + '" tabindex="0" role="img" aria-label="Интерактивная живая 2D-карта мира DataCraft со спрайтами зданий поверх битмапа."></canvas></div>' +
       '<div class="curriculum-legend">' +
         '<span><b class="curriculum-symbol" style="color:#7ed68a">✓</b>Построено (живой спрайт + караваны)</span>' +
         '<span><b class="curriculum-symbol" style="color:#f4d47d">🔨</b>Курс пройден — ждёт постройки за 🪙</span>' +
@@ -134,7 +145,7 @@
       '</div>' +
       '<div class="curriculum-lower">' +
         '<section class="curriculum-detail" id="curriculumDetail" aria-live="polite"></section>' +
-        '<section class="curriculum-list-wrap"><div class="curriculum-list-head"><h3>Все основные учебные здания</h3><span>15 объектов · динамическая отрисовка и анимация</span></div><div class="curriculum-course-list" id="curriculumCourseList"></div></section>' +
+        '<section class="curriculum-list-wrap"><div class="curriculum-list-head"><h3>Все основные учебные здания</h3><span>16 объектов · динамическая отрисовка и анимация</span></div><div class="curriculum-course-list" id="curriculumCourseList"></div></section>' +
       '</div>' +
       '<details class="curriculum-section"><summary>Дополнительные учебные модули, специализации и сертификаты <span>14 веток · необязательны для основного выпуска</span></summary><div class="curriculum-specializations" id="curriculumSpecializations"></div></details>' +
       '<div class="curriculum-library"><p><strong>📚 Полевая библиотека и сервисные точки.</strong> Справочники, Ресурсная экспедиция (внизу) и Торговый контракт помогают зарабатывать монеты 🪙 на возведение построенных в учёбе зданий.</p><a href="../guides/">Открыть все справочники →</a></div>' +
@@ -247,7 +258,7 @@
       life: 0,
       maxLife: maxLife || (1.6 + Math.random() * 0.8),
       size: size || (3 + Math.random() * 3),
-      color: color || "РГБА(235, 240, 245,"
+      color: color || 'rgba(235, 240, 245,'
     });
   }
 
@@ -329,17 +340,17 @@
     /* 5. Emit ambient campfire sparks & forge/chimney smoke */
     if (Math.random() < dt * 14) {
       /* Left forest campfires (always burning on the bitmap at (190,425) and (450,122)) */
-      spawnSmoke(190, 418, "ргба(255, 195, 85,", -24, 1.1, 2.2);
-      spawnSmoke(450, 118, "РГБА(255, 205, 95,", -22, 1.0, 2.0);
+      spawnSmoke(190, 418, 'rgba(255, 195, 85,', -24, 1.1, 2.2);
+      spawnSmoke(450, 118, 'rgba(255, 205, 95,', -22, 1.0, 2.0);
       /* Starter camp fire if foundations is unlocked */
-      spawnSmoke(180, 585, "ргба(255, 180, 75,", -22, 1.1, 2.2);
+      spawnSmoke(180, 585, 'rgba(255, 180, 75,', -22, 1.1, 2.2);
     }
     if (Math.random() < dt * 9) {
       /* Smithy chimney smoke (active on map near Python node + extra dense when Python is built) */
       var pyBuilt = isBuilt('python');
-      spawnSmoke(484, 276, pyBuilt ? "РГБА(220, 230, 240," : "РГБА(200, 205, 210,", pyBuilt ? -22 : -15, pyBuilt ? 2.1 : 1.5, pyBuilt ? 4.2 : 2.8);
+      spawnSmoke(484, 276, pyBuilt ? 'rgba(220, 230, 240,' : 'rgba(200, 205, 210,', pyBuilt ? -22 : -15, pyBuilt ? 2.1 : 1.5, pyBuilt ? 4.2 : 2.8);
       if (isBuilt('sql')) {
-        spawnSmoke(895, 108, "РГБА(135, 215, 255,", -20, 1.6, 3.4);
+        spawnSmoke(895, 108, 'rgba(135, 215, 255,', -20, 1.6, 3.4);
       }
     }
 
@@ -436,6 +447,8 @@
       }
       case 'sql':
         s = readJSON(STORE.sql) || {}; count = uniqueArrayCount(s.doneLessons); break;
+      case 'postgresql':
+        s = readJSON(STORE.postgresql) || {}; count = uniqueArrayCount(s.doneLessons); total = 30; label = 'уроков'; break;
       case 'excel':
         s = readJSON(STORE.excel) || {}; count = uniqueArrayCount(s.lessonsDone); break;
       case 'python':
@@ -605,6 +618,8 @@
       }
       case 'sql':
         s = readJSON(STORE.sql) || {}; return Array.isArray(s.doneLessons) && s.doneLessons.map(String).indexOf(String(lesson.id)) !== -1;
+      case 'postgresql':
+        s = readJSON(STORE.postgresql) || {}; return Array.isArray(s.doneLessons) && s.doneLessons.map(String).indexOf(String(lesson.id)) !== -1;
       case 'excel':
         s = readJSON(STORE.excel) || {}; return Array.isArray(s.lessonsDone) && s.lessonsDone.map(String).indexOf(String(lesson.id)) !== -1;
       case 'python':
@@ -657,6 +672,7 @@
       case 'foundations': return 'foundations:lesson:' + lesson.id;
       case 'quality': return 'quality:category:' + lesson.id;
       case 'sql': return 'sql:lesson:' + lesson.id;
+      case 'postgresql': return 'postgresql:lesson:' + lesson.id;
       case 'excel': return 'excel:lesson:' + lesson.id;
       case 'python': return 'python:lesson:' + lesson.id;
       case 'powerbi': return 'powerbi:lesson:' + lesson.id;
@@ -686,7 +702,7 @@
       if (course.tracker === 'quality' || course.tracker === 'portfolio') amount = 1;
       if (course.tracker === 'simulator' || course.tracker === 'final') amount = 2;
       if (course.tracker === 'projectStudio' || course.tracker === 'cert') amount = 0;
-      return "<класс div=\"учебный план-урока-строка\"" + (done ? ' passed' : '') + (depth ? ' nested' : '') + '"><span class="curriculum-lesson-check">' + (done ? '✓' : '○') + '</span><span class="curriculum-lesson-copy"><span class="curriculum-lesson-title">' + safeText(item.title) + '</span>' + (item.goal ? '<span class="curriculum-lesson-goal">' + safeText(item.goal) + '</span>' : '') + '</span><span class="curriculum-lesson-actions"><span class="curriculum-lesson-reward">' + (done ? 'Зачтено' : (rewardAlreadyClaimed ? 'Монеты получены' : (amount ? '+' + amount + ' 🪙' : 'Этап'))) + "</span><тип кнопки=\"кнопка\" сорт=\"контекст-копии учебной программы\" заголовок=\"Скопировать контекст этого урока для ИИ-агента\" ария-метка=\"Скопировать контекст урока " + safeText(item.title) + "\"название-курса-данных=\"" + safeText(course.title) + "\"путь-курса-данных=\"" + safeText(course.path || '') + "\"id-курса-данных=\"" + safeText(course.id) + '" data-lesson-title="' + safeText(item.title) + '" data-lesson-id="' + safeText(item.id) + '" data-lesson-unit="' + safeText(item.unit || '') + "\"цель-урока-данных=\"" + safeText(item.goal || '') + "\"данные-уроки-готовы=\"" + (done ? 'true' : 'false') + '" data-parent-id="' + safeText(parentId || '') + '">⧉ Скопировать контекст</button></span></div>';
+      return '<div class="curriculum-lesson-row' + (done ? ' passed' : '') + (depth ? ' nested' : '') + '"><span class="curriculum-lesson-check">' + (done ? '✓' : '○') + '</span><span class="curriculum-lesson-copy"><span class="curriculum-lesson-title">' + safeText(item.title) + '</span>' + (item.goal ? '<span class="curriculum-lesson-goal">' + safeText(item.goal) + '</span>' : '') + '</span><span class="curriculum-lesson-actions"><span class="curriculum-lesson-reward">' + (done ? 'Зачтено' : (rewardAlreadyClaimed ? 'Монеты получены' : (amount ? '+' + amount + ' 🪙' : 'Этап'))) + '</span><button type="button" class="curriculum-copy-context" title="Скопировать контекст этого урока для ИИ-агента" aria-label="Скопировать контекст урока ' + safeText(item.title) + '" data-course-title="' + safeText(course.title) + '" data-course-path="' + safeText(course.path || '') + '" data-course-id="' + safeText(course.id) + '" data-lesson-title="' + safeText(item.title) + '" data-lesson-id="' + safeText(item.id) + '" data-lesson-unit="' + safeText(item.unit || '') + '" data-lesson-goal="' + safeText(item.goal || '') + '" data-lesson-done="' + (done ? 'true' : 'false') + '" data-parent-id="' + safeText(parentId || '') + '">⧉ Скопировать контекст</button></span></div>';
     }
     if (course.tracker === 'portfolio') {
       catalog.forEach(function(project){
@@ -782,14 +798,14 @@
       req += '<li><span class="req-mark">Требуется</span><span>Построить предыдущие здания на карте:</span></li>';
       deps.requires.forEach(function(id){
         var c = BY_ID[id], cp = getProgress(c), built = isBuilt(id);
-        req += "<li><span class=\"req-mark\" " + (built ? '' : 'missing') + '">' + (built ? '✓' : '○') + '</span><span>' + safeText(courseName(id)) + ' — ' + safeText(formatProgress(cp)) + (built ? ' · построено' : (cp.complete ? ' · курс пройден, построй за ' + (c.cost || 0) + ' 🪙' : ' · осталось ' + Math.max(0, cp.total - cp.done) + ' ур. и постройка за ' + (c.cost || 0) + ' 🪙')) + '</span></li>';
+        req += '<li><span class="req-mark ' + (built ? '' : 'missing') + '">' + (built ? '✓' : '○') + '</span><span>' + safeText(courseName(id)) + ' — ' + safeText(formatProgress(cp)) + (built ? ' · построено' : (cp.complete ? ' · курс пройден, построй за ' + (c.cost || 0) + ' 🪙' : ' · осталось ' + Math.max(0, cp.total - cp.done) + ' ур. и постройка за ' + (c.cost || 0) + ' 🪙')) + '</span></li>';
       });
     } else {
       req += '<li><span class="req-mark">✓</span><span>Стартовая площадка: предварительные постройки не нужны.</span></li>';
     }
     if (deps.anyOf.length) {
       var anyDone = deps.anyOf.some(function(id){return isBuilt(id);});
-      req += "<li><span class=\"req-mark\" " + (anyDone ? '' : 'missing') + '">' + (anyDone ? '✓' : '○') + '</span><span>Дополнительно: построй один из вариантов — ' + deps.anyOf.map(function(id){return safeText(courseName(id));}).join(' или ') + '.</span></li>';
+      req += '<li><span class="req-mark ' + (anyDone ? '' : 'missing') + '">' + (anyDone ? '✓' : '○') + '</span><span>Дополнительно: построй один из вариантов — ' + deps.anyOf.map(function(id){return safeText(courseName(id));}).join(' или ') + '.</span></li>';
     }
     var action = document.createElement('div'); action.className = 'curriculum-detail-actions';
     if (st.built) {
@@ -809,10 +825,10 @@
     var currencyNote = '<div class="curriculum-wallet-line"><span>🪙 В кошельке: <strong>' + wallet.balance + '</strong></span><span>Цена постройки: <strong>' + (st.built ? 'оплачено' : (course.cost || 0) + ' 🪙') + '</strong></span><span>Всего заработано: ' + wallet.totalEarned + ' 🪙</span></div>';
     detail.innerHTML =
       '<div class="curriculum-detail-eyebrow">' + safeText(stageLabel) + '</div>' +
-      '<h3>' + safeText(course.icon || '🏗️') + ' ' + safeText(course.title) + '</h3>' +
-      "<класс диапазона=\"статус учебного плана " + st.state + '">' + (st.built ? '✓ ' : st.courseComplete ? '🔨 ' : st.unlocked ? '🏗️ ' : '🔒 ') + safeText(statusText(st)) + '</span>' +
+      '<h3>' + safeText(course.icon || '🏗️') + ' ' + (recommendedStep(course) ? '<span class="curriculum-order-badge" style="display:inline-block;margin:0 7px 0 2px;padding:3px 8px;border:1px solid #59846a;border-radius:999px;background:#244331;color:#c7f6d8;font-size:11px;vertical-align:middle">ШАГ ' + formattedStep(course) + '</span>' : '') + safeText(course.title) + '</h3>' +
+      '<span class="curriculum-status ' + st.state + '">' + (st.built ? '✓ ' : st.courseComplete ? '🔨 ' : st.unlocked ? '🏗️ ' : '🔒 ') + safeText(statusText(st)) + '</span>' +
       '<p>' + safeText(course.desc || 'Дополнительный учебный маршрут.') + '</p>' +
-      "<div class=\"curriculum-progress\"><я стиль=\"ширина:" + p.percent + '%"></i></div>' +
+      '<div class="curriculum-progress"><i style="width:' + p.percent + '%"></i></div>' +
       '<p class="curriculum-progress-text">' + safeText(formatProgress(p)) + ' · ' + p.percent + '%</p>' +
       currencyNote +
       '<ul class="curriculum-requirements">' + req + '</ul>' +
@@ -828,7 +844,7 @@
       b.className = 'curriculum-course-card' + (selectedId === c.id ? ' selected' : '');
       b.setAttribute('aria-pressed', selectedId === c.id ? 'true' : 'false');
       var label = st.built ? '✓ ПОСТРОЕНО' : (!st.unlocked ? '🔒 ПУСТОЙ УЧАСТОК' : (st.courseComplete ? '🔨 ГОТОВО К СТРОЙКЕ' : '🏗️ СТРОИТСЯ'));
-      b.innerHTML = '<span class="cc-icon">' + safeText(c.icon) + '</span><span class="cc-copy"><span class="cc-title">' + safeText(c.short) + ' <small style="color:#9ab39f;font-weight:600">(' + safeText(c.title) + ')</small></span><span class="cc-meta"><span>' + safeText(formatProgress(p)) + '</span><span class="cc-state">' + label + "</span></span><span class=\"cc-bar\"><я стиль=\"ширина:" + p.percent + '%"></i></span><span class="cc-cost">' + (st.built ? 'Спрайт здания возведён на карте' : 'Постройка здания: ' + (c.cost || 0) + ' 🪙') + '</span></span>';
+      b.innerHTML = '<span class="cc-icon">' + safeText(c.icon) + '</span><span class="cc-copy"><span class="cc-title">' + (recommendedStep(c) ? '<b style="display:inline-block;margin-right:5px;color:#9be7b5;font-weight:900">' + formattedStep(c) + '.</b>' : '') + safeText(c.short) + ' <small style="color:#9ab39f;font-weight:600">(' + safeText(c.title) + ')</small></span><span class="cc-meta"><span>' + safeText(formatProgress(p)) + '</span><span class="cc-state">' + label + '</span></span><span class="cc-bar"><i style="width:' + p.percent + '%"></i></span><span class="cc-cost">' + (st.built ? 'Спрайт здания возведён на карте' : 'Постройка здания: ' + (c.cost || 0) + ' 🪙') + '</span></span>';
       b.addEventListener('click', function(){ selectCourse(c.id, false); });
       courseList.appendChild(b);
     });
@@ -842,7 +858,7 @@
       var top = document.createElement('div'); top.className = 'curriculum-special-top';
       var icon = document.createElement('span'); icon.className = 'curriculum-special-icon'; icon.textContent = c.icon;
       var text = document.createElement('div'); text.style.minWidth = '0';
-      var h = document.createElement('h4'); h.textContent = c.title;
+      var h = document.createElement('h4'); h.textContent = (recommendedStep(c) ? formattedStep(c) + '. ' : '') + c.title;
       var desc = document.createElement('p'); desc.textContent = formatProgress(p) + ' · ' + (st.built ? 'построено' : (!st.unlocked ? 'закрыто' : 'постройка ' + (c.cost || 0) + ' 🪙'));
       text.append(h, desc); top.append(icon, text); card.append(top);
       var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'curriculum-action' + (st.unlocked ? ' primary' : '');
@@ -869,7 +885,7 @@
       ctx.translate(wx - 4, wy - 14);
       ctx.rotate(t * 1.15);
       ctx.strokeStyle = '#3b2816';
-      ctx.fillStyle = "rgba(246, 232, 198, 0,88)";
+      ctx.fillStyle = 'rgba(246, 232, 198, 0.88)';
       ctx.lineWidth = 2;
       for (var arm = 0; arm < 4; arm++) {
         ctx.rotate(Math.PI / 2);
@@ -889,7 +905,7 @@
       /* Pulsing orange forge hearth glow */
       var glow = 0.35 + 0.25 * Math.sin(t * 5.2);
       ctx.save();
-      ctx.fillStyle = "РГБА(255, 140, 40, " + glow + ')';
+      ctx.fillStyle = 'rgba(255, 140, 40, ' + glow + ')';
       ctx.beginPath();
       ctx.arc(wx + 2, wy + 8, 18, 0, Math.PI * 2);
       ctx.fill();
@@ -898,7 +914,7 @@
       /* Shimmering blue SQL ore crystals & minecart motion */
       var cartShift = Math.sin(t * 2.1) * 10;
       ctx.save();
-      ctx.fillStyle = "РГБА(110, 215, 255, " + (0.45 + 0.35 * Math.sin(t * 4)) + ')';
+      ctx.fillStyle = 'rgba(110, 215, 255, ' + (0.45 + 0.35 * Math.sin(t * 4)) + ')';
       ctx.beginPath();
       ctx.arc(wx - 12 + cartShift, wy + 12, 7, 0, Math.PI * 2);
       ctx.fill();
@@ -908,7 +924,7 @@
       var waveR = (t * 22) % 42;
       var waveAlpha = Math.max(0, 0.65 * (1 - waveR / 42));
       ctx.save();
-      ctx.strokeStyle = "РГБА(165, 230, 255, " + waveAlpha + ')';
+      ctx.strokeStyle = 'rgba(165, 230, 255, ' + waveAlpha + ')';
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.arc(wx, wy - 20, waveR, 0, Math.PI * 2);
@@ -981,7 +997,7 @@
       ctx.save();
       ctx.shadowColor = '#ffe59a';
       ctx.shadowBlur = animEnabled ? 11 : 3;
-      ctx.fillStyle = "rgba(25, 42, 30, 0,94)";
+      ctx.fillStyle = 'rgba(25, 42, 30, 0.94)';
       ctx.beginPath();
       ctx.arc(pos.x, pos.y, 15 * pulse, 0, Math.PI * 2);
       ctx.fill();
@@ -991,14 +1007,14 @@
       ctx.stroke();
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.font = "21пикселей «Эмодзи цвета яблока», «Сегоэ UI Эмодзи», без засечек";
+      ctx.font = '21px "Apple Color Emoji","Segoe UI Emoji",sans-serif';
       ctx.fillStyle = '#ffffff';
       ctx.fillText(npc.icon, pos.x, pos.y + 1);
       if (hoveredNpcId === npc.id) {
         var label = npc.name + ' · квест';
-        ctx.font = "700 11пикселей системный интерфейс, без засечек";
+        ctx.font = '700 11px system-ui,sans-serif';
         var labelW = ctx.measureText(label).width + 16;
-        ctx.fillStyle = "rgba(16, 29, 21, 0,94)";
+        ctx.fillStyle = 'rgba(16, 29, 21, 0.94)';
         roundRect(ctx, pos.x - labelW / 2, pos.y - 33, labelW, 19, 7);
         ctx.fill();
         ctx.fillStyle = '#fff0aa';
@@ -1028,8 +1044,8 @@
       ctx.save();
       ctx.globalAlpha = Math.min(1, opacity);
       var mist = ctx.createRadialGradient(region.x + driftX, region.y + driftY, 10, region.x + driftX, region.y + driftY, region.rx);
-      mist.addColorStop(0, "rgba(222, 234, 226, 0,64)");
-      mist.addColorStop(0.52, "rgba(190, 207, 197, 0,40)");
+      mist.addColorStop(0, 'rgba(222, 234, 226, 0.64)');
+      mist.addColorStop(0.52, 'rgba(190, 207, 197, 0.40)');
       mist.addColorStop(1, 'rgba(177, 197, 187, 0)');
       ctx.fillStyle = mist;
       ctx.beginPath();
@@ -1043,7 +1059,7 @@
         var prx = region.rx * (0.18 + (puff % 3) * 0.035);
         var pry = region.ry * (0.19 + (puff % 2) * 0.04);
         var cloud = ctx.createRadialGradient(px, py, 2, px, py, prx);
-        cloud.addColorStop(0, "rgba(235, 242, 237, 0,48)");
+        cloud.addColorStop(0, 'rgba(235, 242, 237, 0.48)');
         cloud.addColorStop(1, 'rgba(214, 226, 218, 0)');
         ctx.fillStyle = cloud;
         ctx.beginPath();
@@ -1051,9 +1067,9 @@
         ctx.fill();
       }
       if (locked && opacity > 0.62) {
-        ctx.font = "800 10пикселей системный интерфейс, без засечек";
+        ctx.font = '800 10px system-ui,sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillStyle = "rgba(239, 248, 241, 0,82)";
+        ctx.fillStyle = 'rgba(239, 248, 241, 0.82)';
         ctx.fillText('НЕИЗВЕДАННАЯ ОБЛАСТЬ', region.x, region.y + region.ry * 0.72);
       }
       ctx.restore();
@@ -1065,13 +1081,13 @@
     ctx.save();
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.font = "900 17пикселей системный интерфейс, «Эмодзи цвета яблока», «Сегоэ UI Эмодзи», без засечек";
+    ctx.font = '900 17px system-ui,"Apple Color Emoji","Segoe UI Emoji",sans-serif';
     ctx.lineWidth = 3.4;
     ctx.lineJoin = 'round';
     animState.floatingTexts.forEach(function(item) {
       var alpha = Math.max(0, 1 - item.life / item.maxLife);
       ctx.globalAlpha = alpha;
-      ctx.strokeStyle = "rgba(16, 27, 20, 0,94)";
+      ctx.strokeStyle = 'rgba(16, 27, 20, 0.94)';
       ctx.strokeText(item.text, item.x, item.y);
       ctx.fillStyle = item.color;
       ctx.fillText(item.text, item.x, item.y);
@@ -1187,7 +1203,7 @@
     ctx.save();
 
     /* A. Waterfall cascading droplets & mist at (560, 0..95) */
-    ctx.fillStyle = "rgba(230, 248, 255, 0,78)";
+    ctx.fillStyle = 'rgba(230, 248, 255, 0.78)';
     animState.waterfallDrops.forEach(function(d) {
       ctx.beginPath();
       ctx.ellipse(d.x, d.y, d.r * 0.8, d.r * 2.2, 0.12, 0, Math.PI * 2);
@@ -1197,7 +1213,7 @@
     for (var fi = 0; fi < 4; fi++) {
       var fx = 540 + fi * 11 + Math.sin(t * 3 + fi) * 2;
       var fr = 6 + Math.sin(t * 4.5 + fi * 1.3) * 2.2;
-      ctx.fillStyle = "rgba(245, 252, 255, 0,55)";
+      ctx.fillStyle = 'rgba(245, 252, 255, 0.55)';
       ctx.beginPath();
       ctx.arc(fx, 89, fr, 0, Math.PI * 2);
       ctx.fill();
@@ -1210,7 +1226,7 @@
       /* Never let a highlight drift onto grass, road, a building pad, or a bank. */
       if (!isRiverWaterPixel(sx, sy)) return;
       var shimmer = 0.25 + 0.55 * Math.abs(Math.sin(t * 3.5 + s.progress * 15));
-      ctx.fillStyle = "РГБА(225, 248, 255, " + shimmer.toFixed(2) + ')';
+      ctx.fillStyle = 'rgba(225, 248, 255, ' + shimmer.toFixed(2) + ')';
       ctx.beginPath();
       ctx.ellipse(sx, sy, s.size * 1.6, s.size * 0.7, -0.4, 0, Math.PI * 2);
       ctx.fill();
@@ -1220,7 +1236,7 @@
     var boatCoords = [{x: 1125, y: 642}, {x: 1098, y: 582}, {x: 1228, y: 588}, {x: 995, y: 468}];
     boatCoords.forEach(function(b, idx) {
       var bob = Math.sin(t * 2.4 + idx * 1.5) * 4;
-      ctx.strokeStyle = "РГБА(220, 245, 255, " + (0.35 + 0.2 * Math.sin(t * 2.4 + idx)) + ')';
+      ctx.strokeStyle = 'rgba(220, 245, 255, ' + (0.35 + 0.2 * Math.sin(t * 2.4 + idx)) + ')';
       ctx.lineWidth = 1.6;
       ctx.beginPath();
       ctx.ellipse(b.x, b.y + 4, 18 + bob * 0.8, 7 + Math.abs(bob) * 0.3, -0.25, 0, Math.PI * 2);
@@ -1232,8 +1248,8 @@
     fires.forEach(function(f, idx) {
       var flick = 1 + 0.22 * Math.sin(t * 9 + idx * 2.1);
       var grad = ctx.createRadialGradient(f.x, f.y, 2, f.x, f.y, 26 * flick);
-      grad.addColorStop(0, "rgba(255, 230, 110, 0,65)");
-      grad.addColorStop(0.5, "rgba(255, 140, 40, 0,28)");
+      grad.addColorStop(0, 'rgba(255, 230, 110, 0.65)');
+      grad.addColorStop(0.5, 'rgba(255, 140, 40, 0.28)');
       grad.addColorStop(1, 'rgba(255, 90, 20, 0)');
       ctx.fillStyle = grad;
       ctx.beginPath();
@@ -1268,7 +1284,7 @@
     ctx.globalAlpha = 1;
 
     /* 3. Flying Birds (V-shaped wings flapping) */
-    ctx.strokeStyle = "rgba(35, 45, 38, 0,65)";
+    ctx.strokeStyle = 'rgba(35, 45, 38, 0.65)';
     ctx.lineWidth = 1.8;
     animState.birds.forEach(function(b) {
       var flap = Math.sin(t * 7.5 + b.phase) * 4.5;
@@ -1282,7 +1298,7 @@
     /* 4. Soft drifting cloud shadows across terrain */
     animState.clouds.forEach(function(c) {
       var grad = ctx.createRadialGradient(c.x, c.y, c.rx * 0.1, c.x, c.y, c.rx);
-      grad.addColorStop(0, "rgba(12, 24, 18, 0,10)");
+      grad.addColorStop(0, 'rgba(12, 24, 18, 0.10)');
       grad.addColorStop(1, 'rgba(12, 24, 18, 0)');
       ctx.fillStyle = grad;
       ctx.beginPath();
@@ -1324,7 +1340,7 @@
       ctx.quadraticCurveTo(mx, my, to.wx, to.wy);
 
       if (fs.built && ts.built) {
-        ctx.strokeStyle = "rgba(134, 238, 142, 0,85)";
+        ctx.strokeStyle = 'rgba(134, 238, 142, 0.85)';
         ctx.lineWidth = 4;
         ctx.setLineDash([]);
         ctx.stroke();
@@ -1342,13 +1358,13 @@
           ctx.fill();
         }
       } else if (fs.built && ts.unlocked) {
-        ctx.strokeStyle = "rgba(255, 222, 112, 0,88)";
+        ctx.strokeStyle = 'rgba(255, 222, 112, 0.88)';
         ctx.lineWidth = 3.5;
         ctx.setLineDash([9, 6]);
         if (animEnabled) ctx.lineDashOffset = -t * 24;
         ctx.stroke();
       } else {
-        ctx.strokeStyle = "rgba(42, 54, 44, 0,42)";
+        ctx.strokeStyle = 'rgba(42, 54, 44, 0.42)';
         ctx.lineWidth = 2;
         ctx.setLineDash([5, 7]);
         ctx.stroke();
@@ -1387,7 +1403,7 @@
         ctx.save();
         ctx.beginPath();
         ctx.ellipse(wx, wy + 6, rad * 0.92 * pulse, rad * 0.54 * pulse, 0, 0, Math.PI * 2);
-        ctx.fillStyle = isSelected ? "rgba(168, 230, 161, 0,36)" : (st.courseComplete && !st.built ? "rgba(245, 211, 126, 0,42)" : "rgba(255, 255, 255, 0,24)");
+        ctx.fillStyle = isSelected ? 'rgba(168, 230, 161, 0.36)' : (st.courseComplete && !st.built ? 'rgba(245, 211, 126, 0.42)' : 'rgba(255, 255, 255, 0.24)');
         ctx.fill();
         ctx.lineWidth = isSelected ? 3.5 : 2.5;
         ctx.strokeStyle = isSelected ? '#a8e6a1' : (st.courseComplete && !st.built ? '#f5d37e' : '#ffffff');
@@ -1405,7 +1421,7 @@
         } else if (st.unlocked && st.courseComplete) {
           /* Course finished -> ready to pay & construct */
           ctx.save();
-          ctx.filter = "сепия(35%) насыщенность(155%) яркость(1,08)";
+          ctx.filter = 'sepia(35%) saturate(155%) brightness(1.08)';
           ctx.globalAlpha = matchesFilter ? 0.94 : 0.25;
           ctx.drawImage(spriteImg, sx, sy, SPRITE_CELL, SPRITE_CELL, wx - drawSize / 2, wy - drawSize * 0.58, drawSize, drawSize);
           ctx.restore();
@@ -1416,7 +1432,7 @@
           ctx.save();
           var breath = animEnabled ? (0.05 * Math.sin(t * 2.6 + c.spriteIdx)) : 0;
           ctx.globalAlpha = (0.38 + (p.percent / 100) * 0.45 + breath) * (matchesFilter ? 1 : 0.3);
-          ctx.filter = "насыщенность(65%) контрастность(95%)";
+          ctx.filter = 'saturate(65%) contrast(95%)';
           ctx.drawImage(spriteImg, sx, sy, SPRITE_CELL, SPRITE_CELL, wx - drawSize / 2, wy - drawSize * 0.58, drawSize, drawSize);
           ctx.restore();
         } else {
@@ -1433,7 +1449,7 @@
       var plateW = 128, plateH = 36;
       var px = wx - plateW / 2, py = wy + rad * 0.36;
       var borderCol = st.built ? '#7ed68a' : (st.unlocked && st.courseComplete ? '#f5d37e' : (st.unlocked ? '#8ecae6' : '#5c6e60'));
-      var bgCol = st.built ? "rgba(20, 48, 29, 0,92)" : (st.unlocked && st.courseComplete ? "rgba(58, 45, 18, 0,94)" : (st.unlocked ? "rgba(22, 39, 34, 0,92)" : "rgba(20, 28, 23, 0,86)"));
+      var bgCol = st.built ? 'rgba(20, 48, 29, 0.92)' : (st.unlocked && st.courseComplete ? 'rgba(58, 45, 18, 0.94)' : (st.unlocked ? 'rgba(22, 39, 34, 0.92)' : 'rgba(20, 28, 23, 0.86)'));
 
       ctx.fillStyle = bgCol;
       ctx.strokeStyle = borderCol;
@@ -1444,12 +1460,12 @@
 
       ctx.textAlign = 'center';
       ctx.fillStyle = '#eff8ec';
-      ctx.font = "800 10пикселей системный интерфейс, -Яблоко-система, без засечек";
+      ctx.font = '800 10px system-ui, -apple-system, sans-serif';
       ctx.fillText(c.short, wx, py + 13);
 
       /* Mini progress bar inside nameplate */
       var barW = plateW - 16, barX = px + 8, barY = py + 18;
-      ctx.fillStyle = "rgba(10, 18, 13, 0,85)";
+      ctx.fillStyle = 'rgba(10, 18, 13, 0.85)';
       roundRect(ctx, barX, barY, barW, 5, 2.5);
       ctx.fill();
       if (p.percent > 0 || st.built) {
@@ -1460,7 +1476,7 @@
       }
 
       /* Bottom status / coin cost line */
-      ctx.font = "700 9пикселей системный интерфейс, -Яблоко-система, без засечек";
+      ctx.font = '700 9px system-ui, -apple-system, sans-serif';
       ctx.fillStyle = st.built ? '#a8eeae' : (st.unlocked && st.courseComplete ? '#ffe39c' : '#b8cbb9');
       var metaLabel = st.built ? '✓ Построено' : (st.unlocked && st.courseComplete ? '🔨 Строить: ' + c.cost + ' 🪙' : p.done + '/' + p.total + ' · ' + c.cost + ' 🪙');
       ctx.fillText(metaLabel, wx, py + 31);
@@ -1620,7 +1636,7 @@
     try { if (path) materialUrl = new URL(path, window.location.href).href; } catch (e) {}
     var lines = [
       'КОНТЕКСТ ДЛЯ ИИ-АГЕНТА',
-      "Проект: Подготовительный комплект для аналитика — ДатаКрафт.",
+      'Проект: Analyst Prep Kit — DataCraft.',
       'Курс: ' + courseTitle,
       courseId ? 'Идентификатор курса: ' + courseId : '',
       unit ? 'Раздел: ' + unit : '',
