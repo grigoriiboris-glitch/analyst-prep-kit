@@ -53,6 +53,12 @@ jobs:
           NODE_OPTIONS: --max-old-space-size=4096
         run: node tools/static-russian-translation.mjs
 
+      - name: Audit generated static Russian pages before publication
+        run: node tools/check-static-russian.js
+
+      - name: Verify module scripts and acceptance criteria after translation
+        run: node tools/check-new-modules.js
+
       - name: Save translation cache even when rate-limited
         if: always()
         uses: actions/cache/save@v4
