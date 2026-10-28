@@ -36,8 +36,9 @@ for (const page of pages) {
   if (/\b(?:id|class)\s*=\s*["'][^"']*(?:language-toggle|language-switcher|language-selector|lang-toggle)[^"']*["']/i.test(page.content)) {
     failures.push(page.file + ": language selector UI remains");
   }
-  if (/<класс\s+div\s*=/i.test(page.content)) {
-    failures.push(page.file + ": translated text corrupted a rendered HTML tag");
+  // Translation must never convert HTML tag names or attribute names into Russian.
+  if (/<[А-Яа-яЁё]+\s+(?:div|span|button|a|label|input|section|article|class|style|id)\b/i.test(page.content)) {
+    failures.push(page.file + ": translated text corrupted an HTML tag or attribute");
   }
 
   // Inspect only actual static visible markup, not developer comments, CSS or code.
@@ -49,7 +50,14 @@ for (const page of pages) {
     .replace(/<code\b[^>]*>[\s\S]*?<\/code\s*>/gi, " ");
   const englishControl = /<(?:button|a|label)\b[^>]*>\s*(?:Home|Lessons|Practice|Workspace|Cards|Glossary|Line|Scatter|Clear|Example|Try again|Next lesson|Not quite|Sign In|Sign in|Sign Up|Continue with Google|Log out)\s*<\/(?:button|a|label)\s*>/i;
   if (englishControl.test(visibleMarkup)) {
-    failures.push(page.file + ": an English control label remains visible");
+    failures.push(page.file + ": an English control label remains visible in static markup");
+  }
+
+  // The lesson UIs generate many controls from JavaScript template literals.
+  // Check those rendered fragments as well, not only the static HTML shell.
+  const dynamicEnglishControl = />\s*(?:Home|Lessons|Guides|Practice|Workspace|Cards|Glossary|Line|Scatter|Clear|Example|Try again|Next lesson|Previous lesson|Not quite|Sign In|Sign in|Sign Up|Continue with Google|Log out|Start Learning|Get Started|Show answer|Reset progress|Learn more|Orient|Build|Check|Close)\s*<\/(?:button|a|label|option)>/i;
+  if (dynamicEnglishControl.test(page.content)) {
+    failures.push(page.file + ": an English control label remains in a rendered JavaScript template");
   }
 
   const labelArray = page.content.match(/const\s+STAGE_LABELS\s*=\s*\[([^\]]*)\]/i);
