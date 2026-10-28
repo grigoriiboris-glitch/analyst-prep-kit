@@ -58,9 +58,10 @@ test("identifies attribute fragments inside a JavaScript HTML concatenation", ()
   assert.equal(shouldPreserveHtmlAttributeFragment('" height="', false), false);
 });
 
-test("the static Russian build keeps native DataCraft game sources out of translation", () => {
+test("the static Russian build keeps authored game and visualization sources out of translation", () => {
   const source = fs.readFileSync(path.join(__dirname, "../tools/static-russian-translation.mjs"), "utf8");
   for (const file of [
+    "assets/sql-mermaid.js",
     "datacraft/curriculum-map.js",
     "datacraft/index.html",
     "datacraft/quiet-valley.js",
