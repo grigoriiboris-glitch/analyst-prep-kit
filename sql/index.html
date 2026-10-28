@@ -2082,6 +2082,7 @@ function missGotIt(lessonId){
 let currentView = 'home';
 function navigate(view, ...args){
   guided = null; // any normal navigation exits the guided practice flow
+  if(view==='lesson'){ const _lessonId=Number(args[0]); if(DATA.LESSONS.some(l=>l.id===_lessonId)&&state.currentLesson!==_lessonId){state.currentLesson=_lessonId;saveState();} }
   currentView = view;
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   // Index into .nav-btn, which starts with "← All Kits" — so Home is 1, not 0.
@@ -6260,9 +6261,7 @@ initKitWithSync();
     }
     else navigate('lesson', l.id);
   }
-  else navigate('home');
-})();
-// Arrived from the SQL Path round (`?from=path`): show one persistent way back to it.
+  else { const _staged=Object.keys(state.lessonStage||{}).filter(id=>DATA.LESSONS.some(l=>l.id===Number(id))); const _fallback=_staged.length?Number(_staged[_staged.length-1]):(state.doneLessons.length?Number(state.doneLessons[state.doneLessons.length-1]):null); const _resumeId=DATA.LESSONS.some(l=>l.id===Number(state.currentLesson))?Number(state.currentLesson):_fallback; const _resume=DATA.LESSONS.find(l=>l.id===_resumeId); if(_resume)navigate('lesson',_resume.id);else navigate('home'); } })(); // Arrived from the SQL Path round (`?from=path`): show one persistent way back to it.
 // User test, 2026-07-29: the round sends the learner here in a new tab, and this page carries
 // four back-shaped controls ("← All Kits", "Lessons", "← Lessons", "← All kits") of which
 // none returns to the round, so the rotation quietly ends on a lesson page. This is the

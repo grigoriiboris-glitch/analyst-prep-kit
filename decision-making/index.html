@@ -292,7 +292,7 @@
   'use strict';
   var progressKey='apk-decision-thinking-progress-v1';
   var answerKey='apk-decision-thinking-answer-v1';
-  var checklistKey='apk-decision-thinking-checklist-v1';
+  var checklistKey='apk-decision-thinking-checklist-v1'; var positionKey='apk-decision-thinking-state-v1';
   var correct={q1:'b',q2:'c',q3:'a',q4:'b',q5:'a',q6:'c'};
   var explanations={
     q1:'Сначала проясняем, что считается успехом и для какого решения нужен ответ. Иначе можно идеально посчитать не тот показатель.',
@@ -303,7 +303,7 @@
     q6:'Ответ показывает структуру, проверку данных, сравнение гипотез и честное отношение к неопределённости.'
   };
   function read(key,fallback){try{var v=JSON.parse(localStorage.getItem(key)||'null');return v===null?fallback:v;}catch(e){return fallback;}}
-  function write(key,value){try{localStorage.setItem(key,JSON.stringify(value));}catch(e){}}
+  function write(key,value){try{localStorage.setItem(key,JSON.stringify(value));}catch(e){}} var savedPosition=read(positionKey,{}), lastSavedLesson=Number(savedPosition&&savedPosition.lesson)||0, restoringPosition=false, scrollSaveTimer=0; function rememberLessonPosition(){ if(restoringPosition)return; var sections=Array.prototype.slice.call(document.querySelectorAll('section.lesson[id^="lesson"]')); if(!sections.length)return; var targetLine=150,best=null,bestDistance=Infinity; sections.forEach(function(section){ var rect=section.getBoundingClientRect(); var distance=(rect.top<=targetLine&&rect.bottom>targetLine)?0:Math.abs(rect.top-targetLine); if(distance<bestDistance){bestDistance=distance;best=section;} }); if(!best)return; var id=Number(String(best.id).replace(/^lesson/,'')); if(!Number.isInteger(id)||id<1)return; if(id!==lastSavedLesson){lastSavedLesson=id;write(positionKey,{lesson:id});} } function restoreLessonPosition(){ var id=Number(savedPosition&&savedPosition.lesson); var section=document.getElementById('lesson'+id); if(!section)return; restoringPosition=true; section.scrollIntoView({behavior:'auto',block:'start'}); window.setTimeout(function(){restoringPosition=false;rememberLessonPosition();},250); } window.addEventListener('scroll',function(){ if(restoringPosition)return; window.clearTimeout(scrollSaveTimer); scrollSaveTimer=window.setTimeout(rememberLessonPosition,120); },{passive:true}); window.addEventListener('load',restoreLessonPosition);
   var done=read(progressKey,[]);
   if(!Array.isArray(done))done=[];
   function renderProgress(){
