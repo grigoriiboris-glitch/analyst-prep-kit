@@ -39,6 +39,10 @@ for (const page of pages) {
   if (/<класс\s+div\s*=/i.test(page.content)) {
     failures.push(page.file + ": translated text corrupted a rendered HTML tag");
   }
+  const labelArray = page.content.match(/const\s+STAGE_LABELS\s*=\s*\[([^\]]*)\]/i);
+  if (labelArray && /\b(?:Orient|Example|Try|Build|Check|Close)\b/i.test(labelArray[1])) {
+    failures.push(page.file + ": a lesson-stage label is still in English");
+  }
 }
 
 assert.deepEqual(failures, [], "Static Russian audit failed:\n" + failures.join("\n"));

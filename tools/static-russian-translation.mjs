@@ -74,7 +74,8 @@ const normalize = s => String(s ?? "").replace(/\s+/g, " ").trim().toLowerCase()
 const MANUAL_TRANSLATIONS = new Map([
   ["Sign In", "Войти"], ["Sign in", "Войти"], ["Log in", "Войти"],
   ["Sign Up", "Зарегистрироваться"], ["Log out", "Выйти"], ["Log Out", "Выйти"],
-  ["Welcome", "Добро пожаловать"], ["Next lesson", "Следующий урок"],
+  ["Welcome", "Добро пожаловать"], ["Orient", "Разобраться"],
+  ["Next lesson", "Следующий урок"],
   ["Previous lesson", "Предыдущий урок"], ["Example", "Пример"],
   ["Try", "Попробовать"], ["Try again", "Попробовать ещё раз"],
   ["Build", "Собрать"], ["Check", "Проверить"], ["Close", "Закрыть"],
@@ -351,10 +352,25 @@ async function translateMixedSegments(value) {
 async function translateMarkup(value) {
   const pieces = String(value).split(/(<\/?[A-Za-z][^>]*>)/g);
   const result = [];
+  const skipped = [];
   for (const piece of pieces) {
     if (!piece) continue;
-    if (/^<\/?[A-Za-z][^>]*>$/.test(piece)) result.push(piece);
-    else result.push(await translateVisibleString(piece, null, true));
+    const tagMatch = piece.match(/^<\s*(\/)?\s*([A-Za-z][A-Za-z0-9:-]*)\b[^>]*>$/);
+    if (tagMatch) {
+      const tag = tagMatch[2].toLowerCase();
+      const closing = Boolean(tagMatch[1]);
+      if (closing) {
+        const ix = skipped.lastIndexOf(tag);
+        if (ix >= 0) skipped.splice(ix, 1);
+      } else if (!/\/\s*>$/.test(piece) && SKIP_TAGS.has(tag)) {
+        skipped.push(tag);
+      }
+      result.push(piece);
+    } else if (skipped.length) {
+      result.push(piece);
+    } else {
+      result.push(await translateVisibleString(piece, null, true));
+    }
   }
   return result.join("");
 }
@@ -474,14 +490,22 @@ async function translateJavaScript(source, filename) {
   const replacements = [];
   async function visit(node, parent = null, context = null) {
     if (!node || typeof node !== "object") return;
+    if (node.type === "AssignmentExpression" && VISIBLE_PROPERTIES.has(memberName(node.left))) {
+      await visit(node.left, node, null);
+      await visit(node.right, node, "label");
+      return;
+    }
+    if (node.type === "BinaryExpression" && node.operator === "+" && context) {
+      await Promise.all([visit(node.left, node, context), visit(node.right, node, context)]);
+      return;
+    }
     if (node.type === "Literal" && typeof node.value === "string") {
       const isHuman = (context && HUMAN_KEYS.has(context.toLowerCase())) || directVisibleLiteral(node, parent);
-      // Also translate standalone sentence literals: many lessons render these
-      // through variables before assigning textContent/innerHTML.
+      const hasManualTranslation = Boolean(context) && MANUAL_TRANSLATIONS.has(normalize(node.value));
       const isSentence = candidate(node.value, null, false);
-      if (isHuman || isSentence) {
+      if (isHuman || isSentence || hasManualTranslation) {
         const original = node.value;
-        const translated = await translateVisibleString(original, isHuman ? (context || "visible") : null, isHuman);
+        const translated = await translateVisibleString(original, isHuman || hasManualTranslation ? (context || "visible") : null, isHuman);
         if (translated !== original) replacements.push({ start: node.start, end: node.end, value: JSON.stringify(translated) });
       }
       return;
