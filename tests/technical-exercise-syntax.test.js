@@ -163,3 +163,62 @@ test("Learner-facing explanations stay Russian while technical expressions stay 
   assert.doesNotMatch(powerbiCert, /A duplicate is an independent copy|Dashboards are a Service-side canvas/);
   assert.doesNotMatch(tableauCert, /Objective 2\.3\.1\. A computed sort is a rule/);
 });
+
+
+test("Residual exercise questions, answers, and explanations are Russian while syntax stays English", () => {
+  const sql = read("sql/index.html");
+  const excel = read("excel/index.html");
+  const python = read("python/index.html");
+  const powerbi = read("powerbi/index.html");
+  const tableau = read("tableau/index.html");
+  const stats = read("stats/index.html");
+
+  for (const phrase of [
+    "SELECT region names the group;",
+    "COALESCE(phone, 'Missing') returns phone",
+    "COUNT(*) counts every row;",
+    "Select the name and email columns from the customers table.",
+    "Show only the customer statuses that have more than 1 customer."
+  ]) assert.ok(!sql.includes(phrase), "SQL still contains English learner-facing text: " + phrase);
+  assert.ok(sql.includes("SELECT region задаёт группы"));
+  assert.ok(sql.includes("WHERE фильтрует строки"));
+
+  for (const phrase of [
+    "COUNTA counts everything",
+    "VLOOKUP is like a reader",
+    "=COUNTIF(A:A,B2) counts 0",
+    "SUM doesn't work on that range",
+    "Return all rows from A2:D200"
+  ]) assert.ok(!excel.includes(phrase), "Excel still contains English learner-facing text: " + phrase);
+  assert.ok(excel.includes("COUNTA учитывает все непустые ячейки"));
+
+  for (const phrase of [
+    "df['rep'].str.strip() runs without error",
+    "It returns a new Series — assign it back",
+    "df.dtypes returns the type of every column",
+    "df.dropna() with no arguments does what?"
+  ]) assert.ok(!python.includes(phrase), "Python still contains English learner-facing text: " + phrase);
+  assert.ok(python.includes("df['rep'].str.strip() выполняется без ошибки"));
+
+  for (const phrase of [
+    "A calculated column stamps an answer",
+    "Select the key column, then Remove Duplicates",
+    "DISTINCTCOUNT counts people, not events",
+    "DIVIDE works with text columns"
+  ]) assert.ok(!powerbi.includes(phrase), "Power BI still contains English learner-facing text: " + phrase);
+
+  for (const phrase of [
+    "Tableau picked its top 10 from the whole company",
+    "The exam's favorite trap is",
+    "Same columns, you just want more rows",
+    "Filter out the small regions"
+  ]) assert.ok(!tableau.includes(phrase), "Tableau still contains English learner-facing text: " + phrase);
+
+  for (const phrase of [
+    "Variance averages squared deviations",
+    "The interval is a net cast at one number",
+    "r = 0.88 is too weak to be meaningful",
+    "If H₀ were true, 3% chance of seeing results this extreme"
+  ]) assert.ok(!stats.includes(phrase), "Statistics still contains English learner-facing text: " + phrase);
+  assert.ok(stats.includes("Дисперсия — это среднее квадратов отклонений"));
+});
