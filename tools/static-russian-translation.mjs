@@ -102,6 +102,8 @@ const MANUAL_TRANSLATIONS = new Map([
   ["Search…", "Поиск…"], ["Settings", "Настройки"], ["Start", "Начать"],
   ["View all", "Посмотреть все"], ["Show more", "Показать ещё"],
   ["Show less", "Свернуть"], ["Copy", "Копировать"], ["Copied", "Скопировано"],
+  ["Tracks", "Треки"], ["Track", "Трек"], ["Platinum", "Платина"],
+  ["Bookmark", "Закладка"], ["Bookmarks", "Закладки"],
   ["Submit", "Отправить"], ["Apply", "Применить"], ["Open", "Открыть"],
   ["Open lesson", "Открыть урок"], ["Choose", "Выбрать"], ["Select", "Выбрать"],
   ["All courses", "Все курсы"], ["All lessons", "Все уроки"],
