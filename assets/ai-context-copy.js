@@ -32,14 +32,14 @@
     if (!root || root.nodeType !== 1) return false;
     if (root.closest('nav, aside, header, footer, .lesson-nav, .sidebar, .lesson-list, .curriculum-course-list')) return false;
     if (root.matches('[hidden],[aria-hidden="true"]')) return false;
-    var heading = root.querySelector('h1,h2,.lesson-title,[data-lesson-title]');
+    var heading = root.querySelector('h1,h2,h3,.lesson-title,[data-lesson-title]');
     if (!heading) return false;
-    var signals = root.querySelector('.quiz-wrap,#quiz-wrap,.quiz,.lesson-story,.lesson-eyebrow,.lesson-progress,.lesson-progress-text,.lesson-task,.lesson-content,.lesson-body,.ral-block,.sql-mermaid-panel,.pg-workbench,.lesson-result,.answer-panel,.practice,.task-card,[data-lesson-task]');
-    return !!signals || root.matches('article.lesson,[data-lesson-root]');
+    var signals = root.querySelector('.quiz-wrap,#quiz-wrap,.quiz,.lesson-story,.lesson-eyebrow,.lesson-progress,.lesson-progress-text,.lesson-task,.lesson-content,.lesson-body,.ral-block,.sql-mermaid-panel,.pg-workbench,.lesson-result,.answer-panel,.practice,.task-card,[data-lesson-task],.study-section,.study-body,.section-overview,.a-section,.question,.tab-panel.active,.assignment-body,.task-screen');
+    return !!signals || root.matches('article.lesson,[data-lesson-root],.study-section,.question');
   }
 
   function staticLessonRoots() {
-    var roots = Array.prototype.slice.call(document.querySelectorAll('article.lesson,.lesson.active,.lesson-card.active,[data-lesson-root],article[data-lesson],section[data-lesson]'));
+    var roots = Array.prototype.slice.call(document.querySelectorAll('article.lesson,.lesson.active,.lesson-card.active,[data-lesson-root],article[data-lesson],section[data-lesson],.study-section,.question'));
     var unique = [];
     roots.forEach(function (root) {
       if (!visibleLessonRoot(root)) return;
@@ -54,7 +54,7 @@
     var selectors = [
       '#lessonView','#lessonContent','#lesson-content','#lessonBody','#lesson-body',
       '#lessonPanel','#lesson-panel','.lesson-view','.lesson-detail','.lesson-page',
-      '[data-current-lesson]','#main'
+      '[data-current-lesson]','#main','#app'
     ];
     var candidates = [];
     selectors.forEach(function (selector) {
