@@ -202,18 +202,83 @@
   }
 
   var initialized = false;
+  var mermaidLoadPromise = null;
+  var MERMAID_SRC = 'https://cdn.jsdelivr.net/npm/mermaid@11.17.2/dist/mermaid.min.js';
+
+  function removeLoading(root) {
+    root = root || global.document;
+    if (!root || !root.querySelectorAll) return;
+    Array.prototype.forEach.call(root.querySelectorAll('.sql-mermaid-loading'), function (notice) {
+      if (notice.parentNode) notice.parentNode.removeChild(notice);
+    });
+    Array.prototype.forEach.call(root.querySelectorAll('.sql-mermaid-source'), function (node) {
+      node.style.display = '';
+      if (node.removeAttribute) node.removeAttribute('data-sql-mermaid-pending');
+    });
+  }
+
+  function showFallback(root, message) {
+    root = root || global.document;
+    if (!root || !root.querySelectorAll) return;
+    Array.prototype.forEach.call(root.querySelectorAll('.sql-mermaid-source'), function (node) {
+      var canvas = node.closest('.sql-mermaid-canvas');
+      if (canvas) canvas.innerHTML = '<p class="sql-mermaid-fallback">' + message + '</p>';
+    });
+  }
+
+  function loadMermaid() {
+    if (global.mermaid && typeof global.mermaid.run === 'function') return Promise.resolve(global.mermaid);
+    if (!global.document || !global.document.createElement || !global.document.head) {
+      return Promise.reject(new Error('A document head is unavailable'));
+    }
+    return new Promise(function (resolve, reject) {
+      var script = global.document.createElement('script');
+      script.src = MERMAID_SRC;
+      script.async = true;
+      script.setAttribute('data-sql-mermaid-loader', 'true');
+      script.onload = function () {
+        if (global.mermaid && typeof global.mermaid.run === 'function') resolve(global.mermaid);
+        else reject(new Error('Mermaid loaded without its browser API'));
+      };
+      script.onerror = function () { reject(new Error('Mermaid CDN request failed')); };
+      global.document.head.appendChild(script);
+    });
+  }
+
   function render(root) {
     root = root || global.document;
     if (!root || !root.querySelectorAll) return Promise.resolve();
     var nodes = Array.prototype.slice.call(root.querySelectorAll('.sql-mermaid-source'));
     if (!nodes.length) return Promise.resolve();
+
     if (!global.mermaid || typeof global.mermaid.run !== 'function') {
       nodes.forEach(function (node) {
+        if (node.getAttribute('data-sql-mermaid-pending') === 'true') return;
+        node.setAttribute('data-sql-mermaid-pending', 'true');
+        node.style.display = 'none';
         var canvas = node.closest('.sql-mermaid-canvas');
-        if (canvas) canvas.innerHTML = '<p class="sql-mermaid-fallback">Не удалось загрузить схему. Пример SQL и таблица результата остаются доступными ниже.</p>';
+        if (canvas) {
+          var notice = global.document.createElement('p');
+          notice.className = 'sql-mermaid-loading';
+          notice.textContent = 'Подготавливаем схему таблиц…';
+          canvas.insertBefore(notice, node);
+        }
       });
-      return Promise.resolve();
+      if (!mermaidLoadPromise) {
+        mermaidLoadPromise = loadMermaid()
+          .then(function () {
+            removeLoading(global.document);
+            return render(global.document);
+          })
+          .catch(function () {
+            showFallback(global.document, 'Не удалось загрузить схему. Пример SQL и таблица результата остаются доступными ниже.');
+          })
+          .finally(function () { mermaidLoadPromise = null; });
+      }
+      return mermaidLoadPromise;
     }
+
+    removeLoading(root);
     if (!initialized) {
       global.mermaid.initialize({
         startOnLoad: false,
@@ -234,10 +299,7 @@
       initialized = true;
     }
     return global.mermaid.run({ nodes: nodes }).catch(function () {
-      nodes.forEach(function (node) {
-        var canvas = node.closest('.sql-mermaid-canvas');
-        if (canvas) canvas.innerHTML = '<p class="sql-mermaid-fallback">Эту схему не удалось отобразить. Посмотри текст схемы ниже и таблицу результата.</p>';
-      });
+      showFallback(root, 'Эту схему не удалось отобразить. Посмотри текст схемы ниже и таблицу результата.');
     });
   }
 
