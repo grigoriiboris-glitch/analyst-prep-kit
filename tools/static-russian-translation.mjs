@@ -327,13 +327,22 @@ async function translateJavaScript(source, filename) {
       }
       return;
     }
-    if (node.type === "TemplateLiteral" && node.expressions.length === 0) {
+    if (node.type === "TemplateLiteral") {
       const isHuman = (context && HUMAN_KEYS.has(context.toLowerCase())) || directVisibleLiteral(node, parent);
       if (isHuman) {
-        const original = node.quasis.map(q => q.value.cooked ?? q.value.raw).join("");
-        const translated = await translateVisibleString(original, context || "visible");
-        if (translated !== original) replacements.push({ start: node.start, end: node.end, value: JSON.stringify(translated) });
+        for (const quasi of node.quasis) {
+          const original = quasi.value.cooked ?? quasi.value.raw;
+          if (!candidate(original, context || "visible", true)) continue;
+          const translated = await translateVisibleString(original, context || "visible", true);
+          if (translated !== original) {
+            // TemplateElement ranges cover only the literal text, not ${...}.
+            // Escape syntax characters so translated UI text cannot break the JS template.
+            const raw = translated.replace(/\\/g, "\\\\").replace(/`/g, "\\`").replace(/\$\{/g, "\\$\{");
+            replacements.push({ start: quasi.start, end: quasi.end, value: raw });
+          }
+        }
       }
+      if (node.expressions.length) await Promise.all(node.expressions.map(expression => visit(expression, node, null)));
       return;
     }
     if (node.type === "Property" || node.type === "PropertyDefinition") {
