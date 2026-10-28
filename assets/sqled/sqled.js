@@ -67,7 +67,7 @@
     'SUBSTR', 'INSTR', 'PRINTF', 'TYPEOF',
     'DATE', 'TIME', 'DATETIME', 'JULIANDAY', 'STRFTIME',
     'ROW_NUMBER', 'RANK', 'DENSE_RANK', 'NTILE', 'LAG', 'LEAD',
-    'FIRST_VALUE', 'LAST_VALUE', 'OVER', 'PARTITION BY'
+    'FIRST_VALUE', 'LAST_VALUE', 'OVER', "РАЗДЕЛЕНИЕ ПО"
   ];
 
   // The stock sql hint, plus the functions above. Anything the stock hint already found is
@@ -230,7 +230,7 @@
     const res = db.exec("SELECT name FROM sqlite_master WHERE type = 'table'");
     if (!res.length) return schema;
     res[0].values.forEach(([t]) => {
-      const info = db.exec('PRAGMA table_info(' + t + ')');
+      const info = db.exec("ПРАГМА table_info(" + t + ')');
       schema[t] = info.length ? info[0].values.map(r => r[1]) : [];
     });
     return schema;

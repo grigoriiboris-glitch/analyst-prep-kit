@@ -371,7 +371,7 @@ ont-size:13.5px;color:var(--muted)}
 <body>
 
 <div class="shell">
-  <p class="crumb"><a href="../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql/">SQL-комплект</a> &middot; <a href="../guides/">Guides</a></p>
+  <p class="crumb"><a href="../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql/">SQL-кит</a> &middot; <a href="../guides/">Guides</a></p>
   <h1>SQL-детализация</h1>
   <p class="lead" id="lead">Приступайте прямо к делу и учитесь, записывая запросы. Каждое упражнение представляет собой только что введенный вами запрос плюс одно новое значение. Ничего не оценивается, ответ все время на экране, и единственная задача — напечатать его.</p>
   <p class="desktop-note"><strong>Сделано для десктопа.</strong>  Запросы становятся длинными, и на этой странице отображается каждая их строка, а не сжимается до размера телефона. Клавиатура делает это намного лучше.</p>
@@ -556,7 +556,7 @@ function loadScript(src){
     const s = document.createElement('script');
     s.src = src;
     s.onload = ok;
-    s.onerror = () => no(new Error('could not load ' + src));
+    s.onerror = () => no(new Error("не удалось загрузить " + src));
     document.head.appendChild(s);
   });
 }
@@ -592,7 +592,7 @@ function renderAsk(){
   const d = LADDER.drills[i];
   const hide = !revealed;
   // In Recall the headline would name the clause it is asking you to remember.
-  $('adds').textContent = hide ? 'Write this one from memory.' : d.adds;
+  $('adds').textContent = hide ? "Запишите это по памяти." : d.adds;
   $('why').textContent = hide ? '' : (d.why || '');
   // Every drill names one guide that covers the idea it adds. The link is one phrase, so a
   // learner who wants the reading can get it without the drill turning into an article.
@@ -605,7 +605,7 @@ function renderAsk(){
   } else {
     more.hidden = true;
   }
-  $('queryhead').textContent = revealed ? 'The query' : 'Write it yourself';
+  $('queryhead').textContent = revealed ? "Запрос" : "Напиши это сам";
   $('recall').hidden = !hide;
   $('query').hidden = hide;
   $('copybtn').hidden = hide;
@@ -619,7 +619,7 @@ function render(){
   $('tables').innerHTML = used.length
     ? (used.length > 1 ? 'TABLES: ' : 'TABLE: ') + used.map(n => '<b>' + esc(n) + '</b>').join(' &middot; ')
     : '';
-  $('question').innerHTML = '<span>The question</span>' + esc(d.q || '');
+  $('question').innerHTML = "<span>Вопрос</span>" + esc(d.q || '');
   paintCols(d.sql);
   // Always measured against the rung below this one, whichever direction you arrived from,
   // so a drill looks the same every time you land on it.
@@ -636,7 +636,7 @@ function render(){
   $('verdict').className = 'hint';
   $('verdict').textContent = "Запустите запрос, и здесь появятся строки.";
   $('out').innerHTML = '';
-  $('predict').innerHTML = '<span><b>Before you run it:</b> ' + esc(d.pre || '') + '</span>';
+  $('predict').innerHTML = "<span><b>Прежде чем запустить его:</b> " + esc(d.pre || '') + '</span>';
   // The last rung is a finish, not a dead end. Telling someone to click Next drill while
   // Next drill is greyed out is the page instructing you to use a control it disabled.
   const last = i === LADDER.drills.length - 1;
@@ -645,8 +645,8 @@ function render(){
   $('next').hidden = last;
   $('restart').hidden = !last;
   $('directive-text').textContent = last
-    ? 'Last drill. Type it, run it, then start over from drill 1 whenever you want the practice.'
-    : 'Type the whole query, run it, then take the next drill.';
+    ? "Последнее упражнение. Введите его, запустите, а затем начните заново с упражнения 1, когда захотите попрактиковаться."
+    : "Введите весь запрос, запустите его, а затем перейдите к следующему этапу детализации.";
   // A fresh drill is unfinished by definition, so the finished state is cleared here and
   // nowhere else. Arriving back on a drill you already matched shows it unfinished again,
   // which is right: the rep is the typing, and you have not typed it this time.
@@ -673,7 +673,7 @@ function paintCols(sql){
   WANT_COLS = cols;
   $('colsask').hidden = !cols.length;
   $('colsask').innerHTML = cols.length
-    ? '<span class="lab">Come back with</span>' +
+    ? "<span class=\"lab\">Вернись с</span>" +
       cols.map(c => '<code>' + esc(c) + '</code>').join('')
     : '';
 }
@@ -776,7 +776,7 @@ function readSchema(){
   const names = db.exec("SELECT name FROM sqlite_master WHERE type = 'table' ORDER BY name");
   if(!names.length) return [];
   return names[0].values.map(([t]) => {
-    const info = db.exec('PRAGMA table_info(' + t + ')');
+    const info = db.exec("ПРАГМА table_info(" + t + ')');
     const count = db.exec('SELECT COUNT(*) FROM ' + t)[0].values[0][0];
     return {
       name: t,
@@ -818,13 +818,13 @@ function tablesInDrill(sql){
 }
 
 function table(res){
-  if(!res.length) return 'Query ran. No rows returned.';
+  if(!res.length) return "Запрос выполнен. Ни одна строка не возвращена.";
   const {columns, values} = res[res.length - 1];
   const head = '<tr>' + columns.map(c => '<th>' + esc(c) + '</th>').join('') + '</tr>';
   const body = values.slice(0, 50).map(r => '<tr>' + r.map(v =>
     '<td>' + (v === null ? '<span class="dim">NULL</span>' : esc(v)) + '</td>').join('') + '</tr>').join('');
   const more = values.length > 50
-    ? '<div class="dim">Showing the first 50 of ' + values.length + ' rows.</div>' : '';
+    ? "<div class=\"dim\">Показаны первые 50 из " + values.length + ' rows.</div>' : '';
   return '<table>' + head + body + '</table>' + more;
 }
 
@@ -843,8 +843,8 @@ function answerLine(res){
     return Number.isInteger(v) ? v.toLocaleString() : (Math.round(v * 10) / 10).toLocaleString();
   });
   return values.length === 1
-    ? '<b>Your answer:</b> ' + esc(parts.join(', ')) + '.'
-    : '<b>Top row:</b> ' + esc(parts.join(', ')) + '.';
+    ? "<b>Ваш ответ:</b> " + esc(parts.join(', ')) + '.'
+    : "<b>Верхний ряд:</b> " + esc(parts.join(', ')) + '.';
 }
 
 function run(){
@@ -854,10 +854,10 @@ function run(){
   // caught on the body rather than on the box, or it comes back as a bare zero rows.
   // In Recall the reference pane is folded away, so every line that points at it has to
   // point at the button that opens it instead.
-  const where = revealed ? 'The one to type is on the left.'
-                         : 'Show me the query opens it on the left.';
+  const where = revealed ? "Тот, который нужно печатать, находится слева."
+                         : "Покажите мне, что запрос открывает его слева.";
   if(!bodyOf(typed)){
-    say('That is the comment header on its own. The query goes under it. ' + where, false);
+    say("Это отдельный заголовок комментария. Запрос идет под ним. " + where, false);
     $('out').innerHTML = '';
     markReady(false);
     return;
@@ -869,10 +869,10 @@ function run(){
     // already on screen, so there is nothing here to reveal or withhold. It goes beside
     // Run like every other answer: a typo used to render a thousand pixels below the fold,
     // which is indistinguishable from the button doing nothing.
-    say('<span class="no">SQLite could not run that.</span> It says: ' + esc(e.message) +
+    say("<span class=\"no\">SQLite не смог это запустить.</span> Там говорится: " + esc(e.message) +
         '. ' + (revealed
-                 ? 'Compare your line against the query on the left.'
-                 : 'Read it, fix the line, and Show me the query is there if you want it.'), false);
+                 ? "Сравните свою строку с запросом слева."
+                 : "Прочтите его, исправьте строку и, если хотите, покажите мне, что запрос есть."), false);
     $('out').innerHTML = '';
     markReady(false);
     return;
@@ -893,14 +893,14 @@ function run(){
 
   let line;
   if(matched){
-    line = '<span class="ok">Match.</span> ' + got + ' rows, and the ' + WANT_COLS.length +
-           ' columns asked for. ' + answerLine(res);
+    line = "<span class=\"ok\">Соответствовать.</span> " + got + " ряды и " + WANT_COLS.length +
+           " колонки просили. " + answerLine(res);
   } else if(rowsOk){
-    line = '<span class="no">Not yet.</span> ' + got + ' rows is right, but ' +
-           gotCols.length + ' column' + (gotCols.length === 1 ? '' : 's') + ' back and the ' +
-           'drill asks for ' + WANT_COLS.length + '.';
+    line = "<span class=\"no\">Еще нет.</span> " + got + " строки правильные, но " +
+           gotCols.length + ' column' + (gotCols.length === 1 ? '' : 's') + " назад и " +
+           "дрель просит " + WANT_COLS.length + '.';
   } else {
-    line = '<span class="no">Not yet.</span> You got ' + got + ' rows, the drill\'s query ' +
+    line = "<span class=\"no\">Еще нет.</span> У тебя есть " + got + " строки, запрос детализации " +
            'returns ' + want + '.';
   }
   say(line, matched);
@@ -947,15 +947,15 @@ function markReady(matched){
   $('restart').classList.remove('ready');
   if(!matched){
     $('directive-text').textContent = last
-      ? 'Last drill. Type it, run it, then start over from drill 1 whenever you want the practice.'
-      : 'Type the whole query, run it, then take the next drill.';
+      ? "Последнее упражнение. Введите его, запустите, а затем начните заново с упражнения 1, когда захотите попрактиковаться."
+      : "Введите весь запрос, запустите его, а затем перейдите к следующему этапу детализации.";
     return;
   }
   btn.classList.add('ready');
   $('directive-text').textContent = last
-    ? 'That is the last drill on this ladder. Start over from drill 1 whenever you want another lap.'
-    : 'That one is done. Click Next drill, or press Enter.';
-  celebrate(last ? '\u{1F389} Ladder complete.' : '✓ Match. Next drill →');
+    ? "Это последнее упражнение на этой лестнице. Начинайте заново с упражнения 1 всякий раз, когда вам понадобится еще один круг."
+    : "Это сделано. Нажмите «Следующая детализация» или нажмите Enter.";
+  celebrate(last ? "🎉Лестница готова." : "✓ Матч. Следующее упражнение →");
 }
 
 // The answer goes in two places from one string: beside Run, which is the only one on
@@ -963,7 +963,7 @@ function markReady(matched){
 // scrolled down to read them.
 function say(line, matched){
   const onward = matched
-    ? ' <span class="onward"><kbd>Enter</kbd> takes the next drill.</span>'
+    ? " <span class=\"onward\"><kbd>Enter</kbd> выполняет следующее упражнение.</span>"
     : '';
   $('predict').innerHTML = '<span>' + line + onward + '</span>';
   $('verdict').className = '';
@@ -1050,8 +1050,8 @@ function startTimer(m, resumeEnd){
 function fireBreak(){
   const ran = mins;
   stopTimer();
-  $('breaksub').textContent = 'That is ' + ran + ' minutes of writing SQL by hand, which is the ' +
-    'whole point of this page. Take two minutes before the next stretch.';
+  $('breaksub').textContent = 'That is ' + ran + " минут написания SQL вручную, что является " +
+    "весь смысл этой страницы. Уделите две минуты перед следующей растяжкой.";
   $('breakwrap').hidden = false;
   $('breakclose').focus();
 }
@@ -1094,9 +1094,9 @@ function renderLadders(){
       '<a href="?ladder=' + k + '"' + (k === SLUG ? ' aria-current="true"' : '') + '>' +
       esc(LADDERS[k].title) + '</a>').join('');
   // One picker now. The second row was Mode, and there is one way through a ladder.
-  $('lead').textContent = 'Read the business question and write the query that answers it. ' +
-    'Each drill is the query you just typed plus one new thing. Nothing is graded, ' +
-    'the query is one click away whenever you want it, and the only job is typing it out.';
+  $('lead').textContent = "Прочитайте бизнес-вопрос и напишите запрос, который на него отвечает. " +
+    "Каждое упражнение представляет собой только что введенный вами запрос плюс одно новое значение. Ничего не оценивается, " +
+    "запрос можно выполнить одним щелчком мыши, когда бы вы этого ни захотели, и единственная работа — это его напечатать.";
 }
 
 Promise.all(LADDERS[SLUG].files.map(loadScript))
@@ -1105,7 +1105,7 @@ Promise.all(LADDERS[SLUG].files.map(loadScript))
   renderLadders();
   $('ladder-blurb').textContent = LADDER.blurb || '';
   $('footnote').innerHTML = LADDER.footnote || '';
-  document.title = 'SQL Drill: ' + LADDER.name + ' · Analyst Prep Kit';
+  document.title = "SQL-детализация: " + LADDER.name + " · Подготовительный комплект для аналитика";
   try { i = Math.min(parseInt(localStorage.getItem(KEY) || '0', 10) || 0, LADDER.drills.length - 1); } catch(e){}
 
   return initSqlJs({locateFile: f => 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/' + f});
@@ -1131,7 +1131,7 @@ Promise.all(LADDERS[SLUG].files.map(loadScript))
     });
     render();
   })
-  .catch(e => { $('adds').textContent = 'This ladder failed to load: ' + e.message; });
+  .catch(e => { $('adds').textContent = "Не удалось загрузить эту лестницу: " + e.message; });
 
 // Arrived from the Plan Builder (`?from=plan`): a persistent way back to the plan, plus a
 // SITTING SCOPE (Mike playtest, 2026-08-21: "we just drop them where they left off").
@@ -1171,7 +1171,7 @@ Promise.all(LADDERS[SLUG].files.map(loadScript))
     bar.setAttribute('aria-label', "Вернуться к вашему плану");
     bar.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);bottom:16px;' +
       'z-index:1200;background:var(--accent,#0E7490);color:#fff;text-decoration:none;' +
-      'font:600 14px/1 system-ui,sans-serif;padding:12px 18px;border-radius:999px;' +
+      "шрифт: 600 14 пикселей/1 system-ui, без засечек; отступ: 12 пикселей 18 пикселей; радиус границы: 999 пикселей;" +
       'box-shadow:0 6px 20px rgba(0,0,0,.28)';
     document.body.appendChild(bar);
 
@@ -1207,19 +1207,19 @@ Promise.all(LADDERS[SLUG].files.map(loadScript))
         'display:flex;align-items:center;justify-content:center;padding:20px';
       ov.innerHTML =
         '<div style="background:#fff;border-radius:14px;max-width:430px;padding:24px;' +
-          'font:15px/1.55 system-ui,sans-serif;color:#09090B;box-shadow:0 20px 60px rgba(9,9,11,.35)">' +
-        '<p style="font:700 19px/1.3 system-ui,sans-serif;margin:0 0 8px">Stop here. Those were your drills for today.</p>' +
-        '<p style="margin:0 0 6px;color:#52525B">' + n + ' drill' + (n===1?'':'s') + ' done, exactly what the ' +
-          'plan asked for. This page saves your spot, and tomorrow&rsquo;s step starts right here.</p>' +
+          "шрифт: 15 пикселей/1,55 system-ui, без засечек; цвет: # 09090B; box-shadow: 0 20 пикселей 60 пикселей rgba (9,9,11,.35)\">" +
+        "<p style=\"font:700 19px/1.3 system-ui,sans-serif;margin:0 0 8px\">Остановитесь здесь. Это были ваши сегодняшние упражнения.</p>" +
+        '<p style="margin:0 0 6px;color:#52525B">' + n + ' drill' + (n===1?'':'s') + " сделано, именно то, что " +
+          "план просил. Эта страница сохранит ваше место, и завтрашний шаг начнется прямо здесь.</p>" +
         '<p style="margin:0 0 16px;font:600 14px/1.5 system-ui,sans-serif;color:#15803D">' +
           n + ' drill' + (n===1?'':'s') + ' in ' + mins + ' minute' + (mins===1?'':'s') + '.</p>' +
         '<div style="display:flex;gap:10px;flex-wrap:wrap">' +
         '<a href="' + href + '" style="display:inline-block;background:#15803D;color:#fff;' +
-          'text-decoration:none;font:600 15px/1 system-ui,sans-serif;padding:13px 18px;' +
-          'border-radius:10px">✓ Back to the plan, box checked</a>' +
+          "текст-декорация: нет; шрифт: 600 15 пикселей/1 system-ui, без засечек; отступ: 13 пикселей 18 пикселей;" +
+          "border-radius:10px\">✓ Вернуться к плану, флажок установлен</a>" +
         '<button type="button" style="background:none;border:0;color:#52525B;' +
-          'font:600 14px/1 system-ui,sans-serif;padding:13px 8px;cursor:pointer;' +
-          'text-decoration:underline">One more drill anyway</button>' +
+          "шрифт: 600 14 пикселей/1 system-ui, без засечек; отступ: 13 пикселей 8 пикселей; курсор: указатель;" +
+          "text-decoration:underline\">В любом случае еще одно упражнение</button>" +
         '</div></div>';
       // Real Test rt010h: dialog semantics, focus in, Tab trapped, Escape closes.
       const card = ov.firstElementChild;
@@ -1267,6 +1267,6 @@ Promise.all(LADDERS[SLUG].files.map(loadScript))
   } catch(e){}
 })();
 </script>
-<script src="../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

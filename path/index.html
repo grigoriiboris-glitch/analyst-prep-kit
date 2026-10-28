@@ -432,7 +432,7 @@ ont-weight:600;
 <body>
 
 <div class="shell">
-  <p class="crumb"><a href="../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql/">SQL-комплект</a> &middot; <a href="../drill/">SQL-детализация</a></p>
+  <p class="crumb"><a href="../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql/">SQL-кит</a> &middot; <a href="../drill/">SQL-детализация</a></p>
   <h1>Путь SQL · Глава 1</h1>
   <p class="lead">Наберите четыре запроса, запишите их еще раз по памяти, затем посмотрите, что вы сделали и какой результат. Около пятнадцати минут.</p>
   <p class="desktop-note"><strong>Сделано для десктопа.</strong>  Запросы становятся длинными, и клавиатура делает это намного лучше.</p>
@@ -663,7 +663,7 @@ function celebrate(msg, pieces){
       ';animation-delay:' + (Math.random() * .4) + 's;animation-duration:' + (.9 + Math.random() * .6) + 's';
     overlay.appendChild(d);
   }
-  if(msg !== false) showToast(msg || '✓ Nice work!');
+  if(msg !== false) showToast(msg || "✓ Хорошая работа!");
   setTimeout(() => { overlay.innerHTML = ''; }, 1800);
 }
 // The thing you just got right moves, so the eye knows where the good news is.
@@ -709,8 +709,8 @@ function winPopup({title, lead, body, label, onContinue, pieces, toast, tone, cu
   // and the screen's directive is put back when the popup closes without advancing.
   winPrevCue = $('directive-text').textContent;
   if(!$('win-go').hidden){
-    $('directive-text').textContent = (cue || 'Read what came back') +
-      ', then click ' + $('win-go').textContent.replace(/\s*[→↗]\s*$/, '') + '.';
+    $('directive-text').textContent = (cue || "Прочитай, что вернулось") +
+      ", затем нажмите " + $('win-go').textContent.replace(/\s*[→↗]\s*$/, '') + '.';
   }
   $('scrim').hidden = false;
   celebrate(toast, pieces);
@@ -749,12 +749,12 @@ document.addEventListener('keydown', e => {
 
 // ── the stepper and which section is on screen ──────────────────────────────
 const STEPS = [
-  {key:'type',     t:'Type',      s:'four real queries',
-   does:'the query is on the left, you type it on the right'},
-  {key:'recall',   t:'Recall',    s:'the same four, covered',
-   does:'same four, query covered up, a miss uncovers more of it'},
-  {key:'concepts', t:'What you did', s:'and where it is used',
-   does:'the new SQL, and the jobs that use it'},
+  {key:'type',     t:'Type',      s:"четыре реальных запроса",
+   does:"запрос находится слева, вы вводите его справа"},
+  {key:'recall',   t:'Recall',    s:"те же четверо, покрытые",
+   does:"те же четыре, запрос скрыт, промах раскрывает больше"},
+  {key:'concepts', t:"Что ты сделал", s:"и где он используется",
+   does:"новый SQL и задания, которые его используют"},
 ];
 // Jump in, repeat, then just enough theory. Cut to this on 2026-08-01 (Mike): the round had
 // grown a pre-test, a six-word primer, a four-read lesson and a mini quiz around the two
@@ -766,16 +766,16 @@ const ORDER = ['type','recall','concepts','done'];
 // it does cannot drift apart.
 const runOrderHtml = () => '<ol class="runorder">' + STEPS
   .map(s => '<li><b>' + esc(s.t) + '</b> ' + esc(s.does) + '</li>').join('') +
-  '<li><b>Your score</b> out of 100, with your best and last run beside it</li></ol>';
+  "<li><b>Ваш результат</b> из 100, рядом с которым находится ваш лучший и последний результат</li></ol>";
 
 // Run 007: the bar named buttons that were below the fold, so it sent someone hunting for
 // a control it had not said was further down. Each line now says where the control is.
 const DIRECTIVE = {
-  concepts: 'Read the blocks, then click See your score at the bottom.',
+  concepts: "Прочитайте блоки, затем нажмите «Просмотреть свой результат» внизу.",
   // "the loud button" was a build word, and it identified a control by how it looks, which
   // is nothing at all to a screen reader or a read-aloud. paintDone() overwrites this with
   // the name of whichever button the score actually promotes.
-  done:   'Read the card, then pick your next move below it.',
+  done:   "Прочтите карту, а затем выберите свой следующий ход под ней.",
 };
 
 function paintStepper(){
@@ -783,7 +783,7 @@ function paintStepper(){
   $('stepper').innerHTML = STEPS.map((s, n) => {
     const pos = ORDER.indexOf(s.key);
     const state = pos < at ? 'done' : (pos === at ? 'now' : 'todo');
-    return `<div class="step" data-state="${state}">
+    return `<div class="шаг" data-state="${state}">
       <span class="n">Step ${n + 1}</span>
       <span class="t">${s.t}</span>
       <span class="s">${s.s}</span>
@@ -887,21 +887,21 @@ function renderDrill(){
 
   $('rung').textContent = 'Query ' + ((rec ? p : i) + 1) + ' of ' + LAP.drills.length;
   $('adds').textContent = d.adds;
-  $('question').innerHTML = '<span>The question</span>' + esc(d.q);
+  $('question').innerHTML = "<span>Вопрос</span>" + esc(d.q);
   // Read off the reference result, never written down, so it cannot disagree with the check.
   // A business question does not name its columns, and the check compares the whole table:
   // without this line "which of those songs are country?" has no single right answer.
   const want = refRows[idx];
   $('wants').innerHTML = (want
-    ? '<b>Bring back:</b> ' + want.columns.map(c => '<code>' + esc(c) + '</code>').join(', ') +
-      (want.values.length === 1 ? ' &middot; one row' : '')
+    ? "<b>Верните:</b> " + want.columns.map(c => '<code>' + esc(c) + '</code>').join(', ') +
+      (want.values.length === 1 ? " · один ряд" : '')
     : '') +
     // Every criterion the check compares against, in words. REAL_TEST.md 5d: if a threshold,
     // a definition or a cap decides the answer, it is on the screen at the moment of the ask.
     (d.given ? '<ul class="given">' +
       d.given.map(g => '<li>' + g + '</li>').join('') + '</ul>' : '');
   $('wants').hidden = !want && !d.given;
-  $('qhead').textContent = rec ? 'Write it from the question' : 'Type this query';
+  $('qhead').textContent = rec ? "Напишите это из вопроса" : "Введите этот запрос";
   // Only before the first try. Once something is uncovered the pane is showing help rather
   // than promising it, and a standing invitation over a half-revealed query reads as noise.
   $('tryline').hidden = !rec;
@@ -925,8 +925,8 @@ function renderDrill(){
   $('pretext').parentElement.hidden = rec;
   $('verdict').className = 'hint';
   $('verdict').textContent = rec
-    ? 'Write it, run it, and the rows appear here.'
-    : 'Run your query and the rows appear here.';
+    ? "Напишите его, запустите, и здесь появятся строки."
+    : "Запустите запрос, и здесь появятся строки.";
   $('out').innerHTML = '';
   $('back').hidden = rec;
   $('back').disabled = i === 0;
@@ -939,10 +939,10 @@ function renderDrill(){
   $('run').classList.add('go');
   $('next').classList.remove('go');
   $('directive-text').textContent = rec
-    ? 'Type whatever you remember, then click Run under your editor.'
+    ? "Введите все, что помните, затем нажмите «Выполнить» под редактором."
     : last
-      ? 'Last one. Type the query, then click Run under your editor. After this you read why each of them worked.'
-      : 'Type the whole query, then click Run under your editor.';
+      ? "Последний. Введите запрос, затем нажмите «Выполнить» под редактором. После этого вы прочтете, почему каждый из них сработал."
+      : "Введите весь запрос, затем нажмите «Выполнить» в редакторе.";
   // Never prefilled, in either mode. Typing it out is the entire point.
   ed.setValue('');
   ed.focus();
@@ -954,14 +954,14 @@ function renderDrill(){
 // client puts in its object tree, which is where a learner meets it next. Nothing here is
 // written down by hand, so it cannot drift from the data.
 const GRAIN = {
-  gem_page: 'one row = one curated gem track',
-  artist_era: 'one row = one artist'
+  gem_page: "одна строка = одна тщательно подобранная дорожка драгоценных камней",
+  artist_era: "один ряд = один исполнитель"
 };
 function renderSchema(){
   const names = db.exec("SELECT name FROM sqlite_master WHERE type = 'table' ORDER BY name");
   if(!names.length) return;
   const tables = names[0].values.map(([t]) => {
-    const info = db.exec('PRAGMA table_info(' + t + ')');
+    const info = db.exec("ПРАГМА table_info(" + t + ')');
     return {
       name: t,
       rows: db.exec('SELECT COUNT(*) FROM ' + t)[0].values[0][0],
@@ -969,7 +969,7 @@ function renderSchema(){
     };
   });
   $('dbhint').textContent = tables.length + (tables.length === 1 ? ' table' : ' tables') +
-    ' · click a column name to type it';
+    " · щелкните имя столбца, чтобы ввести его";
   $('schema').innerHTML = tables.map(t => `
     <div class="tbl">
       <div class="thead"><span class="tname">${esc(t.name)}</span>
@@ -998,7 +998,7 @@ $('db').addEventListener('toggle', () => {
 });
 
 function table(res){
-  if(!res.length) return 'Query ran. No rows returned.';
+  if(!res.length) return "Запрос выполнен. Ни одна строка не возвращена.";
   const {columns, values} = res[res.length - 1];
   const head = '<tr>' + columns.map(c => '<th>' + esc(c) + '</th>').join('') + '</tr>';
   // Twelve, not the drill page's fifty. Fifty rows put 1,400px of table between the rows
@@ -1007,7 +1007,7 @@ function table(res){
   const body = values.slice(0, CAP).map(r => '<tr>' + r.map(v =>
     '<td>' + (v === null ? '<span class="dim">NULL</span>' : esc(v)) + '</td>').join('') + '</tr>').join('');
   const more = values.length > CAP
-    ? '<div class="dim">Showing the first ' + CAP + ' of ' + values.length + ' rows.</div>' : '';
+    ? "<div class=\"dim\">Показываю первый " + CAP + ' of ' + values.length + ' rows.</div>' : '';
   return '<table>' + head + body + '</table>' + more;
 }
 
@@ -1022,8 +1022,8 @@ function answerLine(res){
     return Number.isInteger(v) ? v.toLocaleString() : (Math.round(v * 10) / 10).toLocaleString();
   });
   return values.length === 1
-    ? '<b>Your answer:</b> ' + esc(parts.join(', ')) + '.'
-    : '<b>Top row:</b> ' + esc(parts.join(', ')) + '.';
+    ? "<b>Ваш ответ:</b> " + esc(parts.join(', ')) + '.'
+    : "<b>Верхний ряд:</b> " + esc(parts.join(', ')) + '.';
 }
 
 function run(){
@@ -1038,7 +1038,7 @@ function run(){
     // column: country" as "the table has no country column", which is the opposite of the
     // truth, so the likely cause gets named in words before the engine gets quoted.
     const msg = String(e.message || '');
-    let guess = 'Compare your query against the reference query, line by line. A stray comma or a missing word is the usual cause.';
+    let guess = "Сравните свой запрос с эталонным запросом, построчно. Обычной причиной является случайная запятая или пропущенное слово.";
     // Run 008: this fired the quotes explanation for EVERY "no such column", including two
     // cases where quotes had nothing to do with it. The sharpest was drill 4: the given list
     // says the answer brings back total_rows and artists, so the likely first attempt is
@@ -1048,38 +1048,38 @@ function run(){
     const aliases = (LAP.drills[at()].sql.match(/\bAS\s+(\w+)/gi) || [])
       .map(s => s.replace(/\bAS\s+/i, ''));
     if(missing && aliases.some(a => a.toLowerCase() === missing.toLowerCase())){
-      guess = '<code>' + esc(missing) + '</code> is a name the query has to <em>create</em>, ' +
-        'not a column sitting in the table. <code>AS</code> is what names a result column: ' +
-        '<code>COUNT(*) AS ' + esc(missing) + '</code>.';
+      guess = '<code>' + esc(missing) + "</code> это имя, которое должен указать запрос <em>create</em>, " +
+        "не столбец, сидящий в таблице. <code>AS</code> это то, что называет столбец результатов: " +
+        "<code>СЧИТАТЬ(*) КАК " + esc(missing) + '</code>.';
     } else if(/no such column/i.test(msg)){
-      guess = 'That usually means a text value is missing its quotes. ' +
+      guess = "Обычно это означает, что в текстовом значении отсутствуют кавычки. " +
         "<code>WHERE genre = country</code> looks for a column called country; " +
-        "<code>WHERE genre = 'country'</code> looks for the word. The table is fine. " +
-        'If your query has its quotes already, check the column name against the table panel.';
+        "<code>ГДЕ жанр = «кантри»</code> ищет слово. Стол в порядке. " +
+        "Если в вашем запросе уже есть кавычки, проверьте имя столбца на панели таблицы.";
     } else if(/no such table/i.test(msg)){
-      guess = 'The only two tables here are <code>gem_page</code> and <code>artist_era</code>. Check the spelling.';
+      guess = "Здесь только две таблицы <code>gem_page</code> and <code>artist_era</code>. Проверьте орфографию.";
     } else if(/syntax error/i.test(msg)){
-      guess = 'A word or a piece of punctuation is off.' + (inRecall() ? ''
-        : ' Read your query against the reference query one line at a time.');
+      guess = "Слово или часть пунктуации пропущены." + (inRecall() ? ''
+        : " Считайте свой запрос по эталонному запросу по одной строке за раз.");
     }
     $('out').innerHTML = '';
     // In recall a query that will not run is a miss like any other. It is the moment the
     // help is wanted, so it uncovers. Nothing on this screen tells someone to compare their
     // query against a reference query, because the reference query is under the covers.
-    if(inRecall()) return missRecall('<span class="no">That query did not run.</span> ' + guess,
-      '<span class="hint">The database reported: ' + esc(msg) + '</span>',
+    if(inRecall()) return missRecall("<span class=\"no\">Этот запрос не был выполнен.</span> " + guess,
+      "<span class=\"hint\">В базе данных сообщалось: " + esc(msg) + '</span>',
       {title: "Этот запрос не выполнялся", lead: guess,
-       body: '<p class="note">The database reported: ' + esc(msg) + '</p>'});
+       body: "<p class=\"note\">В базе данных сообщалось: " + esc(msg) + '</p>'});
     $('verdict').className = '';
-    $('verdict').innerHTML = '<span class="no">That query did not run.</span> ' + guess +
-      '<br><span class="hint">The database reported: ' + esc(msg) + '</span>';
+    $('verdict').innerHTML = "<span class=\"no\">Этот запрос не был выполнен.</span> " + guess +
+      "<br><span class=\"hint\">В базе данных сообщалось: " + esc(msg) + '</span>';
     $('directive-text').textContent = "Исправьте запрос, затем нажмите «Выполнить» под редактором.";
     winPopup({
-      cue: 'Read what went wrong',
+      cue: "Прочитайте, что пошло не так",
       tone: 'no',
       title: "Этот запрос не выполнялся",
       lead: guess,
-      body: '<p class="note">The database reported: ' + esc(msg) + '</p>',
+      body: "<p class=\"note\">В базе данных сообщалось: " + esc(msg) + '</p>',
       label: "Попробуй ещё раз",
       onContinue: () => ed.focus(),
       toast: false,
@@ -1093,8 +1093,8 @@ function run(){
   const got = res.length ? res[res.length - 1].values.length : 0;
   const want = LAP.drills[i].rows;
   $('verdict').className = '';
-  $('verdict').innerHTML = '<b>' + got + (got === 1 ? ' row' : ' rows') + ' back.</b> The reference query returns ' +
-    want + (got === want ? '. ' : ', so the two are not doing the same thing yet. ') +
+  $('verdict').innerHTML = '<b>' + got + (got === 1 ? ' row' : ' rows') + " назад.</b> Справочный запрос возвращает " +
+    want + (got === want ? '. ' : ", так что эти двое пока не делают одно и то же. ") +
     (got === want ? answerLine(res) : '');
   // Right answer: the kits' confetti, and the loud button moves from Run to the way out,
   // so the next click is the one the hand is already heading for.
@@ -1103,14 +1103,14 @@ function run(){
     // here, so the repair is a line-by-line comparison rather than a hint.
     $('directive-text').textContent = "Исправьте запрос, затем нажмите «Выполнить» под редактором.";
     winPopup({
-      cue: 'Read what came back',
+      cue: "Прочитай, что вернулось",
       tone: 'no',
       title: "Не те же строки",
-      lead: 'You got ' + got + (got === 1 ? ' row' : ' rows') + '; the query on the left returns ' +
-        want + '. ' + (got > want ? 'Something is not being filtered out.'
-                                  : 'Something is filtering too much.'),
-      body: '<p class="note">Read your query against the one on the left, one line at a ' +
-        'time. What came back:</p>' + table(res),
+      lead: 'You got ' + got + (got === 1 ? ' row' : ' rows') + "; запрос слева возвращает " +
+        want + '. ' + (got > want ? "Что-то не фильтруется."
+                                  : "Что-то слишком сильно фильтрует."),
+      body: "<p class=\"note\">Прочтите свой запрос напротив запроса слева, по одной строке. " +
+        "время. Что вернулось:</p>" + table(res),
       label: "Попробуй ещё раз",
       onContinue: () => ed.focus(),
       toast: false,
@@ -1122,22 +1122,22 @@ function run(){
     const fwd = last ? $('to-lesson') : $('next');
     $('run').classList.remove('go');
     fwd.classList.add('go');
-    $('directive-text').textContent = 'Read your rows, then click ' +
-      fwd.textContent.trim().replace(/\s*[→↗]\s*$/, '') + ' under the editor.';
+    $('directive-text').textContent = "Прочитайте свои строки, затем нажмите " +
+      fwd.textContent.trim().replace(/\s*[→↗]\s*$/, '') + " под редактором.";
     winPopup({
-      cue: 'Read your rows',
-      title: last ? 'That is all ' + LAP.drills.length : 'Rows match',
+      cue: "Прочтите свои строки",
+      title: last ? "Это все " + LAP.drills.length : "Совпадение строк",
       lead: answerLine(res),
       body: didAndMatters(LAP.drills[i]) +
         '<p class="note">' + (last
-          ? 'That is the last of them. Next you read why each one worked, then write all ' +
-            LAP.drills.length + ' again with the query covered up.'
-          : 'What your query returned:') + '</p>' + table(res),
+          ? "Это последний из них. Далее вы читаете, почему каждый из них сработал, затем записываете все " +
+            LAP.drills.length + " снова с закрытым вопросом."
+          : "Что вернул ваш запрос:") + '</p>' + table(res),
       // Read off the button it presses, not written twice. The two said different things
       // for a while after the lesson and recall steps swapped places.
       label: fwd.textContent.trim(),
       onContinue: () => fwd.click(),
-      toast: last ? '✓ That is all ' + LAP.drills.length : '✓ Rows match',
+      toast: last ? "✓ Вот и все " + LAP.drills.length : "✓ Соответствие строк",
       pieces: last ? 34 : 20
     });
   }
@@ -1236,7 +1236,7 @@ function paintPile(){
   const clean = LAP.drills.filter((d, n) => cleared.has(n) && !(helpUsed[n] > 0)).length;
   $('pile').innerHTML =
     '<span class="tally ok"><b>' + cleared.size + '</b> of ' + total + ' answered</span>' +
-    (clean ? '<span class="tally ok"><b>' + clean + '</b> with no help</span>' : '');
+    (clean ? '<span class="tally ok"><b>' + clean + "</b> без помощи</span>" : '');
 }
 
 // Uncover more of the query in the box it already lives in. Nothing new appears on the
@@ -1258,8 +1258,8 @@ function uncover(was){
 function didAndMatters(d){
   const did = d.did || d.why;
   return '<div class="did">' +
-    '<h3>What you just did</h3><p>' + esc(did) + '</p>' +
-    (d.matters ? '<div class="why"><h3>Why it matters</h3><p style="margin:0">' +
+    "<h3>Что ты только что сделал</h3><p>" + esc(did) + '</p>' +
+    (d.matters ? "<div class=\"why\"><h3>Зачем это нужно</h3><p style=\"margin:0\">" +
       esc(d.matters) + '</p></div>' : '') +
     '</div>';
 }
@@ -1275,8 +1275,8 @@ function judgeRecall(res){
     cleared.add(idx); missed.delete(idx);
     $('verdict').className = '';
     $('verdict').innerHTML = unaided
-      ? '<span class="ok">That is the table, and you had it.</span> ' + esc(LAP.drills[idx].why)
-      : '<span class="ok">That is the table.</span> ' + esc(LAP.drills[idx].why);
+      ? "<span class=\"ok\">Это стол, и он у вас был.</span> " + esc(LAP.drills[idx].why)
+      : "<span class=\"ok\">Это стол.</span> " + esc(LAP.drills[idx].why);
     // The query stops being covered once it is answered: there is nothing left to protect,
     // and the point now is to read it against what you wrote. The rest is marked as new,
     // because on a clean answer this is the first time any of it has been on screen.
@@ -1285,21 +1285,21 @@ function judgeRecall(res){
     $('next').hidden = false;
     $('next').classList.add('go');
     $('skip').disabled = true;
-    $('directive-text').textContent = 'Read your rows, then click ' +
-      $('next').textContent.trim().replace(/\s*[→↗]\s*$/, '') + ' under the editor.';
+    $('directive-text').textContent = "Прочитайте свои строки, затем нажмите " +
+      $('next').textContent.trim().replace(/\s*[→↗]\s*$/, '') + " под редактором.";
     paintPile();
     remember();
     winPopup({
-      cue: 'Read your rows',
-      title: unaided ? 'You had it' : 'That is the table',
+      cue: "Прочтите свои строки",
+      title: unaided ? "У тебя это было" : "Это стол",
       lead: unaided
-        ? 'Written from memory with the query covered up. Full marks on this one.'
-        : 'You got there with some of the query on screen. It scores less, and it still counts.',
+        ? "Записано по памяти с закрытым запросом. Полные оценки по этому поводу."
+        : "Вы попали туда с частью запроса на экране. Он набирает меньше очков, но все равно имеет значение.",
       body: didAndMatters(LAP.drills[idx]) +
-        '<p class="note">What your query returned:</p>' + table(res),
+        "<p class=\"note\">Что вернул ваш запрос:</p>" + table(res),
       label: "Далее →",
       onContinue: () => $('next').click(),
-      toast: unaided ? '✓ From memory' : '✓ Answered',
+      toast: unaided ? "✓ По памяти" : "✓ Ответил",
       pieces: unaided ? 20 : 8
     });
     return;
@@ -1313,19 +1313,19 @@ function judgeRecall(res){
   const wantC = want ? want.columns.length : 0;
   let diff;
   if(gotN !== wantN){
-    diff = 'You got ' + gotN + (gotN === 1 ? ' row' : ' rows') + '; the answer has ' + wantN +
-      '. ' + (gotN > wantN ? 'Something is not being filtered out.' : 'Something is filtering too much.');
+    diff = 'You got ' + gotN + (gotN === 1 ? ' row' : ' rows') + "; ответ есть " + wantN +
+      '. ' + (gotN > wantN ? "Что-то не фильтруется." : "Что-то слишком сильно фильтрует.");
   } else if(gotC !== wantC){
-    diff = 'The row count is right, but you asked for ' + gotC +
-      (gotC === 1 ? ' column' : ' columns') + ' and the answer has ' + wantC + '.';
+    diff = "Количество строк правильное, но вы просили " + gotC +
+      (gotC === 1 ? ' column' : ' columns') + " и ответ есть " + wantC + '.';
   } else {
-    diff = 'Same shape, different contents. The values or the sort order are not matching.';
+    diff = "Та же форма, разное содержание. Значения или порядок сортировки не совпадают.";
   }
-  missRecall('<span class="no">Not the same table.</span> ' + diff, null, {
+  missRecall("<span class=\"no\">Не тот стол.</span> " + diff, null, {
     title: "Не тот стол",
     lead: diff,
     // Their rows, not the answer's. Seeing what they actually asked for is the repair.
-    body: '<p class="note">What your query returned:</p>' + table(res)
+    body: "<p class=\"note\">Что вернул ваш запрос:</p>" + table(res)
   });
 }
 
@@ -1339,9 +1339,9 @@ function missRecall(html, footnote, opts){
   revealed = Math.min(misses, 3);
   helpUsed[at()] = Math.max(helpUsed[at()] || 0, revealed);
   uncover(had);
-  const helped = misses === 1 ? 'Half the query is uncovered on the left.'
-     : misses === 2 ? 'Three quarters of it is uncovered now.'
-     : 'All of it is uncovered now. Type it out; it never goes into the editor for you.';
+  const helped = misses === 1 ? "Половина запроса раскрыта слева."
+     : misses === 2 ? "Три четверти из них сейчас раскрыты."
+     : "Сейчас все это раскрыто. Напечатайте это; он никогда не попадет в редактор для вас.";
   $('verdict').className = '';
   // The engine's own words go last. They are the least useful line on the screen and they
   // must never sit between the explanation and the help.
@@ -1353,9 +1353,9 @@ function missRecall(html, footnote, opts){
   // Same popup as a right answer, so a wrong one is not the quiet outcome. It carries what
   // their query actually returned, what is different about it, and what just got uncovered.
   winPopup({
-    cue: 'Read what went wrong',
+    cue: "Прочитайте, что пошло не так",
     tone: 'no',
-    title: (opts && opts.title) || 'Not the same table',
+    title: (opts && opts.title) || "Не тот стол",
     lead: (opts && opts.lead) || '',
     body: '<p class="note">' + helped + '</p>' + ((opts && opts.body) || ''),
     label: "Попробуй ещё раз",
@@ -1378,7 +1378,7 @@ function recallDone(){
   const clean = LAP.drills.filter((d, n) => cleared.has(n) && !(helpUsed[n] > 0)).length;
   // Confetti for a clean sweep only. Everyone else gets the step change and the score,
   // which is the honest amount of noise for what happened.
-  if(clean === total) celebrate('✓ All ' + total + ' from memory', 34);
+  if(clean === total) celebrate('✓ All ' + total + " по памяти", 34);
   else if(cleared.size) showToast(cleared.size + ' of ' + total + ' answered');
   show('concepts');
 }
@@ -1393,9 +1393,9 @@ function paintConcepts(){
     <section class="concept">
       <h3><span class="cn">${n + 1}</span>${esc(c.name)}</h3>
       <p>${esc(c.does)}</p>
-      <p class="worked"><b>Why your query worked.</b> ${esc(c.worked)}</p>
+      <p class="worked"><b>Почему ваш запрос сработал.</b> ${esc(c.worked)}</p>
       <div class="where">
-        <h4>Where you will use it</h4>
+        <h4>Где вы будете его использовать</h4>
         <ul>${c.where.map(([who, what]) =>
           '<li><b>' + esc(who) + '</b> ' + esc(what) + '</li>').join('')}</ul>
       </div>
@@ -1434,19 +1434,19 @@ function paintDone(){
 
   const clean = LAP.drills.filter((d, n) => cleared.has(n) && !(helpUsed[n] > 0)).length;
   $('score-line').textContent =
-    now === max ? 'All ' + LAP.drills.length + ' written from memory with nothing uncovered.'
+    now === max ? 'All ' + LAP.drills.length + " написано по памяти, ничего не раскрыто."
     : clean ? clean + ' of ' + LAP.drills.length +
-      ' came back to you with nothing uncovered. The rest needed some of the query on screen, which is what the next run is for.'
-    : 'Every one of them needed some of the query on screen. That is an ordinary first run; the score moves fast on the second.';
+      " вернулся к вам ни с чем. Остальным требовалась часть запроса на экране, для чего и нужен следующий запуск."
+    : "Каждому из них требовался какой-то запрос на экране. Это обычный первый запуск; счет быстро меняется на второй.";
 
   // Query by query, so the number has something behind it.
   $('score-table').innerHTML =
-    '<tr><th>Query</th><th>Help you needed</th><th>Points</th></tr>' +
+    "<tr><th>Query</th><th>Помощь вам нужна</th><th>Points</th></tr>" +
     LAP.drills.map((d, D) => {
       const help = cleared.has(D) ? (helpUsed[D] || 0) : null;
-      const words = help === null ? 'Not written from memory'
-        : help === 0 ? 'None' : help === 1 ? 'Half of it uncovered'
-        : help === 2 ? 'Three quarters uncovered' : 'All of it uncovered';
+      const words = help === null ? "Записано не по памяти"
+        : help === 0 ? 'None' : help === 1 ? "Половина раскрыта"
+        : help === 2 ? "Три четверти раскрыты" : "Все это раскрыто";
       return '<tr><td>' + esc(d.adds) + '</td><td>' + words + '</td><td class="mark">' +
         (help === null ? 0 : POINTS[Math.min(help, 3)]) + '</td></tr>';
     }).join('');
@@ -1454,10 +1454,10 @@ function paintDone(){
   const loud = now === max ? $('again') : $('again-blind');
   $('again').classList.toggle('go', now === max);
   $('again-blind').classList.toggle('go', now !== max);
-  $('directive-text').textContent = 'Read your score, then click ' + loud.textContent.trim() + '.';
+  $('directive-text').textContent = "Прочитайте свой результат, затем нажмите " + loud.textContent.trim() + '.';
   $('ck-line').textContent = now === max
-    ? 'Nothing left to beat on this unit. Another run is reps, not repair.'
-    : 'The fastest way up is the covered-up pass on its own. The queries are the same four.';
+    ? "В этом устройстве больше нечего превзойти. Еще один пробег — это повторы, а не ремонт."
+    : "Самый быстрый путь наверх — это закрытый проход сам по себе. Запросов те же четыре.";
 }
 
 $('to-done').onclick = () => show('done');
@@ -1513,11 +1513,11 @@ function maybeIntro(){
   winPopup({
     tone: 'plain',
     title: "Как это работает",
-    lead: 'One round of SQL, about fifteen minutes.',
-    body: '<p class="note"><b>The pane on the left is what to type:</b> the question, what ' +
-      'the answer has to bring back, and the query itself. <b>The pane on the right is ' +
-      'where you type it</b>, on a real database of 500 songs. Press Run and you get real ' +
-      'rows back.</p>' + runOrderHtml(),
+    lead: "Один раунд SQL, около пятнадцати минут.",
+    body: "<p class=\"note\"><b>На панели слева указано, что вводить:</b> вопрос, что " +
+      "ответ должен вернуть обратно, и сам запрос. <b>Панель справа " +
+      "где ты это напечатаешь</b>, на реальной базе данных из 500 песен. Нажмите «Выполнить», и вы получите реальный результат " +
+      "ряды назад.</p>" + runOrderHtml(),
     label: "Начните печатать",
     onContinue: () => ed.focus(),
     never: INTRO_KEY,
@@ -1534,9 +1534,9 @@ function paintResume(){
   const at = ORDER.indexOf(step);
   if(at <= 0){ $('resume').hidden = true; return; }
   const here = (STEPS.find(s => s.key === step) || {}).t ||
-    (step === 'done' ? 'the finish card' : step);
-  $('resume-line').innerHTML = 'Picking up where you left off, at <b>' + esc(here) +
-    '</b>. The steps behind it are ticked from last time, not from this visit.';
+    (step === 'done' ? "финишная карта" : step);
+  $('resume-line').innerHTML = "Продолжая с того места, где вы остановились, в <b>" + esc(here) +
+    "</b>. Шаги, стоящие за этим, отмечены с прошлого раза, а не с этого визита.";
   $('resume').hidden = false;
 }
 $('restart').onclick = () => {
@@ -1578,11 +1578,11 @@ initSqlJs({locateFile: f => 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.
     // Only on the way in at the top, never over a round already in progress.
     if(step === 'type' && i === 0) maybeIntro();
   })
-  .catch(e => { $('adds').textContent = 'The SQL engine failed to load: ' + e.message; });
+  .catch(e => { $('adds').textContent = "Механизм SQL не удалось загрузить: " + e.message; });
 </script>
 <script src="../assets/apk-footer.js?v=10" defer></script>
 <script src="../assets/progress-state.js"></script>
 <script src="../assets/supabase_auth_sync.js?v=3"></script>
-<script src="../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

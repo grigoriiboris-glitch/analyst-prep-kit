@@ -294,7 +294,7 @@ function save(){ localStorage.setItem(STORE, JSON.stringify(state)); }
 function getCoachKey(){ return localStorage.getItem('apk-coach-key') || ''; }
 function setCoachKey(k){
   localStorage.setItem('apk-coach-key', k.trim());
-  toast(k.trim() ? 'Key saved. Hints are on.' : 'Key cleared.');
+  toast(k.trim() ? "Ключ сохранен. Подсказки включены." : "Ключ очищен.");
   render();
 }
 function stripTags(html){
@@ -316,36 +316,36 @@ async function hintCall(prompt, targetId){
       body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:350,messages:[{role:'user',content:prompt}]})
     });
     const data = await res.json();
-    if(!res.ok){ el.textContent = data?.error?.message || 'Request refused. Check your key.'; return; }
-    el.textContent = data.content?.[0]?.text || 'No response. Check your key.';
+    if(!res.ok){ el.textContent = data?.error?.message || "Запрос отклонен. Проверьте свой ключ."; return; }
+    el.textContent = data.content?.[0]?.text || "Никакого ответа. Проверьте свой ключ.";
   } catch(e){ el.textContent = "Запрос не выполнен. Проверьте свой ключ и соединение."; }
 }
-const TUTOR_ROLE = `You are a plain-spoken Azure data tutor helping a new data analyst study for Microsoft exam DP-900, Azure Data Fundamentals. That exam covers core data concepts (structured, semi-structured and unstructured data, file formats, transactional vs analytical workloads, data roles), relational data on Azure (normalization, SQL statement types, database objects, the Azure SQL family, Azure Database for MySQL and PostgreSQL), non-relational data on Azure (Blob, Files and Table storage, Azure Cosmos DB and its APIs), and analytics workloads on Azure (ingestion, data warehouses, lakes and lakehouses, Microsoft Fabric, Azure Databricks, batch vs streaming, Power BI). Use facts from Microsoft Learn only.`;
+const TUTOR_ROLE = `Вы откровенный преподаватель данных Azure, помогающий сдавать новое исследование по аналитике данных для экзамена Microsoft DP-900 «Основы данных Azure». Этот экзамен охватывает основные понятия данных (структурированные, полуструктурированные и неструктурированные данные, форматы файлов, транзакционные и аналитические рабочие нагрузки, роли данных), реляционные данные в Azure (нормализация, типы операторов SQL, объекты базы данных, семейство Azure SQL, база данных Azure для MySQL и PostgreSQL), нереляционные данные в Azure (хранилища BLOB-объектов, файлов и таблиц, Azure Cosmos DB и ее API), а также аналитические рабочие нагрузки в Azure (прием, хранилища данных, озера и домики у озера, Microsoft Fabric, Azure Databricks, пакетная и потоковая передача, Power BI). Используйте только факты из Microsoft Learn.`;
 function hintStudy(key, i){
   const s = STUDY.find(x=>x.key===key);
   if(!s) return;
   const fact = stripTags(s.must[i]);
   const prompt = `${TUTOR_ROLE}
 
-Explain this exam point a different way than it is written here:
+Объясните этот экзаменационный вопрос иначе, чем написано здесь:
 "${fact}"
 
-Rules: 3 sentences at most. One idea per sentence. Use an everyday comparison if it helps. Say what the exam is likely to ask about it. No preamble, no restating the question.`;
+Правила: максимум 3 предложения. Одна идея в предложении. Используйте повседневное сравнение, если это помогает. Скажите, что, скорее всего, об этом спросят на экзамене. Никакой преамбулы, никакого повторения вопроса.`;
   hintCall(prompt, 'hint-resp-' + key + '-' + i);
 }
 function hintQuestion(qid){
   const q = QUESTIONS.find(x=>x.id===qid);
   if(!q) return;
   const chosen = state.answers[qid];
-  const picked = Array.isArray(chosen) ? chosen.map(i=>stripTags(q.choices[i])).join(' / ') : (chosen!==undefined ? stripTags(q.choices[chosen]) : '(no answer)');
+  const picked = Array.isArray(chosen) ? chosen.map(i=>stripTags(q.choices[i])).join(' / ') : (chosen!==undefined ? stripTags(q.choices[chosen]) : "(нет ответа)");
   const right = q.type==='ms' ? q.correct.map(i=>stripTags(q.choices[i])).join(' / ') : stripTags(q.choices[q.correct]);
-  const prompt = `${TUTOR_ROLE} A student got this practice question wrong.
+  const prompt = `${TUTOR_ROLE} Студент неправильно ответил на этот практический вопрос.
 
-Question: ${stripTags(q.q)}
-They picked: ${picked}
-Correct answer: ${right}
+Вопрос: ${stripTags(q.q)}
+Они выбрали: ${picked}
+Правильный ответ: ${right}
 
-In 3 sentences at most, say what they were probably confusing, then give one plain rule that keeps the two apart. No preamble.`;
+Максимум в трех предложениях скажите, что вас, вероятно, смутило, а затем приведите одно простое правило, которое разделяет эти два понятия. Никакой преамбулы.`;
   hintCall(prompt, 'hint-resp-q-' + qid);
 }
 
@@ -354,22 +354,22 @@ In 3 sentences at most, say what they were probably confusing, then give one pla
    ("Skills measured as of July 21, 2026"). The ranges are official. The single
    number used for each bar is the midpoint of the range, scaled so the four sum to 100. */
 const DOMAIN_INFO = {
-  d1:{label:"Зона 1", name:'Core data concepts', weight:29, range:'25 to 30%', color:'var(--c-d1)',
+  d1:{label:"Зона 1", name:"Основные понятия данных", weight:29, range:"от 25 до 30%", color:'var(--c-d1)',
       hint:"Структурированные, полуструктурированные и неструктурированные данные; форматы файлов; файловые хранилища и базы данных; OLTP против OLAP; роли данных.",
       docPath:'https://learn.microsoft.com/en-us/training/modules/explore-core-data-concepts/',
-      docLabel:'Explore core data concepts (Microsoft Learn)'},
-  d2:{label:"Зона 2", name:'Relational data on Azure', weight:23, range:'20 to 25%', color:'var(--c-d2)',
+      docLabel:"Изучите основные концепции данных (Microsoft Learn)"},
+  d2:{label:"Зона 2", name:"Реляционные данные в Azure", weight:23, range:"от 20 до 25%", color:'var(--c-d2)',
       hint:"Нормализация, DDL/DCL/DML, представления, хранимые процедуры, индексы, семейство Azure SQL, база данных Azure для MySQL и PostgreSQL.",
       docPath:'https://learn.microsoft.com/en-us/training/modules/explore-provision-deploy-relational-database-offerings-azure/',
-      docLabel:'Explore relational database services in Azure (Microsoft Learn)'},
-  d3:{label:"Зона 3", name:'Non-relational data on Azure', weight:19, range:'15 to 20%', color:'var(--c-d3)',
+      docLabel:"Изучите службы реляционных баз данных в Azure (Microsoft Learn)"},
+  d3:{label:"Зона 3", name:"Нереляционные данные в Azure", weight:19, range:"от 15 до 20%", color:'var(--c-d3)',
       hint:"Типы BLOB-объектов и уровни доступа, Data Lake Storage Gen2, файлы Azure, хранилище таблиц Azure, Cosmos DB и пять его API.",
       docPath:'https://learn.microsoft.com/en-us/training/modules/explore-non-relational-data-stores-azure/',
-      docLabel:'Explore fundamentals of Azure Cosmos DB (Microsoft Learn)'},
-  d4:{label:"Зона 4", name:'Analytics workloads on Azure', weight:29, range:'25 to 30%', color:'var(--c-d4)',
+      docLabel:"Изучите основы Azure Cosmos DB (Microsoft Learn)"},
+  d4:{label:"Зона 4", name:"Рабочие нагрузки аналитики в Azure", weight:29, range:"от 25 до 30%", color:'var(--c-d4)',
       hint:"ETL против ELT, склады против озер против озер, Fabric и Databricks, пакетная обработка против потоковой передачи, концентраторы событий и потоковая аналитика, модели и визуальные эффекты Power BI.",
       docPath:'https://learn.microsoft.com/en-us/training/modules/examine-components-of-modern-data-warehouse/',
-      docLabel:'Explore fundamentals of large-scale analytics (Microsoft Learn)'}
+      docLabel:"Изучите основы крупномасштабной аналитики (Microsoft Learn)"}
 };
 const DOMAIN_ORDER = ['d1','d2','d3','d4'];
 
@@ -377,54 +377,54 @@ const DOMAIN_ORDER = ['d1','d2','d3','d4'];
 const STUDY = [
   {key:'d1', title:"Основные концепции данных: формы данных, хранилища, рабочие нагрузки, роли.",
     must:[
-      `<strong>Three shapes of data, and the test is the schema.</strong> <em>Structured</em> data follows a fixed schema, so every record has the same fields. Think of a spreadsheet where every row has the same columns. It is usually tabular and lives in relational tables.`,
-      `<strong>Semi-structured data has some structure but allows variation</strong> between records. One customer has two email addresses, another has none. JSON is the common example. The shape bends per record, which a fixed table cannot do.`,
-      `<strong>Unstructured data has no specific structure at all.</strong> Documents, images, audio, video and binary files. Microsoft Learn also now mentions <em>vector data</em> (embeddings) as a growing type used by AI assistants.`,
-      `<strong>Two broad categories of data store: file stores and databases.</strong> Files sit in a file system or cloud storage. A database is a dedicated system for managing data records rather than files.`,
-      `<strong>Delimited text (CSV, TSV, fixed width) is the human-readable choice</strong> for structured data that many applications need to read. Fields split on a comma or tab, rows end on a new line, and the first line may carry field names.`,
-      `<strong>JSON uses braces for objects and square brackets for collections.</strong> It fits both structured and semi-structured data because an attribute can itself be an object or a list. XML does a similar job with angle-bracket tags but is more verbose and mostly superseded.`,
-      `<strong>Parquet is columnar, Avro is row-based.</strong> Parquet stores each column together inside row groups with metadata, which is why it is the de facto standard for lakehouses and great for analytics. Avro stores a JSON header plus binary blocks of whole records, good for compression and moving data over the network.`,
-      `<strong>Delta Lake is Parquet plus a transaction log.</strong> The log adds ACID transactions, versioning and reliable updates on top of files in a data lake. Both Microsoft Fabric and Azure Databricks use it as their standard format.`,
-      `<strong>BLOB means Binary Large Object</strong>: raw binary that an application must interpret, such as images, video, audio and application-specific documents. It is the file-side word for unstructured data.`,
-      `<strong>Relational databases store structured data in tables with primary keys.</strong> A key uniquely identifies each row and is referenced from other tables, which lets the database be normalized so each fact is stored once. SQL, based on an ANSI standard, queries them.`,
-      `<strong>Four kinds of non-relational (NoSQL) database.</strong> <em>Key-value</em>: a unique key and a value of any format. <em>Document</em>: a key-value store where the value is a JSON document. <em>Column family</em>: rows and columns, with columns grouped into families. <em>Graph</em>: entities as nodes with links as relationships.`,
-      `<strong>OLTP is the live system that records transactions</strong>: a bank transfer, a checkout. It is high volume, optimized for both reads and writes, and built around CRUD operations (create, retrieve, update, delete). These systems run line-of-business (LOB) applications.`,
-      `<strong>ACID is the promise an OLTP transaction makes.</strong> <em>Atomicity</em>: all or nothing. <em>Consistency</em>: one valid state to another. <em>Isolation</em>: concurrent transactions do not interfere. <em>Durability</em>: once committed, it stays committed even if the power goes out.`,
-      `<strong>Analytical processing is read-only or read-mostly</strong> over large volumes of historical data or snapshots. The common pipeline: ETL or ELT into a data lake, load into a lakehouse or warehouse, aggregate into an OLAP or semantic model, then report on it.`,
-      `<strong>A data lake is files, a data warehouse is relational, a lakehouse is both.</strong> Lakes collect large volumes of file-based data. Warehouses hold a relational schema optimized for reads. Lakehouses put relational querying on top of lake storage.`,
-      `<strong>An OLAP model (now usually called a semantic model, historically a cube) pre-aggregates measures across dimensions</strong> so you can drill up and down, for example sales by region, then city, then address. Because the numbers are aggregated, summary queries are fast.`,
-      `<strong>Who works where</strong>: data scientists work with raw files in the data lake, data analysts query tables in the warehouse, business users consume the pre-aggregated model as reports and dashboards.`,
-      `<strong>Three roles, three sentences.</strong> A <em>database administrator</em> manages databases: availability, performance, backups, restores, and who has access. A <em>data engineer</em> builds and monitors the pipelines that ingest, clean and move data between systems. A <em>data analyst</em> explores data, builds models, and turns it into reports and visualizations for decisions.`
+      `<strong>Три формы данных, а тест — это схема.</strong> <em>Structured</em> данные следуют фиксированной схеме, поэтому каждая запись имеет одни и те же поля. Представьте себе электронную таблицу, в которой каждая строка имеет одинаковые столбцы. Обычно он табличный и находится в реляционных таблицах.`,
+      `<strong>Полуструктурированные данные имеют некоторую структуру, но допускают вариации.</strong> между записями. У одного клиента есть два адреса электронной почты, у другого — ни одного. JSON является распространенным примером. Форма изгибается для каждой записи, чего не может сделать фиксированная таблица.`,
+      `<strong>Неструктурированные данные вообще не имеют определенной структуры.</strong> Документы, изображения, аудио, видео и двоичные файлы. Microsoft Learn также теперь упоминает <em>векторные данные</em> (встраивания) как растущий тип, используемый помощниками ИИ.`,
+      `<strong>Две широкие категории хранилищ данных: хранилища файлов и базы данных.</strong> Файлы хранятся в файловой системе или облачном хранилище. База данных — это специальная система для управления записями данных, а не файлами.`,
+      `<strong>Текст с разделителями (CSV, TSV, фиксированная ширина) — удобочитаемый вариант.</strong> для структурированных данных, которые необходимо читать многим приложениям. Поля разделяются запятой или табуляцией, строки заканчиваются на новой строке, а первая строка может содержать имена полей.`,
+      `<strong>JSON использует фигурные скобки для объектов и квадратные скобки для коллекций.</strong> Он подходит как для структурированных, так и для полуструктурированных данных, поскольку атрибут сам по себе может быть объектом или списком. XML выполняет аналогичную работу с тегами угловых скобок, но он более многословен и в большинстве случаев заменяется.`,
+      `<strong>Паркет столбчатый, Авро – рядный.</strong> Parquet хранит каждый столбец вместе в группах строк с метаданными, поэтому он является фактическим стандартом для озерных домиков и отлично подходит для аналитики. Avro хранит заголовок JSON, а также двоичные блоки целых записей, что удобно для сжатия и перемещения данных по сети.`,
+      `<strong>Delta Lake — это паркет плюс журнал транзакций.</strong> Журнал добавляет транзакции ACID, управление версиями и надежные обновления поверх файлов в озере данных. И Microsoft Fabric, и Azure Databricks используют его в качестве стандартного формата.`,
+      `<strong>BLOB означает большой двоичный объект.</strong>: необработанный двоичный файл, который приложение должно интерпретировать, например изображения, видео, аудио и документы, специфичные для приложения. Это файловое слово, обозначающее неструктурированные данные.`,
+      `<strong>Реляционные базы данных хранят структурированные данные в таблицах с первичными ключами.</strong> Ключ уникально идентифицирует каждую строку и на него ссылаются другие таблицы, что позволяет нормализовать базу данных, чтобы каждый факт сохранялся один раз. Их запрашивает SQL, основанный на стандарте ANSI.`,
+      `<strong>Четыре типа нереляционных (NoSQL) баз данных.</strong> <em>Key-value</em>: уникальный ключ и значение любого формата. <em>Document</em>: хранилище ключей и значений, где значением является документ JSON. <em>Семейство колонн</em>: строки и столбцы, столбцы сгруппированы в семейства. <em>Graph</em>: сущности как узлы со ссылками как отношения.`,
+      `<strong>OLTP — это действующая система, которая записывает транзакции</strong>: банковский перевод, касса. Он имеет большой объем, оптимизирован как для чтения, так и для записи и построен на операциях CRUD (создание, получение, обновление, удаление). Эти системы запускают бизнес-приложения (LOB).`,
+      `<strong>ACID — это обещание, которое дает транзакция OLTP.</strong> <em>Atomicity</em>: все или ничего. <em>Consistency</em>: одно допустимое состояние в другое. <em>Isolation</em>: параллельные транзакции не мешают. <em>Durability</em>: однажды совершенный, он остается зафиксированным, даже если отключится электричество.`,
+      `<strong>Аналитическая обработка доступна только для чтения или преимущественно для чтения.</strong> над большими объемами исторических данных или снимков. Общий конвейер: ETL или ELT в озеро данных, загрузка в озеро или хранилище, агрегирование в OLAP или семантическую модель, а затем создание отчета по нему.`,
+      `<strong>Озеро данных — это файлы, хранилище данных — реляционное, а озеро — и то, и другое.</strong> Озера собирают большие объемы файловых данных. Хранилища содержат реляционную схему, оптимизированную для чтения. Lakehouses помещают реляционные запросы поверх хранилища озер.`,
+      `<strong>Модель OLAP (теперь обычно называемая семантической моделью, исторически кубом) предварительно агрегирует показатели по измерениям.</strong> так что вы можете детализировать данные вверх и вниз, например, продажи по региону, затем по городу, а затем по адресу. Поскольку числа агрегируются, сводные запросы выполняются быстро.`,
+      `<strong>Кто где работает</strong>: ученые, работающие с данными, работают с необработанными файлами в озере данных, аналитики данных запрашивают таблицы в хранилище, бизнес-пользователи используют предварительно агрегированную модель в виде отчетов и информационных панелей.`,
+      `<strong>Три роли, три предложения.</strong> A <em>Администратор базы данных</em> управляет базами данных: доступность, производительность, резервное копирование, восстановление и доступ к ним. А <em>Дата-инженер</em> строит и контролирует конвейеры, которые принимают, очищают и перемещают данные между системами. А <em>Аналитик данных</em> изучает данные, строит модели и превращает их в отчеты и визуализации для принятия решений.`
     ],
-    miscon:`<strong>Misconception to bust:</strong> "Semi-structured just means messy." It means the structure is allowed to vary per record, not that there is none. A JSON document with nested objects is highly organized, but two documents in the same collection can carry different fields. If a question describes records with different numbers of phone numbers, or fields that only some records have, that is semi-structured, not unstructured. Unstructured is reserved for things like images and audio where there is no field structure to speak of.`,
+    miscon:`<strong>Заблуждение, которое следует разоблачить:</strong> «Полуструктурированный — это просто беспорядок». Это означает, что структура может меняться для каждой записи, а не то, что ее нет. Документ JSON с вложенными объектами хорошо организован, но два документа в одной коллекции могут содержать разные поля. Если вопрос описывает записи с разным количеством телефонных номеров или поля, которые есть только в некоторых записях, то он является полуструктурированным, а не неструктурированным. Неструктурированное зарезервировано для таких вещей, как изображения и аудио, где нет структуры полей.`,
     viz:`<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:stretch">
-      <div class="vz-card" style="flex:1;min-width:160px"><b>Structured</b><span>Fixed schema, tables. CSV, SQL tables.</span></div>
-      <div class="vz-card" style="flex:1;min-width:160px"><b>Semi-structured</b><span>Some structure, varies per record. JSON, XML.</span></div>
-      <div class="vz-card" style="flex:1;min-width:160px"><b>Unstructured</b><span>No field structure. Images, audio, video, PDFs.</span></div>
-    </div><div class="vz-note">Ask "does every record have the same fields?" Yes means structured. Mostly means semi-structured. The question does not apply means unstructured.</div>`},
+      <div class="vz-card" style="flex:1;min-width:160px"><b>Structured</b><span>Фиксированная схема, таблицы. Таблицы CSV, SQL.</span></div>
+      <div class="vz-card" style="flex:1;min-width:160px"><b>Semi-structured</b><span>Некоторая структура, варьируется в зависимости от записи. JSON, XML.</span></div>
+      <div class="vz-card" style="flex:1;min-width:160px"><b>Unstructured</b><span>Нет полевой структуры. Изображения, аудио, видео, PDF-файлы.</span></div>
+    </div><div class="vz-note">Спросите: «Все ли записи имеют одинаковые поля?» Да означает структурированный. В основном означает полуструктурированный. Вопрос не относится к средствам неструктурированным.</div>`},
 
   {key:'d2', title:"Реляционные данные в Azure: нормализация, SQL, объекты, семейство Azure SQL.",
     must:[
-      `<strong>A relational table models one entity.</strong> Each row is one instance (one customer, one order). Each column is one attribute with a set data type. A column can be NULL when the value is missing, unless it is declared NOT NULL.`,
-      `<strong>Normalization in four steps</strong>, per Microsoft Learn: separate each entity into its own table, separate each attribute into its own column, identify each row with a primary key, and link related entities with foreign keys.`,
-      `<strong>Why normalize: less duplication and better integrity.</strong> A customer's address is stored once, so changing it means changing one row. Each column holds one data type, so prices must be decimals and quantities must be integers.`,
-      `<strong>A foreign key points at another table's primary key</strong>, and the database can enforce referential integrity: no order for a customer who does not exist. A key built from several columns together is a <em>composite</em> key.`,
-      `<strong>DDL defines structure</strong>: <code>CREATE</code>, <code>ALTER</code>, <code>DROP</code>, <code>RENAME</code>. Dropping a table loses all its rows. DDL is about the shape of objects, not the rows inside them.`,
-      `<strong>DCL controls access</strong>: <code>GRANT</code>, <code>DENY</code>, <code>REVOKE</code>. It is the administrator's group. Revoke removes a permission you granted earlier; deny blocks it outright.`,
-      `<strong>DML manipulates rows</strong>: <code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>. An UPDATE or DELETE with no WHERE clause touches every row, and SQL never asks "are you sure".`,
-      `<strong>Three dialects to recognize.</strong> Transact-SQL (T-SQL) for SQL Server and the Azure SQL family. pgSQL for PostgreSQL. PL/SQL for Oracle. SQL was standardized by ANSI in 1986 and ISO in 1987; vendors add their own extensions on top.`,
-      `<strong>A view is a virtual table based on a SELECT query.</strong> It is a saved window onto one or more tables, queried and filtered like a table. It does not copy the data.`,
-      `<strong>A stored procedure is saved SQL you run on command</strong>, often with parameters, to encapsulate logic the application needs. You call it with EXEC and pass in values.`,
-      `<strong>An index is like the index at the back of a book.</strong> A sorted copy of one column with pointers to rows, so a WHERE on that column finds rows without scanning the whole table. It costs storage and slows inserts, updates and deletes, because it has to be maintained.`,
-      `<strong>Azure SQL is a family of three</strong> based on the SQL Server engine. <em>SQL Server on Azure VMs</em> is IaaS. <em>Azure SQL Managed Instance</em> is PaaS. <em>Azure SQL Database</em> is PaaS. The ladder runs from most control to least admin work.`,
-      `<strong>SQL Server on Azure VMs is the lift-and-shift option</strong>: fully compatible with on-premises, you manage the operating system, patches, backups and everything else. Pick it when you need OS-level access or full control. Availability 99.99%.`,
-      `<strong>Azure SQL Managed Instance has near-100% SQL Server compatibility</strong> with automated updates, backups and recovery. Use it for most cloud migrations when you want minimal application changes. Each instance can host multiple databases; instance pools share resources. Availability 99.99%.`,
-      `<strong>Azure SQL Database is for new cloud applications.</strong> It supports most core database-level features, but some instance-level features are missing. Two shapes: a <em>single database</em> on a logical server, or an <em>elastic pool</em> where several databases share memory, storage and compute. Availability 99.995%.`,
-      `<strong>Serverless and Hyperscale are Azure SQL Database options.</strong> Serverless scales compute automatically and you pay per use. Hyperscale supports very large databases, up to 100 TB, with fast backup and restore regardless of size.`,
-      `<strong>Azure Database for MySQL is PaaS on MySQL Community Edition</strong>, the classic choice for LAMP-stack apps. Automatic backups with point-in-time restore up to 35 days (7 by default). Flexible Server is the recommended deployment option for new workloads.`,
-      `<strong>Azure Database for PostgreSQL is PaaS PostgreSQL</strong>, a hybrid relational-object database that can store custom data types and geometric data, extended with code modules. Its dialect is pgsql. Query history lives in the <code>azure_sys</code> database, seen through <code>query_store.qs_view</code>. Flexible Server is the current deployment option.`
+      `<strong>Реляционная таблица моделирует одну сущность.</strong> Каждая строка представляет собой один экземпляр (один клиент, один заказ). Каждый столбец представляет собой один атрибут с заданным типом данных. Столбец может иметь значение NULL, если значение отсутствует, если только оно не объявлено NOT NULL.`,
+      `<strong>Нормализация в четыре шага</strong>, согласно Microsoft Learn: отделите каждую сущность в отдельную таблицу, отделите каждый атрибут в отдельный столбец, идентифицируйте каждую строку с помощью первичного ключа и свяжите связанные сущности с помощью внешних ключей.`,
+      `<strong>Зачем нормализовать: меньше дублирования и больше целостности.</strong> Адрес клиента сохраняется один раз, поэтому его изменение означает изменение одной строки. Каждый столбец содержит один тип данных, поэтому цены должны быть десятичными, а количества — целыми числами.`,
+      `<strong>Внешний ключ указывает на первичный ключ другой таблицы.</strong>, а база данных может обеспечить ссылочную целостность: нет заказа для несуществующего клиента. Ключ, составленный из нескольких столбцов, представляет собой <em>composite</em> ключ.`,
+      `<strong>DDL определяет структуру</strong>: <code>CREATE</code>, <code>ALTER</code>, <code>DROP</code>, <code>RENAME</code>. При удалении таблицы теряются все ее строки. В DDL речь идет о форме объектов, а не о строках внутри них.`,
+      `<strong>DCL контролирует доступ</strong>: <code>GRANT</code>, <code>DENY</code>, <code>REVOKE</code>. Это группа администраторов. Отозвать удаляет разрешение, которое вы предоставили ранее; Deny полностью блокирует его.`,
+      `<strong>DML манипулирует строками</strong>: <code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>. Операторы UPDATE или DELETE без предложения WHERE затрагивают каждую строку, и SQL никогда не спрашивает «вы уверены».`,
+      `<strong>Три диалекта, которые нужно распознать.</strong> Transact-SQL (T-SQL) для SQL Server и семейства Azure SQL. pgSQL для PostgreSQL. PL/SQL для Oracle. SQL был стандартизирован ANSI в 1986 году и ISO в 1987 году; поставщики добавляют свои собственные расширения сверху.`,
+      `<strong>Представление — это виртуальная таблица, основанная на запросе SELECT.</strong> Это сохраненное окно в одной или нескольких таблицах, запрашиваемое и фильтруемое как таблица. Он не копирует данные.`,
+      `<strong>Хранимая процедура — это сохраненный SQL, который вы запускаете по команде.</strong>, часто с параметрами, для инкапсуляции логики, необходимой приложению. Вы вызываете его с помощью EXEC и передаете значения.`,
+      `<strong>Указатель подобен указателю в конце книги.</strong> Отсортированная копия одного столбца с указателями на строки, поэтому WHERE в этом столбце находит строки без сканирования всей таблицы. Это требует затрат на хранение и замедляет вставку, обновление и удаление, поскольку его необходимо поддерживать.`,
+      `<strong>Azure SQL — это семья из трех человек</strong> на основе движка SQL Server. <em>SQL Server на виртуальных машинах Azure</em> это IaaS. <em>Управляемый экземпляр Azure SQL</em> это ПааС. <em>База данных SQL Azure</em> это ПааС. Лестница простирается от максимального контроля к минимуму административной работы.`,
+      `<strong>SQL Server на виртуальных машинах Azure — это вариант «поднять и переместить».</strong>: полностью совместим с локальной средой, вы управляете операционной системой, исправлениями, резервными копиями и всем остальным. Выбирайте его, если вам нужен доступ на уровне ОС или полный контроль. Доступность 99,99%.`,
+      `<strong>Управляемый экземпляр Azure SQL имеет почти 100% совместимость с SQL Server.</strong> с автоматическими обновлениями, резервным копированием и восстановлением. Используйте его для большинства миграций в облако, когда вам нужны минимальные изменения в приложениях. Каждый экземпляр может содержать несколько баз данных; Пулы экземпляров совместно используют ресурсы. Доступность 99,99%.`,
+      `<strong>База данных SQL Azure предназначена для новых облачных приложений.</strong> Он поддерживает большинство основных функций уровня базы данных, но некоторые функции уровня экземпляра отсутствуют. Две формы: а. <em>единая база данных</em> на логическом сервере или <em>Эластичный пул</em> где несколько баз данных совместно используют память, хранилище и вычислительные ресурсы. Доступность 99,995%.`,
+      `<strong>Бессерверные технологии и гипермасштабирование — это варианты базы данных SQL Azure.</strong> Бессерверные весы выполняют вычисления автоматически, и вы платите за использование. Hyperscale поддерживает очень большие базы данных (до 100 ТБ) с быстрым резервным копированием и восстановлением независимо от размера.`,
+      `<strong>База данных Azure для MySQL — это PaaS в MySQL Community Edition.</strong>, классический выбор для приложений из стека LAMP. Автоматическое резервное копирование с восстановлением на определенный момент времени до 35 дней (7 по умолчанию). Flexible Server — рекомендуемый вариант развертывания для новых рабочих нагрузок.`,
+      `<strong>База данных Azure для PostgreSQL — это PaaS PostgreSQL.</strong>, гибридная база данных реляционных объектов, которая может хранить пользовательские типы данных и геометрические данные, дополненная модулями кода. Его диалект — pgsql. История запросов хранится в <code>azure_sys</code> база данных, просмотренная насквозь <code>query_store.qs_view</code>. Flexible Server — текущий вариант развертывания.`
     ],
-    miscon:`<strong>Misconception to bust:</strong> "Managed Instance and SQL Database are the same thing with different names." They are both PaaS, but the exam lives in the gap. Managed Instance gives you a whole SQL Server <em>instance</em> in the cloud with near-100% compatibility, which is why it is the migration answer. SQL Database gives you a <em>database</em> with the core features and the highest availability number, which is why it is the new-cloud-app answer. If the question says "minimal changes to an existing on-premises solution", reach for Managed Instance. If it says "new application" or "elastic pool", reach for SQL Database.`,
+    miscon:`<strong>Заблуждение, которое следует разоблачить:</strong> «Управляемый экземпляр и база данных SQL — это одно и то же, но с разными именами». Они оба PaaS, но экзамен живет в промежутке. Управляемый экземпляр предоставляет вам целый SQL-сервер <em>instance</em> в облаке с почти 100% совместимостью, поэтому это решение проблемы миграции. База данных SQL дает вам <em>database</em> с основными функциями и максимальным уровнем доступности, поэтому это решение для нового облачного приложения. Если в вопросе говорится «минимальные изменения в существующем локальном решении», выберите «Управляемый экземпляр». Если там написано «новое приложение» или «эластичный пул», выберите «База данных SQL».`,
     viz:`<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
       <span class="vz-chip"><b>SQL Server on Azure VM</b><br><span style="color:var(--dim)">IaaS · you manage OS · lift and shift</span></span>
       <span class="vz-arrow">→</span>
@@ -435,26 +435,26 @@ const STUDY = [
 
   {key:'d3', title:"Нереляционные данные в Azure: хранилище, озеро данных, файлы, таблицы, Cosmos DB.",
     must:[
-      `<strong>Azure Storage is one account, three kinds of store.</strong> <em>Blob containers</em> for binary files at scale, <em>file shares</em> like a corporate network drive, and <em>tables</em> for key-value data. A storage account can hold all three.`,
-      `<strong>Blobs live in containers, and access is controlled at the container level.</strong> Folders inside a container are virtual by default: just a <code>/</code> in the blob name. Microsoft Entra ID with Azure RBAC is the recommended way to sign in and assign permissions.`,
-      `<strong>Three blob types.</strong> <em>Block blobs</em> for large discrete objects that change rarely (blocks up to 4,000 MiB, blob up to 190.7 TiB). <em>Page blobs</em> for random read and write in 512-byte pages, up to 8 TB, used for VM virtual disks. <em>Append blobs</em> for adding to the end only, just over 195 GB maximum, think logs.`,
-      `<strong>Four access tiers: Hot, Cool, Cold, Archive.</strong> Storage cost falls and access cost rises as you go down. Hot is the default. Minimum stays to avoid early-deletion charges: Cool 30 days, Cold 90 days, Archive 180 days.`,
-      `<strong>Archive is offline.</strong> Reads from Hot, Cool and Cold take milliseconds. An Archive blob can take up to 15 hours to become available, and you must move it to Hot, Cool or Cold first, a step called <em>rehydration</em>. You cannot read it where it sits.`,
-      `<strong>Lifecycle management policies move blobs down the tiers automatically</strong> as they age, based on days since modification, and can delete old blobs. That is how you avoid paying Hot prices for data nobody reads.`,
-      `<strong>Redundancy options in plain terms.</strong> LRS keeps three copies in one datacenter. ZRS spreads copies across three availability zones in the region. GRS and GZRS also copy asynchronously to a second region far away. RA-GRS and RA-GZRS let you read from that second region before any failover.`,
-      `<strong>Azure Data Lake Storage Gen2 is Blob Storage with a hierarchical namespace.</strong> Real folders, not virtual ones, with POSIX-style access control lists on files and folders. It is compatible with Hadoop-style distributed file systems, which is what Spark and Databricks expect.`,
-      `<strong>You get Data Lake Storage Gen2 by enabling Hierarchical Namespace</strong> on a storage account, at creation or as an upgrade later. The upgrade is one-way. You cannot go back to a flat namespace.`,
-      `<strong>OneLake is the Fabric data lake, built on Data Lake Storage Gen2.</strong> One per Fabric tenant, shared by every workload, storing data in Delta Parquet. <em>Shortcuts</em> point at external storage without copying it.`,
-      `<strong>Azure Files is a cloud network file share.</strong> Up to 256 TiB per SSD-based account, more for HDD, a single file up to 4 TiB, and up to 2,000 concurrent handles per file or directory. Upload with the portal or AzCopy, and cache locally with Azure File Sync.`,
-      `<strong>Azure Files speaks SMB and NFS.</strong> SMB works across Windows, Linux and macOS. NFS is Linux only (kernel 4.3 or later), needs an SSD-tier account and a virtual network. Two media tiers: HDD and SSD, with SSD faster and pricier.`,
-      `<strong>Azure Table storage is NoSQL key-value, not a relational table.</strong> Every row needs a <em>partition key</em> plus a <em>row key</em>, and a timestamp records changes. Beyond that, rows can have different columns. No foreign keys, relationships, stored procedures or views.`,
-      `<strong>Table data is denormalized on purpose</strong>: one row holds the whole entity, phone numbers and addresses included. Rows with the same partition key are stored together in row-key order, which makes <em>point</em> queries (one row) and <em>range</em> queries (a block of rows in one partition) fast.`,
-      `<strong>Azure Cosmos DB is a fully managed, globally distributed, multi-model NoSQL PaaS database.</strong> It is schema-agnostic, indexes every property automatically, and replicates to any Azure regions you add. Reads around 4 ms and writes around 5 ms at the 99th percentile.`,
+      `<strong>Azure Storage — это одна учетная запись и три вида хранилища.</strong> <em>Контейнеры BLOB-объектов</em> для двоичных файлов в большом масштабе, <em>общие файловые ресурсы</em> как корпоративный сетевой диск, и <em>tables</em> для данных «ключ-значение». Учетная запись хранения может содержать все три.`,
+      `<strong>Большие двоичные объекты живут в контейнерах, а доступ контролируется на уровне контейнера.</strong> Папки внутри контейнера по умолчанию виртуальные: всего лишь <code>/</code> в имени большого двоичного объекта. Microsoft Entra ID с Azure RBAC — рекомендуемый способ входа и назначения разрешений.`,
+      `<strong>Три типа больших двоичных объектов.</strong> <em>Блокировать BLOB-объекты</em> для больших дискретных объектов, которые изменяются редко (блоки до 4000 МиБ, blob до 190,7 ТиБ). <em>Страничные BLOB-объекты</em> для произвольного чтения и записи страниц по 512 байт, до 8 ТБ, используется для виртуальных дисков ВМ. <em>Добавить большие двоичные объекты</em> только для добавления в конец, чуть больше 195 ГБ максимум, думаю журналы.`,
+      `<strong>Четыре уровня доступа: Горячий, Холодный, Холодный, Архив.</strong> Стоимость хранения падает, а стоимость доступа возрастает по мере снижения. Горячий — значение по умолчанию. Минимальный срок пребывания во избежание платы за досрочное удаление: «холодный» — 30 дней, «холодный» — 90 дней, архивный — 180 дней.`,
+      `<strong>Архив оффлайн.</strong> Чтение из Hot, Cool и Cold занимает миллисекунды. Архивный большой двоичный объект может занять до 15 часов, чтобы стать доступным, и вам необходимо сначала переместить его в режим «Горячий», «Холодный» или «Холодный» (этап называется <em>rehydration</em>. Вы не можете прочитать это там, где оно находится.`,
+      `<strong>Политики управления жизненным циклом автоматически перемещают большие двоичные объекты вниз по уровням.</strong> по мере их старения, в зависимости от количества дней с момента модификации, и могут удалять старые большие двоичные объекты. Так вы избежите высоких цен за данные, которые никто не читает.`,
+      `<strong>Варианты резервирования простыми словами.</strong> LRS хранит три копии в одном центре обработки данных. ZRS распределяет копии по трем зонам доступности в регионе. GRS и GZRS также асинхронно копируют во второй удаленный регион. RA-GRS и RA-GZRS позволяют вам читать из этого второго региона до любого переключения при сбое.`,
+      `<strong>Azure Data Lake Storage Gen2 — это хранилище BLOB-объектов с иерархическим пространством имен.</strong> Реальные папки, а не виртуальные, со списками управления доступом в стиле POSIX для файлов и папок. Он совместим с распределенными файловыми системами в стиле Hadoop, чего и ожидают Spark и Databricks.`,
+      `<strong>Вы получаете Data Lake Storage Gen2, включив иерархическое пространство имен.</strong> в учетной записи хранения, при создании или при последующем обновлении. Обновление является односторонним. Вы не можете вернуться к плоскому пространству имен.`,
+      `<strong>OneLake — это озеро данных Fabric, построенное на базе Data Lake Storage Gen2.</strong> Один на каждого арендатора Fabric, общий для каждой рабочей нагрузки и хранящий данные в Delta Parquet. <em>Shortcuts</em> укажите на внешнее хранилище, не копируя его.`,
+      `<strong>Файлы Azure — это общий файловый ресурс облачной сети.</strong> До 256 ТиБ на одну учетную запись на основе SSD, больше для жесткого диска, один файл до 4 ТиБ и до 2000 одновременных дескрипторов на файл или каталог. Загрузите с помощью портала или AzCopy и кэшируйте локально с помощью синхронизации файлов Azure.`,
+      `<strong>Azure Files поддерживает SMB и NFS.</strong> SMB работает в Windows, Linux и macOS. NFS предназначен только для Linux (ядро 4.3 или более поздней версии), требует учетной записи уровня SSD и виртуальной сети. Два уровня носителей: HDD и SSD, причем SSD быстрее и дороже.`,
+      `<strong>Хранилище таблиц Azure — это ключ-значение NoSQL, а не реляционная таблица.</strong> Каждая строка нуждается в <em>ключ раздела</em> больше имеет <em>ключ строки</em>и метка времени фиксирует изменения. Помимо этого, строки могут иметь разные столбцы. Никаких внешних ключей, отношений, хранимых процедур или представлений.`,
+      `<strong>Данные таблицы намеренно денормализованы</strong>: одна строка содержит весь объект, включая номера телефонов и адреса. Строки с одинаковым ключом раздела хранятся вместе в порядке ключей строк, что делает <em>point</em> запросы (одна строка) и <em>range</em> запросы (блок строк в одном разделе) быстрые.`,
+      `<strong>Azure Cosmos DB — это полностью управляемая, глобально распределенная, многомодельная база данных NoSQL PaaS.</strong> Он не зависит от схемы, автоматически индексирует каждое свойство и реплицируется в любые добавляемые вами регионы Azure. Чтение около 4 мс и запись около 5 мс на 99-м процентиле.`,
       `<strong>Cosmos DB's hierarchy is account, database, container, items.</strong> The container is the unit of storage and scaling; that is where you set the partition key, throughput, indexing and time-to-live. A logical partition holds up to 20 GB, so pick a partition key with many distinct, evenly spread values.`,
       `<strong>Throughput is measured in Request Units per second (RU/s)</strong>; one RU is roughly a 1 KB read. Modes: <em>dedicated</em> to one container, <em>shared</em> across up to 25 containers in a database, or <em>serverless</em> pay-per-request (single region only). <em>Autoscale</em> sets a ceiling and adjusts inside it. Five consistency levels run from Strong to Eventual; Session is the common starting point.`,
       `<strong>Five Cosmos DB APIs, matched to the data model.</strong> <em>NoSQL</em> (native, JSON documents, SQL-like queries, recommended for new apps; formerly called the SQL API). <em>MongoDB</em> (BSON documents, MQL, <code>db.products.find()</code>). <em>Table</em> (key-value with PartitionKey and RowKey, the upgrade path from Azure Table storage). <em>Apache Cassandra</em> (column family, CQL). <em>Apache Gremlin</em> (graph: vertices and edges). Pick by the workload you are migrating.`
     ],
-    miscon:`<strong>Misconception to bust:</strong> "Cosmos DB for NoSQL has no SQL, because it says NoSQL." The native API queries JSON documents with a SQL-like syntax such as <code>SELECT * FROM customers c WHERE c.id = "joe@litware.com"</code>. The name says the data model is non-relational, not that the query language is foreign. The reverse trap also shows up: Azure Table storage has "table" in the name, but it is a key-value store with no joins, no foreign keys and no stored procedures. Read the data model, not the name.`,
+    miscon:`<strong>Заблуждение, которое следует разоблачить:</strong> «В Cosmos DB для NoSQL нет SQL, потому что там написано NoSQL». Собственный API запрашивает документы JSON с синтаксисом, подобным SQL, например <code>SELECT * FROM customers c WHERE c.id = "joe@litware.com"</code>. Название говорит о том, что модель данных нереляционная, а не о том, что язык запросов является иностранным. Обнаруживается и обратная ловушка: в названии хранилища таблиц Azure есть слово «таблица», но это хранилище «ключ-значение» без соединений, внешних ключей и хранимых процедур. Читайте модель данных, а не имя.`,
     viz:`<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
       <span class="vz-chip"><b style="color:var(--accent)">Hot</b> default · ms reads</span>
       <span class="vz-arrow">→</span>
@@ -467,30 +467,30 @@ const STUDY = [
 
   {key:'d4', title:"Рабочие нагрузки аналитики в Azure: прием, хранилища, Fabric, потоковая передача, Power BI.",
     must:[
-      `<strong>The large-scale analytics architecture has four layers</strong>: ingestion and processing (ETL or ELT), an analytical data store (warehouse, lake or lakehouse), an analytical data model (semantic model), and data visualization. Microsoft Learn now adds AI-assisted analytics as a fifth.`,
-      `<strong>ETL transforms before loading; ELT loads first and transforms inside the store.</strong> Either way the result is optimized for analytical queries. ELT is the common pattern in modern lakehouses because the store has the compute to do the transforming.`,
-      `<strong>A pipeline is activities plus linked services.</strong> Activities operate on data, starting from an input dataset and ending at an output dataset. Linked services are the connections to sources and destinations. Azure Data Factory and Fabric Data Factory share this model, so skills transfer.`,
-      `<strong>Azure Data Factory is the standalone Azure pipeline service.</strong> Use it when the destination is outside Fabric, such as Azure SQL Database, or when you connect to on-premises sources in a hybrid setup. Fabric Data Factory is the recommended choice when all the work lives in Fabric; it adds <em>Dataflows Gen2</em>, a low-code Power Query transform tool.`,
-      `<strong>Fabric has three ways to get data in without writing a pipeline.</strong> <em>Shortcuts</em> reference external storage (ADLS Gen2, S3, Google Cloud Storage) in place. <em>Mirroring</em> replicates a database such as Azure SQL Database, Cosmos DB or Snowflake into OneLake in near real time. <em>Eventstream</em> ingests streaming events.`,
-      `<strong>A data warehouse is a relational store shaped as a star schema.</strong> Numeric values sit in central <em>fact</em> tables, related to <em>dimension</em> tables you aggregate by (customer, product, store, time). Adding tables off the dimensions (product to category) makes it a <em>snowflake</em> schema. Pick a warehouse when data is structured and the team writes SQL.`,
-      `<strong>A data lake is a file store queried by distributed engines like Apache Spark</strong>, using <em>schema-on-read</em>: the tabular shape is applied when the data is read, not enforced when it is written. Pick a lake for mixed structured, semi-structured and unstructured data.`,
-      `<strong>A data lakehouse is the hybrid</strong>: raw files in a lake, with a SQL analytics endpoint exposing them as tables. Delta Lake makes it work by adding schema enforcement and transactions on top of Parquet. Both Fabric and Azure Databricks build on it.`,
-      `<strong>Microsoft Fabric is the unified SaaS analytics platform</strong>: data engineering, warehousing, real-time analytics, data science and Power BI in one browser workspace, all on OneLake. You do not manage servers. <em>Fabric Lakehouse</em> for mixed data and Spark work; <em>Fabric Warehouse</em> for a SQL Server-compatible relational warehouse with strong schema enforcement.`,
-      `<strong>Azure Databricks is the Apache Spark platform</strong>, running as a managed service inside your subscription, with Delta Lake as its native format. Pieces: notebooks (Python, SQL, Scala, R), Databricks SQL warehouse for BI queries, Unity Catalog for governance, and Lakeflow declarative pipelines for ingestion. Choose it for code-first Spark work and existing Databricks skills.`,
-      `<strong>Batch collects records and processes the group at once</strong>, on a schedule or when enough has arrived. Credit card billing is the textbook example. Strengths: large volumes, run off-peak. Weaknesses: latency of hours, and one bad record can stop the whole job.`,
-      `<strong>Streaming processes each record as it arrives</strong>, in real time, for time-critical reactions such as a fire alarm. It works on the most recent data or a rolling window, handles small micro-batches, and does simple aggregates such as rolling averages. Latency is seconds or milliseconds.`,
-      `<strong>Stream processing architecture in four parts</strong>: an event produces data, a <em>source</em> (often a queue) captures it, a <em>perpetual query</em> selects, projects or aggregates it over time windows, and a <em>sink</em> receives the result. Most solutions combine batch and streaming; the lambda architecture is the named pattern.`,
-      `<strong>Sources: Azure Event Hubs, Azure IoT Hub, Data Lake Storage Gen2, Apache Kafka.</strong> Event Hubs ingests high volumes of events, keeps order inside a partition and guarantees at-least-once delivery. IoT Hub is the same idea tuned for devices.`,
-      `<strong>Processors: Azure Stream Analytics, Spark Structured Streaming, Fabric Real-Time Intelligence.</strong> Stream Analytics is PaaS: define a streaming job, apply a perpetual query, write to an output. Structured Streaming runs on Spark in Databricks or Fabric. Real-Time Intelligence bundles <em>Eventstreams</em>, <em>Eventhouse</em> (queried with KQL), real-time dashboards and <em>Activator</em> for automated actions. Sinks for the results: Event Hubs for more processing, Data Lake Storage Gen2 or OneLake for files, Azure SQL Database or Fabric for tables, and Power BI when the question ends "visualize in real time".`,
-      `<strong>Power BI workflow: Desktop to service to mobile.</strong> Model and build reports in <em>Power BI Desktop</em> (Windows). Publish to the <em>Power BI service</em> to share, schedule refresh, and build dashboards and apps. Consume in a browser or the <em>Power BI phone app</em>. Inside Fabric, Power BI lives in workspaces on OneLake and <em>Direct Lake</em> mode reads Delta tables with no import or refresh.`,
-      `<strong>A semantic model is measures plus dimensions.</strong> Measures are the numbers you aggregate (revenue, quantity) stored in fact tables. Dimensions are what you group by (product, customer, time). Hierarchies let you drill from year to month to day. Power BI holds the model in memory in the VertiPaq columnar engine and aggregates at query time. Model view in Desktop is where you set relationships and hierarchies.`,
-      `<strong>Pick the visual by the question.</strong> Table or card: show many values, or one key number. Bar or column: compare discrete categories. Line: trends over time. Pie: parts of a whole. Scatter: relationship between two measures. Map: compare geographic areas. Visuals in one report cross-filter each other automatically.`
+      `<strong>Архитектура крупномасштабной аналитики состоит из четырех уровней.</strong>: прием и обработка (ETL или ELT), хранилище аналитических данных (склад, озеро или озеро), аналитическая модель данных (семантическая модель) и визуализация данных. Microsoft Learn теперь добавляет аналитику с помощью искусственного интеллекта на пятое место.`,
+      `<strong>ETL преобразуется перед загрузкой; ELT загружается первым и преобразуется внутри хранилища.</strong> В любом случае результат оптимизирован для аналитических запросов. ELT — распространенный шаблон в современных домиках у озера, поскольку у магазина есть вычислительная мощность для преобразования.`,
+      `<strong>Конвейер — это действия плюс связанные услуги.</strong> Действия оперируют данными, начиная с входного набора данных и заканчивая выходным набором данных. Связанные услуги — это соединения с источниками и пунктами назначения. Фабрика данных Azure и Фабрика данных Fabric используют эту модель, поэтому навыки передаются.`,
+      `<strong>Фабрика данных Azure — это автономная служба конвейера Azure.</strong> Используйте его, когда место назначения находится за пределами структуры, например базы данных SQL Azure, или при подключении к локальным источникам в гибридной установке. Фабрика данных Fabric — рекомендуемый выбор, когда вся работа выполняется в Fabric; он добавляет <em>Потоки данных второго поколения</em>, инструмент преобразования Power Query с простым кодом.`,
+      `<strong>У Fabric есть три способа получения данных без написания конвейера.</strong> <em>Shortcuts</em> наличие эталонного внешнего хранилища (ADLS Gen2, S3, Google Cloud Storage). <em>Mirroring</em> реплицирует такую ​​базу данных, как база данных SQL Azure, Cosmos DB или Snowflake, в OneLake почти в реальном времени. <em>Eventstream</em> принимает потоковые события.`,
+      `<strong>Хранилище данных — это реляционное хранилище, имеющее форму звездообразной схемы.</strong> Числовые значения располагаются в центре <em>fact</em> таблицы, относящиеся к <em>dimension</em> таблицы, которые вы агрегируете по (клиент, продукт, магазин, время). Добавление таблиц по измерениям (продукт в категорию) делает его <em>snowflake</em> схема. Выбирайте хранилище, когда данные структурированы и команда пишет SQL.`,
+      `<strong>Озеро данных — это хранилище файлов, к которому обращаются распределенные механизмы, такие как Apache Spark.</strong>, с использованием <em>schema-on-read</em>: табличная форма применяется при чтении данных, но не применяется при их записи. Выберите озеро для смешанных структурированных, полуструктурированных и неструктурированных данных.`,
+      `<strong>Озеро данных — это гибрид</strong>: необработанные файлы в озере, где конечная точка аналитики SQL представляет их в виде таблиц. Delta Lake заставляет его работать, добавляя принудительное применение схемы и транзакции поверх Parquet. На его основе построены как Fabric, так и Azure Databricks.`,
+      `<strong>Microsoft Fabric — единая аналитическая платформа SaaS.</strong>: обработка данных, складирование, аналитика в реальном времени, обработка данных и Power BI в одном рабочем пространстве браузера — и все это на OneLake. Вы не управляете серверами. <em>Ткань Лейкхаус</em> для смешанных данных и работы Spark; <em>Склад тканей</em> для реляционного хранилища, совместимого с SQL Server, со строгим соблюдением схемы.`,
+      `<strong>Azure Databricks — это платформа Apache Spark.</strong>, работающий как управляемая служба внутри вашей подписки, с Delta Lake в качестве собственного формата. Части: блокноты (Python, SQL, Scala, R), хранилище SQL Databricks для запросов бизнес-аналитики, каталог Unity для управления и декларативные конвейеры Lakeflow для приема. Выберите его для работы с кодом в Spark и существующих навыков работы с Databricks.`,
+      `<strong>Пакетный сбор записей и обработка группы сразу</strong>, по расписанию или когда прибудет достаточно. Выставление счетов по кредитным картам является хрестоматийным примером. Сильные стороны: большие объемы, работа в непиковое время. Слабые стороны: задержки в несколько часов и одна плохая запись могут остановить всю работу.`,
+      `<strong>Потоковая передача обрабатывает каждую запись по мере ее поступления.</strong>, в режиме реального времени, для срочных реакций, таких как пожарная сигнализация. Он работает с самыми последними данными или скользящим окном, обрабатывает небольшие микропакеты и выполняет простые агрегаты, такие как скользящие средние. Задержка составляет секунды или миллисекунды.`,
+      `<strong>Архитектура потоковой обработки в четырех частях</strong>: событие производит данные, <em>source</em> (часто очередь) захватывает его, <em>Постоянный запрос</em> выбирает, проецирует или агрегирует его во временных окнах, а <em>sink</em> получает результат. Большинство решений сочетают пакетную и потоковую передачу; лямбда-архитектура — это именованный шаблон.`,
+      `<strong>Источники: Центры событий Azure, Центр Интернета вещей Azure, Data Lake Storage Gen2, Apache Kafka.</strong> Центры событий принимают большие объемы событий, поддерживают порядок внутри раздела и гарантируют хотя бы однократную доставку. IoT Hub — это та же идея, адаптированная для устройств.`,
+      `<strong>Процессоры: Azure Stream Analytics, структурированная потоковая передача Spark, аналитика в реальном времени Fabric.</strong> Stream Analytics — это PaaS: определите задание потоковой передачи, примените постоянный запрос, запишите в выходные данные. Структурированная потоковая передача выполняется на Spark в Databricks или Fabric. Пакеты разведки в реальном времени <em>Eventstreams</em>, <em>Eventhouse</em> (запрашивается с помощью KQL), информационные панели в реальном времени и <em>Activator</em> для автоматизированных действий. Приемники для результатов: концентраторы событий для дополнительной обработки, Data Lake Storage Gen2 или OneLake для файлов, база данных или структура SQL Azure для таблиц и Power BI, когда вопрос заканчивается «визуализировать в реальном времени».`,
+      `<strong>Рабочий процесс Power BI: настольный компьютер для обслуживания мобильных устройств.</strong> Моделируйте и создавайте отчеты в <em>Рабочий стол Power BI</em> (Окна). Опубликовать в <em>Служба Power BI</em> для совместного использования, планирования обновления и создания информационных панелей и приложений. Используйте в браузере или <em>Телефонное приложение Power BI</em>. Внутри Fabric Power BI находится в рабочих пространствах OneLake и <em>Прямое озеро</em> Режим читает таблицы Delta без импорта или обновления.`,
+      `<strong>Семантическая модель — это меры плюс измерения.</strong> Меры — это агрегированные числа (доход, количество), хранящиеся в таблицах фактов. Измерения — это то, по чему вы группируете (продукт, клиент, время). Иерархии позволяют детализировать данные из года в месяц. Power BI хранит модель в памяти в столбчатом механизме VertiPaq и выполняет статистическую обработку во время запроса. В представлении модели на рабочем столе вы устанавливаете связи и иерархии.`,
+      `<strong>Выберите визуальное изображение по вопросу.</strong> Таблица или карточка: отображайте множество значений или один ключевой номер. Столбец или столбец: сравнение отдельных категорий. Линия: тенденции с течением времени. Пирог: части целого. Разброс: взаимосвязь между двумя показателями. Карта: сравните географические области. Визуальные элементы в одном отчете автоматически фильтруют друг друга.`
     ],
-    miscon:`<strong>Misconception to bust:</strong> "Batch and streaming are two competing choices." On the exam they are two halves of one solution. Streaming captures events and handles the time-critical part: a rolling count, an alert, a live dashboard. Batch handles the heavy, historical part: complex analytics over the full dataset. The same events are often stored for batch processing later. When a question asks for "real-time" or "as it happens", that is streaming. When it asks for "monthly totals" or "complex analysis over all data", that is batch. When it asks for both, it is the combined lambda pattern.`,
+    miscon:`<strong>Заблуждение, которое следует разоблачить:</strong> «Пакетная обработка и потоковая передача — два конкурирующих варианта». На экзамене это две половинки одного решения. Потоковая передача фиксирует события и обрабатывает критическую по времени часть: скользящий подсчет, оповещение, живую информационную панель. Пакетная обработка выполняет тяжелую историческую часть: сложную аналитику по всему набору данных. Одни и те же события часто сохраняются для последующей пакетной обработки. Когда вопрос требует ответа «в реальном времени» или «по мере того, как это происходит», это потоковая передача. Когда он запрашивает «общие ежемесячные данные» или «комплексный анализ всех данных», это пакетный анализ. Когда он запрашивает оба, это комбинированный лямбда-шаблон.`,
     viz:`<div style="display:flex;gap:10px;flex-wrap:wrap">
-      <div class="vz-card" style="flex:1;min-width:200px"><b>Batch</b><span>Collect, then process the group. Hours of latency. Full dataset. Complex analytics. Example: monthly credit card bill.</span></div>
-      <div class="vz-card" style="flex:1;min-width:200px"><b>Streaming</b><span>Process each event on arrival. Seconds or milliseconds. Rolling window. Simple aggregates and alerts. Example: counting cars as they pass.</span></div>
-    </div><div class="vz-note">Event Hubs or IoT Hub feeds it. Stream Analytics, Spark Structured Streaming or Fabric Real-Time Intelligence processes it. Power BI shows it live.</div>`}
+      <div class="vz-card" style="flex:1;min-width:200px"><b>Batch</b><span>Соберите, а затем обработайте группу. Часы ожидания. Полный набор данных. Комплексная аналитика. Пример: ежемесячный счет по кредитной карте.</span></div>
+      <div class="vz-card" style="flex:1;min-width:200px"><b>Streaming</b><span>Обрабатывайте каждое событие по прибытии. Секунды или миллисекунды. Роллетное окно. Простые агрегаты и оповещения. Пример: подсчет проезжающих автомобилей.</span></div>
+    </div><div class="vz-note">Центры событий или Центр Интернета вещей подают его. Его обрабатывают Stream Analytics, Spark Structured Streaming или Fabric Real-Time Intelligence. Power BI показывает это вживую.</div>`}
 ];
 
 /* ============== PRACTICE EXAM: 48 questions ==============
@@ -500,204 +500,204 @@ const STUDY = [
    type 'mc' → correct: index · type 'ms' → correct: [indices] (choose all that apply) */
 const QUESTIONS = [
   /* ---------- AREA 1 · Core data concepts (14) ---------- */
-  {id:'q1', domain:'d1', type:'mc', q:`A customer record in a collection has two email addresses. The next record has none, and a third has a nested shipping address the others lack. What kind of data is this?`,
+  {id:'q1', domain:'d1', type:'mc', q:`Запись о клиенте в коллекции имеет два адреса электронной почты. В следующей записи ее нет, а в третьей есть вложенный адрес доставки, которого нет у остальных. Что это за данные?`,
     choices:[`Structured`, `Semi-structured`, `Unstructured`, `Relational`],
     correct:1,
-    explain:`<strong>Semi-structured.</strong> There is structure, but it is allowed to vary between records. Structured data has a fixed schema where every record carries the same fields. Unstructured data, such as images, has no field structure at all.`},
-  {id:'q2', domain:'d1', type:'mc', q:`Which file format stores data column by column, making it the standard for modern lakehouses?`,
+    explain:`<strong>Полуструктурированный.</strong> Структура существует, но в разных записях она может меняться. Структурированные данные имеют фиксированную схему, в которой каждая запись содержит одни и те же поля. Неструктурированные данные, такие как изображения, вообще не имеют структуры полей.`},
+  {id:'q2', domain:'d1', type:'mc', q:`В каком формате файла данные хранятся столбец за столбцом, что делает его стандартом для современных домиков у озер?`,
     choices:[`Avro`, `CSV`, `Parquet`, `XML`],
     correct:2,
-    explain:`<strong>Parquet is columnar.</strong> Data for each column is stored together in row groups with metadata, which suits analytical reads. Avro is row-based. CSV and XML are human-readable text, not optimized storage formats.`},
-  {id:'q3', domain:'d1', type:'mc', q:`What does Delta Lake add on top of Parquet files?`,
+    explain:`<strong>Паркет столбчатый.</strong> Данные для каждого столбца хранятся вместе в группах строк с метаданными, что удобно для аналитического чтения. Avro основан на строках. CSV и XML — это удобочитаемый текст, а не оптимизированные форматы хранения.`},
+  {id:'q3', domain:'d1', type:'mc', q:`Что Delta Lake добавляет поверх файлов Parquet?`,
     choices:[`Compression`, `Журнал транзакций, который обеспечивает транзакции ACID и управление версиями.`, `Макет на основе строк для потоковой передачи`, `Читаемые человеком теги`],
     correct:1,
-    explain:`Delta Lake is <strong>Parquet plus a transaction log</strong>. The log enables ACID transactions, data versioning and reliable updates on files in a data lake. Parquet already handles compression on its own.`},
-  {id:'q4', domain:'d1', type:'ms', q:`Which of these are examples of unstructured data? <em>Choose all that apply.</em>`,
+    explain:`Озеро Дельта <strong>Паркет плюс журнал транзакций</strong>. Журнал обеспечивает транзакции ACID, управление версиями данных и надежные обновления файлов в озере данных. Паркет уже самостоятельно справляется со сжатием.`},
+  {id:'q4', domain:'d1', type:'ms', q:`Что из этого является примером неструктурированных данных? <em>Выберите все, что применимо.</em>`,
     choices:[`Видеофайл`, `JSON-документ`, `Аудиозапись`, `Таблица заказов в реляционной базе данных`],
     correct:[0,2],
-    explain:`Video and audio have no field structure and are unstructured. JSON is semi-structured. A relational table is structured.`},
-  {id:'q5', domain:'d1', type:'mc', q:`What does the term BLOB stand for?`,
+    explain:`Видео и аудио не имеют полевой структуры и неструктурированы. JSON полуструктурирован. Реляционная таблица структурирована.`},
+  {id:'q5', domain:'d1', type:'mc', q:`Что означает термин BLOB?`,
     choices:[`Базовый блок больших объектов`, `Двоичный большой объект`, `Массовая загрузка байтов`, `Буфер объекта блочного уровня`],
     correct:1,
-    explain:`<strong>Binary Large Object.</strong> It is the word for raw binary data such as images, video and application documents that an application must interpret and render.`},
-  {id:'q6', domain:'d1', type:'mc', q:`A non-relational database stores each record as a unique key with a JSON document as the value, and is optimized to parse and query that document. Which type is it?`,
+    explain:`<strong>Двоичный большой объект.</strong> Это слово обозначает необработанные двоичные данные, такие как изображения, видео и документы приложения, которые приложение должно интерпретировать и отображать.`},
+  {id:'q6', domain:'d1', type:'mc', q:`Нереляционная база данных хранит каждую запись как уникальный ключ с документом JSON в качестве значения и оптимизирована для анализа и запроса этого документа. Какой это тип?`,
     choices:[`Key-value`, `Document`, `Семейство колонн`, `Graph`],
     correct:1,
     explain:`A <strong>document database</strong> is a specific form of key-value store where the value is a JSON document the system can query. A plain key-value store treats the value as opaque. Column family groups columns; graph stores nodes and edges.`},
-  {id:'q7', domain:'d1', type:'mc', q:`Which database type stores entities as nodes with links that define the relationships between them?`,
+  {id:'q7', domain:'d1', type:'mc', q:`Какой тип базы данных хранит сущности в виде узлов со связями, определяющими отношения между ними?`,
     choices:[`Семейство колонн`, `Key-value`, `Graph`, `Relational`],
     correct:2,
-    explain:`<strong>Graph databases</strong> store entities as nodes and relationships as links (edges). On Azure that is Cosmos DB for Apache Gremlin.`},
-  {id:'q8', domain:'d1', type:'mc', q:`A bank transfer must debit one account and credit another. If either half fails, the other must fail too. Which ACID property is this?`,
+    explain:`<strong>Графовые базы данных</strong> храните объекты как узлы, а отношения как ссылки (ребра). В Azure это Cosmos DB для Apache Gremlin.`},
+  {id:'q8', domain:'d1', type:'mc', q:`Банковский перевод должен дебетовать один счет и кредитовать другой. Если одна половина терпит неудачу, другая тоже должна потерпеть неудачу. Что это за свойство ACID?`,
     choices:[`Atomicity`, `Consistency`, `Isolation`, `Durability`],
     correct:0,
-    explain:`<strong>Atomicity</strong>: each transaction is a single unit that succeeds completely or fails completely. Consistency is about valid states, isolation about concurrent transactions, durability about surviving a shutdown.`},
-  {id:'q9', domain:'d1', type:'mc', q:`While a transfer is in progress, a balance check must not see one account after the transfer and the other account before it. Which ACID property guarantees this?`,
+    explain:`<strong>Atomicity</strong>: каждая транзакция представляет собой отдельную единицу, которая либо полностью завершается успешно, либо полностью завершается неудачей. Согласованность связана с допустимыми состояниями, изоляция — с параллельными транзакциями, долговечность — с возможностью выживания после завершения работы.`},
+  {id:'q9', domain:'d1', type:'mc', q:`Пока выполняется перевод, проверка баланса не должна видеть один счет после перевода и другой счет до него. Какое свойство ACID гарантирует это?`,
     choices:[`Atomicity`, `Consistency`, `Isolation`, `Durability`],
     correct:2,
-    explain:`<strong>Isolation</strong>: concurrent transactions cannot interfere with one another and must each see a consistent state. Durability is the one about committed data surviving a power loss.`},
-  {id:'q10', domain:'d1', type:'ms', q:`Which statements describe a transactional (OLTP) workload? <em>Choose all that apply.</em>`,
+    explain:`<strong>Isolation</strong>: параллельные транзакции не могут мешать друг другу и каждая из них должна видеть согласованное состояние. Долговечность – это сохранение зафиксированных данных при потере питания.`},
+  {id:'q10', domain:'d1', type:'ms', q:`Какие операторы описывают транзакционную (OLTP) рабочую нагрузку? <em>Выберите все, что применимо.</em>`,
     choices:[`Большой объем, часто миллионы транзакций в день.`, `Оптимизирован как для чтения, так и для записи.`, `Доступно только для чтения или преимущественно для чтения по историческим снимкам`, `Построен на основе операций CRUD`],
     correct:[0,1,3],
-    explain:`OLTP systems are high volume, optimized for reads and writes, and built around create, retrieve, update and delete. Read-mostly over historical data describes an <strong>analytical</strong> workload.`},
-  {id:'q11', domain:'d1', type:'mc', q:`In the enterprise analytics architecture on Microsoft Learn, who typically works directly with data files in the data lake?`,
+    explain:`OLTP-системы имеют большой объем, оптимизированы для чтения и записи и построены на создании, извлечении, обновлении и удалении. Чтение в основном исторических данных описывает <strong>analytical</strong> рабочая нагрузка.`},
+  {id:'q11', domain:'d1', type:'mc', q:`Кто в архитектуре корпоративной аналитики Microsoft Learn обычно работает непосредственно с файлами данных в озере данных?`,
     choices:[`Бизнес-пользователи`, `Специалисты по данным`, `Администраторы базы данных`, `Сообщить о потребителях`],
     correct:1,
-    explain:`<strong>Data scientists</strong> explore and model raw files in the lake. Data analysts query tables in the warehouse. Business users consume the pre-aggregated model as reports and dashboards.`},
-  {id:'q12', domain:'d1', type:'mc', q:`An OLAP model, now usually called a semantic model, lets you view total sales by region, then by city, then by address. What is this capability called?`,
+    explain:`<strong>Специалисты по данным</strong> исследовать и моделировать необработанные файлы в озере. Аналитики данных запрашивают таблицы в хранилище. Бизнес-пользователи используют предварительно агрегированную модель в виде отчетов и информационных панелей.`},
+  {id:'q12', domain:'d1', type:'mc', q:`Модель OLAP, которую сейчас обычно называют семантической моделью, позволяет просматривать общий объем продаж по региону, затем по городу, а затем по адресу. Как называется эта способность?`,
     choices:[`Normalization`, `Schema-on-read`, `Детализация вверх и вниз`, `Rehydration`],
     correct:2,
-    explain:`Aggregations exist at different hierarchy levels so you can <strong>drill up and down</strong>. Because the data is pre-aggregated, those summary queries run fast.`},
-  {id:'q13', domain:'d1', type:'mc', q:`Which role is responsible for designing and implementing data ingestion pipelines, cleansing and transformation, and monitoring that data loads run as expected?`,
+    explain:`Агрегации существуют на разных уровнях иерархии, поэтому вы можете <strong>сверлить вверх и вниз</strong>. Поскольку данные предварительно агрегированы, сводные запросы выполняются быстро.`},
+  {id:'q13', domain:'d1', type:'mc', q:`Какая роль отвечает за проектирование и реализацию конвейеров приема данных, их очистку и преобразование, а также за мониторинг того, чтобы загрузка данных выполнялась должным образом?`,
     choices:[`Администратор базы данных`, `Дата-инженер`, `Аналитик данных`, `Бизнес-пользователь`],
     correct:1,
-    explain:`That is the <strong>data engineer</strong>. The database administrator owns availability, performance, backups and access. The data analyst explores data and builds reports and visualizations.`},
-  {id:'q14', domain:'d1', type:'mc', q:`Which role grants or denies users access to data, stores backups, and restores data after a failure?`,
+    explain:`Это <strong>Дата-инженер</strong>. Администратор базы данных отвечает за доступность, производительность, резервное копирование и доступ. Аналитик данных изучает данные и строит отчеты и визуализации.`},
+  {id:'q14', domain:'d1', type:'mc', q:`Какая роль предоставляет или запрещает пользователям доступ к данным, хранит резервные копии и восстанавливает данные после сбоя?`,
     choices:[`Дата-инженер`, `Аналитик данных`, `Администратор базы данных`, `Специалист по данным`],
     correct:2,
-    explain:`The <strong>database administrator</strong> manages databases, assigns permissions, keeps backups and restores after failure. It is the role that issues GRANT, DENY and REVOKE.`},
+    explain:`The <strong>Администратор базы данных</strong> управляет базами данных, назначает разрешения, сохраняет резервные копии и восстанавливает после сбоя. Это роль, которая выдает GRANT, DENY и REVOKE.`},
 
   /* ---------- AREA 2 · Relational data on Azure (11) ---------- */
-  {id:'q15', domain:'d2', type:'mc', q:`A spreadsheet repeats each customer's name and address on every order line. After normalization, where does the customer's address live?`,
+  {id:'q15', domain:'d2', type:'mc', q:`В электронной таблице в каждой строке заказа повторяются имя и адрес каждого клиента. Где после нормализации живет адрес клиента?`,
     choices:[`В каждой строке заказа, поэтому каждый заказ является автономным.`, `Один раз в строке таблицы Customer, на которую ссылается внешний ключ.`, `В представлении, построенном на основе таблицы заказов`, `В индексе таблицы заказов`],
     correct:1,
-    explain:`Normalization separates each entity into its own table, so the address is stored <strong>once</strong> in the Customer table. Orders hold the customer's primary key as a foreign key. Changing the address means changing one row.`},
-  {id:'q16', domain:'d2', type:'ms', q:`Which statements are Data Definition Language (DDL)? <em>Choose all that apply.</em>`,
+    explain:`Нормализация разделяет каждый объект в отдельную таблицу, поэтому адрес сохраняется. <strong>once</strong> в таблице «Клиенты». В заказах первичный ключ клиента хранится как внешний ключ. Изменение адреса означает изменение одной строки.`},
+  {id:'q16', domain:'d2', type:'ms', q:`Какие утверждения представляют собой язык определения данных (DDL)? <em>Выберите все, что применимо.</em>`,
     choices:[`CREATE`, `GRANT`, `DROP`, `UPDATE`],
     correct:[0,2],
-    explain:`DDL creates, modifies and removes objects: CREATE, ALTER, DROP, RENAME. GRANT is DCL. UPDATE is DML.`},
-  {id:'q17', domain:'d2', type:'mc', q:`A database administrator needs to remove a permission that was granted to user1 last month. Which statement does that?`,
+    explain:`DDL создает, изменяет и удаляет объекты: CREATE, ALTER, DROP, RENAME. ГРАНТ — это DCL. ОБНОВЛЕНИЕ — это DML.`},
+  {id:'q17', domain:'d2', type:'mc', q:`Администратору базы данных необходимо удалить разрешение, предоставленное пользователю user1 в прошлом месяце. Какое утверждение это делает?`,
     choices:[`DROP`, `DELETE`, `REVOKE`, `DENY`],
     correct:2,
-    explain:`<strong>REVOKE</strong> removes a previously granted permission. DENY blocks an action outright. DROP removes an object, DELETE removes rows.`},
+    explain:`<strong>REVOKE</strong> удаляет ранее предоставленное разрешение. DENY полностью блокирует действие. DROP удаляет объект, DELETE удаляет строки.`},
   {id:'q18', domain:'d2', type:'mc', q:`What happens if you run <code>DELETE FROM Product;</code> with no WHERE clause?`,
     choices:[`SQL попросит вас подтвердить`, `Ничего, требуется предложение WHERE.`, `Каждая строка в таблице продуктов удаляется.`, `Удаляется только первая строка`],
     correct:2,
-    explain:`By default SELECT, UPDATE and DELETE apply to <strong>every row</strong>. SQL gives no "are you sure" prompt, which is why Microsoft Learn warns about omitting WHERE.`},
-  {id:'q19', domain:'d2', type:'mc', q:`Which SQL dialect is used by Azure SQL Database, Azure SQL Managed Instance and SQL Server?`,
+    explain:`По умолчанию SELECT, UPDATE и DELETE применяются к <strong>каждая строка</strong>. SQL не выдает запроса «вы уверены», поэтому Microsoft Learn предупреждает о пропуске WHERE.`},
+  {id:'q19', domain:'d2', type:'mc', q:`Какой диалект SQL используется базой данных SQL Azure, Управляемым экземпляром SQL Azure и SQL Server?`,
     choices:[`pgSQL`, `PL/SQL`, `Транзакт-SQL (T-SQL)`, `MQL`],
     correct:2,
-    explain:`<strong>T-SQL</strong> is the SQL Server family dialect. pgSQL is PostgreSQL, PL/SQL is Oracle, and MQL is the MongoDB query language.`},
-  {id:'q20', domain:'d2', type:'mc', q:`A query on the Product table filters by Name and is slow because the table has millions of rows. Which object helps most?`,
+    explain:`<strong>T-SQL</strong> — это диалект семейства SQL Server. pgSQL — это PostgreSQL, PL/SQL — это Oracle, а MQL — это язык запросов MongoDB.`},
+  {id:'q20', domain:'d2', type:'mc', q:`Запрос к таблице «Продукт» фильтруется по имени и выполняется медленно, поскольку таблица содержит миллионы строк. Какой предмет помогает больше всего?`,
     choices:[`вид`, `Хранимая процедура`, `Индекс в столбце Имя`, `Внешний ключ`],
     correct:2,
-    explain:`An <strong>index</strong> holds a sorted copy of the column with pointers to rows, so a WHERE on that column avoids scanning the whole table. The cost: storage, and slower inserts, updates and deletes.`},
-  {id:'q21', domain:'d2', type:'mc', q:`What is a view?`,
+    explain:`An <strong>index</strong> содержит отсортированную копию столбца с указателями на строки, поэтому WHERE в этом столбце позволяет избежать сканирования всей таблицы. Цена: хранение и более медленные вставки, обновления и удаления.`},
+  {id:'q21', domain:'d2', type:'mc', q:`Что такое вид?`,
     choices:[`Копия таблицы, хранящаяся на диске`, `Виртуальная таблица на основе результатов запроса SELECT`, `Сохраненный набор операторов, который выполняется с параметрами.`, `Сортированная структура, ускоряющая поиск`],
     correct:1,
     explain:`A view is a <strong>virtual table based on a SELECT query</strong>. It does not copy data. The parameterized statement set is a stored procedure; the sorted search structure is an index.`},
-  {id:'q22', domain:'d2', type:'mc', q:`A company wants to move an on-premises SQL Server instance with several databases to the cloud with minimal application changes, but does not want to manage the operating system. Which service fits?`,
+  {id:'q22', domain:'d2', type:'mc', q:`Компания хочет переместить локальный экземпляр SQL Server с несколькими базами данных в облако с минимальными изменениями приложений, но не хочет управлять операционной системой. Какой сервис подойдет?`,
     choices:[`SQL Server на виртуальных машинах Azure`, `Управляемый экземпляр Azure SQL`, `Единая база данных базы данных SQL Azure.`, `База данных Azure для PostgreSQL`],
     correct:1,
-    explain:`<strong>Azure SQL Managed Instance</strong>: PaaS, near-100% SQL Server compatibility, multiple databases per instance, automated patching and backups. A VM would mean managing the OS. SQL Database lacks some instance-level features.`},
-  {id:'q23', domain:'d2', type:'mc', q:`Which Azure SQL option is infrastructure as a service (IaaS), where you manage operating system updates, configuration and backups yourself?`,
+    explain:`<strong>Управляемый экземпляр Azure SQL</strong>: PaaS, почти 100% совместимость с SQL Server, несколько баз данных на экземпляр, автоматическое исправление и резервное копирование. Виртуальная машина будет означать управление ОС. В базе данных SQL отсутствуют некоторые функции уровня экземпляра.`},
+  {id:'q23', domain:'d2', type:'mc', q:`Какой вариант Azure SQL представляет собой инфраструктуру как услугу (IaaS), где вы самостоятельно управляете обновлениями, настройкой и резервным копированием операционной системы?`,
     choices:[`База данных SQL Azure`, `Управляемый экземпляр Azure SQL`, `SQL Server на виртуальных машинах Azure`, `Эластичный пул базы данных SQL Azure.`],
     correct:2,
-    explain:`<strong>SQL Server on Azure VMs</strong> is IaaS. It is fully compatible with on-premises installs and lift-and-shift ready, and you manage all aspects of the server. The other options are PaaS.`},
-  {id:'q24', domain:'d2', type:'mc', q:`A payroll database is busy at month end and a reporting database is busy mid-month. Both are otherwise quiet. Which Azure SQL Database option lets them share resources to cut cost?`,
+    explain:`<strong>SQL Server на виртуальных машинах Azure</strong> это IaaS. Он полностью совместим с локальной установкой и готов к подъему и смене, и вы можете управлять всеми аспектами сервера. Другие варианты — PaaS.`},
+  {id:'q24', domain:'d2', type:'mc', q:`База данных расчета заработной платы занята в конце месяца, а база данных отчетов — в середине месяца. В остальном оба молчат. Какой вариант базы данных SQL Azure позволяет им совместно использовать ресурсы для сокращения затрат?`,
     choices:[`Hyperscale`, `Эластичный пул`, `Пул экземпляров`, `Единая база данных с бессерверными вычислениями`],
     correct:1,
-    explain:`An <strong>elastic pool</strong> lets multiple databases share memory, storage and compute, which suits databases whose demand varies at different times. Instance pools belong to Managed Instance. Hyperscale is for very large databases.`},
-  {id:'q25', domain:'d2', type:'mc', q:`Which Azure service is a PaaS implementation of a hybrid relational-object database that can store custom data types and geometric data, and whose dialect is pgsql?`,
+    explain:`An <strong>Эластичный пул</strong> позволяет нескольким базам данных совместно использовать память, хранилище и вычислительные ресурсы, что подходит для баз данных, потребности которых меняются в разное время. Пулы экземпляров принадлежат Управляемому экземпляру. Гипермасштабирование предназначено для очень больших баз данных.`},
+  {id:'q25', domain:'d2', type:'mc', q:`Какая служба Azure представляет собой PaaS-реализацию гибридной реляционно-объектной базы данных, которая может хранить пользовательские типы данных и геометрические данные, и чей диалект — pgsql?`,
     choices:[`База данных Azure для MySQL`, `База данных Azure для PostgreSQL`, `База данных SQL Azure`, `Azure CosmoDB для Apache Cassandra`],
     correct:1,
-    explain:`That describes <strong>Azure Database for PostgreSQL</strong>. MySQL is the simple LAMP-stack database. Cosmos DB for Cassandra is non-relational column family.`},
+    explain:`Это описывает <strong>База данных Azure для PostgreSQL</strong>. MySQL — это простая база данных стека LAMP. Cosmos DB для Cassandra — это нереляционное семейство столбцов.`},
 
   /* ---------- AREA 3 · Non-relational data on Azure (9) ---------- */
-  {id:'q26', domain:'d3', type:'mc', q:`An application writes log entries by adding to the end of a blob and never edits earlier content. Which blob type fits?`,
+  {id:'q26', domain:'d3', type:'mc', q:`Приложение записывает записи журнала, добавляя их в конец большого двоичного объекта, и никогда не редактирует более раннее содержимое. Какой тип BLOB-объекта подходит?`,
     choices:[`Блокировать большой двоичный объект`, `Страничный BLOB-объект`, `Добавить большой двоичный объект`, `Архивный большой двоичный объект`],
     correct:2,
-    explain:`<strong>Append blobs</strong> only allow adding blocks to the end; updating or deleting existing blocks is not supported. Page blobs are for random read and write (VM disks). Block blobs suit large objects that change rarely. Archive is a tier, not a type.`},
-  {id:'q27', domain:'d3', type:'mc', q:`A blob is in the Archive tier. What must happen before an application can read it?`,
+    explain:`<strong>Добавить большие двоичные объекты</strong> разрешить добавление блоков только в конец; обновление или удаление существующих блоков не поддерживается. Страничные BLOB-объекты предназначены для произвольного чтения и записи (диски виртуальной машины). Блочные объекты подходят для крупных объектов, которые изменяются редко. Архив — это уровень, а не тип.`},
+  {id:'q27', domain:'d3', type:'mc', q:`Большой двоичный объект находится на уровне архива. Что должно произойти, прежде чем приложение сможет его прочитать?`,
     choices:[`Ничего, чтение занимает несколько миллисекунд, как и любой другой уровень.`, `Его необходимо переместить в режим «Горячее», «Прохладное» или «Холодное» и провести регидратацию, что может занять до 15 часов.`, `Его необходимо преобразовать в страничный BLOB-объект.`, `Его необходимо скопировать в файлы Azure.`],
     correct:1,
-    explain:`Archive blobs are effectively <strong>offline</strong>. You change the tier to Hot, Cool or Cold, wait for rehydration (up to 15 hours), and only then can you read it.`},
-  {id:'q28', domain:'d3', type:'mc', q:`Which blob access tier is the default when you create a blob?`,
+    explain:`Архивные BLOB-объекты эффективно <strong>offline</strong>. Вы меняете уровень на «Горячий», «Прохладный» или «Холодный», ждете регидратации (до 15 часов) и только потом можете его прочитать.`},
+  {id:'q28', domain:'d3', type:'mc', q:`Какой уровень доступа к BLOB-объекту используется по умолчанию при создании BLOB-объекта?`,
     choices:[`Hot`, `Cool`, `Cold`, `Archive`],
     correct:0,
-    explain:`<strong>Hot</strong> is the default, for frequently accessed data on high-performance media. Cool, Cold and Archive trade lower storage cost for higher access cost and minimum retention periods of 30, 90 and 180 days.`},
-  {id:'q29', domain:'d3', type:'mc', q:`What must you enable on an Azure Storage account to turn it into Azure Data Lake Storage Gen2?`,
+    explain:`<strong>Hot</strong> используется по умолчанию для часто используемых данных на высокопроизводительных носителях. «Холодный», «Холодный» и «Архивный» обменяют более низкую стоимость хранения на более высокую стоимость доступа и минимальные сроки хранения 30, 90 и 180 дней.`},
+  {id:'q29', domain:'d3', type:'mc', q:`Что необходимо включить в учетной записи хранения Azure, чтобы превратить ее в Azure Data Lake Storage Gen2?`,
     choices:[`Геоизбыточное хранилище`, `Иерархическое пространство имен`, `Управление жизненным циклом`, `протокол NFS`],
     correct:1,
-    explain:`Enabling the <strong>Hierarchical Namespace</strong> gives real folders with POSIX-style ACLs, compatible with Hadoop-style file systems used by Spark and Databricks. The upgrade is one-way.`},
-  {id:'q30', domain:'d3', type:'ms', q:`Which statements about Azure Files are true? <em>Choose all that apply.</em>`,
+    explain:`Включение <strong>Иерархическое пространство имен</strong> предоставляет реальные папки со списками управления доступом в стиле POSIX, совместимыми с файловыми системами в стиле Hadoop, используемыми Spark и Databricks. Обновление является односторонним.`},
+  {id:'q30', domain:'d3', type:'ms', q:`Какие утверждения о файлах Azure верны? <em>Выберите все, что применимо.</em>`,
     choices:[`Он поддерживает протокол SMB в Windows, Linux и macOS.`, `Общие ресурсы NFS работают в Windows и macOS.`, `Один файл может иметь размер до 4 ТиБ.`, `Azure File Sync может кэшировать общие файлы локально.`],
     correct:[0,2,3],
-    explain:`SMB is cross-platform, a file can reach 4 TiB, and Azure File Sync keeps local caches in sync. NFS shares are <strong>Linux only</strong> (kernel 4.3 or later) and need an SSD-tier account plus a virtual network.`},
-  {id:'q31', domain:'d3', type:'mc', q:`Which two values together form the unique key of a row in Azure Table storage?`,
+    explain:`SMB является кроссплатформенным, размер файла может достигать 4 ТиБ, а служба синхронизации файлов Azure обеспечивает синхронизацию локальных кэшей. Акции NFS <strong>только Linux</strong> (ядро 4.3 или более поздней версии) и вам потребуется учетная запись уровня SSD и виртуальная сеть.`},
+  {id:'q31', domain:'d3', type:'mc', q:`Какие два значения вместе образуют уникальный ключ строки в хранилище таблиц Azure?`,
     choices:[`Первичный ключ и внешний ключ`, `Ключ раздела и ключ строки`, `Ключ учетной записи и ключ контейнера`, `Временная метка и ключ строки`],
     correct:1,
-    explain:`The <strong>partition key</strong> picks the partition, the <strong>row key</strong> is unique within it. Rows in a partition are stored in row-key order, which makes point and range queries fast. There are no foreign keys in Table storage.`},
-  {id:'q32', domain:'d3', type:'mc', q:`A team is migrating an existing MongoDB application to Azure and wants to keep its drivers and query syntax. Which Cosmos DB API should they choose?`,
+    explain:`The <strong>ключ раздела</strong> выбирает раздел, <strong>ключ строки</strong> уникален внутри себя. Строки в разделе хранятся в порядке ключей строк, что ускоряет запросы точек и диапазонов. В хранилище таблиц нет внешних ключей.`},
+  {id:'q32', domain:'d3', type:'mc', q:`Команда переносит существующее приложение MongoDB в Azure и хочет сохранить его драйверы и синтаксис запросов. Какой API CosmoDB им следует выбрать?`,
     choices:[`Cosmos DB для NoSQL`, `CosmoDB для MongoDB`, `Cosmos DB для таблицы`, `Cosmos DB для Apache Gremlin`],
     correct:1,
-    explain:`<strong>Cosmos DB for MongoDB</strong> is wire-compatible with MongoDB drivers and uses MQL over BSON documents, so existing apps connect with minimal changes. NoSQL is the native API for new apps; Gremlin is for graph data.`},
-  {id:'q33', domain:'d3', type:'mc', q:`A social network needs to store people and the "follows" relationships between them, and to traverse those connections. Which Cosmos DB API fits?`,
+    explain:`<strong>CosmoDB для MongoDB</strong> совместим с драйверами MongoDB и использует MQL поверх документов BSON, поэтому существующие приложения подключаются с минимальными изменениями. NoSQL — это собственный API для новых приложений; Gremlin предназначен для графических данных.`},
+  {id:'q33', domain:'d3', type:'mc', q:`Социальная сеть должна хранить людей и отношения «подписок» между ними, а также пересекать эти связи. Какой API CosmoDB подходит?`,
     choices:[`Cosmos DB для Apache Cassandra`, `Cosmos DB для таблицы`, `Cosmos DB для Apache Gremlin`, `Cosmos DB для NoSQL`],
     correct:2,
-    explain:`<strong>Apache Gremlin</strong> is the graph API: entities as vertices, relationships as edges, traversed with Gremlin queries. Cassandra is column family; Table is key-value.`},
-  {id:'q34', domain:'d3', type:'mc', q:`In Azure Cosmos DB, at which level do you configure the partition key, throughput and indexing policy?`,
+    explain:`<strong>Апач Гремлин</strong> — это API графа: объекты как вершины, отношения как ребра, проходимые с помощью запросов Gremlin. Кассандра — семейство колонн; Таблица представляет собой ключ-значение.`},
+  {id:'q34', domain:'d3', type:'mc', q:`На каком уровне в Azure Cosmo DB вы настраиваете ключ секции, пропускную способность и политику индексирования?`,
     choices:[`Account`, `Database`, `Container`, `Item`],
     correct:2,
-    explain:`The <strong>container</strong> is the unit of storage and scaling. The account is the top-level resource, the database groups containers, and items are the individual records (documents, rows, nodes or edges depending on API).`},
+    explain:`The <strong>container</strong> — единица хранения и масштабирования. Учетная запись — это ресурс верхнего уровня, контейнеры групп базы данных, а элементы — отдельные записи (документы, строки, узлы или ребра в зависимости от API).`},
 
   /* ---------- AREA 4 · Analytics workloads on Azure (14) ---------- */
-  {id:'q35', domain:'d4', type:'mc', q:`Data is copied into the analytical store first and transformed afterwards inside it. What is this pattern called?`,
+  {id:'q35', domain:'d4', type:'mc', q:`Данные сначала копируются в аналитическое хранилище, а затем преобразуются внутри него. Как называется этот узор?`,
     choices:[`ETL`, `ELT`, `OLTP`, `Lambda`],
     correct:1,
-    explain:`<strong>ELT</strong>: extract, load, then transform in the store. ETL transforms before loading. Both produce data optimized for analytical queries; ELT is common in modern lakehouses.`},
-  {id:'q36', domain:'d4', type:'mc', q:`In a data pipeline, what connects an activity to its source or destination system?`,
+    explain:`<strong>ELT</strong>: извлечь, загрузить, затем преобразовать в хранилище. ETL преобразуется перед загрузкой. Оба предоставляют данные, оптимизированные для аналитических запросов; ELT часто встречается в современных домиках у озер.`},
+  {id:'q36', domain:'d4', type:'mc', q:`Что связывает действие в конвейере данных с его исходной или целевой системой?`,
     choices:[`Набор данных`, `Связанная услуга`, `Семантическая модель`, `Ярлык`],
     correct:1,
-    explain:`<strong>Linked services</strong> are the connections to sources and destinations. Datasets describe the input and output data. Both Azure Data Factory and Fabric Data Factory use this model.`},
-  {id:'q37', domain:'d4', type:'mc', q:`A company wants data that must stay in Amazon S3 for compliance to appear in a Fabric Lakehouse without copying it. Which Fabric feature does that?`,
-    choices:[`Mirroring`, `Eventstream`, `Ярлык OneLake`, `Поток данных второго поколения`],
+    explain:`<strong>Связанные услуги</strong> Это связи с источниками и пунктами назначения. Наборы данных описывают входные и выходные данные. Эту модель используют как фабрика данных Azure, так и фабрика данных Fabric.`},
+  {id:'q37', domain:'d4', type:'mc', q:`Компания хочет, чтобы данные, которые должны оставаться в Amazon S3 для соответствия требованиям, появлялись в Fabric Lakehouse без их копирования. Какая функция Fabric делает это?`,
+    choices:[`Mirroring`, `Eventstream`, `Этикетка OneLake`, `Поток данных второго поколения`],
     correct:2,
-    explain:`A <strong>shortcut</strong> is a live reference to external storage (ADLS Gen2, S3, Google Cloud Storage or another OneLake location) with no movement or duplication. Mirroring replicates databases; Eventstream ingests streams.`},
-  {id:'q38', domain:'d4', type:'mc', q:`A warehouse has a central Sales table of numeric values related to Customer, Product, Store and Date tables. What is this design called?`,
+    explain:`A <strong>shortcut</strong> — это действующая ссылка на внешнее хранилище (ADLS Gen2, S3, Google Cloud Storage или другое местоположение OneLake) без перемещения или дублирования. Зеркальное отображение реплицирует базы данных; Eventstream принимает потоки.`},
+  {id:'q38', domain:'d4', type:'mc', q:`На складе есть центральная таблица продаж с числовыми значениями, связанными с таблицами «Клиент», «Продукт», «Магазин» и «Дата». Как называется эта конструкция?`,
     choices:[`Нормализованная схема`, `Схема звезды`, `Schema-on-read`, `Медальонная архитектура`],
     correct:1,
-    explain:`A central <strong>fact</strong> table related to <strong>dimension</strong> tables is a <strong>star schema</strong>. Add tables off the dimensions (Product to Category) and it becomes a snowflake schema.`},
-  {id:'q39', domain:'d4', type:'mc', q:`Which analytical store applies a tabular schema at the point the data is read, rather than enforcing it when the data is written?`,
+    explain:`Центральный <strong>fact</strong> таблица, связанная с <strong>dimension</strong> таблицы - это <strong>Схема звезды</strong>. Добавьте таблицы по измерениям (товар в категорию), и это станет схемой снежинки.`},
+  {id:'q39', domain:'d4', type:'mc', q:`Какое аналитическое хранилище применяет табличную схему в момент чтения данных, а не применяет ее при записи данных?`,
     choices:[`Хранилище данных`, `Озеро данных`, `База данных SQL Azure`, `Склад тканей`],
     correct:1,
-    explain:`A <strong>data lake</strong> uses <em>schema-on-read</em>. Engines like Apache Spark define the tabular shape when they read the files. A warehouse enforces its schema on write.`},
-  {id:'q40', domain:'d4', type:'mc', q:`Which option best describes Microsoft Fabric?`,
+    explain:`A <strong>Озеро данных</strong> uses <em>schema-on-read</em>. Такие механизмы, как Apache Spark, определяют табличную форму при чтении файлов. Склад применяет свою схему при записи.`},
+  {id:'q40', domain:'d4', type:'mc', q:`Какой вариант лучше всего описывает Microsoft Fabric?`,
     choices:[`Платформа Apache Spark, работающая внутри вашей собственной подписки Azure.`, `Единая аналитическая платформа SaaS с инжинирингом данных, хранилищем, аналитикой в ​​реальном времени и Power BI на одном общем уровне хранения под названием OneLake.`, `Служба PaaS для определения потоковых заданий с помощью постоянного запроса.`, `Инструмент управления для сопоставления происхождения данных`],
     correct:1,
-    explain:`That is <strong>Microsoft Fabric</strong>. The Spark platform in your subscription is Azure Databricks. The streaming-job PaaS is Azure Stream Analytics. The lineage tool is Microsoft Purview.`},
-  {id:'q41', domain:'d4', type:'mc', q:`A team has strong Apache Spark and notebook skills and wants a code-first platform with Delta Lake as its native format, running as a managed service in their Azure subscription. Which service fits?`,
+    explain:`То есть <strong>Microsoft Ткань</strong>. Платформой Spark в вашей подписке является Azure Databricks. PaaS для потоковой передачи — это Azure Stream Analytics. Инструментом происхождения является Microsoft Purview.`},
+  {id:'q41', domain:'d4', type:'mc', q:`Команда обладает сильными навыками работы с Apache Spark и блокнотами и ей нужна платформа с приоритетом кода и Delta Lake в качестве собственного формата, работающая как управляемая служба в их подписке Azure. Какой сервис подойдет?`,
     choices:[`Склад тканей Microsoft`, `Блоки данных Azure`, `Azure Stream Analytics`, `Фабрика данных Azure`],
     correct:1,
-    explain:`<strong>Azure Databricks</strong> is built on Apache Spark, uses Delta Lake natively, offers notebooks in Python, SQL, Scala and R, and is the common choice for code-first Spark workflows.`},
-  {id:'q42', domain:'d4', type:'ms', q:`Which statements describe stream processing rather than batch processing? <em>Choose all that apply.</em>`,
+    explain:`<strong>Блоки данных Azure</strong> построен на Apache Spark, изначально использует Delta Lake, предлагает записные книжки на Python, SQL, Scala и R и является распространенным выбором для рабочих процессов Spark, ориентированных на код.`},
+  {id:'q42', domain:'d4', type:'ms', q:`Какие утверждения описывают потоковую обработку, а не пакетную обработку? <em>Выберите все, что применимо.</em>`,
     choices:[`Каждая запись обрабатывается по мере поступления`, `Задержка обычно составляет несколько часов`, `Он работает с самыми последними данными или с скользящим временным окном.`, `Он используется для простых агрегатов, таких как скользящие средние.`],
     correct:[0,2,3],
-    explain:`Streaming processes records on arrival, sees a rolling window, and does simple aggregates in seconds or milliseconds. Latency of <strong>hours</strong> is batch.`},
-  {id:'q43', domain:'d4', type:'mc', q:`A credit card company sends one bill per month covering all that month's purchases. Which kind of processing is this?`,
+    explain:`Потоковая передача обрабатывает записи по прибытии, видит скользящее окно и выполняет простые статистические вычисления за секунды или миллисекунды. Задержка <strong>hours</strong> является пакетным.`},
+  {id:'q43', domain:'d4', type:'mc', q:`Компания-эмитент кредитных карт высылает один счет в месяц, охватывающий все покупки за этот месяц. Что это за обработка?`,
     choices:[`Потоковая обработка`, `Пакетная обработка`, `Разведка в реальном времени`, `Постоянный запрос`],
     correct:1,
-    explain:`Records are collected and processed together as a group: <strong>batch processing</strong>. It is the textbook example on Microsoft Learn.`},
-  {id:'q44', domain:'d4', type:'mc', q:`Which Azure service ingests high volumes of event data, delivers events in order within a partition, and guarantees at-least-once delivery?`,
+    explain:`Записи собираются и обрабатываются вместе как группа: <strong>Пакетная обработка</strong>. Это хрестоматийный пример по Microsoft Learn.`},
+  {id:'q44', domain:'d4', type:'mc', q:`Какая служба Azure принимает большие объемы данных о событиях, доставляет события по порядку внутри раздела и гарантирует хотя бы однократную доставку?`,
     choices:[`Центры событий Azure`, `Azure Stream Analytics`, `Фабрика данных Azure`, `Файлы Azure`],
     correct:0,
-    explain:`<strong>Azure Event Hubs</strong> is the ingestion <em>source</em>. Stream Analytics is the <em>processor</em> that runs a perpetual query over it. Data Factory builds batch pipelines.`},
-  {id:'q45', domain:'d4', type:'mc', q:`Which PaaS service lets you define a streaming job that reads from a source, applies a perpetual query, and writes the results to an output such as Power BI?`,
+    explain:`<strong>Центры событий Azure</strong> это проглатывание <em>source</em>. Стрим Аналитика — это <em>processor</em> который выполняет постоянный запрос к нему. Фабрика данных строит пакетные конвейеры.`},
+  {id:'q45', domain:'d4', type:'mc', q:`Какая служба PaaS позволяет определить задание потоковой передачи, которое считывает данные из источника, применяет постоянный запрос и записывает результаты в выходные данные, например Power BI?`,
     choices:[`Центр Интернета вещей Azure`, `Azure Stream Analytics`, `Блоки данных Azure`, `Область компетенции Майкрософт`],
     correct:1,
-    explain:`<strong>Azure Stream Analytics</strong>: streaming jobs, perpetual query, output sink. IoT Hub is an ingestion source for devices. Purview is governance.`},
-  {id:'q46', domain:'d4', type:'ms', q:`Which are components of Microsoft Fabric Real-Time Intelligence? <em>Choose all that apply.</em>`,
+    explain:`<strong>Azure Stream Analytics</strong>: потоковые задания, постоянный запрос, приемник вывода. Центр Интернета вещей — это источник приема данных для устройств. Целью является управление.`},
+  {id:'q46', domain:'d4', type:'ms', q:`Каковы компоненты Microsoft Fabric Real-Time Intelligence? <em>Выберите все, что применимо.</em>`,
     choices:[`Eventstreams`, `Eventhouse запрошен с помощью KQL`, `Activator`, `Каталог Unity`],
     correct:[0,1,2],
-    explain:`Real-Time Intelligence bundles Eventstreams (ingest and route), Eventhouse (time-series store queried with KQL), real-time dashboards and Activator (automated actions). <strong>Unity Catalog</strong> is the governance layer in Azure Databricks.`},
-  {id:'q47', domain:'d4', type:'mc', q:`In a Power BI semantic model, what are the numeric values you analyze, such as revenue and quantity, called?`,
+    explain:`Аналитика в реальном времени объединяет потоки событий (захват и маршрутизация), Eventhouse (хранилище временных рядов, запрашиваемое с помощью KQL), информационные панели реального времени и активатор (автоматизированные действия). <strong>Каталог Unity</strong> — это уровень управления в Azure Databricks.`},
+  {id:'q47', domain:'d4', type:'mc', q:`Как называются анализируемые числовые значения, такие как доход и количество, в семантической модели Power BI?`,
     choices:[`Dimensions`, `Measures`, `Hierarchies`, `Attributes`],
     correct:1,
-    explain:`<strong>Measures</strong> are the numbers you aggregate, stored in fact tables. Dimensions are the entities you group by. Hierarchies let you drill through levels of a dimension, and attributes are a dimension's columns.`},
-  {id:'q48', domain:'d4', type:'mc', q:`An analyst wants to check whether marketing spend and revenue move together. Which visualization should they pick?`,
+    explain:`<strong>Measures</strong> — это числа, которые вы суммируете и которые хранятся в таблицах фактов. Измерения — это объекты, по которым вы группируете. Иерархии позволяют детализировать уровни измерения, а атрибуты представляют собой столбцы измерения.`},
+  {id:'q48', domain:'d4', type:'mc', q:`Аналитик хочет проверить, движутся ли маркетинговые расходы и доходы вместе. Какую визуализацию им выбрать?`,
     choices:[`Круговая диаграмма`, `Card`, `График рассеяния`, `Map`],
     correct:2,
-    explain:`A <strong>scatter plot</strong> compares two numeric measures to find a relationship or correlation. Pie shows parts of a whole, a card shows one key number, a map compares geographic areas.`}
+    explain:`A <strong>График рассеяния</strong> сравнивает два числовых показателя, чтобы найти взаимосвязь или корреляцию. На круговой диаграмме показаны части целого, на карточке показано одно ключевое число, на карте сравниваются географические области.`}
 ];
 
 /* ============== VIEW ROUTING ============== */
@@ -756,9 +756,9 @@ function renderHome(){
   const inProgress = state.examStart !== null && !state.submitted;
   return `
     <div class="hero">
-      <div class="hero-eyebrow">Certification prep · Microsoft DP-900</div>
-      <h1>Azure Data <span>Fundamentals</span> Prep</h1>
-      <p>Microsoft Certified: Azure Data Fundamentals, in one place. An area-by-area study guide that names the idea first and the Azure service second, plus a ${total}-question practice exam weighted the way Microsoft weights the real one.</p>
+      <div class="hero-eyebrow">Подготовка к сертификации · Microsoft DP-900</div>
+      <h1>Данные Azure <span>Fundamentals</span> Prep</h1>
+      <p>Сертификация Microsoft: основы данных Azure в одном месте. Подробное учебное пособие, в котором сначала указывается идея, а затем служба Azure, а также ${total}-question practice exam weighted the way Microsoft weights the real one.</p>
     </div>
 
     <div class="facts-grid">
@@ -776,7 +776,7 @@ function renderHome(){
         const d = DOMAIN_INFO[k];
         return `<div class="dw-row">
           <span class="dw-label" style="color:${d.color}">${d.label} · ${d.name}</span>
-          <span class="dw-bar"><span class="dw-fill" style="width:${d.weight}%;background:${d.color};display:block"></span></span>
+          <span class="dw-bar"><span class="dw-fill" style="width:${d.weight}%;background:${d.color};дисплей:блокировать"></span></span>
           <span class="dw-pct" style="color:${d.color}">${d.range}</span>
         </div>`;
       }).join('')}
@@ -792,40 +792,40 @@ function renderHome(){
       </a>
       <a class="cta-card primary" onclick="setView('exam')">
         <div class="cta-icon"><i data-lucide="clipboard-list"></i></div>
-        <div class="cta-title">${state.submitted ? 'Review your exam' : (inProgress ? 'Resume the practice exam' : 'Take the practice exam')}</div>
-        <div class="cta-desc">${state.submitted ? `You scored ${calcScore().total}/${total}. Reopen to review the answers, or retake it.` : `${total} questions across the four areas, weighted like the official outline. Includes multiple-response questions so you practise reading carefully. ${answered ? `You've answered ${answered}/${total}.` : ''}`}</div>
-        <div class="cta-link">${state.submitted ? 'Review results →' : (inProgress ? 'Continue →' : 'Start →')}</div>
+        <div class="cta-title">${state.submitted ? "Проверьте свой экзамен" : (inProgress ? "Возобновить пробный экзамен" : "Сдать практический экзамен")}</div>
+        <div class="cta-desc">${state.submitted ? `Вы забили ${calcScore().total}/${total}. Откройте повторно, чтобы просмотреть ответы, или повторите попытку.` : `${total} вопросы по четырем областям, имеющие вес, соответствующий официальному плану. Включает вопросы с несколькими ответами, чтобы вы попрактиковались в внимательном чтении. ${answered ? `Вы ответили ${answered}/${total}.` : ''}`}</div>
+        <div class="cta-link">${state.submitted ? "Посмотреть результаты →" : (inProgress ? "Продолжить →" : 'Start →')}</div>
       </a>
     </div>
 
     <div class="method-callout">
-      <strong>🗣️ Say it out loud.</strong> This is a vocabulary exam. Most questions come down to two things that sound alike: structured or semi-structured, OLTP or OLAP, Managed Instance or SQL Database, a lake or a warehouse, batch or streaming, a source or a sink. If you can say the difference in one sentence out loud, the phrasing of the question stops mattering.
+      <strong>🗣️ Скажите это вслух.</strong> Это экзамен по словарному запасу. Большинство вопросов сводятся к двум вещам, которые звучат одинаково: структурированная или полуструктурированная, OLTP или OLAP, управляемый экземпляр или база данных SQL, озеро или хранилище, пакетная или потоковая передача, источник или приемник. Если вы можете произнести вслух разницу в одном предложении, формулировка вопроса перестанет иметь значение.
     </div>
 
     <div class="method-callout" style="border-left-color:var(--c-d1)">
-      <strong>Idea first, service second.</strong> Every Azure service on this exam is an everyday idea with a product name on it. A blob container is a bucket of files. Event Hubs is a mailbox that never fills up. A semantic model is a pivot table that remembers its relationships. Learn the idea, and the name sticks.
+      <strong>Сначала идея, потом сервис.</strong> Каждая служба Azure на этом экзамене представляет собой повседневную идею с названием продукта. Контейнер BLOB-объектов представляет собой корзину файлов. Центры событий — это почтовый ящик, который никогда не заполняется. Семантическая модель — это сводная таблица, которая запоминает свои связи. Изучите идею, и название приживется.
     </div>
 
     ${needsReviewCount()>0?`<div class="method-callout" style="border-left-color:var(--warn)">
-      <strong>🔁 ${needsReviewCount()} concept${needsReviewCount()===1?'':'s'} flagged for review.</strong> You rated ${needsReviewCount()===1?'it':'them'} "Not yet" or "Almost" in the study guide. <a href="#" onclick="openReview();return false;">Filter to just those →</a>
+      <strong>🔁 ${needsReviewCount()} concept${needsReviewCount()===1?'':'s'} отмечено для проверки.</strong> Вы оценили ${needsReviewCount()===1?'it':'them'} "Not yet" or "Almost" in the study guide. <a href="#" onclick="openReview();return false;">Filter to just those →</a>
     </div>`:''}
 
     <div class="method-callout" style="border-left-color:var(--accent)">
-      <strong>💡 Hints.</strong> ${getCoachKey()
+      <strong>💡Подсказки.</strong> ${getCoachKey()
         ? `Hints are on. Every study-guide point has a <em>Stuck? Get a hint →</em> button that explains it a different way, and every missed exam question gets one too. <a href="#" onclick="setCoachKey('');return false;">Turn hints off</a>`
-        : `Optional. Paste an Anthropic API key and every study-guide point gets a <em>Stuck? Get a hint →</em> button that explains it a different way. Missed exam questions get one too. The key is stored only in this browser, and it is the same key the SQL, Excel, Python, Power BI, Tableau and Stats kits use.
+        : `Необязательный. Вставьте ключ Anthropic API, и каждый пункт учебного пособия получит <em>Застрявший? Получить подсказку →</em> кнопка, которая объясняет это по-другому. Пропущенные экзаменационные вопросы тоже получают один. Ключ хранится только в этом браузере, и это тот же ключ, который используют комплекты SQL, Excel, Python, Power BI, Tableau и Stats.
       <div class="hint-key-row">
         <input id="hintKey" type="password" placeholder="sk-ant-..." autocomplete="off">
-        <button type="button" onclick="setCoachKey(document.getElementById('hintKey').value)">Save key</button>
+        <button type="button" onclick="setCoachKey(document.getElementById('hintKey').value)">Сохранить ключ</button>
       </div>`}
     </div>
 
     <div class="method-callout" style="border-left-color:var(--c-d3)">
-      <strong>What this badge feeds.</strong> Microsoft says Azure Data Fundamentals is good preparation for role-based certifications such as Azure Database Administrator Associate and Azure Data Engineer Associate, but it is not a prerequisite for either.
+      <strong>Чем кормится этот значок.</strong> Microsoft заявляет, что Azure Data Fundamentals является хорошей подготовкой к сертификациям на основе ролей, таким как помощник администратора базы данных Azure и специалист по инженеру данных Azure, но это не является обязательным условием ни для того, ни для другого.
     </div>
 
     <div class="method-callout" style="border-left-color:var(--c-d2)">
-      <strong>Also here:</strong> the <a href="../powerbi-cert/">Power BI cert kit</a> goes deeper on the Power BI half of Area 4, and the <a href="../sql/">SQL kit</a> covers the statements Area 2 expects you to recognize.
+      <strong>Также здесь:</strong> the <a href="../powerbi-cert/">Комплект сертификатов Power BI</a> углубляется в половину области 4 Power BI, а <a href="../sql/">SQL-комплект</a> охватывает утверждения, которые Зона 2 ожидает от вас.
     </div>
   `;
 }
@@ -836,8 +836,8 @@ function renderStudy(){
       <p><strong>The four official areas, one at a time.</strong> Click an area to expand. Every point is a skill from Microsoft's outline: the everyday idea first, then the Azure name; the yellow callouts are the confusions the exam is written to catch.</p>
       <p>Every point traces to the DP-900 learning path on Microsoft Learn. Each area links to its module at the bottom.</p>
     </div>
-    <button class="expand-all" onclick="toggleAllStudy()">${allStudyOpen() ? 'Collapse all' : 'Expand all'}</button>
-    <button class="expand-all ${state.reviewFilter?'rf-on':''}" onclick="toggleReviewFilter()">${state.reviewFilter ? `Showing needs-review only (${needsReviewCount()}), show all` : `Filter: needs review (${needsReviewCount()})`}</button>
+    <button class="expand-all" onclick="toggleAllStudy()">${allStudyOpen() ? "Свернуть все" : "Развернуть все"}</button>
+    <button class="развернуть-все ${state.reviewFilter?'rf-on':''}" onclick="toggleReviewFilter()">${state.reviewFilter ? `Показан только обзор потребностей (${needsReviewCount()}), показать все` : `Фильтр: требует проверки (${needsReviewCount()})`}</button>
     ${STUDY.map(s=>{
       const d = DOMAIN_INFO[s.key];
       const vis = s.must.map((m,i)=>({m,i})).filter(x=>{
@@ -848,17 +848,17 @@ function renderStudy(){
       if(state.reviewFilter && vis.length===0) return '';
       const open = state.reviewFilter ? true : !!state.openSections[s.key];
       return `
-        <div class="study-section ${open?'open':''}" id="study-${s.key}">
+        <div class="study-section" ${open?'open':''}" id="исследование-${s.key}">
           <div class="study-head" onclick="toggleStudy('${s.key}')">
             <span class="study-pill" style="color:${d.color}">${d.label} · ${d.range}</span>
             <span class="study-title">${s.title}</span>
             <span class="study-toggle">▸</span>
           </div>
           <div class="study-body">
-            ${state.reviewFilter?'':`<div class="study-viz"><div class="sv-cap"><i data-lucide="monitor"></i> See it</div>${s.viz}</div>`}
+            ${state.reviewFilter?'':`<div class="study-viz"><div class="sv-cap"><i data-lucide="monitor"></i> Посмотри это</div>${s.viz}</div>`}
             <ul>${vis.map(x=>studyItemHTML(s.key,x.i,x.m)).join('')}</ul>
             ${state.reviewFilter?'':`<div class="miscon">${s.miscon}</div>`}
-            <a class="study-link" href="${d.docPath}" target="_blank" rel="noopener">Source: ${d.docLabel} →</a>
+            <a class="study-link" href="${d.docPath}" target="_blank" rel="noopener">Источник: ${d.docLabel} →</a>
           </div>
         </div>
       `;
@@ -870,8 +870,8 @@ function renderStudy(){
 function studyItemHTML(key,i,m){
   const id = key+'-'+i;
   const lvl = state.conf[id];
-  const chip = (l,txt)=>`<button class="conf-chip ${lvl===l?('on '+l):''}" onclick="rateConf('${id}','${l}')">${txt}</button>`;
-  return `<li>${m}<div class="li-foot"><span class="conf-chips">${chip('low','✗ Not yet')}${chip('mid','~ Almost')}${chip('high','✓ Have it')}</span><button class="hint-btn" onclick="hintStudy('${key}',${i})">Stuck? Get a hint →</button></div><div class="hint-resp" id="hint-resp-${id}"></div></li>`;
+  const chip = (l,txt)=>`<button class="conf-чип ${lvl===l?('on '+l):''}" onclick="rateConf('${id}','${l}')">${txt}</button>`;
+  return `<li>${m}<div class="li-foot"><span class="conf-chips">${chip('low',"✗ Пока нет")}${chip('mid','~ Almost')}${chip('high',"✓ Иметь это")}</span><button class="hint-btn" onclick="hintStudy('${key}',${i})">Застряли? Получить подсказку →</button></div><div class="hint-resp" id="hint-resp-${id}"></div></li>`;
 }
 function rateConf(id,lvl){
   if(state.conf[id]===lvl) delete state.conf[id];
@@ -939,18 +939,18 @@ function renderExam(){
   if(state.examStart === null && !state.submitted){
     return `
       <div class="start-card">
-        <h2>Practice Exam · ${QUESTIONS.length} questions</h2>
-        <p>Spread across the four official areas in the same proportions Microsoft uses. One question at a time. Pick an answer and it locks in and moves you on. Some questions are "choose all that apply" with no partial credit, so read them twice. Everything grades at once when you submit.</p>
+        <h2>Практический экзамен · ${QUESTIONS.length} questions</h2>
+        <p>Распределено по четырем официальным областям в тех же пропорциях, что и Microsoft. Один вопрос за раз. Выберите ответ, и он зафиксирует вас и продвинет вас дальше. Некоторые вопросы типа «выберите все подходящие» без частичной оценки, поэтому прочитайте их дважды. Все оценивается сразу при отправке.</p>
         <div class="start-actions">
-          <button class="btn btn-primary" onclick="startExam(false)">Start with no time limit</button>
-          <button class="btn btn-ghost" onclick="startExam(true)">Timed, ${EXAM_MINUTES}:00 like the real exam ⏱</button>
+          <button class="btn btn-primary" onclick="startExam(false)">Начните без ограничения по времени</button>
+          <button class="btn btn-ghost" onclick="startExam(true)">Приурочено, ${EXAM_MINUTES}:00 как настоящий экзамен ⏱</button>
         </div>
       </div>
       <div class="method-callout">
-        <strong>The real exam gives you ${EXAM_MINUTES} minutes.</strong> Microsoft does not publish a fixed question count, and some questions are unscored trial items you cannot identify. Untimed is fine for a first pass. Run it timed once before you book, to practise not overthinking.
+        <strong>Настоящий экзамен дает вам ${EXAM_MINUTES} минут.</strong> Microsoft не публикует фиксированное количество вопросов, а некоторые вопросы представляют собой пробные элементы без оценок, которые вы не можете идентифицировать. Untimed подойдет для первого прохода. Запустите его один раз перед бронированием, чтобы потренироваться не думать слишком много.
       </div>
       <div class="method-callout" style="border-left-color:var(--warn)">
-        <strong>There is no penalty for guessing.</strong> Microsoft scores with no deduction for wrong answers, so answer everything. An unanswered item scores the same as a wrong one.
+        <strong>Штрафа за угадывание нет.</strong> Microsoft выставляет баллы без каких-либо сбавок за неправильные ответы, поэтому отвечайте на все. Задание без ответа оценивается так же, как и неправильное.
       </div>
     `;
   }
@@ -961,8 +961,8 @@ function renderExam(){
   const left = timeLeftMs();
 
   let topBtn;
-  if(state.submitted) topBtn = `<button class="exam-submit-btn" onclick="setView('results')">View results →</button>`;
-  else topBtn = `<button class="exam-submit-btn" onclick="submitExam()" ${answered===0?'disabled':''}>${answered===total?'Submit exam':'Submit ('+answered+'/'+total+' answered)'}</button>`;
+  if(state.submitted) topBtn = `<button class="exam-submit-btn" onclick="setView('results')">Посмотреть результаты →</button>`;
+  else topBtn = `<button class="exam-submit-btn" onclick="submitExam()" ${answered===0?'disabled':''}>${answered===total?"Сдать экзамен":'Submit ('+answered+'/'+total+' answered)'}</button>`;
 
   const i = clampQIdx();
   const q = QUESTIONS[i];
@@ -973,17 +973,17 @@ function renderExam(){
     if(state.submitted) cls += isCorrect(qq) ? ' ok' : ' no';
     else if(hasAnswer(qq)) cls += ' done';
     if(n === i) cls += ' cur';
-    return `<button class="${cls}" onclick="gotoQ(${n})" title="Question ${n+1}"></button>`;
+    return `<класс кнопки="${cls}" onclick="gotoQ(${n})" title="Вопрос ${n+1}"></button>`;
   }).join('');
 
   let html = `
     <div class="exam-header">
       <div class="exam-header-row">
         <div class="exam-title-block">
-          <div class="exam-mini-title">DP-900 practice exam${state.timed?' · timed':''}</div>
+          <div class="exam-mini-title">Практический экзамен DP-900${state.timed?' · timed':''}</div>
           <div class="exam-q-progress"><span>${answered}</span> of ${total} answered</div>
         </div>
-        ${(!state.submitted && state.timed && left!==null) ? `<span class="exam-timer${left<5*60000?' low':''}" id="examTimer">${fmtTime(left)}</span>` : ''}
+        ${(!state.submitted && state.timed && left!==null) ? `<span class="экзамен-таймер${left<5*60000?' low':''}" id="examTimer">${fmtTime(left)}</span>` : ''}
         ${topBtn}
       </div>
       <div class="exam-progress-bar"><div class="exam-progress-fill" style="width:${pct}%"></div></div>
@@ -1001,27 +1001,27 @@ function renderExam(){
   if(!state.submitted){
     if(q.type === 'ms' && hasAnswer(q)){
       primary = isLast
-        ? `<button class="btn btn-primary" onclick="submitExam()">Lock in &amp; submit →</button>`
-        : `<button class="btn btn-primary" onclick="gotoQ(${i+1})">Lock in &amp; continue →</button>`;
+        ? `<button class="btn btn-primary" onclick="submitExam()">Зафиксируйте и отправьте →</button>`
+        : `<button class="btn btn-primary" onclick="gotoQ(${i+1})">Зафиксировать и продолжить →</button>`;
     } else if(isLast && answered > 0){
-      primary = `<button class="btn btn-primary" onclick="submitExam()">Submit exam →</button>`;
+      primary = `<button class="btn btn-primary" onclick="submitExam()">Сдать экзамен →</button>`;
     }
   }
 
   html += `
     <div class="q-nav">
-      <button class="btn btn-outline btn-sm" onclick="gotoQ(${i-1})" ${i===0?'disabled':''}>← Prev</button>
+      <button class="btn btn-outline btn-sm" onclick="gotoQ(${i-1})" ${i===0?'disabled':''}> ← Предыдущий</button>
       <div class="spacer"></div>
       ${primary}
-      <button class="btn btn-outline btn-sm" onclick="gotoQ(${i+1})" ${isLast?'disabled':''}>Next →</button>
+      <button class="btn btn-outline btn-sm" onclick="gotoQ(${i+1})" ${isLast?'disabled':''}>Далее →</button>
     </div>
   `;
 
   if(!state.submitted){
     html += `<div class="lockin-hint">${q.type==='ms'
-      ? 'Choose every option that applies, then lock it in. No partial credit. You need all the right ones and none of the wrong ones.'
-      : 'Pick an answer and it locks in, then moves you on. Use Prev or the bars above to change it before you submit.'}
-      Nothing is graded until you submit.</div>`;
+      ? "Выберите каждый подходящий вариант, а затем зафиксируйте его. Никакого частичного кредита. Вам нужны все правильные и ни одного неправильного."
+      : "Выберите ответ, и он зафиксируется, а затем продвинет вас дальше. Используйте «Предыдущий» или панели выше, чтобы изменить его перед отправкой."}
+      Ничто не оценивается, пока вы не отправите заявку.</div>`;
   }
   return html;
 }
@@ -1067,19 +1067,19 @@ function renderQuestion(q){
     }
     const letter = String.fromCharCode(65+i);
     const mark = isMs ? (picked ? '☑' : '☐') : letter;
-    return `<button class="${cls}" onclick="${isMs?`answerMs('${q.id}',${i})`:`answerMc('${q.id}',${i})`}" ${state.submitted?'disabled':''}>
+    return `<класс кнопки="${cls}" onclick="${isMs?`answerMs('${q.id}',${i})`:`answerMc('${q.id}',${i})`}" ${state.submitted?'disabled':''}>
       <span class="choice-letter">${mark}</span>
       <span class="choice-text">${c}</span>
     </button>`;
   }).join('')}</div>`;
 
   const explanation = state.submitted
-    ? `<div class="explanation show"><strong>${isCorrect(q) ? 'Correct.' : 'Heads up: '}</strong> ${q.explain}${isCorrect(q) ? '' : `<div style="margin-top:10px"><button class="hint-btn" onclick="hintQuestion('${q.id}')">Still unclear? Get a hint →</button></div><div class="hint-resp" id="hint-resp-q-${q.id}"></div>`}</div>`
+    ? `<div class="explanation show"><strong>${isCorrect(q) ? 'Correct.' : "Берегись: "}</strong> ${q.explain}${isCorrect(q) ? '' : `<div style="margin-top:10px"><button class="hint-btn" onclick="hintQuestion('${q.id}')">Все еще неясно? Получить подсказку →</button></div><div class="hint-resp" id="hint-resp-q-${q.id}"></div>`}</div>`
     : '';
 
   return `
-    <div class="q-card${stateCls}" id="q-${q.id}">
-      <div class="q-num">Question ${idx} of ${QUESTIONS.length}${isMs?'<span class="ms-tag">· multiple response</span>':''}</div>
+    <div class="q-карта${stateCls}" id="q-${q.id}">
+      <div class="q-num">Question ${idx} of ${QUESTIONS.length}${isMs?"<span class=\"ms-tag\">· множественный ответ</span>":''}</div>
       <div class="q-text">${q.q}</div>
       ${body}
       ${explanation}
@@ -1161,11 +1161,11 @@ function renderResults(){
   const pass = pct >= PASS_PCT;
   return `
     <div class="results-hero">
-      <div class="results-eyebrow">Practice exam · Results</div>
+      <div class="results-eyebrow">Практический экзамен · Результаты</div>
       <div class="score-big">${score.total}<small>/${score.outOf}</small></div>
       <div class="score-verdict">${pct}%. ${v.label}</div>
-      <div class="scaled-box">Against our readiness bar: <strong style="color:${pass?'var(--good)':'var(--bad)'}">${pct}%</strong> <span style="color:var(--dim)">vs. ${PASS_PCT}% (real exam: 700 of 1,000 scaled)</span></div>
-      <p class="score-sub" style="margin-top:14px">The real exam reports a <strong>scaled score from 1 to 1,000 and 700 passes</strong>. Microsoft says that is not simply 70% of the questions, because harder question sets need fewer points. We cannot reproduce the scaling, so we show raw percent and treat <strong>70% as our readiness line</strong>. We suggest ${READY_PCT}%+ here before booking, purely as margin for a question set that phrases things differently.</p>
+      <div class="scaled-box">Напротив нашей шкалы готовности: <strong style="color:${pass?'var(--good)':'var(--bad)'}">${pct}%</strong> <span style="color:var(--dim)">против. ${PASS_PCT}% (реальный экзамен: 700 из 1000 по шкале)</span></div>
+      <p class="score-sub" style="margin-top:14px">Настоящий экзамен сообщает <strong>масштабированный счет от 1 до 1000 и 700 проходов</strong>. Microsoft утверждает, что это не просто 70% вопросов, потому что для более сложных наборов вопросов требуется меньше баллов. Мы не можем воспроизвести масштабирование, поэтому показываем необработанные проценты и лечим <strong>70% как наша линия готовности</strong>. Мы предлагаем ${READY_PCT}%+ здесь перед бронированием, просто как запас для набора вопросов, который формулирует вещи по-другому.</p>
     </div>
 
     <div class="results-grid">
@@ -1173,10 +1173,10 @@ function renderResults(){
         const d = DOMAIN_INFO[k];
         const s = score.byDomain[k];
         const p = Math.round(100*s.correct/s.total);
-        const hint = p === 100 ? 'Clean sweep. Move on.'
-          : p >= 80 ? `Nearly there. Reread the <a href="#study-${k}" onclick="setView('study',{scrollToSection:'${k}'});return false;">${d.label} study section</a> once.`
-          : p >= 50 ? `Shaky, and this area is ${d.range} of the real exam. <a href="#study-${k}" onclick="setView('study',{scrollToSection:'${k}'});return false;">Study section</a> · ${d.hint}`
-          : `Focus here first. ${d.hint} <a href="#study-${k}" onclick="setView('study',{scrollToSection:'${k}'});return false;">Open the study section</a>.`;
+        const hint = p === 100 ? "Чистая развертка. Двигаться дальше."
+          : p >= 80 ? `Почти там. Перечитайте <a href="#study-${k}" onclick="setView('study',{scrollToSection:'${k}'}); вернуть ложь;">${d.label} раздел исследования</a> один раз.`
+          : p >= 50 ? `Шаки, и эта область ${d.range} настоящего экзамена. <a href="#study-${k}" onclick="setView('study',{scrollToSection:'${k}'});return false;">Study section</a> · ${d.hint}`
+          : `Сначала сосредоточьтесь здесь. ${d.hint} <a href="#study-${k}" onclick="setView('study',{scrollToSection:'${k}'});return false;">Open the study section</a>.`;
         return `
           <div class="results-row">
             <div class="results-row-top">
@@ -1192,9 +1192,9 @@ function renderResults(){
     </div>
 
     <div class="results-actions">
-      <button class="btn btn-ghost" onclick="setView('exam')">Review answers &amp; explanations</button>
-      <button class="btn btn-ghost" onclick="setView('study')">Open study guide</button>
-      <button class="btn btn-primary" onclick="retake()">Retake exam <i data-lucide="rotate-ccw" style="width:14px;height:14px;vertical-align:-2px"></i></button>
+      <button class="btn btn-ghost" onclick="setView('exam')">Просмотрите ответы и пояснения</button>
+      <button class="btn btn-ghost" onclick="setView('study')">Открыть учебное пособие</button>
+      <button class="btn btn-primary" onclick="retake()">Пересдать экзамен <i data-lucide="rotate-ccw" style="width:14px;height:14px;vertical-align:-2px"></i></button>
     </div>
   `;
 }
@@ -1235,13 +1235,13 @@ function toggleTheme(){
   const next = cur === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('apk-theme', next);
-  document.getElementById('themeIcon').innerHTML = '<i data-lucide="' + (next === 'dark' ? 'sun' : 'moon') + '"></i>';
+  document.getElementById('themeIcon').innerHTML = "<я данные-lucid=\"" + (next === 'dark' ? 'sun' : 'moon') + '"></i>';
   if(window.grainRefreshIcons)grainRefreshIcons();else if(window.lucide)lucide.createIcons();
 }
 (function initTheme(){
   const saved = localStorage.getItem('apk-theme');
   if(saved) document.documentElement.setAttribute('data-theme', saved);
-  document.getElementById('themeIcon').innerHTML = '<i data-lucide="' + (document.documentElement.getAttribute('data-theme')==='dark'?'sun':'moon') + '"></i>';
+  document.getElementById('themeIcon').innerHTML = "<я данные-lucid=\"" + (document.documentElement.getAttribute('data-theme')==='dark'?'sun':'moon') + '"></i>';
 })();
 
 function resetAll(){
@@ -1314,6 +1314,6 @@ function grainRefreshIcons(){
 <script src="../assets/datacraft-economy.js"></script>
 <script src="../assets/progress-state.js"></script>
 <script src="../assets/supabase_auth_sync.js?v=3"></script>
-<script src="../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

@@ -1,11 +1,11 @@
 /* Shared, dependency-free progress helpers for Analyst Prep Kit. */
 (function (root, factory) {
-  'use strict';
+  "используйте строгий";
   var api = factory();
   if (typeof module === 'object' && module.exports) module.exports = api;
   if (root) root.APKProgress = api;
 })(typeof window !== 'undefined' ? window : globalThis, function () {
-  'use strict';
+  "используйте строгий";
 
   var KITS = {
     foundations: { id: 'foundations-v1', keys: ['apk-foundations-progress-v1', 'apk-foundations-state-v1'] },
@@ -185,13 +185,13 @@
     var json = JSON.stringify(data);
     if (typeof btoa === 'function') return 'APK2:' + btoa(unescape(encodeURIComponent(json)));
     if (typeof Buffer !== 'undefined') return 'APK2:' + Buffer.from(json, 'utf8').toString('base64');
-    throw new Error('Base64 encoding is unavailable');
+    throw new Error("Кодировка Base64 недоступна.");
   }
 
   function decodeBase64(value) {
     if (typeof atob === 'function') return decodeURIComponent(escape(atob(value)));
     if (typeof Buffer !== 'undefined') return Buffer.from(value, 'base64').toString('utf8');
-    throw new Error('Base64 decoding is unavailable');
+    throw new Error("Декодирование Base64 недоступно");
   }
 
   function parseImport(code) {

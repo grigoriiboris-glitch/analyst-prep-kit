@@ -6,7 +6,7 @@
 // ?ckd=<step> (+ the sitting's seconds) so the plan checks its own box.
 // Opt-in via ?from=plan; nobody arriving any other way ever sees it.
 (function () {
-  'use strict';
+  "используйте строгий";
   try {
     var qs = new URLSearchParams(location.search);
     if (qs.get('from') !== 'plan') return;
@@ -16,13 +16,13 @@
     var planPath = location.pathname.replace(/(analyst-prep-kit\/).*$/, '$1plan/');
     var bar = document.createElement('a');
     bar.href = planPath;
-    bar.textContent = ok ? '✓ Done here? Back to your plan, box checked'
-                         : '← Back to your plan';
-    bar.setAttribute('aria-label', ok ? 'Done here. Back to your plan, box checked'
-                                      : 'Back to your plan');
+    bar.textContent = ok ? "✓ Готово? Вернуться к своему плану, флажок установлен"
+                         : "← Вернуться к вашему плану";
+    bar.setAttribute('aria-label', ok ? "Готово здесь. Вернуться к своему плану, флажок установлен"
+                                      : "Вернуться к вашему плану");
     bar.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);bottom:16px;' +
       'z-index:1200;background:' + (ok ? '#15803D' : '#0E7490') + ';color:#fff;' +
-      'text-decoration:none;font:600 14px/1 system-ui,sans-serif;padding:12px 18px;' +
+      "текст-декорация: нет; шрифт: 600 14 пикселей/1 system-ui, без засечек; отступ: 12 пикселей 18 пикселей;" +
       'border-radius:999px;box-shadow:0 6px 20px rgba(0,0,0,.28)';
     if (ok) {
       bar.addEventListener('click', function (e) {

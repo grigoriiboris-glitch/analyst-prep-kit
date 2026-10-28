@@ -21,7 +21,7 @@ let apkCloudReadyUserId = null;
 const apkPendingSyncTimers = Object.create(null);
 
 function apkProgressApi() {
-  if (!window.APKProgress) throw new Error('progress-state.js was not loaded before supabase_auth_sync.js');
+  if (!window.APKProgress) throw new Error("Progress-state.js не был загружен до supabase_auth_sync.js");
   return window.APKProgress;
 }
 
@@ -70,7 +70,7 @@ async function signUpWithEmail(email, password) {
     if (error) return { success: false, error: error.message };
     return { success: true, user: data.user };
   } catch (error) {
-    console.error('Sign up error:', error);
+    console.error("Ошибка регистрации:", error);
     return { success: false, error: error.message || 'Не удалось создать аккаунт.' };
   }
 }
@@ -83,7 +83,7 @@ async function signInWithEmail(email, password) {
     await bootstrapProgressSync({ user: data.user });
     return { success: true, user: data.user };
   } catch (error) {
-    console.error('Sign in error:', error);
+    console.error("Ошибка входа:", error);
     return { success: false, error: error.message || 'Не удалось войти.' };
   }
 }
@@ -98,7 +98,7 @@ async function signInWithGoogle() {
     if (error) return { success: false, error: error.message };
     return { success: true };
   } catch (error) {
-    console.error('Google sign in error:', error);
+    console.error("Ошибка входа в Google:", error);
     return { success: false, error: error.message || 'Не удалось войти через Google.' };
   }
 }
@@ -121,7 +121,7 @@ async function getCurrentUser() {
     const result = await sb.auth.getUser();
     return result && result.data ? result.data.user : null;
   } catch (error) {
-    console.warn('Auth temporarily unavailable:', error.message || error);
+    console.warn("Авторизация временно недоступна:", error.message || error);
     return null;
   }
 }
@@ -144,7 +144,7 @@ function apkReadMeta() {
 
 function apkWriteMeta(meta) {
   try { Storage.prototype.setItem.call(localStorage, APK_SYNC_META_KEY, JSON.stringify(meta)); }
-  catch (error) { console.warn('Progress metadata could not be saved:', error); }
+  catch (error) { console.warn("Метаданные прогресса не удалось сохранить:", error); }
 }
 
 function apkMarkKeyChanged(key, deleted) {
@@ -173,7 +173,7 @@ function apkMarkKeyChanged(key, deleted) {
     };
     Object.defineProperty(Storage.prototype, '__apkProgressHooksInstalled', { value: true });
   } catch (error) {
-    console.warn('Progress storage hooks are unavailable:', error);
+    console.warn("Хуки хранения прогресса недоступны:", error);
   }
 })();
 
@@ -206,7 +206,7 @@ function apkScheduleKitSync(kitId) {
   apkPendingSyncTimers[kitId] = setTimeout(() => {
     delete apkPendingSyncTimers[kitId];
     syncKitSnapshot(kitId).catch(error => {
-      console.warn('Progress sync deferred:', kitId, error.message || error);
+      console.warn("Синхронизация прогресса отложена:", kitId, error.message || error);
     });
   }, 650);
 }
@@ -231,7 +231,7 @@ class SyncQueue {
       Storage.prototype.setItem.call(localStorage, APK_SYNC_QUEUE_KEY, JSON.stringify(this.queue));
       Storage.prototype.removeItem.call(localStorage, APK_LEGACY_QUEUE_KEY);
     } catch (error) {
-      console.warn('Sync queue could not be persisted:', error);
+      console.warn("Очередь синхронизации не удалось сохранить:", error);
     }
   }
 
@@ -281,10 +281,10 @@ class SyncQueue {
           this.queue = this.queue.filter(candidate => candidate !== item);
           changed = true;
         } else {
-          console.warn('Queued progress remains pending:', error.message || error);
+          console.warn("Ход выполнения в очереди остается ожидающим:", error.message || error);
         }
       } catch (error) {
-        console.warn('Queued progress remains pending:', error.message || error);
+        console.warn("Ход выполнения в очереди остается ожидающим:", error.message || error);
         break;
       }
     }
@@ -338,7 +338,7 @@ async function syncKitSnapshot(kitId, options) {
     return true;
   } catch (error) {
     syncQueue.addSnapshot(user.id, kitId, snapshot);
-    console.warn('Snapshot queued for retry:', kitId, error.message || error);
+    console.warn("Снимок поставлен в очередь на повтор:", kitId, error.message || error);
     return false;
   }
 }
@@ -368,7 +368,7 @@ async function syncProgress(kitId, lessonId, drillId, state) {
     return true;
   } catch (error) {
     syncQueue.addRow(row);
-    console.warn('Granular progress queued for retry:', error.message || error);
+    console.warn("Детальный прогресс поставлен в очередь на повтор:", error.message || error);
     return false;
   }
 }
@@ -390,7 +390,7 @@ async function fetchKitProgress(kitId) {
     });
     return progress;
   } catch (error) {
-    console.error('Fetch progress error:', error);
+    console.error("Ошибка получения прогресса:", error);
     return {};
   }
 }
@@ -411,7 +411,7 @@ async function restoreAllProgress(options) {
       if (result.error) throw result.error;
       data = result.data || [];
     } catch (error) {
-      console.warn('Cloud restore postponed:', error.message || error);
+      console.warn("Восстановление облака отложено:", error.message || error);
       return { ok: false, changed: false, restoredKeys: [] };
     }
 
@@ -522,7 +522,7 @@ async function bootstrapProgressSync(options) {
     await syncQueue.flush(user);
     return true;
   } catch (error) {
-    console.warn('Progress bootstrap postponed:', error.message || error);
+    console.warn("Загрузка прогресса отложена:", error.message || error);
     return false;
   }
 }
@@ -543,7 +543,7 @@ async function hasInterviewPass() {
     }
     return !!(data && data.has_interview_pass);
   } catch (error) {
-    console.error('Entitlements check error:', error);
+    console.error("Ошибка проверки прав:", error);
     return false;
   }
 }
@@ -561,7 +561,7 @@ async function unlockInterviewPass(userId) {
     if (error) throw error;
     return true;
   } catch (error) {
-    console.error('Unlock error:', error);
+    console.error("Ошибка разблокировки:", error);
     return false;
   }
 }
@@ -622,4 +622,4 @@ if (typeof window !== 'undefined') {
 // Preserve old login callback contract.
 onAuthStateChange(async (event) => {
   if (event === 'SIGNED_IN') await syncQueue.flush();
-}).catch(error => console.warn('Auth listener unavailable:', error.message || error));
+}).catch(error => console.warn("Прослушиватель аутентификации недоступен:", error.message || error));

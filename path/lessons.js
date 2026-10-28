@@ -21,107 +21,107 @@ const LESSON_TEXT = [
   {
     id: 1,
     title: 'SELECT & FROM',
-    sub: 'Pull columns from a table',
+    sub: "Извлечение столбцов из таблицы",
     story: "You know the mental model: databases are tables, rows have a grain, keys connect tables, queries return tables. Now write your first actual question. SELECT names the columns you want; FROM names the table to get them from. That's the whole skeleton. Every query you'll ever write starts with these two words.",
     intro: 'A SELECT query is like ordering at a deli counter: you name what you want (the columns) and which counter to get it from (the table). Every SQL query starts with <code>SELECT</code> to choose columns and <code>FROM</code> to name the table. Think of it as: &ldquo;Give me <em>these columns</em> from <em>this table</em>.&rdquo;',
     ral: {
       sql: 'SELECT name, email\nFROM customers;',
-      say: 'Give me the name and email columns from the customers table.',
+      say: "Дайте мне столбцы имени и электронной почты из таблицы клиентов.",
       lines: [
-        ['SELECT', 'display — start the query by listing the columns you want back'],
-        ['name, email', 'the two columns to display, separated by a comma'],
-        ['FROM', 'pull from — names the table to read'],
-        ['customers', 'the table holding one row per customer'],
-        [';', 'ends the statement']
+        ['SELECT', "display — запустите запрос, перечислив столбцы, которые вы хотите вернуть."],
+        ["имя, электронная почта", "два отображаемых столбца, разделенные запятой"],
+        ['FROM', "pull from — называет таблицу для чтения"],
+        ['customers', "таблица, содержащая одну строку на каждого клиента"],
+        [';', "заканчивает заявление"]
       ]
     },
-    notes: 'Use <code>SELECT *</code> to grab every column — handy for exploration, but name columns explicitly in real queries.',
+    notes: "Use <code>ВЫБИРАТЬ *</code> захватить каждый столбец — удобно для исследования, но в реальных запросах столбцам следует указывать явное имя.",
     viz: {
       columns: ['name', 'email'],
       rows: [['Maya Chen', 'maya@co.com'], ["Джордан Ли", 'jordan@co.com'], ["Сэм Ривера", 'sam@co.com'], ["Алекс Ким", 'alex@co.com']],
       caption: "Два столбца, по одной строке на каждого клиента — именно те столбцы, которые вы указали в SELECT."
     },
-    compare: 'The order is fixed: SELECT always leads, FROM always follows. Even though you think of the table first, the query names the columns before the source.',
-    close: "You can pull any column from any table. Every query you'll ever write starts with exactly this.",
-    unlock: 'Naming columns explicitly instead of SELECT * is a production habit — it makes queries self-documenting and immune to breaking when someone later adds a column to the table.'
+    compare: "Порядок фиксирован: SELECT всегда впереди, FROM всегда следует. Даже если вы сначала думаете о таблице, запрос называет столбцы перед источником.",
+    close: "Вы можете извлечь любой столбец из любой таблицы. Каждый запрос, который вы когда-либо напишете, начинается именно с этого.",
+    unlock: "Явное именование столбцов вместо SELECT * — это производственная привычка: она делает запросы самодокументируемыми и невосприимчивыми к взлому, когда кто-то позже добавит столбец в таблицу."
   },
   {
     id: 2,
     title: 'WHERE',
-    sub: 'Filter rows by condition',
+    sub: "Фильтровать строки по условию",
     story: "You can pull columns from a table. Your manager's first real question isn't 'show me everything' — it's 'show me just the West region.' WHERE is the filter: it checks a condition row by row and only returns the rows where it's true. SELECT tells SQL what to show; WHERE tells it which rows.",
     intro: "WHERE — это как список гостей у двери — попадают только те строки, имя которых в нем указано (условие истинно). <code>WHERE</code> фильтрует, какие строки возвращаются. Возвращаются только строки, в которых условие имеет значение TRUE.",
     ral: {
       sql: "SELECT name\nFROM customers\nWHERE status = 'active';",
-      say: "Give me the names of customers whose status is 'active'.",
+      say: "Назовите мне имена клиентов, у которых статус «активный».",
       lines: [
-        ['SELECT name', 'display the name column'],
-        ['FROM customers', 'pull from the customers table'],
-        ["WHERE status = 'active'", 'keep only rows where the status column equals the text \'active\''],
-        ["= 'active'", 'single quotes wrap text values; SQL uses = for equality, not ==']
+        ["ВЫБЕРИТЕ имя", "отобразить столбец имени"],
+        ["ОТ клиентов", "взять со стола клиентов"],
+        ["ГДЕ статус = «активный»", "сохранять только строки, в которых столбец статуса равен тексту «активный»"],
+        ["= 'активный'", "одинарные кавычки заключают текстовые значения; SQL использует = для равенства, а не =="]
       ]
     },
-    notes: 'Common operators: <code>=</code> <code>!=</code> <code>&gt;</code> <code>&lt;</code> <code>BETWEEN</code> <code>LIKE</code> <code>IN</code>. Combine with <code>AND</code> / <code>OR</code>.',
+    notes: "Общие операторы: <code>=</code> <code>!=</code> <code>></code> <code><</code> <code>BETWEEN</code> <code>LIKE</code> <code>IN</code>. Комбинировать с <code>AND</code> / <code>OR</code>.",
     viz: {
       columns: ['name'],
       rows: [['Maya Chen'], ["Джордан Ли"], ["Алекс Ким"]],
       caption: "Только строки со статусом = «активный» выдерживают фильтр WHERE — Сэм (неактивный) и Тейлор (ожидающий) исключаются."
     },
-    compare: 'WHERE goes after FROM, not before it. The clause order is always SELECT → FROM → WHERE → ORDER BY. Swapping WHERE and FROM is a syntax error.',
-    close: 'You can filter to exactly the rows you need. WHERE is the single most-used clause in real analyst work.',
-    unlock: 'WHERE short-circuits as soon as a row fails the condition — the database stops evaluating that row immediately. Putting the most selective condition first can speed up queries on large tables, a small habit that matters at scale.'
+    compare: "WHERE идет после FROM, а не перед ним. Порядок предложений всегда следующий: SELECT → FROM → WHERE → ORDER BY. Замена местами WHERE и FROM является синтаксической ошибкой.",
+    close: "Вы можете фильтровать именно те строки, которые вам нужны. ГДЕ — это единственное наиболее часто используемое предложение в реальной работе аналитика.",
+    unlock: "WHERE выполняет короткое замыкание, как только строка не соответствует условию — база данных немедленно прекращает оценку этой строки. Установка наиболее избирательного условия на первое место может ускорить запросы к большим таблицам — небольшая привычка, имеющая значение в масштабе."
   },
   {
     id: 104,
     title: "Запрос возвращает таблицу; NULL = Неизвестно",
-    sub: 'The output shape of every SQL query — and the special case of missing data.',
-    story: "Keys connect the tables. One more idea before you query: SQL always returns a result set shaped like a table — even a single number is wrapped in a 1×1 table. And empty cells in a database aren't blank — they're NULL, which means 'unknown.' NULL is not zero and not empty string. It has its own comparison rules, and ignoring them causes silent wrong totals.",
+    sub: "Форма вывода каждого SQL-запроса и особый случай отсутствия данных.",
+    story: "Ключи соединяют таблицы. Еще одна идея перед запросом: SQL всегда возвращает набор результатов в виде таблицы — даже одно число заключено в таблицу 1×1. А пустые ячейки в базе данных не являются пустыми — они имеют значение NULL, что означает «неизвестно». NULL — это не ноль и не пустая строка. У него есть свои собственные правила сравнения, и игнорирование их приводит к неверным итоговым результатам.",
     intro: "Каждый SQL-запрос возвращает таблицу — строки и столбцы, даже если это одна строка или один столбец. Это контракт. А когда значение отсутствует или неизвестно, базы данных сохраняют NULL — специальный сигнал, означающий «мы не знаем». NULL НЕ равен нулю. NULL НЕ является пустой строкой. NULL не равен NULL. Сравнения с NULL требуют <code>НУЛЕВЫЙ</code> / <code>НЕ НУЛЬ</code>, нет <code>= НУЛЬ</code>.",
     ral: {
       sql: 'SELECT name, revenue\nFROM orders\nWHERE region IS NULL;',
-      say: 'Show me every order where the region is unknown (NULL).',
+      say: "Показывать мне каждый заказ, в котором регион неизвестен (NULL).",
       lines: [
-        ['SELECT name, revenue', 'display the name and revenue columns'],
-        ['FROM orders', 'pull from the orders table'],
-        ['WHERE region IS NULL', 'keep only rows where region is unknown — IS NULL is the only test that works; = NULL never matches, because NULL equals nothing'],
-        ['NULL', "means 'unknown' — not zero, not blank; NULL + anything = NULL"],
-        ['COUNT(*) vs COUNT(col)', 'COUNT(*) counts every row; COUNT(col) skips NULLs — the gap is your missing-value count']
+        ["ВЫБЕРИТЕ название, доход", "отображать столбцы имени и дохода"],
+        ["ОТ заказов", "взять из таблицы заказов"],
+        ["ГДЕ регион НУЛЕВОЙ", 'keep only rows where region is unknown — IS NULL is the only test that works; = NULL never matches, because NULL equals nothing'],
+        ['NULL', "означает «неизвестно» — не ноль, не пусто; НОЛЬ + что-нибудь = НОЛЬ"],
+        ["COUNT(*) против COUNT(столбец)", "COUNT(*) подсчитывает каждую строку; COUNT(col) пропускает NULL — пробел — это количество пропущенных значений."]
       ]
     },
     notes: 'COUNT(*) and COUNT(column) return different numbers when a column has NULLs. COUNT(*) counts every row; COUNT(revenue) skips rows where revenue is NULL. If your totals seem low, check for NULLs with SELECT COUNT(*) vs SELECT COUNT(revenue) — a difference tells you how many NULL rows there are.',
     viz: {
-      columns: ['order_id', 'region', 'revenue', 'COUNT(*) sees this row?', 'COUNT(revenue) sees this?'],
+      columns: ['order_id', 'region', 'revenue', "COUNT(*) видит эту строку?", "COUNT(доход) видит это?"],
       rows: [['1001', 'West', '150', "да ✓", "да ✓"], ['1002', 'NULL', '200', "да ✓", "да ✓"], ['1003', 'East', 'NULL', "да ✓", "нет — NULL пропущен"]],
       caption: "COUNT(*) подсчитывает все 3 строки. COUNT(доход) учитывает только 2 (пропускает NULL). COUNT(регион) учитывает только 2 (пропускает NULL-строку 1002). Эти различия незаметно меняют ваши итоги, если вы их не ожидаете."
     },
-    compare: "IS NULL is the only correct test for missing values. The common mistake is writing = NULL — but NULL means 'unknown', so NULL = NULL evaluates to unknown (false), not true. IS NULL bypasses that.",
-    close: 'You know what SQL returns and how NULL behaves — that prevents a whole class of silent wrong answers.',
-    unlock: "NULL propagation is the most silent source of wrong totals in SQL. Once you know that NULL + anything = NULL and that COUNT(col) skips NULLs, you'll catch calculation errors that fool most junior analysts."
+    compare: "IS NULL — единственный правильный тест на пропущенные значения. Распространенной ошибкой является запись = NULL, но NULL означает «неизвестно», поэтому NULL = NULL оценивается как неизвестное (ложь), а не как истина. IS NULL обходит это.",
+    close: "Вы знаете, что возвращает SQL и как ведет себя NULL — это предотвращает целый класс молчаливых неправильных ответов.",
+    unlock: "Распространение NULL — самый тихий источник неправильных итогов в SQL. Как только вы узнаете, что NULL + Anything = NULL и что COUNT(col) пропускает NULL, вы обнаружите ошибки вычислений, которые вводят в заблуждение большинство младших аналитиков."
   },
   {
     id: 3,
     title: "СОРТИРОВАТЬ ПО И ОГРАНИЧИТЬ",
-    sub: 'Sort and cap your results',
-    story: 'You can filter rows. Your manager wants the highest-revenue orders first, not whatever order the database stored them in. ORDER BY sorts the result — ASC for smallest to largest, DESC for largest to smallest. LIMIT caps how many rows come back. Two small clauses that make query output readable.',
+    sub: "Сортируйте и ограничивайте результаты",
+    story: "Вы можете фильтровать строки. Вашему менеджеру нужны в первую очередь заказы с наибольшим доходом, а не тот порядок, в котором они хранятся в базе данных. ORDER BY сортирует результат — ASC от меньшего к большему, DESC от большего к меньшему. LIMIT ограничивает количество возвращаемых строк. Два небольших предложения, которые делают вывод запроса читабельным.",
     intro: "ORDER BY и LIMIT похожи на таблицу лидеров: отсортируйте всех по баллам, а затем отобразите только несколько лучших. <code>ЗАКАЗАТЬ ПО</code> сортирует результаты. <code>LIMIT</code> ограничивает количество возвращаемых строк — важно для больших таблиц.",
     ral: {
       sql: 'SELECT name, order_date\nFROM orders\nORDER BY order_date DESC\nLIMIT 5;',
-      say: 'Give me the name and order date from orders, sorted by most recent first, and just the top 5 results.',
+      say: "Дайте мне имя и дату заказа из заказов, отсортированных по самым последним, и только первые 5 результатов.",
       lines: [
-        ['SELECT name, order_date', 'display the name and order date columns'],
-        ['FROM orders', 'pull from the orders table'],
-        ['ORDER BY order_date DESC', 'sort by order date — DESC = descending, newest first'],
+        ["ВЫБЕРИТЕ имя, дату_заказа", "отображать столбцы имени и даты заказа"],
+        ["ОТ заказов", "взять из таблицы заказов"],
+        ["СОРТИРОВАТЬ ПО order_date DESC", "сортировка по дате заказа — DESC = по убыванию, сначала самые новые"],
         ['LIMIT 5', 'return only the first 5 rows after sorting']
       ]
     },
-    notes: '<code>ASC</code> (ascending, A→Z, 0→9) is the default. <code>DESC</code> reverses it. Always use LIMIT when exploring large data.',
+    notes: "<code>ASC</code> (по возрастанию, A→Z, 0→9) — значение по умолчанию. <code>DESC</code> меняет его. Всегда используйте LIMIT при исследовании больших данных.",
     viz: {
       columns: ['name', 'order_date'],
       rows: [['Maya Chen', '2026-05-30'], ["Алекс Ким", '2026-05-28'], ["Джордан Ли", '2026-05-21'], ["Сэм Ривера", '2026-05-14'], ['Maya Chen', '2026-05-02']],
       caption: "Отсортировано по порядку_даты: сначала самые новые, затем LIMIT ограничивает их 5-ю верхними строками."
     },
-    compare: "LIMIT must come after ORDER BY, not before it. The sort happens first, then the cap is applied. Swapping them would cap before sorting — you'd get a random 3 rows sorted, not the 3 most recent.",
-    close: "You can sort results and cap them to a useful size. ORDER BY + LIMIT is behind every leaderboard, top-N report, and 'show me the latest' query.",
-    unlock: 'NULL values sort to the end in ASC and the beginning in DESC in most databases. If your top-10 results look wrong, check whether NULLs are sneaking in before real values.'
+    compare: "LIMIT должен идти после ORDER BY, а не перед ним. Сначала происходит сортировка, затем применяется ограничение. Их замена местами приведет к ограничению перед сортировкой — вы получите случайные 3 отсортированные строки, а не 3 самые последние.",
+    close: "Вы можете сортировать результаты и ограничивать их до полезного размера. ORDER BY + LIMIT стоит за каждой таблицей лидеров, отчетом N лучших и запросом «покажи мне последние».",
+    unlock: "Значения NULL сортируются до конца в формате ASC и до начала в формате DESC в большинстве баз данных. Если ваши первые 10 результатов выглядят неправильными, проверьте, не появляются ли NULL перед реальными значениями."
   }
 ];

@@ -275,16 +275,16 @@ function save(){ localStorage.setItem(STORE, JSON.stringify(state)); }
 
 /* ============== DOMAINS (official PL-300 skills outline, April 2026) ============== */
 const DOMAIN_INFO = {
-  d1:{label:"Домен 1", name:'Prepare the Data', weight:'25–30%', mid:27.5, color:'var(--c-d1)',
+  d1:{label:"Домен 1", name:"Подготовьте данные", weight:'25–30%', mid:27.5, color:'var(--c-d1)',
       hint:`Единицы комплекта Power BI в Power Query — подключение, профилирование, очистка и формирование данных до того, как они попадут в модель.`,
       kitPath:'../powerbi/'},
-  d2:{label:"Домен 2", name:'Model the Data', weight:'25–30%', mid:27.5, color:'var(--c-d2)',
+  d2:{label:"Домен 2", name:"Смоделируйте данные", weight:'25–30%', mid:27.5, color:'var(--c-d2)',
       hint:`Уроки Power BI Kit по звездообразной схеме, связям и DAX (меры, РАСЧЕТ, анализ времени).`,
       kitPath:'../powerbi/'},
-  d3:{label:"Домен 3", name:'Visualize & Analyze the Data', weight:'25–30%', mid:27.5, color:'var(--c-d3)',
+  d3:{label:"Домен 3", name:"Визуализация и анализ данных", weight:'25–30%', mid:27.5, color:'var(--c-d3)',
       hint:`Уроки по созданию информационной панели Power BI Kit, а также Chart Literacy Kit для визуального выбора.`,
       kitPath:'../powerbi/'},
-  d4:{label:"Домен 4", name:'Manage & Secure Power BI', weight:'15–20%', mid:17.5, color:'var(--c-d4)',
+  d4:{label:"Домен 4", name:"Управление и защита Power BI", weight:'15–20%', mid:17.5, color:'var(--c-d4)',
       hint:`Уроки публикации Power BI Kit; В приведенном здесь учебном пособии рассматриваются рабочие области, обновление, шлюзы и безопасность на уровне строк.`,
       kitPath:'../powerbi/'}
 };
@@ -305,16 +305,16 @@ const LESSON_LINKS = {
 const STUDY = [
   {key:'d1', title:"Подготовка данных — территория Power Query",
     must:[
-      `<strong>Power Query is the kitchen, the model is the dining room.</strong> Everything in this domain happens BEFORE data enters the model: connect, profile, clean, shape, load. The language behind it is M — but the exam tests the UI actions, not M syntax.`,
-      `<strong>Import vs. DirectQuery vs. DirectLake</strong>: Import copies data into the model (fastest visuals, data as fresh as the last refresh) · DirectQuery leaves data at the source and queries live (always current, slower visuals, source must be reachable) · DirectLake reads Fabric OneLake delta tables directly (lakehouse speed without import).`,
-      `<strong>Say it out loud</strong>: "Import is a photocopy, DirectQuery is a phone call." Same mental model as Tableau's extract vs. live.`,
-      `<strong>Profiling tools</strong> (View ribbon in Power Query): Column quality (valid/error/empty %), Column distribution (distinct vs. unique counts), Column profile (stats + value distribution). By default they profile the first 1,000 rows — switch to the entire dataset from the status bar.`,
-      `<strong>Cleaning moves</strong>: replace values/errors, remove rows, fill down (for those merged-cell gaps), change data type, trim/clean text. Fixing a data-type error means fixing it in Power Query, not in DAX afterward.`,
-      `<strong>Shaping moves</strong>: pivot (rows → columns), unpivot (columns → rows — the fix for "months as column headers"), transpose (flip the whole grid), group by (aggregate rows), split column.`,
-      `<strong>Merge vs. Append</strong>: merge = SQL join (adds COLUMNS by matching keys, you pick the join kind) · append = SQL union (stacks ROWS of same-shaped tables). Same rhyme as Tableau: join wide, union tall.`,
+      `<strong>Power Query — это кухня, модель — столовая.</strong> Все в этой области происходит ДО того, как данные поступят в модель: подключение, профилирование, очистка, придание формы, загрузка. Язык, лежащий в его основе, — M, но на экзамене проверяются действия пользовательского интерфейса, а не синтаксис M.`,
+      `<strong>Импорт, DirectQuery и DirectLake</strong>: Импорт копирует данные в модель (самые быстрые визуальные эффекты, данные такие же свежие, как и при последнем обновлении). · DirectQuery оставляет данные в источнике и выполняет запросы в реальном времени (всегда актуальные, более медленные визуальные элементы, источник должен быть доступен). · DirectLake считывает дельта-таблицы Fabric OneLake напрямую (скорость Lakehouse без импорта).`,
+      `<strong>Скажи это вслух</strong>: «Импорт — это фотокопия, DirectQuery — это телефонный звонок». Та же ментальная модель, что и отрывок из Таблицы по сравнению с живым.`,
+      `<strong>Инструменты профилирования</strong> (Просмотр ленты в Power Query): качество столбца (действительный/ошибочный/пустой%), распределение столбцов (отдельные и уникальные счетчики), профиль столбца (статистика + распределение значений). По умолчанию они профилируют первые 1000 строк — переключитесь на весь набор данных из строки состояния.`,
+      `<strong>Уборочные ходы</strong>: заменить значения/ошибки, удалить строки, заполнить (для пробелов в объединенных ячейках), изменить тип данных, обрезать/очистить текст. Исправление ошибки типа данных означает ее последующее исправление в Power Query, а не в DAX.`,
+      `<strong>Формирование движений</strong>: поворот (строки → столбцы), разворот (столбцы → строки — исправление «месяцев в качестве заголовков столбцов»), транспонирование (переворот всей сетки), группировка (агрегирование строк), разделение столбца.`,
+      `<strong>Слияние против добавления</strong>: merge = объединение SQL (добавляет СТОЛБЦЫ путем сопоставления ключей, вы выбираете тип соединения) ·добавление = объединение SQL (складывает СТРОКИ таблиц одинаковой формы). Та же рифма, что и в Таблице: соединение широкое, соединение высокое.`,
       `<strong>Reference vs. Duplicate</strong> a query: duplicate = independent full copy of all steps; reference = a new query that starts from the ORIGINAL's output (changes upstream flow into it).`,
-      `<strong>Parameters</strong> in Power Query hold a reusable value (a server name, a file path, a threshold) you can swap without editing every query.`,
-      `<strong>Build fact and dimension tables here</strong>: split the one giant flat export into a fact table (events/transactions) and dimension tables (customer, product, date) with proper keys — that's what Domain 2's star schema will need.`
+      `<strong>Parameters</strong> в Power Query хранится повторно используемое значение (имя сервера, путь к файлу, пороговое значение), которое вы можете поменять, не редактируя каждый запрос.`,
+      `<strong>Здесь можно создавать таблицы фактов и измерений.</strong>: разделить один гигантский плоский экспорт на таблицу фактов (события/транзакции) и таблицы измерений (клиент, продукт, дата) с соответствующими ключами — это то, что понадобится звездообразной схеме Домена 2.`
     ],
     miscon:`<strong>Misconception to bust:</strong> "I'll just clean it with DAX later." Power Query (M) transforms data BEFORE it loads; DAX calculates AFTER it's in the model. Type fixes, nulls, unpivoting, merging — that's all Power Query work. If a question asks where to fix source-data problems, the answer is Power Query, not a DAX measure.`,
     viz:`<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
@@ -326,18 +326,18 @@ const STUDY = [
     </div><div style="color:var(--dim);font-size:12px;margin-top:7px">Power Query (M) does all of this — before DAX ever sees the data</div>`},
   {key:'d2', title:"Моделирование данных — схема «звезда» + DAX, самый тяжелый домен на практике.",
     must:[
-      `<strong>Star schema</strong>: one fact table (transactions/events, the numbers) surrounded by dimension tables (who/what/where/when). Flat single tables and deeply snowflaked chains both underperform it.`,
-      `<strong>Relationships</strong>: typically one-to-many from dimension (one side) to fact (many side). Cross-filter direction: single (dimension filters fact — the default and the safe choice) vs. both (bidirectional — use sparingly, it creates ambiguity and performance cost).`,
-      `<strong>A common date table</strong> is near-mandatory: a dedicated Date dimension, marked as a date table, related to every fact date — that's what makes time intelligence work reliably.`,
-      `<strong>Role-playing dimensions</strong>: one physical Date table used in multiple roles (Order Date, Ship Date). Power BI allows one ACTIVE relationship; the others are inactive and activated per-measure with <code>USERELATIONSHIP()</code>.`,
-      `<strong>Measures vs. calculated columns</strong>: measures compute at query time in filter context (cheap, flexible — your default); calculated columns compute row-by-row at refresh and are STORED in the model (cost memory; use only when you need the value on a row, e.g. to slice by it).`,
-      `<strong>CALCULATE is the most important function in DAX</strong>: it evaluates an expression in a MODIFIED filter context — <code>CALCULATE(SUM(Sales[Amount]), Region[Name]="West")</code> means "total sales, but pretend only West is selected."`,
-      `<strong>Say it out loud</strong>: "Every measure runs inside the filters coming from the visual. CALCULATE lets me overwrite those filters."`,
-      `<strong>X-functions iterate</strong>: <code>SUMX(Sales, Sales[Qty] * Sales[Price])</code> evaluates row-by-row then sums. Plain <code>SUM</code> only takes a single existing column.`,
-      `<strong>Time intelligence</strong>: <code>TOTALYTD</code>, <code>SAMEPERIODLASTYEAR</code>, <code>DATEADD</code>, <code>DATESINPERIOD</code> — all need that marked date table. Semi-additive measures (account balances) use <code>LASTDATE</code>-style logic: sum across accounts, but take the LAST value across time, not the sum.`,
-      `<strong>Performance</strong>: remove unneeded columns and rows (columns cost the most in a columnar engine), prefer measures over calculated columns, reduce granularity if detail isn't needed, and find slow visuals/measures with Performance Analyzer + DAX query view.`
+      `<strong>Схема звезды</strong>: одна таблица фактов (транзакции/события, числа), окруженная таблицами измерений (кто/что/где/когда). Плоские одиночные столы и цепи с глубокими снежинками уступают ему по эффективности.`,
+      `<strong>Relationships</strong>: обычно один-ко-многим от измерения (одна сторона) до факта (много сторон). Направление перекрестной фильтрации: однонаправленное (фактически фильтры измерений — выбор по умолчанию и безопасный выбор) или оба (двунаправленное — используйте с осторожностью, это создает неоднозначность и снижает производительность).`,
+      `<strong>Общая таблица дат</strong> почти обязателен: выделенное измерение даты, помеченное как таблица дат, связанное с каждой фактической датой — это то, что обеспечивает надежную работу аналитики времени.`,
+      `<strong>Ролевые аспекты</strong>: одна физическая таблица дат, используемая в нескольких ролях (Дата заказа, Дата отгрузки). Power BI допускает одну АКТИВНУЮ связь; остальные неактивны и активируются для каждого такта с помощью <code>ПОЛЬЗОВАТЕЛЬСКИЕ ОТНОШЕНИЯ()</code>.`,
+      `<strong>Меры и вычисляемые столбцы</strong>: меры вычисляются во время запроса в контексте фильтра (дешево, гибко — по умолчанию); вычисляемые столбцы вычисляются построчно при обновлении и СОХРАНЯЮТСЯ в модели (память стоимости; используйте только тогда, когда вам нужно значение в строке, например, для разрезания по ней).`,
+      `<strong>РАСЧЕТ — самая важная функция в DAX.</strong>: он оценивает выражение в контексте МОДИФИЦИРОВАННОГО фильтра — <code>РАССЧИТАТЬ(СУММА(Продажи[Сумма]), Регион[Имя]="Запад")</code> означает «общий объем продаж, но притворитесь, что выбран только Запад».`,
+      `<strong>Скажи это вслух</strong>: «Каждая мера выполняется внутри фильтров, исходящих из визуального элемента. CALCULATE позволяет мне перезаписать эти фильтры».`,
+      `<strong>X-функции повторяются</strong>: <code>SUMX(Продажи, Продажи[Кол-во] * Продажи[Цена])</code> вычисляет строку за строкой, а затем суммирует. Простой <code>SUM</code> принимает только один существующий столбец.`,
+      `<strong>Временной интеллект</strong>: <code>TOTALYTD</code>, <code>SAMEPERIODLASTYEAR</code>, <code>DATEADD</code>, <code>DATESINPERIOD</code> — Всем нужна эта помеченная таблица дат. Использование полуаддитивных показателей (остатков по счетам) <code>LASTDATE</code>Логика в стиле: суммируйте данные по учетным записям, но берите ПОСЛЕДНЕЕ значение по времени, а не сумму.`,
+      `<strong>Performance</strong>: удалите ненужные столбцы и строки (столбцы стоят больше всего в столбчатом механизме), отдайте предпочтение мерам вычисляемым столбцам, уменьшите степень детализации, если детализация не нужна, и найдите медленные визуальные элементы/меры с помощью представления запросов Performance Analyser + DAX.`
     ],
-    miscon:`<strong>Misconception to bust:</strong> "Calculated column or measure — whatever, they both use DAX." The exam pushes on this constantly. A calculated column is computed at refresh, stored per row, and consumes memory; a measure is computed at query time in the visual's filter context and stores nothing. Default to a measure; reach for a calculated column only when you need the value ON the row (to slice, filter, or relate by it).`,
+    miscon:`<strong>Заблуждение, которое следует разоблачить:</strong> «Вычисляемый столбец или мера — неважно, они оба используют DAX». Экзамен постоянно к этому подталкивает. Вычисляемый столбец вычисляется при обновлении, сохраняется для каждой строки и потребляет память; мера вычисляется во время запроса в контексте фильтра визуального элемента и ничего не сохраняет. По умолчанию мера; обращайтесь к вычисляемому столбцу только тогда, когда вам нужно значение В строке (для разрезания, фильтрации или связи по нему).`,
     viz:`<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-size:11px;text-align:center;max-width:330px">
       <div></div><div style="border:1px solid var(--border);border-radius:6px;padding:6px;background:var(--surf)">📅 Date</div><div></div>
       <div style="border:1px solid var(--border);border-radius:6px;padding:6px;background:var(--surf)">👤 Customer</div>
@@ -347,18 +347,18 @@ const STUDY = [
     </div><div style="color:var(--dim);font-size:12px;margin-top:7px">One-to-many, single direction, dimension → fact. Mark the Date table.</div>`},
   {key:'d3', title:"Визуализируйте и анализируйте данные — отчеты, которые отвечают на вопросы",
     must:[
-      `<strong>Visual choice</strong>: trend → line · category comparison → bar/column · part-of-whole → stacked bar or treemap · two measures → scatter · KPI vs. target → card/gauge/KPI visual · geographic → map. (Same rules the <a href="../chart-literacy/">Chart Literacy Kit</a> teaches.)`,
-      `<strong>Paginated reports</strong> are the exception to "interactive": pixel-perfect, print/PDF-oriented, multi-page operational output (invoices, statements). "Formatted for printing, many pages" → paginated.`,
-      `<strong>Slicers vs. filters</strong>: a slicer is an ON-CANVAS visual users see and click; the Filters pane is at visual / page / report scope. Sync slicers extends one slicer across pages.`,
-      `<strong>Conditional formatting</strong> colors visuals by rules or by a measure's value (background, font, data bars, icons).`,
-      `<strong>Interactions</strong>: by default clicking a visual cross-highlights the others; Edit Interactions changes it to cross-filter or none, per visual pair.`,
-      `<strong>Drillthrough</strong> = right-click a data point → jump to a detail page filtered to that point. Different from drill DOWN (hierarchy levels within one visual).`,
-      `<strong>Bookmarks</strong> capture a report state (filters, visibility, sort) for navigation, reset buttons, and story-style toggles — pair with the Selection pane to show/hide groups of visuals.`,
-      `<strong>Tooltips</strong>: report-page tooltips show a mini page on hover, not just a value list.`,
-      `<strong>Analytics features</strong>: reference lines and error bars, forecasting on line charts, anomaly detection, the Analyze ▸ "explain the increase" feature, grouping/binning/clustering, AI visuals (Key influencers, Decomposition tree, Q&A), and Copilot for narrative summaries and report-page suggestions.`,
-      `<strong>Mobile & accessibility</strong>: build a separate mobile layout per report page; set tab order and alt text, mind color contrast for accessibility.`
+      `<strong>Визуальный выбор</strong>: тренд → линия · сравнение категорий → полоса/столбец · часть целого → составная полоса или древовидная карта · два показателя → разброс · KPI по сравнению с целевым показателем → карта/датчик/KPI визуальный · географический → карта. (Те же правила <a href="../chart-literacy/">Диаграммный комплект грамотности</a> учит.)`,
+      `<strong>Отчеты с разбивкой на страницы</strong> являются исключением из «интерактивного»: многостраничный оперативный вывод с точностью до пикселя, ориентированный на печать/PDF (счета-фактуры, выписки). «Отформатировано для печати, много страниц» → с разбивкой по страницам.`,
+      `<strong>Срезы против фильтров</strong>: срез — это визуальный элемент ON-CANVAS, который пользователи видят и нажимают; Панель «Фильтры» находится в области визуального элемента/страницы/отчета. Синхронизация срезов расширяет один срез на страницы.`,
+      `<strong>Условное форматирование</strong> раскрашивает визуальные элементы по правилам или по значению меры (фон, шрифт, гистограммы, значки).`,
+      `<strong>Interactions</strong>: по умолчанию щелчок по визуальному перекрестию выделяет остальные; Редактирование взаимодействий меняет его на перекрестную фильтрацию или ее отсутствие для каждой визуальной пары.`,
+      `<strong>Drillthrough</strong> = щелкните правой кнопкой мыши точку данных → перейдите на страницу сведений, отфильтрованную по этой точке. Отличается от детализации ВНИЗ (уровни иерархии внутри одного визуального элемента).`,
+      `<strong>Bookmarks</strong> захватите состояние отчета (фильтры, видимость, сортировка) для навигации, кнопок сброса и переключателей стиля истории — используйте панель выбора, чтобы показать/скрыть группы визуальных элементов.`,
+      `<strong>Tooltips</strong>: всплывающие подсказки на странице отчета при наведении показывают мини-страницу, а не просто список значений.`,
+      `<strong>Возможности аналитики</strong>: опорные линии и панели ошибок, прогнозирование на линейных диаграммах, обнаружение аномалий, функция «Анализ ▸ «объяснение увеличения», группировка/группировка/кластеризация, визуальные эффекты искусственного интеллекта (ключевые факторы влияния, дерево декомпозиции, вопросы и ответы) и Copilot для описательных сводок и предложений на страницах отчета.`,
+      `<strong>Мобильность и доступность</strong>: создайте отдельный мобильный макет для каждой страницы отчета; установите порядок табуляции и замещающий текст, обратите внимание на цветовой контраст для обеспечения доступности.`
     ],
-    miscon:`<strong>Misconception to bust:</strong> "Drillthrough and drill down are the same thing." Drill DOWN moves along a hierarchy inside one visual (Year → Quarter → Month). DrillTHROUGH right-click-jumps to a whole different page, filtered to the clicked data point. The exam phrases both; match the word to the motion.`,
+    miscon:`<strong>Заблуждение, которое следует разоблачить:</strong> «Детализация и детализация — это одно и то же». Детализация ВНИЗ перемещается по иерархии внутри одного визуального элемента (Год → Квартал → Месяц). DrillTHROUGH позволяет перейти на совершенно другую страницу, отфильтрованную по выбранной точке данных. Экзамен формулирует и то, и другое; соотнесите слово с движением.`,
     viz:`<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
       <span style="padding:4px 9px;border-radius:6px;background:var(--surf);border:1px solid var(--border);font-size:12px"><b style="color:var(--accent)">Drill down</b> hierarchy, same visual</span>
       <span style="color:var(--dim)">vs.</span>
@@ -366,17 +366,17 @@ const STUDY = [
     </div>`},
   {key:'d4', title:"Управление и защита Power BI — сервисная сторона",
     must:[
-      `<strong>The flow</strong>: build in Power BI Desktop → publish to a WORKSPACE in the Service → distribute via an APP (the packaged, read-friendly bundle for consumers).`,
-      `<strong>Workspace roles</strong>, most → least power: Admin (everything incl. deleting the workspace and managing access) · Member (publish/edit + share) · Contributor (create/edit content, no app-audience management by default) · Viewer (read only).`,
+      `<strong>Поток</strong>: сборка в Power BI Desktop → публикация в РАБОЧЕМ ОБЛАСТИ в Службе → распространение через приложение (упакованный, удобный для чтения пакет для потребителей).`,
+      `<strong>Роли в рабочей области</strong>, большинство → наименьшие полномочия: Администратор (все, включая удаление рабочей области и управление доступом) · Участник (публикация/редактирование + общий доступ) · Участник (создание/редактирование контента, по умолчанию управление аудиторией приложения отсутствует) · Просмотрщик (только чтение).`,
       `<strong>Dashboards vs. reports</strong>: a dashboard is a Service-only single canvas of PINNED tiles from one or more reports; reports are multi-page and built in Desktop. Pin a visual → it becomes a dashboard tile.`,
-      `<strong>Refresh</strong>: imported semantic models need a scheduled refresh in the Service. If the source is on-premises (a local SQL Server, files on a network share), you need an <strong>on-premises data gateway</strong>. Pure-cloud sources don't need one.`,
-      `<strong>Row-level security (RLS)</strong>: define roles with DAX filter rules in DESKTOP (e.g. <code>[Region] = USERPRINCIPALNAME()</code>-mapped rules), then assign members to those roles in the SERVICE. Test with "View as."`,
-      `<strong>RLS caveat</strong>: workspace Admins/Members/Contributors see ALL data regardless of RLS — RLS applies to viewers/app consumers.`,
-      `<strong>Sensitivity labels</strong> (from Microsoft Purview) classify content (Confidential, etc.) and follow the data on export.`,
-      `<strong>Endorsement</strong>: Promoted (self-serve "this is good") vs. Certified (blessed by an authorized reviewer — the stronger signal).`,
-      `<strong>Alerts & subscriptions</strong>: data alerts fire on dashboard tiles (cards, gauges, KPIs) when a threshold crosses; subscriptions email report/dashboard snapshots on a schedule.`
+      `<strong>Refresh</strong>: импортированные семантические модели требуют планового обновления в Сервисе. Если источник находится локально (локальный SQL-сервер, файлы в общей сетевой папке), вам потребуется <strong>Локальный шлюз данных</strong>. Источникам из чистого облака он не нужен.`,
+      `<strong>Безопасность на уровне строк (RLS)</strong>: определение ролей с помощью правил фильтрации DAX в DESKTOP (например, <code>[Регион] = ИМЯ ПРИНЦИПА ПОЛЬЗОВАТЕЛЯ()</code>-сопоставленные правила), а затем назначьте участникам эти роли в SERVICE. Протестируйте с помощью «Просмотреть как».`,
+      `<strong>Предостережение относительно СБН</strong>: администраторы/участники/участники рабочей области видят ВСЕ данные независимо от RLS — RLS применяется к зрителям/потребителям приложений.`,
+      `<strong>Метки конфиденциальности</strong> (из Microsoft Purview) классифицируйте контент (Конфиденциально и т. д.) и следите за данными при экспорте.`,
+      `<strong>Endorsement</strong>: повышенный (самообслуживание «это хорошо») или сертифицированный (благословленный авторизованным рецензентом — более сильный сигнал).`,
+      `<strong>Оповещения и подписки</strong>: оповещения о данных срабатывают на плитках информационной панели (карточки, датчики, ключевые показатели эффективности) при пересечении порогового значения; отчеты по электронной почте/снимки информационной панели по подпискам по расписанию.`
     ],
-    miscon:`<strong>Misconception to bust:</strong> "RLS locks down everyone." Workspace members with edit rights (Admin, Member, Contributor) bypass RLS entirely — they see all the data. RLS constrains report CONSUMERS (Viewer role / app audiences). If a question has an admin still seeing everything "despite RLS," that's not a bug, that's the design.`,
+    miscon:`<strong>Заблуждение, которое следует разоблачить:</strong> «RLS изолирует всех». Участники рабочей области с правами редактирования (Администратор, Участник, Участник) полностью обходят RLS — они видят все данные. RLS ограничивает отчет ПОТРЕБИТЕЛИ (роль зрителя/аудитория приложения). Если в вопросе администратор все еще видит все «несмотря на RLS», это не ошибка, это так задумано.`,
     viz:`<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
       <span style="padding:4px 9px;border-radius:6px;background:var(--surf);border:1px solid var(--border);font-size:12px">🖥️ Desktop <span style="color:var(--dim)">build</span></span><span style="color:var(--dim)">→</span>
       <span style="padding:4px 9px;border-radius:6px;background:var(--surf);border:1px solid var(--border);font-size:12px">📁 Workspace <span style="color:var(--dim)">publish</span></span><span style="color:var(--dim)">→</span>
@@ -426,7 +426,7 @@ const GUIDE_LINKS = {
 function guideLinkHtml(qid){
   const g = GUIDE_LINKS[qid];
   if(!g) return '';
-  return `<button class="guide-link" onclick="openGuide('${g.slug}',this.dataset.t)" data-t="${g.title.replace(/"/g,'&quot;')}">Read more: ${g.title}</button>`;
+  return `<button class="guide-link" onclick="openGuide('${g.slug}',this.dataset.t)" data-t="${g.title.replace(/"/g,'&quot;')}">Читать далее: ${g.title}</button>`;
 }
 
 function openGuide(slug, title){
@@ -453,277 +453,277 @@ document.addEventListener('keydown', e => {
 
 const QUESTIONS = [
   /* ---------- DOMAIN 1 · Prepare the Data (14) ---------- */
-  {id:'q1', domain:'d1', type:'mc', q:`Your report must always show data that is current to the second, straight from an Azure SQL database, and the dataset is far too large to copy. Choose:`,
+  {id:'q1', domain:'d1', type:'mc', q:`В вашем отчете всегда должны отображаться данные, актуальные с точностью до секунды, прямо из базы данных SQL Azure, а набор данных слишком велик для копирования. Выбирать:`,
     choices:[`Режим импорта`, `Режим DirectQuery`, `Экспорт в формате CSV обновляется еженедельно.`, `Расчетная таблица`],
     correct:1,
-    explain:`DirectQuery leaves the data at the source and queries it live — always current, no copy. Import would snapshot it and be only as fresh as the last refresh.`},
-  {id:'q2', domain:'d1', type:'mc', q:`The main trade-off you accept when choosing DirectQuery over Import:`,
+    explain:`DirectQuery оставляет данные в источнике и запрашивает их в реальном времени — всегда актуальные, без копирования. Импорт сделает его снимок и будет таким же свежим, как и последнее обновление.`},
+  {id:'q2', domain:'d1', type:'mc', q:`Основной компромисс, который вы принимаете при выборе DirectQuery вместо импорта:`,
     choices:[
       `Данные никогда не могут быть обновлены.`,
       `Визуальные элементы обычно работают медленнее, а некоторые функции DAX/Power Query ограничены, поскольку при каждом взаимодействии запрашивается источник.`,
       `Файл модели становится намного больше.`,
       `Вы больше не можете использовать слайсеры.`],
     correct:1,
-    explain:`Import is fastest because data lives in the in-memory engine. DirectQuery trades speed (and some functionality) for freshness and no data duplication.`},
-  {id:'q3', domain:'d1', type:'mc', q:`In Power Query, "Column quality" and "Column distribution" profile which rows by default?`,
+    explain:`Импорт выполняется быстрее, поскольку данные хранятся в памяти. DirectQuery жертвует скоростью (и некоторой функциональностью) ради свежести и отсутствия дублирования данных.`},
+  {id:'q3', domain:'d1', type:'mc', q:`В Power Query профиль «Качество столбца» и «Распределение столбцов» какие строки по умолчанию?`,
     choices:[`Все строки, всегда`, `Верхние 1000 строк (с возможностью переключения на весь набор данных из строки состояния)`, `Случайная выборка 10%`, `Только строки с ошибками`],
     correct:1,
-    explain:`Profiling defaults to the first 1,000 rows for speed. The status-bar toggle ("Column profiling based on entire data set") widens it — worth doing before trusting the stats.`},
-  {id:'q4', domain:'d1', type:'mc', q:`A column of order amounts imported as text ("1,204.50"). The correct place and move:`,
+    explain:`Для ускорения профилирования по умолчанию используются первые 1000 строк. Переключатель строки состояния («Профилирование столбцов на основе всего набора данных») расширяет ее — это стоит сделать, прежде чем доверять статистике.`},
+  {id:'q4', domain:'d1', type:'mc', q:`Столбец сумм заказов, импортированный в виде текста («1204,50»). Правильное место и ход:`,
     choices:[
       `Напишите меру DAX, которая преобразует текст в числа во время запроса.`,
       `В Power Query измените тип данных столбца на Десятичное число (устранив проблемы с языковыми стандартами и форматом).`,
       `Попросите зрителей игнорировать колонку.`,
       `Установите метку конфиденциальности.`],
     correct:1,
-    explain:`Type problems are prepare-the-data problems: fix them in Power Query so the model receives a clean numeric column. DAX workarounds recompute forever and break aggregation defaults.`},
-  {id:'q5', domain:'d1', type:'mc', q:`Your export has month names as COLUMN HEADERS (Jan, Feb, Mar…) and you need them as rows in a single Month column. The Power Query transform is:`,
+    explain:`Проблемы с типами — это проблемы с подготовкой данных: исправьте их в Power Query, чтобы модель получала чистый числовой столбец. Обходные пути DAX выполняют повторные вычисления навсегда и нарушают настройки агрегации по умолчанию.`},
+  {id:'q5', domain:'d1', type:'mc', q:`В вашем экспорте названия месяцев указаны в ЗАГОЛОВКАХ СТОЛБЦОВ (январь, февраль, март…), и они нужны вам в виде строк в одном столбце «Месяц». Преобразование Power Query:`,
     choices:[`Pivot`, `Unpivot`, `Transpose`, `Группировать по`],
     correct:1,
-    explain:`Unpivot turns column headers into attribute-value rows — the classic fix for spreadsheet-shaped data. Pivot is the reverse; transpose flips the entire grid.`},
-  {id:'q6', domain:'d1', type:'mc', q:`Combining a Sales table and a Customers table side-by-side by Customer ID in Power Query is a:`,
+    explain:`Unpivot превращает заголовки столбцов в строки со значениями атрибутов — классическое решение для данных в форме электронных таблиц. Pivot — наоборот; транспонирование переворачивает всю сетку.`},
+  {id:'q6', domain:'d1', type:'mc', q:`Объединение таблицы «Продажи» и таблицы «Клиенты» рядом по идентификатору клиента в Power Query — это:`,
     choices:[`Объединиться (присоединиться)`, `Добавить (объединение)`, `Transpose`, `Parameter`],
     correct:0,
-    explain:`Merge = join (adds columns by key match, with a join-kind choice). Append = union (stacks rows of same-shaped tables).`},
-  {id:'q7', domain:'d1', type:'mc', q:`You merge Orders with Returns and must keep EVERY order, matched or not. The join kind is:`,
+    explain:`Merge = join (добавляет столбцы по ключевому совпадению с выбором типа объединения). Append = объединение (складывает строки таблиц одинаковой формы).`},
+  {id:'q7', domain:'d1', type:'mc', q:`Вы объединяете заказы с возвратами и должны сохранить КАЖДЫЙ заказ, совпадающий или нет. Тип соединения:`,
     choices:[`Inner`, `Левый внешний (все из первого, совпадение со второго)`, `Право анти`, `Полный анти`],
     correct:1,
-    explain:`Left outer keeps all rows from the first (Orders) plus matches from the second. Inner would drop orders that were never returned.`},
-  {id:'q8', domain:'d1', type:'mc', q:`Twelve identical monthly CSV files must become one long table. In Power Query, use:`,
+    explain:`Левый внешний сохраняет все строки из первого (Заказы) плюс совпадения из второго. Inner отказывалась от заказов, которые так и не были возвращены.`},
+  {id:'q8', domain:'d1', type:'mc', q:`Двенадцать одинаковых ежемесячных файлов CSV должны стать одной длинной таблицей. В Power Query используйте:`,
     choices:[`Объединить запросы двенадцать раз`, `Добавить запросы (или объединить из папки)`, `Двенадцать отдельных моделей`, `Рассчитываемая таблица только с UNION()`],
     correct:1,
-    explain:`Append stacks same-schema tables into more rows. Connecting to the folder and combining is the same idea with less clicking.`},
-  {id:'q9', domain:'d1', type:'mc', q:`The difference between REFERENCING and DUPLICATING a query:`,
+    explain:`Append объединяет таблицы одной схемы в большее количество строк. Подключение к папке и объединение — та же идея с меньшим количеством кликов.`},
+  {id:'q9', domain:'d1', type:'mc', q:`Разница между ССЫЛКОЙ и ДУБЛИКАЦИЕЙ запроса:`,
     choices:[
       `Они идентичны.`,
       `A duplicate is an independent copy of all steps; a reference starts from the original query's OUTPUT, so upstream changes flow into it.`,
       `Ссылка копирует данные дважды.`,
       `Дубликаты обновляются автоматически; ссылки нет.`],
     correct:1,
-    explain:`Reference = "build on top of that query's result" (one source of truth). Duplicate = "fork it completely." The exam phrases this as which one reflects future changes to the original.`},
-  {id:'q10', domain:'d1', type:'mc', q:`You maintain dev and prod versions of the same report, differing only in the database server they point to. The cleanest Power Query tool:`,
+    explain:`Ссылка = «построить на основе результата этого запроса» (один источник истины). Дубликат = «полностью разветвить». На экзамене это формулируется так: что отражает будущие изменения оригинала.`},
+  {id:'q10', domain:'d1', type:'mc', q:`Вы поддерживаете версии одного и того же отчета для разработчиков и продуктов, отличающиеся только сервером базы данных, на который они указывают. Самый чистый инструмент Power Query:`,
     choices:[`Параметр, содержащий имя сервера, используемое в источнике данных.`, `Два полностью отдельных файла .pbix, редактируемые параллельно.`, `Вычисляемый столбец`, `Закладка`],
     correct:0,
-    explain:`Parameters hold swappable values (server, path, threshold) referenced by queries — change it once, every query follows.`},
-  {id:'q11', domain:'d1', type:'mc', q:`One giant flat sales export should become a proper model. The prepare-the-data move is:`,
+    explain:`Параметры содержат изменяемые значения (сервер, путь, порог), на которые ссылаются запросы — измените их один раз, после чего последует каждый запрос.`},
+  {id:'q11', domain:'d1', type:'mc', q:`Подходящей моделью должен стать один гигантский экспорт плоских продаж. Шаг подготовки данных:`,
     choices:[
       `Загрузите плоский стол как есть; квартира самая быстрая.`,
       `Разделите его на таблицу фактов (транзакции) и таблицы измерений (клиент, продукт, дата) с ключами для связей.`,
       `Удалить все текстовые столбцы.`,
       `Преобразуйте все в DirectQuery.`],
     correct:1,
-    explain:`Fact + dimensions with proper keys is what Domain 2's star schema is built from — and the exam expects you to create those tables in Power Query.`},
-  {id:'q12', domain:'d1', type:'ms', q:`Which are Power Query data-profiling tools? <em>Choose all that apply.</em>`,
+    explain:`Факт + измерения с правильными ключами — это то, из чего построена звездообразная схема Домена 2, и экзамен предполагает, что вы создадите эти таблицы в Power Query.`},
+  {id:'q12', domain:'d1', type:'ms', q:`Что такое инструменты профилирования данных Power Query? <em>Выберите все, что применимо.</em>`,
     choices:[`Качество колонки`, `Распределение столбцов`, `Профиль столбца`, `Анализатор производительности`],
     correct:[0,1,2],
-    explain:`The three profiling views live on Power Query's View ribbon. Performance Analyzer is a report-view tool for finding slow visuals — Domain 2/3 territory.`},
-  {id:'q13', domain:'d1', type:'mc', q:`A column shows scattered <code>Error</code> values after a type change. A reasonable Power Query response:`,
+    explain:`Три представления профилирования находятся на ленте «Представление» Power Query. Анализатор производительности — это инструмент просмотра отчетов для поиска медленных визуальных эффектов — территория домена 2/3.`},
+  {id:'q13', domain:'d1', type:'mc', q:`В столбце показаны разбросанные <code>Error</code> значения после изменения типа. Разумный ответ Power Query:`,
     choices:[
       `Замените или удалите ошибки (Replace Errors/Remove Errors), предварительно проверив, что их вызвало.`,
       `Ошибки исправляются при обновлении.`,
       `Скрыть столбец в отчете.`,
       `Напишите меру ЕСЛИ вокруг каждого визуального элемента.`],
     correct:0,
-    explain:`Import errors are resolved in Power Query — inspect a sample (what text failed to convert?), then Replace Errors with a sentinel/null or remove the rows, deliberately.`},
-  {id:'q14', domain:'d1', type:'mc', q:`Privacy levels and credentials for a data source are managed:`,
+    explain:`Ошибки импорта устраняются в Power Query — проверьте образец (какой текст не удалось преобразовать?), затем замените ошибки на дозорное/нулевое значение или намеренно удалите строки.`},
+  {id:'q14', domain:'d1', type:'mc', q:`Уровни конфиденциальности и учетные данные для источника данных управляются следующим образом:`,
     choices:[`На панели формата каждого визуального элемента`, `В настройках источника данных (Power Query/параметры)`, `Только через службу поддержки Microsoft`, `В реестре Windows`],
     correct:1,
-    explain:`Data source settings hold credentials and privacy levels (Public/Organizational/Private) that govern how sources may be folded/combined.`},
+    explain:`Настройки источника данных содержат учетные данные и уровни конфиденциальности (публичный/организационный/частный), которые определяют, как источники могут быть свернуты/объединены.`},
 
   /* ---------- DOMAIN 2 · Model the Data (14) ---------- */
-  {id:'q15', domain:'d2', type:'mc', q:`The recommended shape for a Power BI data model is:`,
+  {id:'q15', domain:'d2', type:'mc', q:`Рекомендуемая форма модели данных Power BI:`,
     choices:[
       `Один широкий плоский стол.`,
       `Звездчатая схема — центральная таблица фактов, связанная с окружающими таблицами измерений.`,
       `Снежинка с максимально возможным количеством нормализованных уровней.`,
       `Какую бы форму ни использовала исходная система.`],
     correct:1,
-    explain:`Star schemas are the Power BI sweet spot: fast in the columnar engine, friendly to DAX (especially time intelligence), and easy to reason about.`},
-  {id:'q16', domain:'d2', type:'mc', q:`A relationship from a Product dimension to a Sales fact table is typically:`,
+    explain:`Звездообразные схемы — это лучшее место в Power BI: они быстрые в столбчатом движке, дружественны к DAX (особенно с временной аналитикой) и их легко анализировать.`},
+  {id:'q16', domain:'d2', type:'mc', q:`Связь между измерением «Продукт» и таблицей фактов «Продажи» обычно следующая:`,
     choices:[
       `Многие ко многим, перекрестная фильтрация обоих.`,
       `Один ко многим (одна строка «Продукт», несколько строк «Продажи»), одно направление перекрестной фильтрации от измерения к факту.`,
       `Один в один.`,
       `Нет связи — везде используйте LOOKUPVALUE.`],
     correct:1,
-    explain:`One-to-many with single direction is the default and the safe pattern. Bidirectional filtering exists but introduces ambiguity and cost — use it deliberately, not habitually.`},
-  {id:'q17', domain:'d2', type:'mc', q:`Time-intelligence functions like <code>TOTALYTD</code> work reliably when:`,
+    explain:`«Один-ко-многим» с одним направлением — это безопасный шаблон по умолчанию. Двунаправленная фильтрация существует, но вносит двусмысленность и затраты — используйте ее сознательно, а не по привычке.`},
+  {id:'q17', domain:'d2', type:'mc', q:`Функции временного интеллекта, такие как <code>TOTALYTD</code> работать надежно, когда:`,
     choices:[
       `Модель содержит специальную таблицу дат, помеченную как таблица дат, связанную с датами фактов.`,
       `В таблице фактов есть хотя бы один столбец даты, больше ничего не требуется.`,
       `Автоматическая дата/время отключены.`,
       `Вы используете DirectQuery.`],
     correct:0,
-    explain:`A common date dimension — continuous dates, marked as date table — is the backbone of time intelligence. (Auto date/time hidden tables sort of work but don't scale; the exam wants the real date table.)`},
-  {id:'q18', domain:'d2', type:'mc', q:`Your Sales fact has both Order Date and Ship Date, each related to the single Date table. Power BI allows:`,
+    explain:`Общее измерение даты — непрерывные даты, помеченные как таблица дат, — является основой анализа времени. (Автоматические скрытые таблицы даты и времени работают, но не масштабируются; на экзамене нужна реальная таблица дат.)`},
+  {id:'q18', domain:'d2', type:'mc', q:`Ваш факт продаж имеет как дату заказа, так и дату отгрузки, каждая из которых связана с одной таблицей дат. Power BI позволяет:`,
     choices:[
       `Оба отношения активны одновременно.`,
       `Одно АКТИВНОЕ отношение; другой неактивен и используется для каждой меры через USERELATIONSHIP().`,
       `Ни то, ни другое — вам необходимо продублировать таблицу дат.`,
       `Меры принимаются только на дату заказа.`],
     correct:1,
-    explain:`That's the role-playing dimension pattern: one active path, and <code>CALCULATE([Measure], USERELATIONSHIP(Sales[ShipDate], 'Date'[Date]))</code> activates the other when needed. (Duplicating the date table is an alternative pattern, but not required.)`},
-  {id:'q19', domain:'d2', type:'mc', q:`Measure vs. calculated column — the core difference:`,
+    explain:`Это модель измерения ролевой игры: один активный путь и <code>РАСЧЕТ([Мера], USERELATIONSHIP(Продажи[Дата Отгрузки], 'Дата'[Дата]))</code> активирует другой, когда это необходимо. (Дублирование таблицы дат является альтернативным шаблоном, но не обязательным.)`},
+  {id:'q19', domain:'d2', type:'mc', q:`Показатель и вычисляемый столбец — основное отличие:`,
     choices:[
       `Меры вычисляются во время запроса в контексте фильтра визуального элемента и ничего не сохраняют; вычисляемые столбцы вычисляются при обновлении и сохраняются для каждой строки.`,
       `Вычисляемые столбцы всегда работают быстрее.`,
       `Меры не могут использовать РАСЧЕТ.`,
       `Они взаимозаменяемы во всех случаях.`],
     correct:0,
-    explain:`Default to measures. Reach for a calculated column only when the value must exist ON the row — to slice by it, filter it, or relate on it.`},
-  {id:'q20', domain:'d2', type:'mc', q:`You need a "High/Medium/Low" price band on each product row so users can put it in a slicer. Build a:`,
+    explain:`По умолчанию меры. Обращайтесь к вычисляемому столбцу только тогда, когда значение должно существовать В строке — чтобы срезать его, отфильтровать или связать с ним.`},
+  {id:'q20', domain:'d2', type:'mc', q:`Вам нужен ценовой диапазон «Высокий/Средний/Низкий» для каждой строки продукта, чтобы пользователи могли поместить его в срез. Создайте:`,
     choices:[`Measure`, `Вычисляемый столбец (или лучше сделайте это в Power Query)`, `Bookmark`, `Быстрый обзор`],
     correct:1,
-    explain:`Slicers need a column, and columns exist per row — so a calculated column (or the equivalent Power Query conditional column, which is generally preferred) is right. A measure can't sit in a slicer.`},
-  {id:'q21', domain:'d2', type:'mc', q:`What does <code>CALCULATE(SUM(Sales[Amount]), 'Region'[Name] = "West")</code> return in a card visual with no other filters?`,
+    explain:`Срезам нужен столбец, а столбцы существуют для каждой строки, поэтому вычисляемый столбец (или эквивалентный условный столбец Power Query, который обычно является предпочтительным) является правильным. Мера не может находиться в срезе.`},
+  {id:'q21', domain:'d2', type:'mc', q:`Что значит<code>РАСЧЕТ(SUM(Продажи[Сумма]), 'Регион'[Имя] = "Запад")</code> return in a card visual with no other filters?`,
     choices:[
       `Общий объем продаж по всем регионам.`,
       `Общий объем продаж с измененным контекстом фильтра на «Регион = Запад», т. е. продажи Запада.`,
       `Ошибка: CALCULATE принимает один аргумент.`,
       `Количество западных рядов.`],
     correct:1,
-    explain:`CALCULATE evaluates the expression in a modified filter context — its filter arguments overwrite/add to the filters coming from the visual. It's the most important function in DAX.`},
-  {id:'q22', domain:'d2', type:'mc', q:`<code>SUM(Sales[Qty] * Sales[Price])</code> fails. The working version is:`,
+    explain:`CALCULATE оценивает выражение в измененном контексте фильтра — его аргументы фильтра перезаписывают/добавляют фильтры, поступающие из визуального элемента. Это самая важная функция в DAX.`},
+  {id:'q22', domain:'d2', type:'mc', q:`<code>SUM(Продажи[Количество] * Продажи[Цена])</code> терпит неудачу. Рабочая версия:`,
     choices:[
       `SUMX(Продажи, Продажи[Кол-во] * Продажи[Цена])`,
       `SUM(Продажи[Кол-во]) * SUM(Продажи[Цена])`,
       `РАСЧЕТ(Продажи[Количество] * Продажи[Цена])`,
       `COUNT(Продажи[Кол-во] * Продажи[Цена])`],
     correct:0,
-    explain:`SUM only accepts a single column. Row-by-row arithmetic needs an iterator: SUMX walks the table, evaluates the expression per row, then sums. (Multiplying the two SUMs is a classic wrong answer — mathematically different.)`},
-  {id:'q23', domain:'d2', type:'mc', q:`"Same period last year" revenue for comparison. The idiomatic DAX:`,
+    explain:`SUM принимает только один столбец. Для построчной арифметики нужен итератор: SUMX обходит таблицу, вычисляет выражение для каждой строки, затем суммирует. (Перемножение двух СУММ — классический неправильный ответ, математически отличающийся.)`},
+  {id:'q23', domain:'d2', type:'mc', q:`Выручка за аналогичный период прошлого года для сравнения. Идиоматический DAX:`,
     choices:[
       `РАСЧЕТ([Выручка], SAMEPERIODLASTYEAR('Дата'[Дата]))`,
       `[Доход] - 365`,
       `SUMX(ВСЕ(Продажи), [Доход])`,
       `ПРОСМОТРЗНАЧ(Продажи[Сумма], Продажи[Год], 2025)`],
     correct:0,
-    explain:`Time-intelligence functions slide the date filter context; wrapped in CALCULATE they give prior-period versions of any measure. Needs the marked date table.`},
-  {id:'q24', domain:'d2', type:'mc', q:`Account BALANCES summed across accounts but taken as the LAST value across time (not summed across months) is called a:`,
+    explain:`Функции управления временем перемещают контекст фильтра даты; Обернутые в РАСЧЕТ, они дают версии любого показателя за предыдущий период. Нужна отмеченная таблица дат.`},
+  {id:'q24', domain:'d2', type:'mc', q:`ОСТАТКИ на счетах, суммированные по всем счетам, но принимаемые как ПОСЛЕДНИЕ значения во времени (не суммированные по месяцам), называются:`,
     choices:[`Аддитивная мера`, `Полуаддитивная мера`, `Мера соотношения`, `Быстрая мера`],
     correct:1,
-    explain:`Semi-additive: additive over some dimensions (accounts), not over time. Implemented with patterns like CALCULATE(SUM(...), LASTDATE('Date'[Date])).`},
-  {id:'q25', domain:'d2', type:'mc', q:`Which change most reliably SHRINKS an import model and speeds it up?`,
+    explain:`Полуаддитивный: аддитивный по некоторым измерениям (счетам), а не по времени. Реализовано с помощью таких шаблонов, как CALCULATE(SUM(...), LASTDATE('Date'[Date])).`},
+  {id:'q25', domain:'d2', type:'mc', q:`Какое изменение наиболее надежно СОКРАЩАЕТ модель импорта и ускорит ее?`,
     choices:[
       `Удаление столбцов, которые отчет не использует.`,
       `Добавление дополнительных вычисляемых столбцов.`,
       `Включение двунаправленной фильтрации везде.`,
       `Увеличение количества визуальных эффектов на странице.`],
     correct:0,
-    explain:`Power BI's engine is columnar — every column costs memory whether used or not. Trimming columns (then rows/granularity) is optimization move #1; the other three all make things worse.`},
-  {id:'q26', domain:'d2', type:'mc', q:`The tool that shows how long EACH VISUAL and its DAX query take, so you can find the slow one:`,
+    explain:`Механизм Power BI является столбчатым — каждый столбец требует памяти, независимо от того, используется он или нет. Обрезка столбцов (а затем строк/детализации) — это оптимизационный шаг №1; остальные трое только ухудшают ситуацию.`},
+  {id:'q26', domain:'d2', type:'mc', q:`Инструмент, который показывает, сколько времени занимает КАЖДЫЙ VISUAL и его запрос DAX, чтобы вы могли найти медленный:`,
     choices:[`Профиль столбца Power Query`, `Анализатор производительности`, `Метки конфиденциальности`, `Синхронизировать срезы`],
     correct:1,
-    explain:`Performance Analyzer (report view) logs per-visual DAX query, visual display, and other times — and lets you copy the slow query into DAX query view to dissect it.`},
-  {id:'q27', domain:'d2', type:'ms', q:`Which are valid reasons to create a CALCULATED TABLE? <em>Choose all that apply.</em>`,
+    explain:`Анализатор производительности (представление отчета) регистрирует каждый визуальный запрос DAX, визуальное отображение и другие моменты — и позволяет скопировать медленный запрос в представление запроса DAX, чтобы проанализировать его.`},
+  {id:'q27', domain:'d2', type:'ms', q:`Каковы веские причины для создания РАСЧЕТНОЙ ТАБЛИЦЫ? <em>Выберите все, что применимо.</em>`,
     choices:[
       `Создание таблицы дат с помощью CALENDAR()/CALENDARAUTO().`,
       `Материализация отфильтрованной или обобщенной копии другой таблицы для конкретных нужд моделирования.`,
       `Замена всех Power Query — вычисляемые таблицы являются предпочтительным инструментом ETL.`,
       `Создание ролевой копии измерения.`],
     correct:[0,1,3],
-    explain:`Calculated tables (DAX, computed at refresh) fit date tables, summarized/filtered derivatives, and dimension copies. They do NOT replace Power Query — source shaping still belongs in the prepare stage.`},
-  {id:'q28', domain:'d2', type:'mc', q:`Calculation groups are best described as:`,
+    explain:`Вычисляемые таблицы (DAX, вычисляемые при обновлении) соответствуют таблицам дат, суммированным/отфильтрованным производным и копиям измерений. Они НЕ заменяют Power Query — формирование исходного кода все еще находится на этапе подготовки.`},
+  {id:'q28', domain:'d2', type:'mc', q:`Группы вычислений лучше всего описать как:`,
     choices:[
       `Способ применения набора многократно используемых вариантов расчета (с начала года, года к году, в годовом сопоставлении%) ко МНОГИМ показателям без написания каждой комбинации вручную.`,
       `Папка для организации мер.`,
       `Функция безопасности.`,
       `Шаг группировки Power Query.`],
     correct:0,
-    explain:`One calculation group with items like YTD / PY / YoY% multiplies across all your base measures — instead of authoring measures × variations separately.`},
+    explain:`Одна группа вычислений с такими элементами, как YTD / PY / YoY%, умножается на все ваши базовые показатели — вместо того, чтобы создавать показатели × варианты отдельно.`},
 
   /* ---------- DOMAIN 3 · Visualize & Analyze the Data (13) ---------- */
-  {id:'q29', domain:'d3', type:'mc', q:`Monthly revenue trend for the last 3 years. The right visual:`,
+  {id:'q29', domain:'d3', type:'mc', q:`Ежемесячная динамика выручки за последние 3 года. Правильный визуал:`,
     choices:[`Круговая диаграмма`, `Линейный график`, `Кольцевая диаграмма`, `Card`],
     correct:1,
-    explain:`Time on the axis, trend as slope → line. Same rule in every tool.`},
-  {id:'q30', domain:'d3', type:'mc', q:`Finance needs pixel-perfect, multi-page, print-ready invoices generated from data. Choose:`,
+    explain:`Время на оси, тренд как наклон → линия. То же правило в каждом инструменте.`},
+  {id:'q30', domain:'d3', type:'mc', q:`Финансам нужны точные, многостраничные, готовые к печати счета, созданные на основе данных. Выбирать:`,
     choices:[`Стандартный интерактивный отчет Power BI.`, `Отчет с разбивкой на страницы`, `Панель управления`, `Система показателей`],
     correct:1,
-    explain:`"Formatted for print/PDF, many pages, operational" is the paginated-report signature (Report Builder / paginated in Fabric). Interactive reports are for exploration, not statements.`},
-  {id:'q31', domain:'d3', type:'mc', q:`The difference between a slicer and the Filters pane:`,
+    explain:`«Отформатирован для печати/PDF, много страниц, работоспособен» — это подпись отчета с разбивкой на страницы (построитель отчетов/с разбивкой на страницы в Fabric). Интерактивные отчеты предназначены для исследования, а не для заявлений.`},
+  {id:'q31', domain:'d3', type:'mc', q:`Разница между срезом и панелью «Фильтры»:`,
     choices:[
       `Нет — два имени для одной функции.`,
       `Срез — это визуальный элемент на холсте, который видят и нажимают потребители; Панель «Фильтры» применяет фильтры в области визуального элемента, страницы или отчета и может быть настроена или скрыта.`,
       `Срезы работают только по датам.`,
       `Панель «Фильтры» предназначена только для личного использования авторами отчетов и никогда не влияет на потребителей.`],
     correct:1,
-    explain:`Slicer = visible interactive control on the canvas. Filters pane = scoped filter list beside the canvas. They overlap in power; they differ in placement and experience.`},
-  {id:'q32', domain:'d3', type:'mc', q:`By default, clicking a bar in one visual makes the other visuals on the page:`,
+    explain:`Слайсер = видимый интерактивный элемент управления на холсте. Панель «Фильтры» = список фильтров с ограниченной областью действия рядом с холстом. Они пересекаются во власти; они различаются по месту работы и опыту.`},
+  {id:'q32', domain:'d3', type:'mc', q:`По умолчанию нажатие панели в одном визуальном элементе приводит к появлению на странице других визуальных элементов:`,
     choices:[
       `Перекрестное выделение (связанные части выделены, остальные затемнены).`,
       `Удалите их данные.`,
       `Полностью игнорируйте щелчок.`,
       `Экспорт в Excel.`],
     correct:0,
-    explain:`By default a click both cross-filters and cross-highlights, and which one you get depends on the target: line charts, scatter charts and maps can only be cross-filtered, never highlighted. Edit interactions (Format menu) sets any pair to filter, highlight or none.`},
-  {id:'q33', domain:'d3', type:'mc', q:`A user right-clicks a product in a summary visual and jumps to a "Product Detail" page already filtered to that product. This is:`,
+    explain:`По умолчанию щелчок выполняет как перекрестную фильтрацию, так и перекрестное выделение, и какой из них вы получите, зависит от цели: линейные диаграммы, точечные диаграммы и карты могут подвергаться только перекрестной фильтрации, но не выделены. Редактирование взаимодействий (меню «Формат») позволяет фильтровать, выделять или не выделять любую пару.`},
+  {id:'q33', domain:'d3', type:'mc', q:`Пользователь щелкает правой кнопкой мыши продукт в сводном визуальном представлении и переходит на страницу «Сведения о продукте», уже отфильтрованную по этому продукту. Это:`,
     choices:[`Детализация`, `Drillthrough`, `Закладка`, `Слайсер синхронизации`],
     correct:1,
-    explain:`Drillthrough = navigate to a target page carrying the clicked context as a filter. Drill down would expand a hierarchy inside the same visual.`},
-  {id:'q34', domain:'d3', type:'mc', q:`Bookmarks in Power BI capture:`,
+    explain:`Детализация = переход на целевую страницу, содержащую выбранный контекст в качестве фильтра. Детализация расширит иерархию внутри одного и того же визуального элемента.`},
+  {id:'q34', domain:'d3', type:'mc', q:`Закладки в захвате Power BI:`,
     choices:[
       `Сохраненное состояние страницы отчета — фильтры, выбор срезов, визуальная видимость, сортировка — можно повторно использовать для кнопок навигации и сброса.`,
       `Резервная копия файла .pbix.`,
       `Закладки браузера пользователя.`,
       `Только цветовая тема.`],
     correct:0,
-    explain:`Bookmarks + buttons + the Selection pane are the toolkit for guided navigation, "clear all filters" buttons, and toggling visual groups.`},
-  {id:'q35', domain:'d3', type:'mc', q:`Sales spiked in March and a stakeholder asks "why?" The built-in feature that decomposes an increase between two points:`,
+    explain:`Закладки + кнопки + панель выбора — это набор инструментов для управляемой навигации, кнопок «очистить все фильтры» и переключения визуальных групп.`},
+  {id:'q35', domain:'d3', type:'mc', q:`Продажи резко выросли в марте, и заинтересованная сторона спрашивает: «Почему?» Встроенная функция, которая разлагает прибавку между двумя точками:`,
     choices:[
       `Анализ ▸ Объясните увеличение (щелкните правой кнопкой мыши точку данных).`,
       `Метки чувствительности.`,
       `Синхронизировать слайсеры.`,
       `Мобильная планировка.`],
     correct:0,
-    explain:`The Analyze feature runs quick ML over the change and proposes drivers. For a fuller interactive breakdown, the Decomposition tree AI visual does it manually.`},
-  {id:'q36', domain:'d3', type:'ms', q:`Which are AI visuals in Power BI? <em>Choose all that apply.</em>`,
+    explain:`Функция «Анализ» быстро выполняет машинное обучение над изменениями и предлагает драйверы. Для более полной интерактивной разбивки визуальный элемент ИИ дерева декомпозиции делает это вручную.`},
+  {id:'q36', domain:'d3', type:'ms', q:`Что такое визуальные эффекты искусственного интеллекта в Power BI? <em>Выберите все, что применимо.</em>`,
     choices:[`Ключевые влиятельные лица`, `Дерево разложения`, `Q&A`, `Столбчатая диаграмма с накоплением`],
     correct:[0,1,2],
-    explain:`Key influencers (what drives a metric), decomposition tree (interactive root-cause breakdown), and Q&A (natural-language questions) are the AI visuals. A stacked column is just a chart.`},
-  {id:'q37', domain:'d3', type:'mc', q:`To flag every table cell red when margin falls below 10%, use:`,
+    explain:`Ключевые факторы влияния (что влияет на метрику), дерево декомпозиции (интерактивное разбиение первопричин) и вопросы и ответы (вопросы на естественном языке) — это визуальные эффекты ИИ. Столбец с накоплением — это просто диаграмма.`},
+  {id:'q37', domain:'d3', type:'mc', q:`Чтобы пометить каждую ячейку таблицы красным цветом, когда маржа падает ниже 10%, используйте:`,
     choices:[`Условное форматирование (правила или значение поля)`, `Расчетная таблица`, `Редактировать взаимодействия`, `Шлюз`],
     correct:0,
-    explain:`Conditional formatting drives background/font color, data bars, and icons from rules or a measure. No extra visuals needed.`},
-  {id:'q38', domain:'d3', type:'mc', q:`Forecasting with a shaded confidence band can be added to which visual, from which pane?`,
+    explain:`Условное форматирование определяет цвет фона/шрифта, гистограммы и значки из правил или показателей. Никаких дополнительных визуальных эффектов не требуется.`},
+  {id:'q38', domain:'d3', type:'mc', q:`К какому визуальному элементу и на какой панели можно добавить прогноз с заштрихованной доверительной полосой?`,
     choices:[
       `Линейный график на панели «Аналитика».`,
       `Круговая диаграмма на панели «Формат».`,
       `Карточка на панели «Фильтры».`,
       `Таблица из Power Query.`],
     correct:0,
-    explain:`The Analytics pane adds reference lines, error bars, trend lines, anomaly detection, and forecasts — the forecast works on line charts with a date axis. (The Forecasting Kit covers what those bands mean.)`},
-  {id:'q39', domain:'d3', type:'mc', q:`One Region slicer should control pages 1, 2, and 3 simultaneously. Use:`,
+    explain:`На панели «Аналитика» добавляются опорные линии, полосы ошибок, линии тренда, обнаружение аномалий и прогнозы — прогноз работает на линейных диаграммах с осью дат. (В «Комплекте прогнозов» объясняется, что означают эти полосы.)`},
+  {id:'q39', domain:'d3', type:'mc', q:`Один срез региона должен одновременно управлять страницами 1, 2 и 3. Использовать:`,
     choices:[`Три несвязанных слайсера`, `Синхронизировать срезы`, `Отчет с разбивкой на страницы`, `безопасность на уровне строк`],
     correct:1,
-    explain:`View ▸ Sync slicers lets one slicer apply (and optionally show) across chosen pages.`},
-  {id:'q40', domain:'d3', type:'mc', q:`Numeric customer ages should become "under 25 / 25–40 / over 40" buckets for a bar chart, without DAX. Use:`,
+    explain:`Просмотр ▸ Синхронизировать срезы позволяет применять (и при необходимости отображать) один срез на выбранных страницах.`},
+  {id:'q40', domain:'d3', type:'mc', q:`Числовой возраст клиентов должен быть преобразован в сегменты «до 25/25–40/более 40» для гистограммы без DAX. Использовать:`,
     choices:[`Группировка/биннинг по полю (Новая группа)`, `Шлюз`, `Аудитория приложения`, `Анализатор производительности`],
     correct:0,
-    explain:`Right-click a field → New group: bins for equal-width numeric buckets, groups for hand-picked members — the report-side sibling of Tableau's groups and bins.`},
-  {id:'q41', domain:'d3', type:'mc', q:`To make a report usable on phones, you:`,
+    explain:`Щелкните поле правой кнопкой мыши → Новая группа: ячейки для числовых сегментов одинаковой ширины, группы для выбранных вручную элементов — родственный брат групп и ячеек Tableau на стороне отчета.`},
+  {id:'q41', domain:'d3', type:'mc', q:`Чтобы сделать отчет доступным для использования на телефонах, вы:`,
     choices:[
       `Создайте мобильный макет для каждой страницы (отдельное портретное расположение одних и тех же визуальных элементов).`,
       `Ничего — отчеты об автоперекомпоновке отлично.`,
       `Публикуйте дважды.`,
       `Уменьшите объем данных.`],
     correct:0,
-    explain:`The mobile layout view lets you arrange (a subset of) each page's visuals in a phone-shaped canvas — same report, second layout.`},
+    explain:`Представление мобильного макета позволяет упорядочить (подмножество) визуальных элементов каждой страницы на холсте в форме телефона — тот же отчет, второй макет.`},
 
   /* ---------- DOMAIN 4 · Manage & Secure Power BI (9) ---------- */
-  {id:'q42', domain:'d4', type:'mc', q:`The standard path from building to broad consumption is:`,
+  {id:'q42', domain:'d4', type:'mc', q:`Стандартный путь от строительства к широкому потреблению таков:`,
     choices:[
       `Рабочий стол → публикация в рабочей области → распространение через приложение.`,
       `Рабочий стол → отправьте .pbix всем по электронной почте.`,
       `Сервис → экспорт на рабочий стол.`,
       `Рабочая область → шлюз → Рабочий стол.`],
     correct:0,
-    explain:`Build in Desktop, publish into a Service workspace (the team's working area), then package selected content as an app for consumers.`},
-  {id:'q43', domain:'d4', type:'mc', q:`A teammate must EDIT reports in a workspace but should NOT manage who else has access. The minimal role:`,
+    explain:`Создайте на рабочем столе, опубликуйте в рабочей области службы (рабочей области группы), а затем упакуйте выбранный контент в приложение для потребителей.`},
+  {id:'q43', domain:'d4', type:'mc', q:`Товарищ по команде должен РЕДАКТИРОВАТЬ отчеты в рабочей области, но НЕ должен управлять тем, кто еще имеет доступ. Минимальная роль:`,
     choices:[`Admin`, `Member`, `Contributor`, `Viewer`],
     correct:2,
-    explain:`Contributor can create/edit content but doesn't manage workspace access (Admin) or publish the app (Member+). An Admin can delegate app UPDATES to Contributors with the "Allow contributors to update the app" setting; publishing still isn't theirs. Viewer is read-only. Least-privilege questions want the lowest role that still does the job.`},
-  {id:'q44', domain:'d4', type:'mc', q:`A Power BI DASHBOARD (as opposed to a report) is:`,
+    explain:`Участник может создавать/редактировать контент, но не управляет доступом к рабочей области (Администратор) и не публикует приложение (Участник+). Администратор может делегировать ОБНОВЛЕНИЯ приложения участникам с помощью настройки «Разрешить участникам обновлять приложение»; издательское дело все еще не принадлежит им. Программа просмотра доступна только для чтения. Вопросы с наименьшими привилегиями требуют самой низкой роли, которая по-прежнему выполняет свою работу.`},
+  {id:'q44', domain:'d4', type:'mc', q:`ПАНЕЛЬ ИНФОРМАЦИИ Power BI (в отличие от отчета) — это:`,
     choices:[
       `Любая страница любого отчета.`,
       `Коллекция плиток на одном холсте, ЗАКРЕПЛЕННЫХ из отчетов (и других источников), созданных в Сервисе.`,
@@ -731,54 +731,54 @@ const QUESTIONS = [
       `То же, что и постраничный отчет.`],
     correct:1,
     explain:`Dashboards are a Service-side canvas of pinned tiles, often aggregating visuals from several reports; clicking a tile goes to its source report. Data alerts live on dashboard tiles.`},
-  {id:'q45', domain:'d4', type:'mc', q:`Your published dataset imports from a SQL Server running in your office. For scheduled refresh in the Service to reach it, you need:`,
+  {id:'q45', domain:'d4', type:'mc', q:`Опубликованный набор данных импортируется с SQL-сервера, работающего в вашем офисе. Для планового обновления в Сервисе необходимо:`,
     choices:[
       `Ничего лишнего — облако всегда видит ваш офис.`,
       `Локальный шлюз данных.`,
       `Лицензия на постраничный отчет.`,
       `Двунаправленные отношения.`],
     correct:1,
-    explain:`The gateway is the secure bridge between the cloud Service and on-premises sources. Pure-cloud sources (Azure SQL, SharePoint Online) don't need one — the exam tests exactly this distinction.`},
-  {id:'q46', domain:'d4', type:'mc', q:`Row-level security roles are DEFINED and MEMBERS ASSIGNED, respectively, in:`,
+    explain:`Шлюз — это безопасный мост между облачной службой и локальными источниками. Источникам чистого облака (Azure SQL, SharePoint Online) он не нужен — экзамен проверяет именно это различие.`},
+  {id:'q46', domain:'d4', type:'mc', q:`Роли безопасности на уровне строк ОПРЕДЕЛЕНЫ и НАЗНАЧЕНЫ ЧЛЕНОВ соответственно в:`,
     choices:[
       `Оба на рабочем столе.`,
       `Определено на рабочем столе (управление ролями, правила DAX); члены, назначенные в Сервисе (набор данных ▸ Безопасность).`,
       `Оба в Сервисе.`,
       `Определяется каждым зрителем.`],
     correct:1,
-    explain:`Author the DAX filter rules in Desktop, publish, then map users/groups to roles in the Service. "View as" tests the rules before publishing.`},
-  {id:'q47', domain:'d4', type:'mc', q:`RLS is configured, yet a workspace Member still sees ALL rows. Why?`,
+    explain:`Создайте правила фильтра DAX в Desktop, опубликуйте, а затем сопоставьте пользователей/группы с ролями в Службе. «Просмотреть как» проверяет правила перед публикацией.`},
+  {id:'q47', domain:'d4', type:'mc', q:`RLS настроен, но участник рабочей области по-прежнему видит ВСЕ строки. Почему?`,
     choices:[
       `Ошибка обновления.`,
       `Роли редактирования рабочей области (Администратор/Участник/Участник) обходят RLS — это применяется к зрителям и потребителям приложений.`,
       `RLS работает только на рабочем столе.`,
       `Шлюз разделил роли.`],
     correct:1,
-    explain:`By design: people with edit rights on the data see the data. Give report consumers the Viewer role (or app access) for RLS to bite.`},
-  {id:'q48', domain:'d4', type:'mc', q:`An email should fire automatically when the "Open tickets" number crosses 100. Set up a:`,
+    explain:`По замыслу: люди с правами на редактирование данных видят данные. Предоставьте потребителям отчетов роль наблюдателя (или доступ к приложению), чтобы RLS мог их использовать.`},
+  {id:'q48', domain:'d4', type:'mc', q:`Электронное письмо должно отправляться автоматически, когда число открытых заявок превышает 100. Настройте:`,
     choices:[
       `Оповещение о данных на плитке информационной панели (карта/датчик/ключевой показатель эффективности).`,
       `Закладка.`,
       `Страница детализации.`,
       `Группа расчета.`],
     correct:0,
-    explain:`Data alerts watch dashboard tiles of numeric visuals and notify on threshold crossings. Subscriptions, by contrast, send scheduled snapshots regardless of value.`},
-  {id:'q49', domain:'d4', type:'ms', q:`Which statements about endorsement and labels are true? <em>Choose all that apply.</em>`,
+    explain:`Оповещения о данных просматривают плитки информационной панели с числовыми изображениями и уведомляют о пересечении пороговых значений. Подписки, напротив, отправляют запланированные снимки независимо от их стоимости.`},
+  {id:'q49', domain:'d4', type:'ms', q:`Какие утверждения об одобрении и маркировке верны? <em>Выберите все, что применимо.</em>`,
     choices:[
       `«Продвигается» — это самостоятельная поддержка владельцев контента.`,
       `«Сертифицированный» требует наличия уполномоченного рецензента и является более сильным подтверждением.`,
       `Метки конфиденциальности классифицируют содержимое и сохраняются при экспорте.`,
       `Подтверждение автоматически предоставляет доступ всем участникам клиента.`],
     correct:[0,1,2],
-    explain:`Promoted = "we think it's good"; Certified = centrally vetted; sensitivity labels (Purview) travel with exported data. Endorsement signals trust — it never changes permissions.`},
-  {id:'q50', domain:'d4', type:'mc', q:`After publishing an updated .pbix to the workspace, consumers of the workspace's APP still see the old version. Because:`,
+    explain:`Продвигается = «мы думаем, что это хорошо»; Сертифицировано = централизованно проверено; метки конфиденциальности (Purview) перемещаются вместе с экспортированными данными. Одобрение сигнализирует о доверии — оно никогда не меняет разрешения.`},
+  {id:'q50', domain:'d4', type:'mc', q:`После публикации обновленного PBIX-файла в рабочей области потребители приложения рабочей области по-прежнему видят старую версию. Потому что:`,
     choices:[
       `Служба не работает.`,
       `Приложение должно быть ОБНОВЛЕНО (переиздано), прежде чем изменения в рабочей области дойдут до потребителей приложения.`,
       `Приложения никогда не могут быть изменены.`,
       `РЛС их блокирует.`],
     correct:1,
-    explain:`Apps are a packaged snapshot of workspace content. Publishing to the workspace updates the workspace; pressing "Update app" pushes it to the app audience.`}
+    explain:`Приложения представляют собой упакованный снимок содержимого рабочей области. Публикация в рабочей области обновляет рабочую область; нажатие «Обновить приложение» отправляет его аудитории приложения.`}
 ];
 
 /* ============== RENDER ============== */
@@ -836,17 +836,17 @@ function renderHome(){
   const inProgress = state.examStart !== null && !state.submitted;
   return `
     <div class="hero">
-      <div class="hero-eyebrow">Certification prep · Microsoft PL-300</div>
+      <div class="hero-eyebrow">Подготовка к сертификации · Microsoft PL-300</div>
       <h1>Power BI <span>Certification</span> Prep</h1>
-      <p>Prep for the Microsoft Power BI Data Analyst Associate (PL-300): a study guide for all four blueprint domains, plus a full-length practice exam weighted to the official skills outline. The PL-300 is widely cited as the highest-ROI certification for entry-level analyst roles.</p>
+      <p>Подготовка к программе Microsoft Power BI Data Analyst Associate (PL-300): учебное пособие по всем четырем предметным областям, а также полноценный практический экзамен, адаптированный к официальному описанию навыков. PL-300 широко известен как сертификат с самой высокой рентабельностью инвестиций для должностей аналитиков начального уровня.</p>
     </div>
 
     <div class="facts-grid">
       <div class="fact-chip"><span class="chip-num">40–60</span><span class="chip-label">Questions</span></div>
-      <div class="fact-chip"><span class="chip-num">100 min</span><span class="chip-label">Time limit</span></div>
-      <div class="fact-chip"><span class="chip-num">700</span><span class="chip-label">Passing scaled score</span></div>
-      <div class="fact-chip"><span class="chip-num">$165</span><span class="chip-label">Exam fee (US)</span></div>
-      <div class="fact-chip"><span class="chip-num">1 yr</span><span class="chip-label">Renew free online</span></div>
+      <div class="fact-chip"><span class="chip-num">100 мин.</span><span class="chip-label">Ограничение по времени</span></div>
+      <div class="fact-chip"><span class="chip-num">700</span><span class="chip-label">Проходной балл по шкале</span></div>
+      <div class="fact-chip"><span class="chip-num">$165</span><span class="chip-label">Стоимость экзамена (США)</span></div>
+      <div class="fact-chip"><span class="chip-num">1 год</span><span class="chip-label">Продлить бесплатно онлайн</span></div>
       <div class="fact-chip"><span class="chip-num">0</span><span class="chip-label">Prerequisites</span></div>
     </div>
 
@@ -855,7 +855,7 @@ function renderHome(){
         const d = DOMAIN_INFO[k];
         return `<div class="dw-row">
           <span class="dw-label" style="color:${d.color}">${d.label} · ${d.name}</span>
-          <span class="dw-bar"><span class="dw-fill" style="width:${d.mid}%;background:${d.color};display:block"></span></span>
+          <span class="dw-bar"><span class="dw-fill" style="width:${d.mid}%;background:${d.color};дисплей:блокировать"></span></span>
           <span class="dw-pct" style="color:${d.color}">${d.weight}</span>
         </div>`;
       }).join('')}
@@ -864,28 +864,28 @@ function renderHome(){
     <div class="cta-row">
       <a class="cta-card" onclick="setView('study')">
         <div class="cta-icon"><i data-lucide="book-open"></i></div>
-        <div class="cta-title">Study the blueprint</div>
-        <div class="cta-desc">The four exam domains, distilled: Power Query vs. DAX territory, the star-schema and CALCULATE mental models, the Service-side flow — and the misconception the exam loves in each domain.</div>
-        <div class="cta-link">Open study guide →</div>
+        <div class="cta-title">Изучите план</div>
+        <div class="cta-desc">Четыре предмета экзамена вкратце: Power Query и территория DAX, звездная схема и ментальные модели CALCULATE, поток на стороне службы — и заблуждение, которое экзамен любит в каждом домене.</div>
+        <div class="cta-link">Открыть учебное пособие →</div>
       </a>
       <a class="cta-card primary" onclick="setView('exam')">
         <div class="cta-icon"><i data-lucide="clipboard-list"></i></div>
-        <div class="cta-title">${state.submitted ? 'Review your exam' : (inProgress ? 'Resume the practice exam' : 'Take the practice exam')}</div>
-        <div class="cta-desc">${state.submitted ? `You scored ${calcScore().total}/${total}. Reopen to review the answers, or retake it.` : `50 questions, 100-minute timer, weighted to the official outline — multiple-choice and multiple-response. ${answered ? `You've answered ${answered}/${total}.` : ''}`}</div>
-        <div class="cta-link">${state.submitted ? 'Review results →' : (inProgress ? 'Continue →' : 'Start →')}</div>
+        <div class="cta-title">${state.submitted ? "Проверьте свой экзамен" : (inProgress ? "Возобновить пробный экзамен" : "Сдать практический экзамен")}</div>
+        <div class="cta-desc">${state.submitted ? `Вы забили ${calcScore().total}/${total}. Откройте повторно, чтобы просмотреть ответы, или повторите попытку.` : `50 вопросов, 100-минутный таймер, взвешенные по официальному плану — множественный выбор и множественный ответ. ${answered ? `Вы ответили ${answered}/${total}.` : ''}`}</div>
+        <div class="cta-link">${state.submitted ? "Посмотреть результаты →" : (inProgress ? "Продолжить →" : 'Start →')}</div>
       </a>
     </div>
 
     <div class="method-callout">
-      <strong>🗣️ Say it out loud.</strong> The PL-300 is scenario-heavy: "a company needs X, what should you do?" If you can narrate the pipeline — "clean it in Power Query, model it as a star, measure it with DAX, publish it to a workspace" — you can place any scenario in the right stage. That's the same method the Power BI Kit teaches.
+      <strong>🗣️ Скажите это вслух.</strong> PL-300 насыщен сценариями: «Компании нужен X, что вам делать?» Если вы можете рассказать о конвейере — «очистить его в Power Query, смоделировать в виде звезды, измерить с помощью DAX, опубликовать в рабочей области» — вы сможете поместить любой сценарий на правильную стадию. Этому же методу учит Power BI Kit.
     </div>
 
     ${needsReviewCount()>0?`<div class="method-callout" style="border-left-color:var(--warn)">
-      <strong>🔁 ${needsReviewCount()} concept${needsReviewCount()===1?'':'s'} flagged for review.</strong> You rated ${needsReviewCount()===1?'it':'them'} "Not yet" or "Almost" in the study guide — <a href="#" onclick="openReview();return false;">filter to just those →</a>
+      <strong>🔁 ${needsReviewCount()} concept${needsReviewCount()===1?'':'s'} отмечено для проверки.</strong> Вы оценили ${needsReviewCount()===1?'it':'them'} "Not yet" or "Almost" in the study guide — <a href="#" onclick="openReview();return false;">filter to just those →</a>
     </div>`:''}
 
     <div class="method-callout" style="border-left-color:var(--c-d2)">
-      <strong>New to these topics?</strong> The <a href="../powerbi/">Power BI Kit</a> teaches Power Query, modeling, DAX, and dashboards as interactive lessons. Do the lessons first, then come back here to drill the exam. Note the real PL-300 also includes case studies and occasional drag-and-drop/build-list formats this drill doesn't simulate.
+      <strong>Впервые в этих темах?</strong> The <a href="../powerbi/">Комплект Power BI</a> преподает Power Query, моделирование, DAX и информационные панели в качестве интерактивных уроков. Сначала сделай уроки, а потом возвращайся сюда, чтобы подготовиться к экзамену. Обратите внимание, что настоящий PL-300 также включает тематические исследования и отдельные форматы перетаскивания/построения списков, которые это упражнение не имитирует.
     </div>
   `;
 }
@@ -893,11 +893,11 @@ function renderHome(){
 function renderStudy(){
   return `
     <div class="study-intro">
-      <p><strong>The blueprint, one domain at a time.</strong> Click a domain to expand. Every bullet maps to the official skills outline (April 2026 version); the yellow callouts are the misconceptions the exam is written to catch.</p>
-      <p>Percentage ranges are the official domain weights — spend your study time proportionally.</p>
+      <p><strong>Схема, по одному домену за раз.</strong> Нажмите на домен, чтобы развернуть его. Каждый пункт соответствует официальному описанию навыков (версия от апреля 2026 г.); желтые выноски — это заблуждения, для выявления которых написан экзамен.</p>
+      <p>Процентные диапазоны являются официальными весами доменов — тратьте время на обучение пропорционально.</p>
     </div>
-    <button class="expand-all" onclick="toggleAllStudy()">${allStudyOpen() ? 'Collapse all' : 'Expand all'}</button>
-    <button class="expand-all ${state.reviewFilter?'rf-on':''}" onclick="toggleReviewFilter()">${state.reviewFilter ? `Showing needs-review only (${needsReviewCount()}) — show all` : `Filter: needs review (${needsReviewCount()})`}</button>
+    <button class="expand-all" onclick="toggleAllStudy()">${allStudyOpen() ? "Свернуть все" : "Развернуть все"}</button>
+    <button class="развернуть-все ${state.reviewFilter?'rf-on':''}" onclick="toggleReviewFilter()">${state.reviewFilter ? `Показан только обзор потребностей (${needsReviewCount()}) — показать все` : `Фильтр: требует проверки (${needsReviewCount()})`}</button>
     ${STUDY.map(s=>{
       const d = DOMAIN_INFO[s.key];
       const vis = s.must.map((m,i)=>({m,i})).filter(x=>{
@@ -908,17 +908,17 @@ function renderStudy(){
       if(state.reviewFilter && vis.length===0) return '';
       const open = state.reviewFilter ? true : !!state.openSections[s.key];
       return `
-        <div class="study-section ${open?'open':''}" id="study-${s.key}">
+        <div class="study-section" ${open?'open':''}" id="исследование-${s.key}">
           <div class="study-head" onclick="toggleStudy('${s.key}')">
             <span class="study-pill" style="color:${d.color}">${d.label} · ${d.weight}</span>
             <span class="study-title">${s.title}</span>
             <span class="study-toggle">▸</span>
           </div>
           <div class="study-body">
-            ${state.reviewFilter?'':`<div class="study-viz"><div class="sv-cap"><i data-lucide="monitor"></i> See it</div>${s.viz}</div>`}
+            ${state.reviewFilter?'':`<div class="study-viz"><div class="sv-cap"><i data-lucide="monitor"></i> Посмотри это</div>${s.viz}</div>`}
             <ul>${vis.map(x=>studyItemHTML(s.key,x.i,x.m)).join('')}</ul>
             ${state.reviewFilter?'':`<div class="miscon">${s.miscon}</div>`}
-            <a class="study-link" href="${d.kitPath}">${d.hint} Open the Power BI Kit →</a>
+            <a class="study-link" href="${d.kitPath}">${d.hint}Откройте комплект Power BI →</a>
           </div>
         </div>
       `;
@@ -930,10 +930,10 @@ function renderStudy(){
 function studyItemHTML(key,i,m){
   const id = key+'-'+i;
   const lvl = state.conf[id];
-  const chip = (l,txt)=>`<button class="conf-chip ${lvl===l?('on '+l):''}" onclick="rateConf('${id}','${l}')">${txt}</button>`;
+  const chip = (l,txt)=>`<button class="conf-чип ${lvl===l?('on '+l):''}" onclick="rateConf('${id}','${l}')">${txt}</button>`;
   const href = LESSON_LINKS[id];
-  const link = href ? `<a class="lesson-link" href="${href}">Open the lesson →</a>` : '';
-  return `<li>${m}<div class="li-foot"><span class="conf-chips">${chip('low','✗ Not yet')}${chip('mid','~ Almost')}${chip('high','✓ Have it')}</span>${link}</div></li>`;
+  const link = href ? `<a class="ссылка-урока" href="${href}">Открыть урок →</a>` : '';
+  return `<li>${m}<div class="li-foot"><span class="conf-chips">${chip('low',"✗ Пока нет")}${chip('mid','~ Almost')}${chip('high',"✓ Иметь это")}</span>${link}</div></li>`;
 }
 function rateConf(id,lvl){
   if(state.conf[id]===lvl) delete state.conf[id];
@@ -999,15 +999,15 @@ function renderExam(){
   if(state.examStart === null && !state.submitted){
     return `
       <div class="start-card">
-        <h2>Practice Exam · 50 questions</h2>
-        <p>Weighted to the official PL-300 outline: 14 Prepare · 14 Model · 13 Visualize &amp; Analyze · 9 Manage &amp; Secure. Includes multiple-response questions ("choose all that apply") with exact-match grading — no partial credit, like the real exam. Answers grade all at once when you submit.</p>
+        <h2>Практический экзамен · 50 вопросов</h2>
+        <p>Соответствует официальной схеме PL-300: 14 Подготовка · 14 Моделирование · 13 Визуализация и анализ · 9 Управление и безопасность. Включает вопросы с несколькими ответами («выберите все подходящие») с точным соответствием оценок — без частичного зачета, как на настоящем экзамене. Ответы оцениваются сразу при отправке.</p>
         <div class="start-actions">
-          <button class="btn btn-primary" onclick="startExam(true)">Start timed — 100:00 ⏱</button>
-          <button class="btn btn-ghost" onclick="startExam(false)">Start untimed practice</button>
+          <button class="btn btn-primary" onclick="startExam(true)">Время начала — 100:00 ⏱</button>
+          <button class="btn btn-ghost" onclick="startExam(false)">Начать вневременную практику</button>
         </div>
       </div>
       <div class="method-callout">
-        <strong>Exam-day pacing:</strong> 100 minutes for 40–60 questions leaves roughly 2 minutes each, but case studies eat time — bank minutes on the quick recall questions. Answer everything; there's no penalty for guessing.
+        <strong>Темп экзаменационного дня:</strong> На 100 минут на 40–60 вопросов уходит примерно по 2 минуты на каждый, но тематические исследования съедают время — тратьте минуты на вопросы для быстрого напоминания. Ответьте на все; за угадывание нет штрафа.
       </div>
     `;
   }
@@ -1018,17 +1018,17 @@ function renderExam(){
   const left = timeLeftMs();
 
   let topBtn;
-  if(state.submitted) topBtn = `<button class="exam-submit-btn" onclick="setView('results')">View results →</button>`;
-  else topBtn = `<button class="exam-submit-btn" onclick="submitExam()" ${answered===0?'disabled':''}>${answered===total?'Submit exam':'Submit ('+answered+'/'+total+' answered)'}</button>`;
+  if(state.submitted) topBtn = `<button class="exam-submit-btn" onclick="setView('results')">Посмотреть результаты →</button>`;
+  else topBtn = `<button class="exam-submit-btn" onclick="submitExam()" ${answered===0?'disabled':''}>${answered===total?"Сдать экзамен":'Submit ('+answered+'/'+total+' answered)'}</button>`;
 
   let html = `
     <div class="exam-header">
       <div class="exam-header-row">
         <div class="exam-title-block">
-          <div class="exam-mini-title">PL-300 practice exam${state.timed===false?' · untimed':''}</div>
+          <div class="exam-mini-title">Практический экзамен PL-300${state.timed===false?" · безвременный":''}</div>
           <div class="exam-q-progress"><span>${answered}</span> of ${total} answered</div>
         </div>
-        ${(!state.submitted && state.timed && left!==null) ? `<span class="exam-timer${left<10*60000?' low':''}" id="examTimer">${fmtTime(left)}</span>` : ''}
+        ${(!state.submitted && state.timed && left!==null) ? `<span class="экзамен-таймер${left<10*60000?' low':''}" id="examTimer">${fmtTime(left)}</span>` : ''}
         ${topBtn}
       </div>
       <div class="exam-progress-bar"><div class="exam-progress-fill" style="width:${pct}%"></div></div>
@@ -1050,7 +1050,7 @@ function renderExam(){
   }
 
   if(!state.submitted){
-    html += `<div style="text-align:center;margin-top:24px"><button class="exam-submit-btn" onclick="submitExam()" ${answered===0?'disabled':''}>${answered===total?'Submit exam & see results':'Submit ('+answered+' of '+total+' answered)'}</button></div>`;
+    html += `<div style="text-align:center;margin-top:24px"><button class="exam-submit-btn" onclick="submitExam()" ${answered===0?'disabled':''}>${answered===total?"Сдайте экзамен и посмотрите результаты":'Submit ('+answered+' of '+total+' answered)'}</button></div>`;
   }
   return html;
 }
@@ -1076,19 +1076,19 @@ function renderQuestion(q){
     }
     const letter = String.fromCharCode(65+i);
     const mark = isMs ? (picked ? '☑' : '☐') : letter;
-    return `<button class="${cls}" onclick="${isMs?`answerMs('${q.id}',${i})`:`answerMc('${q.id}',${i})`}" ${state.submitted?'disabled':''}>
+    return `<класс кнопки="${cls}" onclick="${isMs?`answerMs('${q.id}',${i})`:`answerMc('${q.id}',${i})`}" ${state.submitted?'disabled':''}>
       <span class="choice-letter">${mark}</span>
       <span class="choice-text">${c}</span>
     </button>`;
   }).join('')}</div>`;
 
   const explanation = state.submitted
-    ? `<div class="explanation show"><strong>${isCorrect(q) ? 'Correct.' : 'Heads up: '}</strong> ${q.explain}${guideLinkHtml(q.id)}</div>`
+    ? `<div class="explanation show"><strong>${isCorrect(q) ? 'Correct.' : "Берегись: "}</strong> ${q.explain}${guideLinkHtml(q.id)}</div>`
     : '';
 
   return `
-    <div class="q-card${stateCls}" id="q-${q.id}">
-      <div class="q-num">Question ${idx} of ${QUESTIONS.length}${isMs?'<span class="ms-tag">· multiple response</span>':''}</div>
+    <div class="q-карта${stateCls}" id="q-${q.id}">
+      <div class="q-num">Question ${idx} of ${QUESTIONS.length}${isMs?"<span class=\"ms-tag\">· множественный ответ</span>":''}</div>
       <div class="q-text">${q.q}</div>
       ${body}
       ${explanation}
@@ -1170,10 +1170,10 @@ function renderResults(){
   const pass = scaled >= 700;
   return `
     <div class="results-hero">
-      <div class="results-eyebrow">Practice exam · Results</div>
+      <div class="results-eyebrow">Практический экзамен · Результаты</div>
       <div class="score-big">${score.total}<small>/${score.outOf}</small></div>
       <div class="score-verdict">${pct}% — ${v.label}</div>
-      <div class="scaled-box">Estimated scaled score: <strong style="color:${pass?'var(--good)':'var(--bad)'}">${scaled}</strong> <span style="color:var(--dim)">/ 1000 · passing = 700</span></div>
+      <div class="scaled-box">Предполагаемая оценка по шкале: <strong style="color:${pass?'var(--good)':'var(--bad)'}">${scaled}</strong> <span style="color:var(--dim)">/ 1000 · passing = 700</span></div>
       <p class="score-sub" style="margin-top:14px">Microsoft converts raw answers to a 1–1000 scaled score with its own weighting; this estimate maps your percent correct onto that band. Treat 750+ here as "ready," 700–749 as "nearly."</p>
     </div>
 
@@ -1182,10 +1182,10 @@ function renderResults(){
         const d = DOMAIN_INFO[k];
         const s = score.byDomain[k];
         const p = Math.round(100*s.correct/s.total);
-        const hint = p === 100 ? 'Clean sweep. Move on.'
-          : p >= 75 ? `Mostly there — reread the <a href="#study-${k}" onclick="setView('study',{scrollToSection:'${k}'});return false;">${d.label} study section</a> once.`
-          : p >= 50 ? `Shaky at ${d.weight} of the exam — that's real points. <a href="#study-${k}" onclick="setView('study',{scrollToSection:'${k}'});return false;">Study section</a> + <a href="${d.kitPath}">Power BI Kit lessons</a>.`
-          : `Focus here first — ${d.weight} of the exam. ${d.hint} <a href="${d.kitPath}">Open the Power BI Kit</a>.`;
+        const hint = p === 100 ? "Чистая развертка. Двигаться дальше."
+          : p >= 75 ? `В основном там — перечитайте <a href="#study-${k}" onclick="setView('study',{scrollToSection:'${k}'}); вернуть ложь;">${d.label} раздел исследования</a> один раз.`
+          : p >= 50 ? `Shaky at ${d.weight} экзамена — это реальные баллы. <a href="#study-${k}" onclick="setView('study',{scrollToSection:'${k}'});return false;">Study section</a> + <a href="${d.kitPath}">Уроки Power BI Kit</a>.`
+          : `Сначала сосредоточьтесь здесь — ${d.weight} экзамена. ${d.hint}<a href="${d.kitPath}«>Откройте комплект Power BI</a>.`;
         return `
           <div class="results-row">
             <div class="results-row-top">
@@ -1201,9 +1201,9 @@ function renderResults(){
     </div>
 
     <div class="results-actions">
-      <button class="btn btn-ghost" onclick="setView('exam')">Review answers &amp; explanations</button>
-      <button class="btn btn-ghost" onclick="setView('study')">Open study guide</button>
-      <button class="btn btn-primary" onclick="retake()">Retake exam <i data-lucide="rotate-ccw" style="width:14px;height:14px;vertical-align:-2px"></i></button>
+      <button class="btn btn-ghost" onclick="setView('exam')">Просмотрите ответы и пояснения</button>
+      <button class="btn btn-ghost" onclick="setView('study')">Открыть учебное пособие</button>
+      <button class="btn btn-primary" onclick="retake()">Пересдать экзамен <i data-lucide="rotate-ccw" style="width:14px;height:14px;vertical-align:-2px"></i></button>
     </div>
   `;
 }
@@ -1243,13 +1243,13 @@ function toggleTheme(){
   const next = cur === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('apk-theme', next);
-  document.getElementById('themeIcon').innerHTML = '<i data-lucide="' + (next === 'dark' ? 'sun' : 'moon') + '"></i>';
+  document.getElementById('themeIcon').innerHTML = "<я данные-lucid=\"" + (next === 'dark' ? 'sun' : 'moon') + '"></i>';
   if(window.grainRefreshIcons)grainRefreshIcons();else if(window.lucide)lucide.createIcons();
 }
 (function initTheme(){
   const saved = localStorage.getItem('apk-theme');
   if(saved) document.documentElement.setAttribute('data-theme', saved);
-  document.getElementById('themeIcon').innerHTML = '<i data-lucide="' + (document.documentElement.getAttribute('data-theme')==='dark'?'sun':'moon') + '"></i>';
+  document.getElementById('themeIcon').innerHTML = "<я данные-lucid=\"" + (document.documentElement.getAttribute('data-theme')==='dark'?'sun':'moon') + '"></i>';
 })();
 
 function resetAll(){
@@ -1333,6 +1333,6 @@ function grainRefreshIcons(){
 <script src="../assets/datacraft-economy.js"></script>
 <script src="../assets/progress-state.js"></script>
 <script src="../assets/supabase_auth_sync.js?v=3"></script>
-<script src="../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

@@ -130,7 +130,7 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-комплект</a></p>
+  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-кит</a></p>
   <h1>СЛУЧАЙ, КОГДА с перекрывающимися условиями в SQL</h1>
   <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Каждый запрос на этой странице был выполнен до его публикации.</p>
 
@@ -257,11 +257,11 @@ ORDER BY rows_labelled;</code></pre>
   <p>Представьте себе последнюю сегментацию, которую вы отправили. Два ее правила рядом: может ли один клиент соответствовать обоим? Если вы не можете ответить на этот вопрос по памяти, это запрос, который нужно запустить завтра для проверки флага.</p>
 
   <h2>Пограничные случаи, которые стоит знать</h2>
-  <p><strong><code>NULL</code>  никогда ничему не соответствует, поэтому он попадает в  <code>ELSE</code>.</strong>  У Янсена не зарегистрировано никаких расходов. В примере с группой  <code>NULL &gt;= 100</code>  не является ни истинным, ни ложным, поэтому Янсен проваливается до  <code>small</code>, что читается как «тратит очень мало» и на самом деле означает «мы не знаем». Дайте неизвестным свою ветку:  <code>WHEN spend IS NULL THEN 'unknown'</code>, во-первых, перед чем-либо, что проверяет столбец. Подробнее об этом поведении см.  <a href="../sql-null/">NULL в SQL</a>.</p>
+  <p><strong><code>NULL</code>  никогда ничему не соответствует, поэтому он попадает в  <code>ELSE</code>.</strong>  У Янсена не зарегистрировано никаких расходов. В примере с группой  <code>NULL &gt;= 100</code>  не является ни истинным, ни ложным, поэтому Янсен проваливается до  <code>small</code>, что читается как «тратит очень мало» и на самом деле означает «мы не знаем». Дайте неизвестным свою ветку:  <code>WHEN spend IS NULL THEN 'unknown'</code>, во-первых, перед чем-либо, что проверяет столбец. Подробнее об этом поведении см.  <a href="../sql-null/">НУЛЬ в SQL</a>.</p>
   <p><strong>No <code>ELSE</code> means <code>NULL</code>, молча.</strong> A <code>CASE</code>  условия, для которых закончились условия, возвращаются  <code>NULL</code>  для этого ряда, а не поднимать что-либо. Затем  <code>GROUP BY</code>  дает вам пустой сегмент в отчете. Всегда пишите  <code>ELSE</code>, даже если вы считаете, что он недоступен, и поместите в него что-нибудь читабельное, например  <code>'unclassified'</code>.</p>
   <p><strong><code>BETWEEN</code>  полосы перекрываются по шву.</strong> <code>BETWEEN 0 AND 10</code> and <code>BETWEEN 10 AND 20</code>  оба содержат 10. В  <code>CASE</code>  это не двойной счет, а просто спокойно передает 10 первой группе. Напишите группы с одним инклюзивным концом, например  <code>&lt; 10</code> then <code>&lt; 20</code>, и шов перестает быть решением.</p>
   <p><strong>Обрезки, существующие в SQL, должны быть изменены в SQL.</strong>  Если в следующем квартале порог VIP достигнет 1200, каждый запрос, содержащий это число, необходимо будет найти. Если более двух или трех запросов используют один и тот же набор правил, поместите полосы в небольшую таблицу и вместо этого присоединитесь к ней.</p>
-  <p><strong>Правило первого совпадения является стандартным, а не особенностью движка.</strong>  PostgreSQL, MySQL, SQL Server, SQLite и Oracle оценивают  <code>WHEN</code>  предложения по порядку и остановитесь на первом верном. Переписываю то же самое  <code>CASE</code>  на другом двигателе то, что он делает, не изменится.</p>
+  <p><strong>Правило первого совпадения является стандартным, а не особенностью движка.</strong>    Конфигурации PostgreSQL, MySQL, SQL Server, SQLite и Oracle    <code>WHEN</code>  предложения по порядку и остановитесь на первом верном. Переписываю то же самое  <code>CASE</code>  на другом двигателе то, что он делает, не изменится.</p>
 
   <h2>Почему это работает таким образом</h2>
   <p><code>CASE</code>  это не набор взвешиваемых правил. Это цепочка операторов if, и возвращается первый истинный оператор.</p>
@@ -305,19 +305,19 @@ ORDER BY rows_labelled;</code></pre>
 
   <div class="cta">
     <strong>Напишите ДЕЛО, а не просто читайте об этом.</strong>
-    <p style="margin:6px 0 0">Начните с синтаксиса в  <a href="../sql-case-expression/">Объяснение SQL CASE WHEN</a>, а затем построить полную сегментацию в  <a href="../sql-segment-with-case/">сегментация клиентов с помощью CASE</a>.  <a href="../../sql/">SQL-комплект</a>  охватывает SELECT, WHERE, JOIN и GROUP BY с практикой и пробным экзаменом, и все это в браузере.</p>
+    <p style="margin:6px 0 0">Начните с синтаксиса в  <a href="../sql-case-expression/">Объяснение SQL CASE WHEN</a>, а затем построить полную сегментацию в  <a href="../sql-segment-with-case/">Сегментация клиентов с помощью CASE</a>.  <a href="../../sql/">SQL-кит</a>  охватывает SELECT, WHERE, JOIN и GROUP BY с практикой и пробным экзаменом, и все это в браузере.</p>
     <a class="btn" href="../../sql/">Откройте набор SQL →</a>
     <p style="margin:10px 0 0;font-size:15px">Или получите повторения:  <a href="../../drill/">открыть SQL Drill</a>  и вводите по одному исполняемому запросу за раз.</p>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql-case-expression/">SQL СЛУЧАЙ, КОГДА</a> · <a href="../sql-segment-with-case/">Сегмент с CASE</a> · <a href="../sql-null/">NULL в SQL</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-rank-vs-dense-rank-vs-row-number/">RANK, DENSE_RANK и ROW_NUMBER</a> · <a href="../sql-teaching-comments/">Комментирование SQL для обучения</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../../drill/">SQL-детализация</a> · <a href="../../sql/">SQL-комплект</a>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql-case-expression/">SQL СЛУЧАЙ, КОГДА</a> · <a href="../sql-segment-with-case/">Сегмент с CASE</a> · <a href="../sql-null/">НУЛЬ в SQL</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-rank-vs-dense-rank-vs-row-number/">РАНГ, DENSE_RANK и ROW_NUMBER</a> · <a href="../sql-teaching-comments/">Комментирование SQL для обучения</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../../drill/">SQL-детализация</a> · <a href="../../sql/">SQL-кит</a>
     <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
     <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-<script src="../../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

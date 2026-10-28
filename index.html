@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="ru" data-theme="light" data-static-ru="true">
 <head>
 
   <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
@@ -771,14 +771,14 @@ footer a:hover{color:var(--accent-d)}
         <a class="skill-item" href="https://michaelnocito.github.io/sql-trail/" target="_blank" rel="noopener">
           <span class="skill-ic"><i data-lucide="tent"></i></span>
           <span class="skill-body">
-            <span class="skill-name">SQL-след</span>
+            <span class="skill-name">SQL-после</span>
             <span class="skill-meta">Рогулайт-бег</span>
           </span>
         </a>
         <a class="skill-item" href="https://michaelnocito.github.io/nexus-sql-mystery/" target="_blank" rel="noopener">
           <span class="skill-ic"><i data-lucide="fingerprint"></i></span>
           <span class="skill-body">
-            <span class="skill-name">Тайна NEXUS SQL</span>
+            <span class="skill-name">НЕКСУС SQL-сервер</span>
             <span class="skill-meta">Тайна офиса</span>
           </span>
         </a>
@@ -942,10 +942,10 @@ footer a:hover{color:var(--accent-d)}
   }
   function render(){
     if(!items.length){
-      res.innerHTML='<div class="pal-empty">'+(inp.value.trim()?'No matches. Try a shorter word — "join", "pivot", "null".':'Type to search every lesson, guide, glossary term and app.')+'</div>';
+      res.innerHTML='<div class="pal-empty">'+(inp.value.trim()?"Никаких совпадений. Попробуйте более короткие слова — «join», «pivot», «null».":"Введите текст для поиска по каждому уроку, руководству, термину глоссария и приложению.")+'</div>';
       return;
     }
-    const groups=[['lesson','Lessons'],['guide','Guides'],['term','Glossary'],['app','Apps & games']];
+    const groups=[['lesson','Lessons'],['guide','Guides'],['term','Glossary'],['app',"Приложения и игры"]];
     let html='', idx=0;
     groups.forEach(([type,label])=>{
       const g=items.filter(i=>i.type===type);
@@ -953,7 +953,7 @@ footer a:hover{color:var(--accent-d)}
       html+='<div class="pal-group">'+label+'</div>';
       g.forEach(i=>{
         const n=items.indexOf(i);
-        html+='<a class="pal-item'+(n===sel?' sel':'')+'" data-n="'+n+'" href="'+i.href+'">'
+        html+='<a class="pal-item'+(n===sel?' sel':'')+"\"данные-n=\""+n+'" href="'+i.href+'">'
           +'<div class="pi-title">'+(i.kit?'<span class="pi-chip">'+i.kit.replace(' Kit','').toUpperCase()+'</span>':'')+esc(i.title)+'</div>'
           +(i.sub?'<div class="pi-sub">'+esc(i.sub)+'</div>':'')+'</a>';
       });
@@ -1046,7 +1046,7 @@ const KITS = [
     read: () => { const s = JSON.parse(localStorage.getItem('apk-business-analysis-progress-v1')||'{}');
       const done = Object.keys(s).filter(k=>/^\d+$/.test(k)&&s[k]===true).length;
       return { done, last: done < 9 ? done + 1 : 9 }; } },
-  { id:'excel',     name:'Excel Kit',                            path:'excel/',     unit:'lessons', total:12,
+  { id:'excel',     name:"Excel комплект",                            path:'excel/',     unit:'lessons', total:12,
     read: () => { const s = JSON.parse(localStorage.getItem('epk')||'{}'); const ids=s.lessonsDone||[];
       return { done:ids.length, doneIds:ids, last:s.currentLesson||null }; } },
   { id:'sql',       name:'SQL Kit',                              path:'sql/',       unit:'lessons', total:12,
@@ -1054,38 +1054,38 @@ const KITS = [
       const ids = s.doneLessons||[]; const done = ids.length;
       // SQL has no explicit cursor — last = next unfinished
       return { done, doneIds:ids, last: done < 12 ? done + 1 : 12 }; } },
-  { id:'python',    name:'Python Kit',                           path:'python/',    unit:'lessons', total:12,
+  { id:'python',    name:"Комплект Python",                           path:'python/',    unit:'lessons', total:12,
     read: () => { const s = JSON.parse(localStorage.getItem('ppk')||'{}'); const ids=s.lessonsDone||[];
       return { done:ids.length, doneIds:ids, last:s.currentLesson||null }; } },
-  { id:'tableau',   name:'Tableau Kit',                          path:'tableau/',   unit:'lessons', total:12,
+  { id:'tableau',   name:"Табличный комплект",                          path:'tableau/',   unit:'lessons', total:12,
     read: () => { const s = JSON.parse(localStorage.getItem('tpk')||'{}');
       const ids = Object.keys(s.done||{}).filter(k=>/^lesson\d+$/.test(k)).map(k=>+k.slice(6));
       return { done:ids.length, doneIds:ids, last:s.lastLesson||null }; } },
-  { id:'stats',     name:'Stats Kit',                            path:'stats/',     unit:'lessons', total:12,
+  { id:'stats',     name:"Статистический набор",                            path:'stats/',     unit:'lessons', total:12,
     read: () => { const s = JSON.parse(localStorage.getItem('spk')||'{}');
       const ids = Object.keys(s.done||{}).filter(k=>/^lesson\d+$/.test(k)).map(k=>+k.slice(6));
       return { done:ids.length, doneIds:ids, last:s.lastLesson||null }; } },
-  { id:'powerbi',   name:'Power BI Kit',                         path:'powerbi/',   unit:'lessons', total:12,
+  { id:'powerbi',   name:"Комплект Power BI",                         path:'powerbi/',   unit:'lessons', total:12,
     read: () => { const s = JSON.parse(localStorage.getItem('pbikt-v1')||'{}');
       const ids = s.doneLessons||[]; const done = ids.length;
       return { done, doneIds:ids, last: done < 12 ? done + 1 : 12 }; } },
-  { id:'interview', name:'Interview Kit',                        path:'interview/', unit:'lessons', total:12,
+  { id:'interview', name:"Комплект для интервью",                        path:'interview/', unit:'lessons', total:12,
     read: () => { const s = JSON.parse(localStorage.getItem('ipk')||'{}');
       const done = Object.keys(s.lessonsComplete||{}).length;
       return { done, last: done < 12 ? done + 1 : 12 }; } },
-  { id:'simulator', name:'Associate Data Analyst Simulator',     path:'simulator/', unit:'tasks',   total:10,
+  { id:'simulator', name:"Симулятор работы младшего аналитика данных",     path:'simulator/', unit:'tasks',   total:10,
     read: () => { const s = JSON.parse(localStorage.getItem('sim2')||'{}');
       const done = Object.keys(s.reviews||{}).length;
       return { done, last:null }; } },
-  { id:'excel-cert', name:'Excel Certification Prep',            path:'excel-cert/', unit:'questions', total:35,
+  { id:'excel-cert', name:"Подготовка к сертификации Excel",            path:'excel-cert/', unit:'questions', total:35,
     read: () => { const s = JSON.parse(localStorage.getItem('apk-excelcert')||'{}');
       const done = Object.keys(s.answers||{}).length;
       return { done, last:null, submitted: !!s.submitted }; } },
-  { id:'powerbi-cert', name:'Power BI Certification Prep',       path:'powerbi-cert/', unit:'questions', total:50,
+  { id:'powerbi-cert', name:"Подготовка к сертификации Power BI",       path:'powerbi-cert/', unit:'questions', total:50,
     read: () => { const s = JSON.parse(localStorage.getItem('apk-pbicert')||'{}');
       const done = Object.keys(s.answers||{}).length;
       return { done, last:null, submitted: !!s.submitted }; } },
-  { id:'tableau-cert', name:'Tableau Certification Prep',        path:'tableau-cert/', unit:'questions', total:49,
+  { id:'tableau-cert', name:"Подготовка к сертификации Tableau",        path:'tableau-cert/', unit:'questions', total:49,
     read: () => { const s = JSON.parse(localStorage.getItem('apk-tabcert')||'{}');
       const done = Object.keys(s.answers||{}).length;
       return { done, last:null, submitted: !!s.submitted }; } },
@@ -1097,11 +1097,11 @@ const KITS = [
     read: () => { const s = JSON.parse(localStorage.getItem('apk-dsclmcert')||'{}');
       const done = Object.keys(s.answers||{}).length;
       return { done, last:null, submitted: !!s.submitted }; } },
-  { id:'docusign-clm-workflow-cert', name:'Docusign CLM Workflow Pro Prep', path:'docusign-clm-workflow-cert/', unit:'questions', total:44,
+  { id:'docusign-clm-workflow-cert', name:"Подготовка Docusign CLM Workflow Pro", path:'docusign-clm-workflow-cert/', unit:'questions', total:44,
     read: () => { const s = JSON.parse(localStorage.getItem('apk-dsclmwfcert')||'{}');
       const done = Object.keys(s.answers||{}).length;
       return { done, last:null, submitted: !!s.submitted }; } },
-  { id:'docusign-clm-implementation-cert', name:'Docusign CLM Implementation Pro Prep', path:'docusign-clm-implementation-cert/', unit:'questions', total:50,
+  { id:'docusign-clm-implementation-cert', name:"Docusign CLM Подготовка к внедрению", path:'docusign-clm-implementation-cert/', unit:'questions', total:50,
     read: () => { const s = JSON.parse(localStorage.getItem('apk-dsclmimplcert')||'{}');
       const done = Object.keys(s.answers||{}).length;
       return { done, last:null, submitted: !!s.submitted }; } },
@@ -1109,27 +1109,27 @@ const KITS = [
     read: () => { const s = JSON.parse(localStorage.getItem('apk-dsorgcert')||'{}');
       const done = Object.keys(s.answers||{}).length;
       return { done, last:null, submitted: !!s.submitted }; } },
-  { id:'azure-data-cert', name:'DP-900 Azure Data Fundamentals Prep', path:'azure-data-cert/', unit:'questions', total:48,
+  { id:'azure-data-cert', name:"DP-900 Подготовка к основам данных Azure", path:'azure-data-cert/', unit:'questions', total:48,
     read: () => { const s = JSON.parse(localStorage.getItem('apk-dp900cert')||'{}');
       const done = Object.keys(s.answers||{}).length;
       return { done, last:null, submitted: !!s.submitted }; } },
-  { id:'alteryx-cert', name:'Alteryx Foundation Prep', path:'alteryx-cert/', unit:'questions', total:40,
+  { id:'alteryx-cert', name:"Подготовка Фонда Альтерикс", path:'alteryx-cert/', unit:'questions', total:40,
     read: () => { const s = JSON.parse(localStorage.getItem('apk-alteryxcert')||'{}');
       const done = Object.keys(s.answers||{}).length;
       return { done, last:null, submitted: !!s.submitted }; } },
-  { id:'ga4-cert', name:'Google Analytics Certification Prep', path:'ga4-cert/', unit:'questions', total:50,
+  { id:'ga4-cert', name:"Подготовка к сертификации Google Analytics", path:'ga4-cert/', unit:'questions', total:50,
     read: () => { const s = JSON.parse(localStorage.getItem('apk-ga4cert')||'{}');
       const done = Object.keys(s.answers||{}).length;
       return { done, last:null, submitted: !!s.submitted }; } },
-  { id:'databricks-cert', name:'Databricks Fundamentals Prep', path:'databricks-cert/', unit:'questions', total:40,
+  { id:'databricks-cert', name:"Подготовка к основам Databricks", path:'databricks-cert/', unit:'questions', total:40,
     read: () => { const s = JSON.parse(localStorage.getItem('apk-dbxcert')||'{}');
       const done = Object.keys(s.answers||{}).length;
       return { done, last:null, submitted: !!s.submitted }; } },
-  { id:'excel-expert-cert', name:'Excel Expert MO-211 Prep', path:'excel-expert-cert/', unit:'questions', total:45,
+  { id:'excel-expert-cert', name:"Excel Expert MO-211 Подготовка", path:'excel-expert-cert/', unit:'questions', total:45,
     read: () => { const s = JSON.parse(localStorage.getItem('apk-excelexpertcert')||'{}');
       const done = Object.keys(s.answers||{}).length;
       return { done, last:null, submitted: !!s.submitted }; } },
-  { id:'final',     name:'Final Exam Kit',                       path:'final/',     unit:'questions', total:28,
+  { id:'final',     name:"Комплект итогового экзамена",                       path:'final/',     unit:'questions', total:28,
     read: () => { const s = JSON.parse(localStorage.getItem('apk-final')||'{}');
       const done = Object.keys(s.answers||{}).length;
       return { done, last:null, submitted: !!s.submitted }; } },
@@ -1152,7 +1152,7 @@ function renderKitProgress(){
     // Untouched kits keep the static count already in the markup
     // ("51 lessons"), so a first-time visitor sees size, not zeros.
     if(done > 0 || p.submitted){
-      slot.textContent = complete ? '✓ Complete' : `${done} / ${kit.total} ${kit.unit}`;
+      slot.textContent = complete ? "✓ Полный" : `${done} / ${kit.total} ${kit.unit}`;
       slot.classList.toggle('done', complete);
     }
     // Mini-exam badge — shows the subject's Final Exam section score, once taken.
@@ -1235,7 +1235,7 @@ if (window.lucide) lucide.createIcons();
 <script src="assets/apk-sync.js?v=2" defer></script>
 
 
-<script src="assets/ru-localization.js?v=20261027-1"></script>
+
 <script src="assets/datacraft-economy.js"></script>
 </body>
 </html>

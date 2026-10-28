@@ -1,6 +1,6 @@
 /* DataCraft shared wallet. Coins are awarded once per newly completed lesson/task. */
 (function () {
-  'use strict';
+  "используйте строгий";
   var KEY = 'datacraft-wallet-v1';
   var CATALOG = {
     foundations: {key:'apk-foundations-progress-v1',prop:'map',rate:2,total:8,bonus:5},

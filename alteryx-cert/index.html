@@ -286,7 +286,7 @@ function save(){ localStorage.setItem(STORE, JSON.stringify(state)); }
 function getCoachKey(){ return localStorage.getItem('apk-coach-key') || ''; }
 function setCoachKey(k){
   localStorage.setItem('apk-coach-key', k.trim());
-  toast(k.trim() ? 'Key saved. Hints are on.' : 'Key cleared.');
+  toast(k.trim() ? "Ключ сохранен. Подсказки включены." : "Ключ очищен.");
   render();
 }
 function stripTags(html){
@@ -308,36 +308,36 @@ async function hintCall(prompt, targetId){
       body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:350,messages:[{role:'user',content:prompt}]})
     });
     const data = await res.json();
-    if(!res.ok){ el.textContent = data?.error?.message || 'Request refused. Check your key.'; return; }
-    el.textContent = data.content?.[0]?.text || 'No response. Check your key.';
+    if(!res.ok){ el.textContent = data?.error?.message || "Запрос отклонен. Проверьте свой ключ."; return; }
+    el.textContent = data.content?.[0]?.text || "Никакого ответа. Проверьте свой ключ.";
   } catch(e){ el.textContent = "Запрос не выполнен. Проверьте свой ключ и соединение."; }
 }
-const TUTOR_ROLE = `You are a plain-spoken Alteryx Designer tutor helping someone study for the Alteryx Foundation Micro-Credential. That exam covers basic data concepts (structured and unstructured data, quantitative and qualitative data, data types such as string, integer, fixed decimal, float, Boolean and date-time, metadata, basic statistics) and the basics of Alteryx Designer (the interface, workflows, Designer file types like .yxmd .yxwz .yxmc .yxdb .yxzp, and these tools: Browse, Input Data, Output Data, Text Input, Data Cleansing, Filter, Formula, Sample, Select, Sort, Text to Columns, Summarize, Comment, Tool Container, Join, Union, DateTime). It tests the latest Desktop Designer with the AMP Engine disabled.`;
+const TUTOR_ROLE = `Вы откровенный наставник Alteryx Designer, помогающий кому-то учиться на микро-сертификаты Alteryx Foundation. Этот экзамен охватывает основные понятия данных (структурированные и неструктурированные данные, количественные и качественные данные, типы данных, такие как строка, целое число, фиксированное десятичное число, число с плавающей запятой, логическое значение и дата-время, метаданные, базовая статистика) и основы Alteryx Designer (интерфейс, рабочие процессы, типы файлов Designer, такие как .yxmd .yxwz .yxmc .yxdb .yxzp, а также следующие инструменты: просмотр, входные данные, выходные данные, текстовый ввод, данные). Очистка, Фильтр, Формула, Образец, Выбор, Сортировка, Текст в столбцы, Подведение итогов, Комментарий, Контейнер инструментов, объединение, объединение, дата и время). Он тестирует последнюю версию Desktop Designer с отключенным AMP Engine.`;
 function hintStudy(key, i){
   const s = STUDY.find(x=>x.key===key);
   if(!s) return;
   const fact = stripTags(s.must[i]);
   const prompt = `${TUTOR_ROLE}
 
-Explain this exam point a different way than it is written here:
+Объясните этот экзаменационный вопрос иначе, чем написано здесь:
 "${fact}"
 
-Rules: 3 sentences at most. One idea per sentence. Use an everyday comparison if it helps. Say what the exam is likely to ask about it. No preamble, no restating the question.`;
+Правила: максимум 3 предложения. Одна идея в предложении. Используйте повседневное сравнение, если это помогает. Скажите, что, скорее всего, об этом спросят на экзамене. Никакой преамбулы, никакого повторения вопроса.`;
   hintCall(prompt, 'hint-resp-' + key + '-' + i);
 }
 function hintQuestion(qid){
   const q = QUESTIONS.find(x=>x.id===qid);
   if(!q) return;
   const chosen = state.answers[qid];
-  const picked = Array.isArray(chosen) ? chosen.map(i=>stripTags(q.choices[i])).join(' / ') : (chosen!==undefined ? stripTags(q.choices[chosen]) : '(no answer)');
+  const picked = Array.isArray(chosen) ? chosen.map(i=>stripTags(q.choices[i])).join(' / ') : (chosen!==undefined ? stripTags(q.choices[chosen]) : "(нет ответа)");
   const right = q.type==='ms' ? q.correct.map(i=>stripTags(q.choices[i])).join(' / ') : stripTags(q.choices[q.correct]);
-  const prompt = `${TUTOR_ROLE} A student got this practice question wrong.
+  const prompt = `${TUTOR_ROLE} Студент неправильно ответил на этот практический вопрос.
 
-Question: ${stripTags(q.q)}
-They picked: ${picked}
-Correct answer: ${right}
+Вопрос: ${stripTags(q.q)}
+Они выбрали: ${picked}
+Правильный ответ: ${right}
 
-In 3 sentences at most, say what they were probably confusing, then give one plain rule that keeps the two apart. No preamble.`;
+Максимум в трех предложениях скажите, что вас, вероятно, смутило, а затем приведите одно простое правило, которое разделяет эти два понятия. Никакой преамбулы.`;
   hintCall(prompt, 'hint-resp-q-' + qid);
 }
 
@@ -347,22 +347,22 @@ In 3 sentences at most, say what they were probably confusing, then give one pla
    areas. The four percentages are OUR split of the official 35/65 and are labeled
    as such on the page. Area 1 + Area 2 = 35%. Area 3 + Area 4 = 65%. */
 const DOMAIN_INFO = {
-  d1:{label:"Зона 1", name:'Data concepts', weight:20, color:'var(--c-d1)',
+  d1:{label:"Зона 1", name:"Концепции данных", weight:20, color:'var(--c-d1)',
       hint:"Структурированные и неструктурированные, расширения файлов, количественные и качественные, типы полей, типы строк, чисел и дат, метаданные.",
       docPath:'https://help.alteryx.com/current/en/designer/file-types-support/data-types.html',
-      docLabel:'Data Types (Alteryx Designer help)'},
-  d2:{label:"Зона 2", name:'Statistics basics and types in operations', weight:15, color:'var(--c-d2)',
+      docLabel:"Типы данных (справка Alteryx Designer)"},
+  d2:{label:"Зона 2", name:"Основы статистики и виды операций", weight:15, color:'var(--c-d2)',
       hint:"Среднее значение, медиана, мода, диапазон, стандартное отклонение, что каждый из них скрывает, и как тип данных меняет то, что инструмент может делать с полем.",
       docPath:'https://help.alteryx.com/current/en/designer/tools/transform/summarize-tool.html',
-      docLabel:'Summarize Tool (Alteryx Designer help)'},
-  d3:{label:"Зона 3", name:'Designer interface, workflows and files', weight:30, color:'var(--c-d3)',
+      docLabel:"Инструмент суммирования (справка Alteryx Designer)"},
+  d3:{label:"Зона 3", name:"Интерфейс дизайнера, рабочие процессы и файлы", weight:30, color:'var(--c-d3)',
       hint:"Окна, меню, где находится справка, из чего состоит рабочий процесс, конфигурация рабочего процесса, расширения файлов Designer.",
       docPath:'https://help.alteryx.com/current/en/designer/get-started/designer-user-interface.html',
-      docLabel:'Designer User Interface (Alteryx Designer help)'},
-  d4:{label:"Зона 4", name:'The 17 tools', weight:35, color:'var(--c-d4)',
+      docLabel:"Пользовательский интерфейс дизайнера (справка Alteryx Designer)"},
+  d4:{label:"Зона 4", name:"17 инструментов", weight:35, color:'var(--c-d4)',
       hint:"Просмотр, входные данные, выходные данные, ввод текста, очистка данных, фильтр, формула, образец, выбор, сортировка, текст в столбцы, суммирование, комментарий, контейнер инструментов, объединение, объединение, дата и время.",
       docPath:'https://help.alteryx.com/current/en/designer/tools.html',
-      docLabel:'Tool Categories (Alteryx Designer help)'}
+      docLabel:"Категории инструментов (справка Alteryx Designer)"}
 };
 const DOMAIN_ORDER = ['d1','d2','d3','d4'];
 
@@ -370,26 +370,26 @@ const DOMAIN_ORDER = ['d1','d2','d3','d4'];
 const STUDY = [
   {key:'d1', title:"Концепции данных: форматы, типы, поля, метаданные.",
     must:[
-      `<strong>Structured data has a fixed shape.</strong> Rows and columns, every row the same fields, every field a known type. A database table, a CSV, an Excel sheet. Designer is built for this shape.`,
-      `<strong>Unstructured data has no fixed shape.</strong> Free text, emails, images, audio, PDFs. It has to be parsed or tagged before rows and columns exist. Semi-structured sits between them: JSON and XML have tags but not a fixed table.`,
-      `<strong>File extensions tell you the format before you open the file.</strong> <code>.csv</code> is comma-separated text. <code>.txt</code> is plain text with any delimiter. <code>.xlsx</code> is an Excel workbook with sheets. <code>.json</code> and <code>.xml</code> are semi-structured. <code>.yxdb</code> is Alteryx's own database file.`,
-      `<strong>Quantitative data is a measured amount.</strong> Revenue, age, temperature, count of orders. You can add it, average it, and compare sizes.`,
-      `<strong>Qualitative data describes a quality.</strong> Region, product name, customer comment, yes or no. You can count it and group by it, but adding two names means nothing.`,
-      `<strong>Quantitative splits into discrete and continuous.</strong> Discrete is a whole-number count: 3 children, 12 orders. Continuous can take any value in a range: 3.7 kg, 12.25 seconds.`,
-      `<strong>Qualitative splits into nominal and ordinal.</strong> Nominal has no order: red, green, blue. Ordinal has an order but no fixed distance: small, medium, large, or a 1 to 5 rating.`,
-      `<strong>A field is one column with one name, one type, and one size.</strong> The type decides what operations work. That is why so many Designer questions are really data type questions.`,
-      `<strong>Alteryx string types come in four.</strong> <code>String</code> is fixed length, Latin-1 only, up to 8,192 characters. <code>WString</code> is fixed length Unicode, same cap. <code>V_String</code> and <code>V_WString</code> are variable length and size themselves to the data.`,
-      `<strong>Say it out loud:</strong> "V means variable length. W means wide, which is Unicode." So V_WString is the one that takes any character at any length, and it is the safest default for text.`,
-      `<strong>Integer types are sized by bytes.</strong> <code>Byte</code> 0 to 255. <code>Int16</code> 2 bytes, about plus or minus 32,767. <code>Int32</code> 4 bytes, about plus or minus 2.1 billion. <code>Int64</code> 8 bytes, about plus or minus 9.2 quintillion. Integers hold no decimals.`,
-      `<strong>Fixed Decimal is exact.</strong> You set the precision and scale. The default is 19.6, meaning 19 characters total with 6 after the point. The maximum precision is 50 characters, counting the decimal point and the minus sign. Use it for money.`,
-      `<strong>Float and Double are approximate.</strong> <code>Float</code> is 4 bytes with about 7 digits of precision. <code>Double</code> is 8 bytes with about 15 digits. Double is the default choice for decimal values that do not need to be exact to the cent.`,
-      `<strong>Bool holds True or False.</strong> False is 0 and True is any non-zero value. A Filter's condition evaluates to a Bool.`,
-      `<strong>Date-time types are strings with a rule.</strong> <code>Date</code> is 10 characters in <code>yyyy-mm-dd</code>. <code>Time</code> is 8 characters in <code>HH:MM:SS</code>. <code>DateTime</code> is 19 characters in <code>yyyy-mm-dd HH:MM:SS</code>. Designer cannot handle dates before 1 January 1400.`,
-      `<strong>A date stored as "03/15/2024" is not a Date.</strong> It is a string that looks like a date. Date math, sorting by real order, and date functions only work once it is converted. The DateTime tool does that.`,
-      `<strong>Metadata is data about the data.</strong> Field name, type, size, source, description. In Designer the Results window and the Browse tool show it, and <code>.yxdb</code> files store it alongside the values.`,
-      `<strong>SpatialObj and Blob are the odd ones out.</strong> SpatialObj holds a point, line, or polygon. Blob holds binary such as an image. Neither is on the Foundation outline in depth; know they exist and that they are not strings.`
+      `<strong>Структурированные данные имеют фиксированную форму.</strong> Строки и столбцы, в каждой строке одни и те же поля, каждое поле известного типа. Таблица базы данных, CSV, лист Excel. Дизайнер создан для этой формы.`,
+      `<strong>Неструктурированные данные не имеют фиксированной формы.</strong> Свободный текст, электронные письма, изображения, аудио, PDF-файлы. Его необходимо проанализировать или пометить до того, как появятся строки и столбцы. Полуструктурированный находится между ними: JSON и XML имеют теги, но не имеют фиксированной таблицы.`,
+      `<strong>Расширения файлов сообщают вам формат, прежде чем вы откроете файл.</strong> <code>.csv</code> это текст, разделенный запятыми. <code>.txt</code> представляет собой обычный текст с любым разделителем. <code>.xlsx</code> представляет собой книгу Excel с листами. <code>.json</code> and <code>.xml</code> являются полуструктурированными. <code>.yxdb</code> — это собственный файл базы данных Alteryx.`,
+      `<strong>Количественные данные – это измеренная сумма.</strong> Доход, возраст, температура, количество заказов. Вы можете сложить его, усреднить и сравнить размеры.`,
+      `<strong>Качественные данные описывают качество.</strong> Регион, название продукта, комментарий клиента, да или нет. Вы можете посчитать его и сгруппировать по нему, но добавление двух имен ничего не значит.`,
+      `<strong>Количественные делятся на дискретные и непрерывные.</strong> Дискретный — целочисленный счет: 3 ребенка, 12 порядков. Непрерывный может принимать любое значение в диапазоне: 3,7 кг, 12,25 секунды.`,
+      `<strong>Качественные распадаются на номинальные и порядковые.</strong> Номинал не имеет порядка: красный, зеленый, синий. Порядковый номер имеет порядок, но не имеет фиксированного расстояния: маленькое, среднее, большое или рейтинг от 1 до 5.`,
+      `<strong>Поле — это один столбец с одним именем, одним типом и одним размером.</strong> Тип решает, какие операции будут работать. Вот почему так много вопросов дизайнера на самом деле относятся к типам данных.`,
+      `<strong>Существует четыре типа строк Alteryx.</strong> <code>String</code> фиксированная длина, только Latin-1, до 8192 символов. <code>WString</code> — Unicode фиксированной длины, с одинаковым ограничением. <code>V_String</code> and <code>V_WString</code> являются переменной длиной и размером в зависимости от данных.`,
+      `<strong>Скажите это вслух:</strong> «V означает переменную длину. W означает ширину, что соответствует Unicode». Таким образом, V_WString принимает любой символ любой длины и является самым безопасным значением по умолчанию для текста.`,
+      `<strong>Целочисленные типы имеют размер в байтах.</strong> <code>Byte</code> от 0 до 255. <code>Int16</code> 2 байта, примерно плюс-минус 32 767. <code>Int32</code> 4 байта, примерно плюс-минус 2,1 миллиарда. <code>Int64</code> 8 байт, примерно плюс-минус 9,2 квинтиллиона. Целые числа не содержат десятичных знаков.`,
+      `<strong>Фиксированная десятичная дробь является точной.</strong> Вы устанавливаете точность и масштаб. Значение по умолчанию — 19,6, что означает всего 19 символов с 6 после точки. Максимальная точность — 50 символов, считая десятичную точку и знак минус. Используйте это ради денег.`,
+      `<strong>Float и Double являются приблизительными.</strong> <code>Float</code> составляет 4 байта с точностью около 7 цифр. <code>Double</code> составляет 8 байт и около 15 цифр. Double — это выбор по умолчанию для десятичных значений, которые не обязательно должны быть точными до цента.`,
+      `<strong>Bool имеет значение True или False.</strong> False — это 0, а True — любое ненулевое значение. Условие фильтра оценивается как Bool.`,
+      `<strong>Типы даты и времени представляют собой строки с правилом.</strong> <code>Date</code> состоит из 10 символов <code>yyyy-mm-dd</code>. <code>Time</code> состоит из 8 символов <code>ЧЧ:ММ:СС</code>. <code>DateTime</code> состоит из 19 символов <code>гггг-мм-дд ЧЧ:ММ:СС</code>. Дизайнер не может обрабатывать даты раньше 1 января 1400 года.`,
+      `<strong>Дата, сохраненная как «15.03.2024», не является датой.</strong> Это строка, похожая на дату. Математические вычисления с датами, сортировка по реальному порядку и функции даты работают только после их преобразования. Инструмент DateTime делает это.`,
+      `<strong>Метаданные — это данные о данных.</strong> Имя поля, тип, размер, источник, описание. В Designer это отображается в окне «Результаты» и инструменте «Обзор», и <code>.yxdb</code> файлы хранят его вместе со значениями.`,
+      `<strong>SpatialObj и Blob — лишние.</strong> SpatialObj содержит точку, линию или многоугольник. Blob содержит двоичный файл, например изображение. Ни один из них не содержит подробного описания Фонда; знать, что они существуют и что они не струны.`
     ],
-    miscon:`<strong>Misconception to bust:</strong> "A number is a number." In Designer a number can be an Int32, a Double, a Fixed Decimal, or a String that happens to contain digits. A zip code stored as Int32 loses its leading zero. A price stored as Double can round. An amount stored as String cannot be summed. Type first, then math.`,
+    miscon:`<strong>Заблуждение, которое следует разоблачить:</strong> «Число есть число». В Designer число может быть Int32, Double, фиксированным десятичным числом или строкой, которая содержит цифры. Почтовый индекс, хранящийся как Int32, теряет ведущий ноль. Цена, сохраненная в виде двойного округления. Сумма, хранящаяся в виде строки, не может быть суммирована. Сначала введите, затем математику.`,
     viz:`<div style="display:flex;gap:8px;flex-wrap:wrap;font-size:12px">
       <span style="padding:4px 9px;border-radius:6px;background:var(--surf);border:1px solid var(--border)"><b>String</b> fixed, Latin-1</span>
       <span style="padding:4px 9px;border-radius:6px;background:var(--surf);border:1px solid var(--border)"><b>WString</b> fixed, Unicode</span>
@@ -399,25 +399,25 @@ const STUDY = [
 
   {key:'d2', title:"Основы статистики и как типы меняют операции",
     must:[
-      `<strong>Mean is the total divided by the count.</strong> Every value pulls on it, so one huge outlier drags it. Good when the data is roughly symmetric.`,
-      `<strong>Median is the middle value once sorted.</strong> Outliers barely move it. That is its strength for income, house prices, and anything skewed. Its weakness: it ignores how far apart the values are.`,
-      `<strong>Mode is the most frequent value.</strong> The only one of the three that works on qualitative data. Its weakness: there may be no mode, or several.`,
-      `<strong>Say it out loud:</strong> "Mean for typical, median for skewed, mode for categories."`,
-      `<strong>Range is max minus min.</strong> One number that tells you spread, and one outlier wrecks it. Quick, crude.`,
-      `<strong>Standard deviation is the typical distance from the mean.</strong> Small means values cluster. Large means they scatter. It is in the same units as the data, which is why it is preferred over variance for reading.`,
-      `<strong>Variance is standard deviation squared.</strong> Same idea, units squared, so it is harder to read. Summarize offers both.`,
-      `<strong>Count is the number of records.</strong> Summarize gives you <code>Count</code>, <code>Count Non Null</code>, <code>Count Null</code> and <code>Count Distinct</code>. Count Distinct is the one that answers "how many different customers".`,
-      `<strong>A percentile tells you the value below which a given share of the data falls.</strong> The 50th percentile is the median. Summarize has a Percentile action.`,
-      `<strong>Every statistic hides something.</strong> Mean hides skew. Median hides spread. Mode hides everything but frequency. Range hides the middle. The exam likes "which measure is least affected by outliers" (median) and "which works on text" (mode).`,
-      `<strong>Data type decides which Summarize actions appear.</strong> Sum, Average, Min, Max, Standard Deviation and the finance actions only offer themselves on numeric fields. A number stored as a string shows only string actions such as Concatenate, Longest, Shortest and the Counts.`,
-      `<strong>Group By works on any type.</strong> Group by Region (string) and Sum Revenue (number) is the classic pair. Grouping is case sensitive: "ARVADA" and "Arvada" become two groups.`,
-      `<strong>String operations on a number field fail or convert.</strong> Concatenating an Int32 forces it to text. Adding two strings in a Formula gives an error or a silent conversion. Convert on purpose, not by accident.`,
-      `<strong>Sorting depends on type too.</strong> Numbers stored as strings sort "1, 10, 2" unless the Sort tool's <em>Use Dictionary Order</em> is on, which sorts numeric strings smallest to largest. Real numbers always sort by value.`,
+      `<strong>Среднее значение — это сумма, деленная на количество.</strong> Каждое значение тянет его, поэтому его тянет за собой один огромный выброс. Хорошо, когда данные примерно симметричны.`,
+      `<strong>Медиана — это среднее значение после сортировки.</strong> Выбросы почти не двигают его. В этом его сила в отношении доходов, цен на жилье и всего остального. Его слабость: он игнорирует расстояние между значениями.`,
+      `<strong>Режим — наиболее часто встречающееся значение.</strong> Единственный из трех, который работает на качественных данных. Его слабость: режима может не быть, а может быть несколько.`,
+      `<strong>Скажите это вслух:</strong> «Среднее для типичных, медианное для асимметричных, режим для категорий».`,
+      `<strong>Диапазон макс минус мин.</strong> Одно число, которое говорит о разбросе, и одно выпадающее значение его разрушает. Быстрый, грубый.`,
+      `<strong>Стандартное отклонение — это типичное расстояние от среднего значения.</strong> Небольшой кластер средних значений. Большие – значит, разлетаются. Он находится в тех же единицах измерения, что и данные, поэтому для чтения он предпочтительнее, чем дисперсия.`,
+      `<strong>Дисперсия представляет собой квадрат стандартного отклонения.</strong> Та же идея, единицы измерения в квадрате, поэтому их труднее читать. Обобщить предлагает оба.`,
+      `<strong>Count — количество записей.</strong> Обобщение дает вам <code>Count</code>, <code>Считать ненулевым</code>, <code>Граф Ноль</code> and <code>Подсчитайте различные</code>. Count Distinct – это тот, который отвечает на вопрос «сколько разных клиентов».`,
+      `<strong>Процентиль показывает значение, ниже которого опускается определенная доля данных.</strong> 50-й процентиль является медианой. «Суммировать» имеет действие «Процентиль».`,
+      `<strong>Каждая статистика что-то скрывает.</strong> Подлость скрывает перекос. Срединные шкуры разбросаны. Режим скрывает все, кроме частоты. Диапазон скрывает середину. Экзамену нравится «на какой показатель меньше всего влияют выбросы» (медиана) и «который работает с текстом» (режим).`,
+      `<strong>Тип данных определяет, какие действия суммирования будут отображаться.</strong> Сумма, Среднее, Мин, Макс, Стандартное отклонение и финансовые действия доступны только в числовых полях. Число, хранящееся в виде строки, отображает только действия над строками, такие как «Объединить», «Самое длинное», «Самое короткое» и «Счетчики».`,
+      `<strong>Group By работает с любым типом.</strong> Классическая пара — группировка по региону (строка) и сумме доходов (число). Группировка чувствительна к регистру: «АРВАДА» и «Арвада» становятся двумя группами.`,
+      `<strong>Строковые операции с числовым полем завершаются неудачно или преобразуются.</strong> Объединение Int32 приводит к тому, что он преобразуется в текст. Добавление двух строк в формулу приводит к ошибке или автоматическому преобразованию. Конвертируйте намеренно, а не случайно.`,
+      `<strong>Сортировка также зависит от типа.</strong> Числа, хранящиеся в виде строк, сортируются по «1, 10, 2», если только инструмент «Сортировка» не <em>Использовать порядок словаря</em> включен, при этом числовые строки сортируются от меньшего к большему. Действительные числа всегда сортируются по значению.`,
       `<strong>Comparisons in Filter depend on type.</strong> <code>Sales &gt; 100</code> works on a number. On a string it compares character by character, so "99" is greater than "100". Fix the type with Select before filtering.`,
-      `<strong>Boolean fields are the result of a test.</strong> Any expression like <code>[Amount] &gt; 0</code> returns a Bool. Filter uses it to route rows; Formula can store it in a new column.`,
-      `<strong>Date-time fields unlock date math.</strong> Only a true Date or DateTime can be used with the DateTime tool's formatting, with date functions such as <code>DateTimeDiff</code>, and with the Summarize Min and Max to find the earliest and latest.`
+      `<strong>Логические поля являются результатом проверки.</strong> Любое выражение типа <code>[Сумма] > 0</code> возвращает Bool. Фильтр использует его для маршрутизации строк; Формула может сохранить его в новом столбце.`,
+      `<strong>Поля даты и времени разблокируют математические функции даты.</strong> При форматировании инструмента DateTime можно использовать только истинную дату или DateTime с такими функциями даты, как <code>DateTimeDiff</code>, а также с помощью суммирования минимального и максимального значений, чтобы найти самое раннее и самое позднее.`
     ],
-    miscon:`<strong>Misconception to bust:</strong> "Average is always the right summary." Ten employees earn 40,000 and the owner earns 1,000,000. The mean pay is 127,000 and nobody earns anywhere near it. The median is 40,000 and describes the room. When a question mentions outliers or skew, the answer is median.`,
+    miscon:`<strong>Заблуждение, которое следует разоблачить:</strong> «Среднее всегда является правильным итогом». Десять сотрудников зарабатывают 40 000, а владелец — 1 000 000. Средняя зарплата составляет 127 000, и никто даже близко к ней не зарабатывает. Медиана составляет 40 000 и описывает комнату. Если в вопросе упоминаются выбросы или асимметрия, ответ является медианным.`,
     viz:`<div style="display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:12.5px;align-items:center">
       <b>Values</b><span style="font-family:var(--mono)">2, 3, 3, 4, 5, 30</span>
       <b>Mean</b><span><span style="font-family:var(--mono)">7.8</span> <span style="color:var(--dim)">dragged up by the 30</span></span>
@@ -428,26 +428,26 @@ const STUDY = [
 
   {key:'d3', title:"Интерфейс дизайнера, рабочие процессы и файлы",
     must:[
-      `<strong>The canvas is where the workflow lives.</strong> Drag tools onto it, connect them, run it. A standard workflow saves as a <code>.yxmd</code> file.`,
-      `<strong>The Tool Palette holds every tool, grouped by category.</strong> In/Out, Preparation, Join, Parse, Transform, Documentation and many more, plus a <em>Favorites</em> category you fill yourself. Drag a tool from the palette to the canvas to use it.`,
-      `<strong>The Configuration window shows settings for whatever is selected.</strong> A tool, a connection, or with nothing selected the workflow itself. That last case is the Workflow Configuration window with its Canvas, Workflow, Runtime, Events and Meta Info tabs.`,
-      `<strong>The Results window shows the data as it flows.</strong> Select any tool after a run and see its input and output, plus the Messages tab with errors, warnings and links to files written. Without a Browse tool it shows up to <code>1 MB</code> of data per tool.`,
-      `<strong>The Overview window is the minimap.</strong> A small picture of the whole workflow for panning around large ones. It also shows which tools have finished running.`,
-      `<strong>Search sits top right.</strong> It searches Designer tools, Server items, Connect assets, Help content and Community posts from one box. Type "join" and the tool is one click away.`,
-      `<strong>The Interface Designer builds the front end of an app or macro.</strong> Full User licence only. It is not where you configure ordinary tools.`,
-      `<strong>Help is everywhere in Designer.</strong> <code>F1</code> opens Alteryx Help. Right-click any tool and choose <em>Help</em> for that tool's page. Select a tool icon on the palette and its description appears, often with an <em>Open Example</em> link to a sample workflow.`,
-      `<strong>The Help menu also holds Tutorials, Sample Workflows, Community, What's New and About.</strong> About shows the version and serial number, which is where you check you are on the latest Desktop Designer.`,
-      `<strong>The shortcuts that get asked.</strong> <code>Ctrl+R</code> runs or stops the workflow. <code>Ctrl+S</code> saves. <code>Ctrl+Shift+B</code> adds a Browse after the selected tools. <code>Ctrl+N</code> new workflow. <code>Ctrl+Z</code> undoes up to 32 actions.`,
-      `<strong>A workflow is tools, connections, and annotations.</strong> Tools do the work. Connections carry data from an output anchor to an input anchor. Annotations and Comment boxes describe it. Every project needs an input and an output.`,
+      `<strong>Холст — это место, где живет рабочий процесс.</strong> Перетащите на него инструменты, подключите их, запустите. Стандартный рабочий процесс сохраняется в виде <code>.yxmd</code> файл.`,
+      `<strong>Палитра инструментов содержит все инструменты, сгруппированные по категориям.</strong> Ввод/вывод, подготовка, объединение, анализ, преобразование, документирование и многое другое, а также <em>Favorites</em> категорию, которую вы заполняете сами. Перетащите инструмент из палитры на холст, чтобы использовать его.`,
+      `<strong>В окне конфигурации отображаются настройки для всего, что выбрано.</strong> Инструмент, соединение или ничего не выбирало сам рабочий процесс. Последний случай — это окно «Конфигурация рабочего процесса» с вкладками «Холст», «Рабочий процесс», «Среда выполнения», «События» и «Метаинформация».`,
+      `<strong>В окне «Результаты» отображаются данные по мере их поступления.</strong> Выберите любой инструмент после запуска и просмотрите его ввод и вывод, а также вкладку «Сообщения» с ошибками, предупреждениями и ссылками на записанные файлы. Без инструмента просмотра он отображается до <code>1 МБ</code> данных на инструмент.`,
+      `<strong>Окно обзора представляет собой мини-карту.</strong> Небольшая картинка всего рабочего процесса для панорамирования больших. Он также показывает, какие инструменты завершили работу.`,
+      `<strong>Поиск находится вверху справа.</strong> Он осуществляет поиск в инструментах дизайнера, элементах сервера, ресурсах Connect, содержимом справки и сообщениях сообщества из одного окна. Введите «присоединиться», и инструмент будет в одном клике.`,
+      `<strong>Конструктор интерфейсов создает интерфейс приложения или макроса.</strong> Только полная пользовательская лицензия. Это не то место, где вы настраиваете обычные инструменты.`,
+      `<strong>Помощь доступна повсюду в Designer.</strong> <code>F1</code> открывает справку Alteryx. Щелкните правой кнопкой мыши любой инструмент и выберите <em>Help</em> для страницы этого инструмента. Выберите значок инструмента на палитре, и появится его описание, часто с <em>Открыть пример</em> ссылка на пример рабочего процесса.`,
+      `<strong>Меню «Справка» также содержит руководства, примеры рабочих процессов, «Сообщество», «Что нового» и «О программе».</strong> В программе «О программе» отображается версия и серийный номер, по которым вы можете проверить, используете ли вы последнюю версию Desktop Designer.`,
+      `<strong>Ярлыки, которые спрашивают.</strong> <code>Ctrl+R</code> запускает или останавливает рабочий процесс. <code>Ctrl+S</code> сохраняет. <code>Ctrl+Shift+B</code> добавляет обзор после выбранных инструментов. <code>Ctrl+N</code> новый рабочий процесс. <code>Ctrl+Z</code> отменяет до 32 действий.`,
+      `<strong>Рабочий процесс — это инструменты, соединения и аннотации.</strong> Инструменты делают свою работу. Соединения переносят данные от выходной привязки к входной привязке. Поля аннотаций и комментариев описывают это. Каждый проект нуждается в входе и выходе.`,
       `<strong>Anchors are the connection points on a tool.</strong> Inputs on the left, outputs on the right. Some tools have several and letter them: Join has L, J and R outputs; Filter has T and F.`,
-      `<strong>Workflow Configuration's Runtime tab is where development settings live.</strong> <em>Record Limit for All Inputs</em> for fast test runs, <em>Disable All Browse Tools</em>, <em>Disable All Tools that Write Output</em>, a conversion errors limit, and the <em>Use AMP Engine</em> checkbox.`,
-      `<strong>AMP is the multi-threaded engine.</strong> The original engine is single-threaded. The exam tests the latest Designer <strong>with AMP disabled</strong>, so default behaviours such as Text Input creating <code>String</code> fields are the original engine's.`,
-      `<strong>Canvas layout direction is a setting.</strong> The Canvas tab lets you choose Horizontal or Vertical so tools connect left to right or top to bottom.`,
-      `<strong>Three workflow types, three extensions.</strong> <code>.yxmd</code> Standard Workflow. <code>.yxwz</code> Analytic App, a workflow with a user interface. <code>.yxmc</code> Macro, a workflow that runs as a single tool inside another workflow.`,
-      `<strong>Two more you must know.</strong> <code>.yxdb</code> is the Alteryx database file: the most efficient format to read and write, no size limit, keeps field types and metadata. <code>.yxzp</code> is a package: a workflow plus all its dependencies zipped into one file, the way you send a workflow to someone else.`,
-      `<strong>The rest of the family.</strong> <code>.yxwg</code> workflow group. <code>.yxi</code> packaged tool installer. <code>.yxft</code> field type file saved from a Select tool. <code>.yxwv</code> app values file. <code>.bak</code> the workflow as it was before the last save. <code>.cydb</code> Calgary database for fast indexed lookups.`
+      `<strong>На вкладке «Время выполнения» конфигурации рабочего процесса находятся настройки разработки.</strong> <em>Лимит записи для всех входов</em> для быстрых тестовых прогонов, <em>Отключить все инструменты просмотра</em>, <em>Отключить все инструменты, записывающие выходные данные</em>, предел ошибок преобразования и <em>Используйте движок AMP</em> флажок.`,
+      `<strong>AMP — это многопоточный движок.</strong> Оригинальный движок однопоточный. На экзамене проверяется последняя версия Designer <strong>с отключенным AMP</strong>, поэтому поведение по умолчанию, такое как создание текстового ввода <code>String</code> Поля — это исходный движок.`,
+      `<strong>Направление макета холста — это настройка.</strong> На вкладке «Холст» можно выбрать «Горизонтально» или «Вертикально», чтобы инструменты соединялись слева направо или сверху вниз.`,
+      `<strong>Три типа рабочего процесса, три расширения.</strong> <code>.yxmd</code> Стандартный рабочий процесс. <code>.yxwz</code> Аналитическое приложение — рабочий процесс с пользовательским интерфейсом. <code>.yxmc</code> Макрос — рабочий процесс, который выполняется как отдельный инструмент внутри другого рабочего процесса.`,
+      `<strong>Еще два, которые вы должны знать.</strong> <code>.yxdb</code> — это файл базы данных Alteryx: наиболее эффективный формат для чтения и записи, без ограничений по размеру, сохраняет типы полей и метаданные. <code>.yxzp</code> — это пакет: рабочий процесс плюс все его зависимости, заархивированные в один файл, так же, как вы отправляете рабочий процесс кому-то другому.`,
+      `<strong>Остальные члены семьи.</strong> <code>.yxwg</code> группа рабочих процессов. <code>.yxi</code> пакетный установщик инструментов. <code>.yxft</code> файл типа поля, сохраненный с помощью инструмента «Выбор». <code>.yxwv</code> файл значений приложения. <code>.bak</code> рабочий процесс, каким он был до последнего сохранения. <code>.cydb</code> База данных Калгари для быстрого индексированного поиска.`
     ],
-    miscon:`<strong>Misconception to bust:</strong> "A .yxzp is a workflow." It is a zip. It holds a <code>.yxmd</code>, <code>.yxmc</code> or <code>.yxwz</code> plus the input files, macros and other dependencies that workflow needs. When a question says "share a workflow with a colleague who does not have your files", the answer is export as <code>.yxzp</code>, not save as <code>.yxmd</code>.`,
+    miscon:`<strong>Заблуждение, которое следует разоблачить:</strong> «.yxzp — это рабочий процесс». Это молния. Он имеет <code>.yxmd</code>, <code>.yxmc</code> or <code>.yxwz</code> плюс входные файлы, макросы и другие зависимости, необходимые для рабочего процесса. Когда в вопросе говорится: «Поделитесь рабочим процессом с коллегой, у которого нет ваших файлов», ответ экспортируется как <code>.yxzp</code>, не сохранять как <code>.yxmd</code>.`,
     viz:`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:6px;font-size:12px">
       <div style="border:1px solid var(--border);border-radius:6px;padding:6px 9px;background:var(--surf)"><b style="font-family:var(--mono)">.yxmd</b><br><span style="color:var(--dim)">standard workflow</span></div>
       <div style="border:1px solid var(--border);border-radius:6px;padding:6px 9px;background:var(--surf)"><b style="font-family:var(--mono)">.yxwz</b><br><span style="color:var(--dim)">analytic app</span></div>
@@ -458,26 +458,26 @@ const STUDY = [
 
   {key:'d4', title:"17 инструментов: что делает каждый",
     must:[
-      `<strong>Input Data (In/Out) opens a file or database.</strong> Options such as the record limit, first row contains field names, start import on line, code page and delimiter vary by file type. One Input Data tool can read many files with a wildcard like <code>2019*.csv</code> if they share the same fields.`,
-      `<strong>Output Data (In/Out) writes the result.</strong> Output options depend on the target: Overwrite File, Append to Existing, Create New Sheet, Overwrite Sheet, Delete and Append. <em>Take File/Table Name From Field</em> writes one file per value, with Append Suffix, Prepend Prefix, Change File Name or Change Entire File Path.`,
-      `<strong>Text Input (In/Out) is a tiny table you type.</strong> The data is saved inside the workflow, so you can share it without an input file. Import is capped at 10,000 cells. With AMP off it creates <code>String</code> fields sized to the longest value.`,
-      `<strong>Browse (In/Out) shows everything.</strong> Full data, a profile per column with a data quality bar and top values, and a map for spatial data. Three ways to add it: drag from the palette, right-click a tool and <em>Add Browse After</em>, or <code>Ctrl+Shift+B</code>. It has no output anchor.`,
-      `<strong>Select (Preparation) is the field manager.</strong> Check or uncheck fields, rename, reorder, change type and size, add a description. The <em>Unknown</em> field is checked by default and is where any new fields land. Options lets you save the layout as a <code>.yxft</code>.`,
-      `<strong>Filter (Preparation) splits rows into two streams.</strong> <code>T</code> outputs rows that meet the condition, <code>F</code> outputs rows that do not. Nothing is deleted. Basic filter tests one column; Custom filter takes an expression over many.`,
-      `<strong>Filter has null operators.</strong> <em>Is null</em>, <em>Is not null</em>, and for strings <em>Is empty</em> (null or blank) and <em>Is not empty</em>. Rows where the condition cannot be evaluated go to F.`,
-      `<strong>Formula (Preparation) creates or overwrites a column with an expression.</strong> One tool can hold many expressions and they run in order, top to bottom, so an expression can use the column the one above it made. <code>Ctrl+Space</code> lists functions. Fixed Decimal is implicitly converted to Double inside the expression.`,
-      `<strong>Sort (Preparation) orders rows.</strong> Several sort columns are allowed and the top entry wins. Ascending is the default. <em>Use Dictionary Order</em> sorts lowercase before uppercase and numeric strings by value.`,
-      `<strong>Sample (Preparation) keeps a slice.</strong> Six modes: First N rows, Last N rows, Skip 1st N rows, 1 of every N rows, 1 in N chance to include each row, First N% of rows. A Group By makes each group sampled separately.`,
-      `<strong>Data Cleansing (Preparation) is a macro that tidies fields.</strong> Remove null rows and columns, replace nulls with blanks (strings) or 0 (numbers), remove leading and trailing whitespace, tabs and line breaks, all whitespace, letters, numbers or punctuation, and change case to Upper, Lower or Title. It is not dynamic: new field names it has never seen are ignored.`,
-      `<strong>Text to Columns (Parse) splits one field on delimiters.</strong> Each delimiter character is treated on its own, so you cannot split on a word. Split to Columns makes N new columns; pick what happens to extra text: leave in last column, drop with warning, drop without warning, or error. Split to Rows makes one row per piece.`,
-      `<strong>DateTime (Parse) converts in two directions.</strong> <em>Date/Time format to string</em> and <em>String to Date/Time format</em>. The new column defaults to <code>DateTime_Out</code>. Use specifiers like <code>dd</code>, <code>MM</code>, <code>yyyy</code>, or the percent style, not both in one format. Alteryx's native format is <code>yyyy-MM-dd</code>.`,
-      `<strong>Summarize (Transform) aggregates and returns only the result.</strong> Group By, Sum, Count, Count Distinct, Min, Max, First, Last, Average, Median, Mode, Standard Deviation, Percentile, Concatenate and more. Output fields are named after the action, such as <code>Sum_Sales</code>. With no Group By the whole stream becomes one row. Join the result back if you need the original rows.`,
-      `<strong>Join (Join) matches two streams.</strong> Inputs <code>L</code> and <code>R</code>. Outputs <code>L</code> (left rows that did not match), <code>J</code> (matched rows), <code>R</code> (right rows that did not match). Join by Specific Field on a shared key, or Join by Record Position when both tables have the same structure. A full outer join is J plus L plus R, which is why Join is often followed by Union.`,
-      `<strong>Union (Join) stacks streams on top of each other.</strong> Auto Configure by Name lines up columns with the same name. Auto Configure by Position lines them up by order. Manually Configure Columns lets you map them. Missing columns: Output All Fields fills with nulls, Output Common Subset keeps only shared columns.`,
-      `<strong>Say it out loud:</strong> "Join goes sideways, Union goes downward." Join adds columns by matching rows. Union adds rows and keeps the columns.`,
-      `<strong>Comment and Tool Container (Documentation) carry no data.</strong> Comment is a text box with shape, font, colours and a background image, and it has no anchors. Tool Container groups tools with a caption, can collapse, and can be <em>disabled</em> so the tools inside do not run.`
+      `<strong>Входные данные (Вход/Выход) открывает файл или базу данных.</strong> Такие параметры, как ограничение количества записей, первая строка содержит имена полей, запуск онлайн-импорта, кодовая страница и разделитель, различаются в зависимости от типа файла. Один инструмент ввода данных может читать множество файлов с подстановочным знаком, например <code>2019*.csv</code> если они имеют одни и те же поля.`,
+      `<strong>Выходные данные (вход/выход) записывают результат.</strong> Параметры вывода зависят от цели: «Перезаписать файл», «Добавить к существующему», «Создать новый лист», «Перезаписать лист», «Удалить» и «Добавить». <em>Взять имя файла/таблицы из поля</em> записывает по одному файлу для каждого значения с добавлением суффикса, добавлением префикса, изменением имени файла или изменением всего пути к файлу.`,
+      `<strong>Текстовый ввод (вход/выход) — это небольшая таблица, которую вы вводите.</strong> Данные сохраняются внутри рабочего процесса, поэтому вы можете поделиться ими без входного файла. Импорт ограничен 10 000 ячеек. При выключенном AMP создается <code>String</code> поля имеют размер наибольшего значения.`,
+      `<strong>Обзор (Вход/Выход) показывает все.</strong> Полные данные, профиль для каждого столбца с индикатором качества данных и максимальными значениями, а также карта для пространственных данных. Три способа добавить его: перетащить из палитры, щелкнуть инструмент правой кнопкой мыши и <em>Добавить просмотр после</em>, или <code>Ctrl+Shift+B</code>. У него нет выходного якоря.`,
+      `<strong>Селект (Подготовка) – менеджер полей.</strong> Установите или снимите флажки для полей, переименуйте, измените порядок, измените тип и размер, добавьте описание. <em>Unknown</em> Поле отмечено по умолчанию, и именно туда попадают все новые поля. Параметры позволяют сохранить макет как <code>.yxft</code>.`,
+      `<strong>Фильтр (Подготовка) разбивает строки на два потока.</strong> <code>T</code> выводит строки, соответствующие условию, <code>F</code> выводит строки, которые этого не делают. Ничего не удаляется. Базовый фильтр проверяет один столбец; Пользовательский фильтр принимает выражение для многих.`,
+      `<strong>Фильтр имеет нулевые операторы.</strong> <em>НУЛЕВЫЙ</em>, <em>НЕ НУЛЬ</em>и для строк <em>Пусто</em> (пусто или пусто) и <em>Не пусто</em>. Строки, где условие не может быть вычислено, переходят к F.`,
+      `<strong>Формула (подготовка) создает или перезаписывает столбец с выражением.</strong> Один инструмент может содержать множество выражений, и они выполняются по порядку, сверху вниз, поэтому выражение может использовать столбец, созданный над ним. <code>Ctrl+Space</code> перечисляет функции. Фиксированное десятичное число неявно преобразуется в двойное внутри выражения.`,
+      `<strong>Сортировка (подготовка) строк заказов.</strong> Допускается несколько столбцов сортировки, и побеждает верхняя запись. По возрастанию используется значение по умолчанию. <em>Использовать порядок словаря</em> сортирует строчные буквы перед прописными и числовые строки по значению.`,
+      `<strong>Образец (Подготовка) сохраняет срез.</strong> Шесть режимов: первые N строк, последние N строк, пропуск первых N строк, 1 из каждых N строк, 1 из N шансов включить каждую строку, первые N% строк. Функция Group By делает выборку каждой группы отдельно.`,
+      `<strong>Очистка данных (подготовка) — макрос, который приводит в порядок поля.</strong> Удалите пустые строки и столбцы, замените пустые значения пробелами (строки) или 0 (цифры), удалите начальные и конечные пробелы, табуляции и разрывы строк, все пробелы, буквы, цифры или знаки препинания и измените регистр на Верхний, Нижний или Заголовок. Он не является динамическим: новые имена полей, которые он никогда не видел, игнорируются.`,
+      `<strong>Текст в столбцы (анализ) разбивает одно поле на разделители.</strong> Каждый символ-разделитель обрабатывается отдельно, поэтому разделить слово на слово невозможно. Разделить на столбцы создает N новых столбцов; выберите, что произойдет с дополнительным текстом: оставить в последнем столбце, удалить с предупреждением, удалить без предупреждения или с ошибкой. Разделение на строки делает одну строку на единицу.`,
+      `<strong>DateTime (Parse) преобразуется в двух направлениях.</strong> <em>Формат даты/времени для строки</em> and <em>Строка в формате даты/времени</em>. Новый столбец по умолчанию имеет значение <code>DateTime_Out</code>. Используйте спецификаторы, такие как <code>dd</code>, <code>MM</code>, <code>yyyy</code>или стиль процентов, но не оба в одном формате. Родной формат Alteryx: <code>yyyy-MM-dd</code>.`,
+      `<strong>Summarize (Transform) суммирует и возвращает только результат.</strong> Группировать по, сумме, подсчету, подсчету различных, мин, макс, первому, последнему, среднему, медиане, моде, стандартному отклонению, процентилю, объединению и т. д. Поля вывода названы в честь действия, например: <code>Sum_Sales</code>. Без группы по весь поток становится одной строкой. Объедините результат обратно, если вам нужны исходные строки.`,
+      `<strong>Join (Объединиться) соответствует двум потокам.</strong> Inputs <code>L</code> and <code>R</code>. Выходы <code>L</code> (оставили несовпадающие строки), <code>J</code> (совпадающие строки), <code>R</code> (правые строки, которые не совпали). Соединение по определенному полю общего ключа или объединение по позиции записи, если обе таблицы имеют одинаковую структуру. Полное внешнее соединение — это J плюс L плюс R, поэтому после соединения часто следует соединение.`,
+      `<strong>Union (Join) укладывает потоки друг на друга.</strong> Автоматическая настройка по имени выстраивает столбцы с одинаковыми именами. Автоматическая настройка по положению выстраивает их по порядку. Настроить столбцы вручную позволяет сопоставить их. Отсутствующие столбцы: все выходные поля заполняются нулями, выходное общее подмножество сохраняет только общие столбцы.`,
+      `<strong>Скажите это вслух:</strong> «Join идет вбок, Union идет вниз». Join добавляет столбцы, сопоставляя строки. Union добавляет строки и сохраняет столбцы.`,
+      `<strong>Контейнер комментариев и инструментов (документация) не содержит данных.</strong> Комментарий — это текстовое поле с формой, шрифтом, цветами и фоновым изображением, не имеющее привязок. Контейнер инструментов группирует инструменты с заголовком, может сворачиваться и может быть <em>disabled</em> поэтому инструменты внутри не запускаются.`
     ],
-    miscon:`<strong>Misconception to bust:</strong> "Filter removes rows." It does not remove anything. Every row leaves through T or F. If a question says rows "disappeared" after a Filter, the rows are sitting on the F anchor with nothing connected to it. The same habit of mind answers Join: rows that did not match are not lost, they are on L or R.`,
+    miscon:`<strong>Заблуждение, которое следует разоблачить:</strong> «Фильтр удаляет строки». Он ничего не удаляет. Каждая строка уходит через T или F. Если в вопросе говорится, что строки «исчезли» после фильтра, строки находятся на якоре F и ничего с ним не связано. Та же привычка отвечает на Join: не совпавшие строки не теряются, они находятся на L или R.`,
     viz:`<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:12px">
       <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end"><span style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--surf)">L in</span><span style="padding:3px 8px;border:1px solid var(--border);border-radius:4px;background:var(--surf)">R in</span></div>
       <span style="color:var(--dim)">→</span>
@@ -498,172 +498,172 @@ const STUDY = [
    type 'mc' → correct: index · type 'ms' → correct: [indices] (choose all that apply) */
 const QUESTIONS = [
   /* ---------- AREA 1 · Data concepts (8) ---------- */
-  {id:'q1', domain:'d1', type:'mc', q:`Which of these is an example of unstructured data?`,
+  {id:'q1', domain:'d1', type:'mc', q:`Что из этого является примером неструктурированных данных?`,
     choices:[`CSV-файл с ежемесячными продажами.`, `Папка сообщений электронной почты клиентов.`, `SQL-таблица сотрудников`, `Лист Excel с одной строкой на заказ`],
     correct:1,
-    explain:`Emails are free text with no fixed rows and columns. The other three are all tables, which is structured data.`},
-  {id:'q2', domain:'d1', type:'ms', q:`Which of these are quantitative data? <em>Choose all that apply.</em>`,
+    explain:`Электронные письма представляют собой свободный текст без фиксированных строк и столбцов. Остальные три — это таблицы, представляющие собой структурированные данные.`},
+  {id:'q2', domain:'d1', type:'ms', q:`Какие из этих данных являются количественными? <em>Выберите все, что применимо.</em>`,
     choices:[`Сумма заказа в долларах`, `Регион клиента`, `Количество товаров в корзине`, `Цвет продукта`],
     correct:[0,2],
-    explain:`Quantitative data is a measured amount you can add or average. Order total and item count qualify. Region and colour are qualitative categories.`},
-  {id:'q3', domain:'d1', type:'mc', q:`A field holds customer names in several languages and the length varies a lot. Which Alteryx type fits best?`,
+    explain:`Количественные данные — это измеренная сумма, которую вы можете добавить или усреднить. Общая сумма заказа и количество товаров соответствуют критериям. Регион и цвет — качественные категории.`},
+  {id:'q3', domain:'d1', type:'mc', q:`Поле содержит имена клиентов на нескольких языках, и его длина сильно различается. Какой тип Alteryx подходит лучше всего?`,
     choices:[`String`, `WString`, `V_String`, `V_WString`],
     correct:3,
-    explain:`V means variable length and W means wide, which is Unicode. V_WString handles any character at any length and sizes itself to the data.`},
-  {id:'q4', domain:'d1', type:'mc', q:`What is the default precision and scale of an Alteryx Fixed Decimal field?`,
+    explain:`V означает переменную длину, а W означает ширину, что соответствует Unicode. V_WString обрабатывает любой символ любой длины и подстраивается под данные.`},
+  {id:'q4', domain:'d1', type:'mc', q:`Какова точность и масштаб поля Alteryx с фиксированной десятичной дробью по умолчанию?`,
     choices:[`10.2`, `19.6`, `38.10`, `50.6`],
     correct:1,
-    explain:`Fixed Decimal defaults to 19.6: 19 characters wide with 6 after the decimal point. The maximum precision is 50 characters, counting the point and the minus sign.`},
-  {id:'q5', domain:'d1', type:'mc', q:`Which integer type holds the value 3,000,000,000?`,
+    explain:`Исправлено значение по умолчанию для десятичной дроби: 19,6: ширина 19 символов с 6 после десятичной точки. Максимальная точность — 50 символов, считая точку и знак минус.`},
+  {id:'q5', domain:'d1', type:'mc', q:`Какой целочисленный тип содержит значение 3 000 000 000?`,
     choices:[`Byte`, `Int16`, `Int32`, `Int64`],
     correct:3,
-    explain:`Int32 tops out at about 2.1 billion. Three billion needs Int64, the 8-byte integer.`},
-  {id:'q6', domain:'d1', type:'mc', q:`What is the format of an Alteryx Date field?`,
+    explain:`Максимальное число Int32 составляет около 2,1 миллиарда. Трем миллиардам нужен Int64, 8-байтовое целое число.`},
+  {id:'q6', domain:'d1', type:'mc', q:`Каков формат поля даты Alteryx?`,
     choices:[`мм/дд/гггг, 10 символов`, `гггг-мм-дд, 10 символов`, `дд-ММ-гггг ЧЧ:ММ:СС, 19 символов`, `Любой формат, при условии, что он анализирует`],
     correct:1,
-    explain:`Date is a 10-character string in yyyy-mm-dd. DateTime adds the time for 19 characters. Anything else is a string that looks like a date and must be converted with the DateTime tool.`},
-  {id:'q7', domain:'d1', type:'mc', q:`Which statement about metadata is correct?`,
+    explain:`Дата — это строка из 10 символов в формате гггг-мм-дд. DateTime добавляет время на 19 символов. Все остальное — это строка, похожая на дату, которую необходимо преобразовать с помощью инструмента DateTime.`},
+  {id:'q7', domain:'d1', type:'mc', q:`Какое утверждение о метаданных верно?`,
     choices:[`Метаданные — это первая строка файла данных.`, `Метаданные — это данные о данных, такие как имена полей, типы и размеры.`, `Метаданные хранятся только в файлах Excel.`, `Метаданные — результат работы инструмента суммирования.`],
     correct:1,
-    explain:`Metadata describes the data: name, type, size, source, description. The Results window and Browse tool show it, and .yxdb files store it with the values.`},
-  {id:'q8', domain:'d1', type:'mc', q:`A Bool field in Alteryx stores False as which value?`,
+    explain:`Метаданные описывают данные: имя, тип, размер, источник, описание. Окно результатов и инструмент «Обзор» отображают его, а файлы .yxdb сохраняют его со значениями.`},
+  {id:'q8', domain:'d1', type:'mc', q:`В качестве какого значения поле Bool в Alteryx хранит значение False?`,
     choices:[`-1`, `0`, `1`, `Null`],
     correct:1,
-    explain:`False is 0. True is any non-zero value. Filter conditions and comparisons produce Bool results.`},
+    explain:`False — 0. True — любое ненулевое значение. Условия фильтрации и сравнения дают результаты типа Bool.`},
 
   /* ---------- AREA 2 · Statistics basics and types in operations (6) ---------- */
-  {id:'q9', domain:'d2', type:'mc', q:`House prices on a street are 200k, 210k, 215k, 220k and 2,000k. Which measure best describes a typical house?`,
+  {id:'q9', domain:'d2', type:'mc', q:`Цены на дома на улице составляют 200 тысяч, 210 тысяч, 215 тысяч, 220 тысяч и 2000 тысяч. Какая мера лучше всего описывает типичный дом?`,
     choices:[`Mean`, `Median`, `Range`, `Стандартное отклонение`],
     correct:1,
-    explain:`One mansion drags the mean to 569k, which describes no house on the street. The median, 215k, is barely moved by the outlier.`},
-  {id:'q10', domain:'d2', type:'mc', q:`Which statistic can be calculated on a qualitative field such as Product Colour?`,
+    explain:`Один особняк доводит среднее значение до 569 тыс., что означает отсутствие дома на улице. Медиана, 215 тыс., почти не смещается из-за выброса.`},
+  {id:'q10', domain:'d2', type:'mc', q:`Какую статистику можно рассчитать по качественному полю, например «Цвет продукта»?`,
     choices:[`Mean`, `Стандартное отклонение`, `Mode`, `Range`],
     correct:2,
-    explain:`Mode is the most frequent value and works on categories. Mean, standard deviation and range all need numbers.`},
-  {id:'q11', domain:'d2', type:'mc', q:`What is the weakness of the range as a measure of spread?`,
+    explain:`Режим является наиболее частым значением и работает с категориями. Среднее значение, стандартное отклонение и диапазон — все это необходимые числа.`},
+  {id:'q11', domain:'d2', type:'mc', q:`В чем слабость диапазона как меры спреда?`,
     choices:[`Сначала необходимо отсортировать данные`, `Это в разных единицах данных`, `Одна крайняя ценность решает все полностью`, `Его нельзя использовать с целыми числами.`],
     correct:2,
-    explain:`Range is max minus min, so a single outlier at either end sets it. Standard deviation uses every value and is in the same units as the data.`},
-  {id:'q12', domain:'d2', type:'mc', q:`A Sales field shows only Concatenate, Longest, Shortest and the Count actions in the Summarize tool. Why?`,
+    explain:`Диапазон равен максимуму минус минимуму, поэтому его задает один выброс на обоих концах. Стандартное отклонение использует все значения и выражается в тех же единицах, что и данные.`},
+  {id:'q12', domain:'d2', type:'mc', q:`В поле «Продажи» отображаются только действия «Объединить», «Самое длинное», «Самое короткое» и «Подсчет» в инструменте «Суммировать». Почему?`,
     choices:[`Рабочий процесс еще не запущен`, `Поле имеет строковый тип, поэтому числовые действия не предлагаются.`, `Подведение итогов требует группы в первую очередь`, `Механизм AMP отключен.`],
     correct:1,
-    explain:`Summarize offers actions by data type. Sum, Average, Min and Max appear only on numeric fields. Change the type with a Select tool first.`},
-  {id:'q13', domain:'d2', type:'ms', q:`Which Summarize actions answer "how many different customers placed orders"? <em>Choose all that apply.</em>`,
+    explain:`Суммировать предлагает действия по типам данных. Сумма, Среднее, Мин и Макс отображаются только в числовых полях. Сначала измените тип с помощью инструмента «Выбор».`},
+  {id:'q13', domain:'d2', type:'ms', q:`Какие действия «Суммировать» отвечают на вопрос «сколько разных клиентов разместили заказы»? <em>Выберите все, что применимо.</em>`,
     choices:[`Count`, `Подсчитайте различные`, `Группируйте по клиентам и рассчитывайте на результат`, `Sum`],
     correct:[1,2],
-    explain:`Count Distinct counts unique values directly. Grouping by Customer and counting the resulting rows gets the same number. Plain Count counts orders, not customers. Sum adds values.`},
-  {id:'q14', domain:'d2', type:'mc', q:`A Filter with the condition <code>[Amount] &gt; 100</code> lets "99" through to T. What is the most likely cause?`,
+    explain:`Функция Count Distinct напрямую подсчитывает уникальные значения. Группируя по Заказчику и подсчитывая полученные строки, получаем одинаковое число. Plain Count считает заказы, а не клиентов. Сумма добавляет значения.`},
+  {id:'q14', domain:'d2', type:'mc', q:`Фильтр с условием <code>[Сумма] > 100</code> пропускаем «99» к T. Какова наиболее вероятная причина?`,
     choices:[`Фильтр находится в базовом режиме.`, `Сумма представляет собой строку, поэтому сравнение происходит посимвольно.`, `Сумма содержит нули`, `Анкеры T и F поменяны местами.`],
     correct:1,
-    explain:`On a string, "99" is greater than "100" because "9" comes after "1". Convert Amount to a numeric type with Select before filtering.`},
+    explain:`В строке «99» больше, чем «100», поскольку «9» идет после «1». Преобразуйте сумму в числовой тип с помощью кнопки «Выбрать» перед фильтрацией.`},
 
   /* ---------- AREA 3 · Designer interface, workflows and files (12) ---------- */
-  {id:'q15', domain:'d3', type:'mc', q:`Which window shows the settings for the tool you have selected?`,
+  {id:'q15', domain:'d3', type:'mc', q:`В каком окне отображаются настройки выбранного вами инструмента?`,
     choices:[`Окно результатов`, `Обзорное окно`, `Окно конфигурации`, `Дизайнер интерфейсов`],
     correct:2,
-    explain:`The Configuration window shows settings for the selected tool or connection. With nothing selected it shows the workflow's own configuration.`},
-  {id:'q16', domain:'d3', type:'mc', q:`After running a workflow you want to see the data coming out of a tool and any error messages. Where do you look?`,
+    explain:`В окне конфигурации отображаются настройки выбранного инструмента или соединения. Если ничего не выбрано, отображается собственная конфигурация рабочего процесса.`},
+  {id:'q16', domain:'d3', type:'mc', q:`После запуска рабочего процесса вы хотите видеть данные, поступающие из инструмента, и любые сообщения об ошибках. Куда ты смотришь?`,
     choices:[`Окно конфигурации`, `Окно результатов`, `Обзорное окно`, `Палитра инструментов`],
     correct:1,
-    explain:`The Results window shows the state of the data at each tool after a run, plus a Messages tab with errors, warnings and links to output files.`},
-  {id:'q17', domain:'d3', type:'mc', q:`What does the Overview window do?`,
+    explain:`В окне «Результаты» отображается состояние данных каждого инструмента после запуска, а также вкладка «Сообщения» с ошибками, предупреждениями и ссылками на выходные файлы.`},
+  {id:'q17', domain:'d3', type:'mc', q:`Что делает окно Обзор?`,
     choices:[`Перечисляет все инструменты в палитре.`, `Показывает небольшую карту всего рабочего процесса панорамирования и список инструментов, которые уже завершены.`, `Показывает профиль данных выбранного поля.`, `Показывает XML рабочего процесса.`],
     correct:1,
-    explain:`The Overview window is the minimap. It is most useful on large workflows and it also shows which tools have completed running.`},
-  {id:'q18', domain:'d3', type:'ms', q:`Which of these open help for a tool inside Designer? <em>Choose all that apply.</em>`,
+    explain:`Окно обзора представляет собой мини-карту. Это наиболее полезно для больших рабочих процессов, а также показывает, какие инструменты завершили работу.`},
+  {id:'q18', domain:'d3', type:'ms', q:`Какой из этих вариантов открывает справку для инструмента в Designer? <em>Выберите все, что применимо.</em>`,
     choices:[`Нажмите F1`, `Щелкните инструмент правой кнопкой мыши и выберите «Справка».`, `Выберите значок инструмента на палитре, чтобы прочитать его описание и ссылку «Открыть пример».`, `Нажмите Ctrl+R.`],
     correct:[0,1,2],
-    explain:`F1 opens Alteryx Help, the right-click menu has a Help item, and the palette description often links to a sample workflow. Ctrl+R runs the workflow.`},
-  {id:'q19', domain:'d3', type:'mc', q:`Which keyboard shortcut runs the workflow?`,
+    explain:`F1 открывает справку Alteryx, в контекстном меню есть пункт «Справка», а описание палитры часто ссылается на пример рабочего процесса. Ctrl+R запускает рабочий процесс.`},
+  {id:'q19', domain:'d3', type:'mc', q:`Какое сочетание клавиш запускает рабочий процесс?`,
     choices:[`Ctrl+S`, `Ctrl+R`, `Ctrl+Shift+B`, `F1`],
     correct:1,
-    explain:`Ctrl+R runs or stops the workflow. Ctrl+S saves, Ctrl+Shift+B adds a Browse after the selected tools, F1 opens help.`},
-  {id:'q20', domain:'d3', type:'mc', q:`What are the three things a workflow is made of?`,
+    explain:`Ctrl+R запускает или останавливает рабочий процесс. Ctrl+S сохраняет, Ctrl+Shift+B добавляет обзор после выбранных инструментов, F1 открывает справку.`},
+  {id:'q20', domain:'d3', type:'mc', q:`Из каких трёх вещей состоит рабочий процесс?`,
     choices:[`Инструменты, соединения, аннотации`, `Входные данные, формулы, выходные данные`, `Файлы, базы данных, отчеты`, `Макросы, приложения, пакеты`],
     correct:0,
-    explain:`Tools do the work, connections carry data from output anchors to input anchors, and annotations or Comment boxes explain it.`},
-  {id:'q21', domain:'d3', type:'mc', q:`Where would you set a record limit on every input so the workflow runs fast during development?`,
+    explain:`Инструменты выполняют работу, соединения переносят данные от выходных привязок к входным привязкам, а аннотации или поля комментариев объясняют это.`},
+  {id:'q21', domain:'d3', type:'mc', q:`Где бы вы установили ограничение на запись для каждого ввода, чтобы рабочий процесс выполнялся быстро во время разработки?`,
     choices:[`Каждый инструмент входных данных, только по одному`, `Конфигурация рабочего процесса, вкладка «Среда выполнения»`, `Опции, настройки пользователя`, `Инструмент «Обзор»`],
     correct:1,
-    explain:`The Runtime tab of Workflow Configuration has Record Limit for All Inputs, along with Disable All Browse Tools, Disable All Tools that Write Output and the AMP Engine checkbox.`},
-  {id:'q22', domain:'d3', type:'mc', q:`Which file extension is an Analytic App?`,
+    explain:`На вкладке «Время выполнения» конфигурации рабочего процесса имеется ограничение записи для всех входных данных, а также флажок «Отключить все инструменты просмотра», «Отключить все инструменты, записывающие выходные данные» и флажок «Механизм AMP».`},
+  {id:'q22', domain:'d3', type:'mc', q:`Какое расширение файла имеет аналитическое приложение?`,
     choices:[`.yxmd`, `.yxmc`, `.yxwz`, `.yxdb`],
     correct:2,
-    explain:`.yxwz is an Analytic App: a workflow with a user interface. .yxmd is a standard workflow, .yxmc a macro, .yxdb a data file.`},
-  {id:'q23', domain:'d3', type:'mc', q:`A colleague needs your workflow and every input file and macro it depends on, in one file. What do you send?`,
+    explain:`.yxwz — это аналитическое приложение: рабочий процесс с пользовательским интерфейсом. .yxmd — это стандартный рабочий процесс, .yxmc — макрос, .yxdb — файл данных.`},
+  {id:'q23', domain:'d3', type:'mc', q:`Коллеге нужен ваш рабочий процесс и все входные файлы и макросы, от которых он зависит, в одном файле. Что вы отправляете?`,
     choices:[`.yxmd`, `.yxzp`, `.yxdb`, `.yxft`],
     correct:1,
-    explain:`.yxzp is a workflow package: the workflow and all its dependencies zipped together. A .yxmd alone carries none of the files it reads.`},
-  {id:'q24', domain:'d3', type:'mc', q:`Which file type is described by Alteryx as the most efficient to read and write, with no size limit?`,
+    explain:`.yxzp — это пакет рабочего процесса: рабочий процесс и все его зависимости собраны вместе. Один только .yxmd не содержит ни одного файла, который он читает.`},
+  {id:'q24', domain:'d3', type:'mc', q:`Какой тип файла описан Alteryx как наиболее эффективный для чтения и записи без ограничения размера?`,
     choices:[`.csv`, `.xlsx`, `.yxdb`, `.yxzp`],
     correct:2,
-    explain:`.yxdb is the Alteryx database file. It keeps field types and metadata, has no row or file size limit, and is the fastest format for Designer.`},
-  {id:'q25', domain:'d3', type:'mc', q:`What is a macro in Alteryx Designer?`,
+    explain:`.yxdb — это файл базы данных Alteryx. Он сохраняет типы полей и метаданные, не имеет ограничений на размер строк или файлов и является самым быстрым форматом для Designer.`},
+  {id:'q25', domain:'d3', type:'mc', q:`Что такое макрос в Alteryx Designer?`,
     choices:[`Записанный набор нажатий клавиш`, `Рабочий процесс, сохраненный в формате .yxmc, который запускается как отдельный инструмент внутри другого рабочего процесса.`, `Рабочий процесс с пользовательским интерфейсом`, `Запланированный рабочий процесс на сервере`],
     correct:1,
-    explain:`A macro is a workflow packaged as a reusable tool, saved as .yxmc. The Data Cleansing tool is itself a macro.`},
-  {id:'q26', domain:'d3', type:'mc', q:`The Foundation exam tests Designer in which engine state?`,
+    explain:`Макрос — это рабочий процесс, упакованный как инструмент многократного использования, сохраненный как .yxmc. Инструмент очистки данных сам по себе является макросом.`},
+  {id:'q26', domain:'d3', type:'mc', q:`В каком состоянии движка сдается экзамен Foundation?`,
     choices:[`Механизм AMP включен`, `Механизм AMP отключен`, `Либо экзамен позволяет избежать различий в двигателях`, `Серверный движок`],
     correct:1,
-    explain:`The official prep guide says the exam tests the latest Desktop Designer with the AMP Engine disabled, so original-engine behaviour is the expected answer.`},
+    explain:`В официальном руководстве по подготовке говорится, что на экзамене тестируется последняя версия Desktop Designer с отключенным движком AMP, поэтому ожидаемым ответом является поведение исходного движка.`},
 
   /* ---------- AREA 4 · The 17 tools (14) ---------- */
-  {id:'q27', domain:'d4', type:'mc', q:`Which output anchor of the Join tool contains the records that matched?`,
+  {id:'q27', domain:'d4', type:'mc', q:`Какая выходная привязка инструмента «Соединение» содержит совпадающие записи?`,
     choices:[`L`, `J`, `R`, `T`],
     correct:1,
-    explain:`J holds joined records. L holds left-input records with no match, R holds right-input records with no match. T belongs to Filter.`},
-  {id:'q28', domain:'d4', type:'mc', q:`You want every customer, including those with no orders, with order details attached where they exist. Customers are on the L input. What do you do?`,
+    explain:`J хранит объединенные записи. L содержит записи левого ввода без совпадений, R содержит записи правого ввода без совпадений. T принадлежит фильтру.`},
+  {id:'q28', domain:'d4', type:'mc', q:`Вы хотите, чтобы к каждому клиенту, включая тех, у кого нет заказов, были прикреплены сведения о заказе там, где они существуют. Потребители находятся на входе L. Что вы делаете?`,
     choices:[`Используйте только выход J`, `Объедините выходы J и L`, `Объедините выходы J и R`, `Используйте только выход L`],
     correct:1,
-    explain:`That is a left join. J has customers with orders. L has customers with none. Union stacks them. J plus R would give all orders instead.`},
-  {id:'q29', domain:'d4', type:'mc', q:`A Filter tool is set to <code>[Region] = "West"</code>. Where do the rows for "East" go?`,
+    explain:`Это левое соединение. У J есть клиенты с заказами. У L есть клиенты, которых нет. Союз складывает их. Вместо этого J плюс R отдавали бы все приказы.`},
+  {id:'q29', domain:'d4', type:'mc', q:`Инструмент «Фильтр» настроен на <code>[Регион] = "Запад"</code>. Куда идут строки со словом «Восток»?`,
     choices:[`Они удалены`, `К якорю Т`, `К якорю F`, `Только к окну результатов`],
     correct:2,
-    explain:`Filter never deletes. Rows that meet the condition leave through T, rows that do not leave through F.`},
-  {id:'q30', domain:'d4', type:'mc', q:`Which tool stacks two datasets with the same columns into one longer dataset?`,
+    explain:`Фильтр никогда не удаляется. Строки, соответствующие условию, выходят через T, строки, не выходящие через F.`},
+  {id:'q30', domain:'d4', type:'mc', q:`Какой инструмент объединяет два набора данных с одинаковыми столбцами в один более длинный набор данных?`,
     choices:[`Join`, `Union`, `Summarize`, `Текст в столбцы`],
     correct:1,
-    explain:`Union adds rows. Join adds columns by matching. Say it out loud: Join goes sideways, Union goes downward.`},
-  {id:'q31', domain:'d4', type:'ms', q:`Which of these can the Select tool do? <em>Choose all that apply.</em>`,
+    explain:`Union добавляет строки. Join добавляет столбцы путем сопоставления. Скажите это вслух: «Join» идет вбок, «Union» идет вниз.`},
+  {id:'q31', domain:'d4', type:'ms', q:`Что из этого может сделать инструмент «Выбор»? <em>Выберите все, что применимо.</em>`,
     choices:[`Переименование поля`, `Изменение типа и размера данных поля`, `Удалить строки, которые не соответствуют условию`, `Изменение порядка полей`],
     correct:[0,1,3],
-    explain:`Select manages fields: include, rename, retype, resize, reorder, describe. Removing rows is Filter's job.`},
-  {id:'q32', domain:'d4', type:'mc', q:`What does the Unknown field in the Select tool do?`,
+    explain:`Выбор управляет полями: включать, переименовывать, перепечатывать, изменять размер, переупорядочивать, описывать. Удаление строк — это работа Filter.`},
+  {id:'q32', domain:'d4', type:'mc', q:`Что делает поле «Неизвестно» в инструменте «Выбор»?`,
     choices:[`Помечает поля с нулевыми значениями`, `Улавливает любые новые поля, которые поступают позже, и проверяется по умолчанию.`, `Содержит поля неподдерживаемых типов.`, `Является заполнителем для инструмента «Формула».`],
     correct:1,
-    explain:`Unknown is selected by default so new incoming fields pass through. Uncheck it to drop any field you have not named, and drag it to set where new fields appear.`},
-  {id:'q33', domain:'d4', type:'mc', q:`Which tool returns only the aggregated result, such as total sales per region, and drops the original rows?`,
+    explain:`По умолчанию выбран вариант «Неизвестно», поэтому проходят новые входящие поля. Снимите этот флажок, чтобы удалить любое поле, которое вы не назвали, и перетащите его, чтобы указать, где будут появляться новые поля.`},
+  {id:'q33', domain:'d4', type:'mc', q:`Какой инструмент возвращает только агрегированный результат, например общий объем продаж по региону, и удаляет исходные строки?`,
     choices:[`Formula`, `Sort`, `Summarize`, `Sample`],
     correct:2,
-    explain:`Summarize outputs only the results of its actions. To keep the original rows next to the totals, Join the result back on the Group By field.`},
-  {id:'q34', domain:'d4', type:'mc', q:`What is the default name of the output field when Summarize sums a field called Sales?`,
+    explain:`Обобщать выводит только результаты своих действий. Чтобы сохранить исходные строки рядом с итоговыми значениями, соедините результат обратно в поле «Группировать по».`},
+  {id:'q34', domain:'d4', type:'mc', q:`Какое имя выходного поля по умолчанию используется, когда Summarize суммирует поле Sales?`,
     choices:[`Sales`, `Sum_Sales`, `Total`, `Sales_Sum`],
     correct:1,
-    explain:`Summarize names outputs action first: Sum_Sales, Count_Sales, Avg_Sales. You can rename in the configuration.`},
-  {id:'q35', domain:'d4', type:'mc', q:`Which Sample mode returns the first row of every group of N rows?`,
+    explain:`При суммировании имен сначала выводятся действия: Sum_Sales, Count_Sales, Avg_Sales. Переименовать можно в конфигурации.`},
+  {id:'q35', domain:'d4', type:'mc', q:`Какой режим выборки возвращает первую строку из каждой группы из N строк?`,
     choices:[`Первые N строк`, `1 из каждых N строк`, `Шанс 1 из N включить каждую строку`, `Первые N% строк`],
     correct:1,
-    explain:`1 of every N rows is the regular pattern. 1 in N chance is random. First N rows is the top slice. First N% needs two passes over the data.`},
-  {id:'q36', domain:'d4', type:'mc', q:`A full name field needs to become First and Last columns. Which tool?`,
+    explain:`1 из каждых N строк — обычный узор. Шанс 1 из N является случайным. Первые N строк — это верхний срез. Для первого N% требуется два прохода по данным.`},
+  {id:'q36', domain:'d4', type:'mc', q:`Поле полного имени должно стать первым и последним столбцами. Какой инструмент?`,
     choices:[`Текст в столбцы`, `Formula`, `DateTime`, `Union`],
     correct:0,
-    explain:`Text to Columns splits on a delimiter, here a space, into a set number of columns. Each delimiter character is treated separately, so you cannot split on a word.`},
-  {id:'q37', domain:'d4', type:'mc', q:`Dates arrive as strings like "15/03/2024". Which tool converts them so date math works, and what is the default new column name?`,
+    explain:`Текст по столбцам разбивается по разделителю (здесь это пробел) на заданное количество столбцов. Каждый символ-разделитель обрабатывается отдельно, поэтому разделить слово на слово невозможно.`},
+  {id:'q37', domain:'d4', type:'mc', q:`Даты поступают в виде строк типа «15.03.2024». Какой инструмент преобразует их, чтобы математические вычисления с датами работали, и какое имя нового столбца по умолчанию?`,
     choices:[`Формула, столбец Date_Out`, `DateTime, столбец DateTime_Out`, `Выберите, столбец Дата`, `Очистка данных, столбец Clean_Date`],
     correct:1,
-    explain:`The DateTime tool converts String to Date/Time format and names the new column DateTime_Out by default. Select can retype but cannot parse a dd/MM/yyyy string.`},
-  {id:'q38', domain:'d4', type:'ms', q:`Which of these does the Data Cleansing tool offer? <em>Choose all that apply.</em>`,
+    explain:`Инструмент DateTime преобразует строку в формат даты/времени и по умолчанию называет новый столбец DateTime_Out. Select может перепечатать, но не может проанализировать строку дд/мм/гггг.`},
+  {id:'q38', domain:'d4', type:'ms', q:`Что из этого предлагает инструмент очистки данных? <em>Выберите все, что применимо.</em>`,
     choices:[`Удалить начальные и конечные пробелы`, `Замените нули на 0 в числовых полях.`, `Объединение двух файлов по ключу`, `Изменить текст на регистр заголовка`],
     correct:[0,1,3],
-    explain:`Data Cleansing removes nulls and unwanted characters, replaces nulls with blanks or 0, and changes case. Joining is the Join tool.`},
-  {id:'q39', domain:'d4', type:'mc', q:`Which is the quickest way to add a Browse tool after the tool you have selected?`,
+    explain:`Очистка данных удаляет нули и нежелательные символы, заменяет нули пробелами или 0 и изменяет регистр. Соединение — это инструмент «Соединение».`},
+  {id:'q39', domain:'d4', type:'mc', q:`Какой самый быстрый способ добавить инструмент «Обзор» после выбранного вами инструмента?`,
     choices:[`Ctrl+R`, `Ctrl+Shift+B`, `Ctrl+N`, `F2`],
     correct:1,
-    explain:`Ctrl+Shift+B adds a Browse after the selected tools. The other two ways are drag from the palette and right-click, Add Browse After.`},
-  {id:'q40', domain:'d4', type:'mc', q:`You disable a Tool Container. What happens to the tools inside it?`,
+    explain:`Ctrl+Shift+B добавляет обзор после выбранных инструментов. Два других способа — перетащить из палитры и щелкнуть правой кнопкой мыши «Добавить просмотр после».`},
+  {id:'q40', domain:'d4', type:'mc', q:`Вы отключите контейнер инструментов. Что происходит с инструментами внутри него?`,
     choices:[`Они удаляются из рабочего процесса.`, `Они остаются на холсте, затемняются и не обрабатывают данные, пока не будут снова включены.`, `Они запускаются, но не пишут результатов`, `Они перемещены в комментарий.`],
     correct:1,
-    explain:`A disabled container stays expanded and dimmed and its tools do not run. Comment and Tool Container both carry no data, and Comment has no anchors at all.`}
+    explain:`Отключенный контейнер остается развернутым и затемненным, а его инструменты не запускаются. Комментарий и контейнер инструментов не несут никаких данных, а комментарий вообще не имеет привязок.`}
 ];
 
 /* ============== VIEW ROUTING ============== */
@@ -742,7 +742,7 @@ function renderHome(){
         const d = DOMAIN_INFO[k];
         return `<div class="dw-row">
           <span class="dw-label" style="color:${d.color}">${d.label} · ${d.name}</span>
-          <span class="dw-bar"><span class="dw-fill" style="width:${d.weight}%;background:${d.color};display:block"></span></span>
+          <span class="dw-bar"><span class="dw-fill" style="width:${d.weight}%;background:${d.color};дисплей:блокировать"></span></span>
           <span class="dw-pct" style="color:${d.color}">${d.weight}%</span>
         </div>`;
       }).join('')}
@@ -758,31 +758,31 @@ function renderHome(){
       </a>
       <a class="cta-card primary" onclick="setView('exam')">
         <div class="cta-icon"><i data-lucide="clipboard-list"></i></div>
-        <div class="cta-title">${state.submitted ? 'Review your exam' : (inProgress ? 'Resume the practice exam' : 'Take the practice exam')}</div>
-        <div class="cta-desc">${state.submitted ? `You scored ${calcScore().total}/${total}. Reopen to review the answers, or retake it.` : `40 questions across the four areas, the same count as the real exam. Includes multiple-response questions so you practise reading carefully. ${answered ? `You've answered ${answered}/${total}.` : ''}`}</div>
-        <div class="cta-link">${state.submitted ? 'Review results →' : (inProgress ? 'Continue →' : 'Start →')}</div>
+        <div class="cta-title">${state.submitted ? "Проверьте свой экзамен" : (inProgress ? "Возобновить пробный экзамен" : "Сдать практический экзамен")}</div>
+        <div class="cta-desc">${state.submitted ? `Вы забили ${calcScore().total}/${total}. Откройте повторно, чтобы просмотреть ответы, или повторите попытку.` : `40 вопросов по четырем областям — столько же, сколько и на настоящем экзамене. Включает вопросы с несколькими ответами, чтобы вы попрактиковались в внимательном чтении. ${answered ? `Вы ответили ${answered}/${total}.` : ''}`}</div>
+        <div class="cta-link">${state.submitted ? "Посмотреть результаты →" : (inProgress ? "Продолжить →" : 'Start →')}</div>
       </a>
     </div>
 
     <div class="method-callout">
-      <strong>🗣️ Say it out loud.</strong> Most questions come down to two things that sound alike: Join or Union, T or F, L or J or R, String or V_WString, mean or median, .yxmd or .yxzp. If you can say the difference in one sentence out loud, the phrasing of the question stops mattering.
+      <strong>🗣️ Скажите это вслух.</strong> Большинство вопросов сводятся к двум вещам, которые звучат одинаково: соединение или объединение, T или F, L или J или R, строка или V_WString, среднее или медиана, .yxmd или .yxzp. Если вы можете произнести вслух разницу в одном предложении, формулировка вопроса перестанет иметь значение.
     </div>
 
     <div class="method-callout" style="border-left-color:var(--c-d1)">
-      <strong>Our readiness bar is 70%.</strong> Alteryx does not publish a passing score for this exam, so 70% is our line, not theirs. It is open book and untimed enough that careful reading matters more than recall. Use the hour.
+      <strong>Наша планка готовности 70%.</strong> Alteryx не публикует проходной балл по этому экзамену, поэтому 70% — это наша линия, а не их. Это открытая книга и достаточно несвоевременная, поэтому внимательное чтение важнее, чем припоминание. Используйте час.
     </div>
 
     ${needsReviewCount()>0?`<div class="method-callout" style="border-left-color:var(--warn)">
-      <strong>🔁 ${needsReviewCount()} concept${needsReviewCount()===1?'':'s'} flagged for review.</strong> You rated ${needsReviewCount()===1?'it':'them'} "Not yet" or "Almost" in the study guide. <a href="#" onclick="openReview();return false;">Filter to just those →</a>
+      <strong>🔁 ${needsReviewCount()} concept${needsReviewCount()===1?'':'s'} отмечено для проверки.</strong> Вы оценили ${needsReviewCount()===1?'it':'them'} "Not yet" or "Almost" in the study guide. <a href="#" onclick="openReview();return false;">Filter to just those →</a>
     </div>`:''}
 
     <div class="method-callout" style="border-left-color:var(--accent)">
-      <strong>💡 Hints.</strong> ${getCoachKey()
+      <strong>💡Подсказки.</strong> ${getCoachKey()
         ? `Hints are on. Every study-guide point has a <em>Stuck? Get a hint →</em> button that explains it a different way, and every missed exam question gets one too. <a href="#" onclick="setCoachKey('');return false;">Turn hints off</a>`
-        : `Optional. Paste an Anthropic API key and every study-guide point gets a <em>Stuck? Get a hint →</em> button that explains it a different way. Missed exam questions get one too. The key is stored only in this browser, and it is the same key the SQL, Excel, Python, Power BI, Tableau and Stats kits use.
+        : `Необязательный. Вставьте ключ Anthropic API, и каждый пункт учебного пособия получит <em>Застрявший? Получить подсказку →</em> кнопка, которая объясняет это по-другому. Пропущенные экзаменационные вопросы тоже получают один. Ключ хранится только в этом браузере, и это тот же ключ, который используют комплекты SQL, Excel, Python, Power BI, Tableau и Stats.
       <div class="hint-key-row">
         <input id="hintKey" type="password" placeholder="sk-ant-..." autocomplete="off">
-        <button type="button" onclick="setCoachKey(document.getElementById('hintKey').value)">Save key</button>
+        <button type="button" onclick="setCoachKey(document.getElementById('hintKey').value)">Сохранить ключ</button>
       </div>`}
     </div>
 
@@ -799,11 +799,11 @@ function renderHome(){
 function renderStudy(){
   return `
     <div class="study-intro">
-      <p><strong>The outline, one area at a time.</strong> Click an area to expand. Every point is a concept, a type, a window or a tool behaviour the exam can ask about; the yellow callouts are the confusions the exam is written to catch.</p>
-      <p>Designer points trace to Alteryx Designer help. Each area links to its main source page at the bottom.</p>
+      <p><strong>Контур, по одной области за раз.</strong> Щелкните область, чтобы развернуть ее. Каждый балл — это концепция, тип, окно или поведение инструмента, о котором может спросить экзамен; желтые выноски — это путаница, для устранения которой написан экзамен.</p>
+      <p>Дизайнер указывает на справку Alteryx Designer. Каждая область ссылается на свою главную исходную страницу внизу.</p>
     </div>
-    <button class="expand-all" onclick="toggleAllStudy()">${allStudyOpen() ? 'Collapse all' : 'Expand all'}</button>
-    <button class="expand-all ${state.reviewFilter?'rf-on':''}" onclick="toggleReviewFilter()">${state.reviewFilter ? `Showing needs-review only (${needsReviewCount()}), show all` : `Filter: needs review (${needsReviewCount()})`}</button>
+    <button class="expand-all" onclick="toggleAllStudy()">${allStudyOpen() ? "Свернуть все" : "Развернуть все"}</button>
+    <button class="развернуть-все ${state.reviewFilter?'rf-on':''}" onclick="toggleReviewFilter()">${state.reviewFilter ? `Показан только обзор потребностей (${needsReviewCount()}), показать все` : `Фильтр: требует проверки (${needsReviewCount()})`}</button>
     ${STUDY.map(s=>{
       const d = DOMAIN_INFO[s.key];
       const vis = s.must.map((m,i)=>({m,i})).filter(x=>{
@@ -814,17 +814,17 @@ function renderStudy(){
       if(state.reviewFilter && vis.length===0) return '';
       const open = state.reviewFilter ? true : !!state.openSections[s.key];
       return `
-        <div class="study-section ${open?'open':''}" id="study-${s.key}">
+        <div class="study-section" ${open?'open':''}" id="исследование-${s.key}">
           <div class="study-head" onclick="toggleStudy('${s.key}')">
             <span class="study-pill" style="color:${d.color}">${d.label} · ${d.weight}%</span>
             <span class="study-title">${s.title}</span>
             <span class="study-toggle">▸</span>
           </div>
           <div class="study-body">
-            ${state.reviewFilter?'':`<div class="study-viz"><div class="sv-cap"><i data-lucide="monitor"></i> See it</div>${s.viz}</div>`}
+            ${state.reviewFilter?'':`<div class="study-viz"><div class="sv-cap"><i data-lucide="monitor"></i> Посмотри это</div>${s.viz}</div>`}
             <ul>${vis.map(x=>studyItemHTML(s.key,x.i,x.m)).join('')}</ul>
             ${state.reviewFilter?'':`<div class="miscon">${s.miscon}</div>`}
-            <a class="study-link" href="${d.docPath}" target="_blank" rel="noopener">Source: ${d.docLabel} →</a>
+            <a class="study-link" href="${d.docPath}" target="_blank" rel="noopener">Источник: ${d.docLabel} →</a>
           </div>
         </div>
       `;
@@ -836,8 +836,8 @@ function renderStudy(){
 function studyItemHTML(key,i,m){
   const id = key+'-'+i;
   const lvl = state.conf[id];
-  const chip = (l,txt)=>`<button class="conf-chip ${lvl===l?('on '+l):''}" onclick="rateConf('${id}','${l}')">${txt}</button>`;
-  return `<li>${m}<div class="li-foot"><span class="conf-chips">${chip('low','✗ Not yet')}${chip('mid','~ Almost')}${chip('high','✓ Have it')}</span><button class="hint-btn" onclick="hintStudy('${key}',${i})">Stuck? Get a hint →</button></div><div class="hint-resp" id="hint-resp-${id}"></div></li>`;
+  const chip = (l,txt)=>`<button class="conf-чип ${lvl===l?('on '+l):''}" onclick="rateConf('${id}','${l}')">${txt}</button>`;
+  return `<li>${m}<div class="li-foot"><span class="conf-chips">${chip('low',"✗ Пока нет")}${chip('mid','~ Almost')}${chip('high',"✓ Иметь это")}</span><button class="hint-btn" onclick="hintStudy('${key}',${i})">Застряли? Получить подсказку →</button></div><div class="hint-resp" id="hint-resp-${id}"></div></li>`;
 }
 function rateConf(id,lvl){
   if(state.conf[id]===lvl) delete state.conf[id];
@@ -906,18 +906,18 @@ function renderExam(){
   if(state.examStart === null && !state.submitted){
     return `
       <div class="start-card">
-        <h2>Practice Exam · ${QUESTIONS.length} questions</h2>
-        <p>Spread across the four areas, weighted like our study split. One question at a time. Pick an answer and it locks in and moves you on. Some questions are "choose all that apply". The real exam gives partial credit on those; this kit does not, so read them twice. Everything grades at once when you submit.</p>
+        <h2>Практический экзамен · ${QUESTIONS.length} questions</h2>
+        <p>Распространено по четырем областям, взвешенным так же, как и в нашем исследовании. Один вопрос за раз. Выберите ответ, и он зафиксирует вас и продвинет вас дальше. Некоторые вопросы: «Выберите все, что применимо». Настоящий экзамен дает частичную оценку по ним; в этом комплекте нет, поэтому прочтите их дважды. Все оценивается сразу при отправке.</p>
         <div class="start-actions">
-          <button class="btn btn-primary" onclick="startExam(false)">Start with no time limit</button>
-          <button class="btn btn-ghost" onclick="startExam(true)">Pacing drill, ${EXAM_MINUTES}:00 ⏱</button>
+          <button class="btn btn-primary" onclick="startExam(false)">Начните без ограничения по времени</button>
+          <button class="btn btn-ghost" onclick="startExam(true)">Тренировка по темпу, ${EXAM_MINUTES}:00 ⏱</button>
         </div>
       </div>
       <div class="method-callout">
-        <strong>The real exam allows one hour.</strong> Forty questions in ${EXAM_MINUTES} minutes is 90 seconds each, and it is open book. The pacing drill rehearses that. Untimed is fine for a first pass.
+        <strong>Настоящий экзамен рассчитан на один час.</strong> Сорок вопросов в ${EXAM_MINUTES} минуты составляют 90 секунд каждая, и это открытая книга. Тренировка по темпу это репетирует. Untimed подойдет для первого прохода.
       </div>
       <div class="method-callout" style="border-left-color:var(--warn)">
-        <strong>No published pass mark.</strong> Alteryx does not say what score passes. We grade against 70% as our own readiness bar. Answer everything. An unanswered item scores the same as a wrong one.
+        <strong>Нет опубликованного проходного балла.</strong> Альтерикс не говорит, какой балл проходит. Мы оцениваем 70% как нашу собственную планку готовности. Ответьте на все. Задание без ответа оценивается так же, как и неправильное.
       </div>
     `;
   }
@@ -928,8 +928,8 @@ function renderExam(){
   const left = timeLeftMs();
 
   let topBtn;
-  if(state.submitted) topBtn = `<button class="exam-submit-btn" onclick="setView('results')">View results →</button>`;
-  else topBtn = `<button class="exam-submit-btn" onclick="submitExam()" ${answered===0?'disabled':''}>${answered===total?'Submit exam':'Submit ('+answered+'/'+total+' answered)'}</button>`;
+  if(state.submitted) topBtn = `<button class="exam-submit-btn" onclick="setView('results')">Посмотреть результаты →</button>`;
+  else topBtn = `<button class="exam-submit-btn" onclick="submitExam()" ${answered===0?'disabled':''}>${answered===total?"Сдать экзамен":'Submit ('+answered+'/'+total+' answered)'}</button>`;
 
   const i = clampQIdx();
   const q = QUESTIONS[i];
@@ -940,17 +940,17 @@ function renderExam(){
     if(state.submitted) cls += isCorrect(qq) ? ' ok' : ' no';
     else if(hasAnswer(qq)) cls += ' done';
     if(n === i) cls += ' cur';
-    return `<button class="${cls}" onclick="gotoQ(${n})" title="Question ${n+1}"></button>`;
+    return `<класс кнопки="${cls}" onclick="gotoQ(${n})" title="Вопрос ${n+1}"></button>`;
   }).join('');
 
   let html = `
     <div class="exam-header">
       <div class="exam-header-row">
         <div class="exam-title-block">
-          <div class="exam-mini-title">Alteryx Foundation practice exam${state.timed?' · pacing drill':''}</div>
+          <div class="exam-mini-title">Практический экзамен Фонда Alteryx${state.timed?" · упражнение на темп":''}</div>
           <div class="exam-q-progress"><span>${answered}</span> of ${total} answered</div>
         </div>
-        ${(!state.submitted && state.timed && left!==null) ? `<span class="exam-timer${left<5*60000?' low':''}" id="examTimer">${fmtTime(left)}</span>` : ''}
+        ${(!state.submitted && state.timed && left!==null) ? `<span class="экзамен-таймер${left<5*60000?' low':''}" id="examTimer">${fmtTime(left)}</span>` : ''}
         ${topBtn}
       </div>
       <div class="exam-progress-bar"><div class="exam-progress-fill" style="width:${pct}%"></div></div>
@@ -968,27 +968,27 @@ function renderExam(){
   if(!state.submitted){
     if(q.type === 'ms' && hasAnswer(q)){
       primary = isLast
-        ? `<button class="btn btn-primary" onclick="submitExam()">Lock in &amp; submit →</button>`
-        : `<button class="btn btn-primary" onclick="gotoQ(${i+1})">Lock in &amp; continue →</button>`;
+        ? `<button class="btn btn-primary" onclick="submitExam()">Зафиксируйте и отправьте →</button>`
+        : `<button class="btn btn-primary" onclick="gotoQ(${i+1})">Зафиксировать и продолжить →</button>`;
     } else if(isLast && answered > 0){
-      primary = `<button class="btn btn-primary" onclick="submitExam()">Submit exam →</button>`;
+      primary = `<button class="btn btn-primary" onclick="submitExam()">Сдать экзамен →</button>`;
     }
   }
 
   html += `
     <div class="q-nav">
-      <button class="btn btn-outline btn-sm" onclick="gotoQ(${i-1})" ${i===0?'disabled':''}>← Prev</button>
+      <button class="btn btn-outline btn-sm" onclick="gotoQ(${i-1})" ${i===0?'disabled':''}> ← Предыдущий</button>
       <div class="spacer"></div>
       ${primary}
-      <button class="btn btn-outline btn-sm" onclick="gotoQ(${i+1})" ${isLast?'disabled':''}>Next →</button>
+      <button class="btn btn-outline btn-sm" onclick="gotoQ(${i+1})" ${isLast?'disabled':''}>Далее →</button>
     </div>
   `;
 
   if(!state.submitted){
     html += `<div class="lockin-hint">${q.type==='ms'
-      ? 'Choose every option that applies, then lock it in. No partial credit. You need all the right ones and none of the wrong ones.'
-      : 'Pick an answer and it locks in, then moves you on. Use Prev or the bars above to change it before you submit.'}
-      Nothing is graded until you submit.</div>`;
+      ? "Выберите каждый подходящий вариант, а затем зафиксируйте его. Никакого частичного кредита. Вам нужны все правильные и ни одного неправильного."
+      : "Выберите ответ, и он зафиксируется, а затем продвинет вас дальше. Используйте «Предыдущий» или панели выше, чтобы изменить его перед отправкой."}
+      Ничто не оценивается, пока вы не отправите заявку.</div>`;
   }
   return html;
 }
@@ -1034,19 +1034,19 @@ function renderQuestion(q){
     }
     const letter = String.fromCharCode(65+i);
     const mark = isMs ? (picked ? '☑' : '☐') : letter;
-    return `<button class="${cls}" onclick="${isMs?`answerMs('${q.id}',${i})`:`answerMc('${q.id}',${i})`}" ${state.submitted?'disabled':''}>
+    return `<класс кнопки="${cls}" onclick="${isMs?`answerMs('${q.id}',${i})`:`answerMc('${q.id}',${i})`}" ${state.submitted?'disabled':''}>
       <span class="choice-letter">${mark}</span>
       <span class="choice-text">${c}</span>
     </button>`;
   }).join('')}</div>`;
 
   const explanation = state.submitted
-    ? `<div class="explanation show"><strong>${isCorrect(q) ? 'Correct.' : 'Heads up: '}</strong> ${q.explain}${isCorrect(q) ? '' : `<div style="margin-top:10px"><button class="hint-btn" onclick="hintQuestion('${q.id}')">Still unclear? Get a hint →</button></div><div class="hint-resp" id="hint-resp-q-${q.id}"></div>`}</div>`
+    ? `<div class="explanation show"><strong>${isCorrect(q) ? 'Correct.' : "Берегись: "}</strong> ${q.explain}${isCorrect(q) ? '' : `<div style="margin-top:10px"><button class="hint-btn" onclick="hintQuestion('${q.id}')">Все еще неясно? Получить подсказку →</button></div><div class="hint-resp" id="hint-resp-q-${q.id}"></div>`}</div>`
     : '';
 
   return `
-    <div class="q-card${stateCls}" id="q-${q.id}">
-      <div class="q-num">Question ${idx} of ${QUESTIONS.length}${isMs?'<span class="ms-tag">· multiple response</span>':''}</div>
+    <div class="q-карта${stateCls}" id="q-${q.id}">
+      <div class="q-num">Question ${idx} of ${QUESTIONS.length}${isMs?"<span class=\"ms-tag\">· множественный ответ</span>":''}</div>
       <div class="q-text">${q.q}</div>
       ${body}
       ${explanation}
@@ -1127,11 +1127,11 @@ function renderResults(){
   const pass = pct >= PASS_PCT;
   return `
     <div class="results-hero">
-      <div class="results-eyebrow">Practice exam · Results</div>
+      <div class="results-eyebrow">Практический экзамен · Результаты</div>
       <div class="score-big">${score.total}<small>/${score.outOf}</small></div>
       <div class="score-verdict">${pct}%. ${v.label}</div>
-      <div class="scaled-box">Against our bar: <strong style="color:${pass?'var(--good)':'var(--bad)'}">${pct}%</strong> <span style="color:var(--dim)">vs. our ${PASS_PCT}% readiness bar</span></div>
-      <p class="score-sub" style="margin-top:14px">The real exam is 40 questions at 1 point each with partial credit on multiple response. <strong>Alteryx does not publish a passing score</strong>, so ${PASS_PCT}% is our readiness bar, not theirs. We suggest ${READY_PCT}%+ here before sitting it, as margin for a question set that phrases things differently.</p>
+      <div class="scaled-box">Напротив нашего бара: <strong style="color:${pass?'var(--good)':'var(--bad)'}">${pct}%</strong> <span style="color:var(--dim)">против нашего ${PASS_PCT}% готовности</span></div>
+      <p class="score-sub" style="margin-top:14px">Настоящий экзамен состоит из 40 вопросов по 1 баллу каждый с частичным зачетом за несколько ответов. <strong>Alteryx не публикует проходной балл</strong>, так ${PASS_PCT}% — это наша шкала готовности, а не их. Мы предлагаем ${READY_PCT}%+ здесь, прежде чем сесть, как запас для набора вопросов, который формулирует вещи по-другому.</p>
     </div>
 
     <div class="results-grid">
@@ -1139,10 +1139,10 @@ function renderResults(){
         const d = DOMAIN_INFO[k];
         const s = score.byDomain[k];
         const p = Math.round(100*s.correct/s.total);
-        const hint = p === 100 ? 'Clean sweep. Move on.'
-          : p >= 80 ? `Nearly there. Reread the <a href="#study-${k}" onclick="setView('study',{scrollToSection:'${k}'});return false;">${d.label} study section</a> once.`
-          : p >= 50 ? `Shaky. <a href="#study-${k}" onclick="setView('study',{scrollToSection:'${k}'});return false;">Study section</a> · ${d.hint}`
-          : `Focus here first. ${d.hint} <a href="#study-${k}" onclick="setView('study',{scrollToSection:'${k}'});return false;">Open the study section</a>.`;
+        const hint = p === 100 ? "Чистая развертка. Двигаться дальше."
+          : p >= 80 ? `Почти там. Перечитайте <a href="#study-${k}" onclick="setView('study',{scrollToSection:'${k}'}); вернуть ложь;">${d.label} раздел исследования</a> один раз.`
+          : p >= 50 ? `Шаки. <a href="#study-${k}" onclick="setView('study',{scrollToSection:'${k}'});return false;">Study section</a> · ${d.hint}`
+          : `Сначала сосредоточьтесь здесь. ${d.hint} <a href="#study-${k}" onclick="setView('study',{scrollToSection:'${k}'});return false;">Open the study section</a>.`;
         return `
           <div class="results-row">
             <div class="results-row-top">
@@ -1158,9 +1158,9 @@ function renderResults(){
     </div>
 
     <div class="results-actions">
-      <button class="btn btn-ghost" onclick="setView('exam')">Review answers &amp; explanations</button>
-      <button class="btn btn-ghost" onclick="setView('study')">Open study guide</button>
-      <button class="btn btn-primary" onclick="retake()">Retake exam <i data-lucide="rotate-ccw" style="width:14px;height:14px;vertical-align:-2px"></i></button>
+      <button class="btn btn-ghost" onclick="setView('exam')">Просмотрите ответы и пояснения</button>
+      <button class="btn btn-ghost" onclick="setView('study')">Открыть учебное пособие</button>
+      <button class="btn btn-primary" onclick="retake()">Пересдать экзамен <i data-lucide="rotate-ccw" style="width:14px;height:14px;vertical-align:-2px"></i></button>
     </div>
   `;
 }
@@ -1199,13 +1199,13 @@ function toggleTheme(){
   const next = cur === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('apk-theme', next);
-  document.getElementById('themeIcon').innerHTML = '<i data-lucide="' + (next === 'dark' ? 'sun' : 'moon') + '"></i>';
+  document.getElementById('themeIcon').innerHTML = "<я данные-lucid=\"" + (next === 'dark' ? 'sun' : 'moon') + '"></i>';
   if(window.grainRefreshIcons)grainRefreshIcons();else if(window.lucide)lucide.createIcons();
 }
 (function initTheme(){
   const saved = localStorage.getItem('apk-theme');
   if(saved) document.documentElement.setAttribute('data-theme', saved);
-  document.getElementById('themeIcon').innerHTML = '<i data-lucide="' + (document.documentElement.getAttribute('data-theme')==='dark'?'sun':'moon') + '"></i>';
+  document.getElementById('themeIcon').innerHTML = "<я данные-lucid=\"" + (document.documentElement.getAttribute('data-theme')==='dark'?'sun':'moon') + '"></i>';
 })();
 
 function resetAll(){
@@ -1278,6 +1278,6 @@ function grainRefreshIcons(){
 <script src="../assets/datacraft-economy.js"></script>
 <script src="../assets/progress-state.js"></script>
 <script src="../assets/supabase_auth_sync.js?v=3"></script>
-<script src="../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

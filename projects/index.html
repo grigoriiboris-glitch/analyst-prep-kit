@@ -191,7 +191,7 @@ const COACH_KEY = 'apk-coach-key'; // shared BYOK key across the suite
 /* ---------- data ---------- */
 const SCOPE_STEPS = ['domain','question','criteria','feasibility','output','tools','review'];
 
-const DOMAIN_CHIPS = ['Games','Weather','Job market','Sports','Music','Movies & TV','Food & recipes','E-commerce','Health & fitness','Something else'];
+const DOMAIN_CHIPS = ['Games','Weather',"Рынок труда",'Sports','Music',"Кино и ТВ","Еда и рецепты",'E-commerce',"Здоровье и фитнес","Что-то еще"];
 
 const OUTPUT_TYPES = [
   {id:'ranked_list', label:"Рейтинговый список", hint:"Отсортированная таблица ответов «какие из них лучшие/худшие»"},
@@ -212,22 +212,22 @@ const TOOLS = [
    Analyze → Share → Act — the lifecycle taught in every entry-level
    analytics curriculum), each with a best-practice teaching note. */
 const STAGES = [
-  {key:'ask', title:'Ask', mission:'Nail down the question and what "answered" looks like.',
-   bp:'Analysts who skip this stage produce technically-correct answers to the wrong question. Your scope doc IS this stage — keep it open while you work, and re-read it any time you feel lost in the data.'},
-  {key:'prepare', title:'Prepare', mission:'Get the data, understand every column, and record where it came from.',
+  {key:'ask', title:'Ask', mission:"Запишите вопрос и то, как выглядит «ответ».",
+   bp:"Аналитики, пропускающие этот этап, дают технически правильные ответы на неправильный вопрос. На этом этапе находится ваш документ по объему работ — держите его открытым во время работы и перечитывайте его каждый раз, когда почувствуете, что потерялись в данных."},
+  {key:'prepare', title:'Prepare', mission:"Получите данные, изучите каждый столбец и запишите, откуда они взялись.",
    bp:'Before writing a single formula or query, profile the data: row count, column list, what one row represents (the grain), and obvious gaps. A data dictionary — even a rough one — saves you hours later and impresses reviewers. Got a huge file (hundreds of MB, 100k+ rows)? Don\'t just double-click it — in Excel, use Data → Get Data → From File → From Text/CSV: the preview loads in seconds and lets you check your columns exist without importing anything. Cancel out once you\'ve confirmed the fields; if you do need it in a sheet, use Load To → Only Create Connection and pull a filtered subset via PivotTable rather than loading every row.',
-   ex:'Profiling the 125k games, <code>MAX(Positive)</code> came back a flat <b>100</b> across every single game — impossible for Steam review counts. That one impossible number was the whole thread to pull. If a summary stat looks too clean to be real, it usually isn\'t.'},
-  {key:'process', title:'Process', mission:'Clean the data and document every cleaning decision.',
-   bp:'Cleaning decisions ARE analysis decisions. Never overwrite the raw data — keep raw and cleaned versions separate, and write down each rule you applied (what you dropped, what you filled, why). Interviewers ask about this constantly.',
-   ex:'The flat-100 turned out to be a broken CSV header: the source file listed 39 columns for 40 fields, so every value after a fused column loaded one slot to the left. Fixed it in a <b>clean copy</b> (raw file left untouched), re-imported, and verified against one known record before trusting anything.'},
-  {key:'analyze', title:'Analyze', mission:'Answer each scoped criterion with evidence.',
-   bp:'Work criterion by criterion from your scope, not wherever the data looks interesting. Sanity-check every result against a second method (a pivot vs. a query, a spot-check of raw rows). Set thresholds from the real distribution of your data, not gut feel.',
-   ex:'Thresholds were set from the data, not gut feel — counting how many games survived each filter (5,175 → 175) until the list was a credible size. A reality-check against real-world knowledge then caught records the numbers alone trusted: Portal 2 sitting in the under-20k-owners tier with 153k reviews, and Batman: Arkham City listed as "free" — both corrupted/stale rows, cut and documented.'},
-  {key:'share', title:'Share', mission:'Turn the findings into the deliverable you defined in scoping.',
-   bp:'Lead with the answer, not the process. One chart that makes the point beats five that show effort. Label everything so it reads without you in the room — that is the actual test of portfolio work.',
-   ex:'The write-up opens with the answer — a ranked top-25 table — before any of the how. Scope and assumptions (language-agnostic, so some titles are non-English) are stated up front so a stranger can judge the list without needing the author in the room.'},
-  {key:'act', title:'Act', mission:'State the recommendation, the limitations, and what you would do next.',
-   bp:'"So what?" is the analyst\'s final exam. A recommendation with honest limitations reads as senior; a wall of charts with no conclusion reads as junior. Always include what you would do next with more time or data.'}
+   ex:"Профилирование 125 тысяч игр, <code>МАКС(Положительный)</code> вернулся в квартиру <b>100</b> в каждой игре, что невозможно для учета обзоров Steam. Это одно невозможное число было единственной нитью, которую нужно было вытянуть. Если сводная статистика выглядит слишком чистой, чтобы быть реальной, обычно это не так."},
+  {key:'process', title:'Process', mission:"Очистите данные и документируйте каждое решение по очистке.",
+   bp:"Решения по очистке ЯВЛЯЮТСЯ аналитическими решениями. Никогда не перезаписывайте необработанные данные — храните необработанные и очищенные версии отдельно и записывайте каждое примененное вами правило (что вы удалили, что вы заполнили, почему). Интервьюеры постоянно об этом спрашивают.",
+   ex:"Flat-100 оказался неработающим заголовком CSV: в исходном файле было 39 столбцов для 40 полей, поэтому каждое значение после объединенного столбца загружало один слот слева. Исправлено это в <b>чистая копия</b> (необработанный файл остается нетронутым), повторно импортируется и проверяется по одной известной записи, прежде чем доверять чему-либо."},
+  {key:'analyze', title:'Analyze', mission:"Ответьте на каждый критерий области действия доказательствами.",
+   bp:"Работайте критерий за критерием в пределах своей области, а не там, где данные кажутся интересными. Проверьте работоспособность каждого результата по второму методу (сводная таблица или запрос, выборочная проверка необработанных строк). Устанавливайте пороговые значения на основе реального распределения ваших данных, а не интуитивного ощущения.",
+   ex:"Пороговые значения были установлены на основе данных, а не интуитивного ощущения — подсчитывалось, сколько игр выдержало каждый фильтр (5175 → 175), пока список не достиг достоверного размера. Проверка реальности на основе реальных знаний, которые затем были обнаружены, зафиксировала только цифры, которым доверяют: Portal 2 находится на уровне владельцев до 20 тысяч с 153 тысячами отзывов, а Batman: Arkham City указан как «бесплатный» — обе испорченные/устаревшие строки, вырезанные и задокументированные."},
+  {key:'share', title:'Share', mission:"Превратите результаты в результат, который вы определили при определении объема работ.",
+   bp:"Руководствуйтесь ответом, а не процессом. Одна диаграмма, отражающая суть дела, лучше пяти, показывающих усилия. Пометьте все так, чтобы все читалось без вашего присутствия — это настоящая проверка работы с портфолио.",
+   ex:"Рецензия начинается с ответа — таблицы топ-25 — перед любым вопросом «как». Объем и предположения (независимые от языка, поэтому некоторые названия не на английском языке) указаны заранее, чтобы незнакомец мог оценить список, не нуждаясь в присутствии автора."},
+  {key:'act', title:'Act', mission:"Изложите рекомендации, ограничения и то, что вы будете делать дальше.",
+   bp:"\"Ну и что?\" это выпускной экзамен аналитика. Рекомендация с честными ограничениями читается как старшая; стена графиков без каких-либо выводов читается как младший. Всегда указывайте, что вы будете делать дальше, если у вас будет больше времени или данных."}
 ];
 
 /* ---------- storage ---------- */
@@ -255,8 +255,8 @@ let AI = {loading:false,err:'',draft:null};
 
 /* ---------- helpers ---------- */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function domainLabel(sc){ return sc.domain==='Something else' ? sc.domainCustom : sc.domain; }
-function projName(p){ return domainLabel(p.scope) || 'Untitled project'; }
+function domainLabel(sc){ return sc.domain==="Что-то еще" ? sc.domainCustom : sc.domain; }
+function projName(p){ return domainLabel(p.scope) || "Безымянный проект"; }
 function skillLabel(id){ const t=TOOLS.find(t=>t.id===id); return t?t.label:(id||''); }
 function planSteps(p){ return p.plan.stages.flatMap(s=>s.steps); }
 function planDone(p){ return planSteps(p).filter(s=>s.done).length; }
@@ -321,9 +321,9 @@ function homeHTML(){
         <span class="stamp" style="border-color:var(--accent);color:var(--accent)">${esc(phLabel).toUpperCase()}</span>
         ${p.scope.stamped?'<span class="stamp" style="border-color:var(--good-ink);color:var(--good-ink)">SCOPED</span>':'<span class="stamp" style="border-color:var(--warm);color:var(--warm)">DRAFT</span>'}
         <div style="font-family:var(--font-display);font-weight:700;font-size:16px;margin-top:8px">${esc(projName(p))}</div>
-        <div style="color:var(--dim);font-size:13.5px;margin-top:2px">${esc(p.scope.question)||'No question written yet.'}</div>
-        ${steps.length?`<div class="progress"><i style="width:${pct}%"></i></div><div class="hint">${planDone(p)}/${steps.length} steps done</div>`:''}
-        <div style="margin-top:8px"><button class="note-btn" onclick="event.stopPropagation();deleteProject('${p.id}')">Delete</button></div>
+        <div style="color:var(--dim);font-size:13.5px;margin-top:2px">${esc(p.scope.question)||"Вопрос еще не написан."}</div>
+        ${steps.length?`<div class="progress"><i style="ширина:${pct}%"></i></div><div class="hint">${planDone(p)}/${steps.length} шаги сделаны</div>`:''}
+        <div style="margin-top:8px"><button class="note-btn" onclick="event.stopPropagation();deleteProject('${p.id}')">Удалить</button></div>
       </div>`;
     }
   }
@@ -355,14 +355,14 @@ function projectHTML(p){
   const phases=[['scope','Scope'],['plan','Plan'],['build','Build'],['present','Present']];
   const cur = phaseIndex(p.phase);
   let h = `
-  <div style="margin-top:20px"><button class="note-btn" onclick="goHome()">← All projects</button></div>
+  <div style="margin-top:20px"><button class="note-btn" onclick="goHome()">← Все проекты</button></div>
   <h1 style="margin-top:10px">${esc(projName(p))}</h1>
-  <p class="sub">${esc(p.scope.question)||'Scope the project to give it a question.'}</p>
+  <p class="sub">${esc(p.scope.question)||"Определите масштаб проекта, чтобы задать ему вопрос."}</p>
   <div class="phasebar">`;
   phases.forEach(([key,label],i)=>{
     const cls = key===p.phase ? 'now' : (i<cur ? 'done':'');
     const unlocked = i<=cur;
-    h += `<button class="phase-pill ${cls}" ${unlocked?`onclick="gotoPhase('${key}')"`:'disabled'}>${i<cur?'✓ ':''}${i+1}. ${label}</button>`;
+    h += `<button class="фаза-таблетка ${cls}" ${unlocked?`onclick="gotoPhase('${key}')"`:'disabled'}>${i<cur?'✓ ':''}${i+1}. ${label}</button>`;
   });
   h += `</div>`;
   if(p.phase==='scope') h += scopeHTML(p);
@@ -385,71 +385,71 @@ function scopeHTML(p){
   const step = SCOPE_STEPS[SSTEP];
   let dots = `<div class="steps-dots">`;
   SCOPE_STEPS.forEach((s,i)=>{
-    dots += `<span class="dot ${i<SSTEP?'done':i===SSTEP?'now':''}">${i<SSTEP?'✓':i+1}</span>`;
-    if(i<SCOPE_STEPS.length-1) dots += `<span class="dot-line ${i<SSTEP?'done':''}"></span>`;
+    dots += `<span class="точка${i<SSTEP?'done':i===SSTEP?'now':''}">${i<SSTEP?'✓':i+1}</span>`;
+    if(i<SCOPE_STEPS.length-1) dots += `<span class="точечная линия" ${i<SSTEP?'done':''}"></span>`;
   });
   dots += `</div>`;
 
   let body='';
   if(step==='domain'){
-    body = `<h2>1. What's a topic you already have opinions about?</h2>
-    <p class="sub" style="font-size:13.5px">Real curiosity beats a random dataset. Hiring managers can tell when you cared about the question.</p>
-    <div class="chips" style="margin-top:14px">${DOMAIN_CHIPS.map(c=>`<button class="chip ${sc.domain===c?'on':''}" onclick="scSet('domain','${esc(c)}')">${esc(c)}</button>`).join('')}</div>
-    ${sc.domain==='Something else'?`<div style="margin-top:12px"><input type="text" value="${esc(sc.domainCustom)}" oninput="scType('domainCustom',this.value)" placeholder="Name your topic"></div>`:''}`;
+    body = `<h2>1. По какой теме у вас уже есть мнение?</h2>
+    <p class="sub" style="font-size:13.5px">Настоящее любопытство важнее случайного набора данных. Менеджеры по найму могут сказать, когда вас волновал этот вопрос.</p>
+    <div class="chips" style="margin-top:14px">${DOMAIN_CHIPS.map(c=>`<button class="чип ${sc.domain===c?'on':''}" onclick="scSet('домен','${esc(c)}')">${esc(c)}</button>`).join('')}</div>
+    ${sc.domain==="Что-то еще"?`<div style="margin-top:12px"><input type="text" value="${esc(sc.domainCustom)}" oninput="scType('domainCustom',this.value)" Placeholder="Назовите свою тему"></div>`:''}`;
   }
   else if(step==='question'){
-    body = `<h2>2. Turn it into one sentence.</h2>
-    <p class="sub" style="font-size:13.5px">Not "analyze ${esc(domainLabel(sc)||'this')}" — a real question. Example: "Which Steam games are hidden gems I'd love but have never heard of?"</p>
+    body = `<h2>2. Превратите это в одно предложение.</h2>
+    <p class="sub" style="font-size:13.5px">Не «анализировать ${esc(domainLabel(sc)||'this')}» — реальный вопрос. Пример: «Какие игры Steam являются скрытыми жемчужинами, которые мне бы очень понравились, но о которых я никогда не слышал?»</p>
     <textarea rows="3" oninput="scType('question',this.value)" placeholder="Write your one-sentence question...">${esc(sc.question)}</textarea>`;
   }
   else if(step==='criteria'){
-    body = `<h2>3. List 3–5 measurable criteria.</h2>
-    <p class="sub" style="font-size:13.5px">What would actually prove your answer? Be specific enough that someone else could check your work.</p>
+    body = `<h2>3. Перечислите 3–5 измеримых критериев.</h2>
+    <p class="sub" style="font-size:13.5px">Что на самом деле подтвердит ваш ответ? Будьте достаточно конкретны, чтобы кто-то другой мог проверить вашу работу.</p>
     <div style="margin-top:12px">`;
     sc.criteria.forEach((c,i)=>{
-      body += `<div class="edit-step"><input type="text" value="${esc(c)}" oninput="scCrit(${i},this.value)" placeholder="Criterion ${i+1}">${sc.criteria.length>1?`<button class="x-btn" onclick="scCritDel(${i})"><i data-lucide="x"></i></button>`:''}</div>`;
+      body += `<div class="edit-step"><input type="text" value="${esc(c)}" oninput="scCrit(${i},this.value)" Placeholder="Критерий ${i+1}">${sc.criteria.length>1?`<button class="x-btn" onclick="scCritDel(${i})"><i data-lucide="x"></i></button>`:''}</div>`;
     });
-    body += `</div>${sc.criteria.length<6?`<button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="scCritAdd()"><i data-lucide="plus"></i> Add criterion</button>`:''}`;
+    body += `</div>${sc.criteria.length<6?`<button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="scCritAdd()"><i data-lucide="plus"></i> Добавить критерий</button>`:''}`;
   }
   else if(step==='feasibility'){
     const rows = feasRows(sc);
-    body = `<h2>4. Check what the data can actually answer.</h2>
-    <p class="sub" style="font-size:13.5px">For each criterion: does a column answer it <b>direct</b>ly, do you need a <b>proxy</b>, or does it get <b>cut</b>? Analysts do this before writing any queries.</p>`;
+    body = `<h2>4. Проверьте, на что на самом деле могут ответить данные.</h2>
+    <p class="sub" style="font-size:13.5px">По каждому критерию: отвечает ли ему столбец <b>direct</b>Ли, тебе нужен <b>proxy</b>, или это получается <b>cut</b>? Аналитики делают это перед тем, как писать какие-либо запросы.</p>`;
     rows.forEach((r,i)=>{
       body += `<div class="feas-row"><div style="font-size:14px;font-weight:600">${esc(r.criterion)}</div>
       <div class="feas-opts">${['direct','proxy','cut'].map(o=>`<button class="feas-opt ${r.status===o?('on'+(o==='cut'?' cut':'')):''}" onclick="scFeas(${i},'${o}')">${o}</button>`).join('')}</div>
-      ${r.status==='proxy'?`<div style="margin-top:8px"><input type="text" value="${esc(r.note)}" oninput="scFeasNote(${i},this.value)" placeholder="What column stands in for this, and why?"></div>`:''}
+      ${r.status==='proxy'?`<div style="margin-top:8px"><input type="text" value="${esc(r.note)}" oninput="scFeasNote(${i},this.value)" Placeholder="Какой столбец это обозначает и почему?"></div>`:''}
       </div>`;
     });
   }
   else if(step==='output'){
-    body = `<h2>5. Define done before you start.</h2>
-    <p class="sub" style="font-size:13.5px">What does the final deliverable look like?</p>
+    body = `<h2>5. Определите, что готово, прежде чем начать.</h2>
+    <p class="sub" style="font-size:13.5px">Как выглядит конечный результат?</p>
     ${OUTPUT_TYPES.map(o=>`<button class="out-opt ${sc.outputType===o.id?'on':''}" onclick="scSet('outputType','${o.id}')"><b>${o.label}</b><small>${o.hint}</small></button>`).join('')}
     <div style="margin-top:10px"><textarea rows="2" oninput="scType('outputNote',this.value)" placeholder="Optional: one line on what the output should show">${esc(sc.outputNote)}</textarea></div>`;
   }
   else if(step==='tools'){
-    body = `<h2>6. Pick the tools you'll practice.</h2>
-    <p class="sub" style="font-size:13.5px">Job-first advice: <b>Excel, SQL, and Tableau</b> are what entry-level postings actually screen for — the dashed ones are our recommended core. Add Power BI or Python if a target job asks for them.</p>
+    body = `<h2>6. Выберите инструменты, которые вы будете практиковать.</h2>
+    <p class="sub" style="font-size:13.5px">Совет для начала работы: <b>Excel, SQL и таблица</b> — это то, что на самом деле проверяют публикации начального уровня. Пунктирные — это рекомендуемое ядро. Добавьте Power BI или Python, если их требует целевое задание.</p>
     <div style="margin-top:14px">`;
     TOOLS.forEach(t=>{
-      body += `<button class="out-opt ${sc.tools.includes(t.id)?'on':''}" onclick="scTool('${t.id}')"><b>${t.label}${t.rec?' · recommended':''}</b><small>${t.why}</small></button>`;
+      body += `<button class="out-opt ${sc.tools.includes(t.id)?'on':''}" onclick="scTool('${t.id}')"><b>${t.label}${t.rec?" · рекомендуется":''}</b><small>${t.why}</small></button>`;
     });
     body += `</div>`;
   }
   else { // review
-    body = `<h2>Scoping document — review</h2>
+    body = `<h2>Обзорный документ — обзор</h2>
     <div class="review-doc">${esc(scopeDocText(sc))}</div>
-    <div class="hint">This document travels with the project. The Plan phase turns it into a step-by-step.</div>`;
+    <div class="hint">Этот документ путешествует вместе с проектом. Фаза планирования превращает его в поэтапный.</div>`;
   }
 
   const canNext = scopeStepValid(sc, step);
   let actions = `<div class="row-actions">
     <button class="btn btn-ghost" onclick="scBack()" ${SSTEP===0?'disabled':''}><i data-lucide="chevron-left"></i> Back</button>`;
   if(step==='review'){
-    actions += `<button class="btn" onclick="scStamp()"><i data-lucide="stamp"></i> Stamp scoped → plan it</button>`;
+    actions += `<button class="btn" onclick="scStamp()"><i data-lucide="stamp"></i> Область печати → планируйте это</button>`;
   }else{
-    actions += `<button class="btn" id="scNextBtn" onclick="scNext()" ${canNext?'':'disabled'}>Next <i data-lucide="chevron-right"></i></button>`;
+    actions += `<button class="btn" id="scNextBtn" onclick="scNext()" ${canNext?'':'disabled'}>Далее <i data-lucide="chevron-right"></i></button>`;
   }
   actions += `</div>`;
   return `<div class="card">${dots}${body}${actions}</div>`;
@@ -509,19 +509,19 @@ function planHTML(p){
   if(p.plan.stages.length) return planEditHTML(p, false);
   return `
   <div class="card">
-    <h2>Choose how to build your step-by-step</h2>
-    <p class="sub" style="font-size:13.5px">Every plan uses the same six industry-standard stages of analysis: <b>Ask → Prepare → Process → Analyze → Share → Act</b>. Only the steps inside them change.</p>
+    <h2>Выберите, как построить свой шаг за шагом</h2>
+    <p class="sub" style="font-size:13.5px">В каждом плане используются одни и те же шесть стандартных отраслевых этапов анализа: <b>Спросить → Подготовиться → Обработать → Анализировать → Поделиться → Действовать</b>. Меняются только ступени внутри них.</p>
     <div class="plan-choice" onclick="planTemplate()">
-      <b><i data-lucide="list-checks"></i> Use the guided template</b>
-      <p>A ready plan built from your scope and tools — the fastest way to start. You can edit every step after.</p>
+      <b><i data-lucide="list-checks"></i> Используйте шаблон с инструкциями</b>
+      <p>Готовый план, составленный на основе ваших возможностей и инструментов — самый быстрый способ начать. После этого вы можете редактировать каждый шаг.</p>
     </div>
     <div class="plan-choice" onclick="planCustomStart()">
-      <b><i data-lucide="pencil"></i> Write or paste your own</b>
-      <p>Bring a plan from a mentor, a course, or another chat. Paste it in and the Studio organizes it into stages.</p>
+      <b><i data-lucide="pencil"></i> Напишите или вставьте свой собственный</b>
+      <p>Принесите план от наставника, курса или другого чата. Вставьте его, и Студия разложит его по этапам.</p>
     </div>
     <div class="plan-choice" onclick="planAIStart()">
-      <b><i data-lucide="sparkles"></i> Generate with Claude (optional)</b>
-      <p>Sends your scoping doc to Claude with your own API key and drafts a plan tailored to your exact project. Key stays in your browser.</p>
+      <b><i data-lucide="sparkles"></i> Создать с помощью Клода (необязательно)</b>
+      <p>Отправляет Клоду ваш обзорный документ с вашим собственным ключом API и составляет план, адаптированный к вашему конкретному проекту. Ключ остается в вашем браузере.</p>
     </div>
     <div id="plan-extra"></div>
   </div>`;
@@ -539,58 +539,58 @@ function mkStep(text,skill){ return {id:'s'+(Date.now().toString(36))+(_sid++), 
 function buildTemplatePlan(sc){
   const t = id=>sc.tools.includes(id);
   const outLabel = (OUTPUT_TYPES.find(o=>o.id===sc.outputType)||{}).label || 'deliverable';
-  const vizTool = t('tableau') ? 'Tableau' : t('powerbi') ? 'Power BI' : 'Excel charts';
+  const vizTool = t('tableau') ? 'Tableau' : t('powerbi') ? 'Power BI' : "Диаграммы Excel";
   const stages = [];
 
   stages.push({key:'ask', steps:[
-    mkStep('Re-read your scoping doc and write the question at the top of a fresh notes file.',''),
-    mkStep('For each criterion, write one sentence on how you expect to measure it.',''),
-    mkStep('Write down 2–3 things you expect to find (your hypotheses) — you\'ll check yourself against these at the end.','')
+    mkStep("Перечитайте свой обзорный документ и напишите вопрос вверху нового файла заметок.",''),
+    mkStep("Для каждого критерия напишите одно предложение о том, как вы собираетесь его измерять.",''),
+    mkStep("Запишите 2–3 вещи, которые вы ожидаете найти (ваши гипотезы) — в конце вы проверите себя по ним.",'')
   ]});
 
   const prep = [
-    mkStep('Locate and download the dataset; save an untouched copy in a raw/ folder.',''),
-    mkStep('Profile the data: row count, column list, and what one row represents (the grain).', t('sql')?'sql':'excel'),
-    mkStep('Build a mini data dictionary: each column you\'ll use, its type, and what it means.','excel')
+    mkStep("Найдите и загрузите набор данных; сохраните нетронутую копию в папке raw/.",''),
+    mkStep("Профилируйте данные: количество строк, список столбцов и то, что представляет собой одна строка (зернистость).", t('sql')?'sql':'excel'),
+    mkStep("Создайте мини-словарь данных: каждый столбец, который вы будете использовать, его тип и его значение.",'excel')
   ];
-  if(t('sql')) prep.push(mkStep('Load the raw data into a SQL database (one table, matching column types).','sql'));
+  if(t('sql')) prep.push(mkStep("Загрузите необработанные данные в базу данных SQL (одна таблица с соответствующими типами столбцов).",'sql'));
   stages.push({key:'prepare', steps:prep});
 
   const proc = [
-    mkStep('List the data-quality problems you can see: nulls, duplicates, weird formats, range strings.', t('sql')?'sql':'excel'),
-    mkStep('Clean each problem and write down the rule you applied (a cleaning log).', t('sql')?'sql':'excel'),
-    mkStep('Derive the calculated fields your criteria need (ratios, parsed numbers, flags).', t('sql')?'sql':'excel'),
-    mkStep('Validate the cleaned data: row counts before/after, spot-check 10 rows by hand.', t('sql')?'sql':'excel')
+    mkStep("Перечислите проблемы с качеством данных, которые вы можете увидеть: значения NULL, дубликаты, странные форматы, строки диапазона.", t('sql')?'sql':'excel'),
+    mkStep("Устраните каждую проблему и запишите примененное вами правило (журнал очистки).", t('sql')?'sql':'excel'),
+    mkStep("Получите вычисляемые поля, необходимые вашим критериям (отношения, проанализированные числа, флаги).", t('sql')?'sql':'excel'),
+    mkStep("Проверьте очищенные данные: подсчитайте количество строк до/после, вручную проверьте 10 строк.", t('sql')?'sql':'excel')
   ];
-  if(t('python')) proc.push(mkStep('Optional: script the cleaning in Python/pandas so it\'s reproducible in one run.','python'));
+  if(t('python')) proc.push(mkStep("Необязательно: напишите сценарий очистки в Python/pandas, чтобы ее можно было воспроизвести за один запуск.",'python'));
   stages.push({key:'process', steps:proc});
 
   const ana = [
-    mkStep('Look at the real distributions of your key fields before setting any thresholds (percentiles, not gut feel).', t('sql')?'sql':'excel'),
-    mkStep('Answer criterion 1 with a query or pivot; save the result and one sentence of interpretation.', t('sql')?'sql':'excel'),
-    mkStep('Repeat for each remaining criterion — one result + one sentence each.', t('sql')?'sql':'excel'),
-    mkStep('Combine the criteria into your final answer set (the ranked list, score, or segment).', t('sql')?'sql':'excel'),
-    mkStep('Sanity-check the top results a second way — do the winners actually make sense?', t('excel')?'excel':'sql')
+    mkStep("Посмотрите на реальное распределение ваших ключевых полей, прежде чем устанавливать какие-либо пороговые значения (процентили, а не интуитивное ощущение).", t('sql')?'sql':'excel'),
+    mkStep("Ответьте на критерий 1 с помощью запроса или сводки; сохраните результат и одно предложение интерпретации.", t('sql')?'sql':'excel'),
+    mkStep("Повторите для каждого оставшегося критерия — по одному результату + по одному предложению.", t('sql')?'sql':'excel'),
+    mkStep("Объедините критерии в окончательный набор ответов (ранжированный список, балл или сегмент).", t('sql')?'sql':'excel'),
+    mkStep("Проверьте здравомыслие лучших результатов вторым способом: действительно ли победители имеют смысл?", t('excel')?'excel':'sql')
   ];
   stages.push({key:'analyze', steps:ana});
 
   const share = [];
   if(sc.outputType==='dashboard' || t('tableau') || t('powerbi')){
-    share.push(mkStep(`Sketch the ${outLabel.toLowerCase()} on paper first: what's the headline view, what are the filters?`,''));
-    share.push(mkStep(`Build the main view in ${vizTool}: your answer front and center.`, t('tableau')?'tableau':t('powerbi')?'powerbi':'excel'));
-    share.push(mkStep(`Add supporting views/filters (genre, price, category — whatever your criteria used).`, t('tableau')?'tableau':t('powerbi')?'powerbi':'excel'));
+    share.push(mkStep(`Нарисуйте ${outLabel.toLowerCase()} сначала на бумаге: как выглядит заголовок, какие фильтры?`,''));
+    share.push(mkStep(`Создайте основной вид в ${vizTool}: ваш ответ впереди и в центре.`, t('tableau')?'tableau':t('powerbi')?'powerbi':'excel'));
+    share.push(mkStep(`Добавьте дополнительные представления/фильтры (жанр, цена, категория — независимо от используемых вами критериев).`, t('tableau')?'tableau':t('powerbi')?'powerbi':'excel'));
   }else{
-    share.push(mkStep(`Draft the ${outLabel.toLowerCase()}: lead with the answer, then the evidence per criterion.`,''));
-    share.push(mkStep('Build 2–3 charts that carry the argument (one idea per chart, labeled to stand alone).', t('tableau')?'tableau':'excel'));
+    share.push(mkStep(`Проект ${outLabel.toLowerCase()}: ведите ответ, затем доказательства по критерию.`,''));
+    share.push(mkStep("Создайте 2–3 диаграммы, отражающие аргументы (по одной идее на диаграмме, помеченной как отдельная).", t('tableau')?'tableau':'excel'));
   }
-  share.push(mkStep('Title and label everything so it reads without you in the room.',''));
+  share.push(mkStep("Назовите и пометьте все, чтобы оно читалось без вас в комнате.",''));
   stages.push({key:'share', steps:share});
 
   stages.push({key:'act', steps:[
-    mkStep('Write the recommendation: what should someone do with this answer?',''),
-    mkStep('Write the limitations honestly: proxies used, data gaps, thresholds you chose.',''),
-    mkStep('Write "next steps": what you\'d do with more time or better data.',''),
-    mkStep('Check back against your hypotheses from the Ask stage — what surprised you?','')
+    mkStep("Напишите рекомендацию: что делать с этим ответом?",''),
+    mkStep("Честно напишите ограничения: используемые прокси, пробелы в данных, выбранные вами пороговые значения.",''),
+    mkStep("Напишите «следующие шаги»: что бы вы сделали, если бы у вас было больше времени или более качественные данные.",''),
+    mkStep("Проверьте свои гипотезы на этапе «Спросить» — что вас удивило?",'')
   ]});
   return stages;
 }
@@ -656,7 +656,7 @@ function planAIStart(){
 async function planAIGenerate(){
   const key = document.getElementById('aiKey').value.trim();
   const errEl = document.getElementById('aiErr');
-  if(!key){ errEl.textContent="Сначала введите ключ API или используйте шаблон."; return; }
+  if(!key){ errEl.textContent="Сначала введите свой ключ API или используйте шаблон."; return; }
   localStorage.setItem(COACH_KEY,key);
   const btn=document.getElementById('aiGo'); btn.disabled=true; btn.textContent="Черчение… (10–20 с)";
   errEl.textContent='';
@@ -680,7 +680,7 @@ ${scopeDocText(p.scope)}`;
       body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:2500,messages:[{role:'user',content:prompt}]})
     });
     const data = await r.json();
-    if(data.error) throw new Error(data.error.message||'API error');
+    if(data.error) throw new Error(data.error.message||"Ошибка API");
     const text = (data.content||[]).map(b=>b.text||'').join('');
     const m = text.match(/\{[\s\S]*\}/);
     const parsed = JSON.parse(m?m[0]:text);
@@ -689,11 +689,11 @@ ${scopeDocText(p.scope)}`;
       const steps = ((found&&found.steps)||[]).map(st=>mkStep(String(st.text||'').slice(0,300), (st.skill||'').toLowerCase().replace(' ','')));
       return {key:s.key, steps};
     });
-    if(!valid.reduce((n,s)=>n+s.steps.length,0)) throw new Error('Claude returned no usable steps.');
+    if(!valid.reduce((n,s)=>n+s.steps.length,0)) throw new Error("Клод не ответил ни на какие шаги.");
     p.plan = {source:'ai', locked:false, stages:valid};
     saveProj(); render();
   }catch(e){
-    errEl.textContent = 'Couldn\'t generate: '+(e.message||'check your key and try again.');
+    errEl.textContent = "Не удалось создать: "+(e.message||"проверьте свой ключ и повторите попытку.");
     btn.disabled=false; btn.innerHTML="<i data-lucide=\"sparkles\"></i> Нарисуйте мой пошаговый план";
     if(window.lucide) lucide.createIcons();
   }
@@ -701,10 +701,10 @@ ${scopeDocText(p.scope)}`;
 
 /* --- plan editor (all three sources land here) --- */
 function planEditHTML(p){
-  const srcLabel = {template:'Guided template',custom:'Your imported plan',ai:'Drafted by Claude'}[p.plan.source]||'Plan';
+  const srcLabel = {template:"Управляемый шаблон",custom:"Ваш импортированный план",ai:"Разработано Клодом"}[p.plan.source]||'Plan';
   let h = `<div class="card">
     <h2>Your step-by-step <span class="stamp" style="border-color:var(--info);color:var(--info);vertical-align:middle">${srcLabel.toUpperCase()}</span></h2>
-    <p class="sub" style="font-size:13.5px">Edit anything — add, reword, or remove steps. When it looks right, lock it in and start building. (You can still edit steps later from the Build phase.)</p>`;
+    <p class="sub" style="font-size:13.5px">Редактируйте что угодно — добавляйте, перефразируйте или удаляйте шаги. Когда все будет выглядеть правильно, зафиксируйте его и начните строить. (Вы все равно сможете редактировать шаги позже, на этапе сборки.)</p>`;
   STAGES.forEach((sg,si)=>{
     const st = p.plan.stages.find(x=>x.key===sg.key) || {key:sg.key,steps:[]};
     h += `<div class="stage-card"><div class="stage-head" style="cursor:default">
@@ -713,21 +713,20 @@ function planEditHTML(p){
       <span class="stage-count">${st.steps.length} steps</span>
     </div><div class="stage-body">`;
     st.steps.forEach((s,i)=>{
-      h += `<div class="edit-step">
-        <input type="text" value="${esc(s.text)}" oninput="peText('${sg.key}',${i},this.value)">
-        <select onchange="peSkill('${sg.key}',${i},this.value)">
-          <option value="">no tag</option>
-          ${TOOLS.map(t=>`<option value="${t.id}" ${s.skill===t.id?'selected':''}>${t.label}</option>`).join('')}
+      h += `<div class="edit-step"><input type="text" value="${esc(s.text)}" oninput="peText('${sg.key}',${i},это.значение)">
+        <select onchange="peSkill('${sg.key}',${i},это.значение)">
+          <option value="">нет тега</option>
+          ${TOOLS.map(t=>`<значение опции="${t.id}" ${s.skill===t.id?'selected':''}>${t.label}</option>`).join('')}
         </select>
         <button class="x-btn" onclick="peDel('${sg.key}',${i})"><i data-lucide="x"></i></button>
       </div>`;
     });
-    h += `<button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="peAdd('${sg.key}')"><i data-lucide="plus"></i> Add step</button>
+    h += `<button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="peAdd('${sg.key}')"><i data-lucide="plus"></i> Добавить шаг</button>
     </div></div>`;
   });
   h += `<div class="row-actions">
-    <button class="btn btn-ghost" onclick="planReset()">Start over (pick another source)</button>
-    <button class="btn" onclick="planLock()"><i data-lucide="hammer"></i> Lock plan → start building</button>
+    <button class="btn btn-ghost" onclick="planReset()">Начать сначала (выбрать другой источник)</button>
+    <button class="btn" onclick="planLock()"><i data-lucide="hammer"></i> Заблокировать план → начать строить</button>
   </div></div>`;
   return h;
 }
@@ -757,8 +756,8 @@ function buildHTML(p){
     OPEN_STAGE = firstOpen ? firstOpen.key : (p.plan.stages[0]&&p.plan.stages[0].key);
   }
   let h = `<div class="card card-sm" style="display:flex;align-items:center;gap:14px">
-    <div style="flex:1"><div class="label">Build progress</div>
-    <div class="progress"><i style="width:${pct}%"></i></div></div>
+    <div style="flex:1"><div class="label">Прогресс сборки</div>
+    <div class="progress"><i style="ширина:${pct}%"></i></div></div>
     <div class="mono" style="font-size:13px;color:var(--dim)">${done}/${total}</div>
   </div>`;
   STAGES.forEach((sg,si)=>{
@@ -768,32 +767,31 @@ function buildHTML(p){
     const open = OPEN_STAGE===sg.key;
     h += `<div class="stage-card">
       <div class="stage-head" onclick="toggleStage('${sg.key}')">
-        <span class="stage-num" style="${sDone===st.steps.length?'background:var(--good-bg);border-color:var(--good-ink);color:var(--good-ink)':''}">${sDone===st.steps.length?'✓':si+1}</span>
+        <span class="номер-этапа" style="${sDone===st.steps.length?'background:var(--good-bg);border-color:var(--good-ink);color:var(--good-ink)':''}">${sDone===st.steps.length?'✓':si+1}</span>
         <span class="t"><b>${sg.title}</b><small>${sg.mission}</small></span>
-        <span class="stage-count">${sDone}/${st.steps.length}</span>
-        <i data-lucide="${open?'chevron-up':'chevron-down'}" style="color:var(--dim)"></i>
+        <span class="stage-count">${sDone}/${st.steps.length}</span><я данные-lucid="${open?'chevron-up':'chevron-down'}" style="color:var(--dim)"></i>
       </div>`;
     if(open){
-      h += `<div class="stage-body"><div class="bp"><b>Best practice —</b> ${sg.bp}</div>`;
-      if(sg.ex) h += `<div class="ex"><span class="ex-lbl">How Steam Hidden Gems handled this →</span>${sg.ex}</div>`;
+      h += `<div class="stage-body"><div class="bp"><b>Лучшая практика —</b> ${sg.bp}</div>`;
+      if(sg.ex) h += `<div class="ex"><span class="ex-lbl">Как Steam Hidden Gems с этим справился →</span>${sg.ex}</div>`;
       st.steps.forEach((s,i)=>{
-        h += `<div class="step-row ${s.done?'done':''}">
-          <input type="checkbox" ${s.done?'checked':''} onchange="stepDone('${sg.key}',${i},this.checked)">
+        h += `<div class="шаг-строка" ${s.done?'done':''}">
+          <input type="флажок" ${s.done?'checked':''} onchange="stepDone('${sg.key}',${i},это.проверено)">
           <div style="flex:1"><span class="txt">${esc(s.text)}</span>${s.skill?`<span class="skill-tag">${skillLabel(s.skill).toUpperCase()}</span>`:''}
-            <div><button class="note-btn" onclick="toggleNote('${s.id}')">${s.notes?'Edit note':'+ note'}</button> ${stepLearnLink(s)}</div>
-            <textarea class="step-note" id="note-${s.id}" style="display:${s.notes?'block':'none'}" placeholder="What you did, what you found, decisions made..." oninput="stepNote('${sg.key}',${i},this.value)">${esc(s.notes)}</textarea>
+            <div><button class="note-btn" onclick="toggleNote('${s.id}')">${s.notes?"Изменить заметку":'+ note'}</button> ${stepLearnLink(s)}</div>
+            <textarea class="step-note" id="note-${s.id}"стиль="отображение:${s.notes?'block':'none'}" Placeholder="Что вы сделали, что нашли, принятые решения..." oninput="stepNote('${sg.key}',${i},this.value)">${esc(s.notes)}</textarea>
           </div>
         </div>`;
       });
-      h += `<button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="peAdd('${sg.key}');OPEN_STAGE='${sg.key}'"><i data-lucide="plus"></i> Add step</button></div>`;
+      h += `<button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="peAdd('${sg.key}');OPEN_STAGE='${sg.key}'"><i data-lucide="plus"></i> Добавить шаг</button></div>`;
     }
     h += `</div>`;
   });
   h += `<div class="row-actions">
-    <span class="hint">Notes you write here flow into the final project export.</span>
-    <button class="btn" onclick="toPresent()" ${done===total&&total>0?'':'disabled'}><i data-lucide="presentation"></i> All steps done → present it</button>
+    <span class="hint">Заметки, которые вы здесь пишете, переходят в окончательный экспорт проекта.</span>
+    <button class="btn" onclick="toPresent()" ${done===total&&total>0?'':'disabled'}><i data-lucide="presentation"></i> Все шаги выполнены → презентуйте</button>
   </div>`;
-  if(done<total) h+=`<div class="hint" style="text-align:right">Finish (or delete) every step to unlock the Present phase.</div>`;
+  if(done<total) h+=`<div class="hint" style="text-align:right">Завершите (или удалите) каждый шаг, чтобы разблокировать фазу «Настоящее».</div>`;
   return h;
 }
 function toggleStage(key){ OPEN_STAGE = OPEN_STAGE===key?null:key; render(); }
@@ -807,9 +805,9 @@ function stepLearnLink(s){
   if(!s.skill || !KIT_HOME[s.skill]) return '';
   let href = KIT_HOME[s.skill], label = skillLabel(s.skill)+' basics';
   if(s.skill==='sql' && /\b(load|import|create|set ?up)\b/i.test(s.text) && /\b(database|table|csv|raw)\b/i.test(s.text)){
-    href = '../sql/#lesson-105'; label = 'How to set up a SQL database';
+    href = '../sql/#lesson-105'; label = "Как настроить базу данных SQL";
   }
-  return `<a class="note-btn" href="${href}" target="_blank" rel="noopener" style="text-decoration:none">📚 New to this? ${label} →</a>`;
+  return `<a class="note-btn" href="${href}" target="_blank" rel="noopener" style="text-decoration:none">📚 Впервые в этом деле? ${label} →</a>`;
 }
 function stepNote(key,i,v){ peStage(key).steps[i].notes=v; saveProj(); }
 function toggleNote(id){ const el=document.getElementById('note-'+id); el.style.display = el.style.display==='none'?'block':'none'; if(el.style.display==='block')el.focus(); }
@@ -824,39 +822,39 @@ function toPresent(){
    ============================================================= */
 function defaultDeliverables(sc){
   const items = [
-    'A short README: the question, the data source, and the answer in the first three lines.',
-    'The methodology write-up: how you cleaned, what you measured, and why (your cleaning log + criteria).',
-    'The main deliverable, polished: titled, labeled, readable without you explaining it.',
-    'A limitations & next-steps section — honest about proxies, gaps, and what you\'d do with more time.'
+    "Краткий README: вопрос, источник данных и ответ в первых трех строках.",
+    "Описание методологии: как вы убирали, что измеряли и почему (ваш журнал уборки + критерии).",
+    "Основной результат, отшлифованный: озаглавленный, помеченный, читаемый без каких-либо объяснений.",
+    "Раздел «Ограничения и дальнейшие действия» — честно рассказывает о прокси, пробелах и о том, что бы вы сделали, если бы у вас было больше времени."
   ];
-  if(sc.outputType==='dashboard') items.splice(2,0,'A published/shareable link to the dashboard (Tableau Public or Power BI publish-to-web).');
-  if(sc.tools.includes('sql')) items.push('Your key SQL queries saved in a .sql file with one comment line each explaining intent.');
-  if(sc.tools.includes('excel')) items.push('The workbook organized: raw / clean / analysis tabs clearly separated and named.');
-  if(sc.tools.includes('python')) items.push('The prep script or notebook runnable top-to-bottom in one pass.');
+  if(sc.outputType==='dashboard') items.splice(2,0,"Опубликованная/доступная для общего доступа ссылка на панель мониторинга (Tableau Public или публикация в Интернете Power BI).");
+  if(sc.tools.includes('sql')) items.push("Ваши ключевые запросы SQL сохраняются в файле .sql с одной строкой комментария, объясняющей намерение.");
+  if(sc.tools.includes('excel')) items.push("Рабочая книга организована: вкладки «сырой», «чистый» и «анализ» четко разделены и названы.");
+  if(sc.tools.includes('python')) items.push("Подготовительный сценарий или блокнот можно выполнить сверху вниз за один проход.");
   return items.map(t=>({id:'d'+Math.random().toString(36).slice(2,8), text:t, done:false}));
 }
 function presentHTML(p){
   const cl = p.present.checklist;
   const done = cl.filter(c=>c.done).length;
   let h = `<div class="card">
-    <h2>Package it for a hiring manager</h2>
-    <p class="sub" style="font-size:13.5px">A portfolio project isn't done when the analysis is done — it's done when a stranger can understand it in two minutes. Check these off as you package it.</p>`;
+    <h2>Упакуйте это для менеджера по найму</h2>
+    <p class="sub" style="font-size:13.5px">Портфельный проект не считается завершенным, когда проведен анализ — он считается завершенным, когда незнакомец может понять его за две минуты. Отметьте их при упаковке.</p>`;
   cl.forEach((c,i)=>{
-    h += `<div class="step-row ${c.done?'done':''}">
-      <input type="checkbox" ${c.done?'checked':''} onchange="delivDone(${i},this.checked)">
-      <span class="txt">${esc(c.text)}</span>
+    h += `<div class="шаг-строка" ${c.done?'done':''}">
+          <input type="флажок" ${c.done?'checked':''} onchange="delivDone(${i},это.проверено)">
+          <span class="txt">${esc(c.text)}</span>
     </div>`;
   });
-  h += `<div class="deliv-note"><b>Interview tip:</b> practice a 90-second walkthrough out loud — question, approach, answer, one limitation. That walkthrough is what gets asked about, not the code.</div>
-  <div class="label" style="margin-top:16px">Presentation notes</div>
+  h += `<div class="deliv-note"><b>Совет на собеседовании:</b> попрактикуйтесь вслух в 90-секундном прохождении — вопрос, подход, ответ, одно ограничение. Спрашивают именно об этом пошаговом руководстве, а не о коде.</div>
+  <div class="label" style="margin-top:16px">Примечания к презентации</div>
   <textarea rows="4" style="margin-top:6px" placeholder="Your headline finding, the story you'll tell, links to the published work..." oninput="presNote(this.value)">${esc(p.present.notes)}</textarea>
   <div class="row-actions">
-    <button class="btn btn-outline" onclick="copyExport()"><i data-lucide="copy"></i> Copy project doc</button>
-    <button class="btn" onclick="downloadExport()"><i data-lucide="download"></i> Download project doc (.md)</button>
+    <button class="btn btn-outline" onclick="copyExport()"><i data-lucide="copy"></i> Копировать документ проекта</button>
+    <button class="btn" onclick="downloadExport()"><i data-lucide="download"></i> Скачать документ проекта (.md)</button>
   </div>
   <div id="expMsg" class="ok"></div>
-  <div class="hint">The export bundles your scope, full step-by-step with notes, and this checklist — a ready skeleton for the project's README.</div>
-  ${done===cl.length&&cl.length?'<div class="ok" style="margin-top:10px">✓ Fully packaged. Put it in front of people.</div>':''}
+  <div class="hint">Экспорт включает в себя ваш объем, полное пошаговое описание с примечаниями, а также этот контрольный список — готовый скелет для README проекта.</div>
+  ${done===cl.length&&cl.length?"<div class=\"ok\" style=\"margin-top:10px\">✓ Полная комплектация. Поставьте это перед людьми.</div>":''}
   </div>`;
   return h;
 }
@@ -865,7 +863,20 @@ function presNote(v){ getProj(VIEW.id).present.notes=v; saveProj(); }
 
 function exportMD(p){
   const sc=p.scope;
-  let md = `# ${projName(p)} — analysis project\n\n**Question:** ${sc.question}\n\n**Deliverable:** ${(OUTPUT_TYPES.find(o=>o.id===sc.outputType)||{}).label||''} ${sc.outputNote?'— '+sc.outputNote:''}\n**Tools:** ${sc.tools.map(skillLabel).join(', ')}\n\n## Scope\n\n### Criteria\n${sc.criteria.filter(c=>c.trim()).map(c=>'- '+c).join('\n')}\n\n### Data feasibility\n${feasRows(sc).map(f=>`- ${f.criterion}: **${f.status}**${f.note?' — '+f.note:''}`).join('\n')}\n\n## Step-by-step\n`;
+  let md = `# ${projName(p)} — аналитический проект
+
+**Вопрос:** ${sc.question}\n\n**Deliverable:** ${(OUTPUT_TYPES.find(o=>o.id===sc.outputType)||{}).label||''} ${sc.outputNote?'— '+sc.outputNote:''}\n**Tools:** ${sc.tools.map(skillLabel).join(', ')}
+
+## Область применения
+
+### Критерии
+${sc.criteria.filter(c=>c.trim()).map(c=>'- '+c).join('\n')}
+
+### Осуществимость данных
+${feasRows(sc).map(f=>`- ${f.criterion}: **${f.status}**${f.note?' — '+f.note:''}`).join('\n')}
+
+## Шаг за шагом
+`;
   STAGES.forEach((sg,si)=>{
     const st=p.plan.stages.find(x=>x.key===sg.key);
     if(!st||!st.steps.length) return;
@@ -875,9 +886,16 @@ function exportMD(p){
       if(s.notes.trim()) md += `  - _${s.notes.trim().replace(/\n/g,' ')}_\n`;
     });
   });
-  md += `\n## Presentation checklist\n${p.present.checklist.map(c=>`- [${c.done?'x':' '}] ${c.text}`).join('\n')}\n`;
-  if(p.present.notes.trim()) md += `\n## Presentation notes\n${p.present.notes}\n`;
-  md += `\n---\n_Scoped, planned, and built with Project Studio — Analyst Prep Kit._\n`;
+  md += `
+## Контрольный список презентации
+${p.present.checklist.map(c=>`- [${c.done?'x':' '}] ${c.text}`).join('\n')}\n`;
+  if(p.present.notes.trim()) md += `
+## Примечания к презентации
+${p.present.notes}\n`;
+  md += `
+---
+_Оценено, спланировано и построено с помощью Project Studio — Analyst Prep Kit._
+`;
   return md;
 }
 function copyExport(){
@@ -937,7 +955,7 @@ render();
 <!-- APK:KIT-SEO:END -->
   <script src="../assets/plan-return.js" defer></script>
 
-<script src="../assets/ru-localization.js?v=20261027-1"></script>
+
 <script src="../assets/datacraft-economy.js"></script>
 <script src="../assets/progress-state.js"></script>\п<script src="../assets/supabase_auth_sync.js?v=3"></script>\п
 

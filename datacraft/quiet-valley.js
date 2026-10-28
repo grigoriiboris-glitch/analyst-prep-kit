@@ -1,12 +1,12 @@
 /* Quiet Valley: cosmetic home-building paid for by study-earned coins. */
 (function(){
-'use strict';
+"используйте строгий";
 var SAVE='datacraft-quiet-valley-v1',WALLET='datacraft-wallet-v1',W=900,H=540,CELL=30;
 var canvas=document.getElementById('quietValleyCanvas'),ctx=canvas&&canvas.getContext('2d');
 var statusEl=document.getElementById('quietValleyStatus'),shopEl=document.getElementById('quietValleyShop'),inventoryEl=document.getElementById('quietValleyInventory'),zonesEl=document.getElementById('quietValleyZones');
 var balanceEl=document.getElementById('quietValleyBalance'),selectionTitle=document.getElementById('quietValleySelectionTitle'),selectionActions=document.getElementById('quietValleySelectionActions');
 var selectedItem=null,selectedObject=null,mode='select',category='all',counter=0,time=0,lastFrame=0;
-var reducedMotion=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+var reducedMotion=!!(window.matchMedia&&window.matchMedia("(предпочитает уменьшенное движение: уменьшить)").matches);
 var ZONES=[
 {id:'garden',name:'🌿 Сад у дома',short:'Сад у дома',price:0,kind:'garden'},
 {id:'forest',name:'🌲 Лесная поляна',short:'Лесная поляна',price:25,kind:'forest'},
@@ -105,7 +105,7 @@ function drawHouse(){
  if(state.active.roof==='roof-terracotta'||state.active.roof==='roof-nightblue'){ctx.save();ctx.strokeStyle=state.active.roof==='roof-nightblue'?'rgba(218,238,255,.48)':'rgba(255,222,183,.58)';ctx.lineWidth=1.5;for(var tileY=124;tileY<160;tileY+=7){var leftX=174-(tileY-111)*63/52,rightX=174+(tileY-111)*66/52;ctx.beginPath();ctx.moveTo(leftX,tileY);ctx.lineTo(rightX,tileY);ctx.stroke();}ctx.restore();}
  ctx.fillStyle='#6a4733';ctx.fillRect(163,188,23,43);ctx.fillStyle='#e9ce8c';ctx.fillRect(182,205,3,3);
  var glow=state.active.window==='window-glow';[[137,172],[194,172]].forEach(function(p){if(glow){ctx.save();ctx.fillStyle='rgba(255,208,83,.28)';ctx.beginPath();ctx.ellipse(p[0]+9.5,p[1]+8.5,20,18,0,0,Math.PI*2);ctx.fill();ctx.restore();}ctx.fillStyle=glow?'#ffdf89':'#b6d9dc';ctx.fillRect(p[0],p[1],19,17);ctx.strokeStyle='#6b6c51';ctx.lineWidth=2;ctx.strokeRect(p[0],p[1],19,17);ctx.beginPath();ctx.moveTo(p[0]+9,p[1]);ctx.lineTo(p[0]+9,p[1]+17);ctx.moveTo(p[0],p[1]+8);ctx.lineTo(p[0]+19,p[1]+8);ctx.stroke();});
- ctx.fillStyle='#f4f0d5';ctx.font='bold 12px system-ui';ctx.textAlign='center';ctx.fillText('Мой дом',174,99);
+ ctx.fillStyle='#f4f0d5';ctx.font="жирный шрифт 12 пикселей, системный интерфейс";ctx.textAlign='center';ctx.fillText('Мой дом',174,99);
 }
 function background(z){
  var g=ctx.createLinearGradient(0,0,0,H);
@@ -128,11 +128,11 @@ function drawObject(o){
  if(it.id==='pond'){var water=ctx.createRadialGradient(-15,-15,2,0,0,63);water.addColorStop(0,'#78d1cf');water.addColorStop(1,'#236c80');ctx.fillStyle='#bcb08b';ctx.beginPath();ctx.ellipse(0,0,63,42,0,0,Math.PI*2);ctx.fill();ctx.fillStyle=water;ctx.beginPath();ctx.ellipse(0,-2,56,35,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle='rgba(224,249,236,.7)';ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(-6,-2,28,12,0,0,Math.PI*2);ctx.stroke();}
  else if(it.id==='wooden-bridge'){ctx.fillStyle='#754c2d';ctx.fillRect(-29,-12,58,24);ctx.strokeStyle='#dfbd7b';ctx.lineWidth=2;ctx.strokeRect(-29,-12,58,24);for(var p=-20;p<29;p+=10){ctx.beginPath();ctx.moveTo(p,-10);ctx.lineTo(p,10);ctx.stroke();}}
  else if(it.id==='fountain'){ctx.fillStyle='#b6c6c3';ctx.beginPath();ctx.ellipse(0,8,27,13,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#6ab9c6';ctx.beginPath();ctx.ellipse(0,5,21,8,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#b8eeea';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(0,5);ctx.quadraticCurveTo(-6,-8,0,-19);ctx.stroke();}
- else{var fs=it.id==='oak-tree'?48:(it.id==='garden-bush'?34:32);if(it.id==='glow-mushroom'){ctx.fillStyle='rgba(143,244,194,'+(.22+.12*Math.sin(time*2))+')';ctx.beginPath();ctx.arc(0,0,29,0,Math.PI*2);ctx.fill();}if(it.id==='garden-lantern'||it.id==='porch-lantern'){ctx.fillStyle='rgba(255,211,109,'+(.15+.06*Math.sin(time*2))+')';ctx.beginPath();ctx.arc(0,0,26,0,Math.PI*2);ctx.fill();}ctx.font=fs+'px "Apple Color Emoji","Segoe UI Emoji",system-ui,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(it.emoji,0,0);}
+ else{var fs=it.id==='oak-tree'?48:(it.id==='garden-bush'?34:32);if(it.id==='glow-mushroom'){ctx.fillStyle='rgba(143,244,194,'+(.22+.12*Math.sin(time*2))+')';ctx.beginPath();ctx.arc(0,0,29,0,Math.PI*2);ctx.fill();}if(it.id==='garden-lantern'||it.id==='porch-lantern'){ctx.fillStyle='rgba(255,211,109,'+(.15+.06*Math.sin(time*2))+')';ctx.beginPath();ctx.arc(0,0,26,0,Math.PI*2);ctx.fill();}ctx.font=fs+"px «Apple Color Emoji», «Segoe UI Emoji», system-ui, без засечек";ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(it.emoji,0,0);}
  ctx.restore();
 }
 function draw(){
- if(!ctx)return;ctx.clearRect(0,0,W,H);background(zone());objects().forEach(drawObject);ctx.save();ctx.fillStyle='rgba(13,31,19,.65)';rr(14,14,205,29,9);ctx.fill();ctx.fillStyle='#eef7df';ctx.font='bold 12px system-ui';ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillText(zone().short,25,28);
+ if(!ctx)return;ctx.clearRect(0,0,W,H);background(zone());objects().forEach(drawObject);ctx.save();ctx.fillStyle='rgba(13,31,19,.65)';rr(14,14,205,29,9);ctx.fill();ctx.fillStyle='#eef7df';ctx.font="жирный шрифт 12 пикселей, системный интерфейс";ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillText(zone().short,25,28);
  if(mode==='place'&&selectedItem){ctx.fillStyle='#ffe7a0';ctx.textAlign='right';ctx.fillText('Выбери место для '+(item(selectedItem)||{}).name,W-20,28);}else if(mode==='move'&&selectedObject){ctx.fillStyle='#ffe7a0';ctx.textAlign='right';ctx.fillText('Выбери новое место',W-20,28);}ctx.restore();
  for(var i=0;i<5;i++){var sx=state.current==='waterfall'?750+i*15:(state.current==='beach'?420+i*32:440+i*37),sy=state.current==='waterfall'?390+Math.sin(time+i)*17:(state.current==='beach'?220+Math.sin(time+i)*7:330+Math.sin(time*1.2+i)*11);ctx.fillStyle='rgba(255,246,186,'+(.2+.45*Math.abs(Math.sin(time*1.6+i)))+')';ctx.beginPath();ctx.arc(sx,sy,1.5+Math.abs(Math.sin(time+i)),0,Math.PI*2);ctx.fill();}
 }

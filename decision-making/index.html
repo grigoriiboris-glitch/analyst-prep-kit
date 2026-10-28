@@ -289,7 +289,7 @@
 </main>
 <script>
 (function(){
-  'use strict';
+  "используйте строгий";
   var progressKey='apk-decision-thinking-progress-v1';
   var answerKey='apk-decision-thinking-answer-v1';
   var checklistKey='apk-decision-thinking-checklist-v1'; var positionKey='apk-decision-thinking-state-v1';
@@ -333,7 +333,7 @@
       var id=button.getAttribute('data-check');
       var selected=document.querySelector('input[name="'+id+'"]:checked');
       var box=button.parentElement.querySelector('.feedback');
-      box.className='feedback show '+(selected&&selected.value===correct[id]?'good':'bad');
+      box.className="шоу обратной связи "+(selected&&selected.value===correct[id]?'good':'bad');
       box.textContent=selected&&selected.value===correct[id]?'Верно. '+explanations[id]:'Пока не совсем. Подумай, какой вариант проверяет факты и снижает риск ошибочного решения. '+explanations[id];
     });
   });
@@ -342,7 +342,7 @@
   document.getElementById('saveCase').addEventListener('click',function(){
     write(answerKey,caseAnswer.value);
     var box=document.getElementById('caseFeedback');
-    box.className='feedback show good';box.textContent='Черновик сохранён в этом браузере. Он не отправляется на сервер.';
+    box.className="обратная связь показывает хорошо";box.textContent='Черновик сохранён в этом браузере. Он не отправляется на сервер.';
   });
   document.getElementById('reviewCase').addEventListener('click',function(){
     var text=caseAnswer.value.trim().toLowerCase();
@@ -356,14 +356,14 @@
     var passed=checks.filter(function(c){return c.re.test(text);});
     var missing=checks.filter(function(c){return !c.re.test(text);}).map(function(c){return c.label;});
     var box=document.getElementById('caseFeedback');
-    box.className='feedback show '+(passed.length>=4?'good':'bad');
+    box.className="шоу обратной связи "+(passed.length>=4?'good':'bad');
     box.innerHTML='<strong>Пункты, которые удалось обнаружить в ответе: '+passed.length+' из 5.</strong><br>'+
       (passed.length?'Есть признаки: '+passed.map(function(c){return c.label;}).join('; ')+'.<br>':'')+
       (missing.length?'Попробуй добавить: '+missing.join('; ')+'.<br>':'')+
       '<br><strong>Подумай ещё:</strong> средний чек мог увеличиться из-за повышения цен, изменения состава заказов или снижения числа дешёвых покупок. Это не доказывает эффективность акции. Проверь количество заказов, маржу/прибыль, период до акции и сравнимую группу, если она доступна. Масштабирование бюджета предложи только после оценки эффекта и риска.';
   });
   var checklist=read(checklistKey,[]);
-  var checklistInputs=Array.prototype.slice.call(document.querySelectorAll('#checklistItems input'));
+  var checklistInputs=Array.prototype.slice.call(document.querySelectorAll("#checklistItems ввод"));
   if(Array.isArray(checklist))checklistInputs.forEach(function(input,i){input.checked=checklist.indexOf(i)!==-1;});
   function updateCheckCount(){
     var checked=checklistInputs.map(function(input,i){return input.checked?i:null;}).filter(function(i){return i!==null;});

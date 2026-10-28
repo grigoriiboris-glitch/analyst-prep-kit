@@ -142,7 +142,7 @@ const shape = r => !r.length ? '[]' :
   JSON.stringify(r[r.length-1].values.map(row => row.map(v => v === null ? null : String(v))).sort());
 
 function table(res){
-  if(!res.length) return 'Query ran. No rows returned.';
+  if(!res.length) return "Запрос выполнен. Ни одна строка не возвращена.";
   const {columns, values} = res[res.length-1];
   return '<table><tr>' + columns.map(c => '<th>'+c+'</th>').join('') + '</tr>' +
     values.slice(0,25).map(r => '<tr>' + r.map(v =>
@@ -172,13 +172,13 @@ function commit(){
   // The table can run to 25 rows, which on a phone put the only way forward nearly two
   // screens down, at the exact moment a miss makes someone most likely to quit.
   const why = right ? '' :
-    '<div class="why"><p>One that works:</p><pre class="ref">' +
+    "<div class=\"why\"><p>Тот, который работает:</p><pre class=\"ref\">" +
     item.sql.replace(/[<>]/g, c => c === '<' ? '&lt;' : '&gt;') + '</pre>' +
-    '<p style="margin-top:10px">Could you say what was wrong in one sentence, without rereading?</p>' +
+    "<p style=\"margin-top:10px\">Не могли бы вы сказать, что не так, в одном предложении, не перечитывая?</p>" +
     '<div class="row"><button data-rec="1">Yes</button><button data-rec="0">No</button></div></div>';
 
   $('out').innerHTML =
-    (right ? '<span class="ok">Right</span>' : '<span class="no">Not that</span>') +
+    (right ? '<span class="ok">Right</span>' : "<span class=\"no\">Не то</span>") +
     why + '\n' + table(mine.rows);
 
   if(!right){
@@ -247,21 +247,21 @@ function dump(){
   const misses = done.filter(r => !r.right);
   rec.summary = {
     reps: n,
-    verdict: n >= 40 ? (n >= 60 ? 'OVERRAN' : 'reached 40, stopped short of 60') : 'stopped before 40',
+    verdict: n >= 40 ? (n >= 60 ? 'OVERRAN' : "достиг 40, остановился перед 60") : "остановился до 40",
     correctRate: done.length ? Math.round(100 * done.filter(r => r.right).length / done.length) + '%' : 'n/a',
     toFirstKeyMs: {first10: avg(r => r.toFirstKey, first10), last10: avg(r => r.toFirstKey, last10)},
     latencyMs: {first10: avg(r => r.latency, first10), last10: avg(r => r.latency, last10)},
     rereadRate: done.length ? Math.round(100 * done.filter(r => r.scrolls > 0).length / done.length) + '%' : 'n/a',
     oneSentenceRecovery: misses.length
-      ? Math.round(100 * misses.filter(r => r.recovered === 1).length / misses.length) + '%' : 'no misses',
+      ? Math.round(100 * misses.filter(r => r.recovered === 1).length / misses.length) + '%' : "никаких промахов",
     attemptsPerRep: done.length ? (done.reduce((a,b) => a + b.tries, 0) / done.length).toFixed(2) : 'n/a'
   };
   save();
   document.querySelector('main').innerHTML =
-    '<p>Run recorded. Copy this into the tracker.</p>' +
+    "<p>Пробег записан. Скопируйте это в трекер.</p>" +
     '<textarea id="dump" spellcheck="false"></textarea>' +
     '<div class="row"><button class="go" id="cp">Copy</button>' +
-    '<button id="wipe">Clear this device’s run</button></div>';
+    "<button id=\"wipe\">Очистить запуск этого устройства</button></div>";
   $('dump').value = JSON.stringify(rec, null, 2);
   $('cp').onclick = () => { $('dump').select(); document.execCommand('copy'); $('cp').textContent = 'Copied'; };
   $('wipe').onclick = () => { store.clear(); location.href = location.pathname; };
@@ -276,8 +276,8 @@ initSqlJs({locateFile: f => 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.
     item = nextRep();
     $('sql').focus({preventScroll:true});
   })
-  .catch(e => { $('prompt').textContent = 'Engine failed to load: ' + e.message; });
+  .catch(e => { $('prompt').textContent = "Двигатель не удалось загрузить: " + e.message; });
 </script>
-<script src="../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

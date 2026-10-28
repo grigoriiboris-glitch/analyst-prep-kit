@@ -21,7 +21,7 @@
      a click handler. Never move a speak() call behind a timer or a promise.
    ========================================================================== */
 (function () {
-  'use strict';
+  "используйте строгий";
 
   var synth = window.speechSynthesis;
   if (!synth || typeof SpeechSynthesisUtterance === 'undefined') return;
@@ -29,18 +29,18 @@
   // ---- What gets read -------------------------------------------------------
   // Blocks in document order. Anything navigational, decorative, or unreadable
   // aloud is excluded here rather than being cleaned up later.
-  var BLOCKS = 'h1, h2, h3, p, li, blockquote, figcaption';
-  var SKIP_INSIDE = '.crumb, .morelinks, .toc, nav, footer, .listen-bar, .listen-launch';
+  var BLOCKS = "h1, h2, h3, p, li, цитата, figcaption";
+  var SKIP_INSIDE = ".crumb, .morelinks, .toc, nav, нижний колонтитул, .listen-bar, .listen-launch";
 
   // Code and tables are read as a short marker instead of their contents.
   // A screenful of SQL read character by character is not listening, it is
   // punishment, and a table read left to right loses the column meanings.
   var MARKERS = [
-    { sel: 'pre', say: 'A code example follows on screen.' },
-    { sel: 'table', say: 'A table follows on screen.' },
+    { sel: 'pre', say: "Пример кода следует на экране." },
+    { sel: 'table', say: "На экране следует таблица." },
     // Author, year, journal, DOI is reference apparatus. Read aloud it is a
     // wall of numbers, and nobody listening is writing down a DOI.
-    { sel: 'ul.refs, ol.refs', say: 'The references are listed on screen.' }
+    { sel: "ул.рефс, ол.рефс", say: "Ссылки перечислены на экране." }
   ];
 
   function visible(el) {
@@ -50,7 +50,7 @@
   function collect(root) {
     var out = [];
     var seen = new Set();
-    var all = root.querySelectorAll(BLOCKS + ', pre, table');
+    var all = root.querySelectorAll(BLOCKS + ", предварительно, таблица");
 
     Array.prototype.forEach.call(all, function (el) {
       if (el.closest(SKIP_INSIDE)) return;
@@ -67,7 +67,7 @@
         out.push({ el: el, text: marker });
         return;
       }
-      if (el.closest('pre, table, ul.refs, ol.refs')) return;
+      if (el.closest("pre, таблица, ul.refs, ol.refs")) return;
 
       var text = (el.innerText || el.textContent || '').replace(/\s+/g, ' ').trim();
       if (text.length < 2) return;
@@ -93,7 +93,7 @@
     if (local.length) pool = local;
     // Apple's Samantha and Google's UK/US English are the least robotic of the
     // defaults; otherwise take whatever the platform put first.
-    var preferred = ['Samantha', 'Google UK English Female', 'Google US English', 'Microsoft Aria'];
+    var preferred = ['Samantha', "Google, Великобритания, английский, женский", "Google, американский английский", "Майкрософт Ария"];
     for (var i = 0; i < preferred.length; i++) {
       var hit = pool.find(function (v) { return v.name.indexOf(preferred[i]) !== -1; });
       if (hit) return hit;
@@ -113,7 +113,7 @@
     '.listen-launch{display:inline-flex;align-items:center;gap:8px;margin:2px 0 18px;',
     'font:600 13px/1 var(--font-sans,inherit);color:var(--accent,#0E7490);',
     'background:transparent;border:1px solid var(--line,#E4E7EA);border-radius:999px;',
-    'padding:8px 15px;cursor:pointer;transition:background .15s,border-color .15s}',
+    "отступ: 8 пикселей 15 пикселей; курсор: указатель; переход: фон .15 с, цвет границы .15 с}",
     '.listen-launch:hover{background:var(--accent-soft,#E0F5F9);border-color:var(--accent,#0E7490)}',
     '.listen-launch:focus-visible{outline:2px solid var(--accent,#0E7490);outline-offset:2px}',
     '.listen-launch-ic{font-size:10px}',
@@ -137,7 +137,7 @@
     // is without turning the page into a karaoke screen.
     '.listen-now{background:var(--accent-soft,#E0F5F9);box-shadow:0 0 0 6px var(--accent-soft,#E0F5F9);',
     'border-radius:3px}',
-    '@media (prefers-color-scheme:dark){.listen-now{background:rgba(56,189,248,.14);',
+    "@media (предпочитает цветовую схему: темную){.listen-now{background:rgba(56,189,248,.14);",
     'box-shadow:0 0 0 6px rgba(56,189,248,.14)}}',
     '@media (prefers-reduced-motion:reduce){.listen-now{transition:none}}',
     '@media print{.listen-launch,.listen-bar{display:none}}'
@@ -244,7 +244,7 @@
       '<button type="button" data-act="prev" aria-label="Previous paragraph">◀◀</button>' +
       '<button type="button" data-act="play" class="listen-play" aria-label="Pause">❙❙</button>' +
       '<button type="button" data-act="next" aria-label="Next paragraph">▶▶</button>' +
-      '<span class="listen-count" aria-live="off">0 of 0</span>' +
+      "<span class=\"listen-count\" aria-live=\"off\">0 из 0</span>" +
       '<button type="button" data-act="rate" class="listen-rate" aria-label="Playback speed">1×</button>' +
       '<button type="button" data-act="stop" aria-label="Stop listening">✕</button>';
     document.body.appendChild(bar);

@@ -6,18 +6,18 @@
 // music_gems.db) and the row counts are what SQLite actually returned.
 
 const LAP = {
-  unit: 'Unit 1: First Queries',
+  unit: "Модуль 1: Первые запросы",
   lesson: "ВЫБРАТЬ, ГДЕ, ЗАКАЗАТЬ ПО, ОГРАНИЧИТЬ",
 
   // ── STEP 1: the primer ────────────────────────────────────────────────────
   // Six lines. Only what someone needs to type rung 1 without guessing.
   primer: [
-    ['A database is tables', 'A table is rows and columns, like a spreadsheet tab. This one has a table called <code>gem_page</code>, and one row in it is one song.'],
-    ['SELECT names the columns', 'You list the columns you want back, separated by commas.'],
-    ['FROM names the table', 'You say which table to read them from.'],
-    ['WHERE keeps some rows', 'It checks every row against a condition and only keeps the ones where it is true. Text goes in single quotes: <code>WHERE genre = \'country\'</code>.'],
-    ['ORDER BY sorts the rows', '<code>DESC</code> puts the biggest number on top. <code>ASC</code> is smallest first, and it is what you get if you say nothing.'],
-    ['LIMIT caps the list', '<code>LIMIT 10</code> hands back ten rows instead of five hundred.'],
+    ["База данных — это таблицы", "Таблица состоит из строк и столбцов, как вкладка электронной таблицы. У этого есть таблица под названием <code>gem_page</code>, и одна строка в нем — это одна песня."],
+    ["SELECT называет столбцы", "Вы перечисляете столбцы, которые хотите вернуть, через запятую."],
+    ["FROM называет таблицу", "Вы говорите, из какой таблицы их читать."],
+    ["ГДЕ хранит некоторые строки", "Он проверяет каждую строку на соответствие условию и сохраняет только те, в которых оно истинно. Текст заключается в одинарные кавычки: <code>ГДЕ жанр = «кантри»</code>."],
+    ["ORDER BY сортирует строки.", "<code>DESC</code> ставит самое большое число сверху. <code>ASC</code> сначала наименьшее, и это то, что вы получите, если ничего не скажете."],
+    ["LIMIT завершает список", "<code>ОГРАНИЧЕНИЕ 10</code> руки назад на десять рядов вместо пятисот."],
   ],
 
   // ── STEP 2: the typing rungs ──────────────────────────────────────────────
@@ -34,77 +34,77 @@ const LAP = {
   // A business question does not carry its own thresholds, sort order or caps, and a learner
   // who cannot see them is being asked to guess and then told they were wrong.
   drills: [
-    { adds: 'Ask for three columns',
-      q: 'What artists, tracks and audience sizes are in the collection?',
-      given: ['The table is <code>gem_page</code>',
-              'Every song in the table, nothing filtered out'],
+    { adds: "Попросите три столбца",
+      q: "Какие исполнители, треки и размер аудитории есть в сборнике?",
+      given: ["Таблица <code>gem_page</code>",
+              "Все песни в таблице, ничего не отфильтровано"],
       why: "Скелет каждого запроса, который вы когда-либо напишете: ВЫБЕРИТЕ столбцы ИЗ таблицы.",
       // `did` and `matters` are what the celebration popup carries. What you just did, in
       // words, and why a working analyst cares. Not a restatement of the syntax.
-      did: 'You pulled three named columns out of a table of 500 songs.',
-      matters: 'Naming the columns you want, instead of asking for all of them, is what makes a query readable to the next person and what stops it breaking when somebody adds a column to the table.',
+      did: "Вы извлекли три именованных столбца из таблицы из 500 песен.",
+      matters: "Присвоение имен столбцам, которые вы хотите, вместо того, чтобы запрашивать их все, делает запрос доступным для чтения следующему человеку и предотвращает его сбой, когда кто-то добавляет столбец в таблицу.",
       sql:
 `SELECT artist, track, listeners
 FROM gem_page;`,
-      pre: 'The table holds 500 songs. How many rows come back when you have not filtered anything?',
+      pre: "Стол вмещает 500 песен. Сколько строк возвращается, когда вы ничего не отфильтровали?",
       rows: 500 },
 
-    { adds: 'Keep only the country songs',
-      q: 'Which of those songs are country?',
-      given: ['The table is <code>gem_page</code>',
-              "Country means the <code>genre</code> column is exactly <code>country</code>"],
+    { adds: "Оставьте только кантри-песни",
+      q: "Какая из этих песен кантри?",
+      given: ["Таблица <code>gem_page</code>",
+              "Страна означает <code>genre</code> столбец точно <code>country</code>"],
       why: "WHERE фильтрует строки. Одинарные кавычки позволяют SQL узнать, что страна — это текст, а не имя столбца.",
-      did: 'You cut 500 songs down to the country ones, and the table told you how many there were.',
-      matters: 'WHERE is the clause you will use more than any other. Almost every question anyone brings you is a filter wearing a business question: this region, this quarter, these customers.',
+      did: "Вы вырезаете 500 песен до кантри, и таблица показывает, сколько их было.",
+      matters: "WHERE — это предложение, которое вы будете использовать чаще, чем любое другое. Почти каждый вопрос, который вам задают, представляет собой фильтр с бизнес-вопросом: этот регион, этот квартал, эти клиенты.",
       sql:
 `SELECT artist, track, listeners
 FROM gem_page
 WHERE genre = 'country';`,
-      pre: 'Out of 500 songs, is country more or fewer than 100 of them?',
+      pre: "Из 500 песен кантри больше или меньше 100?",
       rows: 52 },
 
-    { adds: 'Sort them and cut to a top ten',
-      q: 'What are the ten biggest country songs?',
-      given: ['The table is <code>gem_page</code>',
-              "Country means the <code>genre</code> column is exactly <code>country</code>",
-              'Biggest means the most <code>listeners</code>, largest first',
-              'Ten rows, no more'],
+    { adds: "Отсортируйте их и сократите до первой десятки.",
+      q: "Каковы десять самых популярных песен в стиле кантри?",
+      given: ["Таблица <code>gem_page</code>",
+              "Страна означает <code>genre</code> столбец точно <code>country</code>",
+              "Самый большой значит самый <code>listeners</code>, первый по величине",
+              "Десять рядов, не более"],
       why: "ORDER BY сортирует то, что у вас уже есть, а затем LIMIT ограничивает это. Этот порядок имеет значение: сначала ограничение, и вы должны ограничить его перед сортировкой. Именно так строится каждый отчет о десятке лучших, который вы когда-либо публикуете.",
-      did: 'You put the biggest audience on top and kept the first ten rows.',
-      matters: 'Every top-ten report, every leaderboard and every "show me the latest" is this exact shape. The order of the two clauses is the part people get wrong: sort first, cap second, or you cap a pile of unsorted rows and ship the wrong ten.',
+      did: "Вы поместили самую большую аудиторию сверху и сохранили первые десять рядов.",
+      matters: "Каждый отчет из первой десятки, каждая таблица лидеров и каждый «покажи мне последние новости» имеют именно такую ​​форму. Порядок двух предложений — это то, в чем люди ошибаются: сначала сортируйте, затем ограничивайте, иначе вы закроете кучу неотсортированных строк и отправите неправильные десять.",
       sql:
 `SELECT artist, track, listeners
 FROM gem_page
 WHERE genre = 'country'
 ORDER BY listeners DESC
 LIMIT 10;`,
-      pre: 'You had 52 rows. How many come back now?',
+      pre: "У вас было 52 ряда. Сколько сейчас вернутся?",
       rows: 10 },
 
-    { adds: 'Count what you are working with',
-      q: 'How many country songs are there, and how many different artists made them?',
-      given: ['The table is <code>gem_page</code>',
-              "Country means the <code>genre</code> column is exactly <code>country</code>",
+    { adds: "Посчитайте, с чем вы работаете",
+      q: "Сколько существует кантри-песен и сколько разных исполнителей их написали?",
+      given: ["Таблица <code>gem_page</code>",
+              "Страна означает <code>genre</code> столбец точно <code>country</code>",
               // Run 008: this drill needs three words the primer never taught (COUNT,
               // DISTINCT, AS) and step 3 covers the query, so a learner was being asked to
               // retrieve syntax that had no source on the screen. Naming the words satisfies
               // 5d without writing the line: assembling them is still the work.
-              '<code>COUNT(*)</code> counts rows; <code>COUNT(DISTINCT ...)</code> counts each value once',
+              "<code>СЧИТАТЬ(*)</code> считает строки; <code>СЧЕТ(ОТЛИЧНЫЕ ...)</code> считает каждое значение один раз",
               // The old wording said "Name the two numbers total_rows and artists", which
               // read exactly like the "Bring back" column lists on drills 1 to 3. The likely
               // first attempt was SELECT total_rows, artists — a real column that does not
               // exist. Say plainly that these are names being created.
-              '<code>total_rows</code> and <code>artists</code> are names you create with <code>AS</code>, not columns in the table',
-              'Different artists means each artist counted once'],
+              "<code>total_rows</code> and <code>artists</code> это имена, которые вы создаете с <code>AS</code>, а не столбцы в таблице",
+              "Разные артисты означают, что каждый артист посчитан один раз."],
       why: "Запрос всегда возвращает таблицу, даже если ответом являются два числа. Сравнивая их, вы поймете, что один исполнитель может записать несколько песен.",
-      did: 'You got one row back holding two numbers: how many country songs there are, and how many different artists made them.',
-      matters: 'Counting rows against counting distinct values is how you find out what one row of a table actually represents. Get that wrong and every number you report afterwards is wrong in a way nobody notices, because the query still runs.',
+      did: "У вас есть одна строка назад, содержащая два числа: сколько существует песен в стиле кантри и сколько разных исполнителей их написали.",
+      matters: "Подсчет строк и подсчет отдельных значений — это способ узнать, что на самом деле представляет собой одна строка таблицы. Если вы ошибетесь, каждое число, которое вы сообщите впоследствии, окажется неверным, и никто этого не заметит, потому что запрос все равно будет выполняться.",
       sql:
 `SELECT COUNT(*) AS total_rows,
        COUNT(DISTINCT artist) AS artists
 FROM gem_page
 WHERE genre = 'country';`,
-      pre: 'You know there are 52 country songs. Will there be 52 artists too?',
+      pre: "Вы знаете, что есть 52 кантри-песни. Будет ли тоже 52 артиста?",
       rows: 1 },
   ],
 
@@ -116,38 +116,38 @@ WHERE genre = 'country';`,
   concepts: [
     { name: 'SELECT and FROM',
       does: 'SELECT names the columns you want back. FROM names the table to read them from. Every query you write starts with these two.',
-      worked: 'You asked for three columns out of a table of 500 songs and got three columns back. Nothing else came with them, because you did not ask for anything else.',
+      worked: "Вы запросили три столбца из таблицы из 500 песен и получили три столбца обратно. Больше ничего с ними не пришло, потому что вы ни о чем больше не просили.",
       where: [
-        ['Marketing analyst', 'pulling campaign names and spend out of an ad platform export'],
-        ['Nurse manager', 'pulling patient IDs and admission dates for a shift handover'],
-        ['Warehouse planner', 'pulling SKUs and stock counts before a reorder']
+        ["Маркетинговый аналитик", "извлечение названий кампаний и расходов из экспорта рекламной платформы"],
+        ["Менеджер медсестры", "получение идентификаторов пациентов и дат приема для передачи смены"],
+        ["Планировщик склада", "получение SKU и количества запасов перед повторным заказом"]
       ] },
 
     { name: 'WHERE',
-      does: 'WHERE checks every row against a condition and keeps only the rows where it is true. Text values go in single quotes, which is how SQL knows country is a word and not a column name.',
-      worked: 'The 500 rows became 52. The table did not change; you just stopped asking for the rest of it.',
+      does: "WHERE проверяет каждую строку на соответствие условию и сохраняет только те строки, в которых оно истинно. Текстовые значения заключаются в одинарные кавычки, поэтому SQL знает, что страна — это слово, а не имя столбца.",
+      worked: "500 строк превратились в 52. Таблица не изменилась; ты просто перестал спрашивать обо всем остальном.",
       where: [
-        ['Retail analyst', 'narrowing to one region before a quarterly review'],
-        ['Claims analyst', 'pulling only the denied claims out of a year of submissions'],
-        ['Recruiter', 'pulling only the roles still open']
+        ["Розничный аналитик", "сужение до одного региона перед ежеквартальным обзором"],
+        ["Аналитик по претензиям", "извлечение только отклоненных претензий из года подачи заявок"],
+        ['Recruiter', "вытягиваем только те роли, которые еще открыты"]
       ] },
 
-    { name: 'ORDER BY and LIMIT',
-      does: 'ORDER BY sorts the rows you already have. LIMIT caps how many come back. The order of the two is fixed: sort first, cap second, or you cap a pile of unsorted rows.',
-      worked: 'Sorting put the biggest audience on top without adding or removing a single row, then LIMIT kept the first ten of them.',
+    { name: "ЗАКАЗАТЬ ПО и ОГРАНИЧИТЬ",
+      does: "ORDER BY сортирует уже имеющиеся строки. LIMIT ограничивает количество вернувшихся. Порядок этих двух строк фиксирован: сначала сортировка, затем ограничение, или вы ограничиваете кучу неотсортированных строк.",
+      worked: "Сортировка помещала самую большую аудиторию на первое место, не добавляя и не удаляя ни одной строки, а затем LIMIT сохранял первые десять из них.",
       where: [
-        ['Sales operations', 'the top ten accounts by revenue, every Monday morning'],
-        ['Support lead', 'the ten oldest tickets still open'],
-        ['Media buyer', 'the worst-performing ad sets, worst first, so the cuts are obvious']
+        ["Операции по продажам", "десять крупнейших аккаунтов по выручке, каждое утро понедельника"],
+        ["Руководитель службы поддержки", "десять самых старых билетов все еще открыты"],
+        ["Медиабайер", "самые эффективные группы объявлений, сначала худшие, поэтому сокращения очевидны"]
       ] },
 
-    { name: 'COUNT, DISTINCT and AS',
-      does: 'COUNT(*) counts rows. COUNT(DISTINCT column) counts each different value once. AS gives the number you produced a name, because it is not a column that exists in the table.',
-      worked: 'One row came back holding two numbers. A query always hands back a table, even when the answer is a single figure.',
+    { name: "СЧИТАТЬ, ОТЛИЧИТЬ и КАК",
+      does: "COUNT(*) подсчитывает строки. COUNT(столбец DISTINCT) подсчитывает каждое отдельное значение один раз. AS дает номеру, который вы создали, имя, потому что это не столбец, существующий в таблице.",
+      worked: "Одна строка вернулась с двумя числами. Запрос всегда возвращает таблицу, даже если ответом является одна цифра.",
       where: [
-        ['Any analyst, first day on a new table', 'counting rows against counting distinct IDs is how you find out what one row of it actually represents'],
-        ['Ecommerce', 'how many orders against how many customers, which tells you repeat rate'],
-        ['Healthcare', 'how many visits against how many patients, which is a completely different number and a completely different story']
+        ["Любой аналитик, первый день за новым столом", "подсчет строк против подсчета различных идентификаторов - это то, как вы узнаете, что на самом деле представляет собой одна строка"],
+        ['Ecommerce', "сколько заказов на какое количество клиентов, что говорит о частоте повторения"],
+        ['Healthcare', "сколько посещений против скольких пациентов, это совсем другое число и совсем другая история"]
       ] },
   ],
 
@@ -156,39 +156,39 @@ WHERE genre = 'country';`,
   // handoff step or a mini quiz.
   // The existing kit lessons, unchanged. Deep links open the lesson directly.
   lessons: [
-    { id: 1,   title: 'SELECT & FROM',                    sub: 'Pull columns from a table' },
-    { id: 2,   title: 'WHERE',                            sub: 'Filter rows by condition' },
-    { id: 104, title: "Запрос возвращает таблицу; NULL = Неизвестно", sub: 'The shape that comes back, and what a blank cell really means' },
-    { id: 3,   title: "СОРТИРОВАТЬ ПО И ОГРАНИЧИТЬ",                 sub: 'Sort and cap your results' },
+    { id: 1,   title: 'SELECT & FROM',                    sub: "Извлечение столбцов из таблицы" },
+    { id: 2,   title: 'WHERE',                            sub: "Фильтровать строки по условию" },
+    { id: 104, title: "Запрос возвращает таблицу; NULL = Неизвестно", sub: "Возвращаемая форма и что на самом деле означает пустая ячейка" },
+    { id: 3,   title: "СОРТИРОВАТЬ ПО И ОГРАНИЧИТЬ",                 sub: "Сортируйте и ограничивайте результаты" },
   ],
 
   // ── STEP 4: the mini quiz ─────────────────────────────────────────────────
   // Four questions, one per lesson, taken from the kit's own lesson quizzes so the
   // trial is not inventing a second set of answers to keep in sync.
   quiz: [
-    { q: 'Which clause tells SQL which table to read from?',
+    { q: "Какое предложение сообщает SQL, из какой таблицы следует читать?",
       opts: ['SELECT', 'FROM', 'WHERE', 'ORDER BY'], ans: 1,
-      exp: 'FROM names the table. SELECT names the columns you want back.' },
+      exp: "FROM называет таблицу. SELECT называет столбцы, которые вы хотите вернуть." },
 
-    { q: 'You want country songs with more than 20,000 listeners. Which line does that?',
-      opts: ["WHERE genre = 'country' AND listeners > 20000",
-             "WHERE genre = country AND listeners > 20000",
-             "FILTER genre = 'country' AND listeners > 20000",
-             "WHERE genre = 'country' OR listeners > 20000"], ans: 0,
-      exp: 'Text values need single quotes, and AND means a row has to pass both conditions. OR would let a loud pop song through.' },
+    { q: "Вам нужны кантри-песни, которые слушают более 20 000 человек. Какая линия это делает?",
+      opts: ["ГДЕ жанр = «кантри» И слушателей > 20 000",
+             "ГДЕ жанр = страна И слушатели > 20 000",
+             "ФИЛЬТР по жанру = «кантри» И слушатели > 20 000",
+             "ГДЕ жанр = «кантри» ИЛИ слушателей > 20 000"], ans: 0,
+      exp: "Текстовые значения должны быть заключены в одинарные кавычки, а AND означает, что строка должна соответствовать обоим условиям. ИЛИ пропускал громкую поп-песню." },
 
-    { q: 'You run SELECT COUNT(*) and get 500. You run SELECT COUNT(album) and get 480. What does that tell you?',
-      opts: ['The query has a bug',
-             '20 rows have a NULL value in the album column',
-             'album has 20 duplicate values',
-             'You should use SUM instead'], ans: 1,
-      exp: 'COUNT(*) counts every row. COUNT(column) skips NULLs. A gap of 20 means 20 rows have no album recorded.' },
+    { q: "Вы запускаете SELECT COUNT(*) и получаете 500. Вы запускаете SELECT COUNT(album) и получаете 480. О чем это вам говорит?",
+      opts: ["В запросе есть ошибка",
+             "20 строк имеют значение NULL в столбце альбома.",
+             "в альбоме 20 повторяющихся значений",
+             "Вместо этого вы должны использовать SUM"], ans: 1,
+      exp: "COUNT(*) подсчитывает каждую строку. COUNT(столбец) пропускает NULL. Разрыв в 20 означает, что в 20 строках альбом не записан." },
 
-    { q: 'Get the 10 oldest orders. Which query is correct?',
+    { q: "Получите 10 самых старых заказов. Какой запрос правильный?",
       opts: ['SELECT * FROM orders ORDER BY order_date ASC LIMIT 10;',
              'SELECT * FROM orders ORDER BY order_date DESC LIMIT 10;',
              'SELECT * FROM orders LIMIT 10 ORDER BY order_date;',
              'SELECT TOP 10 * FROM orders ORDER BY order_date;'], ans: 0,
-      exp: 'ASC sorts oldest first. LIMIT has to come after ORDER BY, or you cap the rows before they are sorted.' },
+      exp: "ASC сортирует сначала самые старые. LIMIT должен идти после ORDER BY, иначе вы ограничите строки перед их сортировкой." },
   ],
 };

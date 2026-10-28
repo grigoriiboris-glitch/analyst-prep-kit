@@ -232,53 +232,53 @@ JavaScript для отображения сертификата. Констру�
 &lt;a href="../"&gt;Строитель планов&lt;/a&gt;.&lt;/p&gt;</noscript>
 
 <script>
-'use strict';
+"используйте строгий";
 const $ = id => document.getElementById(id);
 const NAME_KEY = 'apk-plan-name';
 
 const LEVELS = {
-  brandnew: { plan:'Starting from zero' },
-  rusty:    { plan:'The comeback' },
-  basics:   { plan:'Past the basics' },
-  interview:{ plan:'Interview ready' },
-  onthejob: { plan:'The analyst layer' }
+  brandnew: { plan:"Начиная с нуля" },
+  rusty:    { plan:"Возвращение" },
+  basics:   { plan:"Прошлое мимо основ" },
+  interview:{ plan:"Интервью готово" },
+  onthejob: { plan:"Уровень аналитики" }
 };
 const ROLES = {
-  data:      { said:'general data analyst work',   focus:'segmenting a sheet and catching double counting' },
-  marketing: { said:'marketing and product work',  focus:'month-over-month change and share of total' },
-  finance:   { said:'finance and revenue work',    focus:'variance against plan and last year' },
-  ops:       { said:'operations work',             focus:'cleaning exports and reconciling two systems' },
-  bi:        { said:'BI and reporting work',       focus:'defining and defending dashboard numbers' },
-  unsure:    { said:'analyst work',                focus:'segmenting a sheet and catching double counting' }
+  data:      { said:"работа общего аналитика данных",   focus:"сегментирование листа и улавливание двойного счета" },
+  marketing: { said:"маркетинг и работа над продуктом",  focus:"изменение по месяцам и доля от общего числа" },
+  finance:   { said:"работа по финансам и доходам",    focus:"отклонение от плана и прошлого года" },
+  ops:       { said:"оперативная работа",             focus:"очистка экспорта и примирение двух систем" },
+  bi:        { said:"BI и отчетность",       focus:"определение и защита номеров информационной панели" },
+  unsure:    { said:"работа аналитика",                focus:"сегментирование листа и улавливание двойного счета" }
 };
 
 /* Skills actually contained in each plan, cumulative by length. Kept in step
    with the day content in ../index.html: change one, change the other. */
 const SKILLS = {
   brandnew: {
-    3:['Writing a formula','Cell references, relative and absolute','IF','SUMIFS &amp; COUNTIFS','Findings in plain words'],
-    5:['VLOOKUP &amp; XLOOKUP','PivotTables'],
-    7:['Cleaning dirty data','Charting a finding','Picking the right chart']
+    3:["Написание формулы","Ссылки на ячейки, относительные и абсолютные",'IF',"СУММИФЫ И СЧЁТЕЛИ","Выводы простыми словами"],
+    5:["ВПР И XПРОМ",'PivotTables'],
+    7:["Очистка грязных данных","Составление диаграммы результатов","Выбор правильного графика"]
   },
   rusty: {
-    3:['Rebuilt formula fluency, from memory','SUMIFS &amp; COUNTIFS','IFS instead of nested IF','PivotTables'],
-    5:['XLOOKUP &amp; INDEX/MATCH','IFERROR','Excel Tables'],
-    7:['Defining a metric','Month-over-month growth','A scoped portfolio project']
+    3:["Восстановлена ​​беглость формул по памяти.","СУММИФЫ И СЧЁТЕЛИ","IFS вместо вложенного IF",'PivotTables'],
+    5:["ПРОСМОТР И ИНДЕКС/ПОИСКПОЗ",'IFERROR',"Таблицы Excel"],
+    7:["определение метрики","Месячный рост","Объемный портфельный проект"]
   },
   basics: {
-    3:['Excel Tables','SUMIFS &amp; COUNTIFS','XLOOKUP &amp; INDEX/MATCH','Two-way lookups','Pivots with slicers'],
-    5:['Text functions','Dates and numbers','IFERROR','Data validation'],
-    7:['Defining a metric','Segmenting with IFS','A scoped portfolio project']
+    3:["Таблицы Excel","СУММИФЫ И СЧЁТЕЛИ","ПРОСМОТР И ИНДЕКС/ПОИСКПОЗ","Двусторонний поиск","Повороты с помощью слайсеров"],
+    5:["Текстовые функции","Даты и цифры",'IFERROR',"Проверка данных"],
+    7:["определение метрики","Сегментация с помощью IFS","Объемный портфельный проект"]
   },
   interview: {
-    3:['Screen-classic lookups and conditional totals','Pivots under time','Narrating while you build','Findings out loud'],
-    5:['Named Excel traps: ID sums, approximate match','Cleaning dirty data on the clock'],
-    7:['Checking your own work','Reconciling two ways','A full timed exercise, end to end']
+    3:["Классический экранный поиск и условные итоги","Повороты во времени","Рассказывайте, пока строите","Выводы вслух"],
+    5:["Именованные ловушки Excel: суммы идентификаторов, приблизительное совпадение","Очистка грязных данных на часах"],
+    7:["Проверка собственной работы","Примирение двух способов","Полноценное упражнение, от начала до конца"]
   },
   onthejob: {
-    3:['Defining a metric before computing it','Validating the grain','Segmenting','Month-over-month growth','Profiling a source'],
-    5:['Excel Tables','Power Query','Performance triage'],
-    7:['Running totals','Cohort retention','Reconciliation','A scoped portfolio project']
+    3:["Определение метрики перед ее вычислением","Проверка зерна",'Segmenting',"Месячный рост","Профилирование источника"],
+    5:["Таблицы Excel",'Power Query',"Сортировка производительности"],
+    7:["текущие итоги","Удержание когорты",'Reconciliation',"Объемный портфельный проект"]
   }
 };
 
@@ -315,11 +315,11 @@ if (!valid){
   }
   function render(){
     const n = name.trim();
-    $('certName').textContent = n || 'Your name goes here';
+    $('certName').textContent = n || "Здесь будет ваше имя";
     $('certName').className = 'name' + (n ? '' : ' placeholder');
-    $('certDid').innerHTML = 'completed the <b>' + nd + '-day Excel plan</b> &ldquo;' +
-      LEVELS[lv].plan + '&rdquo; for ' + ROLES[rk].said +
-      ', with an analysis focus on ' + ROLES[rk].focus + '.';
+    $('certDid').innerHTML = "завершил <b>" + nd + "план Excel на день</b> «" +
+      LEVELS[lv].plan + "\" для " + ROLES[rk].said +
+      "с акцентом на анализ " + ROLES[rk].focus + '.';
     $('certSkills').innerHTML = skills.map(s => '<li>' + s + '</li>').join('');
     $('certPlan').textContent = nd + ' days · ' + LEVELS[lv].plan;
     $('certDate').textContent = dateStr;
@@ -333,8 +333,8 @@ if (!valid){
     /* LinkedIn standard add-to-profile URL; nothing posts until saved there */
     const li = new URLSearchParams();
     li.set('startTask', 'CERTIFICATION_NAME');
-    li.set('name', nd + '-Day Excel Plan: ' + LEVELS[lv].plan + ' (Analyst Prep Kit)');
-    li.set('organizationName', 'Analyst Prep Kit');
+    li.set('name', nd + "План Excel на день: " + LEVELS[lv].plan + " (Подготовительный комплект для аналитика)");
+    li.set('organizationName', "Подготовительный комплект для аналитика");
     li.set('issueYear', dateStr.slice(0, 4));
     li.set('issueMonth', String(parseInt(dateStr.slice(5, 7), 10)));
     li.set('certUrl', certUrl());
@@ -378,6 +378,6 @@ if (!valid){
   if (window.gtag) gtag('event', 'cert_view', { state:'full', level:lv, role:rk, days:nd });
 }
 </script>
-<script src="../../../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

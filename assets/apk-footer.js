@@ -21,7 +21,7 @@
     'font-size:13px;font-family:inherit;line-height:1.6}' +
     '.apk-eco-footer a{color:var(--muted,var(--dim,var(--txt2,#6B7280)));text-decoration:none;transition:color .15s}' +
     '.apk-eco-footer a:hover{color:var(--accent,#C5511F)}' +
-    '.apk-eco-sep{margin:0 10px;opacity:.7}' +
+    ".apk-eco-sep{маржа:0 10px;непрозрачность:.7}" +
     '.apk-eco-tm{display:block;margin-top:10px;font-size:11px;opacity:.7;max-width:560px;' +
     'margin-left:auto;margin-right:auto}';
   document.head.appendChild(css);
@@ -52,11 +52,11 @@
       label: "Система комментариев SQL" },
     { kits: { sql: 'uhy9o948', 'sql-dry-run': 'uhy9o948', excel: '1ifxmp5y' },
       cls: 'apk-eco-os', ev: 'analyst_os_click',
-      label: "ОС Data Analyst" }
+      label: "Аналитик данных ОС" }
   ];
 
   var packLink = CROSS.filter(function (c) { return c.kits[kit]; }).map(function (c) {
-    return '<a class="' + c.cls + '" href="https://gumroad.com/u/' + c.kits[kit] + '" ' +
+    return "<класс=\"" + c.cls + '" href="https://gumroad.com/u/' + c.kits[kit] + '" ' +
       'target="_blank" rel="noopener">' + c.label + ' ↗</a>' +
       '<span class="apk-eco-sep">·</span>';
   }).join('');
@@ -67,11 +67,11 @@
     packLink +
     '<a href="https://github.com/michaelnocito/analyst-prep-kit" target="_blank" rel="noopener">GitHub</a>' +
     '<span class="apk-eco-sep">·</span>' +
-    '<a class="apk-eco-coffee" href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee ☕</a>' +
+    "<a class=\"apk-eco-coffee\" href=\"https://buymeacoffee.com/michaelnocito\" target=\"_blank\" rel=\"noopener\">Купи мне кофе ☕</a>" +
     '<span class="apk-eco-sep">·</span>' +
-    '<a href="../">← All kits</a>' +
-    '<span class="apk-eco-tm">Power BI and Excel are trademarks of Microsoft; Tableau is a trademark of Salesforce. ' +
-    'Used for identification only. The Analyst Prep Kit is independent and not affiliated with or endorsed by these companies.</span>';
+    "<a href=\"../\">← Все комплекты</a>" +
+    "<span class=\"apk-eco-tm\">Power BI и Excel являются товарными знаками Microsoft; Tableau является торговой маркой Salesforce. " +
+    "Используется только для идентификации. Analyst Prep Kit является независимым и не связан с этими компаниями и не одобрен ими.</span>";
   document.body.appendChild(f);
 
   f.querySelector('.apk-eco-coffee').addEventListener('click', function () {
@@ -100,67 +100,67 @@
   var BOOKS = {
     excel: {
       slug: 'excel-for-analysts', title: "Excel для аналитиков", price: '$19', pages: 378,
-      hook: 'You can build the pivot. The stall comes when the Grand Total does not match the source column and nothing on screen says why.',
+      hook: "Вы можете построить опору. Задержка возникает, когда общий итог не соответствует исходному столбцу, и на экране ничего не указано, почему.",
       what: "каждая формула читается аргумент за аргументом простыми словами, с практическими вопросами, которые печатают ответ и причину, по которой она правильна."
     },
     sql: {
       slug: 'sql-for-analysts', title: "SQL для аналитиков", price: '$19', pages: 458,
-      hook: 'You can write a SELECT. The stall comes when somebody says join those and tell me why the totals moved.',
+      hook: "Вы можете написать SELECT. Прилавок возникает, когда кто-то говорит: «Присоединяйтесь к ним и скажите мне, почему итоговые суммы изменились».",
       what: "каждый запрос читается построчно простыми словами, с практическими вопросами, в которых печатается ответ и причина, по которой он правильный."
     },
     tableau: {
       slug: 'tableau-for-analysts', title: "Таблица для аналитиков", price: '$19', pages: 128,
-      hook: 'The chart draws itself. The stall comes when two sheets on the same data show two different totals.',
+      hook: "Диаграмма рисуется сама собой. Застой возникает, когда на двух листах одних и тех же данных отображаются два разных итоговых значения.",
       what: "отношения, уровень детализации и табличные расчеты обрабатывались по одному решению за раз"
     },
     python: {
       slug: 'python-for-analysts', title: "Python для аналитиков", price: '$19', pages: 203,
-      hook: 'The notebook runs clean. The stall comes when a merge quietly doubles your row count and the code never complains.',
+      hook: "Ноутбук работает чисто. Застой наступает, когда слияние незаметно удваивает количество строк, а код никогда не жалуется.",
       what: "панды читают построчно простыми словами, используя проверки, которые обнаруживают плохое соединение до того, как оно достигнет диаграммы."
     },
     powerbi: {
       slug: 'power-bi-for-analysts', title: "Power BI для аналитиков", price: '$19', pages: 187,
-      hook: 'The visual loads. The stall comes when the measure and the column give two different numbers for the same thing.',
+      hook: "Визуальная нагрузка. Застой наступает, когда мера и столбец дают два разных числа для одного и того же предмета.",
       what: "DAX, звездообразная схема и контекст фильтра, объясненные в том порядке, в котором вопросы фактически поступают."
     },
     stats: {
       slug: 'statistics-for-analysts', title: "Статистика для аналитиков", price: '$19', pages: 123,
-      hook: 'You have the two averages. The stall comes when somebody asks whether the gap between them is real.',
+      hook: "У вас есть два средних значения. Застой возникает, когда кто-то спрашивает, реальна ли разница между ними.",
       what: "разброс, значения p, доверительные интервалы и A/B-тесты, написанные для людей, которым нужно дать ответ."
     },
     forecasting: {
       slug: 'forecasting-for-analysts', title: "Прогнозирование для аналитиков", price: '$12', pages: 43,
-      hook: 'The line goes up. The stall comes when somebody asks how far ahead you are willing to say that out loud.',
+      hook: "Линия идет вверх. Задержка возникает, когда кто-то спрашивает, насколько далеко вы готовы сказать это вслух.",
       what: "скользящие средние, сезонность и точность прогнозов, в том числе как указать то, о чем цифры не могут вам сказать"
     },
     'chart-literacy': {
       slug: 'charts-and-visualization', title: "Диаграммы и визуализация", price: '$12', pages: 42,
-      hook: 'The chart is accurate and still reads wrong to the room.',
+      hook: "Таблица точна и по-прежнему неправильно воспринимается комнатой.",
       what: "выбор отметки, упорядочивание стержней и обрезка оси, при этом ошибки отображаются рядом"
     },
     viz: {
       slug: 'charts-and-visualization', title: "Диаграммы и визуализация", price: '$12', pages: 42,
-      hook: 'The chart is accurate and still reads wrong to the room.',
+      hook: "Таблица точна и по-прежнему неправильно воспринимается комнатой.",
       what: "выбор отметки, упорядочивание стержней и обрезка оси, при этом ошибки отображаются рядом"
     },
     interview: {
       slug: 'thinking-like-an-analyst', title: "Думать как аналитик", price: '$19', pages: 64,
-      hook: 'You know the work. The interview asks you to say it out loud in ninety seconds.',
+      hook: "Вы знаете эту работу. В интервью вас просят произнести это вслух за девяносто секунд.",
       what: "обоснование ответа, чтобы вы могли обсудить проблему, а не повторять формулу"
     },
     projects: {
       slug: 'thinking-like-an-analyst', title: "Думать как аналитик", price: '$19', pages: 64,
-      hook: 'A finished project is not the same as a project you can explain.',
+      hook: "Готовый проект — это не то же самое, что проект, который вы можете объяснить.",
       what: "как аналитик формулирует вопрос, проверяет свою работу и записывает то, что не решают цифры"
     },
     path: {
       slug: 'thinking-like-an-analyst', title: "Думать как аналитик", price: '$19', pages: 64,
-      hook: 'Tools are the easy half. The other half is knowing which question you are answering.',
+      hook: "Инструменты — это легкая половина дела. Другая половина — это знать, на какой вопрос вы отвечаете.",
       what: "как аналитик формулирует вопрос, проверяет свою работу и записывает то, что не решают цифры"
     },
     guides: {
       slug: 'thinking-like-an-analyst', title: "Думать как аналитик", price: '$19', pages: 64,
-      hook: 'Every guide here answers one question. The habit underneath them is the same one.',
+      hook: "Каждое руководство здесь отвечает на один вопрос. Под ними лежит одна и та же привычка.",
       what: "как аналитик формулирует вопрос, проверяет свою работу и записывает то, что не решают цифры"
     }
   };
@@ -187,25 +187,25 @@
      ---------------------------------------------------------- */
   var PAGES = {
     'sql-for-analysts': { p: 'p. 212', code: [
-        'SELECT c.name, SUM(o.amount)', 'FROM customers c',
-        'JOIN orders o ON o.customer_id = c.id', 'GROUP BY c.name;'],
-      say: 'One row per customer. The JOIN can repeat a customer, and GROUP BY folds those copies back into one.' },
-    'excel-for-analysts': { p: 'p. 104', code: ['=SUMIFS(D:D, A:A, "West", B:B, ">="&E2)'],
-      say: 'Add up column D, but only on rows where column A is West and the date in column B is on or after E2.' },
-    'tableau-for-analysts': { p: 'p. 61', code: ['{ FIXED [Customer] : SUM([Sales]) }'],
-      say: 'Total per customer, worked out before any filter on the sheet gets to touch it.' },
-    'python-for-analysts': { p: 'p. 88', code: ["df.merge(orders, on='customer_id', how='left')"],
-      say: 'Keep every customer. A left merge cannot drop a row, but it can quietly duplicate one.' },
-    'power-bi-for-analysts': { p: 'p. 73', code: ['Revenue = SUMX(Sales, Sales[Qty] * Sales[Price])'],
-      say: 'Multiply row by row, then add the rows up. A calculated column would have multiplied once and stored it.' },
+        "ВЫБЕРИТЕ c.имя, СУММА(o.сумма)", "ОТ клиентов c",
+        "ПРИСОЕДИНЯЙТЕСЬ к заказам o ON o.customer_id = c.id", "ГРУППИРОВАТЬ ПО c.name;"],
+      say: "Одна строка на каждого клиента. JOIN может повторить клиента, а GROUP BY складывает эти копии обратно в одну." },
+    'excel-for-analysts': { p: 'p. 104', code: ["=СУММИФ(D:D, A:A, \"Запад\", B:B, \">=\"&E2)"],
+      say: "Сложите столбец D, но только в тех строках, где столбец A соответствует западу, а дата в столбце B совпадает с E2 или после нее." },
+    'tableau-for-analysts': { p: 'p. 61', code: ["{ ИСПРАВЛЕНО [Клиент] : СУММА([Продажи]) }"],
+      say: "Итого на каждого клиента, рассчитанное до того, как к нему прикоснется какой-либо фильтр на листе." },
+    'python-for-analysts': { p: 'p. 88', code: ["df.merge(orders, on='customer_id', How='left')"],
+      say: "Удерживайте каждого клиента. Левое слияние не может удалить строку, но может незаметно дублировать ее." },
+    'power-bi-for-analysts': { p: 'p. 73', code: ["Выручка = SUMX(Продажи, Продажи[Кол-во] * Продажи[Цена])"],
+      say: "Умножьте строку за строкой, затем сложите строки вверх. Вычисляемый столбец умножил бы один раз и сохранил бы его." },
     'statistics-for-analysts': { p: 'p. 46', code: ['p = 0.03'],
-      say: 'If nothing were really going on, you would still see a gap this big about three times in a hundred.' },
-    'forecasting-for-analysts': { p: 'p. 29', code: ['MAPE = 8.4%'],
-      say: 'On average the forecast was 8.4% off. Check whether one bad month is carrying that number on its own.' },
-    'charts-and-visualization': { p: 'p. 18', code: ['Sort the bars by value, not by name.'],
-      say: 'The reader is ranking them anyway. Alphabetical order just makes them do it in their head first.' },
-    'thinking-like-an-analyst': { p: 'p. 31', code: ['What changes if this number is wrong?'],
-      say: 'Ask before the analysis, not after. The answer tells you how much checking the number is worth.' }
+      say: "Если бы на самом деле ничего не происходило, вы бы все равно увидели такой большой разрыв примерно в трех случаях из ста." },
+    'forecasting-for-analysts': { p: 'p. 29', code: ["МАРЕ = 8,4%"],
+      say: "В среднем прогноз составлял 8,4%. Проверьте, несет ли один неудачный месяц такое число." },
+    'charts-and-visualization': { p: 'p. 18', code: ["Сортируйте столбцы по значению, а не по имени."],
+      say: "Читатель все равно их ранжирует. Алфавитный порядок просто заставляет их сначала делать это в уме." },
+    'thinking-like-an-analyst': { p: 'p. 31', code: ["Что изменится, если это число неверно?"],
+      say: "Спрашивайте до анализа, а не после. Ответ расскажет вам, сколько стоит проверка номера." }
   };
 
   var book = BOOKS[kit];
@@ -218,7 +218,7 @@
     'border:1px solid var(--border,var(--bord,var(--line,#e0d9d2)));border-left:4px solid var(--accent,#C5511F);' +
     'border-radius:12px;font-family:inherit;font-size:15px;line-height:1.6;text-align:left;' +
     'display:grid;grid-template-columns:1fr;gap:16px}' +
-    '.apk-book-body strong{display:block;margin-bottom:8px}' +
+    ".apk-book-body Strong{display:block;margin-bottom:8px}" +
     '.apk-book-body p{margin:0;color:var(--muted,var(--dim,var(--txt2,#6B7280)));font-size:14px}' +
     '.apk-book a{display:inline-block;margin-top:12px;font-weight:600;' +
     'color:var(--accent,#C5511F);text-decoration:none}' +
@@ -233,7 +233,7 @@
     'font-size:11.5px;line-height:1.55;color:var(--text,var(--txt,var(--ink,#222)));white-space:pre-wrap;word-break:break-word}' +
     '.apk-book-pg .sy{display:block;margin-top:9px;padding-top:8px;border-top:1px solid var(--border,var(--bord,var(--line,#e0d9d2)));' +
     'font-size:12px;line-height:1.5;color:var(--muted,var(--dim,var(--txt2,#6B7280)));font-style:italic}' +
-    '.apk-book-pg .pn{position:absolute;bottom:5px;right:10px;font-size:10px;letter-spacing:.05em;' +
+    ".apk-book-pg .pn{position:absolute;bottom:5px;right:10px;font-size:10px;интервал между буквами:.05em;" +
     'color:var(--muted,var(--dim,var(--txt2,#6B7280)));opacity:.7}' +
     '@media(min-width:660px){.apk-book.has-pg{grid-template-columns:minmax(0,1fr) 250px;align-items:start}' +
     '.apk-book.has-pg .apk-book-pg{order:2}}';

@@ -44,8 +44,8 @@
   css.textContent =
     '.apk-sub{background:var(--card,#fff);border:1px solid var(--line,var(--border,#e0d9d2));' +
     'border-left:4px solid var(--accent,#C5511F);border-radius:12px;padding:16px 20px;' +
-    'margin:26px 0;font-size:15px;font-family:inherit;line-height:1.6}' +
-    '.apk-sub strong{display:block;margin-bottom:6px}' +
+    "поле: 26 пикселей 0; размер шрифта: 15 пикселей; семейство шрифтов: наследовать; высота строки: 1,6}" +
+    ".apk-sub Strong{display:block;margin-bottom:6px}" +
     '.apk-sub p{margin:6px 0 0}' +
     '.apk-sub form{margin:12px 0 0;display:flex;flex-wrap:wrap;gap:8px}' +
     '.apk-sub input[type=email]{flex:1 1 220px;min-width:0;padding:9px 11px;font:inherit;' +
@@ -53,14 +53,14 @@
     'border:1px solid var(--line,var(--border,#e0d9d2));border-radius:8px}' +
     '.apk-sub button{padding:9px 16px;font:inherit;font-size:14px;font-weight:600;' +
     'cursor:pointer;color:#fff;background:var(--accent,#C5511F);border:0;border-radius:8px}' +
-    '.apk-sub button:disabled{opacity:.55;cursor:default}' +
+    "Кнопка .apk-sub: отключено {непрозрачность: .55; курсор: по умолчанию}" +
     '.apk-sub .apk-sub-consent{flex:1 1 100%;display:flex;gap:8px;align-items:flex-start;' +
     'font-size:13px;color:var(--muted,#888)}' +
     '.apk-sub .apk-sub-consent input{margin-top:3px;flex:0 0 auto}' +
     '.apk-sub a.apk-sub-link{display:inline-block;margin-top:10px;font-weight:600;' +
     'color:var(--accent,#C5511F)}' +
     '.apk-sub .apk-sub-note{margin-top:10px;font-size:13px;color:var(--muted,#888)}' +
-    '.apk-sub .apk-sub-err{color:#b3261e;font-size:13px;margin-top:8px}';
+    ".apk-sub .apk-sub-err{цвет:#b3261e;размер шрифта:13px;margin-top:8px}";
   document.head.appendChild(css);
 
   var box = document.createElement('div');
@@ -70,28 +70,28 @@
   // (feedback_no_free_framing). Promise a cadence that survives
   // (handoff §8) — "every few weeks" is honest, "weekly" is a debt.
   var PITCH =
-    '<strong>One analyst habit, worked through end to end, every few weeks.</strong>' +
-    '<p>Each one takes a single idea — defining a metric so two teams cannot read it ' +
-    'differently, reading a distribution before you trust an average — and walks it ' +
-    'from the question to the query to what you would actually say in the meeting.</p>';
+    "<strong>Одна привычка аналитика, отработанная от начала до конца, каждые несколько недель.</strong>" +
+    "<p>У каждого из них есть одна идея — определение метрики, чтобы две команды не могли ее прочитать. " +
+    "иначе, читая распределение, прежде чем доверять среднему значению, — и проходите его " +
+    "от вопроса к вопросу и к тому, что вы на самом деле скажете на встрече.</p>";
 
   if (MODE === 'link') {
     box.innerHTML = PITCH +
       '<a class="apk-sub-link" href="' + LINK + '" target="_blank" rel="noopener">' +
-      'Get these by email &rarr;</a>' +
-      '<p class="apk-sub-note">Unsubscribe from any of them in one click.</p>';
+      "Получите их по электронной почте →</a>" +
+      "<p class=\"apk-sub-note\">Отпишитесь от любого из них в один клик.</p>";
     box.querySelector('a').addEventListener('click', function () { track('link'); });
   } else {
     box.innerHTML = PITCH +
       '<form novalidate>' +
-      '<input type="email" name="' + FIELD + '" required autocomplete="email" ' +
-      'placeholder="you@example.com" aria-label="Email address">' +
+      "<input type=\"электронная почта\" name=\"" + FIELD + "\" требуется автозаполнение=\"электронная почта\" " +
+      "Placeholder=\"you@example.com\" aria-label=\"Адрес электронной почты\">" +
       '<button type="submit">Subscribe</button>' +
       // Unticked, explicit, its own sentence. Consent for progress sync is
       // not consent for this (handoff §2).
       '<label class="apk-sub-consent"><input type="checkbox" required>' +
-      '<span>Yes, email me the analyst habit write-ups every few weeks. ' +
-      'I can unsubscribe in one click from any of them.</span></label>' +
+      "<span>Да, каждые несколько недель присылайте мне по электронной почте отчеты о привычках аналитиков. " +
+      "Я могу в один клик отписаться от любого из них.</span></label>" +
       '</form>' +
       '<div class="apk-sub-err" hidden></div>';
 
@@ -132,10 +132,10 @@
           track('form');
           // A real confirmation state, not an alert (handoff §6.4).
           box.innerHTML =
-            '<strong>Check your inbox.</strong>' +
-            '<p>There is a confirmation email on its way. Click the link in it and ' +
-            'you are on the list — nothing sends until you do. The first write-up ' +
-            'arrives within a few weeks.</p>';
+            "<strong>Проверьте свой почтовый ящик.</strong>" +
+            "<p>В пути находится письмо с подтверждением. Нажмите на ссылку в нем и " +
+            "вы в списке — пока вы этого не сделаете, ничего не будет отправлено. Первая запись " +
+            "прибудет в течение нескольких недель.</p>";
         })
         .catch(function () {
           btn.disabled = false;

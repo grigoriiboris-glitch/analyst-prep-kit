@@ -465,12 +465,12 @@ const $ = id => document.getElementById(id);
 const TRACKS = {
   basic: {
     title: 'Basic',
-    blurb: 'The shelves, from a list of headers to a finished comparison. Small data you can check by eye, and every step is the same question SQL Drill types out.',
-    lead: 'Build a chart by dragging fields, one small move at a time. Read the question, try it, and click one button if you want the exact steps. Nothing is graded.',
+    blurb: "Полки, от списка заголовков до готового сравнения. Небольшие данные можно проверить на глаз, и каждый шаг представляет собой один и тот же вопрос, который вводит SQL Drill.",
+    lead: "Создайте диаграмму, перетаскивая поля по одному небольшому шагу за раз. Прочтите вопрос, попробуйте и нажмите одну кнопку, если хотите получить точные шаги. Ничего не оценивается.",
     rows: ROWS,
     ladder: LADDER,
     table: 'country_gems',
-    fieldsCaption: '52 country gem tracks, the same rows SQL Drill queries. Blue is a dimension, something you slice by. Green is a measure, something you aggregate.',
+    fieldsCaption: "52 дорожки драгоценных камней страны, те же строки запросов SQL Drill. Синий — это измерение, то, что вы разрезаете. Зеленый — это мера, то, что вы суммируете.",
     fields: {
       artist:    {label: 'Artist',            kind: 'dim'},
       track:     {label: 'Track',             kind: 'dim'},
@@ -487,12 +487,12 @@ const TRACKS = {
 
   telco: {
     title: "Отток телекоммуникационных компаний",
-    blurb: 'The same shelves on a real project: 7,043 phone customers, and why the new ones leave. The last step is a chart that is published, with the write-up under it.',
-    lead: 'Build the churn analysis one move at a time, on the same 7,043 customers behind the published project. Read the question, try it, and click one button if you want the exact steps. Nothing is graded.',
+    blurb: "Те же полки на реальном проекте: 7043 телефонных клиента и почему уходят новые. Последним шагом является публикация диаграммы с описанием под ней.",
+    lead: "Постройте анализ оттока по одному шагу для тех же 7043 клиентов, которые стоят за опубликованным проектом. Прочтите вопрос, попробуйте и нажмите одну кнопку, если хотите получить точные шаги. Ничего не оценивается.",
     rows: TELCO_ROWS,
     ladder: TELCO_LADDER,
     table: 'telco_customers',
-    fieldsCaption: '7,043 phone customers, the extract behind the published churn project. Blue is a dimension, something you slice by. Green is a measure, something you aggregate. Churn and Churned are the same fact twice: one you group by, one you average.',
+    fieldsCaption: "7043 телефонных клиента — выдержка из опубликованного проекта оттока клиентов. Синий — это измерение, то, что вы разрезаете. Зеленый — это мера, то, что вы суммируете. Отток и отток — это один и тот же факт дважды: один вы группируете, другой — усредняете.",
     fields: {
       persona:  {label: 'Persona',            kind: 'dim'},
       contract: {label: 'Contract',           kind: 'dim'},
@@ -509,7 +509,7 @@ const TRACKS = {
               payment: 'payment_method', churn: 'churn', churned: 'churned',
               tenure: 'tenure_months', charges: 'monthly_charges', services: 'add_on_services'},
     project: {
-      head: 'You just built a chart that is published.',
+      head: "Вы только что построили диаграмму, которая опубликована.",
       body: "Полный анализ идет дальше: четыре персоны, контрактный механизм, лежащий в основе разрыва, и три периода удержания, рассчитанные по сравнению с первым годом. Те же 7043 клиента, те же цифры.",
       links: [
         {text: "Панель управления Tableau Public →",
@@ -603,7 +603,7 @@ let picked = null;   // tap-then-tap, so this works without a mouse
 function fieldWells(){
   const draw = (host, kind) => {
     host.innerHTML = Object.keys(FIELDS).filter(f => FIELDS[f].kind === kind).map(f =>
-      `<button class="chip ${kind}${picked === f ? ' sel' : ''}" draggable="true" data-field="${f}">${esc(FIELDS[f].label)}</button>`
+      `<button class="чип ${kind}${picked === f ? ' sel' : ''}"перетаскиваемый="истина" поле данных="${f}">${esc(FIELDS[f].label)}</button>`
     ).join('');
     host.querySelectorAll('.chip').forEach(c => {
       c.addEventListener('dragstart', e => { e.dataTransfer.setData('text/plain', c.dataset.field); });
@@ -621,16 +621,16 @@ function place(shelf, field){
   // what any card will do. Detail is the one genuine restriction: it groups, so it needs
   // something to group by.
   if(shelf === 'detail' && !isDim(field)){
-    say('Detail splits the marks, so it needs a dimension. A measure there would have nothing to split by.');
+    say("Деталь разделяет метки, поэтому ей нужен размер. Мере там было бы не по чему делить.");
     return;
   }
   if(shelf === 'filter' && !isDim(field)){
-    say('This builder filters on dimension values. In the real tools a measure on Filter opens a range slider instead.');
+    say("Этот конструктор фильтрует значения измерений. В реальных инструментах мера «Фильтр» вместо этого открывает ползунок диапазона.");
     return;
   }
   if(MULTI.includes(shelf)){
     if(state[shelf].includes(field)){
-      say('That field is already on ' + SHELF_NAMES[shelf] + '. Drop a different one to nest it underneath.');
+      say("Это поле уже включено " + SHELF_NAMES[shelf] + ". Оставьте другой, чтобы вложить его снизу.");
       return;
     }
     state[shelf] = state[shelf].concat(field);
@@ -659,7 +659,7 @@ SHELVES.forEach(shelf => {
     if(e.key !== 'Enter' && e.key !== ' ') return;
     e.preventDefault();
     if(picked) place(shelf, picked);
-    else say('Choose a field first: tab to one in the Dimensions or Measures list and press Enter, then come back here.');
+    else say("Сначала выберите поле: перейдите к нему в списке «Измерения» или «Показатели» и нажмите Enter, а затем вернитесь сюда.");
   });
   el.addEventListener('dragover', e => { e.preventDefault(); el.classList.add('over'); });
   el.addEventListener('dragleave', () => el.classList.remove('over'));
@@ -680,17 +680,16 @@ function onePill(shelf, f){
   const label = kind === 'meas' && shelf !== 'filter'
     ? state.agg + '(' + FIELDS[f].label + ')'
     : FIELDS[f].label;
-  return `<span class="pill ${kind}" data-shelf="${shelf}" data-field="${f}"
-            title="${kind === 'meas' ? 'Click to change the aggregation' : 'Click the cross to remove'}">
-            ${esc(label)}<span class="x" data-remove="${shelf}" data-field="${f}">&times;</span></span>`;
+  return `<span class="таблетка ${kind}" полка данных="${shelf}"поле данных="${f}" заголовок="${kind === 'meas' ? "Нажмите, чтобы изменить агрегацию" : "Нажмите крестик, чтобы удалить"}">
+            ${esc(label)}<span class="x" data-remove="${shelf}"поле данных="${f}">&times;</span></span>`;
 }
 function pillHTML(shelf){
   if(MULTI.includes(shelf)){
     return state[shelf].length
       ? state[shelf].map(f => onePill(shelf, f)).join('')
-      : '<span class="ph">Drop a field here. Drop a second to nest it.</span>';
+      : "<span class=\"ph\">Оставьте поле здесь. Уделите секунду, чтобы вложить его.</span>";
   }
-  return state[shelf] ? onePill(shelf, state[shelf]) : '<span class="ph">Drop a field here</span>';
+  return state[shelf] ? onePill(shelf, state[shelf]) : "<span class=\"ph\">Оставьте поле здесь</span>";
 }
 
 $('markseg').querySelectorAll('button').forEach(b => {
@@ -812,8 +811,8 @@ function drawLegend(rs){
   if(!state.color){
     // Two measures with nothing on Color: the measure names are doing the coloring.
     if(rs.measFields && rs.measFields.length > 1){
-      el.innerHTML = '<b>Measure names</b> on Color, added for you because two measures ' +
-        'cannot share a set of marks without one:' +
+      el.innerHTML = "<b>Имена мер</b> по цвету, добавлено для вас, потому что две меры " +
+        "нельзя разделить набор оценок без одного:" +
         rs.measFields.map((m, n) => '<span class="sw" style="background:' +
           PALETTE[n % PALETTE.length] + '"></span>' + esc(FIELDS[m].label)).join('');
     } else el.innerHTML = '';
@@ -822,12 +821,12 @@ function drawLegend(rs){
   const f = FIELDS[state.color];
   if(isDim(state.color)){
     const keys = [...new Set(rs.rows.map(r => r.color))];
-    el.innerHTML = '<b>' + esc(f.label) + '</b> on Color, a dimension, so one swatch per value:' +
+    el.innerHTML = '<b>' + esc(f.label) + "</b> в разделе «Цвет» — измерение, поэтому на каждое значение приходится один образец:" +
       keys.map((k, n) => '<span class="sw" style="background:' + PALETTE[n % PALETTE.length] +
         '"></span>' + esc(String(k))).join('');
   } else {
     const vals = rs.rows.map(r => r.color);
-    el.innerHTML = '<b>' + state.agg + '(' + esc(f.label) + ')</b> on Color, a measure, so a ramp:' +
+    el.innerHTML = '<b>' + state.agg + '(' + esc(f.label) + ")</b> по цвету, мера, поэтому рампа:" +
       fmtVal(state.color, Math.min(...vals)) + '<span class="ramp"></span>' +
       fmtVal(state.color, Math.max(...vals));
   }
@@ -841,7 +840,7 @@ function drawTextTable(rs){
     (isDim(state.color) && !rs.dimFields.includes(state.color) ? '<th>' + esc(FIELDS[state.color].label) + '</th>' : '') +
     (state.detail && !rs.dimFields.includes(state.detail) ? '<th>' + esc(FIELDS[state.detail].label) + '</th>' : '') +
     (rs.measFields.length > 1 ? '<th>Measure</th>' : '') +
-    '<th>' + esc(rs.measFields.length > 1 ? state.agg + ' of the measure'
+    '<th>' + esc(rs.measFields.length > 1 ? state.agg + " меры"
                                           : state.agg + '(' + FIELDS[rs.measField].label + ')') + '</th></tr>';
   const body = rs.rows.map(r => '<tr>' +
     (r.dimVals.length ? r.dimVals.map(v => '<td>' + esc(v) + '</td>').join('') : '<td>All</td>') +
@@ -863,7 +862,7 @@ function drawChart(){
   if(rs && rs.measField && state.mark === 'text'){
     svg.style.display = 'none';
     $('texttable').innerHTML = drawTextTable(rs);
-    $('caption').textContent = rs.rows.length + ' rows, printed rather than drawn.';
+    $('caption').textContent = rs.rows.length + " строки, напечатанные, а не нарисованные.";
     return;
   }
   svg.style.display = '';
@@ -874,11 +873,11 @@ function drawChart(){
   if(rs && !rs.measField){
     const keys = [...new Set(rs.rows.map(r => r.key))];
     svg.innerHTML = keys.slice(0, 16).map((k, n) =>
-      `<text x="16" y="${22 + n * 18}" font-size="12.5" fill="#09090B">${esc(k)}</text>`).join('') +
-      (keys.length > 16 ? `<text x="16" y="${22 + 16 * 18}" font-size="11.5" fill="#52525B">and ${keys.length - 16} more</text>` : '') +
-      `<text x="16" y="${22 + Math.min(keys.length, 17) * 18 + 10}" font-size="11.5" fill="#52525B">${keys.length} headers, one per value. Add a measure and they become marks.</text>`;
-    $('caption').textContent = keys.length + ' headers from ' +
-      rs.dimFields.map(f => FIELDS[f].label).join(', then ') + '. No measure yet, so nothing is being counted.';
+      `<текст x="16" y="${22 + n * 18}" font-size="12,5" fill="#09090B">${esc(k)}</text>`).join('') +
+      (keys.length > 16 ? `<текст x="16" y="${22 + 16 * 18}" font-size="11.5" fill="#52525B">и ${keys.length - 16} more</text>` : '') +
+      `<текст x="16" y="${22 + Math.min(keys.length, 17) * 18 + 10}" font-size="11,5" fill="#52525B">${keys.length} заголовки, по одному на каждое значение. Добавьте меру, и они станут отметками.</text>`;
+    $('caption').textContent = keys.length + " заголовки из " +
+      rs.dimFields.map(f => FIELDS[f].label).join(', then ') + ". Меры пока нет, поэтому ничего не учитывается.";
     return;
   }
   if(!rs){
@@ -915,9 +914,9 @@ function drawChart(){
   const lineReady = state.mark === 'line' && vertical;
   let fellBack = '';
   if(state.mark === 'scatter' && !scatterReady)
-    fellBack = 'Scatter plots one measure against another, so it needs a measure on Columns and a measure on Rows. Drawing bars until it has both.';
+    fellBack = "Scatter отображает одну меру в сравнении с другой, поэтому ей нужна мера по столбцам и мера по строкам. Рисовать полосы до тех пор, пока не будет обоих.";
   else if(state.mark === 'line' && !lineReady)
-    fellBack = 'A line runs along an axis, so it needs the measure on Rows and the dimension on Columns. Drawing bars until then.';
+    fellBack = "Линия проходит вдоль оси, поэтому ей нужны измерения в строках и измерения в столбцах. Рисуем полосы до тех пор.";
 
   let svgHTML = '';
   if(scatterReady){
@@ -945,17 +944,17 @@ function drawChart(){
       // With everything that splits the points sitting on Detail there is no header to read
       // them off, so the point carries its own name.
       const who = p.d.key === 'All' ? (p.d.detail || 'All') : p.d.key;
-      svgHTML += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${colorOf(p.d)}" fill-opacity=".8">
+      svgHTML += `<круг cx="${cx}" cy="${cy}" r="${r}" fill="${colorOf(p.d)}" fill-opacity=".8">
         <title>${esc(who)}: ${fmtVal(xField, p.x)} by ${fmtVal(yField, p.y)}</title></circle>`;
       const lab = labelOf(p.d) || (p.d.detail || (p.d.key !== 'All' ? p.d.key : ''));
-      if(lab) svgHTML += `<text x="${cx + 7}" y="${cy - 6}" font-size="10" fill="#52525B">${esc(lab)}</text>`;
+      if(lab) svgHTML += `<текст х="${cx + 7}" y="${cy - 6}" font-size="10" fill="#52525B">${esc(lab)}</text>`;
     });
-    svgHTML += `<text x="10" y="${padT + 10}" font-size="11" fill="#52525B">${fmtVal(yField, yMax)}</text>`;
-    svgHTML += `<text x="${W - 60}" y="${H - 10}" font-size="11" fill="#52525B">${fmtVal(xField, xMax)}</text>`;
-    svgHTML += `<text x="${padL}" y="${H - 10}" font-size="11" fill="#52525B">${esc(FIELDS[xField].label)} across, ${esc(FIELDS[yField].label)} up</text>`;
+    svgHTML += `<текст x="10" у="${padT + 10}" font-size="11" fill="#52525B">${fmtVal(yField, yMax)}</text>`;
+    svgHTML += `<текст х="${W - 60}" y="${H - 10}" font-size="11" fill="#52525B">${fmtVal(xField, xMax)}</text>`;
+    svgHTML += `<текст х="${padL}" y="${H - 10}" font-size="11" fill="#52525B">${esc(FIELDS[xField].label)} across, ${esc(FIELDS[yField].label)} up</text>`;
     svg.innerHTML = svgHTML;
     $('caption').textContent = pts.length + ' points, ' + state.agg + '(' + FIELDS[xField].label +
-      ') against ' + state.agg + '(' + FIELDS[yField].label + ')';
+      ") против " + state.agg + '(' + FIELDS[yField].label + ')';
     return;
   }
   if(lineReady){
@@ -968,29 +967,27 @@ function drawChart(){
         const y = padT + h - (d ? d.value / max * h : 0);
         return x + ',' + y;
       }).join(' ');
-      svgHTML += `<polyline points="${pts}" fill="none" stroke="${PALETTE[ci % PALETTE.length]}" stroke-width="2.5"/>`;
+      svgHTML += `<точки полилинии="${pts}" fill="нет" штрих="${PALETTE[ci % PALETTE.length]}"ширина-штриха="2.5"/>`;
     });
     keys.forEach((k, idx) => {
       const x = padL + (keys.length === 1 ? w / 2 : idx * w / (keys.length - 1));
-      svgHTML += `<text x="${x}" y="${H - 12}" font-size="11" fill="#52525B" text-anchor="middle">${esc(k)}</text>`;
+      svgHTML += `<текст х="${x}" y="${H - 12}" font-size="11" fill="#52525B" text-anchor="middle">${esc(k)}</text>`;
     });
-    svgHTML += `<text x="10" y="${padT + 10}" font-size="11" fill="#52525B">${fmt(max)}</text>`;
+    svgHTML += `<текст x="10" у="${padT + 10}" font-size="11" fill="#52525B">${fmt(max)}</text>`;
   } else if(vertical){
     const padL = 60, padB = 34, padT = 14, w = W - padL - 16, h = H - padB - padT;
     const band = w / data.length;
     data.forEach((d, idx) => {
       const bh = d.value / max * h;
       const th = thickness(d);
-      svgHTML += `<rect x="${padL + idx * band + band * (1 - th) / 2}" y="${padT + h - bh}"
-        width="${band * th}" height="${bh}" fill="${colorOf(d)}" rx="3"><title>${esc(d.key)}: ${fmt(d.value, d)}</title></rect>`;
+      svgHTML += `<прямой х="${padL + idx * band + band * (1 - th) / 2}" y="${padT + h - bh}"ширина="${band * th}"высота="${bh}" fill="${colorOf(d)}" rx="3"><title>${esc(d.key)}: ${fmt(d.value, d)}</title></rect>`;
       const lab = labelOf(d);
-      if(lab) svgHTML += `<text x="${padL + idx * band + band / 2}" y="${padT + h - bh - 5}"
-        font-size="10.5" fill="#52525B" text-anchor="middle">${esc(lab)}</text>`;
+      if(lab) svgHTML += `<текст х="${padL + idx * band + band / 2}" y="${padT + h - bh - 5}"
+        font-size="10,5" fill="#52525B" text-anchor="middle">${esc(lab)}</text>`;
       if(data.length <= 14)
-        svgHTML += `<text x="${padL + idx * band + band / 2}" y="${H - 12}" font-size="11"
-          fill="#52525B" text-anchor="middle">${esc(d.key)}</text>`;
+        svgHTML += `<текст х="${padL + idx * band + band / 2}" y="${H - 12}" font-size="11" fill="#52525B" text-anchor="middle">${esc(d.key)}</text>`;
     });
-    svgHTML += `<text x="10" y="${padT + 10}" font-size="11" fill="#52525B">${fmt(max)}</text>`;
+    svgHTML += `<текст x="10" у="${padT + 10}" font-size="11" fill="#52525B">${fmt(max)}</text>`;
   } else {
     const padL = 150, padT = 10, rowH = Math.min(26, (H - padT) / Math.max(data.length, 1));
     const w = W - padL - 70;
@@ -999,11 +996,10 @@ function drawChart(){
       const y = padT + idx * rowH;
       const th = thickness(d) * .92;
       const lab = labelOf(d);
-      svgHTML += `<text x="${padL - 8}" y="${y + rowH * .7}" font-size="11" fill="#52525B"
-        text-anchor="end">${esc(String(d.key).slice(0, 22))}${d.detail ? ' · ' + esc(String(d.detail)) : ''}</text>`;
-      svgHTML += `<rect x="${padL}" y="${y + rowH * (1 - th) / 2}" width="${Math.max(bw, 1)}"
-        height="${rowH * th}" fill="${colorOf(d)}" rx="3"><title>${esc(d.key)}: ${fmt(d.value)}</title></rect>`;
-      svgHTML += `<text x="${padL + bw + 6}" y="${y + rowH * .72}" font-size="10.5" fill="#52525B">${lab || fmt(d.value, d)}</text>`;
+      svgHTML += `<текст х="${padL - 8}" y="${y + rowH * .7}" font-size="11" fill="#52525B"
+        текст-якорь="конец">${esc(String(d.key).slice(0, 22))}${d.detail ? ' · ' + esc(String(d.detail)) : ''}</text>`;
+      svgHTML += `<прямой х="${padL}" y="${y + rowH * (1 - th) / 2}"ширина="${Math.max(bw, 1)}"высота="${rowH * th}" fill="${colorOf(d)}" rx="3"><title>${esc(d.key)}: ${fmt(d.value)}</title></rect>`;
+      svgHTML += `<текст х="${padL + bw + 6}" y="${y + rowH * .72}" font-size="10,5" fill="#52525B">${lab || fmt(d.value, d)}</text>`;
     });
   }
   svg.innerHTML = svgHTML;
@@ -1012,11 +1008,11 @@ function drawChart(){
   $('caption').textContent = (state.agg) + ' of ' +
     rs.measFields.map(m => FIELDS[m].label).join(' and ') +
     (rs.dimFields.length ? ' by ' + rs.dimFields.map(f => FIELDS[f].label).join(', then ') : '') +
-    (state.color ? ', colored by ' + FIELDS[state.color].label : '') +
-    (state.size ? ', sized by ' + FIELDS[state.size].label : '') +
-    (state.detail ? ', split by ' + FIELDS[state.detail].label : '') +
+    (state.color ? ", раскрашенный " + FIELDS[state.color].label : '') +
+    (state.size ? ", по размеру " + FIELDS[state.size].label : '') +
+    (state.detail ? ", разделить на " + FIELDS[state.detail].label : '') +
     ' · ' + shown + ' marks' +
-    (state.filter ? ' · filtered on ' + FIELDS[state.filter].label : '') +
+    (state.filter ? " · отфильтровано по " + FIELDS[state.filter].label : '') +
     (fellBack ? ' · ' + fellBack : '');
 }
 
@@ -1027,13 +1023,13 @@ function drawData(){
     (rs.dimFields.length ? rs.dimFields.map(f => '<th>' + esc(FIELDS[f].label) + '</th>').join('') : '<th>All</th>') +
     (rs.measFields.length > 1 ? '<th>Measure</th>' : '') +
     '<th>' + (rs.measField ? esc(state.agg + (rs.measFields.length > 1 ? '' : '(' + FIELDS[rs.measField].label + ')')) : 'Rows') + '</th>' +
-    '<th>rows behind it</th></tr>';
+    "<th>ряды за ним</th></tr>";
   const body = rs.rows.slice(0, 40).map(r => '<tr>' +
     (r.dimVals.length ? r.dimVals.map(v => '<td>' + esc(v) + '</td>').join('') : '<td>All</td>') +
     (rs.measFields.length > 1 ? '<td>' + esc(FIELDS[r.measure].label) + '</td>' : '') +
     '<td>' + fmtVal(r.measure || rs.measField, r.value) + '</td><td>' + r.n + '</td></tr>').join('');
   $('datatable').innerHTML = '<table class="data">' + head + body + '</table>' +
-    (rs.rows.length > 40 ? '<p class="caption">Showing the first 40 of ' + rs.rows.length + ' rows.</p>' : '');
+    (rs.rows.length > 40 ? "<p class=\"caption\">Показаны первые 40 из " + rs.rows.length + ' rows.</p>' : '');
 }
 
 // The query the shelves are actually asking for, generated from state. The step's own SQL
@@ -1041,11 +1037,11 @@ function drawData(){
 // anybody changes an aggregation. The column names and the table come from the track.
 function liveSQL(){
   const rs = resultSet();
-  if(!rs) return '-- Nothing on the shelves yet.';
+  if(!rs) return "-- На полках пока ничего нет.";
   const dims = rs.dimFields.concat([state.color, state.detail]
     .filter(f => isDim(f) && !rs.dimFields.includes(f)));
   const measures = rs.measFields.map(m => m === 'records'
-    ? 'COUNT(*) AS number_of_records'
+    ? "COUNT(*) AS число_записей"
     : state.agg + '(' + COLUMN_SQL[m] + ') AS ' + state.agg.toLowerCase() + '_' + COLUMN_SQL[m]);
   const select = dims.map(d => COLUMN_SQL[d]).concat(measures);
   let sql = 'SELECT ' + (select.length ? select.join(',\n       ') : '*') + '\nFROM ' + TRACK.table;
@@ -1065,7 +1061,7 @@ function liveSQL(){
 }
 
 function drawFields(){
-  $('fieldlist').innerHTML = '<table class="data"><tr><th>Field</th><th>Role</th><th>Distinct values</th></tr>' +
+  $('fieldlist').innerHTML = "<table class=\"data\"><tr><th>Field</th><th>Role</th><th>Различные ценности</th></tr>" +
     Object.keys(FIELDS).map(f => {
       const kind = FIELDS[f].kind === 'dim' ? 'Dimension' : 'Measure';
       const distinct = f === 'records' ? '&mdash;' : new Set(DATA.map(r => r[f])).size;
@@ -1096,12 +1092,12 @@ function checkRung(){
     if(k === 'filterVals'){
       const want = [...t.filterVals].sort().join('|');
       const have = [...(state.filterVals || [])].sort().join('|');
-      if(want !== have) missing.push('keep only ' + t.filterVals.join(' and ') + ' in the filter');
+      if(want !== have) missing.push("оставь только " + t.filterVals.join(' and ') + " в фильтре");
       return;
     }
     if(state[k] === t[k]) return;
-    if(k === 'agg') missing.push('set the aggregation to ' + t.agg);
-    else if(k === 'mark') missing.push('switch the mark type to ' + t.mark);
+    if(k === 'agg') missing.push("установите агрегацию на " + t.agg);
+    else if(k === 'mark') missing.push("переключите тип метки на " + t.mark);
     else if(k === 'sort') missing.push('sort ' + (t.sort === 'none' ? 'off' : t.sort === 'desc' ? 'descending' : 'ascending'));
     else if(t[k] === null) missing.push('clear ' + SHELF_NAMES[k]);
     else missing.push('put ' + name(t[k]) + ' on ' + SHELF_NAMES[k]);
@@ -1120,15 +1116,15 @@ function answerLine(){
   const rs = resultSet();
   if(!rs) return '';
   if(!rs.measField)
-    return 'Your answer: ' + [...new Set(rs.rows.map(r => r.key))].length + ' of them.';
+    return "Ваш ответ:" + [...new Set(rs.rows.map(r => r.key))].length + ' of them.';
   const top = rs.rows.reduce((a, b) => b.value > a.value ? b : a, rs.rows[0]);
   if(!top) return '';
   const num = fmtVal(top.measure || rs.measField, top.value);
   const what = rs.measFields.length > 1 && top.measure ? ' ' + FIELDS[top.measure].label.toLowerCase() : '';
   // Nothing on Rows or Columns to name it by means the splitting field is on Detail, and
   // "All is the biggest" is not a sentence anybody would say at work.
-  const who = top.key === 'All' ? (top.detail || 'All of it') : top.key;
-  return 'Your answer: <b>' + esc(who) + '</b> is the biggest, at ' + num + what + '.';
+  const who = top.key === 'All' ? (top.detail || "Все это") : top.key;
+  return "Ваш ответ:<b>" + esc(who) + "</b> является самым большим, в " + num + what + '.';
 }
 
 function draw(){
@@ -1158,12 +1154,11 @@ function draw(){
   // Every value starts included, as a quick filter does, so the action is exclusion. The
   // label has to say that, because a lit button that removes data on click reads backwards.
   $('filtvals').innerHTML = state.filter
-    ? '<span class="hint" style="width:100%">Values of ' + esc(FIELDS[state.filter].label) +
-      '. Everything starts included; click one to leave it out.</span>' +
+    ? "<span class=\"hint\" style=\"width:100%\">Ценности " + esc(FIELDS[state.filter].label) +
+      ". Все запускается включенным; щелкните один, чтобы исключить его.</span>" +
       [...new Set(DATA.map(r => String(r[state.filter])))].sort().map(v => {
         const on = (state.filterVals || []).includes(v);
-        return `<button class="fv" data-v="${esc(v)}" aria-pressed="${on}"
-          title="${on ? 'Included, click to leave it out' : 'Left out, click to put it back'}">${esc(v)}</button>`;
+        return `<button class="fv" data-v="${esc(v)}"ария-прессованная="${on}" заголовок="${on ? "Включено, нажмите, чтобы исключить" : "Если не указано, нажмите, чтобы вернуть его обратно."}">${esc(v)}</button>`;
       }).join('')
     : '';
   $('filtvals').querySelectorAll('.fv').forEach(b => {
@@ -1195,16 +1190,16 @@ function draw(){
   // has handed over the answer the reveal button exists to hand over on purpose.
   const hide = !revealed;
   say(solved
-    ? '<span class="done">Done.</span> ' + answerLine() +
-      (last ? ' That is the last step.' : ' Then click Next step.')
+    ? "<span class=\"done\">Сделанный.</span> " + answerLine() +
+      (last ? " Это последний шаг." : " Затем нажмите «Следующий шаг».")
     : hide
-      ? '<b>Not yet.</b> ' + missing.length + (missing.length === 1 ? ' thing' : ' things') +
-        ' still to change on the shelves.'
-      : '<b>Not yet.</b> ' + missing.join(', then ').replace(/^./, c => c.toUpperCase()) + '.');
+      ? "<b>Еще нет.</b> " + missing.length + (missing.length === 1 ? ' thing' : ' things') +
+        " еще менять на полках."
+      : "<b>Еще нет.</b> " + missing.join(', then ').replace(/^./, c => c.toUpperCase()) + '.');
   // The moment the shelves match, not every redraw after it. solvedSeen is set true by
   // render() before the first draw of a rung, so walking Back onto a step your shelves
   // already satisfy does not throw confetti at you for doing nothing.
-  if(solved && !solvedSeen) celebrate(last ? '\u{1F389} Ladder complete.' : '✓ That is the chart. Next step →');
+  if(solved && !solvedSeen) celebrate(last ? "🎉Лестница готова." : "✓ Это диаграмма. Следующий шаг →");
   solvedSeen = solved;
   markReady(solved, last);
 }
@@ -1242,15 +1237,15 @@ function markReady(solved, last){
   const hidden = !revealed;
   $('directive-text').textContent = solved
     ? (last
-        ? 'That is the last step. Start over from step 1 whenever you want another lap.'
-        : 'That step is done. Click Next step.')
+        ? "Это последний шаг. Начинайте заново с шага 1 всякий раз, когда вам понадобится еще один круг."
+        : "Этот шаг сделан. Нажмите Следующий шаг.")
     : (last
         ? (hidden
-            ? 'Last step. Build it from the question up top, and the steps are one click away.'
-            : 'Last step. Do it, then start over from step 1 whenever you want more practice.')
+            ? "Последний шаг. Создайте его из вопроса вверху, и все шаги можно выполнить одним щелчком мыши."
+            : "Последний шаг. Сделайте это, а затем начните заново с шага 1, когда захотите попрактиковаться.")
         : (hidden
-            ? 'Answer the question up top with the shelves, then click Next step.'
-            : 'Do the numbered steps up top, then click Next step.'));
+            ? "Ответьте на вопрос вверху с полками, затем нажмите «Следующий шаг»."
+            : "Выполните пронумерованные шаги вверху, затем нажмите «Следующий шаг»."));
 }
 
 // The picker is drawn from the registry, not written out by hand, so adding a track is one
@@ -1290,17 +1285,17 @@ function renderTracks(){
 function renderAsk(){
   const r = STEPS.rungs[i];
   const hide = !revealed;
-  $('todohead').textContent = hide ? 'The ask' : 'The ask, and the steps';
+  $('todohead').textContent = hide ? 'The ask' : "Вопрос и шаги";
   // Folded away, the headline would name the move it is asking you to remember.
-  $('adds').textContent = hide ? 'Have a go at this one first.' : r.adds;
-  $('question').innerHTML = '<span>The question</span>' + esc(r.q || '');
+  $('adds').textContent = hide ? "Сначала попробуйте это." : r.adds;
+  $('question').innerHTML = "<span>Вопрос</span>" + esc(r.q || '');
   $('task').innerHTML = hide ? '' : (r.do || []).map(a => '<li>' + a + '</li>').join('');
   $('why').textContent = hide ? '' : (r.why || '');
   // The step's own SQL is the answer written in the other language, so it goes behind the
   // same button. The live SQL under it is their own worksheet and always shows.
   $('tie').textContent = hide ? '' : r.tie;
   $('sql').textContent = hide
-    ? '-- Folded away with the steps. Click Show me the steps to see the query this one matches.'
+    ? "-- Сложен вместе со ступеньками. Нажмите «Показать мне шаги», чтобы увидеть запрос, которому соответствует этот запрос."
     : r.sql;
   $('recall').hidden = !hide;
   $('revealed').hidden = hide || ALWAYS_SHOW;
@@ -1331,7 +1326,7 @@ addEventListener('resize', drawChart);
 
 renderTracks();
 if(TRACK.title !== 'Basic')
-  document.title = 'Viz Drill, ' + TRACK.title + ': Build the Chart Step by Step — Analyst Prep Kit';
+  document.title = "Виз Дрилл, " + TRACK.title + ": Постройте диаграмму шаг за шагом — подготовительный комплект для аналитика";
 render();
 </script>
 <!-- APK:KIT-SEO:START (generated by tools/build-kit-seo.py, do not hand-edit) -->
@@ -1358,6 +1353,6 @@ render();
   <p><a href="../guides/">Просмотреть все руководства</a> · <a href="../">Все комплекты</a></p>
 </section>
 <!-- APK:KIT-SEO:END -->
-<script src="../assets/ru-localization.js?v=20261027-1"></script>
+
 </body>
 </html>

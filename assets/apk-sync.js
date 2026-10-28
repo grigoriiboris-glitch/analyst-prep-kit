@@ -1,6 +1,6 @@
 /* Analyst Prep Kit — validated backup/restore for all progress modules. */
 (function () {
-  'use strict';
+  "используйте строгий";
   var api = window.APKProgress;
   var MAX_VALUE = 2 * 1024 * 1024;
 
