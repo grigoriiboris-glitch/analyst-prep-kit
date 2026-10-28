@@ -26,5 +26,9 @@ jobs:
           node-version: 20
       - name: Check JavaScript syntax and module acceptance criteria
         run: node tools/check-new-modules.js
+      - name: Install PostgreSQL WASM engine for course tests
+        run: npm install --no-save --no-package-lock @electric-sql/pglite@0.5.12
+      - name: Test PostgreSQL course and practice queries
+        run: node --test tests/postgresql-module.test.js
       - name: Test progress persistence, cloud merge, safe import and rewards
         run: node --test tests/progress-sync.test.js
