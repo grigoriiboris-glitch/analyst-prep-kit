@@ -46,7 +46,7 @@ test("AI context copy is loaded by shared course shells and the new PostgreSQL m
   for (const page of pages) {
     const html = read(page);
     assert.ok(
-      html.includes("lesson-visuals.js") || html.includes("ru-localization.js") || html.includes("ai-context-copy.js"),
+      html.includes("progress-state.js") || html.includes("lesson-visuals.js") || html.includes("ai-context-copy.js"),
       "No shared AI-context loader on " + page
     );
   }
