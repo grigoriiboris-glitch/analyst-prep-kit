@@ -855,7 +855,7 @@
       var top = document.createElement('div'); top.className = 'curriculum-special-top';
       var icon = document.createElement('span'); icon.className = 'curriculum-special-icon'; icon.textContent = c.icon;
       var text = document.createElement('div'); text.style.minWidth = '0';
-      var h = document.createElement('h4'); h.textContent = c.title;
+      var h = document.createElement('h4'); h.textContent = (recommendedStep(c) ? formattedStep(c) + '. ' : '') + c.title;
       var desc = document.createElement('p'); desc.textContent = formatProgress(p) + ' · ' + (st.built ? 'построено' : (!st.unlocked ? 'закрыто' : 'постройка ' + (c.cost || 0) + ' 🪙'));
       text.append(h, desc); top.append(icon, text); card.append(top);
       var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'curriculum-action' + (st.unlocked ? ' primary' : '');
