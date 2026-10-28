@@ -16,6 +16,7 @@ const CACHE_PATH = path.join(ROOT, "tools", "static-ru-cache.json");
 const OMIT_DIRS = new Set([".git", ".github", "node_modules", "tools", "tests"]);
 const OMIT_FILES = new Set(["assets/ru-localization.js", "assets/ru-localization-boot.js"]);
 const SKIP_TAGS = new Set(["script", "style", "pre", "code", "kbd", "samp", "svg", "canvas", "iframe"]);
+const SKIP_CLASSES = new Set(["code-block", "code-sample", "code-snippet", "code-example", "formula-code", "ral-code", "ral-note-chunk", "terminal-editor"]);
 const HUMAN_KEYS = new Set([
   "title", "subtitle", "description", "desc", "intro", "summary", "question",
   "explanation", "hint", "feedback", "prompt", "text", "content", "body", "lesson",
@@ -127,7 +128,14 @@ function isTechnicalOnly(text) {
 }
 function isCodeLike(text) {
   const value = text.trim();
+  if (!value) return false;
   if (CODE_START.test(value)) return true;
+  // Formulas and snippets are syntax, not UI prose. Preserve function names,
+  // cell references, pandas calls, decorators, and generated expressions.
+  if (/^(?:=|@)\s*[A-Za-z_]/.test(value)) return true;
+  if (/^(?:df|pd|np|plt|sns)\s*(?:\.|\[|=)/i.test(value)) return true;
+  if (/^(?:[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*)\s*\([^;{}]*\)$/.test(value)) return true;
+  if (/^[A-Za-z_$][\w$]*(?:\[[^\]]+\])+\s*(?:[=<>!]=?|[+*/-])/.test(value)) return true;
   if (value.length > 35 && /(?:=>|[{};])/.test(value) && /(?:\b(?:const|let|var|function|return|SELECT|FROM|WHERE|JOIN|GROUP BY|ORDER BY)\b)/i.test(value)) return true;
   if (/^(?:#[\w-]+|\.?[a-z][\w-]*(?:\s*[>+~]\s*\.?[a-z][\w-]*)*)$/i.test(value) && !/\s{2,}/.test(value)) return true;
   return false;
@@ -417,10 +425,11 @@ async function translateHtmlTemplateFragment(fragment, state) {
   const output = [];
   let textBuffer = "";
   state.skipTags ||= [];
+  state.skipClassTags ||= [];
   state.tagBuffer ||= "";
   async function flushText() {
     if (!textBuffer) return;
-    if (state.skipTags.length) output.push(textBuffer);
+    if (state.skipTags.length || state.skipClassTags.length) output.push(textBuffer);
     else output.push(await translateVisibleString(textBuffer, null, true));
     textBuffer = "";
   }
@@ -433,11 +442,16 @@ async function translateHtmlTemplateFragment(fragment, state) {
         const match = state.tagBuffer.match(/^<\s*(\/)?\s*([A-Za-z][A-Za-z0-9:-]*)\b[^>]*>$/);
         if (match) {
           const tag = match[2].toLowerCase();
+          const classMatch = state.tagBuffer.match(/\bclass\s*=\s*(["'])(.*?)\1/i);
+          const classes = classMatch ? classMatch[2].toLowerCase().split(/\s+/) : [];
           if (match[1]) {
-            const index = state.skipTags.lastIndexOf(tag);
-            if (index >= 0) state.skipTags.splice(index, 1);
-          } else if (!/\/\s*>$/.test(state.tagBuffer) && SKIP_TAGS.has(tag)) {
-            state.skipTags.push(tag);
+            const tagIndex = state.skipTags.lastIndexOf(tag);
+            if (tagIndex >= 0) state.skipTags.splice(tagIndex, 1);
+            const classIndex = state.skipClassTags.lastIndexOf(tag);
+            if (classIndex >= 0) state.skipClassTags.splice(classIndex, 1);
+          } else if (!/\/\s*>$/.test(state.tagBuffer)) {
+            if (SKIP_TAGS.has(tag)) state.skipTags.push(tag);
+            if (classes.some(name => SKIP_CLASSES.has(name))) state.skipClassTags.push(tag);
           }
         }
         state.inTag = false;
@@ -553,7 +567,7 @@ async function translateJavaScript(source, filename) {
       const isHuman = (context && HUMAN_KEYS.has(context.toLowerCase())) || directVisibleLiteral(node, parent);
       const hasHtmlTag = node.quasis.some(quasi => /<\/?[A-Za-z]/.test(quasi.value.raw));
       if (hasHtmlTag) {
-        const tagState = { inTag: false, tagBuffer: "", skipTags: [] };
+        const tagState = { inTag: false, tagBuffer: "", skipTags: [], skipClassTags: [] };
         for (const quasi of node.quasis) {
           const original = quasi.value.cooked ?? quasi.value.raw;
           const translated = await translateHtmlTemplateFragment(original, tagState);
@@ -662,7 +676,8 @@ async function processHtml(file, original) {
 
   async function walk(node, inSkipped = false) {
     const tag = (node.tagName || "").toLowerCase();
-    const skipHere = inSkipped || SKIP_TAGS.has(tag);
+    const classes = (node.attrs || []).find(attr => attr.name.toLowerCase() === "class")?.value.toLowerCase().split(/\s+/) || [];
+    const skipHere = inSkipped || SKIP_TAGS.has(tag) || classes.some(name => SKIP_CLASSES.has(name));
     if (tag === "html" && node.sourceCodeLocation?.startTag) {
       // Use only the opening tag. The element's full location spans the entire
       // document, which would overlap every text replacement and could truncate a page.
