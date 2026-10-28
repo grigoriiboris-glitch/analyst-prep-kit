@@ -116,7 +116,7 @@ for (const feature of ["lessonNav", "progressBar", "resetProgress", "reviewCase"
   assert.ok(businessAnalysis.includes('id="' + feature + '"'), "Business-analysis feature missing: " + feature);
 }
 for (let i = 1; i <= 9; i++) assert.ok(businessAnalysis.includes('data-quiz="q' + i + '"'), "Business-analysis quiz missing: q" + i);
-for (const topic of ["BPMN", "User Story", "Use Case", "UAT", "AS-IS", "TO-BE"]) assert.ok(businessAnalysis.includes(topic), "Business-analysis topic missing: " + topic);
+for (const topic of ["BPMN", "пользовательской истории", "вариант использования", "UAT", "AS-IS", "TO-BE"]) assert.ok(businessAnalysis.includes(topic), "Business-analysis topic missing: " + topic);
 assert.ok(businessAnalysis.includes("apk-business-analysis-progress-v1") && businessAnalysis.includes("localStorage"), "Business-analysis progress storage is missing");
 assert.ok(fs.existsSync(path.join(root, "business-analysis/CHECKLIST_RU.md")), "Business-analysis checklist file missing");
 
