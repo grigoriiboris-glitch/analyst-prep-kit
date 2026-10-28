@@ -145,7 +145,7 @@
       '</div>' +
       '<div class="curriculum-lower">' +
         '<section class="curriculum-detail" id="curriculumDetail" aria-live="polite"></section>' +
-        '<section class="curriculum-list-wrap"><div class="curriculum-list-head"><h3>Все основные учебные здания</h3><span>15 объектов · динамическая отрисовка и анимация</span></div><div class="curriculum-course-list" id="curriculumCourseList"></div></section>' +
+        '<section class="curriculum-list-wrap"><div class="curriculum-list-head"><h3>Все основные учебные здания</h3><span>16 объектов · динамическая отрисовка и анимация</span></div><div class="curriculum-course-list" id="curriculumCourseList"></div></section>' +
       '</div>' +
       '<details class="curriculum-section"><summary>Дополнительные учебные модули, специализации и сертификаты <span>14 веток · необязательны для основного выпуска</span></summary><div class="curriculum-specializations" id="curriculumSpecializations"></div></details>' +
       '<div class="curriculum-library"><p><strong>📚 Полевая библиотека и сервисные точки.</strong> Справочники, Ресурсная экспедиция (внизу) и Торговый контракт помогают зарабатывать монеты 🪙 на возведение построенных в учёбе зданий.</p><a href="../guides/">Открыть все справочники →</a></div>' +
@@ -618,6 +618,8 @@
       }
       case 'sql':
         s = readJSON(STORE.sql) || {}; return Array.isArray(s.doneLessons) && s.doneLessons.map(String).indexOf(String(lesson.id)) !== -1;
+      case 'postgresql':
+        s = readJSON(STORE.postgresql) || {}; return Array.isArray(s.doneLessons) && s.doneLessons.map(String).indexOf(String(lesson.id)) !== -1;
       case 'excel':
         s = readJSON(STORE.excel) || {}; return Array.isArray(s.lessonsDone) && s.lessonsDone.map(String).indexOf(String(lesson.id)) !== -1;
       case 'python':
@@ -670,6 +672,7 @@
       case 'foundations': return 'foundations:lesson:' + lesson.id;
       case 'quality': return 'quality:category:' + lesson.id;
       case 'sql': return 'sql:lesson:' + lesson.id;
+      case 'postgresql': return 'postgresql:lesson:' + lesson.id;
       case 'excel': return 'excel:lesson:' + lesson.id;
       case 'python': return 'python:lesson:' + lesson.id;
       case 'powerbi': return 'powerbi:lesson:' + lesson.id;
