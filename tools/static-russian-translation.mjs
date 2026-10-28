@@ -120,6 +120,10 @@ const preserveWhitespace = (source, translated) => {
 function isTechnicalOnly(text) {
   const value = text.trim();
   if (!value) return true;
+  // Keyboard shortcuts are notation, not English interface copy. Treat even a
+  // partial shortcut such as "Shift+" as technical so a free translator is not
+  // queried for it (which also prevents avoidable HTTP 429 build failures).
+  if (/^(?:(?:shift|ctrl|control|alt|option|cmd|command|meta|super)\\s*\\+\\s*)+(?:[a-z0-9]|f(?:[1-9]|1[0-2]))?$/i.test(value)) return true;
   if (/^(?:&nbsp;|&amp;|&lt;|&gt;|&quot;|&apos;|&#(?:\\d+|x[0-9a-f]+);)+$/i.test(value.replace(/\\s+/g, ""))) return true;
   if (PRESERVED_TERMS_NORMALIZED.has(value.toLowerCase())) return true;
   if (/^(?:[A-Z][A-Z0-9_+#.-]*)(?:\s+[A-Z][A-Z0-9_+#.-]*)*$/.test(value)) return true;
