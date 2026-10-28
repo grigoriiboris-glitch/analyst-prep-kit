@@ -1,5 +1,7 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
 const {
   isHtmlAttributeFragment,
   containsHtmlMarkup,
@@ -54,4 +56,9 @@ test("identifies attribute fragments inside a JavaScript HTML concatenation", ()
   assert.equal(shouldPreserveHtmlAttributeFragment('" aria-label="', containsHtmlMarkup(htmlExpression)), true);
   assert.equal(shouldPreserveHtmlAttributeFragment("Показать карту", containsHtmlMarkup(htmlExpression)), false);
   assert.equal(shouldPreserveHtmlAttributeFragment('" height="', false), false);
+});
+
+test("the static Russian build keeps DataCraft canvas markup out of translation", () => {
+  const source = fs.readFileSync(path.join(__dirname, "../tools/static-russian-translation.mjs"), "utf8");
+  assert.ok(source.includes('"datacraft/curriculum-map.js"'), "The DataCraft map renderer must remain excluded from machine translation");
 });
