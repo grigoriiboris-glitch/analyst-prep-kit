@@ -115,6 +115,25 @@ code,.mono{font-family:var(--font-mono)}
   padding:5px 10px; border-radius:6px; white-space:nowrap;
   background:var(--accent-soft); color:var(--accent-d); border:1px solid var(--accent-soft-bd);
 }
+.premium-chip{
+  display:inline-flex; align-items:center; justify-content:center; gap:6px;
+  font-size:11px; font-weight:800; letter-spacing:.015em; text-transform:none;
+  padding:7px 12px; border-radius:999px; white-space:nowrap;
+  color:#654307; border:1px solid rgba(217,165,48,.72);
+  background:linear-gradient(135deg,#fff8d9 0%,#ffebb2 48%,#f5c95b 100%);
+  box-shadow:0 4px 14px rgba(184,130,25,.16),inset 0 1px 0 rgba(255,255,255,.9);
+}
+.premium-chip .lucide{
+  width:14px; height:14px; color:#8c5d08; stroke-width:2.2;
+  filter:drop-shadow(0 1px 0 rgba(255,255,255,.6));
+}
+@media (max-width:520px){
+  .topbar{gap:8px;padding:8px 10px}
+  .brand-text .sub{display:none}
+  .brand-text strong{font-size:12px}
+  .orient{gap:8px}
+  .premium-chip{gap:5px;padding:6px 8px;font-size:10px;letter-spacing:0}
+}
 .icon-btn{
   background:transparent; border:1px solid var(--line); color:var(--dim);
   cursor:pointer; padding:6px 10px; border-radius:8px; font-size:14px;
@@ -195,6 +214,17 @@ main{max-width:1080px; margin:0 auto; padding:28px 18px 0}
 }
 .welcome-card h1 span{color:var(--accent)}
 .welcome-sub{font-size:15.5px; color:var(--dim); line-height:1.65; max-width:560px}
+
+/* Prominent shortcut to the DataCraft interactive learning map */
+.lesson-plan-cta{display:flex;align-items:center;gap:12px;margin-top:14px;padding:13px 15px;border:1px solid var(--accent-soft-bd);border-radius:12px;background:var(--accent-soft);color:var(--ink);text-decoration:none;transition:transform .15s,border-color .15s,box-shadow .15s}
+.lesson-plan-cta:hover{transform:translateY(-1px);border-color:var(--accent);box-shadow:var(--shadow)}
+.lesson-plan-cta:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.lesson-plan-cta-icon{display:grid;place-items:center;width:42px;height:42px;flex:0 0 42px;border-radius:10px;background:var(--panel);font-size:22px}
+.lesson-plan-cta-copy{display:flex;flex:1;min-width:0;flex-direction:column;gap:2px}
+.lesson-plan-cta-copy strong{font-size:14px;font-weight:750;color:var(--accent-d)}
+.lesson-plan-cta-copy small{font-size:12px;line-height:1.45;color:var(--dim)}
+.lesson-plan-cta-arrow{font-size:23px;color:var(--accent);padding-left:4px}
+@media(max-width:420px){.lesson-plan-cta{padding:11px;gap:9px}.lesson-plan-cta-icon{width:36px;height:36px;flex-basis:36px}.lesson-plan-cta-copy strong{font-size:13px}.lesson-plan-cta-copy small{font-size:11px}}
 
 /* ── Generic card ── */
 .card{
@@ -345,7 +375,7 @@ footer a:hover{color:var(--accent-d)}
     </span>
   </div>
   <div class="orient">
-    <span class="phase-chip">Бесплатно для начала</span>
+    <span class="premium-chip" aria-label="Премиум-доступ"><i data-lucide="crown" aria-hidden="true"></i><span>Премиум-доступ</span></span>
     <span class="user-email" id="userEmail" style="display:none"></span>
     <button class="signin-btn" id="loginBtn" onclick="openAuthModal()" style="display:none">Войти</button>
     <button class="signin-btn ghost" id="logoutBtn" onclick="handleLogout()" style="display:none">Выйти</button>
@@ -364,6 +394,14 @@ footer a:hover{color:var(--accent-d)}
       <span class="search-ph">Поиск по любой теме — VLOOKUP, LEFT JOIN, п-значение…</span>
       <kbd>Ctrl K</kbd>
     </div>
+    <a class="lesson-plan-cta" href="datacraft/" aria-label="Перейти к плану уроков DataCraft">
+      <span class="lesson-plan-cta-icon" aria-hidden="true">🗺️</span>
+      <span class="lesson-plan-cta-copy">
+        <strong>Перейти к плану уроков</strong>
+        <small>Открыть интерактивную карту обучения DataCraft</small>
+      </span>
+      <span class="lesson-plan-cta-arrow" aria-hidden="true">→</span>
+    </a>
   </div>
 
   <!-- ── Teaching method — Say It Out Loud (beside the hero, in the leftover white space) ── -->
@@ -445,6 +483,13 @@ footer a:hover{color:var(--accent-d)}
           <span class="skill-body">
             <span class="skill-name">SQL</span>
             <span class="skill-meta" data-progress-slot>47 уроков</span>
+          </span>
+        </a>
+        <a class="skill-item" href="postgresql/" data-kit="postgresql">
+          <span class="skill-ic"><i data-lucide="database"></i></span>
+          <span class="skill-body">
+            <span class="skill-name">PostgreSQL</span>
+            <span class="skill-meta" data-progress-slot>30 уроков · практика в браузере</span>
           </span>
         </a>
         <a class="skill-item" href="python/" data-kit="python">
@@ -576,6 +621,13 @@ footer a:hover{color:var(--accent-d)}
           <span class="skill-body">
             <span class="skill-name">Все руководства</span>
             <span class="skill-meta">Все инструкции, одна страница</span>
+          </span>
+        </a>
+        <a class="skill-item" href="https://kariernik.ru/blog/git-dlya-analitika?ysclid=mvr13l2hja820219645" target="_blank" rel="noopener noreferrer">
+          <span class="skill-ic"><i data-lucide="git-branch"></i></span>
+          <span class="skill-body">
+            <span class="skill-name">Git для аналитика</span>
+            <span class="skill-meta">Статья о Git и контроле версий в работе аналитика ↗</span>
           </span>
         </a>
         <a class="skill-item" href="guides/sql-foundations/">
@@ -1015,6 +1067,7 @@ footer a:hover{color:var(--accent-d)}
 </footer>
 
 <script src="https://unpkg.com/lucide@latest"></script>
+<script src="assets/learning-order.js" defer></script>
 <script>
 // ── Theme ──
 let theme = localStorage.getItem('apk-theme') || 'light';
@@ -1054,6 +1107,8 @@ const KITS = [
       const ids = s.doneLessons||[]; const done = ids.length;
       // SQL has no explicit cursor — last = next unfinished
       return { done, doneIds:ids, last: done < 12 ? done + 1 : 12 }; } },
+  { id:'postgresql', name:'PostgreSQL', path:'postgresql/', unit:'уроков', total:30,
+    read: () => { const s = JSON.parse(localStorage.getItem('apk-postgresql-progress-v1')||'{}'); const ids=Array.isArray(s.doneLessons)?s.doneLessons:[]; return { done:new Set(ids.map(Number)).size, doneIds:ids, last:s.currentLessonId||'1' }; } },
   { id:'python',    name:"Комплект Python",                           path:'python/',    unit:'lessons', total:12,
     read: () => { const s = JSON.parse(localStorage.getItem('ppk')||'{}'); const ids=s.lessonsDone||[];
       return { done:ids.length, doneIds:ids, last:s.currentLesson||null }; } },
