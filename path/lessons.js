@@ -23,7 +23,7 @@ const LESSON_TEXT = [
     title: 'SELECT & FROM',
     sub: "Извлечение столбцов из таблицы",
     story: "You know the mental model: databases are tables, rows have a grain, keys connect tables, queries return tables. Now write your first actual question. SELECT names the columns you want; FROM names the table to get them from. That's the whole skeleton. Every query you'll ever write starts with these two words.",
-    intro: "Запрос SELECT похож на заказ в гастрономе: вы называете то, что хотите (столбцы), и из какого прилавка это получить (таблица). Каждый SQL-запрос начинается с <code>SELECT</code> выбирать столбцы и <code>FROM</code> назвать таблицу. Думайте об этом так: «Дай мне <em>эти столбцы</em> from <em>этот стол</em>».",
+    intro: "Запрос SELECT похож на заказ в гастрономе: вы называете то, что хотите (столбцы), и из какого прилавка это получить (таблица). Каждый SQL-запрос начинается с <code>SELECT</code> выбирать столбцы и <code>FROM</code> назвать таблицу. Думайте об этом так: «Дай мне <em>эти столбцы</em> от <em>этот стол</em>».",
     ral: {
       sql: 'SELECT name, email\nFROM customers;',
       say: "Дайте мне столбцы имени и электронной почты из таблицы клиентов.",
@@ -35,7 +35,7 @@ const LESSON_TEXT = [
         [';', "заканчивает заявление"]
       ]
     },
-    notes: "Use <code>ВЫБИРАТЬ *</code> захватить каждый столбец — удобно для исследования, но в реальных запросах столбцам следует указывать явное имя.",
+    notes: " Использовать <code>ВЫБИРАТЬ *</code> захватить каждый столбец — удобно для исследования, но в реальных запросах столбцам следует указывать явное имя.",
     viz: {
       columns: ['name', 'email'],
       rows: [['Maya Chen', 'maya@co.com'], ["Джордан Ли", 'jordan@co.com'], ["Сэм Ривера", 'sam@co.com'], ["Алекс Ким", 'alex@co.com']],
@@ -91,7 +91,7 @@ const LESSON_TEXT = [
     notes: 'COUNT(*) and COUNT(column) return different numbers when a column has NULLs. COUNT(*) counts every row; COUNT(revenue) skips rows where revenue is NULL. If your totals seem low, check for NULLs with SELECT COUNT(*) vs SELECT COUNT(revenue) — a difference tells you how many NULL rows there are.',
     viz: {
       columns: ['order_id', 'region', 'revenue', "COUNT(*) видит эту строку?", "COUNT(доход) видит это?"],
-      rows: [['1001', 'West', '150', "да ✓", "да ✓"], ['1002', 'NULL', '200', "да ✓", "да ✓"], ['1003', 'East', 'NULL', "да ✓", "нет — NULL пропущен"]],
+      rows: [['1001', "Запад", '150', "да ✓", "да ✓"], ['1002', 'NULL', '200', "да ✓", "да ✓"], ['1003', "Восток", 'NULL', "да ✓", "нет — NULL пропущен"]],
       caption: "COUNT(*) подсчитывает все 3 строки. COUNT(доход) учитывает только 2 (пропускает NULL). COUNT(регион) учитывает только 2 (пропускает NULL-строку 1002). Эти различия незаметно меняют ваши итоги, если вы их не ожидаете."
     },
     compare: "IS NULL — единственный правильный тест на пропущенные значения. Распространенной ошибкой является запись = NULL, но NULL означает «неизвестно», поэтому NULL = NULL оценивается как неизвестное (ложь), а не как истина. IS NULL обходит это.",

@@ -190,15 +190,15 @@ FROM employees e
 LEFT JOIN employees m ON m.emp_id = e.manager_id
 ORDER BY e.emp_id;</code></pre>
   <table>
-    <tr><th>employee</th><th>manager</th></tr>
-    <tr><td>Alvarez</td><td>NULL</td></tr>
-    <tr><td>Brennan</td><td>Alvarez</td></tr>
-    <tr><td>Cho</td><td>Alvarez</td></tr>
-    <tr><td>Diaz</td><td>Brennan</td></tr>
-    <tr><td>Ellis</td><td>Brennan</td></tr>
-    <tr><td>Fowler</td><td>Cho</td></tr>
-    <tr><td>Grant</td><td>NULL</td></tr>
-    <tr><td>Hale</td><td>Cho</td></tr>
+    <tr><th>сотрудник</th><th>менеджер</th></tr>
+    <tr><td>Альварес</td><td>NULL</td></tr>
+    <tr><td>Бреннан</td><td>Альварес</td></tr>
+    <tr><td>Давать</td><td>Альварес</td></tr>
+    <tr><td>Диас</td><td>Бреннан</td></tr>
+    <tr><td>Эллис</td><td>Бреннан</td></tr>
+    <tr><td>Фаулер</td><td>Давать</td></tr>
+    <tr><td>Грант</td><td>NULL</td></tr>
+    <tr><td>Хейл</td><td>Давать</td></tr>
   </table>
   <p>Прочитайте предложение соединения как предложение: копия менеджера  <code>emp_id</code>  равен копии сотрудника  <code>manager_id</code>. Неправильный вариант — это самая распространенная ошибка самосоединения, и она дает результат, который выглядит нормально, пока вы не заметите, что иерархия перевернута.</p>
 
@@ -219,12 +219,12 @@ SELECT COUNT(*) FROM employees e LEFT JOIN employees m ON m.emp_id = e.manager_i
 FROM employees a
 JOIN employees b ON b.dept = a.dept
 WHERE a.emp_id &lt; b.emp_id;</code></pre>
-  <p>The <code>WHERE</code>    линия выполняет две задачи, и обе они необходимы. Без него каждый человек сопоставляется сам с собой, и каждая подлинная пара появляется дважды в обоих порядках. С    <code>a.emp_id &lt; b.emp_id</code>, каждая пара возвращается ровно один раз и не содержит пар строк сама с собой.</p>
+  <p>тот <code>WHERE</code>    линия выполняет две задачи, и обе они необходимы. Без него каждый человек сопоставляется сам с собой, и каждая подлинная пара появляется дважды в обоих порядках. С    <code>a.emp_id &lt; b.emp_id</code>, каждая пара возвращается ровно один раз и не содержит пар строк сама с собой.</p>
   <p>В продаже есть Бреннан, Чо, Диас и Эллис, что дает 6 пар. В поддержке есть Фаулер, Грант и Хейл, что дает 3. У Исполнительный директор есть один человек, а он не дает ни одного. Девять строк, а арифметика — проверка: н человек в отделе производят н(n-1)/2 пар.</p>
 
   <h2>Еще три формы, которые стоит знать</h2>
   <table>
-    <tr><th>Question</th><th>Shape</th></tr>
+    <tr><th>Вопрос</th><th>Форма</th></tr>
     <tr><td>Кто зарабатывает больше своего менеджера</td><td>Присоединяйтесь сами, тогда  <code>WHERE e.salary &gt; m.salary</code></td></tr>
     <tr><td>Два уровня вверх</td><td>Присоединяйтесь к таблице три раза: сотрудник, менеджер, менеджер менеджера.</td></tr>
     <tr><td>Вся цепочка, любая глубина</td><td>Рекурсивный CTE,  <code>WITH RECURSIVE</code></td></tr>
@@ -238,7 +238,7 @@ WHERE a.emp_id &lt; b.emp_id;</code></pre>
     <li><strong>Условие соединения изменилось.</strong>  Никакой ошибки. Иерархия получается перевернутой.</li>
     <li><strong>Внутреннее объединение образует иерархию.</strong>  Никакой ошибки. Верхушка дерева исчезает.</li>
     <li><strong>Никакого неравенства в парном запросе.</strong>  Каждая пара дважды, плюс совпадения, поэтому считается двойной.</li>
-    <li><strong>Повсюду однобуквенные псевдонимы.</strong>  Законно и нечитабельно через шесть месяцев. Использовать  <code>emp</code> and <code>mgr</code>  скорее, чем  <code>a</code> and <code>b</code>  когда две копии означают разные вещи.</li>
+    <li><strong>Повсюду однобуквенные псевдонимы.</strong>  Законно и нечитабельно через шесть месяцев. Использовать  <code>emp</code>  и  <code>mgr</code>  скорее, чем  <code>a</code>  и  <code>b</code>  когда две копии означают разные вещи.</li>
   </ol>
 
   <h2>Как применить это в своей работе</h2>
@@ -271,9 +271,9 @@ WHERE a.emp_id &lt; b.emp_id;</code></pre>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> &middot; <a href="../sql-join-duplicate-rows/">почему объединение дублирует строки</a> &middot; <a href="../sql-anti-join/">анти-соединение</a> &middot; <a href="../sql-aliasing/">Aliasing</a> &middot; <a href="../sql-subqueries/">Subqueries</a> &middot; <a href="../../drill/">SQL-детализация</a> &middot; <a href="../../sql/">SQL-комплект</a>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> &middot; <a href="../sql-join-duplicate-rows/">почему объединение дублирует строки</a> &middot; <a href="../sql-anti-join/">анти-соединение</a> &middot; <a href="../sql-aliasing/">Псевдонимы</a> &middot; <a href="../sql-subqueries/">Подзапросы</a> &middot; <a href="../../drill/">SQL-детализация</a> &middot; <a href="../../sql/">SQL-комплект</a>
     <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Контакт</a> &middot; <a href="../../privacy.html">Конфиденциальность</a> &middot; <a href="../../terms.html">Условия</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

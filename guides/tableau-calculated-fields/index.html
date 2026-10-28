@@ -186,12 +186,12 @@ COUNTD([Customer])
 MIN([Order Date])</code></pre>
   <p>Здесь самое главное соотношение.  <code>SUM([Profit])/SUM([Sales])</code>  — это истинная маржа на каждом уровне агрегации, и она корректно пересчитывается при изменении содержимого представления.</p>
 
-  <div class="note"><strong>Сообщение об ошибке является диагнозом.</strong>  «Невозможно смешивать агрегированные и неагрегированные аргументы» означает, что половина формулы выполняется в каждой строке, а половина — в каждой отметке. Оберните половину уровня строки в  <code>SUM</code>, <code>MIN</code> or <code>ATTR</code>. <code>ATTR</code>  является честным для текста: он возвращает значение, если оно одинаковое для каждой строки метки, и звездочку, если это не так, что является информацией, а не предположением.</div>
+  <div class="note"><strong>Сообщение об ошибке является диагнозом.</strong>  «Невозможно смешивать агрегированные и неагрегированные аргументы» означает, что половина формулы выполняется в каждой строке, а половина — в каждой отметке. Оберните половину уровня строки в  <code>SUM</code>, <code>MIN</code>  или  <code>ATTR</code>. <code>ATTR</code>  является честным для текста: он возвращает значение, если оно одинаковое для каждой строки метки, и звездочку, если это не так, что является информацией, а не предположением.</div>
 
   <h2>3. Уровень детализации выражений</h2>
   <p>Вычисляется с указанной вами степенью дробности, в фигурных скобках, независимо от представления.</p>
   <table>
-    <tr><th>Keyword</th><th>Means</th><th>Типичное использование</th></tr>
+    <tr><th>Ключевое слово</th><th>Означает</th><th>Типичное использование</th></tr>
     <tr><td><code>FIXED</code></td><td>Это зерно, игнорируя взгляд</td><td>Общее количество клиентов показано на диаграмме регионов</td></tr>
     <tr><td><code>INCLUDE</code></td><td>Зернистость вида плюс эти размеры</td><td>Средняя сумма по каждому клиенту</td></tr>
     <tr><td><code>EXCLUDE</code></td><td>Зернистость вида минус эти размеры</td><td>Процент от общего числа, игнорирующий одно измерение</td></tr>
@@ -212,9 +212,9 @@ LOOKUP(SUM([Sales]), -1)</code></pre>
 
   <h2>Выбор между ними</h2>
   <table>
-    <tr><th>Ты хочешь</th><th>Kind</th><th>Example</th></tr>
+    <tr><th>Ты хочешь</th><th>добрый</th><th>Пример</th></tr>
     <tr><td>Флаг или полоса в каждом ряду</td><td>Уровень строки</td><td><code>IF [Days] &gt; 30 THEN "Late" ELSE "On time" END</code></td></tr>
-    <tr><td>Соотношение на любом уровне</td><td>Aggregate</td><td><code>SUM([Profit])/SUM([Sales])</code></td></tr>
+    <tr><td>Соотношение на любом уровне</td><td>совокупность</td><td><code>SUM([Profit])/SUM([Sales])</code></td></tr>
     <tr><td>Дата первого заказа каждого клиента</td><td>FIXED</td><td><code>{FIXED [Customer]: MIN([Order Date])}</code></td></tr>
     <tr><td>Рейтинг в представлении</td><td>Табличный расчет</td><td><code>RANK(SUM([Sales]))</code></td></tr>
     <tr><td>Отличие от прошлого месяца</td><td>Табличный расчет</td><td><code>ZN(SUM([Sales]) - LOOKUP(SUM([Sales]), -1))</code></td></tr>
@@ -224,16 +224,16 @@ LOOKUP(SUM([Sales]), -1)</code></pre>
   <h2>Привычки, которые делают вычисления удобными</h2>
   <ol>
     <li><strong>Назовите их по тому, что они означают,</strong>  не за то, что они делают.  <code>Margin</code>, нет  <code>Calc1</code>  и не  <code>SUM Profit over SUM Sales</code>.</li>
-    <li><strong>Оставьте комментарий вверху</strong> with <code>//</code>. Две строчки о том, на каком зерне он работает и почему следующему человеку экономится час.</li>
+    <li><strong>Оставьте комментарий вверху</strong> с <code>//</code>. Две строчки о том, на каком зерне он работает и почему следующему человеку экономится час.</li>
     <li><strong>Стройте поэтапно.</strong>  Три небольших вычисления с именами превосходят одно длинное вложенное, и каждое из них можно перенести на лист и проверить.</li>
     <li><strong>Сверяйте каждый расчет с известным вам числом,</strong>  на двух разных уровнях агрегации. Многие ошибки в расчетах верны на одном уровне и ошибочны на другом.</li>
-    <li><strong>Use <code>ZN</code>  вокруг всего, что может быть нулевым</strong>  в арифметической цепочке, или один пропущенный месяц незаметно опустошает текущий итог.</li>
+    <li><strong> Использовать  <code>ZN</code>  вокруг всего, что может быть нулевым</strong>  в арифметической цепочке, или один пропущенный месяц незаметно опустошает текущий итог.</li>
   </ol>
 
   <h2>Как применить это в своей работе</h2>
   <ol>
     <li>Откройте книгу, которую вы унаследовали, и отнесите каждое вычисляемое поле к одному из четырех типов.</li>
-    <li>Найдите любой  <code>AVG</code>  отношения на уровне строки и сравнить его с  <code>SUM</code> over <code>SUM</code>  версия. Обратите внимание на пробел.</li>
+    <li>Найдите любой  <code>AVG</code>  отношения на уровне строки и сравнить его с  <code>SUM</code>  над  <code>SUM</code>  версия. Обратите внимание на пробел.</li>
     <li>Проверяйте каждый  <code>FIXED</code>  против фильтров, которые должны на него повлиять.</li>
     <li>Добавьте комментарий в две строки к пяти наиболее часто используемым вычислениям.</li>
     <li>Проверьте одно вычисление на уровне строки и еще раз на уровне итога. Согласие в обоих случаях является проверкой.</li>
@@ -260,9 +260,9 @@ LOOKUP(SUM([Sales]), -1)</code></pre>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../tableau-table-calculations/">таблица расчетов</a> &middot; <a href="../tableau-filter-order-of-operations/">Порядок фильтра</a> &middot; <a href="../tableau-concepts/">Концепции таблиц</a> &middot; <a href="../tableau-relationships/">Relationships</a> &middot; <a href="../build-a-tableau-dashboard/">Создайте панель управления Tableau</a> &middot; <a href="../../tableau/">Табличный комплект</a>
+    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../tableau-table-calculations/">таблица расчетов</a> &middot; <a href="../tableau-filter-order-of-operations/">Порядок фильтра</a> &middot; <a href="../tableau-concepts/">Концепции таблиц</a> &middot; <a href="../tableau-relationships/">отношения</a> &middot; <a href="../build-a-tableau-dashboard/">Создайте панель управления Tableau</a> &middot; <a href="../../tableau/">Табличный комплект</a>
     <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Контакт</a> &middot; <a href="../../privacy.html">Конфиденциальность</a> &middot; <a href="../../terms.html">Условия</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

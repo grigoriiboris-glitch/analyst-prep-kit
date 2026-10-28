@@ -135,11 +135,11 @@
   <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../">Все руководства</a></p>
   <h1>Как найти повторяющиеся строки в SQL (и решить, что считать одной)</h1>
   <p class="meta">Сначала определите дубликат, затем GROUP BY найдет каждую копию · Написано для прослушивания · Часть  <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-07">7 августа 2026 г.</time></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">К <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-07">7 августа 2026 г.</time></p>
 
   <p>В конце этой страницы вы можете проверить любую таблицу на наличие повторяющихся строк, составить список всех копий и отметить, какую из них следует сохранить, и все это с помощью понятных вам запросов. Вы также будете знать шаг, который следует выполнить перед любым запросом: решить, что означает «дубликат» для этой таблицы, потому что две строки могут совпадать во всем или в одном столбце, и это разные проблемы с разными исправлениями. Это около двадцати минут.</p>
 
-  <p>Вот что на самом деле с этим делать. В следующей таблице, которую вы получите, запустите одно сравнение прежде всего:  <code>COUNT(*)</code> against <code>COUNT(DISTINCT key)</code>. Если эти два числа различаются, в таблице есть дубликаты, и теперь вы узнаете об этом еще до того, как это произойдет в первом отчете.</p>
+  <p>Вот что на самом деле с этим делать. В следующей таблице, которую вы получите, запустите одно сравнение прежде всего:  <code>COUNT(*)</code>  против  <code>COUNT(DISTINCT key)</code>. Если эти два числа различаются, в таблице есть дубликаты, и теперь вы узнаете об этом еще до того, как это произойдет в первом отчете.</p>
 
   <p>Краткая версия: группируйте по столбцам, которые определяют дубликат, сохраняйте группы там, где  <code>COUNT(*)</code>  больше единицы, и отметьте дополнительные функции значком  <code>ROW_NUMBER</code>  вместо того, чтобы удалять их.</p>
 
@@ -223,21 +223,21 @@
   <p>Вот таблица. Четырнадцать строк, и система регистрации дала сбой тремя разными способами.</p>
 
   <table>
-    <tr><th>customer_id</th><th>email</th><th>full_name</th><th>city</th><th>signup_date</th></tr>
-    <tr><td>101</td><td>ana@keller.com</td><td>Ана Келлер</td><td>Austin</td><td>2026-01-04</td></tr>
-    <tr><td>102</td><td>ben.ortiz@mail.com</td><td>Бен Ортис</td><td>Dallas</td><td>2026-01-09</td></tr>
-    <tr><td>103</td><td>cara.li@mail.com</td><td>Дорогая Ли</td><td>Austin</td><td>2026-01-15</td></tr>
-    <tr><td>104</td><td>dev.p@mail.com</td><td>Dev Patel</td><td>Houston</td><td>2026-01-20</td></tr>
-    <tr><td>105</td><td>ella.r@mail.com</td><td>Элла Рейес</td><td>Dallas</td><td>2026-02-02</td></tr>
-    <tr><td>106</td><td>finn.w@mail.com</td><td>Найти Уолша</td><td>Austin</td><td>2026-02-11</td></tr>
-    <tr><td>103</td><td>cara.li@mail.com</td><td>Дорогая Ли</td><td>Austin</td><td>2026-01-15</td></tr>
-    <tr><td>107</td><td>gus.m@mail.com</td><td>Гас Моран</td><td>Houston</td><td>2026-02-19</td></tr>
-    <tr><td>108</td><td>hana.s@mail.com</td><td>Хана Сато</td><td>Dallas</td><td>2026-02-25</td></tr>
+    <tr><th>customer_id</th><th>электронная почта</th><th>полное имя</th><th>Город</th><th>Дата_регистрации</th></tr>
+    <tr><td>101</td><td>ana@keller.com</td><td>Ана Келлер</td><td>Остин</td><td>2026-01-04</td></tr>
+    <tr><td>102</td><td>ben.ortiz@mail.com</td><td>Бен Ортис</td><td>Даллас</td><td>2026-01-09</td></tr>
+    <tr><td>103</td><td>cara.li@mail.com</td><td>Дорогая Ли</td><td>Остин</td><td>2026-01-15</td></tr>
+    <tr><td>104</td><td>dev.p@mail.com</td><td>Dev Patel</td><td>Хьюстон</td><td>2026-01-20</td></tr>
+    <tr><td>105</td><td>ella.r@mail.com</td><td>Элла Рейес</td><td>Даллас</td><td>2026-02-02</td></tr>
+    <tr><td>106</td><td>finn.w@mail.com</td><td>Найти Уолша</td><td>Остин</td><td>2026-02-11</td></tr>
+    <tr><td>103</td><td>cara.li@mail.com</td><td>Дорогая Ли</td><td>Остин</td><td>2026-01-15</td></tr>
+    <tr><td>107</td><td>gus.m@mail.com</td><td>Гас Моран</td><td>Хьюстон</td><td>2026-02-19</td></tr>
+    <tr><td>108</td><td>hana.s@mail.com</td><td>Хана Сато</td><td>Даллас</td><td>2026-02-25</td></tr>
     <tr><td>105</td><td>ella.r@mail.com</td><td>Элла Рейес</td><td>Форт-Уэрт</td><td>2026-03-01</td></tr>
-    <tr><td>109</td><td>ivan.k@mail.com</td><td>Иван Кова</td><td>Austin</td><td>2026-03-06</td></tr>
-    <tr><td>103</td><td>cara.li@mail.com</td><td>Дорогая Ли</td><td>Austin</td><td>2026-01-15</td></tr>
-    <tr><td>110</td><td>jo.b@mail.com</td><td>Да Брандт</td><td>Houston</td><td>2026-03-14</td></tr>
-    <tr><td>111</td><td>ben.ortiz@mail.com</td><td>Бенджамин Ортис</td><td>Dallas</td><td>2026-03-20</td></tr>
+    <tr><td>109</td><td>ivan.k@mail.com</td><td>Иван Кова</td><td>Остин</td><td>2026-03-06</td></tr>
+    <tr><td>103</td><td>cara.li@mail.com</td><td>Дорогая Ли</td><td>Остин</td><td>2026-01-15</td></tr>
+    <tr><td>110</td><td>jo.b@mail.com</td><td>Да Брандт</td><td>Хьюстон</td><td>2026-03-14</td></tr>
+    <tr><td>111</td><td>ben.ortiz@mail.com</td><td>Бенджамин Ортис</td><td>Даллас</td><td>2026-03-20</td></tr>
   </table>
 
   <div class="step">
@@ -268,7 +268,7 @@
 FROM customers;</code></pre>
 
     <table>
-      <tr><th>total_rows</th><th>distinct_ids</th></tr>
+      <tr><th>всего_строк</th><th>различные_иды</th></tr>
       <tr><td>14</td><td>11</td></tr>
     </table>
 
@@ -291,7 +291,7 @@ HAVING COUNT(*) > 1
 ORDER BY copies DESC;</code></pre>
 
     <table>
-      <tr><th>customer_id</th><th>copies</th></tr>
+      <tr><th>customer_id</th><th>копии</th></tr>
       <tr><td>103</td><td>3</td></tr>
       <tr><td>105</td><td>2</td></tr>
     </table>
@@ -307,8 +307,8 @@ GROUP BY customer_id, email, full_name, city, signup_date
 HAVING COUNT(*) > 1;</code></pre>
 
     <table>
-      <tr><th>customer_id</th><th>email</th><th>full_name</th><th>city</th><th>signup_date</th><th>copies</th></tr>
-      <tr><td>103</td><td>cara.li@mail.com</td><td>Дорогая Ли</td><td>Austin</td><td>2026-01-15</td><td>3</td></tr>
+      <tr><th>customer_id</th><th>электронная почта</th><th>полное имя</th><th>Город</th><th>Дата_регистрации</th><th>копии</th></tr>
+      <tr><td>103</td><td>cara.li@mail.com</td><td>Дорогая Ли</td><td>Остин</td><td>2026-01-15</td><td>3</td></tr>
     </table>
 
     <p>Обратите внимание, что изменилось. Клиент 105 исчез из этого результата, поскольку ее две строки различаются по городам, поэтому они никогда не попадают в одну и ту же корзину. Прежде чем читать дальше, скажите своими словами, почему эти два запроса расходятся по поводу 105. Если вы можете это объяснить, у вас есть весь метод:  <code>GROUP BY</code>    список — это ваше определение дубликата, записанное в виде кода.</p>
@@ -332,15 +332,15 @@ WHERE customer_id IN (
 ORDER BY customer_id, signup_date;</code></pre>
 
     <table>
-      <tr><th>customer_id</th><th>email</th><th>full_name</th><th>city</th><th>signup_date</th></tr>
-      <tr><td>103</td><td>cara.li@mail.com</td><td>Дорогая Ли</td><td>Austin</td><td>2026-01-15</td></tr>
-      <tr><td>103</td><td>cara.li@mail.com</td><td>Дорогая Ли</td><td>Austin</td><td>2026-01-15</td></tr>
-      <tr><td>103</td><td>cara.li@mail.com</td><td>Дорогая Ли</td><td>Austin</td><td>2026-01-15</td></tr>
-      <tr><td>105</td><td>ella.r@mail.com</td><td>Элла Рейес</td><td>Dallas</td><td>2026-02-02</td></tr>
+      <tr><th>customer_id</th><th>электронная почта</th><th>полное имя</th><th>Город</th><th>Дата_регистрации</th></tr>
+      <tr><td>103</td><td>cara.li@mail.com</td><td>Дорогая Ли</td><td>Остин</td><td>2026-01-15</td></tr>
+      <tr><td>103</td><td>cara.li@mail.com</td><td>Дорогая Ли</td><td>Остин</td><td>2026-01-15</td></tr>
+      <tr><td>103</td><td>cara.li@mail.com</td><td>Дорогая Ли</td><td>Остин</td><td>2026-01-15</td></tr>
+      <tr><td>105</td><td>ella.r@mail.com</td><td>Элла Рейес</td><td>Даллас</td><td>2026-02-02</td></tr>
       <tr><td>105</td><td>ella.r@mail.com</td><td>Элла Рейес</td><td>Форт-Уэрт</td><td>2026-03-01</td></tr>
     </table>
 
-    <p>Five rows, and now the two problems look as different as they are. Customer 103 is three identical rows: a loading accident, nothing to decide. Customer 105 is two versions of one person: Dallas in February, Fort Worth in March, and someone has to say which city is true. A join back to the same summary gives the identical result, and I ran both to confirm: the same five rows either way. Use whichever reads better to you; <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a>  охватывает форму присоединения.</p>
+    <p>Пять рядов, и теперь две проблемы выглядят совершенно разными. Клиент 103 — три одинаковые строки: авария при погрузке, нечего решать. Клиент 105 — это две версии одного человека: Даллас в феврале, Форт-Уэрт в марте, и кто-то должен сказать, какой город настоящий. Обратное соединение с той же сводкой дает идентичный результат, и я запустил оба варианта, чтобы убедиться: в любом случае одни и те же пять строк. Используйте то, что вам больше нравится;  <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a>  охватывает форму присоединения.</p>
   </div>
 
   <div class="step">
@@ -361,11 +361,11 @@ ORDER BY customer_id, copy_number;</code></pre>
     <p>Дублированные клиенты возвращаются под таким номером.</p>
 
     <table>
-      <tr><th>customer_id</th><th>city</th><th>signup_date</th><th>copy_number</th></tr>
-      <tr><td>103</td><td>Austin</td><td>2026-01-15</td><td>1</td></tr>
-      <tr><td>103</td><td>Austin</td><td>2026-01-15</td><td>2</td></tr>
-      <tr><td>103</td><td>Austin</td><td>2026-01-15</td><td>3</td></tr>
-      <tr><td>105</td><td>Dallas</td><td>2026-02-02</td><td>1</td></tr>
+      <tr><th>customer_id</th><th>Город</th><th>Дата_регистрации</th><th>номер_копии</th></tr>
+      <tr><td>103</td><td>Остин</td><td>2026-01-15</td><td>1</td></tr>
+      <tr><td>103</td><td>Остин</td><td>2026-01-15</td><td>2</td></tr>
+      <tr><td>103</td><td>Остин</td><td>2026-01-15</td><td>3</td></tr>
+      <tr><td>105</td><td>Даллас</td><td>2026-02-02</td><td>1</td></tr>
       <tr><td>105</td><td>Форт-Уэрт</td><td>2026-03-01</td><td>2</td></tr>
     </table>
 
@@ -391,7 +391,7 @@ WHERE rowid NOT IN (
     <p>Я запустил его на обработанной таблице, и последующие счетчики составили 11 строк и 11 различных идентификаторов: десятисекундный тест теперь пройден. Два ограждения, и они не являются обязательными.</p>
 
     <ul>
-      <li><strong>Сначала запустите его как SELECT.</strong> Change <code>DELETE FROM customers</code> to <code>SELECT * FROM customers</code>  с тем же самым  <code>WHERE</code>и прочитайте строки, которые умрут. На этой таблице показаны именно три статиста и ничего больше. Если выбор вас удивил, то удаление тоже произойдет, за исключением того, что удаление не позволяет вам смотреть дважды.</li>
+      <li><strong>Сначала запустите его как SELECT.</strong> Изменять <code>DELETE FROM customers</code> к <code>SELECT * FROM customers</code>  с тем же самым  <code>WHERE</code>и прочитайте строки, которые умрут. На этой таблице показаны именно три статиста и ничего больше. Если выбор вас удивил, то удаление тоже произойдет, за исключением того, что удаление не позволяет вам смотреть дважды.</li>
       <li><strong>Сохраните исходную таблицу.</strong>  Выполните удаление копии или сначала запишите удаленные строки в боковую таблицу. Обратите внимание, что этот шаблон удаления сохраняет произвольную самую раннюю загруженную строку, а не выбранную, поэтому в случае конфликтов с одинаковыми ключами, таких как клиент 105, он может молча сохранять устаревший город. Именно поэтому маркировка стояла на первом месте.</li>
     </ul>
   </div>
@@ -401,7 +401,7 @@ WHERE rowid NOT IN (
 
     <p>Та же таблица, тот же вопрос: у каких клиентов есть повторяющиеся строки, и какая копия должна стоять?</p>
 
-    <h3>Before</h3>
+    <h3>До</h3>
     <pre><code>SELECT customer_id, COUNT(*)
 FROM customers
 GROUP BY customer_id
@@ -409,7 +409,7 @@ HAVING COUNT(*) > 1;</code></pre>
 
     <p>Правильно, и недостаточно, чтобы действовать. Он называет номера 103 и 105, но не показывает ни одной из их строк, не указывает правила хранителя и не дает следующему человеку ничего для просмотра.</p>
 
-    <h3>After</h3>
+    <h3>после</h3>
     <pre><code>-- ============================================================
 -- STEP 2: Which customer rows are duplicates, and which stands?
 -- WHY: 14 rows but only 11 distinct customer_ids, so 3 rows
@@ -465,7 +465,7 @@ ORDER BY customer_id, copy_number;</code></pre>
   <p>Проверка каждой вашей таблицы на наличие дубликатов за один присест — это утомительно, и вы оставите ее за четвертым столом. Вместо этого сделайте это по порядку.</p>
 
   <ol>
-    <li><strong>Запустите десятисекундный тест на одной таблице, от которой больше всего зависит ваш текущий отчет.</strong> <code>COUNT(*)</code> against <code>COUNT(DISTINCT key)</code>. Если они совпадают, остановитесь. У вас есть ответ на сегодня.</li>
+    <li><strong>Запустите десятисекундный тест на одной таблице, от которой больше всего зависит ваш текущий отчет.</strong> <code>COUNT(*)</code>  против  <code>COUNT(DISTINCT key)</code>. Если они совпадают, остановитесь. У вас есть ответ на сегодня.</li>
     <li><strong>Если они различаются, запишите повторяющееся определение в одном предложении.</strong>  прежде чем прикасаться к клавиатуре. «Один и тот же идентификатор клиента» и «идентичная строка» приводят к разным запросам, и если вы выберете один из них вслух, вы не сможете их смешивать.</li>
     <li><strong>Перечислите правонарушителей с помощью GROUP BY и HAVING,</strong>  затем вытащите полные строки назад с помощью  <code>IN</code>. Прочтите их. Сами строки обычно сообщают вам, какая из трех проблем у вас возникла.</li>
     <li><strong>Отметьте хранителей ROW_NUMBER и письменным правилом.</strong>  Отфильтруйте отчеты по копии номер 1. Ничего не удаляйте на этой неделе.</li>
@@ -481,28 +481,28 @@ ORDER BY customer_id, copy_number;</code></pre>
   <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
 
   <table>
-    <tr><th>Concept</th><th>Что он делает</th></tr>
+    <tr><th> концепция</th><th>Что он делает</th></tr>
     <tr><td>Первый шаг</td><td>Решите, какие столбцы определяют «то же самое». Это решение выбирает запрос.</td></tr>
     <tr><td>Дубликат всей строки</td><td>Каждый столбец соответствует. Обычно это авария при погрузке. Безопасно удалить после маркировки.</td></tr>
     <tr><td>Дубликат с естественным ключом</td><td>Тот же реальный идентификатор, другие столбцы отличаются. Кто-то должен выбрать истинную версию.</td></tr>
     <tr><td>Тот же человек, разное написание</td><td>Точного совпадения не существует. Это разрешение сущностей, отдельный инструмент.</td></tr>
-    <tr><td>Десятисекундный тест</td><td><code>COUNT(*)</code> vs <code>COUNT(DISTINCT key)</code>. Любой пробел – это количество доп.</td></tr>
+    <tr><td>Десятисекундный тест</td><td><code>COUNT(*)</code> против <code>COUNT(DISTINCT key)</code>. Любой пробел – это количество доп.</td></tr>
     <tr><td>Список дубликатов</td><td><code>GROUP BY key HAVING COUNT(*) &gt; 1</code>. Список GROUP BY — это ваше определение.</td></tr>
     <tr><td>Посмотреть полные строки</td><td><code>WHERE key IN (the summary)</code>, или присоединитесь к нему снова. В любом случае одни и те же строки.</td></tr>
     <tr><td>Хранители отметок</td><td><code>ROW_NUMBER() OVER (PARTITION BY key ORDER BY rule)</code>. Копия 1 сохраняется, копия выше 1 является дополнительной.</td></tr>
     <tr><td>Зачем отмечать, а не удалять</td><td>Маркировка двусторонняя, и правило хранителя остается видимым. Удаление — ни то, ни другое.</td></tr>
-    <tr><td>Шаблон удаления</td><td>Keep <code>MIN(rowid)</code>  за ключ, остальные удалите. ВЫБЕРИТЕ его первым. Сохраните исходную таблицу.</td></tr>
+    <tr><td>Шаблон удаления</td><td>Держать <code>MIN(rowid)</code>  за ключ, остальные удалите. ВЫБЕРИТЕ его первым. Сохраните исходную таблицу.</td></tr>
     <tr><td>Дубликатов не найдено</td><td>Прежде чем объявить таблицу чистой, проверьте другое определение.</td></tr>
     <tr><td>В любом случае сообщите о двойном учете</td><td>Проверьте клавишу соединения с обеих сторон. Объединяет несколько строк, каждая из которых выглядит чистой по отдельности.</td></tr>
     <tr><td>НУЛЕВЫЕ ключи</td><td>Все значения NULL делят одну корзину. В этом подсчете отсутствуют данные, а не дубликаты.</td></tr>
     <tr><td>Во время миграции</td><td>Дубликаты являются свидетельством исходной системы. Зарегистрируйте их перед очисткой.</td></tr>
   </table>
 
-  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Если вы больше ничего не берете с этой страницы, запустите  <code>COUNT(*)</code> against <code>COUNT(DISTINCT key)</code>  на каждой таблице, прежде чем доверять числу из нее. Десять секунд, и именно в этом разница между поиском дубликатов и тем, чтобы их нашел ваш заинтересованный человек. Если поиск дубликатов дает сбой, который не описан на этой странице, существует общая  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>.</div>
+  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Если вы больше ничего не берете с этой страницы, запустите  <code>COUNT(*)</code>  против  <code>COUNT(DISTINCT key)</code>  на каждой таблице, прежде чем доверять числу из нее. Десять секунд, и именно в этом разница между поиском дубликатов и тем, чтобы их нашел ваш заинтересованный человек. Если поиск дубликатов дает сбой, который не описан на этой странице, существует общая  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>.</div>
 
   <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Моим любимым дубликатом, когда-либо найденным, был клиент, который существовал дважды, потому что оба офиса клялись, что зарегистрировали ее первым. Какова самая странная причина появления дубликата в ваших данных, и нашел ли его запрос или это сделал человек?</p>
 
-  <h2>References</h2>
+  <h2>Ссылки</h2>
   <ul class="refs">
     <li>Кодд, EF (1970). Реляционная модель данных для крупных общих банков данных.  <em>Коммуникации ACM</em>, 13(6), 377–387.</li>
     <li>Бисра К., Лю К., Несбит Дж. К., Салими Ф. и Винн П. Х. (2018). Побуждение к самообъяснению: метаанализ.  <em>Обзор педагогической психологии</em>, 30(3), 703–725.</li>
@@ -517,16 +517,16 @@ ORDER BY customer_id, copy_number;</code></pre>
 
   <div class="cta">
     <strong>Потренируйтесь на реальных таблицах перед собой.</strong>
-    <p style="margin:6px 0 0">The <a href="../../sql/">SQL-комплект</a>  запускает SQLite в браузере, поэтому вы можете заполнять дубликаты, выслеживать их и наблюдать за изменением количества по ходу работы. Рядом с ним лежат рабочие примеры, карточки и пробный экзамен. Ничего устанавливать, учетная запись не требуется.</p>
+    <p style="margin:6px 0 0">тот <a href="../../sql/">SQL-комплект</a>  запускает SQLite в браузере, поэтому вы можете заполнять дубликаты, выслеживать их и наблюдать за изменением количества по ходу работы. Рядом с ним лежат рабочие примеры, карточки и пробный экзамен. Ничего устанавливать, учетная запись не требуется.</p>
     <a class="btn" href="../../sql/">Откройте набор SQL →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../sql-null/">NULL в SQL</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-window-functions/">Оконные функции</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-count-function/">СЧЕТ в SQL</a> · <a href="../sql-month-over-month/">Месяц за месяцем в SQL</a> · <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../migration-profiling/">Профилирование миграции</a> · <a href="../sql-foundations/">Основы SQL</a> · <a href="../sql-ctes/">SQL CTE</a> · <a href="../sql-case-expression/">Выражение CASE</a> · <a href="../sql-aliasing/">SQL-псевдонимы</a> · <a href="../sql-teaching-comments/">Комментарий SQL, чтобы он научился</a> · <a href="../../drill/">SQL-детализация</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../data-migration-stages/">Этапы миграции данных</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../../projects/">Портфельные проекты</a>
+    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../sql-null/">NULL в SQL</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-window-functions/">Оконные функции</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-count-function/">СЧЕТ в SQL</a> · <a href="../sql-month-over-month/">Месяц за месяцем в SQL</a> · <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../migration-profiling/">Профилирование миграции</a> · <a href="../sql-foundations/">Основы SQL</a> · <a href="../sql-ctes/">SQL CTE</a> · <a href="../sql-case-expression/">Выражение CASE</a> · <a href="../sql-aliasing/">SQL-псевдонимы</a> · <a href="../sql-teaching-comments/">Комментарий SQL, чтобы он научился</a> · <a href="../../drill/">SQL-детализация</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../sql-and-python/">SQL + Питон</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../data-migration-stages/">Этапы миграции данных</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../../projects/">Портфельные проекты</a>
     <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Контакт</a> · <a href="../../privacy.html">Конфиденциальность</a> · <a href="../../terms.html">Условия</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

@@ -72,7 +72,7 @@
   <textarea id="sql" spellcheck="false" autocapitalize="off" autocomplete="off"
             autocorrect="off" placeholder=""></textarea>
   <div class="row">
-    <button class="go" id="run">Run</button>
+    <button class="go" id="run">Бегать</button>
   </div>
   <div id="out"></div>
 </main>
@@ -147,7 +147,7 @@ function table(res){
   return '<table><tr>' + columns.map(c => '<th>'+c+'</th>').join('') + '</tr>' +
     values.slice(0,25).map(r => '<tr>' + r.map(v =>
       '<td>' + (v === null ? '<span class="dim">NULL</span>' : v) + '</td>').join('') + '</tr>').join('') +
-    '</table>' + (values.length > 25 ? '<div class="dim">' + values.length + ' rows</div>' : '');
+    '</table>' + (values.length > 25 ? '<div class="dim">' + values.length + "Строки</div>" : '');
 }
 
 let item = null;
@@ -161,7 +161,7 @@ function commit(){
   const latency = performance.now() - t0;
 
   if(mine.err){
-    $('out').innerHTML = '<span class="no">Error</span>\n' + mine.err;
+    $('out').innerHTML = "<span class=\"no\">ошибка</span>\n" + mine.err;
     return;                                   // an error is not a commit, it is a retry
   }
 
@@ -175,10 +175,10 @@ function commit(){
     "<div class=\"why\"><p>Тот, который работает:</p><pre class=\"ref\">" +
     item.sql.replace(/[<>]/g, c => c === '<' ? '&lt;' : '&gt;') + '</pre>' +
     "<p style=\"margin-top:10px\">Не могли бы вы сказать, что не так, в одном предложении, не перечитывая?</p>" +
-    '<div class="row"><button data-rec="1">Yes</button><button data-rec="0">No</button></div></div>';
+    "<div class=\"row\"><button data-rec=\"1\">Да</button><button data-rec=\"0\">Нет</button></div></div>";
 
   $('out').innerHTML =
-    (right ? '<span class="ok">Right</span>' : "<span class=\"no\">Не то</span>") +
+    (right ? "<span class=\"ok\">верно</span>" : "<span class=\"no\">Не то</span>") +
     why + '\n' + table(mine.rows);
 
   if(!right){
@@ -200,7 +200,7 @@ function commit(){
 function offerNext(){
   $('run').disabled = true;
   const b = document.createElement('button');
-  b.className = 'go'; b.textContent = 'Next';
+  b.className = 'go'; b.textContent = "Далее";
   b.onclick = () => { $('run').disabled = false; b.remove(); item = nextRep(); $('sql').focus({preventScroll:true}); };
   $('run').after(b);
   b.focus({preventScroll:true});
@@ -260,10 +260,10 @@ function dump(){
   document.querySelector('main').innerHTML =
     "<p>Пробег записан. Скопируйте это в трекер.</p>" +
     '<textarea id="dump" spellcheck="false"></textarea>' +
-    '<div class="row"><button class="go" id="cp">Copy</button>' +
+    "<div class=\"row\"><button class=\"go\" id=\"cp\">Копировать</button>" +
     "<button id=\"wipe\">Очистить запуск этого устройства</button></div>";
   $('dump').value = JSON.stringify(rec, null, 2);
-  $('cp').onclick = () => { $('dump').select(); document.execCommand('copy'); $('cp').textContent = 'Copied'; };
+  $('cp').onclick = () => { $('dump').select(); document.execCommand('copy'); $('cp').textContent = "Скопировано"; };
   $('wipe').onclick = () => { store.clear(); location.href = location.pathname; };
 }
 

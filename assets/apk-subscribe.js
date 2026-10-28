@@ -42,20 +42,20 @@
 
   var css = document.createElement('style');
   css.textContent =
-    '.apk-sub{background:var(--card,#fff);border:1px solid var(--line,var(--border,#e0d9d2));' +
-    'border-left:4px solid var(--accent,#C5511F);border-radius:12px;padding:16px 20px;' +
+    ".apk-sub{background:var(--card,#fff);border:1px Solid var(--line,var(--border,#e0d9d2));" +
+    "border-left:4px Solid var(--accent,#C5511F);border-radius:12px;padding:16px 20px;" +
     "поле: 26 пикселей 0; размер шрифта: 15 пикселей; семейство шрифтов: наследовать; высота строки: 1,6}" +
     ".apk-sub Strong{display:block;margin-bottom:6px}" +
     '.apk-sub p{margin:6px 0 0}' +
     '.apk-sub form{margin:12px 0 0;display:flex;flex-wrap:wrap;gap:8px}' +
     '.apk-sub input[type=email]{flex:1 1 220px;min-width:0;padding:9px 11px;font:inherit;' +
-    'font-size:14px;color:inherit;background:var(--bg,transparent);' +
-    'border:1px solid var(--line,var(--border,#e0d9d2));border-radius:8px}' +
+    "размер шрифта: 14 пикселей; цвет: наследовать; фон: var (--bg, прозрачный);" +
+    "граница: 1 пиксель сплошной var(--line,var(--border,#e0d9d2));border-radius:8px}" +
     '.apk-sub button{padding:9px 16px;font:inherit;font-size:14px;font-weight:600;' +
-    'cursor:pointer;color:#fff;background:var(--accent,#C5511F);border:0;border-radius:8px}' +
+    "курсор: указатель; цвет: #fff; фон: var (--accent, # C5511F); граница: 0; граница-радиус: 8 пикселей}" +
     "Кнопка .апк суб: отключено {непрозрачность: .55; курсор: по умолчанию}" +
     '.apk-sub .apk-sub-consent{flex:1 1 100%;display:flex;gap:8px;align-items:flex-start;' +
-    'font-size:13px;color:var(--muted,#888)}' +
+    "размер шрифта: 13 пикселей; цвет: var (--muted, # 888)}" +
     '.apk-sub .apk-sub-consent input{margin-top:3px;flex:0 0 auto}' +
     '.apk-sub a.apk-sub-link{display:inline-block;margin-top:10px;font-weight:600;' +
     "цвет:наш(--акцент,#C5511F)}" +
@@ -86,7 +86,7 @@
       '<form novalidate>' +
       "<тип ввода=\"электронная почта\" имя=\"" + FIELD + "\" требуется автозаполнение=\"электронная почта\" " +
       "Заполнитель=\"ты@example.com\" ария-метка=\"Адрес электронной почты\">" +
-      '<button type="submit">Subscribe</button>' +
+      "<button type=\"submit\">Подписаться</button>" +
       // Unticked, explicit, its own sentence. Consent for progress sync is
       // not consent for this (handoff §2).
       '<label class="apk-sub-consent"><input type="checkbox" required>' +
@@ -139,7 +139,7 @@
         })
         .catch(function () {
           btn.disabled = false;
-          btn.textContent = 'Subscribe';
+          btn.textContent = "Подписаться";
           err.textContent = "Это не прошло. Повторите попытку через минуту.";
           err.hidden = false;
         });

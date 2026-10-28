@@ -455,7 +455,7 @@ ont-weight:600;
   <section id="s-type" hidden>
    <div id="t-work">
     <div class="drillbar">
-      <span class="rung" id="rung">Loading</span>
+      <span class="rung" id="rung">Загрузка</span>
       <p class="adds" id="adds">Запуск механизма SQL.</p>
     </div>
 
@@ -465,7 +465,7 @@ ont-weight:600;
       <div class="pane">
         <div class="panehead">
           <h2 id="qhead">Введите этот запрос</h2>
-          <button class="copy" id="copy-q">Copy</button>
+          <button class="copy" id="copy-q">Копировать</button>
           <span class="note" id="covernote" hidden>Скрыто · промах открывает больше</span>
         </div>
         <p class="question" id="question"></p>
@@ -489,7 +489,7 @@ ont-weight:600;
                   autocorrect="off" placeholder="Введите запрос здесь."></textarea>
         <div class="runbar">
           <p class="predict"><b>Прежде чем запустить его:</b> <span id="pretext"></span></p>
-          <button class="go" id="run">Run</button>
+          <button class="go" id="run">Бегать</button>
           <!-- Not "pass", because it does not pass. It comes back this round or the next
                one, and saying so up front is fairer than letting someone use it as an exit. -->
           <button id="skip" hidden>Вернись к этому</button>
@@ -552,7 +552,7 @@ ont-weight:600;
       <p class="sub" id="score-line"></p>
       <div class="scores">
         <div class="scorebox"><span>Этот пробег</span><b id="s-this">0</b></div>
-        <div class="scorebox"><span>Best</span><b id="s-best">0</b></div>
+        <div class="scorebox"><span>Лучший</span><b id="s-best">0</b></div>
         <div class="scorebox"><span>Последний запуск</span><b id="s-last">0</b></div>
       </div>
       <table class="ba" id="score-table"></table>
@@ -581,7 +581,7 @@ ont-weight:600;
     </header>
     <div class="body" id="win-body"></div>
     <footer>
-      <button class="go" id="win-go">Continue</button>
+      <button class="go" id="win-go">Продолжить</button>
       <button class="dismiss" id="win-stay">Оставайтесь на этом экране</button>
       <!-- Only on the orientation popup. Shown once, and the learner decides whether it is
            ever shown again. -->
@@ -784,7 +784,7 @@ function paintStepper(){
     const pos = ORDER.indexOf(s.key);
     const state = pos < at ? 'done' : (pos === at ? 'now' : 'todo');
     return `<div class="step" data-state="${state}">
-      <span class="n">Step ${n + 1}</span>
+      <span class="n">Шаг${n + 1}</span>
       <span class="t">${s.t}</span>
       <span class="s">${s.s}</span>
     </div>`;
@@ -885,7 +885,7 @@ function renderDrill(){
   const last = !rec && i === LAP.drills.length - 1;
   if(rec){ misses = 0; revealed = 0; }
 
-  $('rung').textContent = 'Query ' + ((rec ? p : i) + 1) + ' of ' + LAP.drills.length;
+  $('rung').textContent = "Запрос" + ((rec ? p : i) + 1) + " из " + LAP.drills.length;
   $('adds').textContent = d.adds;
   $('question').innerHTML = "<span>Вопрос</span>" + esc(d.q);
   // Read off the reference result, never written down, so it cannot disagree with the check.
@@ -973,7 +973,7 @@ function renderSchema(){
   $('schema').innerHTML = tables.map(t => `
     <div class="tbl">
       <div class="thead"><span class="tname">${esc(t.name)}</span>
-        <span class="tmeta">${t.rows.toLocaleString()} rows${GRAIN[t.name] ? ' &middot; ' + GRAIN[t.name] : ''}</span></div>
+        <span class="tmeta">${t.rows.toLocaleString()}Строки${GRAIN[t.name] ? ' &middot; ' + GRAIN[t.name] : ''}</span></div>
       <div class="cols">${t.cols.map(c => `
         <button type="button" class="col" data-insert="${esc(c.name)}">
           <span class="cname">${esc(c.name)}</span>
@@ -1048,7 +1048,7 @@ function run(){
     const aliases = (LAP.drills[at()].sql.match(/\bAS\s+(\w+)/gi) || [])
       .map(s => s.replace(/\bAS\s+/i, ''));
     if(missing && aliases.some(a => a.toLowerCase() === missing.toLowerCase())){
-      guess = '<code>' + esc(missing) + "</code> это имя, которое должен указать запрос <em>create</em>, " +
+      guess = '<code>' + esc(missing) + "</code> это имя, которое должен указать запрос <em>Создавать</em>, " +
         "не столбец, сидящий в таблице. <code>AS</code> это то, что называет столбец результатов: " +
         "<code>СЧИТАТЬ(*) КАК " + esc(missing) + '</code>.';
     } else if(/no such column/i.test(msg)){
@@ -1057,7 +1057,7 @@ function run(){
         "<code>ГДЕ жанр = «кантри»</code> ищет слово. Стол в порядке. " +
         "Если в вашем запросе уже есть кавычки, проверьте имя столбца на панели таблицы.";
     } else if(/no such table/i.test(msg)){
-      guess = "Здесь только две таблицы <code>gem_page</code> and <code>artist_era</code>. Проверьте орфографию.";
+      guess = "Здесь только две таблицы <code>gem_page</code> и <code>artist_era</code>. Проверьте орфографию.";
     } else if(/syntax error/i.test(msg)){
       guess = "Слово или часть пунктуации пропущены." + (inRecall() ? ''
         : " Считайте свой запрос по эталонному запросу по одной строке за раз.");
@@ -1162,8 +1162,8 @@ $('sql').addEventListener('keydown', e => {
 });
 $('copy-q').onclick = () => {
   try { navigator.clipboard.writeText($('query').textContent); } catch(e){}
-  $('copy-q').textContent = 'Copied';
-  setTimeout(() => { $('copy-q').textContent = 'Copy'; }, 1400);
+  $('copy-q').textContent = "Скопировано";
+  setTimeout(() => { $('copy-q').textContent = "Копировать"; }, 1400);
 };
 
 // ── step 3: recall, the blank-editor pass ───────────────────────────────────
@@ -1235,7 +1235,7 @@ function paintPile(){
   // against anyone: how many are answered, and how many of those took no help at all.
   const clean = LAP.drills.filter((d, n) => cleared.has(n) && !(helpUsed[n] > 0)).length;
   $('pile').innerHTML =
-    '<span class="tally ok"><b>' + cleared.size + '</b> of ' + total + ' answered</span>' +
+    '<span class="tally ok"><b>' + cleared.size + "</b> из " + total + " ответил</span>" +
     (clean ? '<span class="tally ok"><b>' + clean + "</b> без помощи</span>" : '');
 }
 
@@ -1441,7 +1441,7 @@ function paintDone(){
 
   // Query by query, so the number has something behind it.
   $('score-table').innerHTML =
-    "<tr><th>Query</th><th>Помощь вам нужна</th><th>Points</th></tr>" +
+    "<tr><th>Запрос</th><th>Помощь вам нужна</th><th>очки</th></tr>" +
     LAP.drills.map((d, D) => {
       const help = cleared.has(D) ? (helpUsed[D] || 0) : null;
       const words = help === null ? "Записано не по памяти"

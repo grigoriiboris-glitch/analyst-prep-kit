@@ -167,7 +167,7 @@
   <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../">Все руководства</a></p>
   <h1>COMMENT ON TABLE</h1>
   <p class="meta">Как хранить описание в базе данных, где его сможет найти следующий аналитик · Часть  <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-11">11 августа 2026 г.</time></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">К <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-11">11 августа 2026 г.</time></p>
 
   <p>В SQL есть две совершенно разные вещи, называемые комментариями, и при поиске одной из них вы получаете страницы, посвященные другой.</p>
   <p>Большинство людей имеют в виду  <code>--</code>, что останавливает выполнение строки вашего запроса. Если вы пришли именно за этим, это описано в  <a href="../sql-comments/">Как комментировать в SQL</a>.</p>
@@ -209,7 +209,7 @@ COMMENT ON COLUMN orders.status IS 'Values: new, paid, shipped, refunded. Set by
   <p>Вы должны владеть объектом, чтобы комментировать его, и это стоит знать, прежде чем вы напишете тридцать таких писем и обнаружите, что половина из них отклонена.</p>
 
   <h2>MySQL</h2>
-  <p>MySQL не имеет  <code>COMMENT ON</code>  заявление. Комментарий — это предложение, прикрепленное к таблице или столбцу, и оно находится внутри  <code>CREATE TABLE</code> or <code>ALTER TABLE</code>.</p>
+  <p>MySQL не имеет  <code>COMMENT ON</code>  заявление. Комментарий — это предложение, прикрепленное к таблице или столбцу, и оно находится внутри  <code>CREATE TABLE</code>  или  <code>ALTER TABLE</code>.</p>
   <pre><code>CREATE TABLE orders (
   id      INT PRIMARY KEY COMMENT 'Order line ID, not order ID',
   status  VARCHAR(20)     COMMENT 'new, paid, shipped, refunded'
@@ -237,11 +237,11 @@ COMMENT ON COLUMN orders.status IS 'Values: new, paid, shipped, refunded. Set by
   <h2>Читаю комментарии назад</h2>
   <p>Написать их – это полдела. Возможность вытащить их все делает их полезными.</p>
   <table>
-    <tr><th>Database</th><th>Как читать комментарии</th></tr>
-    <tr><td>PostgreSQL</td><td><code>\d+ tablename</code>  в psql или  <code>obj_description()</code> and <code>col_description()</code>  функции в запросе</td></tr>
-    <tr><td>Oracle</td><td>Query <code>USER_TAB_COMMENTS</code> and <code>USER_COL_COMMENTS</code></td></tr>
-    <tr><td>MySQL</td><td><code>SHOW CREATE TABLE</code>, <code>SHOW FULL COLUMNS</code>, или  <code>information_schema.TABLES.TABLE_COMMENT</code> and <code>information_schema.COLUMNS.COLUMN_COMMENT</code></td></tr>
-    <tr><td>SQL-сервер</td><td><code>fn_listextendedproperty</code>или  <code>sys.extended_properties</code> view</td></tr>
+    <tr><th>база данных</th><th>Как читать комментарии</th></tr>
+    <tr><td>PostgreSQL</td><td><code>\d+ tablename</code>  в psql или  <code>obj_description()</code>  и  <code>col_description()</code>  функции в запросе</td></tr>
+    <tr><td>Оракул</td><td>Запрос <code>USER_TAB_COMMENTS</code>  и  <code>USER_COL_COMMENTS</code></td></tr>
+    <tr><td>MySQL</td><td><code>SHOW CREATE TABLE</code>, <code>SHOW FULL COLUMNS</code>, или  <code>information_schema.TABLES.TABLE_COMMENT</code>  и  <code>information_schema.COLUMNS.COLUMN_COMMENT</code></td></tr>
+    <tr><td>SQL-сервер</td><td><code>fn_listextendedproperty</code>или  <code>sys.extended_properties</code> Вид</td></tr>
     <tr><td>SQLite</td><td>Не поддерживается. Читать  <code>sqlite_master.sql</code>  и надеюсь, что кто-нибудь оставил записку</td></tr>
   </table>
   <p>Маршруты MySQL и PostgreSQL полезны, поскольку это обычные запросы. Это означает, что вы можете объединить их со списком столбцов и создать словарь данных для всей схемы за один раз, что очень полезно иметь в портфолио проекта.</p>
@@ -260,11 +260,11 @@ COMMENT ON COLUMN orders.status IS 'Values: new, paid, shipped, refunded. Set by
 
   <h2>Шпаргалка</h2>
   <table>
-    <tr><th>Database</th><th>Добавить описание таблицы</th><th>Удалить это</th></tr>
+    <tr><th>база данных</th><th>Добавить описание таблицы</th><th>Удалить это</th></tr>
     <tr><td>PostgreSQL</td><td><code>COMMENT ON TABLE t IS 'text';</code></td><td><code>COMMENT ON TABLE t IS NULL;</code></td></tr>
-    <tr><td>Oracle</td><td><code>COMMENT ON TABLE t IS 'text';</code></td><td><code>COMMENT ON TABLE t IS '';</code></td></tr>
+    <tr><td>Оракул</td><td><code>COMMENT ON TABLE t IS 'text';</code></td><td><code>COMMENT ON TABLE t IS '';</code></td></tr>
     <tr><td>MySQL</td><td><code>ALTER TABLE t COMMENT = 'text';</code></td><td><code>ALTER TABLE t COMMENT = '';</code></td></tr>
-    <tr><td>SQL-сервер</td><td><code>sp_addextendedproperty</code> with <code>MS_Description</code></td><td><code>sp_dropextendedproperty</code></td></tr>
+    <tr><td>SQL-сервер</td><td><code>sp_addextendedproperty</code> с <code>MS_Description</code></td><td><code>sp_dropextendedproperty</code></td></tr>
     <tr><td>SQLite</td><td>Не поддерживается</td><td>Непригодный</td></tr>
   </table>
 
@@ -283,7 +283,7 @@ COMMENT ON COLUMN orders.status IS 'Values: new, paid, shipped, refunded. Set by
 
   <div class="cta">
     <strong>Пишите запросы, а не просто читайте их.</strong>
-    <p style="margin:6px 0 0">The <a href="../../sql/">SQL-комплект</a>  охватывает SELECT, WHERE, JOIN и GROUP BY с отработанными примерами, практикой и пробным экзаменом, и все это в браузере. Если у вас еще нет базы данных для практики, начните с  <a href="../set-up-a-sql-database/">установка за пятнадцать минут</a>.</p>
+    <p style="margin:6px 0 0">тот <a href="../../sql/">SQL-комплект</a>  охватывает SELECT, WHERE, JOIN и GROUP BY с отработанными примерами, практикой и пробным экзаменом, и все это в браузере. Если у вас еще нет базы данных для практики, начните с  <a href="../set-up-a-sql-database/">установка за пятнадцать минут</a>.</p>
     <a class="btn" href="../../sql/">Откройте набор SQL →</a>
     <p style="margin:10px 0 0;font-size:15px">Или введите их самостоятельно по одному:  <a href="../../drill/">открыть SQL-детализация</a>, тринадцать запросов, каждый из которых добавляет что-то одно к последнему.</p>
   </div>
@@ -293,7 +293,7 @@ COMMENT ON COLUMN orders.status IS 'Values: new, paid, shipped, refunded. Set by
     <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql-comments/">Как комментировать в SQL</a> · <a href="../sql-comment-syntax-by-database/">Синтаксис комментариев по базе данных</a> · <a href="../sql-teaching-comments/">Комментирование SQL для обучения</a> · <a href="../sql-foundations/">Основы SQL</a> · <a href="../sql-null/">NULL в SQL</a> · <a href="../documenting-data-limitations/">Документирование ограничений данных</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../which-sql-database-to-install/">какую базу данных установить</a> · <a href="../../drill/">SQL-детализация</a> · <a href="../../sql/">SQL-комплект</a>
     <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Контакт</a> · <a href="../../privacy.html">Конфиденциальность</a> · <a href="../../terms.html">Условия</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

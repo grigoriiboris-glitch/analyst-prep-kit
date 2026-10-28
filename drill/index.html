@@ -371,7 +371,7 @@ ont-size:13.5px;color:var(--muted)}
 <body>
 
 <div class="shell">
-  <p class="crumb"><a href="../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql/">SQL-комплект</a> &middot; <a href="../guides/">Guides</a></p>
+  <p class="crumb"><a href="../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql/">SQL-комплект</a> &middot; <a href="../guides/">Путеводители</a></p>
   <h1>SQL-детализация</h1>
   <p class="lead" id="lead">Приступайте прямо к делу и учитесь, записывая запросы. Каждое упражнение представляет собой только что введенный вами запрос плюс одно новое значение. Ничего не оценивается, ответ все время на экране, и единственная задача — напечатать его.</p>
   <p class="desktop-note"><strong>Сделано для десктопа.</strong>  Запросы становятся длинными, и на этой странице отображается каждая их строка, а не сжимается до размера телефона. Клавиатура делает это намного лучше.</p>
@@ -386,15 +386,15 @@ ont-size:13.5px;color:var(--muted)}
     <button type="button" class="mins" data-mins="15" aria-pressed="false">15 мин.</button>
     <button type="button" class="mins" data-mins="20" aria-pressed="false">20 мин.</button>
     <span id="clock" role="timer" aria-live="off" hidden></span>
-    <button type="button" id="stoptimer" hidden>Stop</button>
+    <button type="button" id="stoptimer" hidden>Останавливаться</button>
   </div>
 
   <div class="drillbar">
-    <span class="rung" id="rung">Loading</span>
+    <span class="rung" id="rung">Загрузка</span>
     <p class="adds" id="adds">Запуск механизма SQL.</p>
     <span class="tbls" id="tables"></span>
     <span class="navbtns">
-      <button id="prev">Back</button>
+      <button id="prev">Назад</button>
       <button id="next">Следующее упражнение</button>
       <button id="restart" hidden>Начать заново с упражнения 1</button>
     </span>
@@ -418,7 +418,7 @@ ont-size:13.5px;color:var(--muted)}
     <div class="pane">
       <div class="panehead">
         <h2 id="queryhead">Введите этот запрос</h2>
-        <button class="copy" id="copybtn" data-copy="query">Copy</button>
+        <button class="copy" id="copybtn" data-copy="query">Копировать</button>
       </div>
       <div class="recall" id="recall" hidden>
         <p id="recall-text">Отталкивайтесь от вопроса выше. Запрос будет здесь в тот момент, когда вы этого захотите, и нажатие на него ничего не будет стоить вам.</p>
@@ -437,15 +437,15 @@ ont-size:13.5px;color:var(--muted)}
       <div class="runbar">
         <p class="predict" id="predict" aria-live="polite"></p>
         <span class="keyhint" id="keyhint"></span>
-        <button class="go" id="run">Run</button>
+        <button class="go" id="run">Бегать</button>
       </div>
     </div>
   </div>
 
   <div class="output">
     <div class="tabs" role="tablist" aria-label="Output">
-      <button class="tab" id="tab-results" role="tab" aria-selected="true" aria-controls="panel-results">Results</button>
-      <button class="tab" id="tab-database" role="tab" aria-selected="false" aria-controls="panel-database">Database</button>
+      <button class="tab" id="tab-results" role="tab" aria-selected="true" aria-controls="panel-results">Результаты</button>
+      <button class="tab" id="tab-database" role="tab" aria-selected="false" aria-controls="panel-database">база данных</button>
     </div>
 
     <div class="tabpanel" id="panel-results" role="tabpanel" aria-labelledby="tab-results">
@@ -508,7 +508,7 @@ let db = null, i = 0;
 // ?v is bumped whenever a ladder's files change, so a cached ladder can never run
 // against a fresh page.
 const LADDERS = {
-  'music-country': { title: 'General',
+  'music-country': { title: "Общий",
                      files: ['data.js?v=2', 'drills.js?v=3'] },
   'joins':         { title: "ПРИСОЕДИНЯЙТЕСЬ, миграция данных",
                      files: ['ladders/migration-joins-data.js?v=1',
@@ -613,7 +613,7 @@ function renderAsk(){
 
 function render(){
   const d = LADDER.drills[i];
-  $('rung').textContent = 'Drill ' + (i + 1) + ' of ' + LADDER.drills.length;
+  $('rung').textContent = "сверлить" + (i + 1) + " из " + LADDER.drills.length;
   revealed = ALWAYS_SHOW;
   const used = tablesInDrill(d.sql);
   $('tables').innerHTML = used.length
@@ -791,7 +791,7 @@ function renderSchema(){
   $('schema').innerHTML = SCHEMA_INFO.map(t => `
     <details class="tbl" open>
       <summary><span class="tname">${esc(t.name)}</span>
-        <span class="tmeta">${t.rows.toLocaleString()} rows${GRAIN[t.name] ? ' &middot; ' + GRAIN[t.name] : ''}</span></summary>
+        <span class="tmeta">${t.rows.toLocaleString()}Строки${GRAIN[t.name] ? ' &middot; ' + GRAIN[t.name] : ''}</span></summary>
       <div class="cols">${t.cols.map(c => `
         <button type="button" class="col" data-insert="${esc(c.name)}">
           <span class="cname">${esc(c.name)}</span>
@@ -1004,7 +1004,7 @@ document.querySelectorAll('.copy').forEach(b => {
   const was = b.textContent;
   b.onclick = () => {
     try { navigator.clipboard.writeText($('query').textContent); } catch(e){}
-    b.textContent = 'Copied';
+    b.textContent = "Скопировано";
     setTimeout(() => { b.textContent = was; }, 1400);
   };
 });
@@ -1089,7 +1089,7 @@ document.addEventListener('keydown', e => {
 // The picker is drawn from the registry, not written out by hand, so adding a ladder is
 // one entry in LADDERS and nothing else.
 function renderLadders(){
-  $('ladders').innerHTML = '<span class="lab">Track</span>' +
+  $('ladders').innerHTML = "<span class=\"lab\">отслеживать</span>" +
     Object.keys(LADDERS).map(k =>
       '<a href="?ladder=' + k + '"' + (k === SLUG ? ' aria-current="true"' : '') + '>' +
       esc(LADDERS[k].title) + '</a>').join('');
@@ -1168,7 +1168,7 @@ Promise.all(LADDERS[SLUG].files.map(loadScript))
     const bar = document.createElement('a');
     bar.href = '../plan/';
     bar.textContent = "← Вернуться к вашему плану";
-    bar.setAttribute('aria-label', "Вернуться к вашему плану");
+    bar.setAttribute("aria-метка", "Вернуться к вашему плану");
     bar.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);bottom:16px;' +
       'z-index:1200;background:var(--accent,#0E7490);color:#fff;text-decoration:none;' +
       "шрифт: 600 14 пикселей/1 системный интерфейс, без засечек; отступ: 12 пикселей 18 пикселей; радиус границы: 999 пикселей;" +
@@ -1209,10 +1209,10 @@ Promise.all(LADDERS[SLUG].files.map(loadScript))
         '<div style="background:#fff;border-radius:14px;max-width:430px;padding:24px;' +
           "шрифт: 15 пикселей/1,55 системный интерфейс, без засечек; цвет: # 09090B; коробка-тень: 0 20 пикселей 60 пикселей РГБА (9,9,11,.35)\">" +
         "<p style=\"font:700 19px/1.3 system-ui,sans-serif;margin:0 0 8px\">Остановитесь здесь. Это были ваши сегодняшние упражнения.</p>" +
-        '<p style="margin:0 0 6px;color:#52525B">' + n + ' drill' + (n===1?'':'s') + " сделано, именно то, что " +
+        '<p style="margin:0 0 6px;color:#52525B">' + n + "сверлить" + (n===1?'':'s') + " сделано, именно то, что " +
           "план просил. Эта страница сохранит ваше место, и завтрашний шаг начнется прямо здесь.</p>" +
         '<p style="margin:0 0 16px;font:600 14px/1.5 system-ui,sans-serif;color:#15803D">' +
-          n + ' drill' + (n===1?'':'s') + ' in ' + mins + ' minute' + (mins===1?'':'s') + '.</p>' +
+          n + "сверлить" + (n===1?'':'s') + " в " + mins + "минута" + (mins===1?'':'s') + '.</p>' +
         '<div style="display:flex;gap:10px;flex-wrap:wrap">' +
         '<a href="' + href + '" style="display:inline-block;background:#15803D;color:#fff;' +
           "текст-декорация: нет; шрифт: 600 15 пикселей/1 системный интерфейс, без засечек; отступ: 13 пикселей 18 пикселей;" +
@@ -1225,7 +1225,7 @@ Promise.all(LADDERS[SLUG].files.map(loadScript))
       const card = ov.firstElementChild;
       card.setAttribute('role','dialog');
       card.setAttribute('aria-modal','true');
-      card.setAttribute('aria-label',"Шаг плана завершен");
+      card.setAttribute("aria-метка","Шаг плана завершен");
       ov.querySelector('button').onclick = function(){ ov.remove(); };
       ov.addEventListener('keydown', function(ev){
         if(ev.key === 'Escape'){ ov.remove(); return; }

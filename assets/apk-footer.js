@@ -17,7 +17,7 @@
   var css = document.createElement('style');
   css.textContent =
     '.apk-eco-footer{text-align:center;padding:30px 18px;margin-top:44px;' +
-    'border-top:1px solid var(--border,var(--bord,var(--line,#e0d9d2)));color:var(--muted,var(--dim,var(--txt2,#6B7280)));' +
+    "border-top:1px Solid var(--border,var(--board,var(--line,#e0d9d2)));color:var(--muted,var(--dim,var(--txt2,#6B7280)));" +
     "размер шрифта: 13 пикселей; семейство шрифтов: наследовать; высота строки: 1,6}" +
     '.apk-eco-footer a{color:var(--muted,var(--dim,var(--txt2,#6B7280)));text-decoration:none;transition:color .15s}' +
     '.apk-eco-footer a:hover{color:var(--accent,#C5511F)}' +
@@ -215,26 +215,26 @@
   var bcss = document.createElement('style');
   bcss.textContent =
     '.apk-book{max-width:760px;margin:44px auto 0;padding:18px 22px;' +
-    'border:1px solid var(--border,var(--bord,var(--line,#e0d9d2)));border-left:4px solid var(--accent,#C5511F);' +
+    "border:1px Solid var(--border,var(--board,var(--line,#e0d9d2)));border-left:4px Solid var(--accent,#C5511F);" +
     "граница-радиус: 12 пикселей; семейство шрифтов: наследовать; размер шрифта: 15 пикселей; высота строки: 1,6; выравнивание текста: по левому краю;" +
     "дисплей: сетка; сетка-шаблон-столбцы: 1фр.; разрыв: 16 пикселей}" +
     ".apk-book-body Strong{display:block;margin-bottom:8px}" +
     '.apk-book-body p{margin:0;color:var(--muted,var(--dim,var(--txt2,#6B7280)));font-size:14px}' +
     '.apk-book a{display:inline-block;margin-top:12px;font-weight:600;' +
-    'color:var(--accent,#C5511F);text-decoration:none}' +
+    "цвет:var(--accent,#C5511F);текстовое оформление:нет}" +
     '.apk-book a:hover{text-decoration:underline}' +
     /* The page. A folded top-right corner, a page number, and a hairline rule
        under the code, so it reads as paper rather than as a callout box. */
-    '.apk-book-pg{position:relative;padding:13px 14px 22px;border:1px solid var(--border,var(--bord,var(--line,#e0d9d2)));' +
+    ".apk-book-pg{position:relative;padding:13px 14px 22px;border:1px Solid var(--border,var(--bord,var(--line,#e0d9d2)));" +
     'border-radius:3px;background:var(--surf,var(--panel,var(--surface,#fff)));overflow:hidden}' +
     '.apk-book-pg:after{content:"";position:absolute;top:0;right:0;border-width:0 15px 15px 0;' +
-    'border-style:solid;border-color:transparent var(--bg,#f5f0e9) transparent transparent}' +
-    '.apk-book-pg code{display:block;font-family:var(--mono,ui-monospace,SFMono-Regular,Menlo,monospace);' +
-    'font-size:11.5px;line-height:1.55;color:var(--text,var(--txt,var(--ink,#222)));white-space:pre-wrap;word-break:break-word}' +
-    '.apk-book-pg .sy{display:block;margin-top:9px;padding-top:8px;border-top:1px solid var(--border,var(--bord,var(--line,#e0d9d2)));' +
-    'font-size:12px;line-height:1.5;color:var(--muted,var(--dim,var(--txt2,#6B7280)));font-style:italic}' +
+    "border-style:solid;border-color:transparent var(--bg,#f5f0e9) прозрачный прозрачный}" +
+    ".apk-book-pg code {display:block;font-family:var(--mono,ui-monospace,SFMono-Regular,Menlo,monospace);" +
+    "размер шрифта: 11,5 пикселей; высота строки: 1,55; цвет: var (--text,var(--txt,var(--ink,#222)));пробел:pre-wrap;word-break:break-word}" +
+    ".apk-book-pg .sy{display:block;margin-top:9px;padding-top:8px;border-top:1px Solid var(--border,var(--bord,var(--line,#e0d9d2)));" +
+    "размер шрифта: 12 пикселей; высота строки: 1,5; цвет: var (--muted, var (--dim, var (--txt2, # 6B7280))); стиль шрифта: курсив}" +
     ".apk-book-pg .пн{позиция:абсолютный;нижний:5пикселей;верно:10пикселей;размер шрифта:10пикселей;интервал между буквами:.05Эм;" +
-    'color:var(--muted,var(--dim,var(--txt2,#6B7280)));opacity:.7}' +
+    "цвет:var(--muted,var(--dim,var(--txt2,#6B7280)));непрозрачность:.7}" +
     '@media(min-width:660px){.apk-book.has-pg{grid-template-columns:minmax(0,1fr) 250px;align-items:start}' +
     '.apk-book.has-pg .apk-book-pg{order:2}}';
   document.head.appendChild(bcss);
@@ -250,7 +250,7 @@
           '<span class="pn">' + esc(pg.p) + '</span></div>' : '') +
     '<div class="apk-book-body">' +
     '<strong>' + book.hook + '</strong>' +
-    '<p><em>' + book.title + '</em> is ' + book.pages + " страницы, " + book.what + '.</p>' +
+    '<p><em>' + book.title + "</em>является" + book.pages + " страницы, " + book.what + '.</p>' +
     '<a class="apk-book-link" href="https://michaelnocito.gumroad.com/l/' + book.slug +
     '?utm_source=analyst-prep-kit&utm_medium=kit-hub&utm_campaign=' + book.slug + '" ' +
     'target="_blank" rel="noopener">' + book.title + ', ' + book.price + " →</a>" +

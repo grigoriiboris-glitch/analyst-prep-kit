@@ -217,19 +217,19 @@ INSERT INTO customers VALUES
             ELSE 'active'
        END AS segment
 FROM customers;</code></pre>
-  <p>Хейл возвращается как  <strong>new</strong>. Не потому, что Хейл более новый, чем VIP, а потому, что новая линия находится выше VIP-линии. Вот и весь механизм, и все остальное на этой странице вытекает из него.</p>
+  <p>Хейл возвращается как  <strong>Новый</strong>. Не потому, что Хейл более новый, чем VIP, а потому, что новая линия находится выше VIP-линии. Вот и весь механизм, и все остальное на этой странице вытекает из него.</p>
   <p>Два условия, оба из которых могут быть истинными для одной строки, называются перекрытием. Два условия, которые не могут быть названы взаимоисключающими. Группы, построенные из одного столбца, например, менее 500, 500 или более, являются взаимоисключающими, и их порядок на самом деле не имеет значения. Правила, построенные на основе разных столбцов, почти всегда перекрываются.</p>
 
   <h2>Переместите одну строку, и количество VIP увеличится вдвое.</h2>
   <p>Во-первых: если VIP-правило переместится наверх, сколько из десяти клиентов поменяют сегмент?</p>
   <p>Двое из них, Альварес и Хейл, и этого достаточно, чтобы изменить каждое число, которое читает заинтересованная сторона. Здесь учтены оба заказа, одни и те же данные, те же три правила.</p>
   <table>
-    <tr><th>Segment</th><th>Сначала новое правило</th><th>VIP-правило прежде всего</th></tr>
-    <tr><td>new</td><td>4</td><td>2</td></tr>
-    <tr><td>vip</td><td>2</td><td>4</td></tr>
+    <tr><th>Сегмент</th><th>Сначала новое правило</th><th>VIP-правило прежде всего</th></tr>
+    <tr><td>Новый</td><td>4</td><td>2</td></tr>
+    <tr><td>VIP</td><td>2</td><td>4</td></tr>
     <tr><td>в опасности</td><td>3</td><td>3</td></tr>
-    <tr><td>active</td><td>1</td><td>1</td></tr>
-    <tr><td><strong>Total</strong></td><td><strong>10</strong></td><td><strong>10</strong></td></tr>
+    <tr><td>активный</td><td>1</td><td>1</td></tr>
+    <tr><td><strong>Общий</strong></td><td><strong>10</strong></td><td><strong>10</strong></td></tr>
   </table>
   <p>Оба раза общая сумма равна 10, и именно поэтому это выдерживает проверку. Ничего не пропало, ничего не дублируется, и сумма согласуется. Проверка сверки вообще не может выявить эту проблему, поскольку оба ответа внутренне непротиворечивы. Только раскол сдвинулся.</p>
   <p>Прежде чем читать дальше, произнесите это вслух: если количество VIP удвоилось, а общее количество не изменилось, откуда взялись два дополнительных VIP? Они пришли из нового сегмента и всегда были и тем, и другим.</p>
@@ -244,17 +244,17 @@ FROM customers;</code></pre>
        CASE WHEN julianday('2026-08-23') - julianday(last_order) &gt; 90 THEN 1 ELSE 0 END AS is_at_risk
 FROM customers;</code></pre>
   <table>
-    <tr><th>name</th><th><code>is_new</code></th><th><code>is_vip</code></th><th><code>is_at_risk</code></th></tr>
-    <tr><td>Alvarez</td><td>1</td><td>1</td><td>0</td></tr>
-    <tr><td>Brennan</td><td>0</td><td>1</td><td>0</td></tr>
-    <tr><td>Cho</td><td>1</td><td>0</td><td>0</td></tr>
-    <tr><td>Diaz</td><td>0</td><td>0</td><td>1</td></tr>
-    <tr><td>Ellis</td><td>0</td><td>1</td><td>1</td></tr>
-    <tr><td>Fowler</td><td>1</td><td>0</td><td>0</td></tr>
-    <tr><td>Grant</td><td>0</td><td>0</td><td>1</td></tr>
-    <tr><td>Hale</td><td>1</td><td>1</td><td>0</td></tr>
-    <tr><td>Iyer</td><td>0</td><td>0</td><td>0</td></tr>
-    <tr><td>Jansen</td><td>0</td><td>0</td><td>1</td></tr>
+    <tr><th>имя</th><th><code>is_new</code></th><th><code>is_vip</code></th><th><code>is_at_risk</code></th></tr>
+    <tr><td>Альварес</td><td>1</td><td>1</td><td>0</td></tr>
+    <tr><td>Бреннан</td><td>0</td><td>1</td><td>0</td></tr>
+    <tr><td>Давать</td><td>1</td><td>0</td><td>0</td></tr>
+    <tr><td>Диас</td><td>0</td><td>0</td><td>1</td></tr>
+    <tr><td>Эллис</td><td>0</td><td>1</td><td>1</td></tr>
+    <tr><td>Фаулер</td><td>1</td><td>0</td><td>0</td></tr>
+    <tr><td>Грант</td><td>0</td><td>0</td><td>1</td></tr>
+    <tr><td>Хейл</td><td>1</td><td>1</td><td>0</td></tr>
+    <tr><td>Айер</td><td>0</td><td>0</td><td>0</td></tr>
+    <tr><td>Янсен</td><td>0</td><td>0</td><td>1</td></tr>
   </table>
   <p>В трёх рядах по две единицы: Альварес, Эллис и Хейл. Это те три строки, которые должен был выбрать помеченный запрос, и теперь вы можете видеть их, а не гадать. Эллис, заядлый транжира, находится на расстоянии одной строки SQL:  <code>WHERE is_vip = 1 AND is_at_risk = 1</code>.</p>
   <p>Флаги тоже честно складываются. Четыре клиента по правилу являются VIP-персонами, какой бы порядок вы ни использовали. На этикетке было указано 2 в одной версии и 4 в другой, потому что метка — это рейтинг ваших правил, а не показатель количества ваших клиентов.</p>
@@ -289,8 +289,8 @@ ORDER BY rows_labelled;</code></pre>
 
   <h2>Пограничные случаи, которые стоит знать</h2>
   <p><strong><code>NULL</code>  никогда ничему не соответствует, поэтому он попадает в  <code>ELSE</code>.</strong>  У Янсена не зарегистрировано никаких расходов. В примере с группой  <code>NULL &gt;= 100</code>  не является ни истинным, ни ложным, поэтому Янсен проваливается до  <code>small</code>, что читается как «тратит очень мало» и на самом деле означает «мы не знаем». Дайте неизвестным свою ветку:  <code>WHEN spend IS NULL THEN 'unknown'</code>, во-первых, перед чем-либо, что проверяет столбец. Подробнее об этом поведении см.  <a href="../sql-null/">NULL в SQL</a>.</p>
-  <p><strong>No <code>ELSE</code> means <code>NULL</code>, молча.</strong> A <code>CASE</code>  условия, для которых закончились условия, возвращаются  <code>NULL</code>  для этого ряда, а не поднимать что-либо. Затем  <code>GROUP BY</code>  дает вам пустой сегмент в отчете. Всегда пишите  <code>ELSE</code>, даже если вы считаете, что он недоступен, и поместите в него что-нибудь читабельное, например  <code>'unclassified'</code>.</p>
-  <p><strong><code>BETWEEN</code>  полосы перекрываются по шву.</strong> <code>BETWEEN 0 AND 10</code> and <code>BETWEEN 10 AND 20</code>  оба содержат 10. В  <code>CASE</code>  это не двойной счет, а просто спокойно передает 10 первой группе. Напишите группы с одним инклюзивным концом, например  <code>&lt; 10</code> then <code>&lt; 20</code>, и шов перестает быть решением.</p>
+  <p><strong>Нет <code>ELSE</code> Означает <code>NULL</code>, молча.</strong> A <code>CASE</code>  условия, для которых закончились условия, возвращаются  <code>NULL</code>  для этого ряда, а не поднимать что-либо. Затем  <code>GROUP BY</code>  дает вам пустой сегмент в отчете. Всегда пишите  <code>ELSE</code>, даже если вы считаете, что он недоступен, и поместите в него что-нибудь читабельное, например  <code>'unclassified'</code>.</p>
+  <p><strong><code>BETWEEN</code>  полосы перекрываются по шву.</strong> <code>BETWEEN 0 AND 10</code>  и  <code>BETWEEN 10 AND 20</code>  оба содержат 10. В  <code>CASE</code>  это не двойной счет, а просто спокойно передает 10 первой группе. Напишите группы с одним инклюзивным концом, например  <code>&lt; 10</code>  затем  <code>&lt; 20</code>, и шов перестает быть решением.</p>
   <p><strong>Обрезки, существующие в SQL, должны быть изменены в SQL.</strong>  Если в следующем квартале порог VIP достигнет 1200, каждый запрос, содержащий это число, необходимо будет найти. Если более двух или трех запросов используют один и тот же набор правил, поместите полосы в небольшую таблицу и вместо этого присоединитесь к ней.</p>
   <p><strong>Правило первого совпадения является стандартным, а не особенностью движка.</strong>    PostgreSQL, MySQL, SQL-сервер, SQLite и Оракул оценивают    <code>WHEN</code>  предложения по порядку и остановитесь на первом верном. Переписываю то же самое  <code>CASE</code>  на другом двигателе то, что он делает, не изменится.</p>
 
@@ -312,11 +312,11 @@ ORDER BY rows_labelled;</code></pre>
 
   <h2>Шпаргалка</h2>
   <table>
-    <tr><th>Situation</th><th>Что делает SQL</th><th>Что вы делаете</th></tr>
+    <tr><th>Ситуация</th><th>Что делает SQL</th><th>Что вы делаете</th></tr>
     <tr><td>Два условия оба верны</td><td>Берет первое, молча</td><td>Заказать  <code>WHEN</code>  линии специально и прокомментируйте, почему</td></tr>
     <tr><td>Ветка возвращает ноль строк</td><td>Работает чисто, этикетка никогда не появляется</td><td>Подсчитайте строки на этикетку; проверьте более раннее более рыхлое состояние</td></tr>
-    <tr><td>Столбец  <code>NULL</code></td><td>Ни одно условие не соответствует, попадает в  <code>ELSE</code></td><td>Put <code>WHEN col IS NULL</code>  во-первых, со своим собственным лейблом</td></tr>
-    <tr><td>No <code>ELSE</code> written</td><td>Returns <code>NULL</code>  для несовпадающих строк</td><td>Всегда пишите  <code>ELSE 'unclassified'</code></td></tr>
+    <tr><td>Столбец  <code>NULL</code></td><td>Ни одно условие не соответствует, попадает в  <code>ELSE</code></td><td>Помещать  <code>WHEN col IS NULL</code>  во-первых, со своим собственным лейблом</td></tr>
+    <tr><td>Нет <code>ELSE</code>  написано</td><td> возвращает  <code>NULL</code>  для несовпадающих строк</td><td>Всегда пишите  <code>ELSE 'unclassified'</code></td></tr>
     <tr><td>Вам нужны оба факта</td><td>Метка может содержать только один</td><td>Один столбец флагов для каждого правила, 1 или 0.</td></tr>
     <tr><td>Полосы из одной колонки</td><td>Действительно взаимоисключающие</td><td>Порядок не имеет значения; все равно пиши их в одном направлении</td></tr>
   </table>
@@ -345,7 +345,7 @@ ORDER BY rows_labelled;</code></pre>
   <footer>
     <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql-case-expression/">SQL CASE WHEN</a> · <a href="../sql-segment-with-case/">Сегмент с CASE</a> · <a href="../sql-null/">NULL в SQL</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-rank-vs-dense-rank-vs-row-number/">RANK, DENSE_RANK и ROW_NUMBER</a> · <a href="../sql-teaching-comments/">Комментирование SQL для обучения</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../../drill/">SQL-детализация</a> · <a href="../../sql/">SQL-комплект</a>
     <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Контакт</a> · <a href="../../privacy.html">Конфиденциальность</a> · <a href="../../terms.html">Условия</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

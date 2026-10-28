@@ -135,7 +135,7 @@
   <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../">Все руководства</a></p>
   <h1>NULL в SQL: Почему = NULL ничего не находит и что писать вместо этого</h1>
   <p class="meta">NULL означает «неизвестно», а «неизвестное» прерывает все вопросы, требующие ответа «да» или «нет» · Написано для прослушивания · Часть  <a href="../../">Analyst Prep Kit</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-07">7 августа 2026 г.</time></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">К <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-07">7 августа 2026 г.</time></p>
 
   <p>К концу этой страницы вы сможете предсказать, что сделает любой запрос, если он встретит пропущенное значение. Это навык, который отделяет «мой запрос ничего не дал, и я не знаю почему» от двухсекундного исправления. Вы будете знать, почему  <code>= NULL</code>  соответствует нулю строк, почему один NULL может очистить всю  <code>NOT IN</code>и как значения NULL незаметно перемещают средние значения, подсчеты, группы и порядок сортировки. Это около двадцати минут.</p>
 
@@ -212,22 +212,22 @@
     </ol>
   </div>
 
-  <div class="note"><strong>Проработанный пример реальный.</strong>  Каждое число на этой странице взято из 10-строчной таблицы заявок на поддержку, в которой намеренно засеяны NULL-значения, и каждый запрос выполнялся к нему в SQLite, прежде чем его выходные данные были вставлены сюда. Таблица достаточно маленькая, чтобы ее можно было проверить на глаз. Если  <code>SELECT</code> and <code>WHERE</code>  новые, начните с  <a href="../sql-foundations/">Основы SQL</a>  и вернись.</div>
+  <div class="note"><strong>Проработанный пример реальный.</strong>  Каждое число на этой странице взято из 10-строчной таблицы заявок на поддержку, в которой намеренно засеяны NULL-значения, и каждый запрос выполнялся к нему в SQLite, прежде чем его выходные данные были вставлены сюда. Таблица достаточно маленькая, чтобы ее можно было проверить на глаз. Если  <code>SELECT</code>  и  <code>WHERE</code>  новые, начните с  <a href="../sql-foundations/">Основы SQL</a>  и вернись.</div>
 
   <p>Вот таблица. Десять билетов. Троим не хватает времени, двум не хватает своего региона, а двое не имеют правопреемника.</p>
 
   <table>
-    <tr><th>ticket_id</th><th>region</th><th>minutes_to_close</th><th>assignee</th></tr>
-    <tr><td>1</td><td>East</td><td>45</td><td>Priya</td></tr>
-    <tr><td>2</td><td>East</td><td>NULL</td><td>Priya</td></tr>
-    <tr><td>3</td><td>West</td><td>30</td><td>Marcus</td></tr>
-    <tr><td>4</td><td>West</td><td>90</td><td>NULL</td></tr>
-    <tr><td>5</td><td>NULL</td><td>60</td><td>Marcus</td></tr>
-    <tr><td>6</td><td>East</td><td>15</td><td>Dana</td></tr>
-    <tr><td>7</td><td>West</td><td>NULL</td><td>NULL</td></tr>
-    <tr><td>8</td><td>NULL</td><td>120</td><td>Dana</td></tr>
-    <tr><td>9</td><td>East</td><td>75</td><td>Priya</td></tr>
-    <tr><td>10</td><td>West</td><td>NULL</td><td>Marcus</td></tr>
+    <tr><th>Ticket_id</th><th>Регион</th><th>минут_до_закрыть</th><th>правопреемник</th></tr>
+    <tr><td>1</td><td>Восток</td><td>45</td><td>Прия</td></tr>
+    <tr><td>2</td><td>Восток</td><td>NULL</td><td>Прия</td></tr>
+    <tr><td>3</td><td>Запад</td><td>30</td><td>Маркус</td></tr>
+    <tr><td>4</td><td>Запад</td><td>90</td><td>NULL</td></tr>
+    <tr><td>5</td><td>NULL</td><td>60</td><td>Маркус</td></tr>
+    <tr><td>6</td><td>Восток</td><td>15</td><td>Дана</td></tr>
+    <tr><td>7</td><td>Запад</td><td>NULL</td><td>NULL</td></tr>
+    <tr><td>8</td><td>NULL</td><td>120</td><td>Дана</td></tr>
+    <tr><td>9</td><td>Восток</td><td>75</td><td>Прия</td></tr>
+    <tr><td>10</td><td>Запад</td><td>NULL</td><td>Маркус</td></tr>
   </table>
 
   <div class="step">
@@ -246,12 +246,12 @@
     <pre><code>SELECT * FROM tickets WHERE assignee IS NULL;</code></pre>
 
     <table>
-      <tr><th>ticket_id</th><th>region</th><th>minutes_to_close</th><th>assignee</th></tr>
-      <tr><td>4</td><td>West</td><td>90</td><td>NULL</td></tr>
-      <tr><td>7</td><td>West</td><td>NULL</td><td>NULL</td></tr>
+      <tr><th>Ticket_id</th><th>Регион</th><th>минут_до_закрыть</th><th>правопреемник</th></tr>
+      <tr><td>4</td><td>Запад</td><td>90</td><td>NULL</td></tr>
+      <tr><td>7</td><td>Запад</td><td>NULL</td><td>NULL</td></tr>
     </table>
 
-    <p>Есть два неназначенных билета.  <code>IS NOT NULL</code>  является зеркалом и возвращает остальные 8 строк. Правило, которое следует соблюдать:  <code>=</code> and <code>&lt;&gt;</code>  сравнить значения,  <code>IS NULL</code> and <code>IS NOT NULL</code>  проверьте наличие отсутствующих, они не взаимозаменяемы.</p>
+    <p>Есть два неназначенных билета.  <code>IS NOT NULL</code>  является зеркалом и возвращает остальные 8 строк. Правило, которое следует соблюдать:  <code>=</code>  и  <code>&lt;&gt;</code>  сравнить значения,  <code>IS NULL</code>  и  <code>IS NOT NULL</code>  проверьте наличие отсутствующих, они не взаимозаменяемы.</p>
   </div>
 
   <div class="step">
@@ -327,13 +327,13 @@ ORDER BY ticket_id;</code></pre>
 FROM tickets;</code></pre>
 
     <table>
-      <tr><th>all_rows</th><th>with_minutes</th><th>avg_minutes</th></tr>
+      <tr><th>все_строки</th><th>с_минутами</th><th>avg_минуты</th></tr>
       <tr><td>10</td><td>7</td><td>62.1</td></tr>
     </table>
 
     <p>Среднее значение составляет 435, разделенное на 7, что составляет 62,1 минуты. Принудительно обнулить NULL с помощью  <code>COALESCE</code>  и в том же столбце среднее значение составляет 43,5, потому что теперь это 435, разделенное на 10. Это 30-процентное колебание в цифре заголовка из-за одного решения о недостающих данных, и ни одно из чисел не является автоматически правильным. 62,1 — это среднее значение билетов, время закрытия которых было зафиксировано. 43.5 притворяется, что незаписано, значит мгновенно. В честном отчете указано первое число и дыра: «В среднем 62,1 минуты по 7 из 10 билетов с зафиксированным временем закрытия».</p>
 
-    <p><code>COUNT(*)</code> against <code>COUNT(column)</code>  это тот же пропуск в форме счета.  <code>COUNT(*)</code>  считает строки, здесь 10.  <code>COUNT(minutes_to_close)</code>  подсчитывает значения, отличные от NULL, здесь 7, и  <code>COUNT(assignee)</code>  дает 8. Разрыв между двумя значениями — это количество пропущенных данных, что делает эту пару самой быстрой проверкой полноты в SQL. Вся семья COUNT, включая  <code>DISTINCT</code>, находится в  <a href="../sql-count-function/">СЧЕТ в SQL</a>.</p>
+    <p><code>COUNT(*)</code>  против  <code>COUNT(column)</code>  это тот же пропуск в форме счета.  <code>COUNT(*)</code>  считает строки, здесь 10.  <code>COUNT(minutes_to_close)</code>  подсчитывает значения, отличные от NULL, здесь 7, и  <code>COUNT(assignee)</code>  дает 8. Разрыв между двумя значениями — это количество пропущенных данных, что делает эту пару самой быстрой проверкой полноты в SQL. Вся семья COUNT, включая  <code>DISTINCT</code>, находится в  <a href="../sql-count-function/">СЧЕТ в SQL</a>.</p>
 
     <p>Теперь картинка работает  <code>COUNT(*)</code>  рядом с  <code>COUNT(the_column)</code>  в самом важном числовом столбце ваших собственных данных. Знаете ли вы прямо сейчас, какой будет разрыв? Большинство людей узнают об этом позже, чем им хотелось бы.</p>
   </div>
@@ -343,14 +343,14 @@ FROM tickets;</code></pre>
 
     <p>Та же таблица, тот же вопрос: как быстро каждый регион закрывает заявки?</p>
 
-    <h3>Before</h3>
+    <h3>До</h3>
     <pre><code>SELECT region, AVG(minutes_to_close) AS avg_minutes
 FROM tickets
 GROUP BY region;</code></pre>
 
     <p>Три тихие проблемы, никаких ошибок. Среднее значение молча пропускает три незарегистрированных момента закрытия, поэтому никто не может увидеть, какой объем данных стоит за каждым числом. Два билета без указания региона образуют отдельную пустую группу без каких-либо объяснений. И читатель не имеет возможности узнать об этом из вывода.</p>
 
-    <h3>After</h3>
+    <h3>после</h3>
     <pre><code>-- ============================================================
 -- STEP 4: How fast does each region close tickets?
 -- WHY: minutes_to_close is missing on 3 of 10 tickets, and
@@ -382,7 +382,7 @@ GROUP BY region;</code></pre>
 
     <p><strong>LEFT JOIN создает NULL.</strong>  LEFT JOIN сохраняет каждую строку из левой таблицы, а когда строка не находит совпадений в правой, правые столбцы получают значение NULL. Присоединив билеты к двухстрочному поиску регионов, в котором указан только Восток, я запустил его: четыре билета Востока получают своего менеджера, а остальные шесть строк показывают NULL, охватывая как настоящие билеты Запада без записи поиска, так и билеты, регион которых уже отсутствовал. Таким образом, NULL после соединения означает «нет совпадения или отсутствующий ключ», и их разделение требует  <code>IS NULL</code>  проверьте ключ соединения.  <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a>  гуляет всей семьей.</p>
 
-    <p><strong>ORDER BY должен где-то помещать NULL, а базы данных с этим не согласны.</strong>  Сортировка обработанной таблицы по  <code>minutes_to_close</code>    при возрастании в SQLite сначала помещаются три строки NULL, а затем 15; спуск ставит их на последнее место. SQLite и SQL-сервер рассматривают NULL как наименьшие, PostgreSQL и Оракул рассматривают их как самые большие, а PostgreSQL и Оракул принимают явные значения.    <code>NULLS FIRST</code> or <code>NULLS LAST</code>  сказать то, что вы имеете в виду. Переносимая привычка: когда отсортированный отчет имеет значение, укажите его место либо с помощью этого пункта, либо путем сортировки по  <code>the_column IS NULL</code>  первый.</p>
+    <p><strong>ORDER BY должен где-то помещать NULL, а базы данных с этим не согласны.</strong>  Сортировка обработанной таблицы по  <code>minutes_to_close</code>    при возрастании в SQLite сначала помещаются три строки NULL, а затем 15; спуск ставит их на последнее место. SQLite и SQL-сервер рассматривают NULL как наименьшие, PostgreSQL и Оракул рассматривают их как самые большие, а PostgreSQL и Оракул принимают явные значения.    <code>NULLS FIRST</code>  или  <code>NULLS LAST</code>  сказать то, что вы имеете в виду. Переносимая привычка: когда отсортированный отчет имеет значение, укажите его место либо с помощью этого пункта, либо путем сортировки по  <code>the_column IS NULL</code>  первый.</p>
 
     <p><strong>Пустой текст не имеет значения NULL, за исключением случаев, когда он есть.</strong>  Пустая строка — это известное значение: кто-то сказал «ничего», а не никто ничего не сказал. В большинстве баз данных фильтры и счетчики обрабатывают эти два значения по-разному, поэтому столбец может выглядеть пустым, пока  <code>IS NULL</code>    ничего не находит. Оракул — известное исключение, сохраняющее пустые строки как NULL. Если пробелы ведут себя странно, проверьте оба:    <code>WHERE col IS NULL OR col = ''</code>.</p>
   </div>
@@ -414,7 +414,7 @@ GROUP BY region;</code></pre>
   <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
 
   <table>
-    <tr><th>Concept</th><th>Что он делает</th></tr>
+    <tr><th> концепция</th><th>Что он делает</th></tr>
     <tr><td>NULL</td><td>Неизвестный. Не ноль, не пустой текст. Место, которое никто не заполнил.</td></tr>
     <tr><td><code>= NULL</code></td><td>Ответы неизвестны для каждой строки, поэтому она ничему не соответствует. Всегда.</td></tr>
     <tr><td><code>IS NULL</code> / <code>IS NOT NULL</code></td><td>Настоящий тест на пропущенные значения. Спрашивает о слоте, а не о значении.</td></tr>
@@ -424,8 +424,8 @@ GROUP BY region;</code></pre>
     <tr><td><code>NOT IN</code>  с NULL в списке</td><td>Возвращает ноль строк, без ошибок. Просмотрите подзапрос или используйте  <code>NOT EXISTS</code>.</td></tr>
     <tr><td><code>NOT EXISTS</code></td><td>Невосприимчив к ловушке и считает NULL-строки несовпадающими. Решите, это ли вы имеете в виду.</td></tr>
     <tr><td><code>COALESCE(col, default)</code></td><td>Первое значение, отличное от NULL. Отметьте его отсутствие; не переписывайте молча цифры.</td></tr>
-    <tr><td><code>COUNT(*)</code> vs <code>COUNT(col)</code></td><td>Строки и значения, отличные от NULL. Разрыв — это количество недостающих данных.</td></tr>
-    <tr><td>Aggregates</td><td><code>SUM</code>, <code>AVG</code>, <code>MIN</code>, <code>MAX</code>  пропустить NULL.  <code>AVG</code>  делится на сохраненные значения.</td></tr>
+    <tr><td><code>COUNT(*)</code> против <code>COUNT(col)</code></td><td>Строки и значения, отличные от NULL. Разрыв — это количество недостающих данных.</td></tr>
+    <tr><td>Агрегаты</td><td><code>SUM</code>, <code>AVG</code>, <code>MIN</code>, <code>MAX</code>  пропустить NULL.  <code>AVG</code>  делится на сохраненные значения.</td></tr>
     <tr><td><code>NULL = NULL</code></td><td>Неизвестно, неправда. Ни один NULL никогда не равен другому.</td></tr>
     <tr><td><code>GROUP BY</code></td><td>По-прежнему помещает все NULL в одну группу. Эта группа и есть ваш недостающий счет.</td></tr>
     <tr><td>LEFT JOIN</td><td>Несовпадающие строки поступают с NULL в правых столбцах.</td></tr>
@@ -437,7 +437,7 @@ GROUP BY region;</code></pre>
 
   <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Моей самой худшей NULL-ошибкой был NOT IN, который возвращал ноль строк в течение недели, а в отчете, который он подавал, просто говорилось: «Исключения не найдены», чему все были рады поверить. Как долго NULL тихо лгал вам и что в конце концов его выдало?</p>
 
-  <h2>References</h2>
+  <h2>Ссылки</h2>
   <ul class="refs">
     <li>Кодд, EF (1970). Реляционная модель данных для крупных общих банков данных.  <em>Коммуникации ACM</em>, 13(6), 377–387.</li>
     <li>Бисра К., Лю К., Несбит Дж. К., Салими Ф. и Винн П. Х. (2018). Побуждение к самообъяснению: метаанализ.  <em>Обзор педагогической психологии</em>, 30(3), 703–725.</li>
@@ -452,16 +452,16 @@ GROUP BY region;</code></pre>
 
   <div class="cta">
     <strong>Попрактикуйтесь в обработке NULL, используя живые запросы.</strong>
-    <p style="margin:6px 0 0">The <a href="../../sql/">SQL-комплект</a>  запускает SQLite в браузере, поэтому вы можете заполнять таблицу значениями NULL, запускать запросы-ловушки и наблюдать за изменением количества строк по мере их исправления. Рядом с ним лежат рабочие примеры, карточки и пробный экзамен. Ничего устанавливать, учетная запись не требуется.</p>
+    <p style="margin:6px 0 0">тот <a href="../../sql/">SQL-комплект</a>  запускает SQLite в браузере, поэтому вы можете заполнять таблицу значениями NULL, запускать запросы-ловушки и наблюдать за изменением количества строк по мере их исправления. Рядом с ним лежат рабочие примеры, карточки и пробный экзамен. Ничего устанавливать, учетная запись не требуется.</p>
     <a class="btn" href="../../sql/">Откройте набор SQL →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../sql-find-duplicates/">Найти повторяющиеся строки</a> · <a href="../sql-count-function/">СЧЕТ в SQL</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-case-expression/">Выражение CASE</a> · <a href="../sql-month-over-month/">Месяц за месяцем в SQL</a> · <a href="../sql-foundations/">Основы SQL</a> · <a href="../sql-ctes/">SQL CTE</a> · <a href="../sql-window-functions/">Оконные функции</a> · <a href="../sql-aliasing/">SQL-псевдонимы</a> · <a href="../sql-teaching-comments/">Комментарий SQL, чтобы он научился</a> · <a href="../../drill/">SQL-детализация</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../migration-profiling/">Профилирование миграции</a> · <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../what-is-data-analysis/">Что такое анализ данных?</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../../projects/">Портфельные проекты</a>
+    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../sql-find-duplicates/">Найти повторяющиеся строки</a> · <a href="../sql-count-function/">СЧЕТ в SQL</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-case-expression/">Выражение CASE</a> · <a href="../sql-month-over-month/">Месяц за месяцем в SQL</a> · <a href="../sql-foundations/">Основы SQL</a> · <a href="../sql-ctes/">SQL CTE</a> · <a href="../sql-window-functions/">Оконные функции</a> · <a href="../sql-aliasing/">SQL-псевдонимы</a> · <a href="../sql-teaching-comments/">Комментарий SQL, чтобы он научился</a> · <a href="../../drill/">SQL-детализация</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../sql-and-python/">SQL + Питон</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../migration-profiling/">Профилирование миграции</a> · <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../what-is-data-analysis/">Что такое анализ данных?</a> · <a href="../../sql/">SQL-комплект</a> · <a href="../../projects/">Портфельные проекты</a>
     <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Контакт</a> · <a href="../../privacy.html">Конфиденциальность</a> · <a href="../../terms.html">Условия</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

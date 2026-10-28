@@ -187,7 +187,7 @@ INSERT INTO orders VALUES
   SUM(CASE WHEN status = 'shipped' THEN amount ELSE 0 END) AS shipped_value
 FROM orders;</code></pre>
   <table>
-    <tr><th>all_orders</th><th>shipped</th><th>cancelled</th><th>shipped_value</th></tr>
+    <tr><th>все_ордеры</th><th>отправленный</th><th>отменен</th><th>отправленное_значение</th></tr>
     <tr><td>8</td><td>5</td><td>2</td><td>610</td></tr>
   </table>
   <p>Один проход по столу, четыре ответа, и каждый из них уважает то, что  <code>WHERE</code>  пункт, который вы добавите позже. В этом заключается практическое преимущество перед тремя отдельными запросами: фильтры никогда не разойдутся.</p>
@@ -199,7 +199,7 @@ COUNT(CASE WHEN status = 'shipped' THEN 1 ELSE 0 END)   -- 8, wrong</code></pre>
   <p>Никаких ошибок, никаких предупреждений, и число по-прежнему правдоподобно. Это наиболее распространенная ошибка при условном агрегировании, и она легко выдерживает проверку, поскольку  <code>ELSE 0</code>  выглядит как хорошая оборонительная практика.</p>
 
   <table>
-    <tr><th>Written</th><th>Returns</th><th>Why</th></tr>
+    <tr><th> написано</th><th> возвращает </th><th>Почему</th></tr>
     <tr><td><code>COUNT(CASE WHEN c THEN 1 END)</code></td><td>5</td><td>Несовпадающие строки имеют значение NULL и пропускаются.</td></tr>
     <tr><td><code>COUNT(CASE WHEN c THEN 1 ELSE 0 END)</code></td><td>8</td><td>0 является значением и учитывается</td></tr>
     <tr><td><code>SUM(CASE WHEN c THEN 1 ELSE 0 END)</code></td><td>5</td><td>Добавляет по одному за матч</td></tr>
@@ -217,7 +217,7 @@ COUNT(CASE WHEN status = 'shipped' THEN 1 ELSE 0 END)   -- 8, wrong</code></pre>
     AS shipped_pct
 FROM orders;
 -- 8, 5, 62.5</code></pre>
-  <p>The <code>100.0</code>  имеет значение. В базах данных с целочисленным делением  <code>5 / 8</code>  равно 0, и скорость возвращается к нулю для каждой строки. Сначала умножьте на десятичную дробь или отбросьте одну сторону.</p>
+  <p>тот <code>100.0</code>  имеет значение. В базах данных с целочисленным делением  <code>5 / 8</code>  равно 0, и скорость возвращается к нулю для каждой строки. Сначала умножьте на десятичную дробь или отбросьте одну сторону.</p>
   <p>Берегите также знаменатель.  <code>COUNT(*)</code>  не может быть нулевым, если строка существует, но может быть условным знаменателем, а деление на ноль либо приводит к ошибке, либо возвращает NULL в зависимости от механизма.  <code>NULLIF(denominator, 0)</code>  делает поведение везде одинаковым.</p>
 
   <h2>В сочетании с GROUP BY</h2>
@@ -244,7 +244,7 @@ FROM orders;</code></pre>
     <li>Найдите в сохраненных запросах  <code>COUNT(CASE</code>  и проверь каждого на наличие  <code>ELSE</code>.</li>
     <li>Добавьте проверку работоспособности: количество категорий должно суммироваться с общей суммой.</li>
     <li>Умножить на  <code>100.0</code>  в каждой ставке и заключим знаменатели в  <code>NULLIF</code>.</li>
-    <li>Use <code>FILTER</code>  где ваша база данных поддерживает это, и отметьте в комментарии, почему другие запросы этого не поддерживают.</li>
+    <li> Использовать  <code>FILTER</code>  где ваша база данных поддерживает это, и отметьте в комментарии, почему другие запросы этого не поддерживают.</li>
   </ol>
 
   <h2>Единственная привычка, которую нужно сохранить</h2>
@@ -270,7 +270,7 @@ FROM orders;</code></pre>
   <footer>
     <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql-count-function/">СЧЕТ в SQL</a> &middot; <a href="../sql-case-expression/">Выражение CASE</a> &middot; <a href="../sql-group-by-case/">ГРУППИРОВАТЬ ПО с CASE</a> &middot; <a href="../sql-null/">NULL в SQL</a> &middot; <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> &middot; <a href="../../drill/">SQL-детализация</a> &middot; <a href="../../sql/">SQL-комплект</a>
     <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Контакт</a> &middot; <a href="../../privacy.html">Конфиденциальность</a> &middot; <a href="../../terms.html">Условия</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

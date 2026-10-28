@@ -187,17 +187,17 @@ df = pd.DataFrame({
   <pre><code>df.pivot_table(index='region', columns='month', values='amount',
                aggfunc='sum', fill_value=0, margins=True, margins_name='Total')</code></pre>
   <table>
-    <tr><th>region</th><th>Feb</th><th>Jan</th><th>Total</th></tr>
-    <tr><td>East</td><td>150</td><td>300</td><td>450</td></tr>
-    <tr><td>North</td><td>80</td><td>120</td><td>200</td></tr>
-    <tr><td>South</td><td>50</td><td>200</td><td>250</td></tr>
-    <tr><td>West</td><td>60</td><td>90</td><td>150</td></tr>
-    <tr><td><strong>Total</strong></td><td><strong>340</strong></td><td><strong>710</strong></td><td><strong>1050</strong></td></tr>
+    <tr><th>Регион</th><th>февраль</th><th>Ян</th><th>Общий</th></tr>
+    <tr><td>Восток</td><td>150</td><td>300</td><td>450</td></tr>
+    <tr><td>Север</td><td>80</td><td>120</td><td>200</td></tr>
+    <tr><td>Юг</td><td>50</td><td>200</td><td>250</td></tr>
+    <tr><td>Запад</td><td>60</td><td>90</td><td>150</td></tr>
+    <tr><td><strong>Общий</strong></td><td><strong>340</strong></td><td><strong>710</strong></td><td><strong>1050</strong></td></tr>
   </table>
   <p>Четыре аргумента делают свое дело.  <code>index</code>  это строки,  <code>columns</code>  это столбцы,  <code>values</code>  это число,  <code>aggfunc</code>  что с этим делать.  <code>fill_value</code>    заменяет НЭН в комбинациях, которые никогда не встречались, и    <code>margins</code>  добавляет итоги.</p>
   <p>Обратите внимание на порядок столбцов: с февраля до января, потому что pandas сортирует значения столбцов в алфавитном порядке и понятия не имеет, что это месяцы. Исправление этого — отдельный шаг ниже.</p>
 
-  <div class="note"><strong>По умолчанию, который ловит всех.</strong> Leave <code>aggfunc</code>  и вы получите среднее значение. В этой таблице Восток превращается из 450 в 225, и в результате получается идеально отформатированная сводка чисел, которые не соответствуют вашим запросам. Ничто не ошибается, потому что стремление к среднему является вполне законным.</div>
+  <div class="note"><strong>По умолчанию, который ловит всех.</strong> Оставлять  <code>aggfunc</code>  и вы получите среднее значение. В этой таблице Восток превращается из 450 в 225, и в результате получается идеально отформатированная сводка чисел, которые не соответствуют вашим запросам. Ничто не ошибается, потому что стремление к среднему является вполне законным.</div>
 
   <h2>Значение заполнения — это решение</h2>
   <p>Отсутствующая комбинация — это не то же самое, что ноль. Если бы у Уэста действительно не было февральских приказов,  <code>fill_value=0</code>  честен. Если данные за февраль еще не загружены, ноль — это сфабрикованное наблюдение, которое будет отображаться как реальный месяц без продаж.</p>
@@ -226,7 +226,7 @@ long = wide.melt(id_vars='region', var_name='month', value_name='amount')</code>
 
   <h2>сводная таблица, Сводная_таблица и группировка</h2>
   <table>
-    <tr><th>Use</th><th>When</th><th>Note</th></tr>
+    <tr><th> Использовать </th><th>Когда </th><th>примечание</th></tr>
     <tr><td><code>groupby</code></td><td>Агрегирование, пребывание надолго</td><td>Выбор по умолчанию</td></tr>
     <tr><td><code>pivot_table</code></td><td>Объединение и расширение</td><td>Обрабатывает дубликаты, объединяя их.</td></tr>
     <tr><td><code>pivot</code></td><td>Только изменение формы, без агрегации</td><td>Возникает, если пара индекса и столбца повторяется.</td></tr>
@@ -236,7 +236,7 @@ long = wide.melt(id_vars='region', var_name='month', value_name='amount')</code>
 
   <h2>Как применить это в своей работе</h2>
   <ol>
-    <li>Pass <code>aggfunc</code>  явно в каждой сводной таблице, которую вы пишете, даже если значение по умолчанию оказывается правильным.</li>
+    <li>Проходить <code>aggfunc</code>  явно в каждой сводной таблице, которую вы пишете, даже если значение по умолчанию оказывается правильным.</li>
     <li>Прежде чем поверить в какой-либо поворотный момент, сверьте общий итог с разгруппированной суммой.</li>
     <li>Решите сознательно, является ли пустая ячейка нулем или неизвестным.</li>
     <li>Установите для месяца и других упорядоченных текстовых столбцов значение «Категорический» один раз во время загрузки.</li>
@@ -266,7 +266,7 @@ long = wide.melt(id_vars='region', var_name='month', value_name='amount')</code>
   <footer>
     <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../pandas-groupby/">панды группируются</a> &middot; <a href="../excel-pivot-tables/">сводные таблицы Excel</a> &middot; <a href="../python-practice-drills/">Упражнения для Python</a> &middot; <a href="../pandas-merge/">панды сливаются</a> &middot; <a href="../excel-power-query/">Power Query</a> &middot; <a href="../../python/">Комплект Python</a>
     <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Контакт</a> &middot; <a href="../../privacy.html">Конфиденциальность</a> &middot; <a href="../../terms.html">Условия</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>

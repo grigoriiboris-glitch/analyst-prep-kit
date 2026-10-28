@@ -229,7 +229,7 @@
       playBtn.textContent = playing ? '❙❙' : '▶';
       playBtn.setAttribute('aria-label', playing ? 'Pause' : 'Play');
       var n = blocks.length ? Math.min(idx + 1, blocks.length) : 0;
-      label.textContent = n + ' of ' + blocks.length;
+      label.textContent = n + " из " + blocks.length;
       rateBtn.textContent = rate + '×';
     }
   }
@@ -239,7 +239,7 @@
     bar.className = 'listen-bar';
     bar.hidden = true;
     bar.setAttribute('role', 'group');
-    bar.setAttribute('aria-label', "Элементы управления прослушиванием");
+    bar.setAttribute("aria-метка", "Элементы управления прослушиванием");
     bar.innerHTML =
       '<button type="button" data-act="prev" aria-label="Previous paragraph">◀◀</button>' +
       '<button type="button" data-act="play" class="listen-play" aria-label="Pause">❙❙</button>' +
@@ -274,7 +274,7 @@
     launch.setAttribute('aria-pressed', 'false');
     launch.innerHTML =
       '<span class="listen-launch-ic" aria-hidden="true">▶</span>' +
-      '<span class="listen-launch-text">Listen</span>' +
+      "<span class=\"listen-launch-text\">Слушать</span>" +
       '<span class="listen-launch-time"></span>';
     launch.addEventListener('click', function () {
       if (playing) { pause(); return; }
@@ -308,7 +308,7 @@
 
     buildLaunch(anchor);
     buildBar();
-    launch.querySelector('.listen-launch-time').textContent = minutes() + ' min';
+    launch.querySelector('.listen-launch-time').textContent = minutes() + "мин";
 
     // Tap any paragraph while listening to jump there.
     root.addEventListener('click', function (e) {

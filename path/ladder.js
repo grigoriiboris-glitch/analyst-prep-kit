@@ -94,7 +94,7 @@ LIMIT 10;`,
               // read exactly like the "Bring back" column lists on drills 1 to 3. The likely
               // first attempt was SELECT total_rows, artists — a real column that does not
               // exist. Say plainly that these are names being created.
-              "<code>total_rows</code> and <code>artists</code> это имена, которые вы создаете с <code>AS</code>, а не столбцы в таблице",
+              "<code>total_rows</code> и <code>artists</code> это имена, которые вы создаете с <code>AS</code>, а не столбцы в таблице",
               "Разные артисты означают, что каждый артист посчитан один раз."],
       why: "Запрос всегда возвращает таблицу, даже если ответом являются два числа. Сравнивая их, вы поймете, что один исполнитель может записать несколько песен.",
       did: "У вас есть одна строка назад, содержащая два числа: сколько существует песен в стиле кантри и сколько разных исполнителей их написали.",
@@ -114,7 +114,7 @@ WHERE genre = 'country';`,
   // working person actually meets it, across industries and roles rather than in the
   // abstract. This replaced a four-read lesson step that sat between the two typing passes.
   concepts: [
-    { name: 'SELECT and FROM',
+    { name: "ВЫБРАТЬ и ОТ",
       does: 'SELECT names the columns you want back. FROM names the table to read them from. Every query you write starts with these two.',
       worked: "Вы запросили три столбца из таблицы из 500 песен и получили три столбца обратно. Больше ничего с ними не пришло, потому что вы ни о чем больше не просили.",
       where: [
