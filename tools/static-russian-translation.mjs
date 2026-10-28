@@ -361,6 +361,10 @@ async function translateMarkup(value) {
 
 async function translateVisibleString(value, context = null, htmlText = false) {
   const source = String(value);
+  // A string may contain only the start of an HTML tag because the rest is concatenated
+  // in another JavaScript string. Never translate tag names or class/id attributes.
+  const trimmedSource = source.trim();
+  if (/^<\/?[A-Za-z][^>]*$/.test(trimmedSource) && !trimmedSource.endsWith(">")) return value;
   // HTML fragments are parsed first so that only their visible text is translated.
   if (/<\/?[A-Za-z][^>]*>/.test(source)) return translateMarkup(source);
   const manualKey = normalize(source);
