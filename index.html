@@ -447,6 +447,13 @@ footer a:hover{color:var(--accent-d)}
             <span class="skill-meta" data-progress-slot>47 lessons</span>
           </span>
         </a>
+        <a class="skill-item" href="postgresql/" data-kit="postgresql">
+          <span class="skill-ic"><i data-lucide="database"></i></span>
+          <span class="skill-body">
+            <span class="skill-name">PostgreSQL</span>
+            <span class="skill-meta" data-progress-slot>30 уроков · практика в браузере</span>
+          </span>
+        </a>
         <a class="skill-item" href="python/" data-kit="python">
           <span class="skill-ic"><i data-lucide="terminal"></i></span>
           <span class="skill-body">
@@ -1053,6 +1060,10 @@ const KITS = [
       const ids = s.doneLessons||[]; const done = ids.length;
       // SQL has no explicit cursor — last = next unfinished
       return { done, doneIds:ids, last: done < 12 ? done + 1 : 12 }; } },
+  { id:'postgresql', name:'PostgreSQL', path:'postgresql/', unit:'уроков', total:30,
+    read: () => { const s = JSON.parse(localStorage.getItem('apk-postgresql-progress-v1')||'{}');
+      const ids = Array.isArray(s.doneLessons)?s.doneLessons:[];
+      return { done:new Set(ids.map(Number)).size, doneIds:ids, last:s.currentLessonId||'1' }; } },
   { id:'python',    name:'Python Kit',                           path:'python/',    unit:'lessons', total:12,
     read: () => { const s = JSON.parse(localStorage.getItem('ppk')||'{}'); const ids=s.lessonsDone||[];
       return { done:ids.length, doneIds:ids, last:s.currentLesson||null }; } },
