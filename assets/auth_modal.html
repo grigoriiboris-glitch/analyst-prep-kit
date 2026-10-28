@@ -180,8 +180,8 @@
 <!-- Modal HTML -->
 <div id="authModalOverlay" class="auth-modal-overlay">
   <div class="auth-modal">
-    <h2 id="authModalTitle">Sign In</h2>
-    <p id="authModalSubtitle">Continue to your learning progress</p>
+    <h2 id="authModalTitle">Войти</h2>
+    <p id="authModalSubtitle">Продолжите обучение и сохраните свой прогресс</p>
 
     <div id="authError" class="auth-error" style="display: none;"></div>
     <div id="authSuccess" class="auth-success" style="display: none;"></div>
@@ -189,7 +189,7 @@
     <!-- Sign In Form -->
     <div id="signInForm">
       <div class="auth-form-group">
-        <label for="signInEmail">Email</label>
+        <label for="signInEmail">Электронная почта</label>
         <input
           id="signInEmail"
           type="email"
@@ -199,7 +199,7 @@
       </div>
 
       <div class="auth-form-group">
-        <label for="signInPassword">Password</label>
+        <label for="signInPassword">Пароль</label>
         <input
           id="signInPassword"
           type="password"
@@ -209,25 +209,25 @@
       </div>
 
       <button id="signInButton" class="auth-button auth-button-primary">
-        Sign In
+        Войти
       </button>
 
-      <div class="auth-divider">OR</div>
+      <div class="auth-divider">ИЛИ</div>
 
       <button id="googleSignInButton" class="auth-button auth-button-secondary">
-        Continue with Google
+        Продолжить с Google
       </button>
 
       <div class="auth-toggle">
-        Don't have an account?
-        <button type="button" onclick="toggleAuthForm()">Sign Up</button>
+        Нет аккаунта?
+        <button type="button" onclick="toggleAuthForm()">Зарегистрироваться</button>
       </div>
     </div>
 
     <!-- Sign Up Form -->
     <div id="signUpForm" style="display: none;">
       <div class="auth-form-group">
-        <label for="signUpEmail">Email</label>
+        <label for="signUpEmail">Электронная почта</label>
         <input
           id="signUpEmail"
           type="email"
@@ -237,7 +237,7 @@
       </div>
 
       <div class="auth-form-group">
-        <label for="signUpPassword">Password</label>
+        <label for="signUpPassword">Пароль</label>
         <input
           id="signUpPassword"
           type="password"
@@ -247,7 +247,7 @@
       </div>
 
       <div class="auth-form-group">
-        <label for="signUpPasswordConfirm">Confirm Password</label>
+        <label for="signUpPasswordConfirm">Повторите пароль</label>
         <input
           id="signUpPasswordConfirm"
           type="password"
@@ -257,18 +257,18 @@
       </div>
 
       <button id="signUpButton" class="auth-button auth-button-primary">
-        Create Account
+        Создать аккаунт
       </button>
 
-      <div class="auth-divider">OR</div>
+      <div class="auth-divider">ИЛИ</div>
 
       <button id="googleSignUpButton" class="auth-button auth-button-secondary">
-        Sign Up with Google
+        Зарегистрироваться через Google
       </button>
 
       <div class="auth-toggle">
-        Already have an account?
-        <button type="button" onclick="toggleAuthForm()">Sign In</button>
+        Уже есть аккаунт?
+        <button type="button" onclick="toggleAuthForm()">Войти</button>
       </div>
     </div>
   </div>
@@ -294,13 +294,13 @@
       // Switch to Sign In
       signInForm.style.display = 'block';
       signUpForm.style.display = 'none';
-      title.textContent = 'Sign In';
-      subtitle.textContent = 'Continue to your learning progress';
+      title.textContent = 'Войти';
+      subtitle.textContent = 'Продолжите обучение и сохраните свой прогресс';
     } else {
       // Switch to Sign Up
       signInForm.style.display = 'none';
       signUpForm.style.display = 'block';
-      title.textContent = 'Create Account';
+      title.textContent = 'Создать аккаунт';
       subtitle.textContent = 'Start syncing your progress';
     }
 
@@ -331,24 +331,24 @@
     const password = document.getElementById('signInPassword').value;
 
     if (!email || !password) {
-      showAuthError('Please fill in all fields');
+      showAuthError('Заполните все поля');
       return;
     }
 
     const btn = document.getElementById('signInButton');
     btn.classList.add('auth-loading');
-    btn.textContent = 'Signing in...';
+    btn.textContent = 'Выполняется вход…';
 
     const result = await signInWithEmail(email, password);
     if (result.success) {
-      showAuthSuccess('✓ Signed in! Redirecting...');
+      showAuthSuccess('✓ Вход выполнен! Перенаправление…');
       setTimeout(() => {
         location.reload();
       }, 1500);
     } else {
-      showAuthError(result.error || 'Sign in failed');
+      showAuthError(result.error || 'Не удалось войти');
       btn.classList.remove('auth-loading');
-      btn.textContent = 'Sign In';
+      btn.textContent = 'Войти';
     }
   });
 
@@ -360,36 +360,36 @@
     const confirm = document.getElementById('signUpPasswordConfirm').value;
 
     if (!email || !password || !confirm) {
-      showAuthError('Please fill in all fields');
+      showAuthError('Заполните все поля');
       return;
     }
 
     if (password !== confirm) {
-      showAuthError('Passwords do not match');
+      showAuthError('Пароли не совпадают');
       return;
     }
 
     if (password.length < 8) {
-      showAuthError('Password must be at least 8 characters');
+      showAuthError('Пароль должен содержать не менее 8 символов');
       return;
     }
 
     const btn = document.getElementById('signUpButton');
     btn.classList.add('auth-loading');
-    btn.textContent = 'Creating account...';
+    btn.textContent = 'Создаём аккаунт…';
 
     const result = await signUpWithEmail(email, password);
     if (result.success) {
-      showAuthSuccess('✓ Account created! Check your email to verify.');
+      showAuthSuccess('✓ Аккаунт создан! Проверьте почту для подтверждения адреса.');
       setTimeout(() => {
         toggleAuthForm();
         btn.classList.remove('auth-loading');
-        btn.textContent = 'Create Account';
+        btn.textContent = 'Создать аккаунт';
       }, 2000);
     } else {
-      showAuthError(result.error || 'Sign up failed');
+      showAuthError(result.error || 'Не удалось зарегистрироваться');
       btn.classList.remove('auth-loading');
-      btn.textContent = 'Create Account';
+      btn.textContent = 'Создать аккаунт';
     }
   });
 
