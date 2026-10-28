@@ -1,10 +1,13 @@
-/* Prevent English text from flashing before the Russian localization pass finishes. */
+/* Prevent English text from flashing before the Russian localization pass finishes.
+   Loaded synchronously in <head> on pages using the runtime localizer. */
 (function () {
   "use strict";
   var language = "ru";
   try { language = localStorage.getItem("apk-language-v2") || "ru"; } catch (_) {}
+  language = language === "en" ? "en" : "ru";
   var root = document.documentElement;
-  if (language === "en" || root.lang === "ru") return;
+  root.lang = language;
+  if (language === "en") return;
   root.classList.add("apk-ru-pending");
   var style = document.createElement("style");
   style.setAttribute("data-apk-ru-boot", "true");
