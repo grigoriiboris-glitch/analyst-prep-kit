@@ -12,6 +12,7 @@
     businessAnalysis: { id: 'business-analysis-v1', keys: ['apk-business-analysis-progress-v1', 'apk-business-analysis-answers-v1', 'apk-business-analysis-case-v1', 'apk-business-analysis-state-v1'] },
     quality: { id: 'quality-v1', keys: ['apk-quality-solution', 'apk-quality-score', 'apk-quality-passed-v1'] },
     sql: { id: 'sqlkit-v1', keys: ['sqlkit-v1', 'sqlkit-recalls', 'sqlkit-recall-wins', 'sqlkit-last-visit', 'sqlkit-streak'], prefixes: ['sqlkit-'] },
+    postgresql: { id: 'postgresql-v1', keys: ['apk-postgresql-progress-v1'] },
     excel: { id: 'excel-v1', keys: ['epk', 'epk-recalls', 'epk-recall-wins', 'epk-last-visit', 'epk-streak'], prefixes: ['epk-'] },
     python: { id: 'python-v1', keys: ['ppk', 'ppk-recalls', 'ppk-recall-wins', 'ppk-last-visit', 'ppk-streak'], prefixes: ['ppk-'] },
     powerbi: { id: 'powerbi-v1', keys: ['pbikt-v1', 'pbikt-recalls', 'pbikt-recall-wins', 'pbikt-last-visit', 'pbikt-streak'], prefixes: ['pbikt-'] },
