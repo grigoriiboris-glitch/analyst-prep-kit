@@ -8,7 +8,7 @@
   'use strict';
 
   var KITS = {
-    foundations: { id: 'foundations-v1', keys: ['apk-foundations-progress-v1'] },
+    foundations: { id: 'foundations-v1', keys: ['apk-foundations-progress-v1', 'apk-foundations-state-v1'] },
     businessAnalysis: { id: 'business-analysis-v1', keys: ['apk-business-analysis-progress-v1', 'apk-business-analysis-answers-v1', 'apk-business-analysis-case-v1', 'apk-business-analysis-state-v1'] },
     quality: { id: 'quality-v1', keys: ['apk-quality-solution', 'apk-quality-score', 'apk-quality-passed-v1'] },
     sql: { id: 'sqlkit-v1', keys: ['sqlkit-v1', 'sqlkit-recalls', 'sqlkit-recall-wins', 'sqlkit-last-visit', 'sqlkit-streak'], prefixes: ['sqlkit-'] },
@@ -19,7 +19,7 @@
     statistics: { id: 'stats-v1', keys: ['spk', 'spk-recalls', 'spk-recall-wins', 'spk-last-visit', 'spk-streak'], prefixes: ['spk-'] },
     charts: { id: 'charts-v1', keys: ['clk-v1'] },
     forecasting: { id: 'forecasting-v1', keys: ['fmk-v1'] },
-    decision: { id: 'decision-v1', keys: ['apk-decision-thinking-progress-v1', 'apk-decision-thinking-answer-v1', 'apk-decision-thinking-checklist-v1'] },
+    decision: { id: 'decision-v1', keys: ['apk-decision-thinking-progress-v1', 'apk-decision-thinking-answer-v1', 'apk-decision-thinking-checklist-v1', 'apk-decision-thinking-state-v1'] },
     interview: { id: 'interview-v1', keys: ['ipk', 'ipk-recalls', 'ipk-recall-wins', 'ipk-last-visit', 'ipk-streak'], prefixes: ['ipk-'] },
     simulator: { id: 'simulator-v1', keys: ['sim2'], prefixes: ['sim2-'] },
     final: { id: 'final-v1', keys: ['apk-final'] },
