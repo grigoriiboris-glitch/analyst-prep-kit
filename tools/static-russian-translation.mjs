@@ -20,7 +20,7 @@ const OMIT_DIRS = new Set([".git", ".github", "node_modules", "tools", "tests"])
 // The DataCraft map renderer builds HTML from concatenated JS string fragments.
 // Its visible UI copy is already Russian; keep the authored markup untouched so
 // static translation cannot rename attributes such as height/tabindex/aria-label.
-const OMIT_FILES = new Set(["assets/ru-localization.js", "assets/ru-localization-boot.js", "datacraft/curriculum-map.js"]);
+const OMIT_FILES = new Set(["assets/ru-localization.js", "assets/ru-localization-boot.js", "assets/sql-mermaid.js", "datacraft/curriculum-map.js"]);
 const SKIP_TAGS = new Set(["script", "style", "pre", "code", "kbd", "samp", "svg", "canvas", "iframe"]);
 const SKIP_CLASSES = new Set(["code-block", "code-sample", "code-snippet", "code-example", "formula-code", "ral-code", "ral-note-chunk", "terminal-editor"]);
 const HUMAN_KEYS = new Set([
