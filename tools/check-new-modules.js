@@ -10,7 +10,8 @@ const htmlFiles = [
   "portfolio-projects/index.html",
   "decision-making/index.html",
   "business-analysis/index.html",
-  "datacraft/index.html"
+  "datacraft/index.html",
+  "postgresql/index.html"
 ];
 const requiredRoutes = [
   "foundations/",
@@ -18,7 +19,8 @@ const requiredRoutes = [
   "portfolio-projects/",
   "decision-making/",
   "business-analysis/",
-  "datacraft/"
+  "datacraft/",
+  "postgresql/"
 ];
 
 for (const file of htmlFiles) {
@@ -233,7 +235,7 @@ console.log("OK: Quiet Valley builder, study-coin purchases, place/move/rotate/s
 const lessonCatalog = fs.readFileSync(path.join(root, "datacraft/lesson-catalog.js"), "utf8");
 new Function(lessonCatalog);
 const catalogMatches = [
-  ["foundations", 8], ["quality", 5], ["sql", 48], ["excel", 51],
+  ["foundations", 8], ["quality", 5], ["sql", 48], ["postgresql", 30], ["excel", 51],
   ["python", 42], ["powerbi", 39], ["stats", 16], ["tableau", 32],
   ["charts", 13], ["forecasting", 13], ["decision", 6], ["interview", 16],
   ["portfolio", 3], ["simulator", 10], ["final", 7], ["projectStudio", 4]
@@ -293,4 +295,35 @@ assert.ok(staticRussianAudit.includes('data-static-ru') && staticRussianAudit.in
   "Static Russian HTML audit must verify document language and static marker");
 assert.ok(fs.readFileSync(path.join(root, "README.md"), "utf8").includes("RUN_RU.md"), "README must link to setup guide");
 assert.ok(fs.readFileSync(path.join(root, "RUN_RU.md"), "utf8").includes("Ubuntu Linux"), "Setup guide must cover Ubuntu");
+
+const postgresqlPage = fs.readFileSync(path.join(root, "postgresql/index.html"), "utf8");
+const postgresqlApp = fs.readFileSync(path.join(root, "postgresql/app.js"), "utf8");
+const postgresqlSeed = fs.readFileSync(path.join(root, "postgresql/seed.sql"), "utf8");
+const postgresqlProgress = fs.readFileSync(path.join(root, "assets/progress-state.js"), "utf8");
+const aiContextCopy = fs.readFileSync(path.join(root, "assets/ai-context-copy.js"), "utf8");
+const learningOrder = fs.readFileSync(path.join(root, "assets/learning-order.js"), "utf8");
+assert.ok(postgresqlPage.includes('<html lang="ru" data-static-ru="true"'), "PostgreSQL course must be statically Russian-first");
+assert.ok(postgresqlPage.includes('href="../sql/"'), "PostgreSQL course must link back to the SQL foundations course");
+assert.ok(postgresqlPage.includes('src="../assets/progress-state.js"') && postgresqlPage.includes('src="../assets/supabase_auth_sync.js?v=3"'),
+  "PostgreSQL course must load shared progress and account sync");
+assert.ok(postgresqlPage.includes("PGlite") && postgresqlPage.includes("Mermaid.js"), "PostgreSQL course needs a browser SQL engine and visual schema");
+for (const table of ["customers", "products", "orders", "order_items", "payments", "support_tickets", "page_events"]) {
+  assert.ok(postgresqlSeed.includes("CREATE TABLE " + table + " "), "PostgreSQL practice table missing: " + table);
+}
+assert.ok(postgresqlApp.includes("apk-postgresql-progress-v1") && postgresqlApp.includes("apk-postgresql-drafts-v1"),
+  "PostgreSQL progress and local SQL draft persistence missing");
+assert.ok(postgresqlApp.includes("import(PGLITE_URL)") && postgresqlApp.includes("guardedSQL"),
+  "PostgreSQL sandbox lazy loading or command guard missing");
+assert.ok(postgresqlProgress.includes("postgresql-v1") && postgresqlProgress.includes("ai-context-copy.js"),
+  "PostgreSQL cloud progress and shared AI context copy registration missing");
+assert.ok(aiContextCopy.includes("bindCurriculumCopyButtons") && aiContextCopy.includes("Скопировать контекст для ИИ"),
+  "Shared AI context copy must support lessons and DataCraft entries");
+new Function(postgresqlApp);
+new Function(learningOrder);
+const stepRows = [...learningOrder.matchAll(/\['([^']+)',(\d+),'([^']+)'\]/g)];
+assert.equal(stepRows.length, 18, "Recommended path should number 18 skills");
+assert.deepEqual(stepRows.map((x) => Number(x[2])), Array.from({length:18}, (_, i) => i + 1),
+  "Recommended skill numbers must be sequential");
+console.log("OK: PostgreSQL course, AI lesson context copy and numbered learning path");
+
 console.log("OK: course content, exports, static Russian-only pages, and Windows/Ubuntu instructions");
