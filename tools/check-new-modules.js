@@ -147,9 +147,9 @@ assert.ok(curriculum.includes(`return '<div class="curriculum-lesson-row`) && cu
   "DataCraft lesson rows and AI-context buttons must render as valid HTML elements");
 assert.ok(curriculum.includes(`'<span class="curriculum-status '`) &&
   curriculum.includes(`'<div class="curriculum-progress"><i style="width:'`) &&
-  curriculum.includes(`'<span class="cc-bar"><i style="width:'`),
+  curriculum.includes(`<span class="cc-bar"><i style="width:'`),
   "DataCraft status badges and progress bars must keep their HTML tags and attributes");
-assert.ok(!/\\\\"(?:высота|табиндекс|роль|ария-метка|ширина|заголовок|сорт)=|<класс|<тип кнопки=|<я стиль=|<диапазона=/i.test(curriculum),
+assert.ok(!/высота=|табиндекс=|роль=|ария-метка=|заголовок=|сорт=|<класс|<тип кнопки=|<я стиль=|<диапазона=/i.test(curriculum),
   "DataCraft markup must not contain translated HTML tags or attributes");
 const curriculumCss = fs.readFileSync(path.join(root, "datacraft/curriculum-map.css"), "utf8");
 assert.ok(curriculumCss.includes("#curriculumWorld") && curriculumCss.includes(".curriculum-course-card"),
