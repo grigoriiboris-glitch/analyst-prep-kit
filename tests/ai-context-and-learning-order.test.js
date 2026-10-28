@@ -62,22 +62,22 @@ test("each main course page loads the context button directly or through the exi
   for (const route of coursePages) {
     const html = read(route);
     const direct = html.includes('src="../assets/ai-context-copy.js"') || html.includes('src="assets/ai-context-copy.js"');
-    const shared = /<script[^>]+ru-localization\.js/i.test(html);
-    assert.ok(direct || shared, route + " must load the AI-context feature directly or via the existing localization loader");
+    const shared = /<script[^>]+(?:ru-localization|lesson-visuals)\.js/i.test(html);
+    assert.ok(direct || shared, route + " must load the AI-context feature directly or through an existing shared loader");
   }
 });
 
 test("pages without the shared localization loader declare a lesson root and keep Russian content", () => {
   const expectations = [
-    ["foundations/index.html", 'src="../assets/ai-context-copy.js"', "Основы аналитики данных"],
-    ["business-analysis/index.html", 'src="../assets/ai-context-copy.js"', "Основы бизнес-анализа"],
-    ["data-quality/index.html", 'src="../assets/ai-context-copy.js"', "Качество данных"],
-    ["decision-making/index.html", 'src="../assets/ai-context-copy.js"', "Логика и решения"],
-    ["portfolio-projects/index.html", 'src="../assets/ai-context-copy.js"', "Проекты для портфолио"]
+    ["foundations/index.html", "Основы аналитики данных"],
+    ["business-analysis/index.html", "Основы бизнес-анализа"],
+    ["data-quality/index.html", "Качество данных"],
+    ["decision-making/index.html", "Логика и решения"],
+    ["portfolio-projects/index.html", "Проекты для портфолио"]
   ];
-  for (const [route, script, russianText] of expectations) {
+  for (const [route, russianText] of expectations) {
     const html = read(route);
-    assert.ok(html.includes(script), route + " must load the copy button without changing its localization loader");
+    assert.ok(html.includes('src="../assets/lesson-visuals.js"'), route + " must keep its shared lesson script, which loads the AI context feature");
     assert.ok(html.includes(russianText), route + " must preserve its current Russian page text");
   }
   const foundations = read("foundations/index.html");
