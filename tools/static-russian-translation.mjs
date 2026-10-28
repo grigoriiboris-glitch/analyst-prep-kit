@@ -32,7 +32,9 @@ const HUMAN_KEYS = new Set([
   "examples", "rules", "metrics", "sections", "cards", "bullets", "keyTerms",
   "checklist", "criteria", "activities", "stages", "outcomes", "requirements",
   "signals", "categories", "tasks", "left", "right", "terms", "definitions",
-  "businessQuestion", "businessContext", "deliverables", "metricDescription", "feedbackText"
+  "businessQuestion", "businessContext", "deliverables", "metricDescription", "feedbackText",
+  "headline", "name", "articleBody", "articleSection", "alternativeHeadline", "abstract",
+  "keywords", "disambiguatingDescription", "byline", "publisher", "author"
 ].map(x => x.toLowerCase()));
 const VISIBLE_PROPERTIES = new Set([
   "textContent", "innerText", "innerHTML", "outerHTML", "placeholder", "title",
@@ -49,7 +51,8 @@ const PRESERVED_TERMS = new Set([
   "JavaScript", "TypeScript", "Node.js", "SQLite", "PostgreSQL", "MySQL",
   "DuckDB", "Pandas", "NumPy", "Matplotlib", "KPI", "KPI", "ROI", "ROAS",
   "CPA", "CTR", "A/B", "ARIMA", "BPMN", "UML", "URL", "HTTP", "HTTPS",
-  "ID", "UUID", "JSONL", "DOM", "SVG", "PDF", "PowerPoint", "GitHub Pages"
+  "ID", "UUID", "JSONL", "DOM", "SVG", "PDF", "PowerPoint", "GitHub Pages",
+  "Grain", "DataCraft", "Analyst Prep Kit", "AnalystPrepKit"
 ]);
 const PRESERVED_TERMS_NORMALIZED = new Set([...PRESERVED_TERMS].map(term => term.toLowerCase()));
 const CODE_START = /^\s*(?:SELECT\b[\s\S]*\bFROM\b|INSERT\s+INTO\b|UPDATE\s+\w+\s+SET\b|DELETE\s+FROM\b|CREATE\s+(?:TABLE|VIEW|INDEX)\b|WITH\s+\w+\s+AS\s*\(|function\s*[\w$]*\s*\(|(?:const|let|var)\s+[\w$]+\s*=|return\s+[\w$.(\[{]|if\s*\([^)]*\)\s*\{|for\s*\([^)]*\)\s*\{|import\s+.+\s+from\s+|export\s+(?:default|const|function)\b)/i;
@@ -343,6 +346,41 @@ async function translateVisibleString(value, context = null, htmlText = false) {
   return translateText(value);
 }
 
+async function translateHtmlTemplateFragment(fragment, state) {
+  const source = String(fragment);
+  const output = [];
+  let textBuffer = "";
+  async function flushText() {
+    if (!textBuffer) return;
+    if (candidate(textBuffer, null, true)) output.push(await translateVisibleString(textBuffer, null, true));
+    else output.push(textBuffer);
+    textBuffer = "";
+  }
+  for (let i = 0; i < source.length; i++) {
+    const ch = source[i];
+    if (state.inTag) {
+      output.push(ch);
+      if (ch === ">") state.inTag = false;
+      continue;
+    }
+    const startsTag = ch === "<" && i + 1 < source.length && /[A-Za-z/!?]/.test(source[i + 1]);
+    if (startsTag) {
+      await flushText();
+      state.inTag = true;
+      output.push(ch);
+      continue;
+    }
+    textBuffer += ch;
+  }
+  await flushText();
+  return output.join("");
+}
+function escapeTemplateQuasi(value) {
+  return String(value)
+    .replace(/\\\\/g, "\\\\\\\\")
+    .replace(new RegExp(String.fromCharCode(96), "g"), "\\\\" + String.fromCharCode(96))
+    .replace(/\\$\\{/g, "\\\\${");
+}
 function escapeHtmlText(value) {
   return String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
@@ -420,16 +458,19 @@ async function translateJavaScript(source, filename) {
     }
     if (node.type === "TemplateLiteral") {
       const isHuman = (context && HUMAN_KEYS.has(context.toLowerCase())) || directVisibleLiteral(node, parent);
-      for (const quasi of node.quasis) {
-        const original = quasi.value.cooked ?? quasi.value.raw;
-        const visibleSentence = candidate(original, null, false);
-        if (!isHuman && !visibleSentence) continue;
-        const translated = await translateVisibleString(original, isHuman ? (context || "visible") : null, isHuman);
-        if (translated !== original) {
-          // TemplateElement ranges cover only the literal text, not ${...}.
-          // Escape syntax characters so translated UI text cannot break the JS template.
-          const raw = translated.replace(/\\/g, "\\\\").replace(/`/g, "\\`").replace(/\$\{/g, "\\$\{");
-          replacements.push({ start: quasi.start, end: quasi.end, value: raw });
+      const hasHtmlTag = node.quasis.some(quasi => /<\/?[A-Za-z]/.test(quasi.value.raw));
+      if (hasHtmlTag) {
+        const tagState = { inTag: false };
+        for (const quasi of node.quasis) {
+          const original = quasi.value.cooked ?? quasi.value.raw;
+          const translated = await translateHtmlTemplateFragment(original, tagState);
+          if (translated !== original) replacements.push({ start: quasi.start, end: quasi.end, value: escapeTemplateQuasi(translated) });
+        }
+      } else if (isHuman) {
+        for (const quasi of node.quasis) {
+          const original = quasi.value.cooked ?? quasi.value.raw;
+          const translated = await translateVisibleString(original, context || "visible");
+          if (translated !== original) replacements.push({ start: quasi.start, end: quasi.end, value: escapeTemplateQuasi(translated) });
         }
       }
       if (node.expressions.length) await Promise.all(node.expressions.map(expression => visit(expression, node, null)));
@@ -438,7 +479,7 @@ async function translateJavaScript(source, filename) {
     if (node.type === "Property" || node.type === "PropertyDefinition") {
       if (node.computed) await visit(node.key, node, null);
       const name = keyName(node.key);
-      const nextContext = HUMAN_KEYS.has(name.toLowerCase()) ? name : null;
+      const nextContext = HUMAN_KEYS.has(name.toLowerCase()) ? name : context;
       await visit(node.value, node, nextContext);
       return;
     }
@@ -516,7 +557,10 @@ async function processHtml(file, original) {
       const end = node.sourceCodeLocation.endTag.startOffset;
       if (end >= start) {
         const js = source.slice(start, end);
-        const translatedJs = await translateJavaScript(js, file + " (inline script)");
+        const scriptType = (node.attrs?.find(attr => attr.name.toLowerCase() === "type")?.value || "").toLowerCase();
+        const translatedJs = scriptType === "application/ld+json"
+          ? await processJson(file + " (JSON-LD)", js)
+          : await translateJavaScript(js, file + " (inline script)");
         if (translatedJs !== js) replacements.push({ start, end, value: translatedJs });
       }
       return;
