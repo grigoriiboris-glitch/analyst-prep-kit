@@ -312,17 +312,17 @@ async function hintCall(prompt, targetId){
     el.textContent = data.content?.[0]?.text || "Никакого ответа. Проверьте свой ключ.";
   } catch(e){ el.textContent = "Запрос не выполнен. Проверьте свой ключ и соединение."; }
 }
-const TUTOR_ROLE = `You are a plain-spoken Docusign CLM tutor helping someone study for the Docusign CLM Administration Pro exam. That exam covers administering Docusign CLM: the admin console, account settings, users, groups, permission profiles, delegated permissions, folder security, documents and folders, and the automation tools. It is about Docusign CLM, NOT CLM.CM (the older SpringCM platform).`;
+const TUTOR_ROLE = `Вы откровенный преподаватель Docusign CLM, помогающий кому-то подготовиться к экзамену Docusign CLM Administration Pro. Этот экзамен охватывает администрирование Docusign CLM: консоль администратора, настройки учетной записи, пользователей, группы, профили разрешений, делегированные разрешения, безопасность папок, документы и папки, а также инструменты автоматизации. Речь идет о Docusign CLM, а НЕ CLM.CM (более старая платформа SpringCM).`;
 function hintStudy(key, i){
   const s = STUDY.find(x=>x.key===key);
   if(!s) return;
   const fact = stripTags(s.must[i]);
   const prompt = `${TUTOR_ROLE}
 
-Explain this exam point a different way than it is written here:
+Объясните этот экзаменационный вопрос иначе, чем написано здесь:
 "${fact}"
 
-Rules: 3 sentences at most. One idea per sentence. Use an everyday comparison if it helps. Say what the exam is likely to ask about it. No preamble, no restating the question.`;
+Правила: максимум 3 предложения. Одна идея в предложении. Используйте повседневное сравнение, если это помогает. Скажите, что, скорее всего, об этом спросят на экзамене. Никакой преамбулы, никакого повторения вопроса.`;
   hintCall(prompt, 'hint-resp-' + key + '-' + i);
 }
 function hintQuestion(qid){
@@ -331,13 +331,13 @@ function hintQuestion(qid){
   const chosen = state.answers[qid];
   const picked = Array.isArray(chosen) ? chosen.map(i=>stripTags(q.choices[i])).join(' / ') : (chosen!==undefined ? stripTags(q.choices[chosen]) : "(нет ответа)");
   const right = q.type==='ms' ? q.correct.map(i=>stripTags(q.choices[i])).join(' / ') : stripTags(q.choices[q.correct]);
-  const prompt = `${TUTOR_ROLE} A student got this practice question wrong.
+  const prompt = `${TUTOR_ROLE} Студент неправильно ответил на этот практический вопрос.
 
-Question: ${stripTags(q.q)}
-They picked: ${picked}
-Correct answer: ${right}
+Вопрос: ${stripTags(q.q)}
+Они выбрали: ${picked}
+Правильный ответ: ${right}
 
-In 3 sentences at most, say what they were probably confusing, then give one plain rule that keeps the two apart. No preamble.`;
+Максимум в трех предложениях скажите, что вас, вероятно, смутило, а затем приведите одно простое правило, которое разделяет эти два понятия. Никакой преамбулы.`;
   hintCall(prompt, 'hint-resp-q-' + qid);
 }
 
@@ -493,188 +493,188 @@ const STUDY = [
    type 'mc' → correct: index · type 'ms' → correct: [indices] (choose all that apply) */
 const QUESTIONS = [
   /* ---------- AREA 1 · Account management (11) ---------- */
-  {id:'q1', domain:'d1', type:'mc', q:`What is the default trash retention period for a Docusign CLM account?`,
+  {id:'q1', domain:'d1', type:'mc', q:`Каков срок хранения корзины по умолчанию для учетной записи Docusign CLM?`,
     choices:[`30 дней`, `60 дней`, `90 дней`, `365 дней`],
     correct:2,
     explain:`Мусор хранится для <strong>90 дней</strong> по умолчанию. Поле «Дни хранения корзины» на странице настроек учетной записи принимает любое значение от 0 до 365.`},
   {id:'q2', domain:'d1', type:'mc', q:`Администратор устанавливает дни хранения корзины на <code>0</code>. Что происходит?`,
     choices:[`Мусор никогда не убирается`, `Все файлы в корзине безвозвратно удаляются в конце каждого дня.`, `Папка «Корзина» отключена, и удаление происходит немедленно.`, `Настройка отклонена как недействительная.`],
     correct:1,
-    explain:`Zero is the most aggressive valid setting: everything in the trash is permanently deleted at the end of each day. It is not "off", and 0 to 365 are all valid.`},
-  {id:'q3', domain:'d1', type:'mc', q:`Where do you configure single sign-on and password strength for a Docusign CLM account?`,
+    explain:`Ноль — наиболее агрессивный допустимый параметр: все, что находится в корзине, безвозвратно удаляется в конце каждого дня. Он не «выключен», все значения от 0 до 365 действительны.`},
+  {id:'q3', domain:'d1', type:'mc', q:`Где вы настраиваете единый вход и надежность пароля для учетной записи Docusign CLM?`,
     choices:[`Настройки безопасности в разделе «Управление учетной записью» на боковой панели администратора CLM.`, `Документация администратора`, `Раздел «Интеграции» боковой панели администратора CLM.`, `Собственная страница настроек пользователя`],
     correct:1,
-    explain:`CLM's own Security Settings cover only session timeout, clickjack protection and sharing. SSO, password security and the other account-wide identity options live in Docusign Admin.`},
+    explain:`Собственные настройки безопасности CLM охватывают только время ожидания сеанса, защиту от кликджекинга и совместное использование. Единый вход, защита паролем и другие параметры идентификации на уровне учетной записи находятся в Docusign Admin.`},
   {id:'q4', domain:'d1', type:'ms', q:`Какие настройки находятся на странице настроек безопасности администратора CLM? <em>Выберите все, что применимо.</em>`,
     choices:[`Таймаут простоя сеанса`, `Защита от кликджека`, `Конфигурация единого входа SAML`, `Могут ли пользователи публично делиться документами за пределами организации`],
     correct:[0,1,3],
-    explain:`Session, clickjack protection and sharing are the three CLM security settings. SAML SSO is configured in Docusign Admin.`},
-  {id:'q5', domain:'d1', type:'mc', q:`What is Component Packaging (Deployment) used for?`,
+    explain:`Сеанс, защита от кликджекинга и совместное использование — это три настройки безопасности CLM. SAML SSO настраивается в Docusign Admin.`},
+  {id:'q5', domain:'d1', type:'mc', q:`Для чего используется упаковка компонентов (развертывание)?`,
     choices:[`Перенос большого объема документов между аккаунтами`, `Перемещение компонентов конфигурации между учетными записями CLM, например UAT, в рабочую среду.`, `Упаковка документа и приложений к нему для внешнего просмотра`, `Экспорт резервной копии аккаунта`],
     correct:1,
-    explain:`Component packaging transfers configuration components between accounts, typically UAT to Production. It is explicitly not a way to migrate mass content such as documents.`},
-  {id:'q6', domain:'d1', type:'mc', q:`The first time an administrator grants Docusign Support access to a CLM account, what happens?`,
+    explain:`При упаковке компонентов компоненты конфигурации передаются между учетными записями, обычно UAT в производство. Это явно не способ переноса массового контента, такого как документы.`},
+  {id:'q6', domain:'d1', type:'mc', q:`Что происходит, когда администратор впервые предоставляет службе поддержки Docusign доступ к учетной записи CLM?`,
     choices:[`Служба поддержки навсегда наследует разрешения администратора, предоставившего разрешение.`, `В учетной записи создан пользователь с именем Поддержка документации.`, `Все администраторы уведомляются по электронной почте`, `Учетная запись заблокирована для других администраторов на время`],
     correct:1,
     explain:`Первый грант создает пользователя с именем <em>Поддержка документов</em>. В более поздних грантах <em>Используйте предыдущие разрешения службы поддержки Документ.</em> флажок установлен по умолчанию, поэтому старые разрешения сохраняются, если вы его не снимите.`},
-  {id:'q7', domain:'d1', type:'mc', q:`What is the maximum length of a folder name in Docusign CLM?`,
+  {id:'q7', domain:'d1', type:'mc', q:`Какова максимальная длина имени папки в Docusign CLM?`,
     choices:[`50 символов`, `100 символов`, `255 символов`, `400 символов`],
     correct:1,
     explain:`Имена папок ограничены 100 символами. Папка <em>descriptions</em> and <em>document</em> имена ограничены 255. Ни папка, ни имя документа не могут начинаться или заканчиваться пробелом или заканчиваться точкой.`},
-  {id:'q8', domain:'d1', type:'mc', q:`How many documents can be submitted at one time through the Upload menu action or drag and drop?`,
+  {id:'q8', domain:'d1', type:'mc', q:`Сколько документов можно отправить одновременно с помощью действия меню «Загрузить» или перетаскивания?`,
     choices:[`10`, `20`, `50`, `100`],
     correct:1,
-    explain:`Twenty documents per submission. The size limit is separate: an individual uploaded document may be up to 1.5 GB.`},
-  {id:'q9', domain:'d1', type:'mc', q:`A report needs to be exported to CSV but contains 8,000 records. What has to happen?`,
+    explain:`Двадцать документов в одном представлении. Ограничение на размер отдельное: размер отдельного загружаемого документа может достигать 1,5 ГБ.`},
+  {id:'q9', domain:'d1', type:'mc', q:`Отчет необходимо экспортировать в CSV, но он содержит 8000 записей. Что должно произойти?`,
     choices:[`Ничего, экспорт CSV не имеет ограничений по количеству записей.`, `Сначала сохраните отчет в папке в Документация CLM, а затем экспортируйте его в формате CSV или XLSX.`, `Разделить отчет на два сохраненных отчета`, `Запросите увеличение лимита в службе поддержки Документ.`],
     correct:1,
-    explain:`Direct CSV export caps at 5,000 record entries. Anything larger must be saved to a CLM folder location and exported from there as CSV or XLSX.`},
-  {id:'q10', domain:'d1', type:'mc', q:`CLM needs to send a 60 MB document to eSignature. What is required?`,
+    explain:`Прямой экспорт CSV ограничен 5000 записями. Все, что больше, необходимо сохранить в папке CLM и экспортировать оттуда в формате CSV или XLSX.`},
+  {id:'q10', domain:'d1', type:'mc', q:`CLM необходимо отправить документ размером 60 МБ в систему eSignature. Что требуется?`,
     choices:[`Ничего, лимит по умолчанию 100 МБ.`, `Загрузка частями должна быть включена для учетной записи, которую вы запрашиваете у службы поддержки Документ.`, `Документ необходимо разделить на два конверта.`, `Учетная запись должна находиться в плане IAM.`],
     correct:1,
-    explain:`The default cap on a document or envelope sent from CLM to eSignature is 25 MB. It rises to 100 MB only when chunked upload is enabled, and enablement is a request to Docusign Support, not a setting you toggle.`},
-  {id:'q11', domain:'d1', type:'mc', q:`Which character is permitted in a Docusign CLM folder name?`,
+    explain:`Максимальный размер документа или конверта, отправляемого из CLM в электронную подпись, по умолчанию составляет 25 МБ. Он увеличивается до 100 МБ только тогда, когда включена загрузка частями, и включение — это запрос в службу поддержки Docusign, а не параметр, который вы переключаете.`},
+  {id:'q11', domain:'d1', type:'mc', q:`Какой символ разрешен в имени папки Docusign CLM?`,
     choices:[`<code>:</code>`, `<code>?</code>`, `<code>&amp;</code>`, `<code>|</code>`],
     correct:2,
     explain:`Запрещенный набор – это <code>/ \\ : * ? " < > |</code>. <code>&amp;</code> and <code>#</code> символы разрешены, однако они автоматически заменяются в папках внешнего хранилища объектов.`},
 
   /* ---------- AREA 2 · Users, groups and permissions (13) ---------- */
-  {id:'q12', domain:'d2', type:'mc', q:`How many administrator types exist in Docusign CLM (as opposed to CLM.CM)?`,
+  {id:'q12', domain:'d2', type:'mc', q:`Сколько типов администраторов существует в Docusign CLM (в отличие от CLM.CM)?`,
     choices:[`Один: администратор CLM`, `Два: администратор пользователей и суперадминистратор.`, `Три: администратор CLM, администратор пользователей и суперадминистратор.`, `Нет, администрированием занимаются только администраторы организации.`],
     correct:0,
     explain:`Документация CLM имеет один тип администратора: <strong>Администратор CLM</strong>, и в учетной записи должен быть хотя бы один. Администратор пользователя и суперадминистратор — это роли CLM.CM, и этот экзамен основан на Документ CLM.`},
-  {id:'q13', domain:'d2', type:'mc', q:`A CLM User asks why they can run the quarterly report but cannot change its columns. What explains it?`,
+  {id:'q13', domain:'d2', type:'mc', q:`Пользователь CLM спрашивает, почему он может запустить квартальный отчет, но не может изменить его столбцы. Чем это объясняется?`,
     choices:[`Им нужен профиль разрешений администратора CLM.`, `Пользователи CLM могут запускать отчеты, но не могут создавать или редактировать их по умолчанию.`, `Для редактирования отчета требуется личность`, `Отчет заблокирован его владельцем`],
     correct:1,
     explain:`Профиль пользователя CLM включает запуск отчетов, но не их создание или редактирование. <em>Создание, редактирование и удаление любого отчета</em> делегированное разрешение — вот что добавляет это.`},
   {id:'q14', domain:'d2', type:'ms', q:`Какие действия может выполнять CLM-просмотрщик? <em>Выберите все, что применимо.</em>`,
     choices:[`Загрузить или просмотреть документы`, `Используйте поиск`, `Заполните электронные формы`, `Взаимодействуйте с задачами`],
     correct:[0,1,2],
-    explain:`A Viewer can upload or view documents, search, complete eForms, and change their own password. They cannot move, edit or share documents, cannot interact with tasks, cannot view or create reports, and cannot access contacts.`},
-  {id:'q15', domain:'d2', type:'mc', q:`Which permission profile can be assigned delegated permissions in Docusign CLM?`,
+    explain:`Зритель может загружать или просматривать документы, выполнять поиск, заполнять электронные формы и менять свой пароль. Они не могут перемещать, редактировать или делиться документами, не могут взаимодействовать с задачами, не могут просматривать или создавать отчеты и не могут получить доступ к контактам.`},
+  {id:'q15', domain:'d2', type:'mc', q:`Какому профилю разрешений можно назначить делегированные разрешения в Docusign CLM?`,
     choices:[`Любой профиль, включая CLM-просмотрщик`, `Только для пользователей CLM`, `Только администратор CLM`, `Только для полной подписки`],
     correct:1,
     explain:`В Документация CLM делегированные разрешения можно назначать только пользователям с <strong>Пользователь CLM</strong> профиль разрешений. Полный подписчик — это эквивалент CLM.CM, а не ответ здесь.`},
   {id:'q16', domain:'d2', type:'mc', q:`В каком административном районе находится <em>Настройки пользовательского интерфейса</em> делегированное разрешение принадлежит?`,
     choices:[`Инструменты автоматизации`, `Управление аккаунтом`, `Документы и папки`, `Integrations`],
     correct:1,
-    explain:`UI Preferences sits under Account Management alongside Security. It allows a user to change account branding, navigation and actions.`},
+    explain:`Настройки пользовательского интерфейса находятся в разделе «Управление учетной записью» рядом с «Безопасность». Это позволяет пользователю изменять брендинг учетной записи, навигацию и действия.`},
   {id:'q17', domain:'d2', type:'ms', q:`Какие компоненты входят <em>Рабочий процесс и автоматизация</em> делегированное разрешение позволяет пользователю создавать, редактировать и удалять? <em>Выберите все, что применимо.</em>`,
     choices:[`Workflows`, `Умные правила`, `Schedules`, `Шаблоны напоминаний`],
     correct:[0,1,2,3],
-    explain:`Workflow &amp; Automation covers all five automation components: workflows, smart rules, schedules, forms and reminder templates. It is the broadest single delegated permission.`},
-  {id:'q18', domain:'d2', type:'mc', q:`A user holds the Workflow &amp; Automation delegated permission. What is true about their access to the document repository?`,
+    explain:`Workflow & Automation охватывает все пять компонентов автоматизации: рабочие процессы, интеллектуальные правила, расписания, формы и шаблоны напоминаний. Это самое широкое делегированное разрешение.`},
+  {id:'q18', domain:'d2', type:'mc', q:`Пользователь имеет делегированное разрешение «Рабочий процесс и автоматизация». Что верно об их доступе к хранилищу документов?`,
     choices:[`Они наследуют неограниченный доступ к хранилищу механизма рабочего процесса.`, `Они по-прежнему уважают существующую безопасность папок и членство в группах.`, `Они получают доступ для чтения к каждой папке, но не могут редактировать.`, `Безопасность их папок приостановлена, пока они редактируют рабочий процесс.`],
     correct:1,
     explain:`Рабочий процесс <em>engine</em> имеет неограниченный доступ. Пользователь этого не делает. Безопасность папок для профиля пользователя CLM и членства в группах продолжает применяться.`},
-  {id:'q19', domain:'d2', type:'mc', q:`What is a persona in Docusign CLM?`,
+  {id:'q19', domain:'d2', type:'mc', q:`Что такое персона в Docusign CLM?`,
     choices:[`Профиль разрешений, определяющий доступ к документу`, `Настройка отображения на основе ролей, которая изменяет меню, панель инструментов и параметры навигации.`, `Группа пользователей, получающих одинаковые задачи`, `Именованный набор делегированных разрешений`],
     correct:1,
-    explain:`Personas change what a user sees, not what they may do. They tailor menus, toolbars and navigation so an HR manager and a sales manager get different interfaces.`},
-  {id:'q20', domain:'d2', type:'mc', q:`How are personas created, and how many can a user have?`,
+    explain:`Персоны меняют то, что видит пользователь, а не то, что он может сделать. Они адаптируют меню, панели инструментов и навигацию так, чтобы у менеджера по персоналу и менеджера по продажам были разные интерфейсы.`},
+  {id:'q20', domain:'d2', type:'mc', q:`Как создаются персонажи и сколько их может иметь пользователь?`,
     choices:[`Created from permission profiles; a user can have several`, `Created from groups and named after the group; a user can be assigned a single persona`, `Created from scratch on the Personas page; a user can have one per group`, `Создается автоматически для каждого пользователя; их нельзя изменить`],
     correct:1,
-    explain:`Personas are built from groups and take the group's name. A user profile holds exactly one persona.`},
-  {id:'q21', domain:'d2', type:'mc', q:`Can a Docusign CLM group contain contacts?`,
+    explain:`Персоны создаются из групп и получают название группы. Профиль пользователя содержит ровно одну личность.`},
+  {id:'q21', domain:'d2', type:'mc', q:`Может ли группа Docusign CLM содержать контакты?`,
     choices:[`Да, группы могут смешивать лицензированных пользователей и контакты.`, `Нет, группа содержит только лицензированные учетные записи пользователей.`, `Только если контактам предоставлен профиль CLM-просмотрщик.`, `Только для групп, используемых в рабочих процессах`],
     correct:1,
-    explain:`A group is a collection of licensed CLM user accounts. It cannot contain contacts.`},
-  {id:'q22', domain:'d2', type:'mc', q:`What does Docusign recommend as the way to manage document and folder access?`,
+    explain:`Группа — это совокупность лицензированных учетных записей пользователей CLM. Он не может содержать контакты.`},
+  {id:'q22', domain:'d2', type:'mc', q:`Что рекомендует Docusign в качестве способа управления доступом к документам и папкам?`,
     choices:[`Для каждого пользователя, для точности`, `Для каждого профиля разрешений, поэтому он масштабируется в зависимости от ролей.`, `Для каждой группы, поскольку это упрощает процесс безопасного доступа.`, `Для каждого типа документа с использованием доступа к документам`],
     correct:2,
-    explain:`Docusign recommends specifying access through groups rather than user role or individuals, because it simplifies the security access process and is easier to maintain.`},
-  {id:'q23', domain:'d2', type:'mc', q:`How does an administrator update many CLM users at once?`,
+    explain:`Docusign рекомендует указывать доступ через группы, а не через роли пользователей или отдельных лиц, поскольку это упрощает процесс безопасного доступа и его легче поддерживать.`},
+  {id:'q23', domain:'d2', type:'mc', q:`Как администратор одновременно обновляет информацию для многих пользователей CLM?`,
     choices:[`Через диалоговое окно массового редактирования на странице «Группы».`, `Загрузив CSV-файл со страницы «Пользователи».`, `Через боковую панель администратора CLM в разделе «Управление учетной записью».`, `Массовые обновления не поддерживаются в Документ CLM.`],
     correct:1,
-    explain:`Bulk updates are performed from the Users page by uploading a CSV file.`},
+    explain:`Массовые обновления выполняются со страницы «Пользователи» путем загрузки файла CSV.`},
   {id:'q24', domain:'d2', type:'mc', q:`Какое делегированное разрешение <strong>not</strong> доступен в CLM.CM?`,
     choices:[`Генерация документов`, `Сопоставление объектов`, `Integrations`, `Содержимое входящей папки`],
     correct:1,
-    explain:`Object Mapping, which configures and maps the AI tools, is listed as not available for CLM.CM.`},
+    explain:`Сопоставление объектов, которое настраивает и сопоставляет инструменты искусственного интеллекта, указано как недоступное для CLM.CM.`},
 
   /* ---------- AREA 3 · Documents, folders and security (13) ---------- */
-  {id:'q25', domain:'d3', type:'mc', q:`What is the default security access level for all content in Docusign CLM?`,
+  {id:'q25', domain:'d3', type:'mc', q:`Каков уровень безопасности доступа по умолчанию для всего контента в Docusign CLM?`,
     choices:[`Нет доступа`, `View`, `Просмотр и редактирование`, `Просмотр, редактирование, удаление и настройка доступа`],
     correct:2,
     explain:`<strong>Просмотр и редактирование</strong> — это настройка доступа по умолчанию для всего контента в Документ CLM.`},
   {id:'q26', domain:'d3', type:'mc', q:`У пользователя есть <em>Посмотреть и создать</em> в папке. Чего они не могут сделать?`,
     choices:[`Загрузить документ`, `Пересмотреть содержание документа`, `Изменение атрибутов документа`, `Посмотреть папку`],
     correct:2,
-    explain:`View &amp; Create permits viewing a folder and uploading or revising document content, but users at this level cannot change document attributes.`},
+    explain:`Просмотр и создание позволяет просматривать папку и загружать или редактировать содержимое документа, но пользователи на этом уровне не могут изменять атрибуты документа.`},
   {id:'q27', domain:'d3', type:'mc', q:`У пользователя есть <em>Просмотр, редактирование и удаление</em> в папке. Какое действие все еще заблокировано?`,
     choices:[`Удаление документа`, `Удаление папки`, `Предоставление другому пользователю доступа к папке`, `Загрузка нового контента`],
     correct:2,
     explain:`Удаление документов и папок включено. Предоставление или отзыв доступа не требуется и требует верхнего уровня. <em>Просмотр, редактирование, удаление и настройка доступа</em>.`},
-  {id:'q28', domain:'d3', type:'mc', q:`A user is in a group that was denied access to a folder, but an administrator granted that user access directly on the folder. What is the result?`,
+  {id:'q28', domain:'d3', type:'mc', q:`Пользователь входит в группу, которой было отказано в доступе к папке, но администратор предоставил этому пользователю доступ непосредственно к папке. Каков результат?`,
     choices:[`Групповая настройка побеждает, а пользователю отказано`, `Явное предоставление выигрывает, и пользователь получает доступ.`, `Оба компенсируются, и пользователь получает только просмотр.`, `Результат зависит от настройки наследования родительской папки.`],
     correct:1,
-    explain:`Explicitly granted permissions in Docusign CLM win over group permissions. A direct grant or revoke on a folder or sub-folder overrides group access.`},
+    explain:`Явно предоставленные разрешения в Docusign CLM имеют приоритет перед групповыми разрешениями. Прямое предоставление или отзыв папки или подпапки переопределяет групповой доступ.`},
   {id:'q29', domain:'d3', type:'mc', q:`Сколько результатов дает <em>Просмотр разрешений для всех пользователей</em> возвращаться?`,
     choices:[`100`, `500`, `1,000`, `5,000`],
     correct:2,
-    explain:`Viewing permissions this way returns the first 1,000 results.`},
-  {id:'q30', domain:'d3', type:'mc', q:`What is the maximum number of direct child objects a Docusign CLM folder can hold?`,
+    explain:`Просмотр разрешений таким способом возвращает первые 1000 результатов.`},
+  {id:'q30', domain:'d3', type:'mc', q:`Какое максимальное количество прямых дочерних объектов может содержать папка Docusign CLM?`,
     choices:[`1,000`, `5,000`, `10,000`, `100,000`],
     correct:2,
-    explain:`A folder holds a maximum of 10,000 direct child objects, counting documents and sub-folders together.`},
-  {id:'q31', domain:'d3', type:'mc', q:`A folder has exceeded the 10,000 object limit. What does a user see when they open it?`,
+    explain:`Папка содержит максимум 10 000 прямых дочерних объектов, считая документы и подпапки вместе.`},
+  {id:'q31', domain:'d3', type:'mc', q:`В папке превышено ограничение в 10 000 объектов. Что видит пользователь, когда открывает его?`,
     choices:[`Первые 10 000 объектов, остальные скрыты.`, `Все объекты в папке скрыты`, `Доступ только для чтения к папке`, `Папка автоматически архивируется`],
     correct:1,
     explain:`Продукт предупреждает, что элементов слишком много для отображения, а затем скрывается. <em>all</em> объекты в этой папке. Поиск по-прежнему находит содержимое.`},
-  {id:'q32', domain:'d3', type:'mc', q:`Customer Support agrees to lift a folder's object limit. For how long?`,
+  {id:'q32', domain:'d3', type:'mc', q:`Служба поддержки соглашается снять ограничение на количество объектов в папке. Как долго?`,
     choices:[`24 часа`, `Семь дней максимум`, `30 дней`, `Пока администратор не попросит его восстановить`],
     correct:1,
-    explain:`Engineering can remove the limit for a maximum of seven days. The administrator must confirm in writing that they understand the duration and will not request another exception.`},
-  {id:'q33', domain:'d3', type:'mc', q:`How many subfolders can display under a folder in the Documents page folder tree?`,
+    explain:`Инженеры могут снять ограничение максимум на семь дней. Администратор должен подтвердить в письменной форме, что он понимает продолжительность и не будет запрашивать новое исключение.`},
+  {id:'q33', domain:'d3', type:'mc', q:`Сколько подпапок может отображаться под папкой в ​​дереве папок страницы «Документы»?`,
     choices:[`50`, `100`, `1,000`, `10,000`],
     correct:1,
-    explain:`The tree displays a maximum of 100 subfolders under each folder. Folders beyond that are still accessible by navigating the middle portion of the Documents page.`},
+    explain:`В дереве отображается максимум 100 подпапок в каждой папке. Папки за пределами этого по-прежнему доступны при навигации по средней части страницы «Документы».`},
   {id:'q34', domain:'d3', type:'ms', q:`Какие типы документов по умолчанию классифицируются как изменения? <em>Выберите все, что применимо.</em>`,
     choices:[`Addendum`, `Amendment`, `Изменить порядок`, `Exhibit`],
     correct:[0,1,2],
-    explain:`Amendments are exactly three by default: Addendum, Amendment and Change Order. Exhibit is a supplement, alongside Appendix, Attachment and Supplemental Document.`},
-  {id:'q35', domain:'d3', type:'mc', q:`Which category do supplements fall into, and how are they usually handled?`,
+    explain:`Поправок по умолчанию ровно три: Дополнение, Поправка и Порядок изменения. Приложение является дополнением наряду с Приложением, Приложением и Дополнительным документом.`},
+  {id:'q35', domain:'d3', type:'mc', q:`К какой категории относятся добавки и как с ними обычно обращаются?`,
     choices:[`Это первичные соглашения, которые подписываются`, `Они изменяют другой документ в том же соглашении.`, `Они дают дополнительный контекст и обычно просматриваются и подтверждаются, а не подписываются.`, `Они представляют собой архивные копии отдельных документов.`],
     correct:2,
-    explain:`Supplements provide additional information or context to an agreement, and are typically viewed and acknowledged rather than signed.`},
-  {id:'q36', domain:'d3', type:'mc', q:`You need to stop the Sales group from seeing any document classified as a Lease. Which admin page do you use?`,
+    explain:`Дополнения предоставляют дополнительную информацию или контекст соглашения и обычно просматриваются и подтверждаются, а не подписываются.`},
+  {id:'q36', domain:'d3', type:'mc', q:`Вам необходимо запретить группе «Продажи» просматривать любые документы, классифицированные как «Аренда». Какую страницу администратора вы используете?`,
     choices:[`Типы документов`, `Доступ к документам`, `Настройки документа и папки`, `Attributes`],
     correct:1,
-    explain:`Document Access grants or revokes a user group's access to specified document types. Document Types is where you change a type's name and visibility, which is a different job.`},
-  {id:'q37', domain:'d3', type:'mc', q:`What does an Auto Number do?`,
+    explain:`Доступ к документам предоставляет или отзывает доступ группы пользователей к указанным типам документов. Типы документов — это место, где вы меняете имя и видимость типа, что представляет собой другую работу.`},
+  {id:'q37', domain:'d3', type:'mc', q:`Что делает автоматический номер?`,
     choices:[`Нумерует страницы созданного документа.`, `Присваивает уникальный идентификатор документу при загрузке или приеме.`, `Подсчитывает версии документов`, `Упорядочивает шаги рабочего процесса`],
     correct:1,
-    explain:`Auto Numbers automatically assign a unique identifier to a document when it is uploaded or ingested into Docusign CLM. They are configured under Documents &amp; Folders alongside Attributes and Attribute Import Mappings.`},
+    explain:`Auto Numbers автоматически присваивает документу уникальный идентификатор при его загрузке или приеме в Docusign CLM. Они настраиваются в разделе «Документы и папки» вместе с атрибутами и сопоставлениями импорта атрибутов.`},
 
   /* ---------- AREA 4 · Automation tools and integrations (7) ---------- */
-  {id:'q38', domain:'d4', type:'mc', q:`A rule must run whenever a document is moved into a particular folder. Which automation tool?`,
+  {id:'q38', domain:'d4', type:'mc', q:`Правило должно выполняться всякий раз, когда документ перемещается в определенную папку. Какой инструмент автоматизации?`,
     choices:[`Schedule`, `Умное правило`, `Шаблон напоминания`, `eForm`],
     correct:1,
     explain:`Интеллектуальные правила настраивают автоматические действия над папками или документами на основе <em>events</em> которые происходят в них. Расписания — это инструмент, основанный на времени.`},
-  {id:'q39', domain:'d4', type:'mc', q:`Which two kinds of schedule can an administrator create in Docusign CLM?`,
+  {id:'q39', domain:'d4', type:'mc', q:`Какие два типа расписания может создать администратор в Docusign CLM?`,
     choices:[`Немедленно и с отсрочкой`, `Явные и повторяющиеся`, `Ежедневно и ежемесячно`, `Ручной и автоматический`],
     correct:1,
-    explain:`Docusign CLM supports an explicit schedule and a recurring schedule.`},
-  {id:'q40', domain:'d4', type:'mc', q:`A workflow instance evaluates more than 300 expressions in a 15-minute window. What happens?`,
+    explain:`Docusign CLM поддерживает явное расписание и повторяющееся расписание.`},
+  {id:'q40', domain:'d4', type:'mc', q:`Экземпляр рабочего процесса оценивает более 300 выражений за 15-минутное окно. Что происходит?`,
     choices:[`Экземпляр выходит из строя и выполняет откат`, `Экземпляр приостанавливается, и электронное письмо отправляется пользователям, указанным в настройке расширенного уведомления об ошибках рабочего процесса.`, `Дополнительные выражения ставятся в очередь для следующего окна.`, `Рабочий процесс отключен для всего аккаунта`],
     correct:1,
-    explain:`Hitting the limit pauses the workflow instance and notifies the users named in the Advanced Workflow Error Notification setting.`},
-  {id:'q41', domain:'d4', type:'mc', q:`Where do you set up an address that lets people email documents directly into Docusign CLM?`,
+    explain:`Достижение ограничения приостанавливает экземпляр рабочего процесса и уведомляет пользователей, указанных в настройке расширенного уведомления об ошибках рабочего процесса.`},
+  {id:'q41', domain:'d4', type:'mc', q:`Где настроить адрес, который позволит людям отправлять документы по электронной почте непосредственно в Docusign CLM?`,
     choices:[`Интеграции в разделе «Соединения».`, `Документы и папки в разделе «Адреса входящей электронной почты».`, `Управление учетной записью в разделе «Настройки учетной записи».`, `Инструменты автоматизации в разделе «Шаблоны напоминаний».`],
     correct:1,
-    explain:`Inbound Email Addresses sits under Documents &amp; Folders, not Integrations. The account accepts up to 500 inbound emails per hour.`},
+    explain:`Адреса входящей электронной почты находятся в разделе «Документы и папки», а не в разделе «Интеграции». Аккаунт принимает до 500 входящих писем в час.`},
   {id:'q42', domain:'d4', type:'mc', q:`Какой предмет <strong>not</strong> в разделе «Интеграции» на боковой панели администратора CLM?`,
     choices:[`Системные домены`, `Управление доменами`, `Connections`, `Сопоставления импорта атрибутов`],
     correct:3,
-    explain:`Integrations holds System Domains, Manage Domains, Connections and Docusign Analyzer. Attribute Import Mappings is under Documents &amp; Folders.`},
-  {id:'q43', domain:'d4', type:'mc', q:`Which permission profile can complete an eForm but cannot create one?`,
+    explain:`Интеграция содержит системные домены, управление доменами, соединения и анализатор документов. Сопоставления импорта атрибутов находятся в разделе «Документы и папки».`},
+  {id:'q43', domain:'d4', type:'mc', q:`Какой профиль разрешений может заполнять электронную форму, но не может ее создать?`,
     choices:[`Администратор CLM`, `Пользователь CLM`, `CLM-просмотрщик`, `Нет, для завершения электронных форм требуется разрешение на рабочий процесс и автоматизацию.`],
     correct:2,
-    explain:`A CLM Viewer can complete eForms as part of its guest rights. Creating and editing eForms is an administrative function under Automation Tools.`},
-  {id:'q44', domain:'d4', type:'mc', q:`How many concurrent SFTP connections does a Docusign CLM account allow?`,
+    explain:`CLM Viewer может заполнять электронные формы в рамках своих гостевых прав. Создание и редактирование электронных форм — это административная функция в разделе «Инструменты автоматизации».`},
+  {id:'q44', domain:'d4', type:'mc', q:`Сколько одновременных подключений SFTP допускает учетная запись Docusign CLM?`,
     choices:[`5`, `10`, `20`, `100`],
     correct:2,
-    explain:`Twenty concurrent SFTP connections. SFTP is the practical tool for reorganizing content that has run into a folder limit.`}
+    explain:`Двадцать одновременных подключений SFTP. SFTP — это практичный инструмент для реорганизации контента, для которого превышен лимит папок.`}
 ];
 
 /* ============== VIEW ROUTING ============== */
@@ -770,7 +770,7 @@ function renderHome(){
       <a class="cta-card primary" onclick="setView('exam')">
         <div class="cta-icon"><i data-lucide="clipboard-list"></i></div>
         <div class="cta-title">${state.submitted ? "Проверьте свой экзамен" : (inProgress ? "Возобновить пробный экзамен" : "Сдать практический экзамен")}</div>
-        <div class="cta-desc">${state.submitted ? `You scored ${calcScore().total}/${total}. Reopen to review the answers, or retake it.` : `44 questions across the four areas, graded at 80% like the real thing. Includes multiple-response questions so you practise reading carefully. ${answered ? `You've answered ${answered}/${total}.` : ''}`}</div>
+        <div class="cta-desc">${state.submitted ? `Вы забили ${calcScore().total}/${total}. Откройте повторно, чтобы просмотреть ответы, или повторите попытку.` : `44 вопроса по четырем областям с оценкой 80%, как в реальности. Включает вопросы с несколькими ответами, чтобы вы попрактиковались в внимательном чтении. ${answered ? `Вы ответили ${answered}/${total}.` : ''}`}</div>
         <div class="cta-link">${state.submitted ? "Посмотреть результаты →" : (inProgress ? "Продолжить →" : 'Start →')}</div>
       </a>
     </div>
@@ -814,7 +814,7 @@ function renderStudy(){
       <p>Каждый пункт соответствует Руководству администратора Документ CLM. Каждая область связана со своим разделом внизу.</p>
     </div>
     <button class="expand-all" onclick="toggleAllStudy()">${allStudyOpen() ? "Свернуть все" : "Развернуть все"}</button>
-    <button class="expand-all ${state.reviewFilter?'rf-on':''}" onclick="toggleReviewFilter()">${state.reviewFilter ? `Showing needs-review only (${needsReviewCount()}), show all` : `Filter: needs review (${needsReviewCount()})`}</button>
+    <button class="expand-all ${state.reviewFilter?'rf-on':''}" onclick="toggleReviewFilter()">${state.reviewFilter ? `Показан только обзор потребностей (${needsReviewCount()}), показать все` : `Фильтр: требует проверки (${needsReviewCount()})`}</button>
     ${STUDY.map(s=>{
       const d = DOMAIN_INFO[s.key];
       const vis = s.must.map((m,i)=>({m,i})).filter(x=>{

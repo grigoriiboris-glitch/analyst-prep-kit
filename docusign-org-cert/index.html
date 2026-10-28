@@ -312,17 +312,17 @@ async function hintCall(prompt, targetId){
     el.textContent = data.content?.[0]?.text || "Никакого ответа. Проверьте свой ключ.";
   } catch(e){ el.textContent = "Запрос не выполнен. Проверьте свой ключ и соединение."; }
 }
-const TUTOR_ROLE = `You are a plain-spoken Docusign tutor helping someone study for the Docusign Organization Management Pro exam. That exam covers Docusign Admin: organizations, organization administrator permission profiles, centralized user management, bulk actions with CSV files, sharing and transferring envelope ownership, access management (claimed domains, SSO, login policies, just-in-time provisioning, connected apps) and Docusign Monitor alerts and data export. It is about the organization level in Docusign Admin, not settings inside a single eSignature account.`;
+const TUTOR_ROLE = `Вы откровенный преподаватель Docusign, помогающий кому-то подготовиться к экзамену Docusign Organization Management Pro. Этот экзамен охватывает Docusign Admin: организации, профили разрешений администратора организации, централизованное управление пользователями, массовые действия с файлами CSV, совместное использование и передачу владения конвертами, управление доступом (заявленные домены, единый вход, политики входа, своевременная подготовка, подключенные приложения) и оповещения Docusign Monitor и экспорт данных. Речь идет об уровне организации в Docusign Admin, а не о настройках внутри одной учетной записи электронной подписи.`;
 function hintStudy(key, i){
   const s = STUDY.find(x=>x.key===key);
   if(!s) return;
   const fact = stripTags(s.must[i]);
   const prompt = `${TUTOR_ROLE}
 
-Explain this exam point a different way than it is written here:
+Объясните этот экзаменационный вопрос иначе, чем написано здесь:
 "${fact}"
 
-Rules: 3 sentences at most. One idea per sentence. Use an everyday comparison if it helps. Say what the exam is likely to ask about it. No preamble, no restating the question.`;
+Правила: максимум 3 предложения. Одна идея в предложении. Используйте повседневное сравнение, если это помогает. Скажите, что, скорее всего, об этом спросят на экзамене. Никакой преамбулы, никакого повторения вопроса.`;
   hintCall(prompt, 'hint-resp-' + key + '-' + i);
 }
 function hintQuestion(qid){
@@ -331,13 +331,13 @@ function hintQuestion(qid){
   const chosen = state.answers[qid];
   const picked = Array.isArray(chosen) ? chosen.map(i=>stripTags(q.choices[i])).join(' / ') : (chosen!==undefined ? stripTags(q.choices[chosen]) : "(нет ответа)");
   const right = q.type==='ms' ? q.correct.map(i=>stripTags(q.choices[i])).join(' / ') : stripTags(q.choices[q.correct]);
-  const prompt = `${TUTOR_ROLE} A student got this practice question wrong.
+  const prompt = `${TUTOR_ROLE} Студент неправильно ответил на этот практический вопрос.
 
-Question: ${stripTags(q.q)}
-They picked: ${picked}
-Correct answer: ${right}
+Вопрос: ${stripTags(q.q)}
+Они выбрали: ${picked}
+Правильный ответ: ${right}
 
-In 3 sentences at most, say what they were probably confusing, then give one plain rule that keeps the two apart. No preamble.`;
+Максимум в трех предложениях скажите, что вас, вероятно, смутило, а затем приведите одно простое правило, которое разделяет эти два понятия. Никакой преамбулы.`;
   hintCall(prompt, 'hint-resp-q-' + qid);
 }
 
@@ -508,54 +508,54 @@ const STUDY = [
    type 'mc' → correct: index · type 'ms' → correct: [indices] (choose all that apply) */
 const QUESTIONS = [
   /* ---------- AREA 1 · Organizations, administrators and user management (12) ---------- */
-  {id:'q1', domain:'d1', type:'mc', q:`What is required to create a Docusign organization?`,
+  {id:'q1', domain:'d1', type:'mc', q:`Что необходимо для создания организации Docusign?`,
     choices:[`Любая активная учетная запись пользователя электронной подписи.`, `Администратор учетной записи со всеми возможностями администрирования в учетной записи, в которой включена функция Документация администратора.`, `Билет в службу поддержки Документация, поскольку организации создаются только Документ.`, `Заявленный домен и настроенный поставщик удостоверений.`],
     correct:1,
     explain:`Вы должны быть администратором учетной записи с <strong>Все возможности администрирования</strong> и учетная запись должна быть активирована с помощью Документация администратора. Если <em>Начать</em> раздел отсутствует, администрирование организации не включено и это звонок в службу поддержки.`},
-  {id:'q2', domain:'d1', type:'mc', q:`Which account becomes the organization's default account?`,
+  {id:'q2', domain:'d1', type:'mc', q:`Какая учетная запись становится учетной записью организации по умолчанию?`,
     choices:[`Самый большой аккаунт по количеству пользователей`, `Учетная запись электронной подписи, использованная для создания организации.`, `Какая учетная запись будет связана первой после создания`, `Учетной записи по умолчанию не существует, пока ее не установит администратор.`],
     correct:1,
-    explain:`The account you create the organization from becomes the default account. You can change it to another linked account later, but the current default can never be unlinked.`},
+    explain:`Учетная запись, из которой вы создаете организацию, становится учетной записью по умолчанию. Позже вы сможете изменить его на другую связанную учетную запись, но текущую учетную запись по умолчанию невозможно отменить.`},
   {id:'q3', domain:'d1', type:'ms', q:`Какие условия необходимо выполнить, чтобы привязать аккаунт к вашей организации? <em>Выберите все, что применимо.</em>`,
     choices:[`У вас есть профиль разрешений администратора в организации.`, `Вы являетесь администратором учетной записи и имеете все возможности администрирования для этой учетной записи.`, `Аккаунт еще не связан с организацией`, `Учетная запись находится в той же среде сайта, что и учетная запись по умолчанию.`],
     correct:[0,1,2],
-    explain:`Three requirements: the organization Administrator profile, All Administration Capabilities on the account, and the account not already linked elsewhere. The same-site rule belongs to envelope transfer, not to linking.`},
-  {id:'q4', domain:'d1', type:'mc', q:`An organization administrator wants to hand user management to a colleague, but that colleague must never be able to create or edit other administrators. Which permission profile fits?`,
+    explain:`Три требования: профиль администратора организации, все возможности администрирования в учетной записи и учетная запись, которая еще не связана где-либо еще. Правило одного и того же сайта относится к передаче конвертов, а не к связыванию.`},
+  {id:'q4', domain:'d1', type:'mc', q:`Администратор организации хочет передать управление пользователями коллеге, но этот коллега никогда не должен иметь возможность создавать или редактировать других администраторов. Какой профиль разрешений подходит?`,
     choices:[`Administrator`, `Администратор пользователей`, `Администратор настроек`, `Администратор отчетов по продуктам`],
     correct:1,
-    explain:`The Users Administrator can add, edit and close non-administrator users and can apply non-administrator permission profiles only. They cannot assign or change an administrator permission profile and cannot manage other Docusign administrators.`},
-  {id:'q5', domain:'d1', type:'mc', q:`Which delegated administrator profile can link and unlink accounts from the organization?`,
+    explain:`Администратор пользователей может добавлять, редактировать и закрывать пользователей, не являющихся администраторами, и может применять только профили разрешений, не являющихся администраторами. Они не могут назначать или изменять профиль разрешений администратора и не могут управлять другими администраторами Docusign.`},
+  {id:'q5', domain:'d1', type:'mc', q:`Какой профиль делегированного администратора может связывать и отменять связь учетных записей с организацией?`,
     choices:[`Администратор пользователей`, `Администратор настроек`, `Администратор отчетов безопасности`, `Нотариусы Администратор`],
     correct:1,
-    explain:`The Settings Administrator views and manages organization accounts and account settings, including viewing, comparing, exporting and importing settings, and linking and unlinking accounts. They do no user management at all.`},
-  {id:'q6', domain:'d1', type:'mc', q:`A security team member needs Docusign Monitor and nothing else. Which permission profile do you assign?`,
+    explain:`Администратор настроек просматривает и управляет учетными записями организации и настройками учетной записи, включая просмотр, сравнение, экспорт и импорт настроек, а также связывание и отключение учетных записей. Они вообще не занимаются управлением пользователями.`},
+  {id:'q6', domain:'d1', type:'mc', q:`Сотруднику службы безопасности нужен Docusign Monitor и ничего больше. Какой профиль разрешений вы назначаете?`,
     choices:[`Администратор устройств безопасности`, `Администратор отчетов безопасности`, `Администратор отчетов по продуктам`, `Administrator`],
     correct:1,
-    explain:`The Security Reports Administrator is limited to event reporting with Docusign Monitor. Security Appliance Administrator covers appliance settings; Product Reports Administrator covers envelope report exports.`},
-  {id:'q7', domain:'d1', type:'mc', q:`A newly invited organization administrator says the Admin dashboard still looks unchanged. What is the most likely reason?`,
+    explain:`Администратор отчетов безопасности ограничен отчетами о событиях с помощью Docusign Monitor. Администратор Security Appliance отвечает за настройки устройства; Администратор отчетов о продуктах обеспечивает экспорт отчетов в конвертах.`},
+  {id:'q7', domain:'d1', type:'mc', q:`Недавно приглашенный администратор организации говорит, что панель администратора по-прежнему выглядит без изменений. Какова наиболее вероятная причина?`,
     choices:[`Их приглашение все еще находится на рассмотрении, поскольку они не активировали членство.`, `Изменения администратора применяются в течение 24 часов.`, `Сначала они должны быть администратором учетной записи.`, `Их профиль разрешений был установлен на «Администратор подключения».`],
     correct:0,
     explain:`Новый администратор добавляется со статусом <strong>Pending</strong>. Они получат приглашение по электронной почте и должны выбрать АКТИВИРОВАТЬ и войти в систему, прежде чем членство вступит в силу.`},
-  {id:'q8', domain:'d1', type:'mc', q:`You need to change the permission profile on an administrator invitation that has not been accepted yet. What do you do?`,
+  {id:'q8', domain:'d1', type:'mc', q:`Вам необходимо изменить профиль разрешений в приглашении администратора, которое еще не принято. Что вы делаете?`,
     choices:[`Выберите «Действия», затем «Изменить» и измените профиль.`, `Удалите исходное приглашение и повторно добавьте пользователя в качестве администратора.`, `Подождите, пока пользователь активируется, затем отредактируйте членство.`, `Повторно отправьте приглашение, которое снова откроет выбор профиля.`],
     correct:1,
     explain:`По ожидающему приглашению <em>Edit</em> показывает только имя и профиль разрешений. Чтобы изменить любой из них, удалите приглашение и снова добавьте пользователя.`},
   {id:'q9', domain:'d1', type:'ms', q:`Какие возможности доступны для <strong>пользователи домена</strong> а не для обычных пользователей аккаунта? <em>Выберите все, что применимо.</em>`,
     choices:[`Редактирование адреса электронной почты пользователя`, `Настройка политики входа`, `Активация ожидающего членства вручную`, `Редактирование должности пользователя`],
     correct:[0,1,2],
-    explain:`Email address changes, login policy and manual activation of pending memberships are domain-user features, and so are per-user connected apps. Job title is an ordinary profile field for any user, and it propagates across all their accounts.`},
-  {id:'q10', domain:'d1', type:'mc', q:`How many external domain account administrators receive the invitation to link an account?`,
+    explain:`Изменение адреса электронной почты, политика входа и ручная активация ожидающих членства — это функции пользователя домена, как и приложения, подключаемые для каждого пользователя. Должность — это обычное поле профиля для любого пользователя, которое распространяется на все его учетные записи.`},
+  {id:'q10', domain:'d1', type:'mc', q:`Сколько администраторов учетных записей внешних доменов получают приглашение связать учетную запись?`,
     choices:[`Только главный администратор`, `Пять последних активных администраторов учетных записей`, `Все администраторы аккаунта`, `Владелец аккаунта и одна резервная копия`],
     correct:1,
     explain:`Если у учетной записи электронной подписи несколько администраторов, приглашение отправляется <strong>пять последних активных</strong> администраторы аккаунта. Любой из них может принять или отклонить, и для отказа требуется причина.`},
-  {id:'q11', domain:'d1', type:'mc', q:`An account has Docusign CLM enabled. Where must its groups be managed?`,
+  {id:'q11', domain:'d1', type:'mc', q:`В учетной записи включен Docusign CLM. Где должны управляться его группы?`,
     choices:[`В настройках администрирования учетной записи электронной подписи.`, `В настройках организации Документация`, `В администраторе CLM в разделе «Управление пользователями».`, `В любом случае они автоматически синхронизируются.`],
     correct:1,
-    explain:`CLM accounts must use Docusign organization settings to manage groups. eSignature-only accounts may use either organization settings or account settings. A group created for a CLM-enabled account appears in both eSignature and CLM Admin.`},
-  {id:'q12', domain:'d1', type:'mc', q:`On an IAM plan, a user with a Full licence on Account A is added to Account B with a Free licence. What happens?`,
+    explain:`Учетные записи CLM должны использовать настройки организации Docusign для управления группами. Учетные записи только с электронной подписью могут использовать либо настройки организации, либо настройки учетной записи. Группа, созданная для учетной записи с поддержкой CLM, отображается как в eSignature, так и в CLM Admin.`},
+  {id:'q12', domain:'d1', type:'mc', q:`В плане IAM пользователь с полной лицензией в учетной записи A добавляется в учетную запись B с бесплатной лицензией. Что происходит?`,
     choices:[`У них есть полная лицензия на A и бесплатная лицензия на B.`, `Им назначается полная лицензия на B, чтобы соответствовать другим их учетным записям.`, `Дополнение отклонено`, `Оба членства опускаются до бесплатного уровня.`],
     correct:1,
-    explain:`A single user can hold only one licence type across accounts. Adding them with Free where they already hold Full assigns them the Full licence. To move them down, the administrator edits the licence across every membership.`},
+    explain:`Один пользователь может иметь только один тип лицензии для разных учетных записей. Добавление их с статусом «Бесплатно» там, где они уже имеют статус «Полная», дает им полную лицензию. Чтобы переместить их вниз, администратор редактирует лицензию для каждого участника.`},
 
   /* ---------- AREA 2 · Bulk actions (8) ---------- */
   {id:'q13', domain:'d2', type:'ms', q:`Какие столбцы необходимы в <strong>Массовое добавление пользователей</strong> CSV? <em>Выберите все, что применимо.</em>`,
@@ -570,56 +570,56 @@ const QUESTIONS = [
     choices:[`Импорт не проходит проверку`, `Столбец «Группы» игнорируется, и применяется группа.`, `Столбец «Группа» игнорируется, а применяются группы.`, `Оба применяются, и пользователь попадает в объединение обоих списков.`],
     correct:1,
     explain:`Когда единственное число <code>Group</code> столбец включен, множественное число <code>Groups</code> столбец игнорируется. <code>Group</code> только добавляет одну группу на столбец. <code>Groups</code> добавляет и удаляет, переписывая весь список участников в одной ячейке.`},
-  {id:'q16', domain:'d2', type:'mc', q:`How does an administrator change users' email addresses through a bulk update?`,
+  {id:'q16', domain:'d2', type:'mc', q:`Как администратор меняет адреса электронной почты пользователей посредством массового обновления?`,
     choices:[`Замените столбец электронная почта пользователя новым адресом.`, `Поместите новый адрес в столбец Обновленный адрес электронной почты пользователя.`, `Закройте пользователя и снова добавьте его массово.`, `Адреса электронной почты не могут быть изменены массово.`],
     correct:1,
     explain:`<code>UserEmail</code> — обязательный столбец, идентифицирующий пользователя. Новый адрес войдет <code>UpdatedUserEmail</code>. Для этого требуется заявленный домен и профиль администратора или администратора пользователей.`},
-  {id:'q17', domain:'d2', type:'mc', q:`How many accounts can be updated in one account settings import?`,
+  {id:'q17', domain:'d2', type:'mc', q:`Сколько учетных записей можно обновить за один импорт настроек учетной записи?`,
     choices:[`10`, `40`, `100`, `2,000`],
     correct:1,
     explain:`Импорт настроек учетной записи охватывает до <strong>40 аккаунтов</strong> за раз. Цифра 100 — это общее количество сохраненных экспортированных настроек пользователя и учетной записи; 2000 — это лимит закрытия пользователей внешнего домена на сайт.`},
-  {id:'q18', domain:'d2', type:'mc', q:`How long are bulk exports retained, and how many can an organization store?`,
+  {id:'q18', domain:'d2', type:'mc', q:`Как долго сохраняется оптовый экспорт и сколько организация может хранить?`,
     choices:[`30 дней, до 50 экспортов`, `90 дней, до 100 экспортов настроек пользователей и учетных записей в общей сложности.`, `365 дней, без ограничений`, `До 40 экспортов, пока не будет удалено вручную.`],
     correct:1,
     explain:`Организация может хранить в общей сложности до <strong>100</strong> экспорт пользователей и экспорт настроек учетной записи, сохраняются для <strong>90 дней</strong>. Вы также можете удалить их вручную с помощью <em>Удалить экспорт</em>.`},
-  {id:'q19', domain:'d2', type:'mc', q:`An organization has not claimed a domain. Which user export types are available?`,
+  {id:'q19', domain:'d2', type:'mc', q:`Организация не заявила права на домен. Какие типы экспорта пользователей доступны?`,
     choices:[`Только пользователи и членство`, `Пользователи и членство, а также пользователи домена`, `Все три типа`, `Нет, для экспорта требуется заявленный домен`],
     correct:0,
     explain:`Организации без заявленного домена видят только <em>Пользователи и членство</em> экспорт. <em>пользователи домена</em> and <em>Пользователи внешнего домена</em> оба зависят от заявки на домен.`},
-  {id:'q20', domain:'d2', type:'mc', q:`An administrator uploads a bulk add CSV that includes a few rows for users who already exist. What happens to those rows?`,
+  {id:'q20', domain:'d2', type:'mc', q:`Администратор загружает массовый файл CSV-файла с добавлением нескольких строк для уже существующих пользователей. Что происходит с этими строками?`,
     choices:[`Они обновляют существующих пользователей`, `Они игнорируются, поскольку импортируются только новые пользователи.`, `Весь импорт отклонен`, `Они создают дубликатов пользователей`],
     correct:1,
     explain:`Массовое добавление импортирует только новых пользователей. Изменения существующих пользователей игнорируются. Обновление существующих пользователей — это отдельное действие с другим обязательным набором столбцов, в том числе <code>APIUserName</code>.`},
 
   /* ---------- AREA 3 · Sharing and transferring ownership (8) ---------- */
-  {id:'q21', domain:'d3', type:'mc', q:`Which shared access permission allows a user to correct, resend and void another user's envelopes, but not to send new ones on their behalf?`,
+  {id:'q21', domain:'d3', type:'mc', q:`Какое разрешение общего доступа позволяет пользователю исправлять, пересылать и аннулировать конверты других пользователей, но не отправлять новые от их имени?`,
     choices:[`Разрешить управлять от имени`, `Разрешить редактировать от имени`, `Разрешить отправку от имени`, `Общие конверты, только просмотр`],
     correct:1,
     explain:`Уровни складываются. <em>Manage</em> это просмотр, история, загрузка и перемещение по папкам. <em>Edit</em> добавляет правильно, повторно отправить и аннулировать. <em>Send</em> добавляет отправку и редактирование черновиков поверх обоих.`},
   {id:'q22', domain:'d3', type:'ms', q:`Какие утверждения об общем доступе верны? <em>Выберите все, что применимо.</em>`,
     choices:[`Доступ может быть предоставлен от одного пользователя группе.`, `Оба пользователя должны быть в одной учетной записи`, `Дата окончания не является обязательной и истекает доступ без каких-либо действий вручную.`, `Одновременно можно выбрать до 100 пользователей`],
     correct:[1,2,3],
-    explain:`Shared access is granted user to user, never user to group. Both parties must be on the same account, an optional end date expires the access automatically, and the selection cap is 100 users.`},
-  {id:'q23', domain:'d3', type:'mc', q:`A user has been closed and their envelopes need to be reviewed. What is the supported approach?`,
+    explain:`Общий доступ предоставляется пользователю пользователю, а не пользователю группе. Обе стороны должны находиться в одной учетной записи, необязательная дата окончания автоматически прекращает доступ, а ограничение выбора составляет 100 пользователей.`},
+  {id:'q23', domain:'d3', type:'mc', q:`Пользователь был закрыт, и его конверты необходимо просмотреть. Каков поддерживаемый подход?`,
     choices:[`Предоставить общий доступ к закрытым конвертам пользователя`, `Передайте конверты себе или другому активному пользователю, затем откройте их.`, `Временно активируйте пользователя`, `Запросить поддержку экспорта закрытых конвертов пользователя`],
     correct:1,
-    explain:`Inactive and pending users cannot be granted shared access and cannot have their envelopes shared. Transfer the envelopes to an active user first.`},
-  {id:'q24', domain:'d3', type:'mc', q:`Which envelopes cannot be transferred to a new owner?`,
+    explain:`Неактивным и ожидающим пользователям не может быть предоставлен общий доступ, а также не может быть предоставлен общий доступ к их конвертам. Сначала передайте конверты активному пользователю.`},
+  {id:'q24', domain:'d3', type:'mc', q:`Какие конверты нельзя передать новому владельцу?`,
     choices:[`Заполненные конверты`, `Аннулированные конверты`, `Черновые конверты`, `Конверты с аутентификацией получателя`],
     correct:2,
     explain:`Конверты в любом статусе, кроме <strong>Draft</strong> можно перенести. Сквозняки не могут. Полученные конверты также выходят за рамки, поскольку они принадлежат отправителю.`},
-  {id:'q25', domain:'d3', type:'mc', q:`An administrator tries to transfer envelopes from an NA1 account to a user on an NA2 account in the same organization. What happens?`,
+  {id:'q25', domain:'d3', type:'mc', q:`Администратор пытается передать конверты из учетной записи NA1 пользователю учетной записи NA2 в той же организации. Что происходит?`,
     choices:[`Все работает, оба аккаунта привязаны к организации`, `Это невозможно, конверты нельзя передавать между сайтами`, `Это работает, но конверты теряют свою историю.`, `Работает только для заполненных конвертов.`],
     correct:1,
     explain:`Обе учетные записи должны быть связаны с организацией. <strong>and</strong> в той же среде сайта Документация. NA1–NA2 не поддерживается.`},
-  {id:'q26', domain:'d3', type:'mc', q:`What is the maximum number of eligible envelopes that can be transferred at one time?`,
+  {id:'q26', domain:'d3', type:'mc', q:`Какое максимальное количество конвертов, отвечающих критериям, можно передать за один раз?`,
     choices:[`100`, `500`, `2,000`, `50,000`],
     correct:2,
     explain:`До <strong>2,000</strong> соответствующие конверты могут быть переданы одновременно. Цифра 2000 также отображается как лимит закрытия пользователей внешнего домена на сайт, поэтому прочитайте, о каком из них задается вопрос.`},
   {id:'q27', domain:'d3', type:'mc', q:`Передача конвертов массовой отправки в формате CSV завершается с ошибкой. <code>cannot_copy_bulksend_list</code>. Чего не хватает?`,
     choices:[`Получающий пользователь не имеет разрешения на массовую отправку.`, `CSV содержит более одной учетной записи.`, `Конверты все еще находятся в статусе черновика.`, `Исходный аккаунт не связан с организацией`],
     correct:0,
-    explain:`Owners receiving envelopes that were sent via Bulk Send must hold the Bulk Send permission profile. Without it, the transfer fails with that error.`},
+    explain:`Владельцы, получающие конверты, отправленные с помощью массовой рассылки, должны иметь профиль разрешения на массовую отправку. Без него передача завершается с этой ошибкой.`},
   {id:'q28', domain:'d3', type:'mc', q:`Где находится <em>Добавить первоначального владельца в качестве точной копии</em> предложенный вариант?`,
     choices:[`В диалоговом окне «Перенести сейчас»`, `В диалоговом окне «Передача с использованием CSV»`, `В журналах передачи конвертов`, `В правилах доверительного управления счетом`],
     correct:1,
@@ -629,48 +629,48 @@ const QUESTIONS = [
   {id:'q29', domain:'d4', type:'mc', q:`Две организации хотят претендовать на домен. <code>Fontara.com</code>. Что происходит?`,
     choices:[`Оба могут претендовать на это, и пользователи делятся по учетным записям.`, `Только одна организация может заявить и подтвердить это.`, `Заявка является общей, и обе организации управляют пользователями.`, `Второе утверждение заменяет первое.`],
     correct:1,
-    explain:`A domain can be claimed by only one Docusign organization. The same organization can claim the same domain in both the demo and production environments.`},
-  {id:'q30', domain:'d4', type:'mc', q:`Which DNS record does Docusign recommend for domain verification, and what does it point to?`,
+    explain:`На домен может претендовать только одна организация Docusign. Одна и та же организация может претендовать на один и тот же домен как в демонстрационной, так и в производственной среде.`},
+  {id:'q30', domain:'d4', type:'mc', q:`Какую запись DNS рекомендует Docusign для проверки домена и на что она указывает?`,
     choices:[`Запись TXT, содержащая идентификатор учетной записи.`, `Запись CNAME в субдомене GUID, указывающая на <code>verifydomain.docusign.net.</code>`, `Запись MX, указывающая на почтовые серверы Документ.`, `Запись A, указывающая на безопасный список IP-адресов организации.`],
     correct:1,
     explain:`Документация рекомендует использовать запись CNAME. Хост — это 32-значный GUID, а цель — <code>verifydomain.docusign.net.</code> с завершающей точкой. TXT-запись с <code>документация=</code> плюс GUID тоже работает.`},
-  {id:'q31', domain:'d4', type:'mc', q:`An administrator removes the verification token from DNS after the domain shows Active. What is the consequence?`,
+  {id:'q31', domain:'d4', type:'mc', q:`Администратор удаляет токен проверки из DNS после того, как домен становится активным. Каковы последствия?`,
     choices:[`Ничего, верификация - это разовая проверка`, `Документация периодически перепроверяет DNS, и удаление приведет к тому, что пользователи не смогут получить доступ к Документ.`, `Домен снова переходит в состояние ожидания, но на пользователей это не влияет.`, `Затрагиваются только новые пользователи.`],
     correct:1,
-    explain:`The TXT or CNAME token must remain in place for as long as you reserve the domain. Docusign periodically checks the DNS to confirm the claim is still valid.`},
-  {id:'q32', domain:'d4', type:'mc', q:`Which login policy value lets a user sign in either through the identity provider or with their Docusign username and password?`,
+    explain:`Токен TXT или CNAME должен оставаться в силе до тех пор, пока вы резервируете домен. Docusign периодически проверяет DNS, чтобы подтвердить, что утверждение все еще действительно.`},
+  {id:'q32', domain:'d4', type:'mc', q:`Какое значение политики входа позволяет пользователю войти в систему либо через поставщика удостоверений, либо с помощью имени пользователя и пароля Docusign?`,
     choices:[`None`, `FedAuthRequired`, `FedAuthBypass`, `AutoActivate`],
     correct:2,
     explain:`<code>FedAuthBypass</code> разрешает оба маршрута. <code>FedAuthRequired</code> заставляет поставщика удостоверений. Политика для каждого пользователя намеренно переопределяет политику домена, поэтому Документация рассматривает ее как исключение, а не правило.`},
-  {id:'q33', domain:'d4', type:'mc', q:`What does disabling just-in-time provisioning on the Identity Providers page do?`,
+  {id:'q33', domain:'d4', type:'mc', q:`Что дает отключение своевременной подготовки на странице «Поставщики удостоверений»?`,
     choices:[`Отключает только расширенный поток атрибутов SAML.`, `Отключает только поток учетной записи по умолчанию.`, `Отключает как поток учетной записи по умолчанию, так и поток атрибутов SAML.`, `Блокирует все входы в систему SSO`],
     correct:2,
-    explain:`Disabling JIT stops both flows: adding users to the default account with the default permission profile, and adding users to a specific account from custom identity provider attribute values. JIT is enabled by default.`},
-  {id:'q34', domain:'d4', type:'mc', q:`A user cannot log in through SSO after the identity provider changed its unique identifier for them. What should the administrator do?`,
+    explain:`Отключение JIT останавливает оба потока: добавление пользователей в учетную запись по умолчанию с профилем разрешений по умолчанию и добавление пользователей в определенную учетную запись на основе значений атрибутов настраиваемого поставщика удостоверений. JIT включен по умолчанию.`},
+  {id:'q34', domain:'d4', type:'mc', q:`Пользователь не может войти в систему через единый вход после того, как поставщик удостоверений изменил для него свой уникальный идентификатор. Что должен сделать администратор?`,
     choices:[`Сброс пароля пользователя Документация`, `Очистите сохраненный Федеративный идентификатор в профиле безопасности пользователя.`, `Закройте и повторно добавьте пользователя`, `Установите для политики входа пользователя значение Обход ФедАутентификация навсегда.`],
     correct:1,
-    explain:`Clear the recorded Federated ID from the Security section for that identity provider. The next SSO login records the new identifier automatically.`},
+    explain:`Удалите записанный Federated ID из раздела «Безопасность» для этого поставщика удостоверений. При следующем входе в систему единого входа новый идентификатор автоматически записывается.`},
   {id:'q35', domain:'d4', type:'ms', q:`Какие профили разрешений могут получать доступ к Документ-монитор и управлять им? <em>Выберите все, что применимо.</em>`,
     choices:[`Администратор документов`, `Администратор отчетов безопасности`, `Администратор настроек`, `Администратор пользователей`],
     correct:[0,1],
-    explain:`Only the Docusign Administrator and the Security Reports Administrator can access and manage Monitor. Settings and Users administrators have no Monitor access at all.`},
-  {id:'q36', domain:'d4', type:'mc', q:`Why might Docusign Monitor show no user activity for a set of users?`,
+    explain:`Только администратор Docusign и администратор отчетов безопасности могут получить доступ к Monitor и управлять им. Администраторы настроек и пользователей вообще не имеют доступа к монитору.`},
+  {id:'q36', domain:'d4', type:'mc', q:`Почему Docusign Monitor может не отображать активность пользователей для группы пользователей?`,
     choices:[`Эти пользователи используют бесплатную лицензию.`, `Их домен электронной почты не заявлен организацией.`, `У организации более 40 связанных аккаунтов.`, `Монитор отслеживает только администраторов`],
     correct:1,
-    explain:`Monitor tracks user activity only for users whose email address is on a domain the organization has claimed. Activity tied to the account itself, such as envelope sends and document downloads, is still captured.`},
-  {id:'q37', domain:'d4', type:'mc', q:`How many alerts and events does Docusign Monitor Free Edition provide, compared with full Monitor?`,
+    explain:`Монитор отслеживает активность пользователей только для тех пользователей, чей адрес электронной почты находится в домене, на который претендует организация. Действия, связанные с самой учетной записью, такие как отправка конвертов и загрузка документов, по-прежнему фиксируются.`},
+  {id:'q37', domain:'d4', type:'mc', q:`Сколько оповещений и событий предоставляет Docusign Monitor Free Edition по сравнению с полной версией Monitor?`,
     choices:[`3 оповещения и 12 событий по сравнению с 24 оповещениями и 106 событиями`, `12 оповещений и 3 события по сравнению со 106 оповещениями и 24 событиями`, `10 оповещений и 50 событий по сравнению с 24 оповещениями и 100 событиями`, `Набор оповещений идентичен, отличается только временное окно.`],
     correct:0,
-    explain:`Free Edition gives 3 alerts and 12 events over a 30-day window. Full Monitor gives 24 alerts and 106 events with data back to November 2020, plus the API, Splunk integration and alert history.`},
-  {id:'q38', domain:'d4', type:'mc', q:`An administrator adds no IP address ranges to the Monitor IP Safe List. What is the effect?`,
+    explain:`Бесплатная версия предоставляет 3 оповещения и 12 событий в течение 30-дневного периода. Full Monitor предоставляет 24 оповещения и 106 событий с данными за ноябрь 2020 года, а также API, интеграцию Splunk и историю оповещений.`},
+  {id:'q38', domain:'d4', type:'mc', q:`Администратор не добавляет диапазоны IP-адресов в безопасный список IP-адресов монитора. Каков эффект?`,
     choices:[`При каждом входе в систему из-за пределов собственных диапазонов Документация выдается предупреждение.`, `Предупреждение об IP-адресе за пределами разрешенных диапазонов никогда не генерируется.`, `Все оповещения отключены`, `Монитор возвращается к корпоративному диапазону по умолчанию`],
     correct:1,
     explain:`Список безопасных IP-адресов передает только <em>IP-адрес вне допустимых диапазонов</em> тревога. Если диапазоны не настроены, это предупреждение не генерируется. Документация советует добавлять диапазоны, а не отдельные адреса, и принимается нотация CIDR.`},
   {id:'q39', domain:'d4', type:'ms', q:`Какие ограничения применяются к загрузке CSV-файла событий Документ-монитор? <em>Выберите все, что применимо.</em>`,
     choices:[`Всего 50 000 строк`, `Всего 25 000 уникальных пользователей`, `Только порядок сортировки по возрастанию`, `Доступно в бесплатной версии Монитор`],
     correct:[0,1,2],
-    explain:`The CSV download caps at 50,000 rows and 25,000 unique users, sorts ascending only, and column names cannot be customised. It is not available in Monitor Free Edition.`},
-  {id:'q40', domain:'d4', type:'mc', q:`How many Monitor alert emails can a single user receive per hour?`,
+    explain:`Загрузка CSV ограничена 50 000 строками и 25 000 уникальными пользователями, сортировка осуществляется только по возрастанию, а имена столбцов не могут быть настроены. Он недоступен в Monitor Free Edition.`},
+  {id:'q40', domain:'d4', type:'mc', q:`Сколько электронных писем с оповещениями Monitor может получать один пользователь в час?`,
     choices:[`Three`, `Ten`, `Twenty-four`, `Ограничений нет, но оповещения можно отключить`],
     correct:1,
     explain:`Электронные оповещения ограничены <strong>десять в час за пользователя</strong>. Администраторы организации и делегированные администраторы отчетов о безопасности получают их по умолчанию, и вы можете остановить их, отключив определенное оповещение в настройках монитора.`}
@@ -768,7 +768,7 @@ function renderHome(){
       <a class="cta-card primary" onclick="setView('exam')">
         <div class="cta-icon"><i data-lucide="clipboard-list"></i></div>
         <div class="cta-title">${state.submitted ? "Проверьте свой экзамен" : (inProgress ? "Возобновить пробный экзамен" : "Сдать практический экзамен")}</div>
-        <div class="cta-desc">${state.submitted ? `You scored ${calcScore().total}/${total}. Reopen to review the answers, or retake it.` : `${total} questions across the four areas, graded at 80% like the real thing. Includes multiple-response questions so you practise reading carefully. ${answered ? `You've answered ${answered}/${total}.` : ''}`}</div>
+        <div class="cta-desc">${state.submitted ? `Вы забили ${calcScore().total}/${total}. Откройте повторно, чтобы просмотреть ответы, или повторите попытку.` : `${total} вопросы по четырем областям, оцененные на 80%, как в реальности. Включает вопросы с несколькими ответами, чтобы вы попрактиковались в внимательном чтении. ${answered ? `Вы ответили ${answered}/${total}.` : ''}`}</div>
         <div class="cta-link">${state.submitted ? "Посмотреть результаты →" : (inProgress ? "Продолжить →" : 'Start →')}</div>
       </a>
     </div>
@@ -811,7 +811,7 @@ function renderStudy(){
       <p>Каждый пункт соответствует официальной документации Документация администратора или Документ-монитор. Каждая область связана со своим источником внизу.</p>
     </div>
     <button class="expand-all" onclick="toggleAllStudy()">${allStudyOpen() ? "Свернуть все" : "Развернуть все"}</button>
-    <button class="expand-all ${state.reviewFilter?'rf-on':''}" onclick="toggleReviewFilter()">${state.reviewFilter ? `Showing needs-review only (${needsReviewCount()}), show all` : `Filter: needs review (${needsReviewCount()})`}</button>
+    <button class="expand-all ${state.reviewFilter?'rf-on':''}" onclick="toggleReviewFilter()">${state.reviewFilter ? `Показан только обзор потребностей (${needsReviewCount()}), показать все` : `Фильтр: требует проверки (${needsReviewCount()})`}</button>
     ${STUDY.map(s=>{
       const d = DOMAIN_INFO[s.key];
       const vis = s.must.map((m,i)=>({m,i})).filter(x=>{

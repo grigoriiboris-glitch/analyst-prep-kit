@@ -576,11 +576,11 @@ function buildTemplatePlan(sc){
 
   const share = [];
   if(sc.outputType==='dashboard' || t('tableau') || t('powerbi')){
-    share.push(mkStep(`Sketch the ${outLabel.toLowerCase()} on paper first: what's the headline view, what are the filters?`,''));
-    share.push(mkStep(`Build the main view in ${vizTool}: your answer front and center.`, t('tableau')?'tableau':t('powerbi')?'powerbi':'excel'));
-    share.push(mkStep(`Add supporting views/filters (genre, price, category — whatever your criteria used).`, t('tableau')?'tableau':t('powerbi')?'powerbi':'excel'));
+    share.push(mkStep(`Нарисуйте ${outLabel.toLowerCase()} сначала на бумаге: как выглядит заголовок, какие фильтры?`,''));
+    share.push(mkStep(`Создайте основной вид в ${vizTool}: ваш ответ впереди и в центре.`, t('tableau')?'tableau':t('powerbi')?'powerbi':'excel'));
+    share.push(mkStep(`Добавьте дополнительные представления/фильтры (жанр, цена, категория — независимо от используемых вами критериев).`, t('tableau')?'tableau':t('powerbi')?'powerbi':'excel'));
   }else{
-    share.push(mkStep(`Draft the ${outLabel.toLowerCase()}: lead with the answer, then the evidence per criterion.`,''));
+    share.push(mkStep(`Проект ${outLabel.toLowerCase()}: ведите ответ, затем доказательства по критерию.`,''));
     share.push(mkStep("Создайте 2–3 диаграммы, отражающие аргументы (по одной идее на диаграмме, помеченной как отдельная).", t('tableau')?'tableau':'excel'));
   }
   share.push(mkStep("Назовите и пометьте все, чтобы оно читалось без вас в комнате.",''));
@@ -865,7 +865,20 @@ function presNote(v){ getProj(VIEW.id).present.notes=v; saveProj(); }
 
 function exportMD(p){
   const sc=p.scope;
-  let md = `# ${projName(p)} — analysis project\n\n**Question:** ${sc.question}\n\n**Deliverable:** ${(OUTPUT_TYPES.find(o=>o.id===sc.outputType)||{}).label||''} ${sc.outputNote?'— '+sc.outputNote:''}\n**Tools:** ${sc.tools.map(skillLabel).join(', ')}\n\n## Scope\n\n### Criteria\n${sc.criteria.filter(c=>c.trim()).map(c=>'- '+c).join('\n')}\n\n### Data feasibility\n${feasRows(sc).map(f=>`- ${f.criterion}: **${f.status}**${f.note?' — '+f.note:''}`).join('\n')}\n\n## Step-by-step\n`;
+  let md = `# ${projName(p)} — аналитический проект
+
+**Вопрос:** ${sc.question}\n\n**Deliverable:** ${(OUTPUT_TYPES.find(o=>o.id===sc.outputType)||{}).label||''} ${sc.outputNote?'— '+sc.outputNote:''}\n**Tools:** ${sc.tools.map(skillLabel).join(', ')}
+
+## Область применения
+
+### Критерии
+${sc.criteria.filter(c=>c.trim()).map(c=>'- '+c).join('\n')}
+
+### Осуществимость данных
+${feasRows(sc).map(f=>`- ${f.criterion}: **${f.status}**${f.note?' — '+f.note:''}`).join('\n')}
+
+## Шаг за шагом
+`;
   STAGES.forEach((sg,si)=>{
     const st=p.plan.stages.find(x=>x.key===sg.key);
     if(!st||!st.steps.length) return;
@@ -875,9 +888,16 @@ function exportMD(p){
       if(s.notes.trim()) md += `  - _${s.notes.trim().replace(/\n/g,' ')}_\n`;
     });
   });
-  md += `\n## Presentation checklist\n${p.present.checklist.map(c=>`- [${c.done?'x':' '}] ${c.text}`).join('\n')}\n`;
-  if(p.present.notes.trim()) md += `\n## Presentation notes\n${p.present.notes}\n`;
-  md += `\n---\n_Scoped, planned, and built with Project Studio — Analyst Prep Kit._\n`;
+  md += `
+## Контрольный список презентации
+${p.present.checklist.map(c=>`- [${c.done?'x':' '}] ${c.text}`).join('\n')}\n`;
+  if(p.present.notes.trim()) md += `
+## Примечания к презентации
+${p.present.notes}\n`;
+  md += `
+---
+_Оценено, спланировано и построено с помощью Project Studio — Analyst Prep Kit._
+`;
   return md;
 }
 function copyExport(){

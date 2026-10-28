@@ -315,17 +315,17 @@ async function hintCall(prompt, targetId){
     el.textContent = data.content?.[0]?.text || "Никакого ответа. Проверьте свой ключ.";
   } catch(e){ el.textContent = "Запрос не выполнен. Проверьте свой ключ и соединение."; }
 }
-const TUTOR_ROLE = `You are a plain-spoken Docusign tutor helping someone study for the Docusign eSignature Administration Pro exam. That exam covers account setup, users and groups, branding, sending and signing settings, and sharing envelopes between users.`;
+const TUTOR_ROLE = `Вы откровенный преподаватель Docusign, помогающий кому-то подготовиться к экзамену Docusign eSignature Administration Pro. Этот экзамен охватывает настройку учетной записи, пользователей и групп, брендинг, настройки отправки и подписи, а также обмен конвертами между пользователями.`;
 function hintStudy(key, i){
   const s = STUDY.find(x=>x.key===key);
   if(!s) return;
   const fact = stripTags(s.must[i]);
   const prompt = `${TUTOR_ROLE}
 
-Explain this exam point a different way than it is written here:
+Объясните этот экзаменационный вопрос иначе, чем написано здесь:
 "${fact}"
 
-Rules: 3 sentences at most. One idea per sentence. Use an everyday comparison if it helps. Say what the exam is likely to ask about it. No preamble, no restating the question.`;
+Правила: максимум 3 предложения. Одна идея в предложении. Используйте повседневное сравнение, если это помогает. Скажите, что, скорее всего, об этом спросят на экзамене. Никакой преамбулы, никакого повторения вопроса.`;
   hintCall(prompt, 'hint-resp-' + key + '-' + i);
 }
 function hintQuestion(qid){
@@ -334,13 +334,13 @@ function hintQuestion(qid){
   const chosen = state.answers[qid];
   const picked = Array.isArray(chosen) ? chosen.map(i=>stripTags(q.choices[i])).join(' / ') : (chosen!==undefined ? stripTags(q.choices[chosen]) : "(нет ответа)");
   const right = q.type==='ms' ? q.correct.map(i=>stripTags(q.choices[i])).join(' / ') : stripTags(q.choices[q.correct]);
-  const prompt = `${TUTOR_ROLE} A student got this practice question wrong.
+  const prompt = `${TUTOR_ROLE} Студент неправильно ответил на этот практический вопрос.
 
-Question: ${stripTags(q.q)}
-They picked: ${picked}
-Correct answer: ${right}
+Вопрос: ${stripTags(q.q)}
+Они выбрали: ${picked}
+Правильный ответ: ${right}
 
-In 3 sentences at most, say what they were probably confusing, then give one plain rule that keeps the two apart. No preamble.`;
+Максимум в трех предложениях скажите, что вас, вероятно, смутило, а затем приведите одно простое правило, которое разделяет эти два понятия. Никакой преамбулы.`;
   hintCall(prompt, 'hint-resp-q-' + qid);
 }
 
@@ -488,22 +488,22 @@ const STUDY = [
    type 'mc' → correct: index · type 'ms' → correct: [indices] (choose all that apply) */
 const QUESTIONS = [
   /* ---------- AREA 1 · Set up the account (10) ---------- */
-  {id:'q1', domain:'d1', type:'mc', q:`What is the default value, in minutes, for the Web App Session Timeout?`,
+  {id:'q1', domain:'d1', type:'mc', q:`Каково значение по умолчанию (в минутах) для тайм-аута сеанса веб-приложения?`,
     choices:[`5`, `20`, `60`, `120`],
     correct:1,
     explain:`Все три тайм-аута сеанса (веб-приложение, получатель и мобильное приложение) принимают значения от 1 до 120 минут и по умолчанию равны <strong>20</strong>.`},
-  {id:'q2', domain:'d1', type:'mc', q:`A three-person signing group was sent an envelope. The first member opened it, got distracted, and walked away. Nobody else in the group can open it. What releases it?`,
+  {id:'q2', domain:'d1', type:'mc', q:`Группе подписавшихся из трех человек был отправлен конверт. Первый участник открыл его, отвлекся и ушел. Никто другой в группе не может его открыть. Что его освобождает?`,
     choices:[`Ожидание истечения тайм-аута сеанса получателя`, `Первый участник, выбравший <em>Закончить позже</em>`, `Администратор аннулирует и повторно отправляет конверт`, `Удаление участника из подписывающей группы`],
     correct:1,
     explain:`Тайм-аут сеанса получателя не применяется к подписывающим группам. Участник, открывший его, удерживает его, пока не выберет <em>Закончить позже</em>, который возвращает конверт группе.`},
   {id:'q3', domain:'d1', type:'ms', q:`Какие из них записываются в журнал аудита учетной записи? <em>Выберите все, что применимо.</em>`,
     choices:[`Изменение настроек учетной записи`, `Кто из подписавшихся открыл конверт и когда`, `Изменение платежной кредитной карты`, `Изменения в настройках общего доступа к конвертам`],
     correct:[0,2,3],
-    explain:`The audit log covers account settings, user settings, billing card and address, plan changes, permission profile changes, envelope sharing, branding, the disclosure, and custom fields. Signer activity belongs to that envelope's history and Certificate of Completion, not the audit log.`},
-  {id:'q4', domain:'d1', type:'mc', q:`How many events does the Audit Logs page display on screen?`,
+    explain:`Журнал аудита охватывает настройки учетной записи, настройки пользователя, платежную карту и адрес, изменения плана, изменения профиля разрешений, совместное использование конвертов, брендинг, раскрытие информации и настраиваемые поля. Действия подписывающего лица относятся к истории этого конверта и Сертификату выполнения, а не к журналу аудита.`},
+  {id:'q4', domain:'d1', type:'mc', q:`Сколько событий отображается на экране страницы журналов аудита?`,
     choices:[`25`, `50`, `100`, `Все они, с бесконечной прокруткой`],
     correct:2,
-    explain:`A maximum of 100 events show on the page. To see anything beyond that, export the CSV.`},
+    explain:`На странице отображается максимум 100 событий. Чтобы увидеть что-то еще, экспортируйте CSV.`},
   {id:'q5', domain:'d1', type:'mc', q:`Запись журнала аудита показывает Пользователя как <strong>Система документирования</strong>. Что это значит?`,
     choices:[`Сотрудник Документация внес изменения по вашему запросу.`, `Автоматический процесс Документация внес изменения, например, новый пользователь активировал свою учетную запись.`, `Изменение было сделано через API.`, `Изменение было внесено администратором, чья учетная запись впоследствии была закрыта.`],
     correct:1,
@@ -515,33 +515,33 @@ const QUESTIONS = [
   {id:'q7', domain:'d1', type:'mc', q:`Какое изменение журнала аудита <strong>not</strong> пойман?`,
     choices:[`Редактирование существующего профиля разрешений`, `Создание или удаление профиля разрешений`, `Изменение фирменного оформления аккаунта`, `Изменение настроек пользователя`],
     correct:1,
-    explain:`The audit log records changes to permission profiles but explicitly excludes their creation and deletion. This is a favourite exam detail.`},
-  {id:'q8', domain:'d1', type:'mc', q:`You uploaded a new stamp for the account, but no one can use it. What is missing?`,
+    explain:`Журнал аудита записывает изменения в профилях разрешений, но явно исключает их создание и удаление. Это любимая деталь экзамена.`},
+  {id:'q8', domain:'d1', type:'mc', q:`Вы загрузили новый штамп для аккаунта, но никто не может его использовать. Чего не хватает?`,
     choices:[`Штамп должен быть одобрен службой поддержки Документ.`, `Пользователям или группам необходимо назначить штамп.`, `Штамп должен быть установлен в качестве учетной записи по умолчанию.`, `В настройках подписи должно быть включено принятие подписи.`],
     correct:1,
-    explain:`Uploading a stamp only puts it on the account. Access comes from assigning users or groups to it.`},
-  {id:'q9', domain:'d1', type:'mc', q:`How far back does audit log data go?`,
+    explain:`Загрузка штампа только ставит его на счет. Доступ осуществляется путем назначения к нему пользователей или групп.`},
+  {id:'q9', domain:'d1', type:'mc', q:`Насколько давно хранятся данные журнала аудита?`,
     choices:[`90 дней`, `Два года`, `К дате создания аккаунта`, `До 1 июня 2015 г.`],
     correct:3,
-    explain:`Audit log data begins June 1, 2015. Nothing before that date is available, regardless of when the account was created.`},
-  {id:'q10', domain:'d1', type:'mc', q:`Your compliance team wants an authentication check on every single envelope, with no discretion left to senders. Which account-level recipient authentication setting do you choose?`,
+    explain:`Данные журнала аудита начинаются с 1 июня 2015 года. До этой даты ничего недоступно, независимо от того, когда была создана учетная запись.`},
+  {id:'q10', domain:'d1', type:'mc', q:`Ваша группа обеспечения соответствия хочет, чтобы проверка подлинности проводилась на каждом конверте, не оставляя при этом никаких полномочий отправителям. Какой параметр аутентификации получателя на уровне учетной записи вы выберете?`,
     choices:[`Отправитель может потребовать, чтобы получатель прошел аутентификацию на любом конверте, отправленном с этой учетной записи.`, `Любой получатель должен пройти аутентификацию на каждом конверте, отправленном с этого аккаунта.`, `Отключить аутентификацию получателя для этой учетной записи`, `Каждый раз, когда получатель получает доступ к конверту`],
     correct:1,
-    explain:`"Any recipient must authenticate on every envelope" is the mandatory setting. The sender must still pick a method, but cannot skip it. "Every time a recipient accesses an envelope" is a different control; it sets the trigger frequency, not whether authentication is required.`},
+    explain:`«Любой получатель должен пройти проверку подлинности на каждом конверте» — это обязательная настройка. Отправитель по-прежнему должен выбрать метод, но не может его пропустить. «Каждый раз, когда получатель обращается к конверту» — это другой элемент управления; он устанавливает частоту срабатывания, а не необходимость аутентификации.`},
 
   /* ---------- AREA 2 · Manage users and groups (12) ---------- */
-  {id:'q11', domain:'d2', type:'mc', q:`You added a user with an access code. They typed it wrong on the activation page. What happens?`,
+  {id:'q11', domain:'d2', type:'mc', q:`Вы добавили пользователя с кодом доступа. На странице активации неправильно написали. Что происходит?`,
     choices:[`У них есть еще две попытки`, `Приглашение признано недействительным, и вам необходимо отправить его повторно.`, `Требование кода доступа отменяется, и они переходят на страницу пароля.`, `Пользователь создан, но помечен как неактивный`],
     correct:1,
-    explain:`One wrong access code invalidates the invitation. Resend it from the Users page.`},
-  {id:'q12', domain:'d2', type:'mc', q:`Which two groups exist on every account and cannot be edited or deleted?`,
+    explain:`Один неверный код доступа делает приглашение недействительным. Отправьте его повторно со страницы «Пользователи».`},
+  {id:'q12', domain:'d2', type:'mc', q:`Какие две группы существуют в каждой учетной записи и не могут быть изменены или удалены?`,
     choices:[`Отправители и подписывающие стороны`, `Все и администраторы`, `По умолчанию и администраторы`, `Все пользователи и администратор DS`],
     correct:1,
     explain:`<strong>Everyone</strong> удерживает всех активных пользователей. <strong>Administrators</strong> содержит каждого активного пользователя, чей профиль разрешений имеет все возможности администрирования. Ни то, ни другое нельзя редактировать или удалять.`},
   {id:'q13', domain:'d2', type:'mc', q:`У делегированного администратора есть функция «Разрешить некоторые» только для пользователей и групп. <em>Редактировать только группы</em>. Что они могут сделать?`,
     choices:[`Добавляйте, переименовывайте и удаляйте группы, а также перемещайте пользователей в них и из них, но не редактируйте пользователей.`, `Редактируйте пользователей и группы, но не администраторов.`, `Просматривать группы, но ничего не менять`, `Управление группами и сброс паролей пользователей`],
     correct:0,
-    explain:`Edit Groups Only means full group management plus membership changes, with no ability to add, edit or close users.`},
+    explain:`«Только редактировать группы» означает полное управление группой, а также изменение членства, без возможности добавлять, редактировать или закрывать пользователей.`},
   {id:'q14', domain:'d2', type:'mc', q:`Вы предоставляете делегированному администратору <em>Передача конвертов</em> разрешение и ничего больше. Что Документация делает автоматически?`,
     choices:[`Ничего. Он стоит один`, `Он также включает пользователей и группы только для просмотра.`, `Он также включает общий доступ.`, `Он также включает настройки учетной записи при редактировании.`],
     correct:1,
@@ -549,111 +549,111 @@ const QUESTIONS = [
   {id:'q15', domain:'d2', type:'ms', q:`Делегированный администратор имеет право <em>Настройки учетной записи</em> разрешение. Чем они могут управлять? <em>Выберите все, что применимо.</em>`,
     choices:[`Настройки учетной записи`, `Подписание и отправка настроек`, `Пользователи и группы`, `Настройки безопасности`],
     correct:[0,1],
-    explain:`Account Settings covers account, signing and sending settings, and integrations, but explicitly not users, not groups, not security settings, and not Connect configuration. Connect is its own checkbox.`},
-  {id:'q16', domain:'d2', type:'mc', q:`Which delegated permission also grants the ability to add individual envelopes to the purge queue?`,
+    explain:`Настройки учетной записи охватывают учетную запись, настройки подписи и отправки, а также интеграцию, но явно не пользователей, не группы, не настройки безопасности и не конфигурацию Connect. Connect — это отдельный флажок.`},
+  {id:'q16', domain:'d2', type:'mc', q:`Какое делегированное разрешение также предоставляет возможность добавлять отдельные конверты в очередь очистки?`,
     choices:[`Передача конвертов`, `Настройки учетной записи`, `Хранение документов`, `Reporting`],
     correct:2,
-    explain:`Document Retention lets a delegate enable, disable or modify the retention policy, and use targeted purge on individual envelopes.`},
-  {id:'q17', domain:'d2', type:'mc', q:`Members of a signing group need a Docusign account in order to sign. True or false?`,
+    explain:`Хранение документов позволяет делегату включать, отключать или изменять политику хранения, а также использовать целевую очистку отдельных конвертов.`},
+  {id:'q17', domain:'d2', type:'mc', q:`Для подписания членам группы подписи необходима учетная запись Docusign. Правда или ложь?`,
     choices:[`Истинный. Членам подписывающей группы всегда нужна учетная запись`, `Ложь, если только группа не использует дополнительный адрес электронной почты для уведомлений.`, `ЛОЖЬ. Им никогда не нужна учетная запись ни при какой конфигурации.`, `Верно, но только если в группе более пяти участников.`],
     correct:1,
-    explain:`Signing group members normally need no account. Adding an alternate group email changes that: notifications go to one shared address, only group members can act, and those members must sign in to a Docusign account.`},
+    explain:`Членам подписывающей группы обычно не требуется учетная запись. Добавление альтернативного адреса электронной почты группы меняет следующее: уведомления отправляются на один общий адрес, действовать могут только участники группы, и эти участники должны войти в учетную запись Docusign.`},
   {id:'q18', domain:'d2', type:'mc', q:`Отправитель сообщает, что опция массовой отправки отсутствует, хотя вы включили ее. <em>Включить массовых получателей</em> для аккаунта. Что еще требуется?`,
     choices:[`Требуется профиль разрешений отправителя <em>Разрешить отправку в массовый список</em>`, `Для учетной записи необходимо включить требование шаблона.`, `Отправителю необходимо делегированное разрешение групп подписи.`, `Ничего. Одной настройки учетной записи достаточно.`],
     correct:0,
     explain:`Для некоторых функций требуются оба уровня: переключение учетной записи и опция профиля разрешений. Массовая отправка потребностей <em>Включить массовых получателей</em> на счету и <em>Разрешить отправку в массовый список</em> на профиле.`},
-  {id:'q19', domain:'d2', type:'mc', q:`You want a user to be able to use templates other people made, and create their own, but not share any. Which Templates permission?`,
+  {id:'q19', domain:'d2', type:'mc', q:`Вы хотите, чтобы пользователь мог использовать шаблоны, созданные другими людьми, и создавать свои собственные, но не делиться ими. Какое разрешение на использование шаблонов?`,
     choices:[`None`, `Use`, `Create`, `Share`],
     correct:2,
     explain:`Лестница: Нет → Использовать → Создать → Поделиться. <em>Create</em> позволяет использовать и создавать; обмену нужна верхняя ступенька.`},
-  {id:'q20', domain:'d2', type:'mc', q:`Which Address Book permission is the only one that lets a user share their own contacts with the rest of the account?`,
+  {id:'q20', domain:'d2', type:'mc', q:`Какое разрешение адресной книги является единственным, которое позволяет пользователю делиться своими контактами с остальной частью учетной записи?`,
     choices:[`Использовать только личное`, `Использовать только общий доступ`, `Используйте личные и общие`, `Share`],
     correct:3,
     explain:`Only <em>Share</em> разрешает исходящий обмен. «Использовать личные и общие» позволяет пользователю использовать общие контакты, но не добавлять их.`},
-  {id:'q21', domain:'d2', type:'mc', q:`Are delegated administrators included in the built-in Administrators group?`,
+  {id:'q21', domain:'d2', type:'mc', q:`Включены ли делегированные администраторы во встроенную группу «Администраторы»?`,
     choices:[`Да, все администраторы`, `Нет. В группу «Администраторы» входят только пользователи со всеми возможностями администрирования.`, `Только если у них также есть разрешение безопасности.`, `Только если администратор добавит их вручную.`],
     correct:1,
-    explain:`The Administrators group collects users whose profile has the full "Allow All" administration option. Delegated administrators are deliberately excluded.`},
-  {id:'q22', domain:'d2', type:'mc', q:`You need to change one setting on the built-in DS Admin permission profile. How?`,
+    explain:`В группу «Администраторы» входят пользователи, в профиле которых имеется полная опция администрирования «Разрешить все». Делегированные администраторы намеренно исключены.`},
+  {id:'q22', domain:'d2', type:'mc', q:`Вам необходимо изменить один параметр во встроенном профиле разрешений администратора DS. Как?`,
     choices:[`Отредактируйте его прямо на странице «Профили разрешений».`, `Вы не можете. Профили разрешений по умолчанию не могут быть изменены, поэтому скопируйте их и отредактируйте копию.`, `Обратитесь в службу поддержки Документация, чтобы разблокировать его.`, `Удали его и создай заново`],
     correct:1,
     explain:`Профили разрешений по умолчанию заблокированы. Использовать <em>Добавление и копирование профилей разрешений</em> чтобы сделать редактируемый дубликат.`},
 
   /* ---------- AREA 3 · Branding, sending and signing (12) ---------- */
-  {id:'q23', domain:'d3', type:'mc', q:`Recipients are receiving signing request emails with last year's logo. Which brand do you fix?`,
+  {id:'q23', domain:'d3', type:'mc', q:`Получатели получают электронные письма с запросами на подпись с прошлогодним логотипом. Какую марку вы ремонтируете?`,
     choices:[`Отправляющий бренд`, `Подписывающий бренд`, `Оба. У них один логотип`, `Ни один. Логотипы электронной почты берутся из профиля учетной записи.`],
     correct:1,
-    explain:`The signing brand controls what recipients see: notification emails and the signing view. The sending brand controls what your own users see inside the app.`},
-  {id:'q24', domain:'d3', type:'mc', q:`How many sending brands can you specify for an account?`,
+    explain:`Подписывающий бренд контролирует то, что видят получатели: электронные письма с уведомлениями и вид подписи. Бренд-отправитель контролирует то, что ваши пользователи видят внутри приложения.`},
+  {id:'q24', domain:'d3', type:'mc', q:`Сколько брендов отправки вы можете указать для аккаунта?`,
     choices:[`One`, `Один на группу`, `До пяти`, `Unlimited`],
     correct:0,
-    explain:`You specify a single sending brand for all account members. Signing brands, by contrast, can be many with one set as the default.`},
-  {id:'q25', domain:'d3', type:'mc', q:`Reminders are enabled, the first reminder is set to 3 days, and the days between reminders is set to 0. What happens?`,
+    explain:`Вы указываете единый бренд отправки для всех участников аккаунта. Подписывающих брендов, напротив, может быть много, причем один установлен по умолчанию.`},
+  {id:'q25', domain:'d3', type:'mc', q:`Напоминания включены, для первого напоминания установлено значение 3 дня, а количество дней между напоминаниями установлено на 0. Что произойдет?`,
     choices:[`Напоминания выходят каждый день после третьего дня.`, `Одно напоминание выходит на третий день и больше не будет после него.`, `Напоминания вообще не выходят`, `Настройка отклонена. 0 не является допустимым значением`],
     correct:1,
-    explain:`Zero days between reminders means no reminders are sent after the first one. It is not "off" and it is not "constantly".`},
-  {id:'q26', domain:'d3', type:'mc', q:`The watermark feature is on, but signers report that documents they download to sign carry no watermark. Which setting explains it?`,
+    explain:`Ноль дней между напоминаниями означает, что после первого напоминания не отправляются. Он не «выключен» и не «постоянно».`},
+  {id:'q26', domain:'d3', type:'mc', q:`Функция водяных знаков включена, но подписывающие стороны сообщают, что документы, которые они загружают для подписи, не имеют водяных знаков. Какая настройка это объясняет?`,
     choices:[`Для автоматической навигации установлено значение «Только страница».`, `<em>Разрешить получателям подписывать на бумаге</em> включен`, `Для адаптивной подписи установлено значение «Открывать только в режиме рабочего стола».`, `У конверта только один получатель`],
     correct:1,
     explain:`When <em>Разрешить получателю расписаться на бумаге</em> включен, водяной знак не отображается на документах, которые просматриваются или загружаются для подписи. Эти две функции компенсируют друг друга.`},
-  {id:'q27', domain:'d3', type:'mc', q:`What happens to digital signatures in an in-process document that a recipient downloads while the watermark feature is active?`,
+  {id:'q27', domain:'d3', type:'mc', q:`Что происходит с цифровыми подписями в обрабатываемом документе, который получатель загружает, когда функция водяных знаков активна?`,
     choices:[`Они показаны как обычно`, `Они удаляются и возвращаются после того, как все получатели подпишут.`, `Они заменяются словом «Проект».`, `Загрузка полностью заблокирована`],
     correct:1,
-    explain:`Watermarking exists to stop half-finished agreements being printed and treated as real. Signatures are stripped while in process and restored when the envelope completes.`},
-  {id:'q28', domain:'d3', type:'mc', q:`Which recipient role requires the recipient to have a valid Docusign account?`,
+    explain:`Водяные знаки существуют для того, чтобы недоделанные соглашения не печатались и не воспринимались как настоящие. Подписи удаляются во время обработки и восстанавливаются после завершения конверта.`},
+  {id:'q28', domain:'d3', type:'mc', q:`Какая роль получателя требует, чтобы у получателя была действующая учетная запись Docusign?`,
     choices:[`Необходимо просмотреть`, `Укажите получателей`, `Разрешить редактировать`, `Обновить получателей`],
     correct:2,
     explain:`<em>Разрешить редактировать</em> позволяет получателю исправлять конверт в процессе обработки (получатели и документы), и для этого требуется действующая учетная запись Документ.`},
-  {id:'q29', domain:'d3', type:'mc', q:`You want the Envelope ID stamped on every envelope with no way for a sender to turn it off. How do you configure the two checkboxes?`,
+  {id:'q29', domain:'d3', type:'mc', q:`Вы хотите, чтобы идентификатор конверта был проштампован на каждом конверте, и у отправителя не было возможности его отключить. Как настроить два флажка?`,
     choices:[`Оба выбраны`, `Оба очищены`, `Очистить <em>Включить включение идентификатора конверта в документ.</em>, оставлять <em>Включить идентификатор конверта по умолчанию</em> selected`, `Select <em>Включить включение идентификатора конверта в документ.</em>, прозрачный <em>Включить идентификатор конверта по умолчанию</em>`],
     correct:2,
-    explain:`"Enable including…" is the sender's permission to set it; "Include… by default" is whether it is on. Turning the default on while removing the sender's control forces it for every envelope.`},
+    explain:`«Включить включение…» — это разрешение отправителя на его установку; «Включить… по умолчанию» — включено ли оно. Включение значения по умолчанию при удалении контроля отправителя приводит к принудительному использованию этого параметра для каждого конверта.`},
   {id:'q30', domain:'d3', type:'mc', q:`Вы включаете <em>Требовать шаблон для всех конвертов, отправляемых с этого аккаунта.</em>. Какой маршрут все еще отправляет без шаблона?`,
     choices:[`Мобильное приложение`, `API электронной подписи`, `PowerForms`, `Никто. Правило является абсолютным`],
     correct:1,
-    explain:`The Send an Envelope option disappears from the sending experience, but users can still send an envelope without a template through the API.`},
+    explain:`Параметр «Отправить конверт» исчезнет из процесса отправки, но пользователи по-прежнему смогут отправлять конверт без шаблона через API.`},
   {id:'q31', domain:'d3', type:'ms', q:`Какой из этих вариантов получателей имеет отдельный параметр «разрешить отправителям переопределять»? <em>Выберите все, что применимо.</em>`,
     choices:[`Разрешить получателям подписывать на бумаге`, `Разрешить получателям изменять ответственность за подпись`, `Требовать причину, если получатель отказывается подписывать`, `Разрешить получателям выполнять вход на мобильном устройстве`],
     correct:[0,1],
-    explain:`Sign on paper and change signing responsibility each pair with their own sender-override checkbox. Declining reasons and mobile signing are account-level only.`},
-  {id:'q32', domain:'d3', type:'mc', q:`A sender needs to add a document to an envelope that one of three recipients has already signed. Which setting decides whether they can?`,
+    explain:`Подпишитесь на бумаге и измените ответственность за подпись для каждой пары, установив собственный флажок переопределения отправителя. Причины отказа и мобильная подпись доступны только на уровне аккаунта.`},
+  {id:'q32', domain:'d3', type:'mc', q:`Отправителю необходимо добавить в конверт документ, который уже подписал один из трех получателей. Какой параметр определяет, смогут ли они?`,
     choices:[`Конверт правильный: <em>Разрешить добавление документов после того, как один или несколько получателей выполнили свои действия.</em>`, `Видимость документа`, `Доставка конвертов`, `Дополнительные документы`],
     correct:0,
-    explain:`With that Envelope Correct option off, documents can only be added while no recipient has completed an action.`},
-  {id:'q33', domain:'d3', type:'mc', q:`Offline signing on a mobile device is currently available on which platform?`,
+    explain:`Если опция «Исправление конверта» отключена, документы можно добавлять только в том случае, если ни один получатель не выполнил действие.`},
+  {id:'q33', domain:'d3', type:'mc', q:`На какой платформе в настоящее время доступна автономная подпись на мобильном устройстве?`,
     choices:[`только для Андроид`, `только iOS`, `И iOS, и Андроид`, `Ни один. Это было на пенсии`],
     correct:1,
-    explain:`Offline signing is currently available only for Docusign for iOS.`},
-  {id:'q34', domain:'d3', type:'mc', q:`An in-person signing host is required to collect a piece of information from the signer before signing begins. Where does that response end up?`,
+    explain:`Автономное подписание в настоящее время доступно только для Docusign для iOS.`},
+  {id:'q34', domain:'d3', type:'mc', q:`Перед началом подписания организатору подписи необходимо получить часть информации от подписывающего лица. Где заканчивается этот ответ?`,
     choices:[`Журнал аудита`, `Раздел «Мероприятия для подписантов» в сертификате об окончании`, `Пользовательские поля конверта`, `Никуда. Это отображается только на экране`],
     correct:1,
-    explain:`The response is saved and included on the Certificate of Completion under In Person Signer Events. Every in-person signer sees the same request and must answer it.`},
+    explain:`Ответ сохраняется и включается в Сертификат об окончании в разделе «Личные события подписывающего лица». Каждый подписывающий лицо видит один и тот же запрос и должен на него ответить.`},
 
   /* ---------- AREA 4 · Share envelopes between users (6) ---------- */
-  {id:'q35', domain:'d4', type:'mc', q:`Can an administrator grant shared access from one user to a group?`,
+  {id:'q35', domain:'d4', type:'mc', q:`Может ли администратор предоставить общий доступ одному пользователю группе?`,
     choices:[`Да, это нормальный способ сделать это`, `Нет. Общий доступ предоставляется только пользователю.`, `Да, но только для группы «Все»`, `Только если к группе прикреплена подписывающая группа.`],
     correct:1,
-    explain:`Shared access is granted from one user to another user, on the same account. Group grants are not supported.`},
-  {id:'q36', domain:'d4', type:'mc', q:`A custody transfer rule moves envelopes from a departing sales rep to their manager. What access does the rep keep?`,
+    explain:`Общий доступ предоставляется от одного пользователя другому пользователю в той же учетной записи. Групповые гранты не поддерживаются.`},
+  {id:'q36', domain:'d4', type:'mc', q:`Правило коммерческого учета перемещает конверты от уходящего торгового представителя к его менеджеру. Какой доступ имеет представитель?`,
     choices:[`Доступ только для чтения к переданным конвертам`, `Нет, если правило не добавляет их в качестве получателя точной копии.`, `Полный доступ на 30 дней`, `Доступ только к черновикам`],
     correct:1,
-    explain:`Transferred envelopes are removed from the original owner's account. The only way they retain any access is if the rule adds them as a carbon copy recipient.`},
-  {id:'q37', domain:'d4', type:'mc', q:`You need to change the destination folder on an existing custody transfer rule. How?`,
+    explain:`Перенесенные конверты удаляются из учетной записи первоначального владельца. Единственный способ сохранить им доступ — это добавить их в качестве получателей точной копии правилом.`},
+  {id:'q37', domain:'d4', type:'mc', q:`Вам необходимо изменить папку назначения в существующем правиле коммерческого учета. Как?`,
     choices:[`Измените правило на странице Коммерческий учет.`, `Правила не могут быть изменены. Отключите или удалите его и создайте новый`, `Свяжитесь со службой поддержки Документация`, `Вместо этого измените папку по умолчанию целевого пользователя.`],
     correct:1,
-    explain:`Custody transfer rules cannot be modified after creation. They can only be disabled, enabled, or removed.`},
-  {id:'q38', domain:'d4', type:'mc', q:`Your retention policy keeps documents for 30 days. Roughly how long after an envelope completes are its documents permanently removed?`,
+    explain:`Правила коммерческого учета не могут быть изменены после создания. Их можно только отключить, включить или удалить.`},
+  {id:'q38', domain:'d4', type:'mc', q:`Ваша политика хранения хранит документы в течение 30 дней. Примерно через какое время после завершения конверта его документы будут окончательно удалены?`,
     choices:[`30 дней`, `Около 44 дней: 30 дней хранения плюс примерно 14 дней в очереди на очистку.`, `14 дней`, `Сразу на 30 день, без очереди`],
     correct:1,
-    explain:`The retention period ends at the purge queue, not at deletion. The queue takes about 14 days under normal processing before permanent removal.`},
+    explain:`Срок хранения заканчивается в очереди на очистку, а не при удалении. Очередь занимает около 14 дней при обычной обработке до окончательного удаления.`},
   {id:'q39', domain:'d4', type:'ms', q:`Вы выбираете <em>Удаление личной информации</em> о политике хранения. Что верно? <em>Выберите все, что применимо.</em>`,
     choices:[`Имена, адреса, адреса электронной почты и IP-адреса заменены на «Отредактировано».`, `Редактирование охватывает конверт, акт об окончании и историю.`, `Временные метки действий также удаляются.`, `Процесс невозможно отменить`],
     correct:[0,1,3],
-    explain:`Redaction is irreversible and reaches the envelope, its certificate and its history. Timestamps are deliberately left intact. You keep the record that something happened, and lose the record of who did it.`},
-  {id:'q40', domain:'d4', type:'mc', q:`You disable an existing document retention policy. What happens to envelopes already sitting in the purge queue?`,
+    explain:`Редактирование необратимо и распространяется на конверт, его сертификат и историю. Временные метки намеренно оставлены нетронутыми. Вы сохраняете запись о том, что что-то произошло, и теряете запись о том, кто это сделал.`},
+  {id:'q40', domain:'d4', type:'mc', q:`Вы отключите существующую политику хранения документов. Что происходит с конвертами, уже находящимися в очереди на очистку?`,
     choices:[`Они очищаются немедленно`, `Они удаляются из очереди`, `Они стоят в очереди и проводят уборку по расписанию.`, `Они передаются администратору аккаунта`],
     correct:1,
-    explain:`Disabling an existing policy removes any envelopes currently in the purge queue. It is the emergency stop.`}
+    explain:`Отключение существующей политики удаляет все конверты, находящиеся в очереди на очистку. Это аварийная остановка.`}
 ];
 
 /* ============== VIEW ROUTING ============== */
@@ -749,7 +749,7 @@ function renderHome(){
       <a class="cta-card primary" onclick="setView('exam')">
         <div class="cta-icon"><i data-lucide="clipboard-list"></i></div>
         <div class="cta-title">${state.submitted ? "Проверьте свой экзамен" : (inProgress ? "Возобновить пробный экзамен" : "Сдать практический экзамен")}</div>
-        <div class="cta-desc">${state.submitted ? `You scored ${calcScore().total}/${total}. Reopen to review the answers, or retake it.` : `40 questions across the four areas, graded at 80% like the real thing. Includes multiple-response questions so you practise reading carefully. ${answered ? `You've answered ${answered}/${total}.` : ''}`}</div>
+        <div class="cta-desc">${state.submitted ? `Вы забили ${calcScore().total}/${total}. Откройте повторно, чтобы просмотреть ответы, или повторите попытку.` : `40 вопросов по четырем областям с оценкой 80%, как в реальности. Включает вопросы с несколькими ответами, чтобы вы попрактиковались в внимательном чтении. ${answered ? `Вы ответили ${answered}/${total}.` : ''}`}</div>
         <div class="cta-link">${state.submitted ? "Посмотреть результаты →" : (inProgress ? "Продолжить →" : 'Start →')}</div>
       </a>
     </div>
@@ -789,7 +789,7 @@ function renderStudy(){
       <p>Каждый пункт соответствует руководству по администрированию учетной записи Документ. Каждая область связана со своим разделом внизу.</p>
     </div>
     <button class="expand-all" onclick="toggleAllStudy()">${allStudyOpen() ? "Свернуть все" : "Развернуть все"}</button>
-    <button class="expand-all ${state.reviewFilter?'rf-on':''}" onclick="toggleReviewFilter()">${state.reviewFilter ? `Showing needs-review only (${needsReviewCount()}), show all` : `Filter: needs review (${needsReviewCount()})`}</button>
+    <button class="expand-all ${state.reviewFilter?'rf-on':''}" onclick="toggleReviewFilter()">${state.reviewFilter ? `Показан только обзор потребностей (${needsReviewCount()}), показать все` : `Фильтр: требует проверки (${needsReviewCount()})`}</button>
     ${STUDY.map(s=>{
       const d = DOMAIN_INFO[s.key];
       const vis = s.must.map((m,i)=>({m,i})).filter(x=>{

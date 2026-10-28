@@ -58,7 +58,7 @@
     'font-size:13px;color:var(--muted,#888)}' +
     '.apk-sub .apk-sub-consent input{margin-top:3px;flex:0 0 auto}' +
     '.apk-sub a.apk-sub-link{display:inline-block;margin-top:10px;font-weight:600;' +
-    "цвет:var(--accent,#C5511F)}" +
+    "цвет:наш(--акцент,#C5511F)}" +
     '.apk-sub .apk-sub-note{margin-top:10px;font-size:13px;color:var(--muted,#888)}' +
     ".апк суб .apk-под-ошибка{цвет:#б3261е;размер шрифта:13пикселей;маржа-верх:8пикселей}";
   document.head.appendChild(css);

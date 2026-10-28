@@ -2300,7 +2300,7 @@ function lxSlotHTML(e){
   if(!e.slot || !e.slot.length) return '';
   const at = typeof e.slotAt === 'number' ? e.slotAt : -1;
   return `<div class="lx-slot">${e.slot.map((c,i) =>
-    `${i ? '<i>&rsaquo;</i>' : ''}<span class="${i===at?'on':''}">${c}</span>`).join('')}</div>`;
+    `${i ? "<i>›</i>" : ''}<span class="${i===at?'on':''}">${c}</span>`).join('')}</div>`;
 }
 function lxRow(cls, icon, label, text, extra){
   if(!text) return '';
@@ -3295,8 +3295,8 @@ function v2BuildPick(btn, lid){
   // 2026-08-03). Same two words the Try stage uses.
   const fb = document.getElementById('v2sql-build-fb-'+lid);
   const verdict = isCorrect
-    ? '<span style="color:var(--green);font-weight:600">&#10003; Correct</span>'
-    : '<span style="color:var(--red);font-weight:600">Not quite</span>';
+    ? "<span style=\"color:var(--green);font-weight:600\">✓ Правильно</span>"
+    : "<span style=\"color:var(--red);font-weight:600\">Не совсем</span>";
   if(fb) fb.innerHTML=`<div style="margin-top:10px;font-size:13px">${verdict}</div><div class="quiz-exp show" style="margin-top:8px">${l.build.exp}</div>`;
   if(!isCorrect){ recordMiss(lid, l.build.q); const cb=document.getElementById('v2sql-coach-build-'+lid); if(cb) cb.style.display=''; }
   const row = isCorrect
@@ -3320,8 +3320,8 @@ function v2QuizAnswer(lid, chosen){
   if(exp) exp.classList.add('show');
   // Same verdict wording as Build and Try, said before the explanation.
   if(exp) exp.insertAdjacentHTML('beforebegin', chosen===l.quiz.ans
-    ? '<div style="font-size:13px;margin:10px 0 4px;color:var(--green);font-weight:600">&#10003; Correct</div>'
-    : '<div style="font-size:13px;margin:10px 0 4px;color:var(--red);font-weight:600">Not quite</div>');
+    ? "<div style=\"font-size:13px;margin:10px 0 4px;color:var(--green);font-weight:600\">✓ Правильно</div>"
+    : "<div style=\"font-size:13px;margin:10px 0 4px;color:var(--red);font-weight:600\">Не совсем</div>");
   if(chosen===l.quiz.ans){
     celebrate();
     markDone('doneLessons', lid);
@@ -3458,8 +3458,12 @@ function v2CoachStuck(lid, stageName){
   const p = l.parsons;
   const isTry = stageName==='try';
   const prompt = isTry
-    ? `You are a concise SQL tutor. A student is arranging SQL lines in order. Puzzle: "${p.prompt}"\nLines available:\n${p.lines.map((t,i)=>`${i}: ${t}`).join('\n')}\nGive ONE short hint (1-2 sentences) that nudges them toward the right order without revealing it.`
-    : `You are a concise SQL tutor. A student answered a multiple-choice question about "${l.title}" incorrectly. Question: "${l.build.q}"\nGive ONE short hint (1-2 sentences) pointing toward the correct answer without stating it.`;
+    ? `Вы краткий преподаватель SQL. Студент упорядочивает строки SQL. Головоломка: "${p.prompt}"
+Доступные линии:
+${p.lines.map((t,i)=>`${i}: ${t}`).join('\n')}
+Дайте ОДНУ короткую подсказку (1–2 предложения), которая подтолкнет их к правильному порядку, не раскрывая его.`
+    : `Вы краткий преподаватель SQL. Студент ответил на вопрос с несколькими вариантами ответов о «${l.title}" неправильно. Вопрос: "${l.build.q}"
+Дайте ОДНУ короткую подсказку (1–2 предложения), указывающую на правильный ответ, не называя его.`;
   _v2CoachCall(prompt, 'claude-haiku-4-5-20251001', `v2sql-coach-resp-${isTry?'try':'build'}-${lid}`);
 }
 
@@ -3470,7 +3474,12 @@ function v2CoachGap(lid){
   const att = _v2ParsAttempt[lid];
   const correctLines = p.answer.map(i=>p.lines[i]).join('\n');
   const attemptLines = att ? att.lines.join('\n') : '(skipped)';
-  const prompt = `You are a SQL tutor giving brief gap analysis. Lesson: "${l.title}".\nCorrect order:\n${correctLines}\nStudent's order:\n${attemptLines}\nIn 2-3 sentences, explain the key difference and why the correct order matters. Be direct — no filler.`;
+  const prompt = `Вы преподаватель SQL, дающий краткий анализ пробелов. Урок: "${l.title}".
+Правильный порядок:
+${correctLines}
+Заказ ученика:
+${attemptLines}
+В 2–3 предложениях объясните ключевое различие и почему важен правильный порядок. Будьте прямыми — без наполнителя.`;
   _v2CoachCall(prompt, 'claude-sonnet-4-6', `v2sql-coach-resp-gap-${lid}`);
 }
 
@@ -3507,7 +3516,7 @@ function unifiedStageBar(l, stage, gpos, done){
     const isDone = i < active, isActive = i === active;
     const can = (done || inPractice || i < stage) && !isActive;
     cells.push(`<div class="v2-stage-dot${isDone?' done':isActive?' active':''}" title="${L}"${
-      can ? ` style="cursor:pointer" onclick="setSqlStage(${l.id},${i})"` : ''}></div>`);
+      can ? ` style="курсор:указатель" onclick="setSqlStage(${l.id},${i})"` : ''}></div>`);
   });
   seq.forEach((step,i) => {
     const idx = STAGE_LABELS.length + i;
@@ -4467,11 +4476,11 @@ function checkFill(idx){
   if(att === 1){
     help = _fillPrefill(f.ans, 0.5)
       ? `Не совсем. я набрал <strong>первая половина</strong> в коробку — доделайте и проверьте еще раз.`
-      : `Not quite — this answer is too short to give you half of it, so here's the hint instead: ${f.hint}`;
+      : `Не совсем — этот ответ слишком короткий, чтобы дать вам половину, поэтому вот подсказка: ${f.hint}`;
   } else if(att === 2){
     help = _fillPrefill(f.ans, 0.75)
       ? `Все еще выключен. Сейчас <strong>три четверти</strong> находится в коробке — завершите его и проверьте еще раз.`
-      : `Still off. ${f.hint}`;
+      : `Все еще выключен. ${f.hint}`;
   } else {
     inp.value = ''; inp.focus();
     help = `Вот весь ответ:<div class="fill-reveal">${_escHTML(f.ans)}</div>Введите его самостоятельно в пустое поле и проверьте. Печатание — это та часть, которая прилипает.`;
@@ -4738,12 +4747,12 @@ const LAB_INDEX = [
    size:()=>`${AGG_TASKS.length} tasks`},
   {key:'carddrills', view:'lab-cards', icon:'layers', name:"Карточные упражнения",
    does:"Возьмите один термин из глоссария и напишите запрос, в котором он используется.",
-   size:()=>{const t=drillTermList().length,d=(state.doneCardDrills||[]).length;return `${d} of ${t} terms done`;},
+   size:()=>{const t=drillTermList().length,d=(state.doneCardDrills||[]).length;return `${d} of ${t} Условия выполнены`;},
    pct:()=>{const t=drillTermList().length;return t?Math.round((state.doneCardDrills||[]).length/t*100):0;}},
   {key:'capstone', view:'lab-capstone', icon:'trophy', name:"Соберите все это вместе",
    does:"Создайте один полный отчет, шаг за шагом, так, как поступает реальный запрос.",
    unit:"Модуль 3: Объединения",
-   size:()=>{const t=CAPSTONE.steps.length,d=(state.doneCapstone||[]).filter(i=>i<t).length;return `${d} of ${t} steps done`;},
+   size:()=>{const t=CAPSTONE.steps.length,d=(state.doneCapstone||[]).filter(i=>i<t).length;return `${d} of ${t} шаги сделаны`;},
    pct:()=>{const t=CAPSTONE.steps.length;return t?Math.round((state.doneCapstone||[]).filter(i=>i<t).length/t*100):0;}},
   {key:'dates', view:'lab-dates', icon:'calendar', name:"Лаборатория даты и времени", stub:true,
    does:"Предварительный просмотр того, что будет: фильтрация по диапазону дат, группировка по месяцам, измерение промежутков между событиями.",
@@ -4763,8 +4772,8 @@ function renderLabPicker(){
     // is locked, matching the rest of the kit.
     const need = L.stub ? "Еще не построен — читайте превью"
       : !sk ? "Открыто в любое время"
-      : sk.ready ? `Ready — Skill ${sk.n} done`
-      : `Leans on Skill ${sk.n}: ${sk.name} · ${sk.total - sk.done} lesson${sk.total - sk.done === 1 ? '' : 's'} left`;
+      : sk.ready ? `Готовность — Навык ${sk.n} done`
+      : `Опирается на навыки ${sk.n}: ${sk.name} · ${sk.total - sk.done} lesson${sk.total - sk.done === 1 ? '' : 's'} left`;
     const needCls = L.stub ? '' : !sk ? '' : sk.ready ? ' ok' : ' wait';
     return `<div class="lab-card${L.stub ? ' is-stub' : ''}" onclick="navigate('${L.view}')">
       <div class="lab-card-top">
@@ -4913,24 +4922,24 @@ function friendlyDbError(msg, sql){
   }
   if((m = /no such table:\s*(\S+)/i.exec(msg))){
     return `<strong>Нет таблицы с названием <code>${m[1]}</code>.</strong><br>`
-      + `This database has: ${info.map(t=>t.name).join(', ')}.`
+      + `В этой базе данных есть: ${info.map(t=>t.name).join(', ')}.`
       + `<br><span class="terminal-calm">${calm}</span>`;
   }
   if((m = /no such function:\s*(\S+)/i.exec(msg))){
     const fn = m[1].toUpperCase(), swap = _SQL_DIALECT_SWAPS[fn];
     return `<strong><code>${m[1]}</code> здесь это не функция.</strong><br>`
-      + `This lab runs SQLite in your browser, and ${m[1]} belongs to a different flavour of SQL.`
+      + `Эта лабораторная работа запускает SQLite в вашем браузере и ${m[1]} принадлежит другому варианту SQL.`
       + (swap ? ` В SQLite вы бы написали <code>${swap}</code>.` : '')
       + `<br><span class="terminal-calm">${calm}</span>`;
   }
   if((m = /near "([^"]+)"/i.exec(msg))){
     return `<strong>SQLite остановился на <code>${m[1]}</code>.</strong><br>`
-      + `Usually a missing comma, an unclosed quote or bracket, or a keyword out of order just before that point.`
+      + `Обычно отсутствует запятая, незакрытая кавычка или квадратная скобка или ключевое слово, находящееся не по порядку непосредственно перед этой точкой.`
       + `<br><span class="terminal-calm">${calm}</span>`;
   }
   if(/incomplete input/i.test(msg)){
     return `<strong>Запрос останавливается до завершения.</strong><br>`
-      + `Something opened and never closed — a bracket, a quote, or a clause with nothing after it.`
+      + `Что-то открывающееся и никогда не закрывающееся — скобка, кавычка или предложение, после которого ничего нет.`
       + `<br><span class="terminal-calm">${calm}</span>`;
   }
   return `<strong>SQLite не смог это запустить.</strong><br>${msg}<br><span class="terminal-calm">${calm}</span>`;
@@ -5303,7 +5312,7 @@ function practiceCard(i){
 // give a comment skeleton, 14–18 are bare business questions. Each step adds
 // exactly ONE new construct, in the order the lessons teach them.
 const CAPSTONE = {
-  brief: "The owner asks: <strong>“Which product category is carrying the business, and who are my top customers?”</strong> You'll answer it by building the full analyst toolkit one clause at a time — 18 steps, from your first SELECT to a windowed ranking. Early steps are written for you; by the end you write everything. Already fluent? Tap any step header to jump ahead.",
+  brief: "Хозяин спрашивает: <strong>«Какая категория продуктов поддерживает бизнес и кто мои основные клиенты?»</strong> You'll answer it by building the full analyst toolkit one clause at a time — 18 steps, from your first SELECT to a windowed ranking. Early steps are written for you; by the end you write everything. Already fluent? Tap any step header to jump ahead.",
   steps: [
     {stage:"Сработало — запускайте, читайте каждую строчку", title:"1 · SELECT * — посмотреть необработанную таблицу",
      p:"Запустите запрос, как написано, затем прочитайте комментарии. Каждый анализ начинается с просмотра необработанных строк.",
@@ -5887,10 +5896,10 @@ function toggleJoinCompare(){
 }
 
 function _joinResultTable(sql, accentColor){
-  if(!sqlDb) return '<span style="color:var(--muted);font-size:12px">DB not ready</span>';
+  if(!sqlDb) return "<span style=\"color:var(--muted);font-size:12px\">БД не готова</span>";
   try {
     const res = sqlDb.exec(sql);
-    if(!res.length) return '<div style="font-size:12px;color:var(--muted);padding:8px">No rows returned</div>';
+    if(!res.length) return "<div style=\"font-size:12px;color:var(--muted);padding:8px\">ни одна строка не возвращена</div>";
     const {columns, values} = res[0];
     const th = columns.map(c=>`<th style="text-align:left;padding:5px 10px;border-bottom:2px solid ${accentColor};color:${accentColor};white-space:nowrap;font-size:12px">${c}</th>`).join('');
     const tb = values.map(r=>`<tr>${r.map(v=>`<td style="padding:4px 10px;border-bottom:1px solid rgba(127,127,127,.15);font-size:12px;white-space:nowrap">${v==null?'<em style="color:var(--red);font-style:italic">NULL</em>':v}</td>`).join('')}</tr>`).join('');
@@ -6294,7 +6303,7 @@ initKitWithSync();
       // stay, and the pill is the way out. Kit-native visitors see no change.
       const focusCss = document.createElement('style');
       focusCss.textContent = '#nav{display:none!important}' +
-        "button[onclick=\"navigate('уроки')\"]{display:none!important}";
+        "кнопка[по клику=\"перемещаться('уроки')\"]{отображать:никто!важный}";
       document.head.appendChild(focusCss);
       const hm = (location.hash||'').match(/^#lesson-(\d+)/);
       const tid = hm ? +hm[1] : null;

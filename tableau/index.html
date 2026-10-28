@@ -2156,10 +2156,10 @@ function wsMockHTML(){
     <div style="flex:1;display:flex;flex-direction:column">
       ${wsSpot('columns',`<span style="color:var(--dim);text-transform:uppercase;letter-spacing:.04em">Columns</span> &nbsp;<span style="font-family:var(--mono);color:var(--dim-blue)">Region</span>`,'padding:9px;border-bottom:1px solid var(--border)')}
       ${wsSpot('rows',`<span style="color:var(--dim);text-transform:uppercase;letter-spacing:.04em">Rows</span> &nbsp;<span style="font-family:var(--mono);color:var(--meas-green)">СУММА(Доход)</span>`,'padding:9px;border-bottom:1px solid var(--border)')}
-      ${wsSpot('canvas',`📊&nbsp; Canvas — your live chart appears here`,'flex:1;padding:26px 10px;text-align:center;color:var(--dim);display:flex;align-items:center;justify-content:center')}
+      ${wsSpot('canvas',`📊  Холст — здесь отображается ваша живая диаграмма.`,'flex:1;padding:26px 10px;text-align:center;color:var(--dim);display:flex;align-items:center;justify-content:center')}
     </div>
     <div style="width:100px;display:flex;flex-direction:column;border-left:1px solid var(--border)">
-      ${wsSpot('showme',`Show Me ▾`,'padding:9px;text-align:right;border-bottom:1px solid var(--border);background:var(--surf2);color:var(--accent);font-weight:700')}
+      ${wsSpot('showme',`Покажи мне ▾`,'padding:9px;text-align:right;border-bottom:1px solid var(--border);background:var(--surf2);color:var(--accent);font-weight:700')}
       ${wsSpot('marks',`<div style="font-weight:700;color:var(--txt2);margin-bottom:6px">Marks</div><div style="color:var(--dim)">Color</div><div style="color:var(--dim)">Size</div><div style="color:var(--dim)">Label</div><div style="color:var(--dim)">Tooltip</div>`,'flex:1;padding:9px;background:var(--surf2)')}
     </div>
   </div>`;
@@ -2973,7 +2973,7 @@ function unifiedStageBar(l, stage, gpos){
     const isDone = i < active, isActive = i === active;
     const can = l && (done || inPractice || i < stage) && !isActive;
     cells.push(`<div class="v2-stage-dot${isDone?' done':isActive?' active':''}" title="${L}"${
-      can ? ` style="cursor:pointer" onclick="setTabStage(${l.id},${i})"` : ''}></div>`);
+      can ? ` style="курсор:указатель" onclick="setTabStage(${l.id},${i})"` : ''}></div>`);
   });
   seq.forEach((step,i) => {
     const idx = STAGE_LABELS.length + i;
@@ -3204,8 +3204,8 @@ function v2ParsReset(lid){
 // depends on seeing colour.
 function _verdictHTML(ok){
   return ok
-    ? '<div style="font-size:13px;margin:10px 0 4px;color:var(--success);font-weight:600">&#10003; Correct</div>'
-    : '<div style="font-size:13px;margin:10px 0 4px;color:var(--err);font-weight:600">&#10007; Not quite</div>';
+    ? "<div style=\"font-size:13px;margin:10px 0 4px;color:var(--success);font-weight:600\">✓ Правильно</div>"
+    : "<div style=\"font-size:13px;margin:10px 0 4px;color:var(--err);font-weight:600\">✗ Не совсем</div>";
 }
 function v2BuildPick(btn, lid){
   const l = DATA.LESSONS.find(x=>x.id===lid);
@@ -3345,7 +3345,7 @@ function stuckHint(lid, stageName){
     if(rung>=2){
       const count = rung>=4 ? n : (rung>=3 ? Math.ceil(n*0.75) : Math.ceil(n*0.5));
       Ord.scaffold(key, p.lines, p.answer, Math.min(count, rung>=4 ? n-1 : count));
-      html += `<p class="ladder-step">Размещено для вас: первое ${Math.min(count, rung>=4?n-1:count)} of ${n}${rung>=4?` — the last one is yours`:''}. Заблокированные части не могут двигаться.</p>`;
+      html += `<p class="ladder-step">Размещено для вас: первое ${Math.min(count, rung>=4?n-1:count)} of ${n}${rung>=4?` — последний твой`:''}. Заблокированные части не могут двигаться.</p>`;
     }
   } else {
     html += `<p style="margin:0 0 8px">${l.intro || l.close || l.title}</p>`;
@@ -3354,7 +3354,7 @@ function stuckHint(lid, stageName){
       html += `<div class="ladder-partial">${ladderMask(l.build.opts[l.build.ans], frac)}</div>`;
       html += `<p class="ladder-step">${rung>=4
         ? "Вот и ответ, показанный — не нажатый. Варианты все еще актуальны; нажмите соответствующий."
-        : `That is ${LADDER_STEP[Math.min(rung,4)]}. Miss again and you get more of it.`}</p>`;
+        : `That is ${LADDER_STEP[Math.min(rung,4)]}. Промахнитесь еще раз, и вы получите больше.`}</p>`;
     }
   }
   // The way out of being stuck is the worked example, not a stronger hint.
@@ -3419,8 +3419,12 @@ function v2CoachStuck(lid, stageName){
   const p = l.parsons;
   const isTry = stageName==='try';
   const prompt = isTry
-    ? `You are a concise Tableau tutor. A student is arranging steps in order. Puzzle: "${p.prompt}"\nSteps available:\n${p.lines.map((t,i)=>`${i}: ${t}`).join('\n')}\nGive ONE short hint (1-2 sentences) that nudges them toward the right order without revealing it.`
-    : `You are a concise Tableau tutor. A student answered a multiple-choice question about "${l.title}" incorrectly. Question: "${l.build.q}"\nGive ONE short hint (1-2 sentences) pointing toward the correct answer without stating it.`;
+    ? `Вы краткий преподаватель Tableau. Учащийся расставляет шаги по порядку. Головоломка: "${p.prompt}"
+Доступные шаги:
+${p.lines.map((t,i)=>`${i}: ${t}`).join('\n')}
+Дайте ОДНУ короткую подсказку (1–2 предложения), которая подтолкнет их к правильному порядку, не раскрывая его.`
+    : `Вы краткий преподаватель Tableau. Студент ответил на вопрос с несколькими вариантами ответов о «${l.title}" неправильно. Вопрос: "${l.build.q}"
+Дайте ОДНУ короткую подсказку (1–2 предложения), указывающую на правильный ответ, не называя его.`;
   _v2CoachCall(prompt, 'claude-haiku-4-5-20251001', `v2tab-coach-resp-${isTry?'try':'build'}-${lid}`);
 }
 
@@ -3431,7 +3435,12 @@ function v2CoachGap(lid){
   const att = _v2ParsAttempt[lid];
   const correctLines = p.answer.map(i=>p.lines[i]).join('\n');
   const attemptLines = att ? att.lines.join('\n') : '(skipped)';
-  const prompt = `You are a Tableau tutor giving brief gap analysis. Lesson: "${l.title}".\nCorrect order:\n${correctLines}\nStudent's order:\n${attemptLines}\nIn 2-3 sentences, explain the key difference and why the correct order matters. Be direct — no filler.`;
+  const prompt = `Вы преподаватель Tableau, дающий краткий анализ пробелов. Урок: "${l.title}".
+Правильный порядок:
+${correctLines}
+Заказ ученика:
+${attemptLines}
+В 2–3 предложениях объясните ключевое различие и почему важен правильный порядок. Будьте прямыми — без наполнителя.`;
   _v2CoachCall(prompt, 'claude-sonnet-4-6', `v2tab-coach-resp-gap-${lid}`);
 }
 
@@ -4065,7 +4074,7 @@ function guidedNext(){
     // that just ran — not at the quiz, before any practice happened. Then the
     // Close stage, which is the wrap-up, on the way out.
     const n=DATA.LESSONS.filter(x=>lessonIsDone(x.id)).length;
-    if(n && n%3===0) celebrate(true,`🔥 ${n} lessons done!`);
+    if(n && n%3===0) celebrate(true,`🔥 ${n} уроки сделаны!`);
     else celebrate(true,"Урок завершен — хорошая работа! 🎉");
     // renderLesson() reads lessonState, so point it at this lesson before the
     // stage setter fires — the learner may have reached practice by a route that
@@ -4106,7 +4115,7 @@ function renderDrillList(){
       const done=items.filter((_,i)=>stepIsDone([dt.key,i])).length;
       // Resume at the first incomplete drill (0 if all done — review from the top).
       let start=items.findIndex((_,i)=>!stepIsDone([dt.key,i]));if(start<0)start=0;
-      const cue=done===items.length?"✓ все готово — нажмите, чтобы просмотреть":done>0?`continue at #${start+1}`:'';
+      const cue=done===items.length?"✓ все готово — нажмите, чтобы просмотреть":done>0?`продолжить с #${start+1}`:'';
       return `<div class="card" style="margin-bottom:10px;cursor:pointer" onclick="openDrill('${dt.key}',${start})">
         <div style="display:flex;align-items:center;gap:10px">
           <span style="font-size:1.4rem">${dt.icon}</span>
@@ -4129,7 +4138,7 @@ function renderDrill(){
   let nav=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
     <button class="btn" style="padding:4px 10px;font-size:.8rem" onclick="renderDrillList()">← Сверла</button>
     <span style="color:var(--txt2);font-size:.85rem">${dt.icon} ${dt.label} — ${drillState.idx+1}/${items.length}</span>
-    ${done?'<span style="color:var(--accent);font-size:.85rem">✓ Done</span>':''}
+    ${done?"<span style=\"color:var(--accent);font-size:.85rem\">✓ Готово</span>":''}
   </div>`;
   let navBtns=`<div style="display:flex;gap:8px;margin-top:16px">
     ${drillState.idx>0?`<button class="btn" onclick="openDrill('${drillState.type}',${drillState.idx-1})">← Предыдущий</button>`:''}
@@ -4476,25 +4485,25 @@ function renderVizBuilder(){
           <div>
             <div style="font-size:.72rem;color:var(--txt2);text-transform:uppercase;margin-bottom:4px">Столбцы (ось X)</div>
             <div id="shelf-cols" class="shelf" ondragover="shelfOver(event)" ondragleave="shelfLeave(event)" ondrop="shelfDrop(event,'cols')" onclick="shelfTap('cols')" data-shelf="cols">
-              ${vizState.cols?`<div class="shelf-chip ${getFieldType(vizState.cols)}">${vizState.cols} <span onclick="event.stopPropagation();removeFromShelf('cols')" style="cursor:pointer;margin-left:4px;opacity:.7">✕</span></div>`:'<span style="color:var(--txt2);font-size:.8rem">Drop field here</span>'}
+              ${vizState.cols?`<div class="shelf-chip ${getFieldType(vizState.cols)}">${vizState.cols} <span onclick="event.stopPropagation();removeFromShelf('cols')" style="cursor:pointer;margin-left:4px;opacity:.7">✕</span></div>`:"<span style=\"color:var(--txt2);font-size:.8rem\">Перетащите поле сюда</span>"}
             </div>
           </div>
           <div>
             <div style="font-size:.72rem;color:var(--txt2);text-transform:uppercase;margin-bottom:4px">Строки (ось Y)</div>
             <div id="shelf-rows" class="shelf" ondragover="shelfOver(event)" ondragleave="shelfLeave(event)" ondrop="shelfDrop(event,'rows')" onclick="shelfTap('rows')" data-shelf="rows">
-              ${vizState.rows?`<div class="shelf-chip ${getFieldType(vizState.rows)}">${vizState.rows} <span onclick="event.stopPropagation();removeFromShelf('rows')" style="cursor:pointer;margin-left:4px;opacity:.7">✕</span></div>`:'<span style="color:var(--txt2);font-size:.8rem">Drop field here</span>'}
+              ${vizState.rows?`<div class="shelf-chip ${getFieldType(vizState.rows)}">${vizState.rows} <span onclick="event.stopPropagation();removeFromShelf('rows')" style="cursor:pointer;margin-left:4px;opacity:.7">✕</span></div>`:"<span style=\"color:var(--txt2);font-size:.8rem\">Перетащите поле сюда</span>"}
             </div>
           </div>
           <div>
             <div style="font-size:.72rem;color:var(--txt2);text-transform:uppercase;margin-bottom:4px">Color</div>
             <div id="shelf-color" class="shelf" ondragover="shelfOver(event)" ondragleave="shelfLeave(event)" ondrop="shelfDrop(event,'color')" onclick="shelfTap('color')" data-shelf="color">
-              ${vizState.color?`<div class="shelf-chip ${getFieldType(vizState.color)}">${vizState.color} <span onclick="event.stopPropagation();removeFromShelf('color')" style="cursor:pointer;margin-left:4px;opacity:.7">✕</span></div>`:'<span style="color:var(--txt2);font-size:.8rem">Drop field here</span>'}
+              ${vizState.color?`<div class="shelf-chip ${getFieldType(vizState.color)}">${vizState.color} <span onclick="event.stopPropagation();removeFromShelf('color')" style="cursor:pointer;margin-left:4px;opacity:.7">✕</span></div>`:"<span style=\"color:var(--txt2);font-size:.8rem\">Перетащите поле сюда</span>"}
             </div>
           </div>
           <div>
             <div style="font-size:.72rem;color:var(--txt2);text-transform:uppercase;margin-bottom:4px">Filter</div>
             <div id="shelf-filter" class="shelf" ondragover="shelfOver(event)" ondragleave="shelfLeave(event)" ondrop="shelfDrop(event,'filter')" onclick="shelfTap('filter')" data-shelf="filter">
-              ${vizState.filter?`<div class="shelf-chip ${getFieldType(vizState.filter)}">${vizState.filter} <span onclick="event.stopPropagation();removeFromShelf('filter')" style="cursor:pointer;margin-left:4px;opacity:.7">✕</span></div>`:'<span style="color:var(--txt2);font-size:.8rem">Drop field here</span>'}
+              ${vizState.filter?`<div class="shelf-chip ${getFieldType(vizState.filter)}">${vizState.filter} <span onclick="event.stopPropagation();removeFromShelf('filter')" style="cursor:pointer;margin-left:4px;opacity:.7">✕</span></div>`:"<span style=\"color:var(--txt2);font-size:.8rem\">Перетащите поле сюда</span>"}
             </div>
           </div>
         </div>
@@ -4995,8 +5004,8 @@ setTimeout(initAuthUI,600);
 
     /* One direction, forward: the site nav and every "Lessons" exit go for the sitting. */
     var css = document.createElement('style');
-    css.textContent = "nav{display:none!важно}" +
-      "[onclick*=\"show('уроки')\"]{display:none!important}";
+    css.textContent = "навигация{отображать:никто!важно}" +
+      "[по клику*=\"показывать('уроки')\"]{отображать:никто!важный}";
     document.head.appendChild(css);
 
     var hm = (location.hash||'').match(/^#lesson-(\d+)/);

@@ -2792,7 +2792,7 @@ function checkBadges(quiet){
     if(t > 0 && d >= t && !S.badgesEarned.includes(b.id)){
       S.badgesEarned.push(b.id);
       changed = true;
-      if(!quiet) _badgeToast(`${b.icon} Badge earned: ${b.label}!`);
+      if(!quiet) _badgeToast(`${b.icon} Значок получен: ${b.label}!`);
     }
   });
   if(changed) save();
@@ -2857,7 +2857,7 @@ function renderHome(){
     (_streak.n > 1 ? `<span class="loop-chip">🔥 ${_streak.n}-дневная полоса${_streak.froze ? " · бесплатная заморозка сохранила жизнь" : ''}</span>` : '') +
     (_due.now > 0 ? `<button class="loop-chip loop-chip-btn" onclick="event.stopPropagation();show('review')" title="Review them now">🧠 ${_due.now} review${_due.now>1?'s':''} due</button>` : '');
   document.getElementById('loopSignoff').textContent = (_due.now === 0 && _due.soon > 0)
-    ? `Come back tomorrow — ${_due.soon} quick review${_due.soon>1?'s':''} will be waiting.` : '';
+    ? `Приходи завтра — ${_due.soon} быстрый обзор${_due.soon>1?'s':''} будет ждать.` : '';
   document.getElementById('badgesCard').innerHTML = badgesCardHTML();
 
   // The target and the eleven named skills. This replaced "Skill Readiness",
@@ -3125,7 +3125,7 @@ function unifiedStageBar(l, stage, gpos){
     const isDone = i < active, isActive = i === active;
     const can = l && (done || inPractice || i < stage) && !isActive;
     cells.push(`<div class="v2-stage-dot${isDone?' done':isActive?' active':''}" title="${L}"${
-      can ? ` style="cursor:pointer" onclick="setStage(${l.id},${i})"` : ''}></div>`);
+      can ? ` style="курсор:указатель" onclick="setStage(${l.id},${i})"` : ''}></div>`);
   });
   seq.forEach((step,i) => {
     const idx = STAGE_LABELS.length + i;
@@ -3433,8 +3433,8 @@ function v2PickBuild(el,lid){
   // right, only what the answer is. Each verdict carries a glyph as well as a
   // colour, so the result never depends on seeing colour.
   const verdict=correct
-    ? '<span style="color:var(--success);font-weight:600">&#10003; Correct</span>'
-    : '<span style="color:var(--err);font-weight:600">&#10007; Not quite</span>';
+    ? "<span style=\"color:var(--success);font-weight:600\">✓ Правильно</span>"
+    : "<span style=\"color:var(--err);font-weight:600\">✗ Не совсем</span>";
   if(correct){
     if(fb) fb.innerHTML=`<div style="margin-top:10px;font-size:13px">${verdict}</div>
       <div class="quiz-feedback ok" style="margin-top:8px">${l.build.ans}</div>
@@ -3461,8 +3461,8 @@ function v2CheckOwn(lid,idx){
   // Same two words, same glyphs, said before the explanation — the explanation
   // itself was byte-identical either way.
   const verdict=correct
-    ? '<div style="font-size:13px;margin:10px 0 4px;color:var(--success);font-weight:600">&#10003; Correct</div>'
-    : '<div style="font-size:13px;margin:10px 0 4px;color:var(--err);font-weight:600">&#10007; Not quite</div>';
+    ? "<div style=\"font-size:13px;margin:10px 0 4px;color:var(--success);font-weight:600\">✓ Правильно</div>"
+    : "<div style=\"font-size:13px;margin:10px 0 4px;color:var(--err);font-weight:600\">✗ Не совсем</div>";
   if(correct){
     // Skip the "Lesson complete" card when practice is waiting — a completion
     // signal shown BEFORE retrieval practice reads as false closure and blunts
@@ -3609,9 +3609,19 @@ async function v2CoachCall(lid,key){
   panel.innerHTML=`<div class="coach-panel"><div class="coach-panel-hdr">Hints</div><p style="font-size:14px;color:var(--dim);margin:0">Думая…</p></div>`;
   let prompt;
   if(ctx.stage==='try'&&l.try){
-    prompt=`You are an Excel formula coach. A learner is arranging formula pieces in order for:\n\n"${l.try.q}"\n\nThe pieces are: ${l.try.pieces.map(p=>`"${p}"`).join(', ')}\n\nGive 1-2 hints about the correct ordering logic. Do not reveal the answer. Be concise — a sentence or two, conversational tone, no bullet lists.`;
+    prompt=`Вы тренер по формулам Excel. Учащийся расставляет части формулы так, чтобы:
+
+"${l.try.q}"
+
+Части: ${l.try.pieces.map(p=>`"${p}"`).join(', ')}
+
+Дайте 1-2 подсказки о правильной логике заказа. Не раскрывайте ответ. Будьте лаконичны — одно-два предложения, разговорный тон, никаких списков.`;
   }else if(l.build){
-    prompt=`You are an Excel formula coach. A learner is stuck on:\n\n"${l.build.q}"\n\nGive 1-2 hints to help them think it through. Do not reveal the answer. Be concise — a sentence or two, conversational tone, no bullet lists.`;
+    prompt=`Вы тренер по формулам Excel. Учащийся застревает на:
+
+"${l.build.q}"
+
+Дайте 1–2 подсказки, которые помогут им обдумать ситуацию. Не раскрывайте ответ. Будьте лаконичны — одно-два предложения, разговорный тон, никаких списков.`;
   }else return;
   try{
     const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'x-api-key':key,'anthropic-version':'2023-06-01','content-type':'application/json','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:250,messages:[{role:'user',content:prompt}]})});
@@ -4355,7 +4365,7 @@ function guidedNext(){
     const lid = guided.lessonId; guided = null;
     // The lesson-done reward moment lives here, AFTER the retrieval practice
     // that just ran — not at the quiz, before practice happened.
-    if(S.lessonsDone.length % 3 === 0) celebrate(true, `🔥 ${S.lessonsDone.length} lessons done!`);
+    if(S.lessonsDone.length % 3 === 0) celebrate(true, `🔥 ${S.lessonsDone.length} уроки сделаны!`);
     else celebrate(true, "Урок завершен — хорошая работа! 🎉");
     const _fl=DATA.LESSONS.find(x=>x.id===lid);
     if(_fl){ const _ul=DATA.LESSONS.filter(x=>x.unit===_fl.unit); if(_ul.every(x=>S.lessonsDone.includes(x.id))) setTimeout(()=>celebrate(true,`🎊 ${_fl.unit} complete!`),1500); }
@@ -4579,8 +4589,8 @@ function checkWrong(idx, chosen){
   // Say the result before the explanation — the explanation is byte-identical
   // either way, so it never told you whether YOU were right.
   const verdict = correct
-    ? '<div style="font-size:13px;margin:10px 0 4px;color:var(--success);font-weight:600">&#10003; Correct</div>'
-    : '<div style="font-size:13px;margin:10px 0 4px;color:var(--err);font-weight:600">&#10007; Not quite</div>';
+    ? "<div style=\"font-size:13px;margin:10px 0 4px;color:var(--success);font-weight:600\">✓ Правильно</div>"
+    : "<div style=\"font-size:13px;margin:10px 0 4px;color:var(--err);font-weight:600\">✗ Не совсем</div>";
   document.getElementById('wrongFeedback').innerHTML = verdict + `<div class="quiz-feedback ${correct?'ok':'bad'}">${item.exp}</div>`;
   if(correct){ markDone('wrongDone', idx); celebrate(); }
 }
@@ -5127,8 +5137,8 @@ setTimeout(initAuthUI,600);
 
     /* One direction, forward: the site nav and every "Lessons" exit go for the sitting. */
     var css = document.createElement('style');
-    css.textContent = "nav{display:none!важно}" +
-      "[onclick*=\"show('уроки')\"]{display:none!important}";
+    css.textContent = "навигация{отображать:никто!важно}" +
+      "[по клику*=\"показывать('уроки')\"]{отображать:никто!важный}";
     document.head.appendChild(css);
 
     var hm = (location.hash||'').match(/^#lesson-(\d+)/);

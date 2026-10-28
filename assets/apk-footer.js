@@ -217,7 +217,7 @@
     '.apk-book{max-width:760px;margin:44px auto 0;padding:18px 22px;' +
     'border:1px solid var(--border,var(--bord,var(--line,#e0d9d2)));border-left:4px solid var(--accent,#C5511F);' +
     "граница-радиус: 12 пикселей; семейство шрифтов: наследовать; размер шрифта: 15 пикселей; высота строки: 1,6; выравнивание текста: по левому краю;" +
-    "дисплей: сетка; сетка-шаблон-столбцы: 1fr; разрыв: 16 пикселей}" +
+    "дисплей: сетка; сетка-шаблон-столбцы: 1фр.; разрыв: 16 пикселей}" +
     ".apk-book-body Strong{display:block;margin-bottom:8px}" +
     '.apk-book-body p{margin:0;color:var(--muted,var(--dim,var(--txt2,#6B7280)));font-size:14px}' +
     '.apk-book a{display:inline-block;margin-top:12px;font-weight:600;' +

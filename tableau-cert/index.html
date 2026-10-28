@@ -328,12 +328,12 @@ function hintStudy(key, i){
   const s = STUDY.find(x=>x.key===key);
   if(!s) return;
   const fact = stripTags(s.must[i]);
-  const prompt = `You are a plain-spoken Tableau tutor helping someone study for the Salesforce Certified Tableau Desktop Foundations exam (formerly Tableau Desktop Specialist), which tests Tableau 2022.3.
+  const prompt = `Вы откровенный преподаватель Tableau, помогающий кому-то подготовиться к экзамену Salesforce Certified Tableau Desktop Foundations (ранее — Tableau Desktop Specialist), который тестирует Tableau 2022.3.
 
-Explain this exam point a different way than it is written here:
+Объясните этот экзаменационный вопрос иначе, чем написано здесь:
 "${fact}"
 
-Rules: 3 sentences at most. One idea per sentence. Use an everyday comparison if it helps. Say what the exam is likely to ask about it. No preamble, no restating the question.`;
+Правила: максимум 3 предложения. Одна идея в предложении. Используйте повседневное сравнение, если это помогает. Скажите, что, скорее всего, об этом спросят на экзамене. Никакой преамбулы, никакого повторения вопроса.`;
   hintCall(prompt, `hint-resp-${key}-${i}`);
 }
 function hintQuestion(qid){
@@ -342,13 +342,13 @@ function hintQuestion(qid){
   const chosen = state.answers[qid];
   const picked = Array.isArray(chosen) ? chosen.map(i=>q.choices[i]).join(' / ') : (chosen!==undefined ? q.choices[chosen] : "(нет ответа)");
   const right = q.type==='ms' ? q.correct.map(i=>q.choices[i]).join(' / ') : q.choices[q.correct];
-  const prompt = `You are a plain-spoken Tableau tutor. A student got this Tableau certification practice question wrong.
+  const prompt = `Вы откровенный преподаватель Tableau. Студент неправильно ответил на вопрос практики сертификации Tableau.
 
-Question: ${stripTags(q.q)}
-They chose: ${picked}
-The correct answer: ${right}
+Вопрос: ${stripTags(q.q)}
+Они выбрали: ${picked}
+Правильный ответ: ${right}
 
-In 3 sentences at most, explain what their answer confuses with the correct one, and give them one way to remember the difference. No preamble.`;
+Максимум в 3 предложениях объясните, что их ответ путает с правильным, и дайте им один способ запомнить разницу. Никакой преамбулы.`;
   hintCall(prompt, `hint-resp-q-${qid}`);
 }
 
@@ -528,19 +528,19 @@ document.addEventListener('keydown', e => {
 
 const QUESTIONS = [
   /* ---------- DOMAIN 1 · Connecting to & Preparing Data (12) ---------- */
-  {id:'q46', domain:'d1', type:'mc', q:`Your workbook needs a SQL Server table joined to a regional-targets spreadsheet in Excel. Both must live in one data source. What do you build?`,
+  {id:'q46', domain:'d1', type:'mc', q:`В вашей книге должна быть таблица SQL Server, присоединенная к электронной таблице Excel с региональными целями. Оба должны жить в одном источнике данных. Что вы строите?`,
     choices:[`Объединение двух таблиц`, `Источник данных с несколькими соединениями, объединенными между ними (объединение между базами данных).`, `Две отдельные рабочие тетради, опубликованные рядом`, `Отношения — Tableau не может объединяться в разных системах.`],
     correct:1,
     explain:`Цель 1.1.5. Один источник данных может содержать более одного соединения: нажмите <em>Add</em> рядом с пунктом «Соединения» на панели «Источник данных» добавьте вторую систему, а затем объедините их. Это соединение между базами данных, и Tableau окрашивает каждое соединение по-разному, чтобы вы могли отличить их друг от друга.`},
-  {id:'q1', domain:'d1', type:'mc', q:`A row was added to the source database five minutes ago. Which connection type shows it in your viz right now, without any manual step?`,
+  {id:'q1', domain:'d1', type:'mc', q:`Строка была добавлена ​​в исходную базу данных пять минут назад. Какой тип соединения отображается в вашей визуализации прямо сейчас, без каких-либо действий вручную?`,
     choices:[`Извлечение соединения`, `Живое соединение`, `Либо — оба остаются актуальными автоматически`, `Ни то, ни другое — вы всегда должны перестраивать источник данных.`],
     correct:1,
-    explain:`Live queries the source on every interaction, so new rows appear immediately. An extract is a snapshot — it only updates when refreshed.`},
+    explain:`Live запрашивает источник при каждом взаимодействии, поэтому новые строки появляются немедленно. Экстракт представляет собой снимок — он обновляется только при обновлении.`},
   {id:'q2', domain:'d1', type:'ms', q:`Каковы веские причины использовать экстракт вместо живого соединения? <em>Выберите все, что применимо.</em>`,
     choices:[`Вам нужно работать офлайн в самолете`, `Исходная база данных работает медленно, и вам нужно более быстрое взаимодействие.`, `Вам нужно, чтобы каждая визуализация отражала изменения источника в реальном времени.`, `Вы хотите уменьшить нагрузку на загруженную рабочую базу данных.`],
     correct:[0,1,3],
-    explain:`Extracts shine for speed, portability/offline work, and taking load off the source. The one thing they can't do is stay real-time current — that's live's job.`},
-  {id:'q3', domain:'d1', type:'mc', q:`What file format does Tableau use to store extract data?`,
+    explain:`Экстракты отличаются скоростью, портативностью/работой в автономном режиме и разгрузкой источника. Единственное, чего они не могут, — это оставаться в курсе событий в реальном времени — это работа Live.`},
+  {id:'q3', domain:'d1', type:'mc', q:`Какой формат файла использует Tableau для хранения извлеченных данных?`,
     choices:[`<code>.twb</code>`, `<code>.tds</code>`, `<code>.hyper</code>`, `<code>.csv</code>`],
     correct:2,
     explain:`Экстракты хранятся как <code>.hyper</code> файлы (формат механизма данных Tableau в памяти). <code>.twb</code> это рабочая тетрадь, <code>.tds</code> — метаданные подключения к источнику данных.`},
@@ -548,112 +548,112 @@ const QUESTIONS = [
     choices:[`Рабочая книга и все ее данные`, `Информация о соединении и метаданные для источника данных, но нет данных`, `Сжатый экстракт`, `Информация о макете информационной панели`],
     correct:1,
     explain:`A <code>.tds</code> (Источник данных Tableau) сохраняет способ подключения, а также настройки полей (переименование, значения по умолчанию), а не сами данные. <code>.tdsx</code> упаковывает его С данными.`},
-  {id:'q5', domain:'d1', type:'mc', q:`You have a January sales table and a February sales table with identical columns, and you want one table with all the rows. Use a:`,
+  {id:'q5', domain:'d1', type:'mc', q:`У вас есть таблица продаж за январь и таблица продаж за февраль с одинаковыми столбцами, и вам нужна одна таблица со всеми строками. Используйте:`,
     choices:[`ВНУТРЕННЕЕ СОЕДИНЕНИЕ`, `ЛЕВОЕ ПРИСОЕДИНЕНИЕ`, `Union`, `Relationship`],
     correct:2,
-    explain:`Same columns, stacked rows → union. Joins add columns by matching keys; unions add rows.`},
-  {id:'q6', domain:'d1', type:'mc', q:`An inner join between Orders and Returns keeps:`,
+    explain:`Те же столбцы, расположенные друг над другом строки → объединение. Объединяет добавление столбцов путем сопоставления ключей; союзы добавляют строки.`},
+  {id:'q6', domain:'d1', type:'mc', q:`Внутреннее соединение между заказами и возвратами сохраняет:`,
     choices:[`Все строки из обеих таблиц`, `Только строки, имеющие совпадение в обеих таблицах.`, `Строки «Все заказы» с нулями там, где нет возврата.`, `Только строки, которые НЕ совпадают`],
     correct:1,
-    explain:`Inner = intersection. If you wanted every order regardless of whether it was returned, that's a left join from Orders.`},
-  {id:'q7', domain:'d1', type:'mc', q:`The key advantage of a relationship over a join when combining an Orders table (row per order line) with a Targets table (row per region per quarter):`,
+    explain:`Внутренний = пересечение. Если вам нужен каждый заказ независимо от того, был ли он возвращен, это левое соединение из Orders.`},
+  {id:'q7', domain:'d1', type:'mc', q:`Ключевое преимущество связи перед объединением при объединении таблицы «Заказы» (строка на строку заказа) с таблицей «Цели» (строка на регион за квартал):`,
     choices:[
       `Отношения — единственный способ объединить две таблицы.`,
       `Отношения запрашивают каждую таблицу на своем уровне детализации, избегая дублирования строк, которые может создать соединение с разной степенью детализации.`,
       `Отношения навсегда объединяют таблицы в одну, что происходит быстрее.`,
       `Объединения не могут объединять таблицы из одного источника данных.`],
     correct:1,
-    explain:`Joining tables of different granularity duplicates rows and inflates SUMs. Relationships (the "noodle") stay flexible — Tableau builds the right join per viz at query time.`},
-  {id:'q8', domain:'d1', type:'mc', q:`In the data model canvas, a relationship between two logical tables is shown as:`,
+    explain:`Объединение таблиц с разной степенью детализации приводит к дублированию строк и увеличению сумм. Отношения («лапша») остаются гибкими — Tableau создает правильное соединение для каждой визуализации во время запроса.`},
+  {id:'q8', domain:'d1', type:'mc', q:`На холсте модели данных связь между двумя логическими таблицами отображается следующим образом:`,
     choices:[`Значок диаграммы Венна`, `Гибкая линия («лапша»), соединяющая столы.`, `Объединенная одна таблица`, `Красный предупреждающий треугольник`],
     correct:1,
-    explain:`Relationships display as a line between logical tables. Venn diagram icons are the classic join editor, inside a logical table's physical layer.`},
-  {id:'q9', domain:'d1', type:'mc', q:`Your "region_cd" field shows values like "N", "S", "E", "W" and you want them displayed as "North", "South", "East", "West" without changing the underlying data. Use:`,
+    explain:`Отношения отображаются в виде линии между логическими таблицами. Значки диаграмм Венна — это классический редактор соединений, расположенный на физическом уровне логической таблицы.`},
+  {id:'q9', domain:'d1', type:'mc', q:`В вашем поле «region_cd» отображаются такие значения, как «N», «S», «E», «W», и вы хотите, чтобы они отображались как «Север», «Юг», «Восток», «Запад» без изменения базовых данных. Использовать:`,
     choices:[`Изменение типа данных`, `Aliases`, `Союз`, `Географическая роль`],
     correct:1,
-    explain:`Aliases are display names for the members of a dimension — the underlying values are untouched. (Aliases work on dimensions, not measures.)`},
-  {id:'q10', domain:'d1', type:'mc', q:`Tableau imported your "State" field as a plain string, and double-clicking it won't build a map. The fix:`,
+    explain:`Псевдонимы — это отображаемые имена элементов измерения. Базовые значения остаются нетронутыми. (Псевдонимы работают с измерениями, а не с мерами.)`},
+  {id:'q10', domain:'d1', type:'mc', q:`Tableau импортировала ваше поле «Состояние» в виде простой строки, и двойной щелчок по нему не построит карту. Исправление:`,
     choices:[`Преобразуйте его в число`, `Присвойте ему географическую роль (штат/провинция).`, `Создать вычисляемое поле`, `Переключиться на живое соединение`],
     correct:1,
-    explain:`Geographic roles tell Tableau to geocode the field (generating Latitude/Longitude). Right-click the field → Geographic Role → State/Province.`},
-  {id:'q11', domain:'d1', type:'mc', q:`You want [Revenue] to default to AVG instead of SUM every time anyone drags it into a viz. Where do you set that?`,
+    explain:`Географические роли предписывают Tableau геокодировать поле (генерируя широту/долготу). Щелкните правой кнопкой мыши поле → Географическая роль → Штат/Провинция.`},
+  {id:'q11', domain:'d1', type:'mc', q:`Вы хотите, чтобы для параметра [Доход] по умолчанию использовалось значение AVG вместо SUM каждый раз, когда кто-либо перетаскивает его в визуализацию. Где вы это устанавливаете?`,
     choices:[
       `Вы не можете — SUM является постоянным.`,
       `Щелкните правой кнопкой мыши поле → Свойства по умолчанию → Агрегация.`,
       `Формат ▸ Шрифт`,
       `Полка «Фильтры»`],
     correct:1,
-    explain:`Default Properties control a field's default aggregation, number format, and color — set once on the field, applied every time it's used.`},
+    explain:`Свойства по умолчанию управляют агрегацией поля по умолчанию, числовым форматом и цветом — задаются один раз для поля и применяются каждый раз, когда оно используется.`},
 
   /* ---------- DOMAIN 2 · Exploring & Analyzing Data (18) ---------- */
-  {id:'q52', domain:'d2', type:'mc', q:`You sort a list alphabetically and it comes back Item 1, Item 10, Item 11, Item 2. The cause:`,
+  {id:'q52', domain:'d2', type:'mc', q:`Вы сортируете список по алфавиту, и он возвращает элемент 1, элемент 10, элемент 11, элемент 2. Причина:`,
     choices:[
       `Алфавитная сортировка Tableau не работает для текста, содержащего цифры.`,
       `При алфавитной сортировке сравниваются символы по символам, поэтому цифра 1 сортируется раньше цифры 2.`,
       `Сначала поле необходимо преобразовать в меру.`,
       `Ручная сортировка, примененная ранее, переопределяет ее.`],
     correct:1,
-    explain:`Tableau's alphabetic sort is case sensitive, sorts [A-Z] before [a-z], and treats digits individually. "Item 10" is read as 1 then 0, so it lands before "Item 2". Single-digit labels sort correctly, which is why this stays hidden until the tenth item exists. Fix it by sorting on a numeric field instead of the text.`},
-  {id:'q47', domain:'d2', type:'mc', q:`A bar chart of Sales by Sub-Category must stay in descending order as new sales data arrives each week, without anyone touching it. You should apply:`,
+    explain:`Алфавитная сортировка Tableau чувствительна к регистру, сортирует [A-Z] перед [a-z] и обрабатывает цифры индивидуально. «Пункт 10» читается как 1, а затем 0, поэтому он оказывается перед «Пунктом 2». Однозначные метки сортируются правильно, поэтому они остаются скрытыми до тех пор, пока не появится десятый элемент. Исправьте это, сортируя по числовому полю вместо текста.`},
+  {id:'q47', domain:'d2', type:'mc', q:`Гистограмма продаж по подкатегориям должна оставаться в порядке убывания по мере поступления новых данных о продажах каждую неделю, и никто ее не трогает. Вам следует подать заявку:`,
     choices:[`Ручная сортировка путем перетаскивания заголовков по порядку.`, `Вычисляемая сортировка по SUM(Продажи) по убыванию`, `Контекстный фильтр`, `Фиксированный набор верхних подкатегорий`],
     correct:1,
     explain:`Objective 2.3.1. A computed sort is a rule — "order by SUM(Sales) descending" — so it re-evaluates as the data changes. A manual sort is a frozen arrangement you made by hand; new data will not reorder it.`},
   {id:'q48', domain:'d2', type:'ms', q:`Какие существуют действенные способы создания <strong>group</strong> в Таблице? <em>Выберите все, что применимо.</em>`,
     choices:[`Выберите метки на визуализации, затем нажмите скрепку на подсказке.`, `Выберите заголовки, затем нажмите скрепку`, `Щелкните правой кнопкой мыши измерение на панели «Данные» → «Создать» ▸ «Группировать».`, `Перетащите показатель на полку «Фильтры».`],
     correct:[0,1,2],
-    explain:`Objective 2.2.1 names all three routes: marks, headers, and the Data pane. Dragging a measure to Filters creates a filter, not a group. (Note the asymmetry with sets — sets are made from marks or the Data pane, not from headers.)`},
-  {id:'q12', domain:'d2', type:'mc', q:`Best chart type for comparing total sales across 12 product categories:`,
+    explain:`Задача 2.2.1 называет все три маршрута: метки, заголовки и панель данных. При перетаскивании меры в раздел «Фильтры» создается фильтр, а не группа. (Обратите внимание на асимметрию наборов — наборы создаются из меток или панели данных, а не из заголовков.)`},
+  {id:'q12', domain:'d2', type:'mc', q:`Лучший тип диаграммы для сравнения общего объема продаж по 12 категориям продуктов:`,
     choices:[`Круговая диаграмма`, `Гистограмма`, `Линейный график`, `График рассеяния`],
     correct:1,
-    explain:`Category comparison → bar. Twelve pie slices are unreadable; lines imply order/time; scatter needs two measures.`},
-  {id:'q13', domain:'d2', type:'mc', q:`To see whether higher marketing spend is associated with higher revenue across 200 campaigns, build a:`,
+    explain:`Сравнение категорий → бар. Двенадцать кусочков пирога нечитабельны; линии подразумевают порядок/время; разброс требует двух мер.`},
+  {id:'q13', domain:'d2', type:'mc', q:`Чтобы увидеть, связаны ли более высокие маркетинговые расходы с более высоким доходом в 200 кампаниях, постройте:`,
     choices:[`сложенный бар`, `Выделить таблицу`, `График рассеяния`, `Map`],
     correct:2,
-    explain:`Relationship between two measures → scatter plot: one measure per axis, one mark per campaign.`},
-  {id:'q14', domain:'d2', type:'mc', q:`You have thousands of individual lat/long points and want to show where they concentrate. The best map type is:`,
+    explain:`Связь между двумя показателями → точечная диаграмма: один показатель на ось, один балл на кампанию.`},
+  {id:'q14', domain:'d2', type:'mc', q:`У вас есть тысячи отдельных точек широты и долготы, и вы хотите показать, где они концентрируются. Лучший тип карты:`,
     choices:[`Заполненная (картоплетная) карта`, `Карта плотности (тепловая карта)`, `Карта символов с крупными пометками`, `Древовидная карта`],
     correct:1,
-    explain:`Density maps shade by concentration of overlapping marks — built for "where do many points cluster?" Filled maps color whole regions by a value.`},
-  {id:'q15', domain:'d2', type:'mc', q:`The difference between a dual-axis chart and a combined-axis chart:`,
+    explain:`Карты плотности затеняются концентрацией перекрывающихся меток — они созданы для того, «где группируется много точек?» Заполненные карты раскрашивают целые регионы по значению.`},
+  {id:'q15', domain:'d2', type:'mc', q:`Разница между двухосной диаграммой и комбинированной диаграммой:`,
     choices:[
       `Это два названия одного и того же.`,
       `Двойная ось накладывает два измерения, каждый на СОБСТВЕННУЮ независимую ось; комбинированная ось помещает несколько показателей на ОДНУ общую ось и масштаб.`,
       `Комбинированная ось допускает два типа меток; двойная ось нет.`,
       `Двойная ось работает только с датами.`],
     correct:1,
-    explain:`Dual axis = two scales (great for revenue vs. units, different magnitudes; you can also mix mark types). Combined axis = one shared scale (fair comparison of like measures).`},
-  {id:'q16', domain:'d2', type:'mc', q:`On a dual-axis chart of Revenue and Forecast Revenue, the two axes have different scales and the lines are misleading. Fix it by:`,
+    explain:`Двойная ось = две шкалы (отлично подходит для сравнения доходов и единиц измерения, разные величины; вы также можете смешивать типы оценок). Комбинированная ось = одна общая шкала (справедливое сравнение аналогичных показателей).`},
+  {id:'q16', domain:'d2', type:'mc', q:`На двухосной диаграмме «Доход» и «Прогнозируемый доход» две оси имеют разные масштабы, и линии вводят в заблуждение. Исправьте это:`,
     choices:[
       `Щелкните правой кнопкой мыши вторичную ось и выберите «Синхронизировать ось».`,
       `Удаление одной из мер.`,
       `Преобразование обеих мер в измерения.`,
       `Добавляем линию тренда.`],
     correct:0,
-    explain:`Synchronize Axis locks the secondary axis to the primary's scale — essential whenever the two measures are in comparable units.`},
-  {id:'q17', domain:'d2', type:'mc', q:`To show total sales per month AND the share each region contributes within each month, in one chart, use a:`,
+    explain:`Синхронизация оси привязывает вторичную ось к шкале основной, что важно, когда две меры находятся в сопоставимых единицах.`},
+  {id:'q17', domain:'d2', type:'mc', q:`Чтобы показать общий объем продаж за месяц И долю, которую каждый регион вносит в течение каждого месяца, на одной диаграмме, используйте:`,
     choices:[`Линейный график с одной линией`, `Гистограмма с накоплением (месяц на оси, регион по цвету)`, `График рассеяния`, `Crosstab`],
     correct:1,
-    explain:`Stacked bars show the total (bar height) and the parts (colored segments) at once. Region on the Color shelf creates the stacking.`},
-  {id:'q18', domain:'d2', type:'mc', q:`A "highlight table" is:`,
+    explain:`Столбцы, сложенные друг на друга, показывают одновременно общую сумму (высоту столбца) и части (цветные сегменты). Область на полке «Цвет» создает наложение.`},
+  {id:'q18', domain:'d2', type:'mc', q:`«Таблица основных моментов» — это:`,
     choices:[
       `Кросс-таблица (текстовая таблица) с условным цветом, примененным к ячейкам.`,
       `Таблица, в которой показаны только 10 верхних строк.`,
       `Любая таблица на приборной панели.`,
       `Включена таблица с итогами.`],
     correct:0,
-    explain:`Highlight table = crosstab + a measure on Color, so the grid reads like a heatmap while keeping exact numbers visible.`},
-  {id:'q19', domain:'d2', type:'mc', q:`50 US states need to be analyzed as 4 custom regions of your own design. The right tool:`,
+    explain:`Таблица выделения = перекрестная таблица + показатель цвета, поэтому сетка читается как тепловая карта, сохраняя при этом точные цифры.`},
+  {id:'q19', domain:'d2', type:'mc', q:`50 штатов США необходимо проанализировать как 4 специально созданных вами региона. Правильный инструмент:`,
     choices:[`Набор`, `Группа`, `Иерархия`, `Параметр`],
     correct:1,
-    explain:`Groups combine dimension members into bigger named buckets — exactly "many states → few regions." A set would only give you IN/OUT.`},
-  {id:'q20', domain:'d2', type:'mc', q:`You create a set defined as "Top 10 customers by SUM(Sales)". Next quarter the sales data changes. The set:`,
+    explain:`Группы объединяют элементы измерения в более крупные именованные сегменты — именно «много штатов → мало регионов». Набор даст вам только IN/OUT.`},
+  {id:'q20', domain:'d2', type:'mc', q:`Вы создаете набор, определенный как «10 крупнейших клиентов по сумме (продаж)». В следующем квартале данные о продажах изменятся. Набор:`,
     choices:[
       `Удерживает первоначальных 10 клиентов навсегда.`,
       `Обновляется автоматически — это динамический (вычисляемый) набор, переоцениваемый по текущим данным.`,
       `Становится недействительным и должен быть создан заново.`,
       `Превращается в группу.`],
     correct:1,
-    explain:`Condition/top-N sets are dynamic: membership recomputes as the data changes. A FIXED set (hand-picked members) is the one that stays frozen.`},
+    explain:`Наборы условий/top-N являются динамическими: членство пересчитывается по мере изменения данных. ФИКСИРОВАННЫЙ набор (отобранные вручную участники) — это тот, который остается замороженным.`},
   {id:'q21', domain:'d2', type:'ms', q:`Какие утверждения о множествах верны? <em>Выберите все, что применимо.</em>`,
     choices:[
       `Набор делит данные на IN и OUT.`,
@@ -661,42 +661,42 @@ const QUESTIONS = [
       `Наборы могут основываться на условии, например «Продажи > 10 000».`,
       `Набор можно использовать только один раз на одном листе.`],
     correct:[0,1,2],
-    explain:`Sets are reusable fields (usable across the whole workbook) that classify every row IN or OUT — by fixed membership or by a dynamic condition.`},
-  {id:'q22', domain:'d2', type:'mc', q:`Users should be able to click a + on the Category pill to drill into Sub-Category, then Product. You need a:`,
+    explain:`Наборы — это многократно используемые поля (которые можно использовать во всей книге), которые классифицируют каждую строку IN или OUT — по фиксированному членству или по динамическому условию.`},
+  {id:'q22', domain:'d2', type:'mc', q:`Пользователи должны иметь возможность нажать + на таблетке «Категория», чтобы перейти к подкатегории, а затем к продукту. Вам нужно:`,
     choices:[`Group`, `Set`, `Hierarchy`, `Bin`],
     correct:2,
-    explain:`Hierarchies power the +/− drill-down on pills. Build one by dragging Sub-Category onto Category in the Data pane.`},
-  {id:'q23', domain:'d2', type:'mc', q:`In Tableau's order of operations, which filter type is applied FIRST among these?`,
+    explain:`Иерархии обеспечивают детализацию +/- по таблеткам. Создайте его, перетащив подкатегорию на категорию на панели данных.`},
+  {id:'q23', domain:'d2', type:'mc', q:`Какой тип фильтра применяется ПЕРВЫМ среди них в порядке операций Tableau?`,
     choices:[`Фильтр измерения`, `Фильтр размеров`, `контекстный фильтр`, `Фильтр расчета таблицы`],
     correct:2,
-    explain:`Extract → data source → CONTEXT → dimension → measure → table calc. That's why "top N" problems are fixed by adding the other filter to context — context filters compute before the top-N.`},
-  {id:'q24', domain:'d2', type:'mc', q:`A dashboard must always show "the last 3 months" of data, rolling forward automatically as time passes. Use a:`,
+    explain:`Извлечение → источник данных → КОНТЕКСТ → измерение → мера → расчет таблицы. Вот почему проблемы «первого N» устраняются путем добавления в контекст другого фильтра — контекстные фильтры вычисляются раньше первого N.`},
+  {id:'q24', domain:'d2', type:'mc', q:`На информационной панели всегда должны отображаться данные «за последние 3 месяца», с автоматическим перекатом вперед по прошествии времени. Используйте:`,
     choices:[`Фильтр диапазона дат с фиксированным началом и концом`, `Фильтр относительной даты`, `Дискретный фильтр части даты по месяцу`, `Фильтр источника данных по году = 2026`],
     correct:1,
-    explain:`Relative date filters ("last 3 months") are anchored to today and roll forward on their own. A fixed range goes stale the day after you set it.`},
-  {id:'q25', domain:'d2', type:'mc', q:`You have monthly sales in a line chart and want to show each month as a running cumulative total for the year — without writing a formula. Use:`,
+    explain:`Фильтры относительных дат («последние 3 месяца») привязаны к сегодняшнему дню и перекатываются вперед самостоятельно. Фиксированный диапазон устаревает на следующий день после его установки.`},
+  {id:'q25', domain:'d2', type:'mc', q:`У вас есть ежемесячные продажи в виде линейной диаграммы, и вы хотите отобразить каждый месяц как нарастающую сумму за год — без написания формулы. Использовать:`,
     choices:[`Вычисляемое поле с помощью ПРОСМОТР()`, `Быстрый расчет таблицы → Промежуточный итог`, `Группа`, `Фильтр относительной даты`],
     correct:1,
-    explain:`Quick table calcs (running total, % of total, difference, rank, moving average) live in the measure pill's menu and transform what's already in the viz — zero formula writing.`},
-  {id:'q26', domain:'d2', type:'mc', q:`To see the distribution of order sizes — how many orders fall in $0–100, $100–200, $200–300, and so on — create:`,
+    explain:`Быстрые табличные вычисления (промежуточная сумма, % от суммы, разница, ранг, скользящее среднее) находятся в меню таблицы показателей и преобразуют то, что уже есть в визуальном представлении, а именно — написание нулевой формулы.`},
+  {id:'q26', domain:'d2', type:'mc', q:`Чтобы увидеть распределение размеров ордеров — сколько заказов приходится на 0–100 долларов, 100–200 долларов, 200–300 долларов и т. д. — создайте:`,
     choices:[
       `Ячейки по показателю стоимости заказа, затем гистограмма счетчиков на каждую ячейку.`,
       `Группа по идентификатору заказа.`,
       `Текущий итог.`,
       `Двухосный график.`],
     correct:0,
-    explain:`Bins chop a continuous measure into equal-width buckets (creating a new dimension); the histogram counts rows per bucket. "How is this measure distributed?" → histogram.`},
-  {id:'q27', domain:'d2', type:'mc', q:`A viewer should choose their own sales threshold — 5,000, 10,000, or any number — and have the view respond. You build a parameter. What ELSE must you do before anything changes?`,
+    explain:`Бины разбивают непрерывную меру на ведра одинаковой ширины (создавая новое измерение); гистограмма подсчитывает строки в сегменте. «Как распределяется эта мера?» → гистограмма.`},
+  {id:'q27', domain:'d2', type:'mc', q:`Зритель должен выбрать собственный порог продаж — 5 000, 10 000 или любое другое число — и получить реакцию просмотра. Вы создаете параметр. Что ЕЩЕ нужно сделать, прежде чем что-то изменится?`,
     choices:[
       `Ничего — достаточно показать управление параметрами.`,
       `Ссылка на параметр в чем-либо: вычисляемом поле, фильтре, наборе или опорной строке.`,
       `Преобразуйте параметр в меру.`,
       `Сначала опубликуйте книгу.`],
     correct:1,
-    explain:`A parameter is just a value until something uses it. Show the control AND wire it into a calc/filter/set/reference line — the exam tests exactly this "parameter does nothing alone" point.`},
+    explain:`Параметр — это просто значение, пока что-то его не использует. Покажите элемент управления И подключите его к строке расчета/фильтра/установки/опорной линии — на экзамене проверяется именно этот пункт «параметр сам по себе ничего не делает».`},
 
   /* ---------- DOMAIN 3 · Sharing Insights (12) ---------- */
-  {id:'q50', domain:'d3', type:'mc', q:`You built a dashboard at your monitor's size and left the size setting on Fixed. A colleague opens it on a smaller laptop. They see:`,
+  {id:'q50', domain:'d3', type:'mc', q:`Вы создали панель мониторинга по размеру вашего монитора и оставили для параметра размера значение «Фиксированный». Коллега открывает его на ноутбуке меньшего размера. Они видят:`,
     choices:[
       `Те же фиксированные размеры, поэтому он прокручивается или масштабируется, а не переставляется.`,
       `Макет, который автоматически меняет расположение объектов в соответствии с размером экрана.`,
@@ -704,82 +704,82 @@ const QUESTIONS = [
       `Подсказка с вопросом, какой макет им нужен.`],
     correct:0,
     explain:`Фиксированный сохраняет точные размеры для всех, поэтому экран меньшего размера прокручивается или масштабируется. <strong>Automatic</strong> адаптирует общие размеры приборной панели к размеру экрана. <strong>Range</strong> колеблется между установленным вами минимумом и максимумом. Выбирайте «Фиксированный», только если вы знаете, на каком экране он будет читаться.`},
-  {id:'q51', domain:'d3', type:'mc', q:`A dashboard extension requests Full Data Access. Granting it gives the extension:`,
+  {id:'q51', domain:'d3', type:'mc', q:`Расширение информационной панели запрашивает полный доступ к данным. Предоставление этого дает расширение:`,
     choices:[
       `В представлении уже видны только агрегированные числа.`,
       `Полные базовые данные, а также имена таблиц и полей из источников данных.`,
       `Разрешение на редактирование расчетов книги.`,
       `Права администратора на сервере Таблица.`],
     correct:1,
-    explain:`Full Data Access covers the underlying rows and the table and field names, not just the summary on screen. An extension that only draws a picture of what is already displayed does not need it. Extensions are third-party web applications, and a network-enabled one runs on the developer's own host, so establish where it runs before you add it. Reset Permissions changes your mind later.`},
-  {id:'q49', domain:'d3', type:'mc', q:`Dashboard consumers need a search box they can type a product name into, so matching marks light up while the rest dim — no clicking required. Add:`,
+    explain:`Полный доступ к данным охватывает базовые строки, имена таблиц и полей, а не только сводку на экране. Расширение, которое лишь рисует картинку того, что уже отображается, в этом не нуждается. Расширения — это сторонние веб-приложения, а сетевые приложения запускаются на собственном хосте разработчика, поэтому прежде чем добавлять их, определите, где они работают. Сброс разрешений передумает позже.`},
+  {id:'q49', domain:'d3', type:'mc', q:`Потребителям информационной панели нужно поле поиска, в которое они могут ввести название продукта, чтобы соответствующие метки загорались, а остальные тускнели — никаких нажатий не требовалось. Добавлять:`,
     choices:[`Яркое действие`, `Маркер (Анализ ▸ Маркеры)`, `Действие фильтра`, `URL-действие`],
     correct:1,
     explain:`Цель 3.2.2. <strong>Highlighter</strong> — это карточка, которую вводит пользователь. Изюминка <em>action</em> отличается — он срабатывает, когда кто-то нажимает на отметку. И то, и другое выявляет, а не фильтрует, и на экзамене они рассматриваются как отдельные вещи.`},
-  {id:'q28', domain:'d3', type:'mc', q:`To color the bars in a bar chart by Region, you:`,
+  {id:'q28', domain:'d3', type:'mc', q:`Чтобы раскрасить столбцы на гистограмме по регионам, необходимо:`,
     choices:[
       `Перетащите «Регион» к свойству «Цвет» на карточке «Знаки».`,
       `Используйте «Формат» ▸ «Затенение».`,
       `Щелкните правой кнопкой мыши каждую полосу и выберите цвет.`,
       `Создайте параметр.`],
     correct:0,
-    explain:`Data-driven color = a field on the Color shelf of the Marks card. Format ▸ Shading changes static background/band colors, not per-mark encoding.`},
-  {id:'q29', domain:'d3', type:'mc', q:`Where do you change the font used by a worksheet's labels and headers?`,
+    explain:`Цвет на основе данных = поле на полке «Цвет» карты «Знаки». Формат ▸ Затенение изменяет статические цвета фона/полосы, а не кодирование каждой метки.`},
+  {id:'q29', domain:'d3', type:'mc', q:`Где изменить шрифт, используемый в метках и заголовках листа?`,
     choices:[`Только карта Знаки`, `Формат ▸ Шрифт (выбор области листа/строк/столбцов)`, `Панель данных`, `Вы не можете изменить шрифты в Tableau`],
     correct:1,
-    explain:`Format ▸ Font opens the format pane with scoped controls at worksheet, rows, and columns levels. The Marks card's Label button also offers per-label font edits.`},
-  {id:'q30', domain:'d3', type:'mc', q:`To display each customer segment as a different symbol (circle, square, triangle) in a scatter plot:`,
+    explain:`Формат ▸ Шрифт открывает панель формата с ограниченными элементами управления на уровне листа, строк и столбцов. Кнопка «Метка» на карточке «Метка» также позволяет редактировать шрифты для каждой метки.`},
+  {id:'q30', domain:'d3', type:'mc', q:`Чтобы отобразить каждый сегмент клиентов в виде отдельного символа (круг, квадрат, треугольник) на точечной диаграмме:`,
     choices:[
       `Установите тип метки «Форма» и перетащите «Сегмент» на карту «Форма».`,
       `Вместо этого используйте сложенную планку.`,
       `Добавьте сегмент на полку «Фильтры».`,
       `Включите визуальную анимацию.`],
     correct:0,
-    explain:`Mark type → Shape, field → Shape card, then Edit Shape to assign palettes (including custom shapes).`},
-  {id:'q31', domain:'d3', type:'mc', q:`Viz animations in Tableau:`,
+    explain:`Тип отметки → Форма, поле → Карта формы, затем «Редактировать форму», чтобы назначить палитры (включая пользовательские формы).`},
+  {id:'q31', domain:'d3', type:'mc', q:`Визуальная анимация в Tableau:`,
     choices:[
       `Автоматически воспроизводить слайд-шоу из ваших листов.`,
       `Плавный переход отмечает изменение данных, фильтров или сортировки — настраивается для каждой книги или листа.`,
       `Работайте только с картами.`,
       `Всегда включены и не могут быть отключены.`],
     correct:1,
-    explain:`Format ▸ Animations controls them (on/off, duration, simultaneous vs. sequential) at workbook or sheet scope — they animate mark changes, helping viewers track what moved.`},
-  {id:'q32', domain:'d3', type:'mc', q:`A color legend appeared automatically and you don't want it on the dashboard. You can:`,
+    explain:`Формат ▸ Анимация управляет ими (вкл./выкл., продолжительность, одновременно или последовательно) в области книги или листа — они анимируют изменения меток, помогая зрителям отслеживать, что переместилось.`},
+  {id:'q32', domain:'d3', type:'mc', q:`Цветовая легенда появилась автоматически, и вам не нужно, чтобы она отображалась на приборной панели. Ты можешь:`,
     choices:[
       `Удалить поле Цвет — это единственный способ.`,
       `Скройте легенду (это ✕/меню листа) — цветовая кодировка останется.`,
       `Легенды никогда не могут быть удалены.`,
       `Переведите книгу в режим презентации.`],
     correct:1,
-    explain:`Legends are show/hide-able independently of the encoding. Hiding the legend card leaves the marks colored exactly as before.`},
+    explain:`Легенды можно отображать/скрывать независимо от кодировки. Если скрыть карту легенды, метки будут окрашены точно так же, как и раньше.`},
   {id:'q33', domain:'d3', type:'ms', q:`Что вы можете добавить на панель управления Tableau? <em>Выберите все, что применимо.</em>`,
     choices:[`Worksheets`, `Текстовые объекты и изображения`, `Встроенная веб-страница`, `Отчет Power BI как собственный объект`],
     correct:[0,1,2],
-    explain:`Dashboards hold sheets plus objects: text, image, web page, blank, button, extension. Other BI tools' reports aren't native dashboard objects.`},
-  {id:'q34', domain:'d3', type:'mc', q:`You want a click on a region in the Map sheet to filter the two other sheets on the dashboard. The fastest way:`,
+    explain:`Панели мониторинга содержат листы и объекты: текст, изображение, веб-страницу, пустую страницу, кнопку, расширение. Отчеты других инструментов BI не являются собственными объектами информационной панели.`},
+  {id:'q34', domain:'d3', type:'mc', q:`Вам нужно щелкнуть регион на листе карты, чтобы отфильтровать два других листа на информационной панели. Самый быстрый способ:`,
     choices:[
       `Выберите Карту, нажмите «Использовать как фильтр» (значок воронки) — создаем действие фильтра.`,
       `Добавьте действие URL.`,
       `Восстановите другие листы с жестко запрограммированным регионом.`,
       `Добавьте карту в контекст.`],
     correct:0,
-    explain:`"Use as Filter" auto-creates a dashboard filter action from that sheet to all others. Dashboard ▸ Actions gives finer control (source/target sheets, on select/hover/menu).`},
-  {id:'q35', domain:'d3', type:'mc', q:`A dashboard action that opens the customer's account page in the browser when a mark is clicked is a:`,
+    explain:`«Использовать как фильтр» автоматически создает действие фильтра панели мониторинга для этого листа и для всех остальных. Панель мониторинга ▸ Действия обеспечивает более точный контроль (исходные/целевые листы, при выборе/наведении/меню).`},
+  {id:'q35', domain:'d3', type:'mc', q:`Действие информационной панели, которое открывает страницу учетной записи клиента в браузере при нажатии на отметку, представляет собой:`,
     choices:[`Действие фильтра`, `Выделить действие`, `URL-действие`, `Действие параметра`],
     correct:2,
     explain:`Действия с URL-адресом открывают ссылку (которая может включать значения полей, например <code>https://crm.example.com/&lt;Customer ID&gt;</code>). Фильтр сужается, выделяется прожекторами, действия с параметрами устанавливают параметр с отметки.`},
-  {id:'q36', domain:'d3', type:'mc', q:`Your dashboard looks great on desktop but cramped on phones. The Tableau-native solution:`,
+  {id:'q36', domain:'d3', type:'mc', q:`Ваша панель управления выглядит великолепно на настольном компьютере, но тесновата на телефонах. Нативное решение Tableau:`,
     choices:[
       `Создайте вторую отдельную книгу для телефонов.`,
       `Добавьте макет устройства (Телефон) на ТУ ЖЕ информационную панель и измените или удалите элементы для этого макета.`,
       `Попросите зрителей повернуть свои телефоны.`,
       `Вместо этого экспортируйте в Силовая установка.`],
     correct:1,
-    explain:`Device-specific layouts let one dashboard serve Default/Desktop, Tablet, and Phone arrangements — same sheets, per-device layout, chosen automatically by screen size.`},
-  {id:'q37', domain:'d3', type:'mc', q:`You need to walk executives through your analysis step by step — context first, then the anomaly, then the recommendation — each step captioned. Build a:`,
+    explain:`Макеты для конкретных устройств позволяют на одной информационной панели обслуживать схемы «По умолчанию», «Рабочий стол», «Планшет» и «Телефон» — одни и те же листы, макет для каждого устройства, выбираемый автоматически в зависимости от размера экрана.`},
+  {id:'q37', domain:'d3', type:'mc', q:`Вам нужно шаг за шагом проводить руководство через свой анализ — сначала контекст, затем аномалию, затем рекомендацию — каждый шаг должен быть озаглавлен. Создайте:`,
     choices:[`Панель инструментов с множеством плавающих листов`, `История, по одной сюжетной точке за шаг`, `Crosstab`, `Hierarchy`],
     correct:1,
-    explain:`Stories are ordered, captioned story points (each a sheet or dashboard snapshot) — Tableau's guided-narrative format.`},
+    explain:`Истории упорядочены, снабжены подписями (каждая представляет собой снимок листа или информационной панели) — формат управляемого повествования Tableau.`},
   {id:'q38', domain:'d3', type:'ms', q:`У коллеги есть Таблица для рабочего стола, но нет доступа к вашей базе данных. Что позволит им открыть вашу работу с включенными в нее данными? <em>Выберите все, что применимо.</em>`,
     choices:[
       `Отправить <code>.twbx</code> упакованная рабочая тетрадь (с выпиской).`,
@@ -790,54 +790,54 @@ const QUESTIONS = [
     explain:`<code>.twbx</code> упаковывает книгу С ее данными; публикация с отрывком также содержит данные. <code>.twb</code> and <code>.tds</code> не содержат данных — им все равно понадобится база данных.`},
 
   /* ---------- DOMAIN 4 · Understanding Tableau Concepts (7) ---------- */
-  {id:'q53', domain:'d4', type:'mc', q:`Hierarchies, groups, sets and bins all organize data. Which one arranges several separate FIELDS rather than the values inside one field?`,
+  {id:'q53', domain:'d4', type:'mc', q:`Иерархии, группы, наборы и ячейки организуют данные. Какой из них упорядочивает несколько отдельных ПОЛЯ, а не значения внутри одного поля?`,
     choices:[`Группа`, `Набор`, `Иерархия`, `Тысяча`],
     correct:2,
-    explain:`A hierarchy orders existing fields into levels, such as Category then Sub-Category then Product, and hands the reader a drill control. The other three reshape the values inside a single field: a group merges members into bigger members, a set labels every member IN or OUT, and a bin cuts a continuous measure into equal-width buckets.`},
-  {id:'q39', domain:'d4', type:'mc', q:`In Tableau, dimensions and measures differ in that:`,
+    explain:`Иерархия упорядочивает существующие поля по уровням, например «Категория», затем «Подкатегория», затем «Продукт», и предоставляет читателю элемент управления детализацией. Остальные три меняют форму значений внутри одного поля: группа объединяет элементы в более крупные элементы, набор помечает каждого члена как IN или OUT, а бин делит непрерывную меру на сегменты одинаковой ширины.`},
+  {id:'q39', domain:'d4', type:'mc', q:`В Tableau размеры и меры отличаются тем, что:`,
     choices:[
       `Измерения — это качественные поля, которые разделяют данные; меры — это количественные поля, которые агрегируются.`,
       `Размеры всегда являются текстовыми; меры всегда являются валютой.`,
       `Размеры идут только по строкам; меры только по столбцам.`,
       `Меры нельзя использовать в вычисляемых полях.`],
     correct:0,
-    explain:`Dimensions answer "by what?" (region, product, month); measures answer "how much?" (revenue, units). Either can go on any shelf, and fields can be converted between the two.`},
-  {id:'q40', domain:'d4', type:'mc', q:`A blue pill versus a green pill in Tableau indicates:`,
+    explain:`Размеры отвечают "чем?" (регион, товар, месяц); меры ответ "сколько?" (выручка, ед.). Любой из них может быть размещен на любой полке, и поля можно конвертировать между ними.`},
+  {id:'q40', domain:'d4', type:'mc', q:`Синяя таблетка по сравнению с зеленой таблеткой в ​​Таблице означает:`,
     choices:[
       `Измерение (синий) и мера (зеленый) — всегда.`,
       `Дискретный (синий) и непрерывный (зеленый).`,
       `Фильтрованное (синий) и нефильтрованное (зеленый).`,
       `Текстовый (синий) и числовой (зеленый) типы данных.`],
     correct:1,
-    explain:`The trap answer is A. Blue/green = discrete/continuous. Most dimensions happen to be discrete and most measures continuous, but both can be either — an exact date (dimension) can be green.`},
-  {id:'q41', domain:'d4', type:'mc', q:`A DISCRETE field on Columns produces ______, while a CONTINUOUS field produces ______.`,
+    explain:`Ответ на ловушку: А. Синий/зеленый = дискретный/непрерывный. Большинство измерений являются дискретными, а большинство мер непрерывными, но оба могут быть любыми — точная дата (размерность) может быть зеленой.`},
+  {id:'q41', domain:'d4', type:'mc', q:`ДИСКРЕТНОЕ поле в Столбцах выдает ______, а НЕПРЕРЫВНОЕ поле выдает ______.`,
     choices:[`ось · заголовки`, `заголовки · ось`, `фильтр · параметр`, `цвета · размеры`],
     correct:1,
-    explain:`"Blue makes headers, green makes axes." Discrete = labeled buckets; continuous = an unbroken numeric/date axis.`},
-  {id:'q42', domain:'d4', type:'mc', q:`You want all Januaries from every year combined into one bucket to study seasonality. Use the date as a:`,
+    explain:`«Синий делает заголовки, зеленый делает топоры». Дискретный = помеченные сегменты; непрерывный = непрерывная ось чисел/дат.`},
+  {id:'q42', domain:'d4', type:'mc', q:`Вы хотите, чтобы все январи каждого года были объединены в один блок для изучения сезонности. Используйте дату как:`,
     choices:[
       `Дата ЗНАЧЕНИЕ (непрерывное, например, МЕСЯЦ в усеченном виде) — январь 2024 г. и январь 2025 г. остаются отдельными.`,
       `Дата ЧАСТЬ (дискретный МЕСЯЦ) — все январи объединяются в один «январский» блок.`,
       `Фильтр относительной даты.`,
       `Нить.`],
     correct:1,
-    explain:`Date parts ignore the year boundary (seasonality: compare all Januaries); date values keep the timeline continuous (trend). Right-click-drag a date field to pick explicitly.`},
-  {id:'q43', domain:'d4', type:'mc', q:`When you drag the measure [Revenue] into a view, Tableau by default:`,
+    explain:`Части даты игнорируют границу года (сезонность: сравнивать все январи); Значения даты сохраняют непрерывную временную шкалу (тренд). Щелкните правой кнопкой мыши и перетащите поле даты, чтобы выбрать его явно.`},
+  {id:'q43', domain:'d4', type:'mc', q:`Когда вы перетаскиваете показатель [Доход] в представление, Tableau по умолчанию:`,
     choices:[
       `Показывает каждое необработанное значение строки.`,
       `Агрегирует их — обычно как СУММ (Доход).`,
       `Преобразует его в измерение.`,
       `Попросит вас сначала выбрать агрегат.`],
     correct:1,
-    explain:`Measures aggregate on entry — SUM by default (changeable per-pill or via the field's Default Properties → Aggregation).`},
-  {id:'q44', domain:'d4', type:'mc', q:`A view shows one bar: SUM(Revenue) = 4.2M. You add Region (4 members) to Rows, then Product (10 members) too. What happens to the aggregation?`,
+    explain:`Показатели агрегируются при вводе — СУММА по умолчанию (можно изменить для каждой таблетки или через Свойства поля по умолчанию → Агрегация).`},
+  {id:'q44', domain:'d4', type:'mc', q:`Представление показывает одну полосу: SUM(Доход) = 4,2M. Вы добавляете регион (4 участника) в строки, а затем продукт (10 участников). Что происходит с агрегацией?`,
     choices:[
       `Еще одна цифра — размеры не влияют на меры.`,
       `СУММА пересчитывается на каждом уровне детализации: 4 столбца (по одному на регион), затем до 40 (по одному на комбинацию регион-продукт).`,
       `Измерение автоматически переключается на AVG.`,
       `Табло выдает ошибку.`],
     correct:1,
-    explain:`Each dimension you add sets a finer level of detail, and the aggregate recomputes per combination. The total across all bars still reconciles to 4.2M.`},
+    explain:`Каждое добавляемое измерение устанавливает более высокий уровень детализации, а совокупное значение пересчитывается для каждой комбинации. Сумма по всем столбцам по-прежнему составляет 4,2 млн.`},
   {id:'q45', domain:'d4', type:'mc', q:`Всплывающая подсказка показывает <code>*</code> для имени клиента. Это означает:`,
     choices:[
       `Поле содержит ошибку.`,
@@ -940,7 +940,7 @@ function renderHome(){
       <a class="cta-card primary" onclick="setView('exam')">
         <div class="cta-icon"><i data-lucide="clipboard-list"></i></div>
         <div class="cta-title">${state.submitted ? "Проверьте свой экзамен" : (inProgress ? "Возобновить пробный экзамен" : "Сдать практический экзамен")}</div>
-        <div class="cta-desc">${state.submitted ? `You scored ${calcScore().total}/${total}. Reopen to review the answers, or retake it.` : `53 questions, 70-minute timer, weighted to the official exam outline — multiple-choice and multiple-response, just like the real exam. ${answered ? `You've answered ${answered}/${total}.` : ''}`}</div>
+        <div class="cta-desc">${state.submitted ? `Вы забили ${calcScore().total}/${total}. Откройте повторно, чтобы просмотреть ответы, или повторите попытку.` : `53 вопроса, 70-минутный таймер, адаптированные к официальному плану экзамена — множественный выбор и множественный ответ, как на настоящем экзамене. ${answered ? `Вы ответили ${answered}/${total}.` : ''}`}</div>
         <div class="cta-link">${state.submitted ? "Посмотреть результаты →" : (inProgress ? "Продолжить →" : 'Start →')}</div>
       </a>
     </div>
@@ -976,7 +976,7 @@ function renderStudy(){
       <p>Проценты — это официальный вес домена — тратьте время на обучение пропорционально.</p>
     </div>
     <button class="expand-all" onclick="toggleAllStudy()">${allStudyOpen() ? "Свернуть все" : "Развернуть все"}</button>
-    <button class="expand-all ${state.reviewFilter?'rf-on':''}" onclick="toggleReviewFilter()">${state.reviewFilter ? `Showing needs-review only (${needsReviewCount()}) — show all` : `Filter: needs review (${needsReviewCount()})`}</button>
+    <button class="expand-all ${state.reviewFilter?'rf-on':''}" onclick="toggleReviewFilter()">${state.reviewFilter ? `Показан только обзор потребностей (${needsReviewCount()}) — показать все` : `Фильтр: требует проверки (${needsReviewCount()})`}</button>
     ${STUDY.map(s=>{
       const d = DOMAIN_INFO[s.key];
       const vis = s.must.map((m,i)=>({m,i})).filter(x=>{

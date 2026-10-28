@@ -312,17 +312,17 @@ async function hintCall(prompt, targetId){
     el.textContent = data.content?.[0]?.text || "Никакого ответа. Проверьте свой ключ.";
   } catch(e){ el.textContent = "Запрос не выполнен. Проверьте свой ключ и соединение."; }
 }
-const TUTOR_ROLE = `You are a plain-spoken Docusign CLM tutor helping someone study for the Docusign CLM Implementation Pro exam. That exam is about implementing Docusign CLM for a customer: planning and administering the account, designing folders and attributes, building workflows in Workflow Designer, integrating those workflows with Salesforce through Docusign Apps Launcher, and taking the solution live. It is about Docusign CLM, NOT CLM.CM (the older SpringCM platform).`;
+const TUTOR_ROLE = `Вы откровенный преподаватель Docusign CLM, помогающий кому-то подготовиться к экзамену Docusign CLM Implementation Pro. Этот экзамен посвящен внедрению Docusign CLM для клиента: планированию и администрированию учетной записи, проектированию папок и атрибутов, построению рабочих процессов в Workflow Designer, интеграции этих рабочих процессов с Salesforce через Docusign Apps Launcher и внедрению решения. Речь идет о Docusign CLM, а НЕ CLM.CM (более старая платформа SpringCM).`;
 function hintStudy(key, i){
   const s = STUDY.find(x=>x.key===key);
   if(!s) return;
   const fact = stripTags(s.must[i]);
   const prompt = `${TUTOR_ROLE}
 
-Explain this exam point a different way than it is written here:
+Объясните этот экзаменационный вопрос иначе, чем написано здесь:
 "${fact}"
 
-Rules: 3 sentences at most. One idea per sentence. Use an everyday comparison if it helps. Say what the exam is likely to ask about it. No preamble, no restating the question.`;
+Правила: максимум 3 предложения. Одна идея в предложении. Используйте повседневное сравнение, если это помогает. Скажите, что, скорее всего, об этом спросят на экзамене. Никакой преамбулы, никакого повторения вопроса.`;
   hintCall(prompt, 'hint-resp-' + key + '-' + i);
 }
 function hintQuestion(qid){
@@ -331,13 +331,13 @@ function hintQuestion(qid){
   const chosen = state.answers[qid];
   const picked = Array.isArray(chosen) ? chosen.map(i=>stripTags(q.choices[i])).join(' / ') : (chosen!==undefined ? stripTags(q.choices[chosen]) : "(нет ответа)");
   const right = q.type==='ms' ? q.correct.map(i=>stripTags(q.choices[i])).join(' / ') : stripTags(q.choices[q.correct]);
-  const prompt = `${TUTOR_ROLE} A student got this practice question wrong.
+  const prompt = `${TUTOR_ROLE} Студент неправильно ответил на этот практический вопрос.
 
-Question: ${stripTags(q.q)}
-They picked: ${picked}
-Correct answer: ${right}
+Вопрос: ${stripTags(q.q)}
+Они выбрали: ${picked}
+Правильный ответ: ${right}
 
-In 3 sentences at most, say what they were probably confusing, then give one plain rule that keeps the two apart. No preamble.`;
+Максимум в трех предложениях скажите, что вас, вероятно, смутило, а затем приведите одно простое правило, которое разделяет эти два понятия. Никакой преамбулы.`;
   hintCall(prompt, 'hint-resp-q-' + qid);
 }
 
@@ -512,11 +512,11 @@ const STUDY = [
    type 'mc' → correct: index · type 'ms' → correct: [indices] (choose all that apply) */
 const QUESTIONS = [
   /* ---------- AREA 1 · Implementation planning and administration (12) ---------- */
-  {id:'q1', domain:'d1', type:'mc', q:`A client's Accounts folder has grown past 10,000 direct child objects. What does a user see when they open it?`,
+  {id:'q1', domain:'d1', type:'mc', q:`Папка «Учетные записи» клиента превысила 10 000 прямых дочерних объектов. Что видит пользователь, когда открывает его?`,
     choices:[`Только первые 10 000 объектов, отсортированные по имени.`, `Никаких объектов, плюс предупреждение о том, что слишком много элементов для отображения.`, `Папка открывается нормально, но новые загрузки блокируются`, `Самые старые документы автоматически перемещаются в корзину.`],
     correct:1,
     explain:`При превышении лимита товар скрывается <strong>all</strong> объекты в этой папке и предупреждает, что их слишком много для отображения. Это не частичный взгляд. Поиск по-прежнему находит содержимое, и обычно клиент замечает, что что-то не так.`},
-  {id:'q2', domain:'d1', type:'mc', q:`For how long can Docusign Engineering lift the 10,000-object folder limit as a temporary exception?`,
+  {id:'q2', domain:'d1', type:'mc', q:`На какой срок Docusign Engineering может снять ограничение на количество папок в 10 000 объектов в качестве временного исключения?`,
     choices:[`24 часа`, `Семь дней`, `Тридцать дней`, `Пока папка не будет реорганизована, без фиксированной даты окончания.`],
     correct:1,
     explain:`Максимум <strong>Семь дней</strong>. Администратор должен запросить его в службе поддержки, назвать корневую папку и путь, объяснить, как папка выросла и как предотвратить повторение, а также письменно согласиться, что они не будут запрашивать другое исключение.`},
@@ -524,23 +524,23 @@ const QUESTIONS = [
     choices:[`Он предназначен для перемещения компонентов конфигурации между учетными записями, например UAT в производство.`, `Это поддерживаемый способ переноса большого объема документов в новую учетную запись.`, `Пакет сохраняется в виде файла с расширением .упаковка.`, `Пакет нельзя редактировать в целевой учетной записи.`],
     correct:[0,2,3],
     explain:`Упаковка перемещает компоненты, сохраняет <code>.spackage</code> файл и не может быть отредактирован в месте назначения. В Документация прямо указано, что это <strong>not</strong> предназначен для переноса большого количества контента, такого как документы. Массовый контент перемещается по SFTP.`},
-  {id:'q4', domain:'d1', type:'mc', q:`Where do you build a component package in Docusign CLM?`,
+  {id:'q4', domain:'d1', type:'mc', q:`Где вы собираете пакет компонентов в Docusign CLM?`,
     choices:[`Развертывание в разделе «Управление учетной записью».`, `Интеграции в разделе «Соединения».`, `Сопоставления импорта атрибутов в разделе «Документы и папки»`, `Вкладка «Конфигурация» на странице «Рабочие процессы».`],
     correct:0,
     explain:`Select <em>Admin</em>, затем <em>Deployment</em> under <em>Управление аккаунтом</em>. Вы называете пакет, выбираете флажки опций, выбираете компоненты на вкладках, выбираете место хранения и сохраняете.`},
-  {id:'q5', domain:'d1', type:'mc', q:`How is a component package installed in the destination CLM account?`,
+  {id:'q5', domain:'d1', type:'mc', q:`Как пакет компонента устанавливается в целевую учетную запись CLM?`,
     choices:[`Он отправляется по электронной почте в службу поддержки Документация, которая его устанавливает.`, `Он загружается как документ в папку, затем открывается и устанавливается.`, `Он вставляется на страницу развертывания в формате XML.`, `Он устанавливается автоматически при создании целевой учетной записи.`],
     correct:1,
     explain:` Вы загружаете <code>.spackage</code> из исходной учетной записи, загрузите ее в папку в целевой учетной записи через <em>Файл > Загрузить</em>, дважды щелкните имя файла, дождитесь появления страницы развертывания, затем выберите <em>Install</em>. Электронная почта сообщает об успехе или ошибках.`},
-  {id:'q6', domain:'d1', type:'mc', q:`A component you transferred was changed by mistake in Production. What is the supported way to restore it?`,
+  {id:'q6', domain:'d1', type:'mc', q:`Перенесенный вами компонент был по ошибке изменен в производстве. Какой поддерживаемый способ его восстановления?`,
     choices:[`Отредактируйте пакет в целевой учетной записи и повторно примените его.`, `Установите тот же пакет еще раз`, `Перестройте компонент вручную и задокументируйте изменения.`, `Запросите откат в службе поддержки Документ.`],
     correct:1,
-    explain:`You can install the package as many times as needed, and reinstalling restores the original package contents. Editing the package in the destination account is not possible; if the package itself is wrong you build a new one in the source account.`},
+    explain:`Вы можете устанавливать пакет столько раз, сколько необходимо, а переустановка восстанавливает исходное содержимое пакета. Редактирование пакета в целевой учетной записи невозможно; если сам пакет неправильный, вы создаете новый в исходной учетной записи.`},
   {id:'q7', domain:'d1', type:'ms', q:`Какие элементы можно отметить при создании пакета компонентов? <em>Выберите все, что применимо.</em>`,
     choices:[`Пакет автоматической установки`, `Перезаписать существующие объекты при установке пакета`, `Включить настройки брендинга аккаунта`, `Включить историю активности рабочего процесса`],
     correct:[0,1,2],
-    explain:`The package options are Auto Install Package, Overwrite existing objects when installing package, Include account settings, Include account branding preferences, and Include account-level customization of navigation tabs, menus and toolbars. Workflow activity history is not a packageable option.`},
-  {id:'q8', domain:'d1', type:'mc', q:`How many documents can the Import Bulk Metadata action process at one time?`,
+    explain:`Варианты пакета: «Автоустановка пакета», «Перезаписать существующие объекты при установке пакета», «Включить настройки учетной записи», «Включить настройки фирменного стиля учетной записи» и «Включить настройку навигационных вкладок, меню и панелей инструментов на уровне учетной записи». История активности рабочего процесса не является пакетной опцией.`},
+  {id:'q8', domain:'d1', type:'mc', q:`Сколько документов может обрабатывать действие «Массовый импорт метаданных» одновременно?`,
     choices:[`50`, `500`, `5,000`, `10,000`],
     correct:1,
     explain:`До <strong>500 документов</strong> за раз. Все файлы должны находиться в одной и той же папке, поскольку действие не предназначено для применения атрибутов к нескольким папкам. Это обычный шаг при миграции из устаревшей системы.`},
@@ -548,53 +548,53 @@ const QUESTIONS = [
     choices:[`Установите тип CSV.`, `Установите значение «Начало данных со строки» на 2, поскольку строка 1 содержит заголовки.`, `Назначьте параметр «Имя файла» столбцу 1.`, `Поля атрибутов вводятся только как поля атрибутов, без префикса группы.`],
     correct:[0,1,2],
     explain:`Тип — CSV, данные начинаются со строки — 2, а столбец 1 — это имя файла. Поля атрибутов отформатированы <code>Группа атрибутов. Поле атрибута</code>, поэтому префикс группы является обязательным, а не необязательным.`},
-  {id:'q10', domain:'d1', type:'mc', q:`Which document types are classified as amendments by default?`,
+  {id:'q10', domain:'d1', type:'mc', q:`Какие типы документов по умолчанию классифицируются как изменения? `,
     choices:[`Дополнение, Поправка, Порядок изменения`, `Приложение, Приложение, Приложение, Дополнительный документ`, `Генеральное соглашение об оказании услуг, техническое задание, форма заказа`, `Поправка, Приложение, Порядок изменения, Дополнение`],
     correct:0,
-    explain:`Amendments are only three: Addendum, Amendment, Change Order. The four supplements are Appendix, Exhibit, Attachment and Supplemental Document. Everything else in the default list is a standalone document.`},
+    explain:`Поправок всего три: Дополнение, Поправка, Порядок изменения. Четырьмя дополнениями являются Приложение, Приложение, Приложение и Дополнительный документ. Все остальное в списке по умолчанию является отдельным документом.`},
   {id:'q11', domain:'d1', type:'ms', q:`Клиент хочет, чтобы вместо «Главного соглашения об обслуживании» отображался «Контракт с поставщиком». Что правда в этом? <em>Выберите все, что применимо.</em>`,
     choices:[`Вы добавляете альтернативное имя на странице «Типы документов» в разделе «Документы и папки».`, `Управление вечеринками должно быть включено для использования пользовательских типов документов.`, `Классификация типа документа изменится в соответствии с новым именем.`, `Документы, которые уже существуют в CLM, будут отображать новое имя.`],
     correct:[0,1,3],
     explain:`Альтернативное имя — это изменение отображения. Это применимо к существующим документам и требует включения управления партиями, но это не так. <strong>not</strong> изменить классификацию типа. Генеральное соглашение об обслуживании остается отдельным документом, как бы вы его ни называли.`},
-  {id:'q12', domain:'d1', type:'mc', q:`Where are users, groups and permission profiles managed for a Docusign CLM account?`,
+  {id:'q12', domain:'d1', type:'mc', q:`Где управляются пользователи, группы и профили разрешений для учетной записи Docusign CLM?`,
     choices:[`В админке Документация`, `В разделе «Управление пользователями» боковой панели администратора CLM.`, `На странице настройки Документация Salesforce`, `На странице «Развертывание» в разделе «Управление учетной записью».`],
     correct:0,
     explain:`Для учетных записей Документация CLM управление пользователями, группами и профилями разрешений осуществляется в <strong>Документация администратора</strong>. CLM.CM — это платформа, которая управляет ими внутри приложения и является отвлекающим фактором, который используется на экзамене.`},
 
   /* ---------- AREA 2 · Building workflows (15) ---------- */
-  {id:'q13', domain:'d2', type:'mc', q:`You are building a child workflow that must receive data from its parent. Which kickoff content type do you choose in the New Workflow dialog?`,
+  {id:'q13', domain:'d2', type:'mc', q:`Вы создаете дочерний рабочий процесс, который должен получать данные от своего родителя. Какой тип начального контента вы выбираете в диалоговом окне «Новый рабочий процесс»?`,
     choices:[`Документ`, `Папка`, `Пользовательский XML`, `Этот рабочий процесс начнется без контента`],
     correct:2,
-    explain:`Custom XML. Docusign states that you can upload the XML from a parent workflow to build a sub-workflow. Choosing "start without content" leaves your incoming content variable empty, which is the classic wrong answer here.`},
+    explain:`Пользовательский XML. В Docusign говорится, что вы можете загрузить XML из родительского рабочего процесса для создания подпроцесса. Выбор «начать без содержимого» оставляет переменную входящего содержимого пустой, что является классическим неправильным ответом.`},
   {id:'q14', domain:'d2', type:'ms', q:`Какие из этих категорий представляют собой предопределенные этапы рабочего процесса в Документация CLM? <em>Выберите все, что применимо.</em>`,
     choices:[`Автоматизированные этапы управления документами`, `Шаги двигателя`, `Этапы планирования и коммуникации`, `Этапы отчетности и аналитики`],
     correct:[0,1,2],
-    explain:`The five categories are automated document management, human, engine, integration, and scheduling and communication. There is no reporting and analytics category.`},
-  {id:'q15', domain:'d2', type:'mc', q:`A workflow with no Finish step stops at an approval because of a failure. How does it appear in the workflow activity monitor?`,
+    explain:`Пять категорий — это автоматизированное управление документами, человек, механизм, интеграция, планирование и коммуникация. Категории отчетности и аналитики нет.`},
+  {id:'q15', domain:'d2', type:'mc', q:`Рабочий процесс без шага «Завершение» останавливается при утверждении из-за сбоя. Как это отображается в мониторе активности рабочего процесса?`,
     choices:[`Failure`, `Paused`, `Complete`, `Aborted`],
     correct:2,
     explain:`Это показывает как <strong>Complete</strong>, и именно поэтому шаг Заканчивать имеет значение. Добавьте на холст шаг «Завершение», и тот же запуск будет отмечен как «Сбой». Также необходимо достичь завершения, прежде чем возобновится ожидающий родительский рабочий процесс.`},
-  {id:'q16', domain:'d2', type:'mc', q:`Which step passes a child workflow's output back to its parent?`,
+  {id:'q16', domain:'d2', type:'mc', q:`На каком этапе выходные данные дочернего рабочего процесса передаются обратно родительскому процессу?`,
     choices:[`Обновить родительскую переменную`, `Установить выходные данные рабочего процесса`, `Logger`, `Ресурсная переменная`],
     correct:1,
     explain:`<em>Установить выходные данные рабочего процесса</em> передает выходные данные дочернего рабочего процесса родительскому. <em>Обновить родительскую переменную</em> записывает непосредственно в родительскую переменную, что представляет собой другую работу. <em>Ресурсная переменная</em> загружает пользователя или группу CLM в переменную Актер.`},
-  {id:'q17', domain:'d2', type:'mc', q:`What is the documented rule about the Params variable?`,
+  {id:'q17', domain:'d2', type:'mc', q:`Каково документированное правило относительно переменной Params?`,
     choices:[`Перед использованием переименуйте его в «Входящие».`, `Не изменяйте его содержимое; скопируйте его в новую переменную, если вам нужно манипулировать данными`, `Очистите его после завершения первого шага, чтобы сэкономить место.`, `Его необходимо воссоздавать вручную для каждого рабочего процесса.`],
     correct:1,
-    explain:`Params holds whatever triggered the workflow. Docusign says do not modify it, because retaining the exact triggering data helps with debugging. If you need to change the data, copy it into a new variable and work there. The name can be changed, but the content should not be.`},
-  {id:'q18', domain:'d2', type:'mc', q:`Which variable type is best for storing the output of a Find Documents by Folder step when you only need the identifiers?`,
+    explain:`Params содержит все, что вызвало рабочий процесс. Docusign советует не изменять его, поскольку сохранение точных данных запуска помогает при отладке. Если вам нужно изменить данные, скопируйте их в новую переменную и работайте там. Название можно изменить, но содержание – нет.`},
+  {id:'q18', domain:'d2', type:'mc', q:`Какой тип переменной лучше всего подходит для хранения результатов шага «Найти документы по папке», когда вам нужны только идентификаторы?`,
     choices:[`Пользовательская переменная XML`, `Переменная списка идентификаторов`, `Переменная-итератор`, `Переменная актера`],
     correct:1,
     explain:`An <em>Список идентификаторов</em> переменная хранит идентификаторы нескольких документов или папок. Он предназначен для вывода результатов поиска и сохраняет небольшую переменную, поскольку содержит только идентификаторы.`},
   {id:'q19', domain:'d2', type:'ms', q:`Какие ограничения применяются к шагу «Создать переменную из CSV»? <em>Выберите все, что применимо.</em>`,
     choices:[`Загруженный CSV-файл не может превышать 1 МБ.`, `Создаваемая переменная не может превышать 5 МБ.`, `CSV должен содержать как минимум два столбца со строкой заголовка.`, `CSV-файл необходимо загружать с локального компьютера при каждом запуске.`],
     correct:[0,1,2],
-    explain:`CSV up to 1 MB, resulting variable up to 5 MB, at least two columns and a header row. The file must already be in a Docusign CLM folder, not uploaded from the local machine at run time.`},
-  {id:'q20', domain:'d2', type:'mc', q:`Which step makes outbound HTTPS calls from a CLM workflow?`,
+    explain:`CSV до 1 МБ, результирующая переменная до 5 МБ, минимум два столбца и строка заголовка. Файл уже должен находиться в папке Docusign CLM, а не быть загружен с локального компьютера во время выполнения.`},
+  {id:'q20', domain:'d2', type:'mc', q:`На каком этапе выполняются исходящие вызовы HTTPS из рабочего процесса CLM?`,
     choices:[`Вызов веб-службы`, `HTTP-клиент`, `Connections`, `Excel ЭТЛ`],
     correct:1,
     explain:`<em>HTTP-клиент</em> выполняет исходящие вызовы HTTPS или REST и поддерживает только протокол HTTPS версий 1.0 и 1.1. <em>Вызов веб-службы</em> вызывает настроенную веб-службу из списка веб-служб, что представляет собой другую настройку.`},
-  {id:'q21', domain:'d2', type:'mc', q:`A workflow step is configured with a due date of "1 day" meaning 24 hours. How many business days does CLM calculate?`,
+  {id:'q21', domain:'d2', type:'mc', q:`Шаг рабочего процесса настроен со сроком выполнения «1 день», что означает 24 часа. Сколько рабочих дней рассчитывает CLM?`,
     choices:[`One`, `Two`, `Three`, `Это зависит от часового пояса аккаунта`],
     correct:2,
     explain:`CLM измеряет рабочий день как <strong>восемь часов</strong>, поэтому 24 часа превращаются в три рабочих дня. Клиенты сообщают об этом как об ошибке; это документированное поведение, и его стоит объяснить перед запуском в эксплуатацию.`},
@@ -602,15 +602,15 @@ const QUESTIONS = [
     choices:[`Сохранения дизайна достаточно, чтобы сделать его исполняемым.`, `Вы используете кнопку «Создать и опубликовать версии» на панели инструментов.`, `На панели «Версии и публикация» версия отображается как опубликованная.`, `Неопубликованные проекты отображаются на вкладке «Конфигурация» страницы «Рабочие процессы».`],
     correct:[1,2,3],
     explain:`Сохранение не является публикацией. Вы сохраняете, а затем используете <em>Создание и публикация версий</em>, затем выберите <em>Publish</em> для этой версии, и на панели отображается статус «Опубликовано». Сохраненные, но неопубликованные проекты находятся на вкладке «Конфигурация».`},
-  {id:'q23', domain:'d2', type:'mc', q:`A client's account has Default Account Language set to French. What is the effect on workflow building?`,
+  {id:'q23', domain:'d2', type:'mc', q:`В учетной записи клиента языком учетной записи по умолчанию является французский. Как это влияет на построение рабочего процесса?`,
     choices:[`Названия шагов отображаются на французском языке, но конструктор работает нормально.`, `Дизайнер рабочих процессов не будет работать; он поддерживает только английский язык`, `Затрагивается только построитель выражений.`, `Ничего, потому что язык — это настройка для каждого пользователя.`],
     correct:1,
-    explain:`The workflow designer supports English only, and the Default Account Language account setting must be English. This is a real implementation blocker on international rollouts, so check it before scoping build time.`},
-  {id:'q24', domain:'d2', type:'mc', q:`Expressions in Docusign CLM workflows are written in which language?`,
+    explain:`Конструктор рабочих процессов поддерживает только английский язык, а для параметра учетной записи «Язык учетной записи по умолчанию» должен быть установлен английский язык. Это настоящий блокировщик реализации при международных развертываниях, поэтому проверьте его, прежде чем определять время сборки.`},
+  {id:'q24', domain:'d2', type:'mc', q:`На каком языке написаны выражения в рабочих процессах Docusign CLM?`,
     choices:[`JavaScript`, `C#`, `Apex`, `Python`],
     correct:1,
-    explain:`CLM workflow expressions are C#, built and validated in the Expression Builder. Only namespaces on Docusign's published allowlist may be used, so not every C# library is available to you.`},
-  {id:'q25', domain:'d2', type:'mc', q:`Docusign recommends using Current Date rather than DateTime.Now in a workflow expression. Why?`,
+    explain:`Выражения рабочего процесса CLM созданы на языке C#, созданы и проверены в построителе выражений. Можно использовать только пространства имен из опубликованного списка разрешений Docusign, поэтому вам доступны не все библиотеки C#.`},
+  {id:'q25', domain:'d2', type:'mc', q:`Docusign рекомендует использовать в выражении рабочего процесса текущую дату, а не DateTime.Now. Почему?`,
     choices:[`Текущая дата быстрее оценивается`, `Текущая дата соответствует часовому поясу учетной записи; ДатаВремя.Сейчас соответствует часовому поясу машины.`, `ДатаВремя.Сейчас не находится в белом списке пространства имен.`, `Текущая дата возвращает строку, которую легче сравнивать.`],
     correct:1,
     explain:`<em>Текущая дата</em> использует часовой пояс учетной записи. <code>ДатаВремя.Сейчас</code> использует часовой пояс компьютера, на котором выполняется код. Использовать <code>ДатаВремя.UTCNow</code> и конвертируйте, когда вам действительно нужна определенная зона.`},
@@ -618,86 +618,86 @@ const QUESTIONS = [
     choices:[`Decision`, `Для каждого цикла`, `Получить следующее значение автономера`, `Добавить задачу Salesforce`],
     correct:[0,1,2],
     explain:`«Принятие решения», «Цикл для каждого» и «Получить следующее значение автонумерации» — это этапы механизма, которые создают логику рабочего процесса. <em>Добавить задачу Salesforce</em> является шагом интеграции, поскольку он достигает внешнего приложения.`},
-  {id:'q27', domain:'d2', type:'mc', q:`Where do you switch on the notification that fires when a workflow encounters an error?`,
+  {id:'q27', domain:'d2', type:'mc', q:`Где включить уведомление, которое срабатывает, когда в рабочем процессе возникает ошибка?`,
     choices:[`На шаге «Пуск» флажок «Отправлять уведомление, когда рабочий процесс обнаруживает ошибку»`, `На этапе «Готово» в разделе «Выходы»`, `На каждом отдельном шаге в условиях вывода «Последнее действие»`, `В Документация администратора, в разделе «Настройки учетной записи».`],
     correct:0,
     explain:`Это флажок на <strong>Start</strong> шаг, с <em>Пользователи для получения уведомлений</em> список выбора рядом с ним. Это отдельно от уровня аккаунта. <em>Пользователь уведомления об ошибках расширенного рабочего процесса</em> параметр, который обрабатывает экземпляры, приостановленные из-за достижения предела выражения.`},
 
   /* ---------- AREA 3 · Salesforce integration (15) ---------- */
-  {id:'q28', domain:'d3', type:'mc', q:`Which managed package do you install in Salesforce to use CLM for Salesforce?`,
+  {id:'q28', domain:'d3', type:'mc', q:`Какой управляемый пакет вы устанавливаете в Salesforce, чтобы использовать CLM для Salesforce?`,
     choices:[`Документирование CLM для Salesforce`, `Средство запуска приложений Документация`, `Документооборот`, `SpringCM Файл Это`],
     correct:1,
     explain:`<strong>Средство запуска приложений Документация</strong> это единый пакет. При установке любого одного приложения устанавливаются все из них: CLM для Salesforce, Основы CLM для Salesforce, Генерал для Salesforce, электронная подпись для Salesforce и Электронная подпись для набора инструментов Salesforce Апекс. Документооборот — это устаревшее приложение, ранее называвшееся SpringCM Файл  это.`},
   {id:'q29', domain:'d3', type:'ms', q:`Какие требования предъявляются к пользователю интеграции Документация? <em>Выберите все, что применимо.</em>`,
     choices:[`Он должен иметь доступ системного администратора Сейлфорс.`, `В его профиле Salesforce для параметра «Включить MFA для входов в API» должно быть установлено значение «Неверно».`, `Документация рекомендует использовать общую учетную запись, а не имя конкретного человека.`, `Это должен быть пользователь Облако Опыт работы в продажах.`],
     correct:[0,1,2],
-    explain:`System Administrator access, Enable MFA for API logins set to False, and a generic account such as docusign-admin@company.com so the integration does not break when an employee leaves. Experience Cloud has nothing to do with it.`},
-  {id:'q30', domain:'d3', type:'mc', q:`A client wants two Salesforce organizations connected to one Docusign account. What do you tell them?`,
+    explain:`Доступ системного администратора, параметр «Включить MFA для входов в систему API», установленный на «False», и общую учетную запись, например docusign-admin@company.com, чтобы интеграция не прерывалась при увольнении сотрудника. Опыт Cloud не имеет к этому никакого отношения.`},
+  {id:'q30', domain:'d3', type:'mc', q:`Клиент хочет, чтобы две организации Salesforce были подключены к одной учетной записи Docusign. Что ты им скажешь?`,
     choices:[`Это работает, если в каждой организации есть собственный пользователь интеграции.`, `Документация не поддерживает подключение нескольких организаций Salesforce к одной учетной записи Документ.`, `Для этого необходимо сначала включить Федеральная безопасность.`, `Поддерживается только для организаций-песочниц.`],
     correct:1,
-    explain:`Docusign does not support it. This is a scoping answer, not a configuration answer, and it is worth raising early because it changes the account architecture the client needs to buy.`},
+    explain:`Docusign не поддерживает это. Это обзорный ответ, а не ответ по конфигурации, и его стоит поднять как можно раньше, поскольку он меняет архитектуру учетной записи, которую необходимо купить клиенту.`},
   {id:'q31', domain:'d3', type:'ms', q:`Какие объекты Документация автоматически сопоставляет с вашей учетной записью CLM при подключении к Salesforce? <em>Выберите все, что применимо.</em>`,
     choices:[`Account`, `Opportunity`, `Contact`, `Case`],
     correct:[0,1],
-    explain:`Account and Opportunity are mapped for you. Every other standard or custom object, including Contact and Case, has to be mapped manually through the Integration page.`},
-  {id:'q32', domain:'d3', type:'mc', q:`What is the character limit on a mapped folder path?`,
+    explain:`Учетная запись и возможность отображаются для вас. Любой другой стандартный или настраиваемый объект, включая «Контакт» и «Обращение», необходимо сопоставить вручную на странице «Интеграция».`},
+  {id:'q32', domain:'d3', type:'mc', q:`Каков лимит символов в пути к сопоставленной папке?`,
     choices:[`100 символов`, `240 символов`, `255 символов`, `1000 символов`],
     correct:1,
     explain:`<strong>240 символов</strong>, считая имя сопоставленного объекта и каждую папку над ним. CLM удаляет все, что выходит за пределы лимита, то есть повторяющиеся имена папок появляются, когда уникальная часть пути находится в конце.`},
-  {id:'q33', domain:'d3', type:'mc', q:`Why does Docusign recommend mapping both the record name and the record ID when naming mapped folders?`,
+  {id:'q33', domain:'d3', type:'mc', q:`Почему Docusign рекомендует сопоставлять как имя записи, так и идентификатор записи при присвоении имен сопоставленным папкам?`,
     choices:[`Поскольку CLM не допускает дублирования имен папок, а идентификатор также обеспечивает синхронизацию имен CLM при изменении имен Сейлфорс.`, `Поскольку идентификатор необходим для работы Федеральная безопасность.`, `Поскольку имена папок должны начинаться с числового значения`, `Поскольку компонент Документирование файлов CLM сортирует по идентификатору`],
     correct:0,
-    explain:`Two reasons in one answer. CLM does not permit duplicate folder names, so the ID guarantees uniqueness, and mapping the ID also means CLM folder names update when the Salesforce record is renamed.`},
-  {id:'q34', domain:'d3', type:'mc', q:`An account is named "Smith &amp; Sons". What happens to the ampersand in the mapped CLM folder name?`,
+    explain:`Две причины в одном ответе. CLM не допускает дублирования имен папок, поэтому идентификатор гарантирует уникальность, а сопоставление идентификатора также означает обновление имен папок CLM при переименовании записи Salesforce.`},
+  {id:'q34', domain:'d3', type:'mc', q:`Учетная запись называется «Smith & Sons». Что происходит с амперсандом в имени сопоставленной папки CLM?`,
     choices:[`Сопоставление завершается с ошибкой`, `Он преобразуется в подчеркивание`, `Точно сохранилось`, `Он убирается и пространство закрывается.`],
     correct:1,
     explain:`В именах сопоставленных папок несколько символов преобразуются в символы подчеркивания, в том числе <code>#</code>, <code>&amp;</code>, <code>*</code>, <code>|</code>, <code>\\</code>, <code>:</code>, <code>?</code>, <code>&lt;</code>, <code>&gt;</code>, <code>/</code>, вкладка, <code>+</code>, <code>-</code> and <code>%</code>.`},
-  {id:'q35', domain:'d3', type:'mc', q:`When is a CLM folder actually created for a mapped Salesforce record?`,
+  {id:'q35', domain:'d3', type:'mc', q:`Когда папка CLM фактически создается для сопоставленной записи Salesforce?`,
     choices:[`Немедленно для каждой существующей записи при сопоставлении объекта`, `Когда пользователь открывает эту запись`, `Ночью, по запланированному заданию синхронизации.`, `Только при первой загрузке документа в запись`],
     correct:1,
-    explain:`When a user opens a record from a connected object, Docusign creates the folder in CLM and it appears in that record's Docusign CLM Files component. Folders are created on demand, so a mapping does not bulk-build a directory on day one.`},
-  {id:'q36', domain:'d3', type:'mc', q:`Which minimum version of Docusign Apps Launcher is required for the Start Docusign CLM Workflow action in a Salesforce Flow?`,
+    explain:`Когда пользователь открывает запись из подключенного объекта, Docusign создает папку в CLM, и она появляется в компоненте Docusign CLM Files этой записи. Папки создаются по требованию, поэтому при сопоставлении не требуется массовое создание каталога в первый же день.`},
+  {id:'q36', domain:'d3', type:'mc', q:`Какая минимальная версия Docusign Apps Launcher требуется для действия «Начать рабочий процесс Docusign CLM» в потоке Salesforce?`,
     choices:[`v4.0`, `v5.5`, `v6.3`, `v7.0`],
     correct:2,
     explain:`Version <strong>6.3 или выше</strong>. Два его входа <em>Идентификатор записи</em> and <em>Имя рабочего процесса</em>, а имя рабочего процесса должно совпадать с точным именем активного рабочего процесса CLM.`},
-  {id:'q37', domain:'d3', type:'mc', q:`A Salesforce Flow with a Start Docusign CLM Workflow action never triggers the workflow. What is the most likely cause?`,
+  {id:'q37', domain:'d3', type:'mc', q:`Поток Salesforce с действием «Начать рабочий процесс Docusign CLM» никогда не запускает рабочий процесс. Какова наиболее вероятная причина?`,
     choices:[`Поток запускается по записи, а не по экрану`, `Имя рабочего процесса не совсем соответствует активному рабочему процессу CLM.`, `Рабочий процесс CLM требует этапа «Ожидание сигнала».`, `Федеративная безопасность отключена`],
     correct:1,
-    explain:`Docusign is explicit: you must enter the exact name of an active Docusign CLM workflow. A misspelling, or the name of a workflow that is not active, means Salesforce cannot trigger it.`},
-  {id:'q38', domain:'d3', type:'mc', q:`Data is entered in Salesforce after a CLM workflow has already started, and the workflow needs it. Which step do you use?`,
+    explain:`В Docusign указано явно: вы должны ввести точное имя активного рабочего процесса Docusign CLM. Ошибка в написании или имя неактивного рабочего процесса означает, что Salesforce не может его запустить.`},
+  {id:'q38', domain:'d3', type:'mc', q:`Данные вводятся в Salesforce после того, как рабочий процесс CLM уже запущен, и они необходимы рабочему процессу. Какой шаг вы используете?`,
     choices:[`Salesforce ETL`, `Обновить Salesforce`, `Создать новый объект Salesforce`, `Добавить историю действий Salesforce`],
     correct:0,
     explain:`<em>Salesforce ETL</em> извлекает данные в реальном времени из Salesforce и преобразует их в XML в CLM, что является именно тем случаем, когда статус или дата были добавлены после начала рабочего процесса. <em>Обновить Salesforce</em> это направление обратной записи.`},
   {id:'q39', domain:'d3', type:'ms', q:`Какие из этих шагов являются этапами интеграции Salesforce в рабочий процесс CLM? <em>Выберите все, что применимо.</em>`,
     choices:[`Обновить Salesforce`, `Создать новый объект Salesforce`, `Добавить задачу Salesforce`, `Сопоставить новый объект Salesforce`],
     correct:[0,1,2],
-    explain:`Update Salesforce, Create New Salesforce Object, Add Salesforce Task, Add Salesforce Activity History and Salesforce ETL are the workflow steps. "MAP NEW" is a button on the Integration page in Salesforce, not a workflow step.`},
-  {id:'q40', domain:'d3', type:'mc', q:`Where do you map a Salesforce profile to a Docusign CLM group?`,
+    explain:`Обновление Salesforce, Создание нового объекта Salesforce, Добавление задачи Salesforce, Добавление истории действий Salesforce и Salesforce ETL — это этапы рабочего процесса. «MAP NEW» — это кнопка на странице интеграции в Salesforce, а не этап рабочего процесса.`},
+  {id:'q40', domain:'d3', type:'mc', q:`Где сопоставить профиль Salesforce с группой Docusign CLM?`,
     choices:[`Настройка Salesforce в разделе «Наборы разрешений».`, `В CLM выберите «Администратор» > «Соединения» > «Salesforce» > «Создать новое сопоставление».`, `На странице настройки Документация в Salesforce`, `В Документация администратора, в разделе «Группы».`],
     correct:1,
     explain:`Это задача на стороне CLM: <em>Admin</em>, затем <em>Connections</em>, затем <em>Salesforce</em>, затем <em>Создать новое сопоставление</em>. Вы выбираете профиль Salesforce и одну или несколько групп CLM, и пользователи в этом профиле получают права группы на контент CLM.`},
   {id:'q41', domain:'d3', type:'ms', q:`Какие утверждения о Федеративная безопасность для Документация CLM верны? <em>Выберите все, что применимо.</em>`,
     choices:[`Он применяет безопасность профиля или роли Salesforce к содержимому CLM.`, `Его нельзя применить к отчетам CLM.`, `Прежде чем обновлять организацию Salesforce, необходимо выполнить предписанные действия.`, `Это заменяет необходимость установки Средство запуска приложений Документ.`],
     correct:[0,1,2],
-    explain:`Federated Security applies Salesforce Profile or Role security to CLM content and does not cover CLM reports, because reports run in the CLM account. Refreshing the org or reconnecting to a different CLM account without following the documented steps destroys all CLM file security. It does not replace the package.`},
-  {id:'q42', domain:'d3', type:'mc', q:`A client refreshed their Salesforce sandbox while Federated Security was applied, without following the documented steps. What is the consequence?`,
+    explain:`Federated Security применяет безопасность профиля или роли Salesforce к содержимому CLM и не распространяется на отчеты CLM, поскольку отчеты запускаются в учетной записи CLM. Обновление организации или повторное подключение к другой учетной записи CLM без выполнения документированных шагов разрушает всю безопасность файлов CLM. Он не заменяет пакет.`},
+  {id:'q42', domain:'d3', type:'mc', q:`Клиент обновил свою песочницу Salesforce во время применения Federated Security, не выполнив задокументированные действия. Каковы последствия?`,
     choices:[`Пользователи вышли из системы и должны пройти повторную аутентификацию`, `Вся безопасность файлов CLM уничтожена, и весь каталог CLM необходимо перестроить.`, `Сопоставленные папки переименовываются с использованием идентификаторов их записей.`, `Федеративная безопасность автоматически возвращается к групповой безопасности CLM.`],
     correct:1,
-    explain:`Docusign's warning is blunt: failure to follow the steps destroys all CLM file security, and you must rebuild the entire CLM directory. This is why the refresh procedure belongs in the go-live runbook.`},
+    explain:`Предупреждение Docusign прямое: невыполнение этих шагов разрушает всю безопасность файлов CLM, и вам придется перестроить весь каталог CLM. Вот почему процедура обновления входит в состав runbook запуска.`},
 
   /* ---------- AREA 4 · Advanced workflows and go-live (8) ---------- */
-  {id:'q43', domain:'d4', type:'mc', q:`What is the expression execution limit for a Docusign CLM workflow instance?`,
+  {id:'q43', domain:'d4', type:'mc', q:`Каков предел выполнения выражения для экземпляра рабочего процесса Docusign CLM?`,
     choices:[`100 выражений в течение 15 минут.`, `300 выражений в течение 15 минут.`, `1000 выражений в час`, `10 000 выражений на экземпляр`],
     correct:1,
     explain:`<strong>300 выражений в течение 15 минут.</strong>, измеряется для каждого экземпляра рабочего процесса. Отдельная цифра в 10 000 — это предел активности для экземпляра рабочего процесса, который представляет собой другой потолок.`},
   {id:'q44', domain:'d4', type:'ms', q:`Что происходит, когда экземпляр рабочего процесса достигает предела выполнения выражения? <em>Выберите все, что применимо.</em>`,
     choices:[`Экземпляр приостановлен`, `Электронное письмо отправляется пользователям, указанным в настройках учетной записи пользователя расширенного уведомления об ошибках рабочего процесса.`, `Экземпляр прерывается и очищается, если никто не предпринимает никаких действий до запланированного дня очистки.`, `Остальные выражения ставятся в очередь и автоматически выполняются в следующем 15-минутном окне.`],
     correct:[0,1,2],
-    explain:`Pause, email, and then abort and purge if nobody intervenes before the purge date. Nothing resumes on its own, which is why the notification user setting has to be populated before go-live.`},
-  {id:'q45', domain:'d4', type:'mc', q:`Which pair of environments and limits is correct for workflows started per hour?`,
+    explain:`Сделайте паузу, отправьте электронное письмо, а затем прервите и очистите, если никто не вмешается до даты очистки. Ничто не возобновляется само по себе, поэтому перед запуском в эксплуатацию необходимо заполнить настройки пользователя уведомлений.`},
+  {id:'q45', domain:'d4', type:'mc', q:`Какая пара сред и ограничений подходит для рабочих процессов, запускаемых в час?`,
     choices:[`100 в UAT и 1000 в производстве`, `1000 в UAT и 100 в производстве`, `500 в UAT и 500 в производстве`, `Ни в одной среде нет ограничения по часам.`],
     correct:0,
-    explain:`UAT is deliberately smaller: 100 workflows started per hour against 1,000 in Production. Workflow executions follow the same pattern at 500 every 15 minutes in UAT against 12,000 in Production, so a UAT load test proves less than clients expect.`},
+    explain:`UAT намеренно меньше: в час запускается 100 рабочих процессов против 1000 в Production. Выполнение рабочих процессов происходит по той же схеме: 500 каждые 15 минут в UAT и 12 000 в Production, поэтому нагрузочный тест UAT оказывается меньше, чем ожидают клиенты.`},
   {id:'q46', domain:'d4', type:'mc', q:`Какой из них запускает рабочий процесс при копировании, перемещении документа? <em>or</em> загрузил в папку?`,
     choices:[`Документ добавлен`, `Папка с введенным документом`, `Документ зарегистрирован`, `Документ проиндексирован`],
     correct:1,
@@ -705,16 +705,16 @@ const QUESTIONS = [
   {id:'q47', domain:'d4', type:'ms', q:`Какие действия может выполнять запланированное интеллектуальное правило? <em>Выберите все, что применимо.</em>`,
     choices:[`Отправить электронное письмо`, `Запустить рабочий процесс`, `Переместить один или несколько документов в корзину`, `Публикация новой версии рабочего процесса`],
     correct:[0,1,2],
-    explain:`A scheduled smart rule can send an email, start a workflow, send a custom report, or move documents to the trash. Publishing a workflow version is a manual designer action, not a rule action.`},
-  {id:'q48', domain:'d4', type:'mc', q:`What are the two kinds of schedule in Docusign CLM?`,
+    explain:`Запланированное интеллектуальное правило может отправлять электронное письмо, запускать рабочий процесс, отправлять настраиваемый отчет или перемещать документы в корзину. Публикация версии рабочего процесса — это действие дизайнера вручную, а не действие правила.`},
+  {id:'q48', domain:'d4', type:'mc', q:`Какие два типа расписания существуют в Docusign CLM?`,
     choices:[`Явные и повторяющиеся`, `Немедленный и отсроченный`, `Ежедневно и ежемесячно`, `Документ и папка`],
     correct:0,
     explain:`An <em>explicit</em> расписание называет конкретные даты и время. А <em>recurring</em> расписание определяет день и время относительно часа, недели или месяца. Документ и папка – это типы интеллектуальных правил, а не типов расписаний.`},
-  {id:'q49', domain:'d4', type:'mc', q:`A client complains that a smart rule did not run the instant the triggering event happened. What is the correct explanation?`,
+  {id:'q49', domain:'d4', type:'mc', q:`Клиент жалуется, что интеллектуальное правило не сработало в тот момент, когда произошло инициирующее событие. Каково правильное объяснение?`,
     choices:[`Правило настроено неправильно, и его необходимо перестроить.`, `Очередь правил, и правило, действие которого запускает рабочий процесс, может быть отложено, если учетная запись достигла разрешенного предела рабочего процесса.`, `Умные правила работают только по ночному расписанию.`, `Папка должна быть переиндексирована, прежде чем правила начнут действовать.`],
     correct:1,
-    explain:`Docusign warns that a triggered rule's action might not happen immediately: rules can sit in a queue, and a rule that starts a workflow gets deferred when the account has reached its allowed workflow limit. Never design a process that assumes same-second execution.`},
-  {id:'q50', domain:'d4', type:'mc', q:`A migration reconciliation report returns 12,000 records and the client wants it as a CSV. What do you tell them?`,
+    explain:`Docusign предупреждает, что действие сработавшего правила может произойти не сразу: правила могут находиться в очереди, а правило, запускающее рабочий процесс, откладывается, когда учетная запись достигает разрешенного предела рабочего процесса. Никогда не проектируйте процесс, предполагающий выполнение в одну и ту же секунду.`},
+  {id:'q50', domain:'d4', type:'mc', q:`Отчет о сверке миграции возвращает 12 000 записей, и клиент хочет, чтобы он был в формате CSV. Что ты им скажешь?`,
     choices:[`Экспортируйте его напрямую; нет ограничений по размеру экспорта отчетов`, `Отчет, содержащий более 5000 записей, необходимо сначала сохранить в папке CLM, а затем экспортировать.`, `Разделить отчет на ежемесячные прогоны (это единственный вариант).`, `Экспорт отчетов ограничен 1000 записями и не может быть увеличен.`],
     correct:1,
     explain:`Экспорт отчета в CSV ограничен <strong>5000 рекордных записей</strong>. Отчет большего размера необходимо сохранить в папке в Документация CLM, а затем его можно экспортировать в формате CSV или XLSX и сохранить локально.`}
@@ -813,7 +813,7 @@ function renderHome(){
       <a class="cta-card primary" onclick="setView('exam')">
         <div class="cta-icon"><i data-lucide="clipboard-list"></i></div>
         <div class="cta-title">${state.submitted ? "Проверьте свой экзамен" : (inProgress ? "Возобновить пробный экзамен" : "Сдать практический экзамен")}</div>
-        <div class="cta-desc">${state.submitted ? `You scored ${calcScore().total}/${total}. Reopen to review the answers, or retake it.` : `50 questions across the four areas, graded at 80% like the real thing. Includes multiple-response questions so you practise reading carefully. ${answered ? `You've answered ${answered}/${total}.` : ''}`}</div>
+        <div class="cta-desc">${state.submitted ? `Вы забили ${calcScore().total}/${total}. Откройте повторно, чтобы просмотреть ответы, или повторите попытку.` : `50 вопросов по четырем областям с оценкой 80%, как в реальности. Включает вопросы с несколькими ответами, чтобы вы попрактиковались в внимательном чтении. ${answered ? `Вы ответили ${answered}/${total}.` : ''}`}</div>
         <div class="cta-link">${state.submitted ? "Посмотреть результаты →" : (inProgress ? "Продолжить →" : 'Start →')}</div>
       </a>
     </div>
@@ -857,7 +857,7 @@ function renderStudy(){
       <p>Каждый пункт соответствует официальной документации поддержки Документ. Каждая область ссылается на свою исходную страницу внизу. <strong>Четыре области и их процентное соотношение принадлежат нам, а не Документ.</strong>, поскольку Документация не публикует веса для этого экзамена.</p>
     </div>
     <button class="expand-all" onclick="toggleAllStudy()">${allStudyOpen() ? "Свернуть все" : "Развернуть все"}</button>
-    <button class="expand-all ${state.reviewFilter?'rf-on':''}" onclick="toggleReviewFilter()">${state.reviewFilter ? `Showing needs-review only (${needsReviewCount()}), show all` : `Filter: needs review (${needsReviewCount()})`}</button>
+    <button class="expand-all ${state.reviewFilter?'rf-on':''}" onclick="toggleReviewFilter()">${state.reviewFilter ? `Показан только обзор потребностей (${needsReviewCount()}), показать все` : `Фильтр: требует проверки (${needsReviewCount()})`}</button>
     ${STUDY.map(s=>{
       const d = DOMAIN_INFO[s.key];
       const vis = s.must.map((m,i)=>({m,i})).filter(x=>{

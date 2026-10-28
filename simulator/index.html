@@ -1360,9 +1360,9 @@ async function submitForReview(){
 }
 
 async function fetchLiveReview(apiKey, task, submission){
-  const userMsg = `You are ${COMPANY.manager}, ${COMPANY.managerTitle} at ${COMPANY.name}. You're reviewing work from an associate data analyst in their first week.
+  const userMsg = `You are ${COMPANY.manager}, ${COMPANY.managerTitle} at ${COMPANY.name}. Вы просматриваете работу младшего аналитика данных за первую неделю.
 
-TASK: ${task.title}
+ЗАДАЧА: ${task.title}
 TYPE: ${task.type}
 
 ASSIGNMENT:
@@ -1374,19 +1374,19 @@ ${task.rubric.map((r,i)=>`${i+1}. ${r}`).join('\n')}
 SUBMISSION:
 ${submission}
 
-Give feedback as this manager — warm, direct, specific. Structure as:
+Дайте обратную связь, как у настоящего менеджера — теплую, прямую, конкретную. Структура как:
 
-**Overall:** (one verdict sentence)
+**В целом:** (одно вердикт)
 
-**What landed:** (2 specific things that worked)
+**Что удалось получить:** (2 конкретные вещи, которые сработали)
 
-**Improve this:** (2 specific, actionable suggestions referencing their actual submission)
+**Улучшите это:** (2 конкретных практических предложения, касающихся фактического отправления)
 
-**Pro tip for next time:** (one concrete habit or technique)
+**Совет от профессионала на следующий раз:** (одна конкретная привычка или техника)
 
-**Assessment:** Exceeds Expectations / Meets Expectations / Developing / Needs Revision
+**Оценка:** Превосходит ожидания/соответствует ожиданиям/разрабатывается/требует доработки
 
-Max 280 words. Reference specific things from their submission, not generic praise.`;
+Макс 280 слов. Ссылайтесь на конкретные вещи из их подачи, а не на общие похвалы.`;
 
   const res = await fetch('https://api.anthropic.com/v1/messages',{
     method:'POST',
@@ -1422,14 +1422,26 @@ function fallbackReview(task, submission, prefix=''){
 
   let out = '';
   if(prefix) out += `*${prefix}*\n\n`;
-  out += `**Overall:** Rubric self-check (no API key configured) — review your own submission against the criteria below.\n\n`;
-  out += `**What likely landed:**\n`;
-  out += landed.length ? landed.map(h=>`- ${h.r}`).join('\n') : `- Hard to auto-detect — check the rubric yourself.`;
-  out += `\n\n**Improve this:**\n`;
-  out += missing.length ? missing.map(h=>`- ${h.r}`).join('\n') : `- All rubric items appear addressed.`;
-  out += `\n\n**Pro tip for next time:** Add a Claude API key in the top nav (the "API Key" button) for real manager-style feedback that references your exact submission.\n\n`;
-  out += `**Assessment:** Length — ${words} words. Rubric coverage — ${landed.length}/${task.rubric.length}.\n\n`;
-  out += `**Strong-answer exemplar** (yours doesn't need to match — the shape should):\n\n`;
+  out += `**Общие сведения:** Самостоятельная проверка рубрики (ключ API не настроен). Проверьте свою заявку на соответствие приведенным ниже критериям.
+
+`;
+  out += `**Что, скорее всего, попало:**
+`;
+  out += landed.length ? landed.map(h=>`- ${h.r}`).join('\n') : `- Трудно обнаружить авто — проверьте рубрику самостоятельно.`;
+  out += `
+
+**Улучшите это:**
+`;
+  out += missing.length ? missing.map(h=>`- ${h.r}`).join('\n') : `- Все элементы рубрики отображаются адресованными.`;
+  out += `
+
+**Совет для профессионалов в следующий раз:** Добавьте ключ API Claude в верхнюю часть навигации (кнопка «Ключ API»), чтобы получить обратную связь в стиле менеджера, которая ссылается на вашу точную отправку.
+
+`;
+  out += `**Оценка:** Длина — ${words} слова. Рубрикаторный охват — ${landed.length}/${task.rubric.length}.\n\n`;
+  out += `**Пример убедительного ответа** (ваш не обязательно должен совпадать — форма должна совпадать):
+
+`;
   out += task.exemplar;
   return out;
 }

@@ -862,7 +862,7 @@ function coverUp(sql, frac, from){
   // What is still covered keeps the width of the code it stands in for, so uncovering
   // never shuffles the rest of the query around the screen.
   const hidden = sql.slice(to).split('\n').map(ln =>
-    ln.length ? '<span class="mask" style="width:' + ln.length + 'ch"></span>' : ''
+    ln.length ? '<span class="mask" style="width:' + ln.length + "ч\"></span>" : ''
   ).join('\n');
   return esc(sql.slice(0, Math.min(had, to))) +
     (fresh ? '<span class="justnow">' + esc(fresh) + '</span>' : '') +
@@ -1007,7 +1007,7 @@ function table(res){
   const body = values.slice(0, CAP).map(r => '<tr>' + r.map(v =>
     '<td>' + (v === null ? '<span class="dim">NULL</span>' : esc(v)) + '</td>').join('') + '</tr>').join('');
   const more = values.length > CAP
-    ? "<div class=\"dim\">Показываю первый " + CAP + ' of ' + values.length + ' rows.</div>' : '';
+    ? "<div class=\"dim\">Показываю первый " + CAP + ' of ' + values.length + " ряды.</div>" : '';
   return '<table>' + head + body + '</table>' + more;
 }
 
@@ -1053,7 +1053,7 @@ function run(){
         "<code>СЧИТАТЬ(*) КАК " + esc(missing) + '</code>.';
     } else if(/no such column/i.test(msg)){
       guess = "Обычно это означает, что в текстовом значении отсутствуют кавычки. " +
-        "<code>WHERE genre = country</code> looks for a column called country; " +
+        "<code>WHERE genre = country</code> ищет столбец «Страна»; " +
         "<code>ГДЕ жанр = «кантри»</code> ищет слово. Стол в порядке. " +
         "Если в вашем запросе уже есть кавычки, проверьте имя столбца на панели таблицы.";
     } else if(/no such table/i.test(msg)){

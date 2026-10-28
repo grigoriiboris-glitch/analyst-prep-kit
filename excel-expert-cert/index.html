@@ -312,17 +312,17 @@ async function hintCall(prompt, targetId){
     el.textContent = data.content?.[0]?.text || "Никакого ответа. Проверьте свой ключ.";
   } catch(e){ el.textContent = "Запрос не выполнен. Проверьте свой ключ и соединение."; }
 }
-const TUTOR_ROLE = `You are a plain-spoken Excel tutor helping someone study for the Microsoft Office Specialist Excel Expert exam (MO-211, Microsoft 365 Apps). That exam is performance-based in live Excel and covers workbook protection and settings, custom number formats, data validation, conditional formatting, advanced formulas (LET, XLOOKUP, IFS, SWITCH, SUMIFS, PMT, NPER, FILTER, SORTBY), what-if analysis, formula auditing, recorded macros, PivotTables, PivotCharts, and advanced chart types.`;
+const TUTOR_ROLE = `Вы откровенный преподаватель Excel, помогающий кому-то подготовиться к экзамену Microsoft Office Specialist Excel Expert (MO-211, Microsoft 365 Apps). Этот экзамен основан на производительности в реальном Excel и охватывает защиту и настройки книги, настраиваемые числовые форматы, проверку данных, условное форматирование, расширенные формулы (LET, XLOOKUP, IFS, SWITCH, SUMIFS, PMT, NPER, FILTER, SORTBY), анализ «что если», аудит формул, записанные макросы, сводные таблицы, сводные диаграммы и расширенные типы диаграмм.`;
 function hintStudy(key, i){
   const s = STUDY.find(x=>x.key===key);
   if(!s) return;
   const fact = stripTags(s.must[i]);
   const prompt = `${TUTOR_ROLE}
 
-Explain this exam point a different way than it is written here:
+Объясните этот экзаменационный вопрос иначе, чем написано здесь:
 "${fact}"
 
-Rules: 3 sentences at most. One idea per sentence. Use an everyday comparison if it helps. Say what task the exam is likely to hand you about it. No preamble, no restating the question.`;
+Правила: максимум 3 предложения. Одна идея в предложении. Используйте повседневное сравнение, если это помогает. Скажите, какую задачу вам, скорее всего, поставит экзамен. Никакой преамбулы, никакого повторения вопроса.`;
   hintCall(prompt, 'hint-resp-' + key + '-' + i);
 }
 function hintQuestion(qid){
@@ -331,13 +331,13 @@ function hintQuestion(qid){
   const chosen = state.answers[qid];
   const picked = Array.isArray(chosen) ? chosen.map(i=>stripTags(q.choices[i])).join(' / ') : (chosen!==undefined ? stripTags(q.choices[chosen]) : "(нет ответа)");
   const right = q.type==='ms' ? q.correct.map(i=>stripTags(q.choices[i])).join(' / ') : stripTags(q.choices[q.correct]);
-  const prompt = `${TUTOR_ROLE} A student got this practice question wrong.
+  const prompt = `${TUTOR_ROLE} Студент неправильно ответил на этот практический вопрос.
 
-Question: ${stripTags(q.q)}
-They picked: ${picked}
-Correct answer: ${right}
+Вопрос: ${stripTags(q.q)}
+Они выбрали: ${picked}
+Правильный ответ: ${right}
 
-In 3 sentences at most, say what they were probably confusing, then give one plain rule that keeps the two apart. No preamble.`;
+Максимум в трех предложениях скажите, что вас, вероятно, смутило, а затем приведите одно простое правило, которое разделяет эти два понятия. Никакой преамбулы.`;
   hintCall(prompt, 'hint-resp-q-' + qid);
 }
 
@@ -489,192 +489,192 @@ const STUDY = [
    type 'mc' → correct: index · type 'ms' → correct: [indices] (choose all that apply) */
 const QUESTIONS = [
   /* ---------- AREA 1 · Workbook options and settings (6) ---------- */
-  {id:'q1', domain:'d1', type:'mc', q:`A workbook has one macro you need in another open workbook. What is the supported way to copy it?`,
+  {id:'q1', domain:'d1', type:'mc', q:`В книге есть один макрос, который вам нужен в другой открытой книге. Какой поддерживаемый способ копирования?`,
     choices:[`Скопируйте рабочий лист; макросы путешествуют с простынями`, `В редакторе Визуальный Бейсик перетащите модуль из одного проекта в другой в обозревателе проектов.`, `Сохраните первую книгу как шаблон.`, `Используйте специальную вставку ▸ Макросы`],
     correct:1,
     explain:`Откройте обе книги, нажмите <code>Alt+F11</code>, откройте Обозреватель проектов (<code>Ctrl+R</code>) и перетащите модуль в целевой проект. Затем сохраните место назначения как .XLSM или .xlsb.`},
-  {id:'q2', domain:'d1', type:'mc', q:`You protect a worksheet without unlocking any cells first. What can users do?`,
+  {id:'q2', domain:'d1', type:'mc', q:`Вы защищаете лист, не разблокируя предварительно какие-либо ячейки. Что могут сделать пользователи?`,
     choices:[`Отредактируйте каждую ячейку, поскольку пароль не установлен.`, `Ничего не редактируйте, поскольку каждая ячейка по умолчанию заблокирована.`, `Редактировать только ячейки, содержащие формулы`, `Редактировать только пустые ячейки`],
     correct:1,
     explain:`По умолчанию каждая ячейка имеет флаг «Заблокировано». Защитить лист применяет этот флаг, поэтому весь лист становится доступным только для чтения, пока вы не разблокируете ячейки, которые люди могут редактировать (<code>Ctrl+1</code> ▸ Защита ▸ очистить Заблокировано) перед защитой.`},
   {id:'q3', domain:'d1', type:'ms', q:`Какие действия блокирует просмотр ▸ защита книги? <em>Выберите все, что применимо.</em>`,
     choices:[`Переименование рабочего листа`, `Ввод ячейки`, `Отображение скрытого листа`, `Вставка нового листа`],
     correct:[0,2,3],
-    explain:`Protect Workbook guards structure: adding, deleting, moving, renaming, hiding and unhiding sheets. Typing in cells is governed by Protect Sheet, a different command.`},
-  {id:'q4', domain:'d1', type:'mc', q:`Where do you change the macro security setting that applies to every workbook Excel opens?`,
+    explain:`Protect Workbook защищает структуру книги: добавление, удаление, перемещение, переименование, скрытие и отображение листов. Ввод ячеек регулируется другой командой Protect Sheet.`},
+  {id:'q4', domain:'d1', type:'mc', q:`Где изменить параметр безопасности макросов, который применяется к каждой открываемой книге Excel?`,
     choices:[`Файл ▸ Информация ▸ Защитить книгу`, `Файл ▸ Параметры ▸ Центр управления безопасностью ▸ Настройки центра управления безопасностью ▸ Настройки макроса`, `Обзор ▸ Разрешить редактирование диапазонов`, `Данные ▸ Запросы и соединения`],
     correct:1,
-    explain:`Macro Settings in the Trust Center (also reachable from Developer ▸ Macro Security) holds the four options. The default is "Disable all macros with notification", which is the yellow Enable Content bar.`},
-  {id:'q5', domain:'d1', type:'mc', q:`Formulas on a large sheet no longer update when inputs change, and the status bar says Calculate. Which setting was changed?`,
+    explain:`Настройки макросов в Центре управления безопасностью (также доступные из меню «Разработчик ▸ Безопасность макросов») содержат четыре параметра. По умолчанию установлено значение «Отключить все макросы с уведомлением», которое представляет собой желтую панель «Включить контент».`},
+  {id:'q5', domain:'d1', type:'mc', q:`Формулы на большом листе больше не обновляются при изменении входных данных, а в строке состояния отображается надпись «Вычислить». Какая настройка была изменена?`,
     choices:[`Итерационный расчет включен.`, `Для параметров расчета установлено значение «Вручную».`, `Лист был защищен`, `Ссылки на книгу не работают.`],
     correct:1,
     explain:`Ручной расчет (Формулы ▸ Параметры расчета или Файл ▸ Параметры ▸ Формулы) останавливает автоматический пересчет. Нажимать <code>F9</code> для перерасчета или переключитесь обратно в автоматический режим.`},
-  {id:'q6', domain:'d1', type:'mc', q:`Version History under File ▸ Info shows nothing for a workbook. What is the most likely reason?`,
+  {id:'q6', domain:'d1', type:'mc', q:`История версий в разделе «Файл ▸ Информация» для книги ничего не показывает. Какова наиболее вероятная причина?`,
     choices:[`В книге есть макросы`, `Файл сохраняется на локальном диске, а не в OneDrive или SharePoint.`, `Файл имеет формат .xlsx.`, `Автосохранение включено`],
     correct:1,
-    explain:`Version history only works for files stored in OneDrive or SharePoint in Microsoft 365. Local files have no version history to show.`},
+    explain:`История версий работает только для файлов, хранящихся в OneDrive или SharePoint в Microsoft 365. Для локальных файлов история версий не отображается.`},
 
   /* ---------- AREA 2 · Manage and format data (14) ---------- */
-  {id:'q7', domain:'d2', type:'mc', q:`Column A holds full names. You type the first name from A2 into B2 and want Excel to fill the rest of column B by pattern. Which shortcut?`,
+  {id:'q7', domain:'d2', type:'mc', q:`Столбец A содержит полные имена. Вы вводите имя из A2 в B2 и хотите, чтобы Excel заполнил остальную часть столбца B по шаблону. Какой ярлык?`,
     choices:[`Ctrl+D`, `Ctrl+E`, `Ctrl+R`, `Ctrl+Enter`],
     correct:1,
     explain:`<code>Ctrl+E</code> — это мгновенное заполнение (также данные ▸ мгновенное заполнение). Ctrl+D заполняет одно и то же значение, Ctrl+R — вправо.`},
-  {id:'q8', domain:'d2', type:'mc', q:`You need cells to show 100, 200, 400, 800. In Home ▸ Fill ▸ Series, which Type and Step value?`,
+  {id:'q8', domain:'d2', type:'mc', q:`Вам нужно, чтобы в ячейках отображались 100, 200, 400, 800. В разделе «Главная ▸ Заполнить ▸ Серия» какое значение типа и шага?`,
     choices:[`Линейный, шаг 100`, `Рост, шаг 2`, `Линейный, шаг 2`, `Автозаполнение, шаг 200`],
     correct:1,
-    explain:`Growth multiplies by the step value each time; Linear adds it. Doubling is Growth with a step of 2.`},
-  {id:'q9', domain:'d2', type:'mc', q:`Which formula fills a 10-row by 3-column block with whole numbers from 1 to 50?`,
+    explain:`Рост каждый раз умножается на значение шага; Linear добавляет это. Удвоение – это рост с шагом 2.`},
+  {id:'q9', domain:'d2', type:'mc', q:`Какая формула заполняет блок из 10 строк и 3 столбцов целыми числами от 1 до 50?`,
     choices:[`<code>=СЛУЧМАССРАЙ(10,3,1,50,ИСТИНА)</code>`, `<code>=СЛУЧМЕЖДУ(1,50,10,3)</code>`, `<code>=СЛУЧМАССРАЙ(1,50,10,3)</code>`, `<code>=СЛЧИС(10,3)*50</code>`],
     correct:0,
     explain:`<code>RANDARRAY([строки],[столбцы],[мин],[макс],[целое_число])</code>. Пятый аргумент TRUE дает целые числа. СЛУЧМЕЖДУ возвращает одно значение, а СЛЧИС не принимает аргументов.`},
   {id:'q10', domain:'d2', type:'mc', q:`Пользовательский числовой формат состоит из двух разделов, например <code>0,0;[Красный]-0,0</code>. Как отображается ноль?`,
     choices:[`С первым разделом`, `Со вторым разделом`, `Как генерал`, `Blank`],
     correct:0,
-    explain:`With two sections the first is used for positive numbers and zeros and the second for negative numbers. Four sections are positive;negative;zero;text.`},
+    explain:`Имея два раздела, первый используется для положительных чисел и нулей, а второй — для отрицательных чисел. Четыре раздела: положительный; отрицательный; ноль; текст.`},
   {id:'q11', domain:'d2', type:'mc', q:`В каком пользовательском формате отображается 1 250 000 как <code>1,250</code>?`,
     choices:[`<code>#,##0</code>`, `<code>#,##0,</code>`, `<code>#,##0,,</code>`, `<code>0.000</code>`],
     correct:1,
-    explain:`A trailing comma scales the number down by one thousand. Two trailing commas would show millions, so 1,250,000 would become 1.`},
+    explain:`Запятая уменьшает число на тысячу. Две запятые в конце означают миллионы, поэтому 1 250 000 станет 1.`},
   {id:'q12', domain:'d2', type:'mc', q:`В пользовательском числовом формате, где заполнитель показывает незначащие нули, поэтому 5 в <code>0.00</code> появляется как 5.00?`,
     choices:[`<code>#</code>`, `<code>0</code>`, `<code>?</code>`, `<code>@</code>`],
     correct:1,
     explain:`<code>0</code> всегда показывает цифру. <code>#</code> скрывает незначащие нули, <code>?</code> площадки с пробелом для выравнивания десятичных знаков и <code>@</code> это текстовый заполнитель.`},
-  {id:'q13', domain:'d2', type:'mc', q:`A validation rule must reject any entry that is not one of the values in H2:H6. Which Allow type and Error Alert style?`,
+  {id:'q13', domain:'d2', type:'mc', q:`Правило проверки должно отклонять любую запись, которая не является одним из значений в H2:H6. Какой тип разрешения и стиль оповещения об ошибках?`,
     choices:[`Список, Предупреждение`, `Список, Стоп`, `Пользовательские, Информация`, `Длина текста, стоп`],
     correct:1,
     explain:`Список с источником <code>=$H$2:$H$6</code>. Only the Stop style rejects the entry; Warning and Information both let the user keep the bad value.`},
-  {id:'q14', domain:'d2', type:'mc', q:`A user types an invalid value into a validated cell and a dialog appears with Yes and No buttons. Which Error Alert style is set?`,
+  {id:'q14', domain:'d2', type:'mc', q:`Пользователь вводит недопустимое значение в проверенную ячейку, и появляется диалоговое окно с кнопками «Да» и «Нет». Какой стиль оповещения об ошибках установлен?`,
     choices:[`Stop`, `Warning`, `Information`, `Custom`],
     correct:1,
-    explain:`Warning asks whether to continue and accepts the value on Yes. Stop offers Retry or Cancel only. Information shows OK and accepts.`},
-  {id:'q15', domain:'d2', type:'mc', q:`Validation rules were added after the data was typed. How do you see which existing cells break them?`,
+    explain:`Предупреждение спрашивает, продолжать ли, и принимает значение Да. «Стоп» предлагает только «Повторить» или «Отменить». Информация показывает «ОК» и принимается.`},
+  {id:'q15', domain:'d2', type:'mc', q:`Правила проверки были добавлены после ввода данных. Как увидеть, какие существующие клетки их разрушают?`,
     choices:[`Данные ▸ Проверка данных ▸ Обведите неверные данные`, `Формулы ▸ Проверка ошибок`, `Home ▸ Find &amp; Select ▸ Go To Special ▸ Data validation`, `Обзор ▸ Проверить доступность`],
     correct:0,
-    explain:`Circle Invalid Data draws red circles around cells that violate their rule. Go To Special only selects cells that have validation, valid or not.`},
-  {id:'q16', domain:'d2', type:'mc', q:`Data ▸ Subtotal is grayed out. Why?`,
+    explain:`Обведите неверные данные красными кружками вокруг ячеек, которые нарушают их правило. Параметр «Перейти к специальному» выбирает только те ячейки, которые имеют проверку, действительную или нет.`},
+  {id:'q16', domain:'d2', type:'mc', q:`Данные ▸ Промежуточный итог выделен серым цветом. Почему?`,
     choices:[`Данные не отсортированы`, `Данные отформатированы в виде таблицы Эксель.`, `Лист имеет более одного уровня структуры.`, `Столбец содержит текст`],
     correct:1,
-    explain:`Subtotals are not supported inside an Excel Table. Convert it to a range (Table Design ▸ Convert to Range) and the command returns. Unsorted data makes bad subtotals but does not gray the button.`},
-  {id:'q17', domain:'d2', type:'mc', q:`You run Remove Duplicates with only the Email column ticked. Two rows share an email but have different names. What happens?`,
+    explain:`Промежуточные итоги не поддерживаются внутри таблицы Excel. Преобразуйте его в диапазон (Дизайн таблицы ▸ Преобразовать в диапазон), и команда вернет результат. Несортированные данные дают неправильные промежуточные итоги, но кнопка не становится серой.`},
+  {id:'q17', domain:'d2', type:'mc', q:`Вы запускаете «Удалить дубликаты», отметив только столбец «Электронная почта». Две строки имеют общий адрес электронной почты, но имеют разные имена. Что происходит?`,
     choices:[`Ни одна строка не удаляется, поскольку имена различаются.`, `Второй ряд удаляется; первое вхождение сохраняется`, `Обе строки удалены`, `Excel спрашивает, какой из них сохранить`],
     correct:1,
-    explain:`Duplicates are judged only on the ticked columns. The first occurrence stays and later matches are permanently deleted.`},
-  {id:'q18', domain:'d2', type:'mc', q:`A2:F50 is selected. Which formula rule shades an entire row when that row's value in column E is greater than 1000?`,
+    explain:`Дубликаты оцениваются только по отмеченным столбцам. Первое вхождение остается, а последующие совпадения удаляются без возможности восстановления.`},
+  {id:'q18', domain:'d2', type:'mc', q:`A2: F50 выбран. Какое правило формулы затеняет всю строку, если значение этой строки в столбце E больше 1000?`,
     choices:[`<code>=Е2>1000</code>`, `<code>=$E2>1000</code>`, `<code>=$E$2>1000</code>`, `<code>=E$2>1000</code>`],
     correct:1,
     explain:`Правило записывается для верхней левой ячейки (A2) и копируется по всему диапазону. Блокировка колонны с помощью <code>$Е</code> каждая ячейка в строке смотрит на столбец E, а номер разблокированной строки перемещается вниз.`},
   {id:'q19', domain:'d2', type:'ms', q:`Какие утверждения об условном форматировании ▸ Управление правилами верны? <em>Выберите все, что применимо.</em>`,
     choices:[`Правила оцениваются сверху вниз.`, `Стоп, если правда останавливает оценку более низких правил, если правило истинно.`, `Стоп, если правда можно установить в правиле панели данных.`, `Двигаться вверх и Вниз меняют приоритет`],
     correct:[0,1,3],
-    explain:`Higher rules win. Stop If True stops lower rules from applying, but it is unavailable for data bars, color scales and icon sets.`},
-  {id:'q20', domain:'d2', type:'mc', q:`Which keyboard shortcut hides the detail rows of a selected outline group?`,
+    explain:`Высшие правила побеждают. Параметр «Стоп, если true» останавливает применение более низких правил, но недоступен для гистограмм, цветовых шкал и наборов значков.`},
+  {id:'q20', domain:'d2', type:'mc', q:`Какое сочетание клавиш скрывает строки сведений выбранной группы структуры?`,
     choices:[`Альт+Шифт+=`, `Alt+Shift+-`, `Ctrl+9`, `Ctrl+Shift+(`],
     correct:1,
     explain:`<code>Alt+Shift+-</code> сворачивает группу; <code>Альт+Шифт+=</code> расширяет его. Ctrl+9 скрывает строки без контура.`},
 
   /* ---------- AREA 3 · Advanced formulas and macros (13) ---------- */
-  {id:'q21', domain:'d3', type:'mc', q:`Which formula returns "A" for 90 and above, "B" for 80 to 89, and "C" for everything else?`,
+  {id:'q21', domain:'d3', type:'mc', q:`Какая формула возвращает «А» для 90 и выше, «Б» для 80–89 и «С» для всего остального?`,
     choices:[`<code>=IFS(A2>=90,"A",A2>=80,"B","C")</code>`, `<code>=ЕСЛИ(A2>=90,"A",A2>=80,"B",ИСТИНА,"C")</code>`, `<code>=ПЕРЕКЛЮЧАТЕЛЬ(A2,90,"A",80,"B","C")</code>`, `<code>=ЕСЛИ(A2>=90,"A","B","C")</code>`],
     correct:1,
     explain:`IFS нужны пары, так что все дело в том, <code>ВЕРНО, "С"</code>. Без него значения ниже 80 возвращают #Н/Д. ВЫКЛЮЧАТЕЛЬ проверяет точные совпадения, а не диапазоны.`},
-  {id:'q22', domain:'d3', type:'mc', q:`Which formula totals column D where column B is "East" and column C is over 500?`,
+  {id:'q22', domain:'d3', type:'mc', q:`Какая формула суммирует столбец D, где в столбце B указано «Восток», а в столбце C больше 500?`,
     choices:[`<code>=СУММИФ(B:B,"Восток",C:C,">500",D:D)</code>`, `<code>=СУММИФ(D:D,B:B,"Восток",C:C,">500")</code>`, `<code>=СУММЕСЛИ(B:B,"Восток",C:C,">500",D:D)</code>`, `<code>=СУММИФ(D:D,B:B="Восток",C:C>500)</code>`],
     correct:1,
-    explain:`SUMIFS puts the sum range first, then criteria_range and criteria pairs, with criteria as text. SUMIF takes only one condition.`},
+    explain:`SUMIFS сначала помещает диапазон суммы, затем диапазон критериев и пары критериев с критериями в виде текста. СУММЕСЛИ принимает только одно условие.`},
   {id:'q23', domain:'d3', type:'mc', q:`Что значит<code>=LET(х, A1*12, ЕСЛИ(х>100, х, 0))</code> делать?`,
     choices:[`Возвращает ошибку, поскольку LET нужны три пары.`, `Сохраняет A1*12 как х, затем возвращает х, если оно больше 100, и 0 в противном случае.`, `Создает именованный диапазон с именем х в диспетчере имен.`, `Умножает A1 на 12 и на 100.`],
     correct:1,
-    explain:`LET binds a name to a value for the duration of the formula, then evaluates the final calculation. The name exists only inside the formula.`},
-  {id:'q24', domain:'d3', type:'mc', q:`An XLOOKUP returns #N/A when the ID is missing. Which argument replaces that with "Not found"?`,
+    explain:`LET связывает имя со значением на время действия формулы, а затем оценивает окончательный расчет. Имя существует только внутри формулы.`},
+  {id:'q24', domain:'d3', type:'mc', q:`XLOOKUP возвращает #N/A, если идентификатор отсутствует. Какой аргумент заменяет это на «Не найдено»?`,
     choices:[`match_mode`, `if_not_found`, `search_mode`, `return_array`],
     correct:1,
     explain:`Четвертый аргумент, <code>if_not_found</code>, является встроенным резервным вариантом: <code>=XLOOKUP(id, A:A, C:C, «Не найден»)</code>. Обертка IFERROR не требуется.`},
-  {id:'q25', domain:'d3', type:'mc', q:`In XLOOKUP, which match_mode returns the exact match or the next smaller value?`,
+  {id:'q25', domain:'d3', type:'mc', q:`В XLOOKUP какой режим match_mode возвращает точное совпадение или следующее меньшее значение?`,
     choices:[`0`, `1`, `-1`, `2`],
     correct:2,
-    explain:`0 is exact only, -1 is exact or next smaller, 1 is exact or next larger, 2 is wildcard.`},
-  {id:'q26', domain:'d3', type:'mc', q:`The lookup value is in column D and the value to return is in column A. Which formula works?`,
+    explain:`0 — только точный, -1 — точный или ближайший к нему меньший, 1 — точный или ближайший к нему больший, 2 — подстановочный знак.`},
+  {id:'q26', domain:'d3', type:'mc', q:`Искомое значение находится в столбце D, а возвращаемое значение — в столбце A. Какая формула работает?`,
     choices:[`<code>=ВПР(G2,A:D,1,ЛОЖЬ)</code>`, `<code>=ИНДЕКС(A:A,MATCH(G2,D:D,0))</code>`, `<code>= ПРОСМОТР (G2, A: D, 1, ЛОЖЬ)</code>`, `<code>=ПОИСКПОЗ(G2,D:D,0)</code>`],
     correct:1,
-    explain:`VLOOKUP only returns columns to the right of its lookup column. INDEX/MATCH (or XLOOKUP) looks in any direction. MATCH alone returns a position, not the value.`},
+    explain:`ВПР возвращает только столбцы справа от столбца поиска. INDEX/MATCH (или XLOOKUP) смотрит в любом направлении. Только ПОИСКПОЗ возвращает позицию, а не значение.`},
   {id:'q27', domain:'d3', type:'mc', q:`<code>=ДЕНЬНЕД(A2,2)</code> возвращает 1. Какой день в A2?`,
     choices:[`Sunday`, `Monday`, `Saturday`, `Friday`],
     correct:1,
-    explain:`return_type 2 numbers the week Monday = 1 through Sunday = 7. The default type 1 starts at Sunday = 1.`},
-  {id:'q28', domain:'d3', type:'mc', q:`Which formula gives the delivery date 10 working days after B2, skipping the holidays in H2:H8?`,
+    explain:`return_type 2 нумерует неделю с понедельника = 1 по воскресенье = 7. Тип по умолчанию 1 начинается с воскресенья = 1.`},
+  {id:'q28', domain:'d3', type:'mc', q:`Какая формула дает дату поставки через 10 рабочих дней после B2, пропуская праздники в H2:H8?`,
     choices:[`<code>=В2+10</code>`, `<code>= РАБДЕНЬ(B2,10,H2:H8)</code>`, `<code>=ДЕНЬНЕД(B2,10,H2:H8)</code>`, `<code>=ЧИСТЫЕДНИ(B2,10,H2:H8)</code>`],
     correct:1,
-    explain:`WORKDAY(start_date, days, [holidays]) steps over weekends and listed holidays and returns a date. WEEKDAY returns a day number; NETWORKDAYS counts days between two dates.`},
-  {id:'q29', domain:'d3', type:'mc', q:`A loan payment formula is in B5. You want the payment to be 900 by changing the interest rate in B3. In Goal Seek, what goes in each box?`,
+    explain:`РАБДЕНЬ(начальная_дата, дни, [праздники]) проходит через выходные и указанные праздники и возвращает дату. ДЕНЬНЕД возвращает номер дня; ЧИСТРАБДНИ подсчитывает дни между двумя датами.`},
+  {id:'q29', domain:'d3', type:'mc', q:`Формула выплаты кредита находится в B5. Вы хотите, чтобы платеж составил 900, изменив процентную ставку в B3. Что находится в каждой коробке в Goal Seek?`,
     choices:[`Установите ячейку B3, значение 900, изменив ячейку B5.`, `Установите ячейку B5, значение 900, изменив ячейку B3.`, `Установите ячейку B5, значение B3, изменив ячейку 900.`, `Установите ячейку B3, значение B5, изменив ячейку 900.`],
     correct:1,
-    explain:`Set cell is the formula, To value is the target, By changing cell is the single input the formula depends on.`},
-  {id:'q30', domain:'d3', type:'mc', q:`Which formula returns the monthly payment on a 200,000 loan at 6% annual interest over 30 years?`,
+    explain:`Установить ячейку — это формула. Значение — цель. Изменение ячейки — это единственный ввод, от которого зависит формула.`},
+  {id:'q30', domain:'d3', type:'mc', q:`Какая формула возвращает ежемесячный платеж по кредиту в размере 200 000 долларов США под 6% годовых в течение 30 лет?`,
     choices:[`<code>=ПЛТ(6%,30,200000)</code>`, `<code>=ПЛТ(6%/12,30*12,200000)</code>`, `<code>=КПЕР(6%/12,30*12,200000)</code>`, `<code>=ПЛТ(200000,6%/12,360)</code>`],
     correct:1,
-    explain:`PMT(rate, nper, pv). Rate and periods must share a unit, so monthly means 6%/12 and 30*12. The result is negative because it is an outgoing payment.`},
+    explain:`PMT(ставка, nper, pv). Ставка и периоды должны иметь одну единицу измерения, поэтому месяц означает 6%/12 и 30*12. Результат отрицательный, поскольку это исходящий платеж.`},
   {id:'q31', domain:'d3', type:'ms', q:`Какие утверждения о ФИЛЬТРЕ и СОРТИРОВКЕ верны? <em>Выберите все, что применимо.</em>`,
     choices:[`<code>FILTER</code> возвращает #CALC! когда ничего не соответствует и не задан if_empty`, `<code>SORTBY</code> сортировка_порядок использует 1 для возрастания и -1 для убывания.`, `<code>SORTBY</code> можно сортировать только по первому столбцу массива`, `Оба результата переливаются в соседние ячейки.`],
     correct:[0,1,3],
-    explain:`FILTER(array, include, [if_empty]) and SORTBY(array, by_array1, [sort_order1], ...) are dynamic array functions. SORTBY sorts by any separate range, not just the first column.`},
-  {id:'q32', domain:'d3', type:'mc', q:`You need to see the value of a cell on another sheet while editing formulas here. Which Formula Auditing tool?`,
+    explain:`FILTER(array, include, [if_empty]) и SORTBY(array, by_array1, [sort_order1], ...) являются функциями динамического массива. SORTBY сортирует по любому отдельному диапазону, а не только по первому столбцу.`},
+  {id:'q32', domain:'d3', type:'mc', q:`При редактировании формул здесь вам необходимо видеть значение ячейки на другом листе. Какой инструмент аудита формул?`,
     choices:[`Зависимые от трассировки`, `Окно просмотра`, `Оценить формулу`, `Показать формулы`],
     correct:1,
-    explain:`The Watch Window pins cells from any sheet or workbook and shows their value and formula as they change.`},
-  {id:'q33', domain:'d3', type:'mc', q:`A recorded macro must always format the currently selected cell, not a fixed address. Which Developer tab option must be on while recording?`,
+    explain:`Окно просмотра закрепляет ячейки из любого листа или книги и показывает их значение и формулу по мере их изменения.`},
+  {id:'q33', domain:'d3', type:'mc', q:`Записанный макрос всегда должен форматировать текущую выбранную ячейку, а не фиксированный адрес. Какая опция на вкладке «Разработчик» должна быть включена во время записи?`,
     choices:[`Макробезопасность`, `Используйте относительные ссылки`, `Режим дизайна`, `Запись в личной книге макросов`],
     correct:1,
-    explain:`Use Relative References records moves relative to the active cell. Without it the recorder writes absolute addresses like Range("B5").`},
+    explain:`При использовании относительных ссылок записи перемещаются относительно активной ячейки. Без этого регистратор записывает абсолютные адреса типа Range("B5").`},
 
   /* ---------- AREA 4 · Advanced charts and tables (12) ---------- */
-  {id:'q34', domain:'d4', type:'mc', q:`A column chart shows Revenue in millions and Units in the hundreds, so Units is invisible. Which steps fix it?`,
+  {id:'q34', domain:'d4', type:'mc', q:`Столбчатая диаграмма показывает доход в миллионах и единицах в сотнях, поэтому единицы невидимы. Какие шаги это исправить?`,
     choices:[`Измените тип диаграммы ▸ Комбинация ▸ отметьте «Вторичная ось для единиц измерения».`, `Добавить элемент диаграммы ▸ Метки данных`, `Переключить строку/столбец`, `Ось формата ▸ Логарифмический масштаб на главной оси`],
     correct:0,
-    explain:`A dual-axis (combo) chart plots Units on its own secondary axis, usually as a line. Secondary axes are unavailable on 3-D charts.`},
-  {id:'q35', domain:'d4', type:'mc', q:`Where is the Bin width setting for a Histogram chart?`,
+    explain:`Двухосевая (комбинированная) диаграмма отображает единицы измерения на собственной вторичной оси, обычно в виде линии. Вторичные оси недоступны на трехмерных диаграммах.`},
+  {id:'q35', domain:'d4', type:'mc', q:`Где находится настройка ширины ячейки для гистограммы?`,
     choices:[`Дизайн диаграммы ▸ Добавить элемент диаграммы`, `Формат оси ▸ Параметры оси на горизонтальной оси.`, `Выберите данные`, `Форматирование серии данных ▸ Ширина зазора`],
     correct:1,
-    explain:`Histogram bins (Automatic, Bin width, Number of bins, Overflow bin, Underflow bin) are axis options on the category axis.`},
-  {id:'q36', domain:'d4', type:'mc', q:`In a Waterfall chart the final "Net Income" column floats instead of starting at zero. What fixes it?`,
+    explain:`Ячейки гистограммы («Автоматически», «Ширина ячейки», «Количество ячеек», «Переполненная ячейка», «Нижняя ячейка») — это параметры оси категорий.`},
+  {id:'q36', domain:'d4', type:'mc', q:`На диаграмме «Водопад» последний столбец «Чистый доход» плавает, а не начинается с нуля. Что это исправляет?`,
     choices:[`Добавить линию тренда`, `Выберите только эту точку данных ▸ Форматировать точку данных ▸ Установить как итоговую`, `Измените диаграмму на столбец с накоплением`, `Сортировка данных по убыванию`],
     correct:1,
-    explain:`Set as total anchors a point to the axis so it reads as a subtotal or total instead of an increase or decrease.`},
-  {id:'q37', domain:'d4', type:'mc', q:`Which ribbon path inserts a Sunburst chart?`,
+    explain:`Установка «Итог» привязывает точку к оси, чтобы она отображалась как промежуточный итог или итог, а не как увеличение или уменьшение.`},
+  {id:'q37', domain:'d4', type:'mc', q:`Какой путь ленты вставляет диаграмму Sunburst?`,
     choices:[`Вставить ▸ Вставить статистическую диаграмму`, `Вставить ▸ Вставить иерархическую диаграмму`, `Вставить ▸ Вставить водопад, воронку, запас, поверхность или радарную диаграмму.`, `Вставить ▸ Вставить комбинированную диаграмму`],
     correct:1,
-    explain:`Sunburst and Treemap are hierarchy charts. Histogram and Box &amp; Whisker are statistic charts; Waterfall and Funnel share the waterfall button.`},
-  {id:'q38', domain:'d4', type:'mc', q:`Which option is found in Format Data Series for a Box &amp; Whisker chart?`,
+    explain:`Sunburst и Treemap — это иерархические диаграммы. Гистограмма и Box & Whisker — это статистические диаграммы; Водопад и Воронка имеют общую кнопку водопада.`},
+  {id:'q38', domain:'d4', type:'mc', q:`Какой параметр находится в параметре «Форматировать ряд данных» для диаграммы «Ящик с усами»?`,
     choices:[`Установить как итог`, `Ширина бункера`, `Расчет квартиля: инклюзивная или исключительная медиана`, `Вторичная ось`],
     correct:2,
-    explain:`Box &amp; Whisker series options include show inner points, show outlier points, show mean markers, show mean line and the quartile calculation method.`},
-  {id:'q39', domain:'d4', type:'mc', q:`When should you tick "Add this data to the Data Model" while creating a PivotTable?`,
+    explain:`Параметры серии Box & Whisker включают отображение внутренних точек, отображение точек выбросов, отображение маркеров среднего значения, отображение средней линии и метод расчета квартилей.`},
+  {id:'q39', domain:'d4', type:'mc', q:`Когда следует установить флажок «Добавить эти данные в модель данных» при создании сводной таблицы?`,
     choices:[`Всегда; это делает сводную таблицу быстрее`, `Когда вам нужно связать несколько таблиц или использовать Разное количество`, `Когда источником является таблица Excel`, `Если вы планируете добавить вычисляемое поле`],
     correct:1,
-    explain:`The Data Model enables relationships between tables and Distinct Count. It also changes things: calculated fields are replaced by measures on a Data Model PivotTable.`},
-  {id:'q40', domain:'d4', type:'mc', q:`One slicer must filter two PivotTables built from the same source. Which command?`,
+    explain:`Модель данных обеспечивает связи между таблицами и подсчетом уникальных значений. Это также меняет ситуацию: вычисляемые поля заменяются показателями в сводной таблице модели данных.`},
+  {id:'q40', domain:'d4', type:'mc', q:`Один срез должен фильтровать две сводные таблицы, созданные из одного источника. Какая команда?`,
     choices:[`Срез ▸ Соединения отчетов`, `Анализ сводной таблицы ▸ Изменение источника данных`, `Данные ▸ Отношения`, `Параметры сводной таблицы ▸ Разрешить несколько фильтров для каждого поля.`],
     correct:0,
-    explain:`Select the slicer ▸ Slicer tab ▸ Report Connections and tick each PivotTable. They must share a data source.`},
-  {id:'q41', domain:'d4', type:'mc', q:`A PivotTable row field holds daily dates across three years. You need sales by month and year. Which action?`,
+    explain:`Выберите срез ▸ вкладка «Срез» ▸ «Соединения с отчетами» и отметьте каждую сводную таблицу. Они должны использовать общий источник данных.`},
+  {id:'q41', domain:'d4', type:'mc', q:`Поле строки сводной таблицы содержит ежедневные даты в течение трех лет. Вам нужны продажи по месяцам и годам. Какое действие?`,
     choices:[`Щелкните правой кнопкой мыши дату ▸ Сгруппировать ▸ выберите «Месяцы и годы».`, `Вставить временную шкалу`, `Настройки поля значения ▸ Суммировать по количеству`, `Дизайн ▸ Макет отчета ▸ Табличный`],
     correct:0,
     explain:`Group by Months and Years together so each January stays with its own year. A Timeline filters by date; it does not regroup the rows.`},
-  {id:'q42', domain:'d4', type:'mc', q:`You need a new Values column equal to Sales times 1.2 that stays in sync when the PivotTable refreshes. Which tool?`,
+  {id:'q42', domain:'d4', type:'mc', q:`Вам нужен новый столбец «Значения», равный «Продажи, умноженные на 1,2», который будет синхронизироваться при обновлении сводной таблицы. Какой инструмент?`,
     choices:[`Формула в столбце рядом со сводной таблицей`, `Анализ сводной таблицы ▸ Поля, элементы и наборы ▸ Вычисляемое поле`, `Анализ сводной таблицы ▸ Поля, элементы и наборы ▸ Вычисляемый элемент`, `Настройки поля значения ▸ Показать значения как ▸ % от`],
     correct:1,
     explain:`Вычисляемое поле использует имена полей (<code>=Продажи*1.2</code>), появится в списке полей и обновится данными. Вместо этого вычисляемый элемент добавляет строку в поле.`},
-  {id:'q43', domain:'d4', type:'mc', q:`Each region's sales must display as a percentage of the total for all regions. Which Value Field Settings choice?`,
+  {id:'q43', domain:'d4', type:'mc', q:`Продажи каждого региона должны отображаться в процентах от общего объема продаж по всем регионам. Какой выбор настроек поля значений?`,
     choices:[`Суммировать значения по ▸ среднему`, `Показать значения как ▸ % от общей суммы`, `Показать значения как ▸ Промежуточный итог`, `Формат числа ▸ Процент`],
     correct:1,
-    explain:`Show Values As recalculates the display without a formula. Number Format ▸ Percentage would just show 12000 as 1200000%.`},
+    explain:`Параметр «Показать значения как» пересчитывает отображаемые значения без формулы. Числовой формат ▸ В процентах 12000 будет отображаться как 1200000%.`},
   {id:'q44', domain:'d4', type:'ms', q:`Какие типы диаграмм <strong>not</strong> доступно для сводной диаграммы? <em>Выберите все, что применимо.</em>`,
     choices:[`Разброс (XY)`, `Кластеризованный столбец`, `Bubble`, `Stock`],
     correct:[0,2,3],
-    explain:`PivotCharts support column, bar, line, pie, area, radar and similar types. Scatter, bubble and stock charts cannot be PivotCharts.`},
-  {id:'q45', domain:'d4', type:'mc', q:`The grey filter buttons on a PivotChart should be hidden for a printed report. Where is the switch?`,
+    explain:`Сводные диаграммы поддерживают столбцы, столбцы, линии, круговые диаграммы, области, радары и подобные типы. Точечные, пузырьковые и биржевые диаграммы не могут быть сводными диаграммами.`},
+  {id:'q45', domain:'d4', type:'mc', q:`Серые кнопки фильтра на сводной диаграмме должны быть скрыты для печатного отчета. Где переключатель?`,
     choices:[`Дизайн диаграммы ▸ Добавить элемент диаграммы ▸ Легенда`, `Анализ сводной диаграммы ▸ Кнопки полей`, `Формат ▸ Панель выбора`, `Параметры сводной таблицы ▸ Отображение`],
     correct:1,
-    explain:`PivotChart Analyze ▸ Field Buttons toggles each button type or hides them all. Styles for the chart itself come from the Design tab.`}
+    explain:`Анализ сводной диаграммы ▸ Кнопки полей переключает каждый тип кнопок или скрывает их все. Стили для самой диаграммы можно найти на вкладке «Дизайн».`}
 ];
 
 /* ============== VIEW ROUTING ============== */
@@ -774,7 +774,7 @@ function renderHome(){
       <a class="cta-card primary" onclick="setView('exam')">
         <div class="cta-icon"><i data-lucide="clipboard-list"></i></div>
         <div class="cta-title">${state.submitted ? "Пересмотрите свое упражнение" : (inProgress ? "Возобновить практическое упражнение" : "Пройдите практическое упражнение")}</div>
-        <div class="cta-desc">${state.submitted ? `You scored ${calcScore().total}/${total}. Reopen to review the answers, or retake it.` : `45 knowledge-check questions at the real exam's 50-minute pace, weighted to the official areas. Includes a few multiple-response questions so you practise reading carefully. ${answered ? `You've answered ${answered}/${total}.` : ''}`}</div>
+        <div class="cta-desc">${state.submitted ? `Вы забили ${calcScore().total}/${total}. Откройте повторно, чтобы просмотреть ответы, или повторите попытку.` : `45 вопросов для проверки знаний в реальном 50-минутном темпе экзамена, с учетом официальных разделов. Включает несколько вопросов с несколькими ответами, чтобы вы попрактиковались в внимательном чтении. ${answered ? `Вы ответили ${answered}/${total}.` : ''}`}</div>
         <div class="cta-link">${state.submitted ? "Посмотреть результаты →" : (inProgress ? "Продолжить →" : 'Start →')}</div>
       </a>
     </div>
@@ -810,7 +810,7 @@ function renderStudy(){
       <p>Процентные диапазоны — это опубликованные Майкрософт веса. Тратьте время на учебу и своих представителей Excel пропорционально.</p>
     </div>
     <button class="expand-all" onclick="toggleAllStudy()">${allStudyOpen() ? "Свернуть все" : "Развернуть все"}</button>
-    <button class="expand-all ${state.reviewFilter?'rf-on':''}" onclick="toggleReviewFilter()">${state.reviewFilter ? `Showing needs-review only (${needsReviewCount()}), show all` : `Filter: needs review (${needsReviewCount()})`}</button>
+    <button class="expand-all ${state.reviewFilter?'rf-on':''}" onclick="toggleReviewFilter()">${state.reviewFilter ? `Показан только обзор потребностей (${needsReviewCount()}), показать все` : `Фильтр: требует проверки (${needsReviewCount()})`}</button>
     ${STUDY.map(s=>{
       const d = DOMAIN_INFO[s.key];
       const vis = s.must.map((m,i)=>({m,i})).filter(x=>{
