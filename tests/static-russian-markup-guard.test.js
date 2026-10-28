@@ -58,7 +58,29 @@ test("identifies attribute fragments inside a JavaScript HTML concatenation", ()
   assert.equal(shouldPreserveHtmlAttributeFragment('" height="', false), false);
 });
 
-test("the static Russian build keeps DataCraft canvas markup out of translation", () => {
+test("the static Russian build keeps native DataCraft game sources out of translation", () => {
   const source = fs.readFileSync(path.join(__dirname, "../tools/static-russian-translation.mjs"), "utf8");
-  assert.ok(source.includes('"datacraft/curriculum-map.js"'), "The DataCraft map renderer must remain excluded from machine translation");
+  for (const file of [
+    "datacraft/curriculum-map.js",
+    "datacraft/index.html",
+    "datacraft/quiet-valley.js",
+    "datacraft/lesson-catalog.js"
+  ]) {
+    assert.ok(source.includes('"'+file+'"'), "Native DataCraft source must remain excluded from machine translation: "+file);
+  }
+});
+
+test("DataCraft renderer keeps valid CSS values and animated interaction hooks", () => {
+  const map = fs.readFileSync(path.join(__dirname, "../datacraft/curriculum-map.js"), "utf8");
+  const quiet = fs.readFileSync(path.join(__dirname, "../datacraft/quiet-valley.js"), "utf8");
+  const page = fs.readFileSync(path.join(__dirname, "../datacraft/index.html"), "utf8");
+
+  assert.doesNotMatch(map, /rgba\([^)]*,\s*0,\d+\)/, "RGBA alpha decimals must use a period, not a comma");
+  assert.doesNotMatch(map, /пикселей|сепия\(|насыщенность\(|яркость\(|предпочитает уменьшенное движение/i);
+  assert.match(map, /window\.requestAnimationFrame\(animateWorldLoop\)/, "The animated map loop must remain active");
+  assert.match(map, /function drawRoadNPCs\(t\)/, "Walking characters must be rendered");
+  assert.match(map, /canvas\.addEventListener\('click'/, "Map click interactions must remain attached");
+  assert.match(map, /canvas\.addEventListener\('mousemove'/, "Map hover interactions must remain attached");
+  assert.doesNotMatch(quiet, /пикселей|предпочитает уменьшенное движение/i);
+  assert.doesNotMatch(page, /ctx\.font[^;\n]*(?:пикселей|жирный шрифт)/i);
 });
