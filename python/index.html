@@ -1597,8 +1597,7 @@ const DEFAULT_STATE = {
   unitReviewsDone:[], unitEndSeen:[],
   v2Stage:{},        // lessonId -> stage index (0-5). The only stage key now.
   misses:{},         // lessonId -> the things that come back
-  currentLesson:1,
-  theme:'light'
+  currentLesson:1, lastLessonOpened:null, theme:'light'
 };
 // Preferences are NOT progress and survive a reset.
 const RESET_KEEPS = ['theme'];
@@ -1855,8 +1854,7 @@ function openLesson(id){
   guided = null; _termReturn = null;   // asking for a lesson leaves the practice path
   const _l=DATA.LESSONS.find(x=>x.id===id);
   if(_l) _syncRecalls(id, _l);
-  S.currentLesson=id; save();
-  show('lesson'); renderLesson(id);
+  S.currentLesson=id; S.lastLessonOpened=id; save(); show('lesson'); renderLesson(id);
 }
 
 // "What it outputs" — shows the code's actual output (printed result or a df).
@@ -4078,9 +4076,7 @@ window.addEventListener('load', function(){
     var _id=+m[1];
     if(m[2]){ var _i=S.lessonsDone.indexOf(_id); if(_i>-1) S.lessonsDone.splice(_i,1); if(S.misses) delete S.misses[_id]; }
     openLesson(_id);
-  }catch(e){} }
-});
-// Medium #5: one-time "you've unlocked" moment + async account-entitlement hydrate.
+  }catch(e){} } else { const _resumeId=Number(S.currentLesson); const _hasSavedPosition=S.lastLessonOpened!=null || _resumeId!==1 || S.lessonsDone.length>0 || Object.keys(S.v2Stage||{}).length>0; if(_hasSavedPosition && DATA.LESSONS.some(l=>l.id===_resumeId)) openLesson(_resumeId); } }); // Medium #5: one-time "you've unlocked" moment + async account-entitlement hydrate.
 </script>
 <div id="settingsModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.55);align-items:center;justify-content:center" onclick="if(event.target===this)closeSettings()">
   <div style="background:var(--surf);border:1px solid var(--border);border-radius:12px;padding:28px;min-width:300px;max-width:380px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,.4)">
