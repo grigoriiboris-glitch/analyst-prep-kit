@@ -57,7 +57,7 @@ const inflight = new Map();
 const translationQueue = [];
 let queueTimer = null;
 let activeBatches = 0;
-const MAX_BATCH_ITEMS = 10;
+const MAX_BATCH_ITEMS = 20;
 const MAX_BATCH_CHARS = 3500;
 const MAX_PARALLEL_BATCHES = 4;
 const failures = [];
@@ -137,12 +137,15 @@ function pumpTranslationQueue() {
     });
   }
 }
+function decodeBatchResponse(payload, expected) {
+  if (!Array.isArray(payload) || payload.length !== expected) return null;
+  const values = payload.map(item => Array.isArray(item) && typeof item[0] === "string" ? item[0] : null);
+  return values.every(value => value !== null && value.trim()) ? values : null;
+}
 async function translateOne(item, recordFailure = true) {
   let lastError = "Ответ переводчика не распознан";
   for (let attempt = 0; attempt < 4; attempt++) {
     try {
-      // Google Translate's lightweight endpoint accepts one q parameter reliably.
-      // Do not send a list of q parameters: that endpoint does not return one result per item.
       const url = new URL("https://translate.googleapis.com/translate_a/single");
       url.searchParams.set("client", "gtx");
       url.searchParams.set("sl", "auto");
@@ -170,42 +173,65 @@ async function translateOne(item, recordFailure = true) {
   return null;
 }
 async function translateBatch(batch) {
-  // Translate several short interface strings in one request. A distinctive
-  // separator is checked after translation; if the service changes it, each
-  // item safely falls back to the single-string endpoint.
+  let values = null;
   if (batch.length > 1) {
-    const separator = "\nZXQZAPKSEPARATOR9471QXZ\n";
-    const merged = batch.map(item => item.src).join(separator);
-    const mergedItem = { src: merged };
-    const combined = await translateOne(mergedItem, false);
-    if (combined) {
-      const pieces = combined.split(separator);
-      if (pieces.length === batch.length && pieces.every(piece => piece.trim())) {
-        for (let i = 0; i < batch.length; i++) {
-          const item = batch[i];
-          const result = preserveWhitespace(item.src, pieces[i].trim());
-          cache.set(item.key, result);
-          translatedStrings++;
-          item.resolve(result);
-          inflight.delete(item.key);
-        }
-        return;
+    let lastError = "Пакетный ответ не распознан";
+    for (let attempt = 0; attempt < 4; attempt++) {
+      try {
+        // This Google endpoint accepts repeated q parameters and returns one result
+        // per q. It is substantially faster than one request for each short label.
+        const url = new URL("https://translate.googleapis.com/translate_a/t");
+        url.searchParams.set("client", "dict-chrome-ex");
+        url.searchParams.set("sl", "auto");
+        url.searchParams.set("tl", "ru");
+        for (const item of batch) url.searchParams.append("q", item.src);
+        const response = await fetch(url, {
+          headers: { "Accept": "application/json", "User-Agent": "Mozilla/5.0" },
+          signal: AbortSignal.timeout(15000)
+        });
+        if (!response.ok) throw new Error("HTTP " + response.status);
+        const payload = await response.json();
+        values = decodeBatchResponse(payload, batch.length);
+        if (!values) throw new Error("Неожиданный формат пакетного ответа");
+        apiCalls++;
+        break;
+      } catch (error) {
+        lastError = String(error);
+        if (attempt < 3) await sleep(400 * (2 ** attempt));
       }
     }
+    if (!values) console.warn("Пакетный перевод недоступен; используем одиночные запросы:", lastError);
+  } else {
+    const value = await translateOne(batch[0]);
+    values = value ? [value] : null;
   }
-  await Promise.all(batch.map(async item => {
-    const value = await translateOne(item);
-    if (value && value.trim()) {
-      const result = preserveWhitespace(item.src, value);
-      cache.set(item.key, result);
-      translatedStrings++;
-      item.resolve(result);
-    } else {
-      unchangedStrings++;
-      item.resolve(item.src);
-    }
+
+  if (!values) {
+    await Promise.all(batch.map(async item => {
+      const value = await translateOne(item);
+      if (value && value.trim()) {
+        const result = preserveWhitespace(item.src, value);
+        cache.set(item.key, result);
+        translatedStrings++;
+        item.resolve(result);
+      } else {
+        unchangedStrings++;
+        item.resolve(item.src);
+      }
+      inflight.delete(item.key);
+    }));
+    return;
+  }
+
+  for (let i = 0; i < batch.length; i++) {
+    const item = batch[i];
+    const value = values[i];
+    const result = preserveWhitespace(item.src, value);
+    cache.set(item.key, result);
+    translatedStrings++;
+    item.resolve(result);
     inflight.delete(item.key);
-  }));
+  }
 }
 function translateRaw(text) {
   const src = String(text);
