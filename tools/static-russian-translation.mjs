@@ -57,9 +57,9 @@ const inflight = new Map();
 const translationQueue = [];
 let queueTimer = null;
 let activeBatches = 0;
-const MAX_BATCH_ITEMS = 10;
-const MAX_BATCH_CHARS = 1700;
-const MAX_PARALLEL_BATCHES = 3;
+const MAX_BATCH_ITEMS = 20;
+const MAX_BATCH_CHARS = 3500;
+const MAX_PARALLEL_BATCHES = 4;
 const failures = [];
 let apiCalls = 0;
 let translatedStrings = 0;
@@ -489,20 +489,32 @@ async function main() {
 
   const files = await collectFiles(ROOT);
   let changedFiles = 0;
+  let finishedFiles = 0;
   const failedAtStart = failures.length;
-  for (const file of files) {
-    const full = path.join(ROOT, file);
-    let original;
-    try { original = await fs.readFile(full, "utf8"); } catch { continue; }
-    let translated = original;
-    if (/\.html?$/i.test(file)) translated = await processHtml(file, original);
-    else if (/\.js$/i.test(file)) translated = await translateJavaScript(original, file);
-    else if (/\.json$/i.test(file) && /(?:search-index|guidebook-data)/i.test(file)) translated = await processJson(file, original);
-    if (translated !== original) {
-      await fs.writeFile(full, translated, "utf8");
-      changedFiles++;
+  let cursor = 0;
+  async function fileWorker() {
+    while (true) {
+      const index = cursor++;
+      if (index >= files.length) return;
+      const file = files[index];
+      const full = path.join(ROOT, file);
+      let original;
+      try { original = await fs.readFile(full, "utf8"); } catch { continue; }
+      let translated = original;
+      if (/\.html?$/i.test(file)) translated = await processHtml(file, original);
+      else if (/\.js$/i.test(file)) translated = await translateJavaScript(original, file);
+      else if (/\.json$/i.test(file) && /(?:search-index|guidebook-data)/i.test(file)) translated = await processJson(file, original);
+      if (translated !== original) {
+        await fs.writeFile(full, translated, "utf8");
+        changedFiles++;
+      }
+      finishedFiles++;
+      if (finishedFiles % 10 === 0 || finishedFiles === files.length) {
+        console.log("Обработано файлов: " + finishedFiles + "/" + files.length);
+      }
     }
   }
+  await Promise.all(Array.from({ length: 6 }, () => fileWorker()));
 
   await fs.writeFile(CACHE_PATH, JSON.stringify(Object.fromEntries([...cache.entries()].sort((a,b)=>a[0].localeCompare(b[0]))), null, 2) + "\n", "utf8");
   // Remove the old live translator assets after their dictionary has been imported.
