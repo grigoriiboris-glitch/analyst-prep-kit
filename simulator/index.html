@@ -337,7 +337,7 @@ const DAYS = [
         assignment:`У вас есть доступ к базе данных продаж DataBridge со следующими таблицами:
 
 клиенты → customer_id, имя, адрес электронной почты, дата_подписки, тип_плана, регион
-заказы → идентификатор заказа, customer_id, Product_id, дата_заказа, сумма, статус
+заказы → идентификатор заказа, customer_id, Product_id, order_date, сумма, статус
 продукты → Product_id, название, категория, цена, дата создания
 билеты → Ticket_id, customer_id, созданная_дата, решенная_дата, категория, приоритет
 
@@ -346,13 +346,11 @@ const DAYS = [
 2. Напишите SQL, чтобы отображать разные значения в столбце план_тип.
 3. Напишите СОЕДИНЕНИЕ, которое вам понадобится, чтобы найти «общий доход по категориям продуктов».
 4. В 2–3 предложениях описать, что отслеживает эта база данных с точки зрения бизнеса`,
-        hints:[
-          "SELECT COUNT(*) ОТ имя_таблицы — один запрос на таблицу",
-          "SELECT ОТЛИЧНЫЙ план_тип FROM customers для уникальных значений",
+        hints:["SELECT COUNT(*) FROM table_name — one query per table","SELECT DISTINCT plan_type FROM customers for unique values",
           "Столбец, который отображается в двух таблицах, является вашим ключом JOIN — найдите customer_id и Product_id.",
           "Подумайте: какие решения принял бы бизнес, используя эти данные?"
         ],
-        rubric:["Правильный синтаксис SQL для всех 4 запросов.","Логика JOIN точна","Описание бизнеса демонстрирует понимание, выходящее за рамки названий столбцов."],
+        rubric:["Правильный синтаксис SQL для всех 4 запросов.","JOIN logic is accurate","Описание бизнеса демонстрирует понимание, выходящее за рамки названий столбцов."],
         exemplar:`-- 1. Row counts
 SELECT COUNT(*) FROM customers;
 SELECT COUNT(*) FROM orders;
@@ -397,30 +395,30 @@ Client_ID | Название_компании | Контакт_электрон�
 
 Запишите обе функции И свою интерпретацию того, что будут означать результаты.`,
         hints:[
-          "=COUNTIF(A:A, A2)>1 отмечает дубликаты — затем фильтрует по TRUE",
-          "=ISBLANK(B2) или =COUNTA(B:B) против ожидаемого количества строк",
-          "=ISNUMBER(D2) возвращает FALSE для текста типа «50 000 долларов США».",
-          "=ISNUMBER(DATEVALUE(F2)) улавливает даты в текстовом формате — реальные даты возвращают TRUE",
-          "Замечания менеджера: ведите фразу «Обнаружено Х проблем», а не «Я проверил и...»"
+          "=COUNTIF(A:A, A2)>1 flags duplicates — then filter for TRUE",
+          "=ISBLANK(B2) or =COUNTA(B:B) vs expected row count",
+          "=ISNUMBER(D2) returns FALSE on text like '$50,000'",
+          "=ISNUMBER(DATEVALUE(F2)) catches text-formatted dates — real dates return TRUE",
+          "Manager notes: lead with 'Found X issues' not 'I checked and...'"
         ],
         rubric:["Правильный синтаксис функции","Объясняет, что делать с каждым обнаружением","Примечание менеджера профессиональное и лаконичное"],
         exemplar:`Подход: добавьте вспомогательный столбец для каждой проверки, а затем отфильтруйте проблемы.
 
 1. Дублирующиеся идентификаторы Client_ID
-   =COUNTIF($A:$A, A2) > 1 → фильтровать TRUE во вспомогательном столбце.
+   =COUNTIF($A:$A, A2) > 1  → filter TRUE in helper column.
    Интерпретация результата: любая помеченная строка требует принятия решения «истинно» или «объединено».
 
 2. Пустые значения в любом столбце.
-   Во вспомогательном столбце: =COUNTBLANK(A2:F2) → фильтр >0.
+   In a helper col: =COUNTBLANK(A2:F2)  → filter >0.
    Перекрестная проверка с помощью =COUNTA(B:B) против количества строк на наличие пробелов на уровне столбца.
 
 3. Годовой_доход имеет числовое значение.
-   =ISNUMBER(D2) → ЛОЖНЫЕ флаги «50 000 долларов США» / «TBD» / пробелы в текстовом формате.
+   =ISNUMBER(D2)  → FALSE flags "$50,000" / "TBD" / blanks formatted as text.
    Исправьте кандидатов: =VALUE(SUBSTITUTE(SUBSTITUTE(D2,"$",""),",","")).
 
 4. Дата последнего_контакта реальна.
-   =ISNUMBER(DATEVALUE(F2)) → улавливает даты в текстовом формате.
-   Если много значений FALSE, конвейер экспорта прекращает ввод даты.
+   =ISNUMBER(DATEVALUE(F2))  → catches text-formatted dates.
+   If many FALSEs, the export pipeline is dropping date typing.
 
 Примечание по качеству данных для менеджера:
 • Обнаружено 14 проблем в 500 строках (2,8%) — необходимо принять меры, прежде чем мы воспользуемся этим списком.
@@ -453,12 +451,12 @@ Client_ID | Название_компании | Контакт_электрон�
 Написав все три, ответьте в 2–3 предложениях:
 Какой запрос было труднее всего написать и почему?`,
         hints:[
-          "Фильтр даты: ГДЕ дата_заказа >= CURRENT_DATE – ИНТЕРВАЛ '30 дней'",
-          "ПРИСОЕДИНЯЙТЕ заказы к продуктам по Product_id для запроса 2",
-          "HAVING фильтрует после группировки (в отличие от WHERE, которая фильтрует строки перед группировкой)",
-          "ROUND(SUM(Количество)::числовой / COUNT(*), 2) для чистого avg_order_value"
+          "Date filter: WHERE order_date >= CURRENT_DATE - INTERVAL '30 days'",
+          "JOIN orders to products on product_id for query 2",
+          "HAVING filters after grouping (unlike WHERE which filters rows before grouping)",
+          "ROUND(SUM(amount)::numeric / COUNT(*), 2) for clean avg_order_value"
         ],
-        rubric:["Все три запроса синтаксически корректны.","ХЕВИНГ против ГДЕ используется правильно","Объединяет ссылки на правильные столбцы","Рефлексия Ответ конкретный"],
+        rubric:["Все три запроса синтаксически корректны.","HAVING vs WHERE used correctly","Объединяет ссылки на правильные столбцы","Рефлексия Ответ конкретный"],
         exemplar:`-- Q1: Revenue by region, last 30 days
 SELECT
   c.region,
@@ -505,7 +503,7 @@ think about.`
         assignment:`Напишите скрипт Python, который:
 
 1. Загружает daily_orders.csv с помощью pandas.
-2. Подтверждает существование этих столбцов: идентификатор заказа, customer_id, сумма, дата_заказа.
+2. Подтверждает существование этих столбцов: идентификатор заказа, customer_id, сумма, order_date.
 3. Подсчитывает строки с любым нулевым значением.
 4. Проверяет наличие отрицательных значений в столбце суммы.
 5. Печатает следующий выходной формат:
@@ -521,46 +519,46 @@ think about.`
 
 Добавьте вверху блок комментариев: что делает скрипт, чего он ожидает, кто его написал.`,
         hints:[
-          "pd.read_csv('daily_orders.csv') для загрузки",
-          "набор(требуемые_столбцы).issubset(df.columns) для проверки имен столбцов",
-          "df.isnull().любой(ось=1).сумма() подсчитывает строки с любым нулевым значением",
-          "(дф['Количество'] < 0).сумма() подсчитывает отрицательные числа",
-          "Создайте список неудач и объедините их — чище, чем вложенные если."
+          "pd.read_csv('daily_orders.csv') to load",
+          "set(required_cols).issubset(df.columns) to check column names",
+          "df.isnull().any(axis=1).sum() counts rows with any null",
+          "(df['amount'] < 0).sum() counts negatives",
+          "Build a list of failures and join them — cleaner than nested ifs"
         ],
         rubric:["Скрипт работает без ошибок","Все 5 проверок реализованы","Вывод четко отформатирован","Блок комментариев присутствует и информативен."],
         exemplar:`"""
 daily_orders_validation.py
-Цель: проверить сброс поставщика daily_orders.csv перед последующей загрузкой.
-Ожидается: столбцы идентификатор заказа, customer_id, сумма, дата_заказа. Числовая сумма.
-Автор: [вы]
+Purpose: Validate the daily_orders.csv vendor drop before downstream load.
+Expects: order_id, customer_id, amount, order_date columns. Numeric amount.
+Author : [you]
 """
-импортировать pandas как ПД
+import pandas as pd
 
-ФАЙЛ = "daily_orders.csv"
-ОБЯЗАТЕЛЬНО = {"идентификатор заказа", "customer_id", "сумма", "дата_заказа"}
+FILE = "daily_orders.csv"
+REQUIRED = {"order_id","customer_id","amount","order_date"}
 
-дф = pd.read_csv(ФАЙЛ)
-неудачи = []
+df = pd.read_csv(FILE)
+failures = []
 
-Missing_cols = ОБЯЗАТЕЛЬНО - набор(df.columns)
-если отсутствуют_столбцы:
-    ошибки.добавить(ж"отсутствующие столбцы: {отсортированный(Missing_cols)}")
+missing_cols = REQUIRED - set(df.columns)
+if missing_cols:
+    failures.append(f"missing columns: {sorted(missing_cols)}")
 
-null_rows = интервал(df.isnull().любой(ось=1).сумма())
-neg_amounts = интервал((дф["Количество"] < 0).сумма()), если "сумма" в df.columns еще 0
+null_rows = int(df.isnull().any(axis=1).sum())
+neg_amounts = int((df["amount"] < 0).sum()) if "amount" in df.columns else 0
 
-если null_rows: отказы.Добавить(ж"{null_rows} строки с нулевыми значениями")
-если отрицательные_суммы: ошибки.добавить(ж"{neg_amounts} строки с отрицательной суммой")
+if null_rows: failures.append(f"{null_rows} rows with null values")
+if neg_amounts: failures.append(f"{neg_amounts} negative amount rows")
 
-статус = «PASS ✓», если нет ошибок, иначе «FAIL ✗»
-распечатать("=== Проверка ежедневных заказов ===")
-распечатать(ж"Файл: {ФАЙЛ}")
-распечатать(ж"Загружено строк: {Лен(дф):,}")
-распечатать(ж"Отсутствующие значения: затронуто {null_rows} строк")
-распечатать(ж"Обнаружено отрицательные суммы: {neg_amounts}")
-распечатать(ж"Статус: {статус}")
-для ж в отказах:
-    печать(ж" - {ж}")`
+status = "PASS ✓" if not failures else "FAIL ✗"
+print("=== Daily Orders Validation ===")
+print(f"File: {FILE}")
+print(f"Rows loaded:       {len(df):,}")
+print(f"Missing values:    {null_rows} rows affected")
+print(f"Negative amounts:  {neg_amounts} found")
+print(f"Status: {status}")
+for f in failures:
+    print(f"  - {f}")`
       }
     ]
   },
@@ -602,24 +600,24 @@ neg_amounts = интервал((дф["Количество"] < 0).сумма()),
 1. Клиенты, у которых нет заказов более 90 дней.
    Диаграмма: сортируемая таблица с именем клиента, планом, датой последнего заказа, владельцем AM.
    Почему таблица: это список, по которому нужно действовать, а не форма, на которую нужно смотреть.
-   Фильтр: тип плана, владелец AM.
+   Filter: plan type, AM owner.
 
 2. Ежемесячная динамика выручки за последние 6 месяцев.
    Диаграмма: линейная диаграмма, отдельные серии, с точкой на каждом месяце.
    Почему линия: тенденция во времени, зритель видит наклон, а не величину.
-   Фильтр: клиентский сегмент.
+   Filter: client segment.
 
 3. Клиенты по типу плана
    Диаграмма: горизонтальная полоса, отсортированная по убыванию.
    Почему батончик (а не пирог): четыре категории одинаковых размеров — батончик позволяет
    сравнить точные величины; пирог скрывает сравнение.
-   Фильтр: регион.
+   Filter: region.
 
 4. Среднее время разрешения заявки по приоритету
    Диаграмма: гистограмма с цветовой кодировкой в зависимости от выполнения/невыполнения SLA.
    Почему эта диаграмма: приоритет порядковый, зритель спрашивает: «Соблюдаем ли мы соглашение об уровне обслуживания?»
-   о срочных делах» — цвет сразу говорит об этом.
-   Фильтр: диапазон дат.
+   on the urgent stuff" — color says it immediately.
+   Filter: date range.
 
 РАСПОЛОЖЕНИЕ (4 квадранта)
 Вверху слева: таблица рисков оттока (наиболее срочные меры)
@@ -657,10 +655,10 @@ Q5 — Количество заказов со статусом = «отмен�
 Написав все 5, напишите в Слабый ответ из 3–5 предложений своему менеджеру со своими выводами.
 Составьте правдоподобные цифры для ваши «результаты» — практика в структуре и коммуникации.`,
         hints:[
-          "ГДЕ order_date IN ('2024-10-08', '2024-10-15'), затем GROUP BY дате заказа",
-          "GROUP BY регион, дата_заказа для региональной разбивки",
-          "COUNT(идентификатор заказа) против СУММ(количество) сообщает вам, является ли это объемом или стоимостью.",
-          "Слабый ответ: начните с ответа, затем с доказательствами. Не хороните находку."
+          "WHERE order_date IN ('2024-10-08', '2024-10-15') then GROUP BY order_date",
+          "GROUP BY region, order_date for the regional breakdown",
+          "COUNT(order_id) vs SUM(amount) tells you if it's volume or value",
+          "Slack reply: lead with the answer, then the evidence. Don't bury the finding."
         ],
         rubric:["Все 5 запросов логичны и синтаксически корректны.","Запросы создают систематическую линию расследования.","Сообщение Слабый лаконично и приводит к выводу"],
         exemplar:`-- Q1 Headline
@@ -802,43 +800,43 @@ Recommended Next Steps
 
 Начало файла: строка документации с именем сценария, назначением, автором, датой и ожидаемыми входными столбцами.`,
         hints:[
-          "дф['Регион'].карта(маппинг_дикт) или .заменять() оба работают",
-          "дф['Регион'].уникальный() показывает разные значения до и после",
-          "(дф['Регион'] != дф['регион_чистый']).сумма() подсчитывает измененные строки",
-          "Формат строки документации: строка в тройных кавычках вверху файла."
+          "df['region'].map(mapping_dict) or .replace() both work",
+          "df['region'].unique() shows distinct values before and after",
+          "(df['region'] != df['region_clean']).sum() counts changed rows",
+          "Docstring format: triple-quoted string at top of file"
         ],
         rubric:["Сопоставление охватывает все варианты выборочных данных.","Четкая печать до/после с правильным количеством изменений.","Вывод сохранен правильно","Строка документации присутствует и информативна."],
         exemplar:`"""
-стандартизировать_регионы.пи
-Цель: нормализовать значения области произвольного текста в экспорте клиентов, чтобы
-         последующие отчеты группируют их правильно.
-Автор: [вы]
-Дата: 26 мая 2026 г.
-Ввод: DataFrame со столбцами [customer_id, регион]
-Вывод: customer_cleaned.csv с добавленным столбцом Регион_чистый.
+standardize_regions.py
+Purpose: Normalize free-text region values in the customers export so
+         downstream reporting groups them correctly.
+Author : [you]
+Date   : 2026-05-26
+Input  : DataFrame with columns [customer_id, region]
+Output : customers_cleaned.csv with added region_clean column
 """
-импортировать pandas как ПД
+import pandas as pd
 
-данные = {
+data = {
     'customer_id': [1,2,3,4,5,6,7,8,9,10],
-    'регион': ['США','Соединенные Штаты','США','Великобритания','Великобритания','Великобритания','CA','Канада','CA','CAN']
+    'region':      ['US','United States','usa','UK','United Kingdom','uk','CA','Canada','ca','CAN']
 }
-дф = pd.DataFrame(данные)
+df = pd.DataFrame(data)
 
-КАРТОГРАФИЯ = {
-    'США':'Соединенные Штаты','Соединенные Штаты':'Соединенные Штаты','США':'Соединенные Штаты Штаты», «США»: «Соединенные Штаты»,
-    'UK':'Великобритания','Великобритания':'Великобритания','Великобритания':'Великобритания','GB':'Великобритания',
-    'CA':'Канада','Канада':'Канада','Калифорния':'Канада','CAN':'Канада'
+MAPPING = {
+    'US':'United States','United States':'United States','usa':'United States','USA':'United States',
+    'UK':'United Kingdom','United Kingdom':'United Kingdom','uk':'United Kingdom','GB':'United Kingdom',
+    'CA':'Canada','Canada':'Canada','ca':'Canada','CAN':'Canada'
 }
 
-дф['регион_чистый'] = дф['Регион'].карта(MAPPING)
-изменено = интервал((дф['Регион'] != дф['регион_чистый']).сумма())
+df['region_clean'] = df['region'].map(MAPPING)
+changed = int((df['region'] != df['region_clean']).sum())
 
-распечатать("Исходные уникальные значения:", отсортированный(дф['Регион'].уникальный().внести в список()))
-распечатать("Уникальные значения очищены: ", отсортированный(дф['регион_чистый'].водянка().уникальный().внести в список()))
-распечатать(ж"Строки изменены: {изменено} из {Лен(дф)}")
+print("Original unique values:", sorted(df['region'].unique().tolist()))
+print("Cleaned unique values: ", sorted(df['region_clean'].dropna().unique().tolist()))
+print(f"Rows changed: {changed} of {len(df)}")
 
-df.to_csv("customer_cleaned.csv", индекс=Неверно)`
+df.to_csv("customers_cleaned.csv", index=False)`
       }
     ]
   },
@@ -875,65 +873,65 @@ df.to_csv("customer_cleaned.csv", индекс=Неверно)`
           "Постройте шаг за шагом: соедините данные → перетащите измерение в столбцы → перетащите показатель в строки → выберите тип диаграммы."
         ],
         rubric:["Заявление о цели является конкретным и ориентированным на аудиторию.","Обоснования типа диаграммы обоснованы","Выбор макета отражает принципы визуальной иерархии.","10-секундное понимание — это конкретное, проверяемое утверждение"],
-        exemplar:`DASHBOARD SPEC — Обзор продаж (неделя 1)
+        exemplar:`DASHBOARD SPEC — Sales Overview (Week 1)
 
-1. Цель
-Чтобы широкая аудитория ответила: «Двигаемся ли мы по правильному пути в этом квартале и
-где импульс?» менее чем за 60 секунд и с достаточной специфичностью, чтобы
-принять следующее решение (какой регион или продукт привлекает внимание).
+1. Purpose
+For the all-hands audience to answer "are we on track this quarter and
+where is the momentum?" in under 60 seconds, with enough specificity to
+make the next decision (which region or product gets attention).
 
-2. Метрики (4)
-а. Общий доход — плитка главного ключевого показателя эффективности в сравнении с планом и предыдущим периодом
-   Диаграмма: одно большое число + дельта-стрелка + крошечная спарклайн.
-   Время: QTD с небольшой меткой предыдущего QTD.
-   Фильтры: на этой плитке нет — это якорь.
-   Почему: одно число — это то, что люди помнят из общего числа.
+2. Metrics (4)
+a. Total revenue — hero KPI tile, vs plan and prior period
+   Chart: single big number + delta arrow + tiny sparkline
+   Time: QTD with a small label for prior QTD
+   Filters: none on this tile — it's the anchor
+   Why: one number is what people remember from an all-hands.
 
-б. Выручка по регионам
-   Диаграмма: горизонтальная полоса, отсортировано по выручке текущего периода
-   Время: текущий квартал
-   Фильтры: тип плана
-   Почему запрет: регионы ранжированы, зрители хотят порядка, а не частей целого.
+b. Revenue by region
+   Chart: horizontal bar, sorted by current-period revenue
+   Time: current quarter
+   Filters: plan type
+   Why bar: regions are ranked, viewers want order, not parts-of-whole.
 
-в. Ежемесячная динамика дохода (последние 6 месяцев)
-   Диаграмма: линейный график
-   Время: через 6 месяцев
-   Фильтры: нет — одна строка для всей компании
-   Почему линия: вопрос в форме тренда.
+c. Monthly revenue trend (last 6 months)
+   Chart: line chart
+   Time: trailing 6 months
+   Filters: none — single line for the whole company
+   Why line: shape of the trend is the question.
 
-д. Доход от новых и вернувшихся клиентов
-   Диаграмма: сложенная полоса по месяцам, два сегмента
-   Время: через 6 месяцев
-   Фильтры: регион
-   Почему сложено: показывает одновременно и микс, и общую сумму.
+d. New vs returning customer revenue
+   Chart: stacked bar by month, two segments
+   Time: trailing 6 months
+   Filters: region
+   Why stacked: shows both the mix and the total at once.
 
-3. Планировка
-Вверху слева: плитка KPI героя (самая большая, здесь находится глаз). первый)
-Вверху справа: линия тренда (контекст для KPI).
-Внизу слева: региональная панель (где находится доход)
-Внизу справа: новый и возвращающийся стек (откуда происходит рост)
+3. Layout
+Top-left: hero KPI tile (largest, eye lands here first)
+Top-right: trend line (context for the KPI)
+Bottom-left: regional bar (where the revenue lives)
+Bottom-right: new vs returning stack (where the growth is coming from)
 
-4. Выбор дизайна
-Основной цвет: бирюзовый DataBridge для фактических значений, нейтральный серый для предыдущих.
-период/опорные линии.
-Номер героя: вверху слева, 64 пт, с разницей в 14 пт по сравнению с предыдущим кварталом.
-внизу.
-Заголовок: «Продажи — неделя [дата]»
-Подзаголовок: «Доход и динамика за квартал по регионам и группам клиентов».
+4. Design choices
+Primary color: DataBridge teal for actual values, neutral grey for prior
+period / reference lines.
+Hero number: top-left, 64pt, with a 14pt delta vs prior quarter directly
+underneath.
+Title: "Sales — Week of [date]"
+Subtitle: "QTD revenue and momentum by region and customer cohort"
 
-5. 10-секундное понимание
-«Мы отслеживаем превышение плана на 6%, причем две трети роста приходится на долю
-возвращающихся клиентов в регионе EMEA».
+5. 10-second insight
+"We're tracking 6% above plan, with two-thirds of growth coming from
+returning customers in EMEA."
 
-6. Построение первой диаграммы (KPI героя), шаг за шагом
-1. Подключитесь к источнику данных «Заказы + клиенты».
-2. Новый рабочий лист → перетащите СУММУ (сумму) на карточку оценок.
-3. Отфильтруйте дата_заказа по текущему кварталу.
-4. Измените тип метки на «Большое число»/используйте однострочный текстовый формат.
-5. Добавьте вычисляемое поле: (Доход за квартал – за предыдущий квартал) / предыдущий квартал → перетащите
-   под большим числом в виде дельты с условным цветом.
-6. Добавьте 12-недельную спарклайн ниже дельты того же показателя.
-7. Перейдите на панель мониторинга и поместите ее вверху слева на 50 % ширины.`
+6. Building the first chart (hero KPI), step-by-step
+1. Connect to the orders + customers data source.
+2. New worksheet → drag SUM(amount) onto the marks card.
+3. Filter order_date to current quarter.
+4. Change mark type to "Big number" / use a single-row text format.
+5. Add a calculated field: (QTD revenue – prior QTD) / prior QTD → drag
+   below the big number as the delta with conditional color.
+6. Add a 12-week sparkline below the delta from the same measure.
+7. Move to dashboard, place top-left at 50% width.`
       },
       {
         id:"d5t2", type:"Отражение", duration:"30 мин.", difficulty:"Введение",
@@ -960,8 +958,7 @@ df.to_csv("customer_cleaned.csv", индекс=Неверно)`
 Будьте честны. Точная самооценка более ценна, чем уверенный отзыв.`,
         hints:[
           "Конкретно > расплывчато: «Я боролся с ХЕВИНГ против ГДЕ» лучше «SQL был трудным»",
-          "Ваш открытый вопрос должен быть тем, на что вы искренне хотите получить ответ, а не тем, что, по вашему мнению, звучит впечатляюще.",
-          "Если все ваши рейтинги уверенности равны 4–5, ваш руководитель задастся вопросом, хорошо ли вы себя осознаете.",
+          "Ваш открытый вопрос должен быть тем, на что вы искренне хотите получить ответ, а не тем, что, по вашему мнению, звучит впечатляюще.","If all your confidence ratings are 4–5, your manager will wonder if you're self-aware",
           "Намерение второй недели должно быть осуществимым: «Я посмотрю CTE до вторника», а не «научусь лучше в SQL»."
         ],
         rubric:["Выделение конкретное, а не общее","Самый трудный момент показывает честное самосознание","Три идеи — это настоящие идеи, а не просто названия навыков","Открытый вопрос достаточно конкретен, чтобы на него можно было ответить","Рейтинги уверенности кажутся выверенными и честными"],
