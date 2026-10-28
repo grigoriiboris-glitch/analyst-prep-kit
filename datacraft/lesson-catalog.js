@@ -1,5 +1,157 @@
 /* Lesson outlines extracted from the actual Analyst Prep Kit modules. */
 window.DataCraftLessonCatalog = {
+  "postgresql": [
+    {
+      "id": "1",
+      "title": "Что такое PostgreSQL и чем он отличается от SQL",
+      "unit": "0 · Старт"
+    },
+    {
+      "id": "2",
+      "title": "База, схема, таблица и search_path",
+      "unit": "0 · Старт"
+    },
+    {
+      "id": "3",
+      "title": "SELECT, FROM и псевдонимы",
+      "unit": "1 · Запросы и фильтрация"
+    },
+    {
+      "id": "4",
+      "title": "WHERE и логика условий",
+      "unit": "1 · Запросы и фильтрация"
+    },
+    {
+      "id": "5",
+      "title": "NULL, COALESCE и IS DISTINCT FROM",
+      "unit": "1 · Запросы и фильтрация"
+    },
+    {
+      "id": "6",
+      "title": "Поиск по тексту: LIKE, ILIKE и регулярные выражения",
+      "unit": "1 · Запросы и фильтрация"
+    },
+    {
+      "id": "7",
+      "title": "ORDER BY, LIMIT и правильная пагинация",
+      "unit": "1 · Запросы и фильтрация"
+    },
+    {
+      "id": "8",
+      "title": "Типы данных и явное приведение",
+      "unit": "2 · Типы и время"
+    },
+    {
+      "id": "9",
+      "title": "DATE, timestamp и часовые пояса",
+      "unit": "2 · Типы и время"
+    },
+    {
+      "id": "10",
+      "title": "COUNT, SUM, AVG и FILTER",
+      "unit": "3 · Агрегации"
+    },
+    {
+      "id": "11",
+      "title": "GROUP BY, HAVING и уровень детализации",
+      "unit": "3 · Агрегации"
+    },
+    {
+      "id": "12",
+      "title": "JOIN и кардинальность связей",
+      "unit": "4 · Связи и сложные запросы"
+    },
+    {
+      "id": "13",
+      "title": "EXISTS и проверка наличия связанных строк",
+      "unit": "4 · Связи и сложные запросы"
+    },
+    {
+      "id": "14",
+      "title": "Подзапросы, NOT EXISTS и ловушка NOT IN",
+      "unit": "4 · Связи и сложные запросы"
+    },
+    {
+      "id": "15",
+      "title": "CTE: WITH как имя промежуточного результата",
+      "unit": "4 · Связи и сложные запросы"
+    },
+    {
+      "id": "16",
+      "title": "Рекурсивный CTE",
+      "unit": "4 · Связи и сложные запросы"
+    },
+    {
+      "id": "17",
+      "title": "Оконные функции: ROW_NUMBER, RANK, LAG",
+      "unit": "4 · Связи и сложные запросы"
+    },
+    {
+      "id": "18",
+      "title": "UNION, UNION ALL, INTERSECT и EXCEPT",
+      "unit": "4 · Связи и сложные запросы"
+    },
+    {
+      "id": "19",
+      "title": "CREATE TABLE, ограничения и идентификаторы",
+      "unit": "5 · Модель данных и изменения"
+    },
+    {
+      "id": "20",
+      "title": "INSERT, UPDATE, DELETE и RETURNING",
+      "unit": "5 · Модель данных и изменения"
+    },
+    {
+      "id": "21",
+      "title": "UPSERT: INSERT ... ON CONFLICT",
+      "unit": "5 · Модель данных и изменения"
+    },
+    {
+      "id": "22",
+      "title": "Транзакции, COMMIT, ROLLBACK и SAVEPOINT",
+      "unit": "5 · Модель данных и изменения"
+    },
+    {
+      "id": "23",
+      "title": "JSON и JSONB",
+      "unit": "6 · Возможности PostgreSQL"
+    },
+    {
+      "id": "24",
+      "title": "Массивы, ANY и unnest",
+      "unit": "6 · Возможности PostgreSQL"
+    },
+    {
+      "id": "25",
+      "title": "DISTINCT ON: PostgreSQL-способ выбрать последнюю строку",
+      "unit": "6 · Возможности PostgreSQL"
+    },
+    {
+      "id": "26",
+      "title": "Индексы: B-tree, составные, частичные и GIN",
+      "unit": "6 · Возможности PostgreSQL"
+    },
+    {
+      "id": "27",
+      "title": "EXPLAIN и EXPLAIN ANALYZE",
+      "unit": "6 · Возможности PostgreSQL"
+    },
+    {
+      "id": "28",
+      "title": "Полнотекстовый поиск",
+      "unit": "6 · Возможности PostgreSQL"
+    },
+    {
+      "id": "29",
+      "title": "Роли, GRANT, схемы и эксплуатация",
+      "unit": "7 · Рабочий процесс и безопасность"
+    },
+    {
+      "id": "30",
+      "title": "Итоговый проект: выручка интернет-магазина",
+      "unit": "8 · Итоговый кейс"
+    }
+  ],
   "sql": [
     {
       "id": "100",
@@ -28,7 +180,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "3",
-      "title": "СОРТИРОВАТЬ ПО И ОГРАНИЧИТЬ",
+      "title": "ORDER BY & LIMIT",
       "unit": "Раздел 1: Первые запросы"
     },
     {
@@ -38,7 +190,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "5",
-      "title": "СЧИТАТЬ, СУММИРОВАТЬ И ГРУППИРОВАТЬ ПО",
+      "title": "COUNT, SUM & GROUP BY",
       "unit": "Раздел 2: Агрегация и преобразование данных"
     },
     {
@@ -58,7 +210,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "4",
-      "title": "ВНУТРЕННЕЕ СОЕДИНЕНИЕ",
+      "title": "INNER JOIN",
       "unit": "Раздел 3: Соединение таблиц"
     },
     {
@@ -68,7 +220,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "13",
-      "title": "ПРАВОЕ СОЕДИНЕНИЕ И ПОЛНОЕ ВНЕШНЕЕ СОЕДИНЕНИЕ",
+      "title": "RIGHT JOIN & FULL OUTER JOIN",
       "unit": "Раздел 3: Соединение таблиц"
     },
     {
@@ -325,7 +477,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "13",
-      "title": "Таблицы Excel (Ctrl+Т)",
+      "title": "Таблицы Excel (Ctrl+T)",
       "unit": "Раздел 4: Продвинутые формулы"
     },
     {
@@ -512,7 +664,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "103",
-      "title": "Что такое библиотека и зачем нужен pandas (Импорт)",
+      "title": "Что такое библиотека и зачем нужен pandas (import)",
       "unit": "Раздел 0: Перед написанием кода"
     },
     {
@@ -557,7 +709,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "8",
-      "title": "Группировка (группировка) и агрегация",
+      "title": "Группировка (GroupBy) и агрегация",
       "unit": "Раздел 2: pandas"
     },
     {
@@ -637,12 +789,12 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "604",
-      "title": "Нарастающий итог с помощью когда",
+      "title": "Нарастающий итог с помощью cumsum",
       "unit": "Раздел 5: От вопроса к метрике"
     },
     {
       "id": "605",
-      "title": "Конверсия воронки с уникальный",
+      "title": "Конверсия воронки с nunique",
       "unit": "Раздел 5: От вопроса к метрике"
     },
     {
@@ -734,7 +886,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "1",
-      "title": "Интерфейс — Мощность БИ.",
+      "title": "Интерфейс Power BI",
       "unit": "Раздел 1: Интерфейс и данные"
     },
     {
@@ -981,7 +1133,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "11",
-      "title": "А/Б-тестирование для аналитиков",
+      "title": "A/B-тестирование для аналитиков",
       "unit": 3
     },
     {
@@ -1013,7 +1165,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "1",
-      "title": "Интерфейс таблицы",
+      "title": "Интерфейс Tableau",
       "unit": "Раздел 1: Основы Tableau"
     },
     {
@@ -1063,7 +1215,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "8",
-      "title": "Агрегация в Таблице",
+      "title": "Агрегация в Tableau",
       "unit": "Раздел 2: Улучшение визуализаций"
     },
     {
@@ -1503,7 +1655,7 @@ window.DataCraftLessonCatalog = {
       "items": [
         {
           "id": "0",
-          "title": "Проверил уникальность Ticket_id"
+          "title": "Проверил уникальность ticket_id"
         },
         {
           "id": "1",
