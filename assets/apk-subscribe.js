@@ -85,7 +85,7 @@
     box.innerHTML = PITCH +
       '<form novalidate>' +
       "<тип ввода=\"электронная почта\" имя=\"" + FIELD + "\" требуется автозаполнение=\"электронная почта\" " +
-      "Заполнитель=\"ты@example.com\" ария-метка=\"Адрес электронной почты\">" +
+      "Заполнитель=\"ты@example.ком\" ария-метка=\"Адрес электронной почты\">" +
       "<button type=\"submit\">Подписаться</button>" +
       // Unticked, explicit, its own sentence. Consent for progress sync is
       // not consent for this (handoff §2).
