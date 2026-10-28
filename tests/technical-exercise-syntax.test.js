@@ -50,3 +50,46 @@ test("Analyst simulator examples keep executable Python and SQL syntax", () => {
   assert.match(simulator, /df = pd\.read_csv\(FILE\)/);
   assert.doesNotMatch(simulator, /дф\s*=\s*pd\.read_csv|COUNT\(идентификатор заказа\)|СУММ\(количество\)/);
 });
+
+
+test("Final exam keeps English technical syntax and Russian explanatory copy", () => {
+  const exam = read("final/index.html");
+  assert.match(exam, /WHERE order_date BETWEEN '2026-01-01' AND '2026-03-31'/);
+  assert.match(exam, /COUNT\(DISTINCT column\)/);
+  assert.match(exam, /COALESCE\(column, 0\)/);
+  assert.match(exam, /df\.groupby\('region'\)\['revenue'\]\.sum\(\)/);
+  assert.doesNotMatch(exam, /ГДЕ дата МЕЖДУ|СЧИТАТЬ\(\*\)|СОЕДИНЕНИЕ \(столбец, 0\)|df\.groupby\('регион'\)|df\.где\(Регион=/);
+  assert.match(exam, /Если бы реального эффекта не было/);
+  assert.match(exam, /Создавайте информационные панели визуально/);
+  assert.doesNotMatch(exam, /If there were no real effect|Create dashboards visually\.|In the first phone screen|In your application cover letter/);
+});
+
+test("Excel certification course keeps English formulas and cell references", () => {
+  const excel = read("excel-cert/index.html");
+  assert.match(excel, /=SUM\(Revenue\)/);
+  assert.match(excel, /=IF\(B2>=100,\"High\",\"Low\"\)/);
+  assert.match(excel, /=SORT\(range\)/);
+  assert.match(excel, /=UNIQUE\(range\)/);
+  assert.match(excel, /TEXTJOIN\(", ",TRUE,A2:A10\)/);
+  assert.match(excel, /\$A1/);
+  assert.match(excel, /A\$1/);
+  assert.match(excel, /#SPILL!/);
+  assert.doesNotMatch(excel, /=СУММ\(|=ЕСЛИ\(|=СОРТИРОВАТЬ|=УНИКАЛЬНЫЙ|\$А1|1 австралийский доллар|СЦЕП\(|ИСТИНА,A2:A10/);
+});
+
+test("Power BI certification course keeps English DAX function and model identifiers", () => {
+  const powerbi = read("powerbi-cert/index.html");
+  assert.match(powerbi, /CALCULATE\(SUM\(Sales\[Amount\]\), Region\[Name\] = \"West\"\)/);
+  assert.match(powerbi, /SUMX\(Sales, Sales\[Quantity\] \* Sales\[Price\]\)/);
+  assert.match(powerbi, /USERELATIONSHIP\(Sales\[Ship Date\], 'Date'\[Date\]\)/);
+  assert.match(powerbi, /USERPRINCIPALNAME\(\)/);
+  assert.doesNotMatch(powerbi, /РАССЧИТАТЬ\(|ПОЛЬЗОВАТЕЛЬСКИЕ ОТНОШЕНИЯ|SUMX\(Продажи|\[Регион\] = ИМЯ ПРИНЦИПА/);
+});
+
+test("Tableau certification course keeps English calculation syntax", () => {
+  const tableau = read("tableau-cert/index.html");
+  assert.match(tableau, /\[Revenue\] - \[Cost\]/);
+  assert.match(tableau, /IF \[Units\] > 100 THEN \"High\" END/);
+  assert.match(tableau, /T\|F/);
+  assert.doesNotMatch(tableau, /\[Доход\] – \[Стоимость\]|ЕСЛИ \[Единицы\].*ТО|Т\|Ф/);
+});
