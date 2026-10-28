@@ -396,22 +396,40 @@ async function translateHtmlTemplateFragment(fragment, state) {
   const source = String(fragment);
   const output = [];
   let textBuffer = "";
+  state.skipTags ||= [];
+  state.tagBuffer ||= "";
   async function flushText() {
     if (!textBuffer) return;
-    output.push(await translateVisibleString(textBuffer, null, true));
+    if (state.skipTags.length) output.push(textBuffer);
+    else output.push(await translateVisibleString(textBuffer, null, true));
     textBuffer = "";
   }
   for (let i = 0; i < source.length; i++) {
     const ch = source[i];
     if (state.inTag) {
       output.push(ch);
-      if (ch === ">") state.inTag = false;
+      state.tagBuffer += ch;
+      if (ch === ">") {
+        const match = state.tagBuffer.match(/^<\s*(\/)?\s*([A-Za-z][A-Za-z0-9:-]*)\b[^>]*>$/);
+        if (match) {
+          const tag = match[2].toLowerCase();
+          if (match[1]) {
+            const index = state.skipTags.lastIndexOf(tag);
+            if (index >= 0) state.skipTags.splice(index, 1);
+          } else if (!/\/\s*>$/.test(state.tagBuffer) && SKIP_TAGS.has(tag)) {
+            state.skipTags.push(tag);
+          }
+        }
+        state.inTag = false;
+        state.tagBuffer = "";
+      }
       continue;
     }
     const startsTag = ch === "<" && i + 1 < source.length && /[A-Za-z/!?]/.test(source[i + 1]);
     if (startsTag) {
       await flushText();
       state.inTag = true;
+      state.tagBuffer = ch;
       output.push(ch);
       continue;
     }
@@ -502,8 +520,9 @@ async function translateJavaScript(source, filename) {
     if (node.type === "Literal" && typeof node.value === "string") {
       const isHuman = (context && HUMAN_KEYS.has(context.toLowerCase())) || directVisibleLiteral(node, parent);
       const hasManualTranslation = Boolean(context) && MANUAL_TRANSLATIONS.has(normalize(node.value));
+      const hasHtmlFragment = /<\/?[A-Za-z][^>]*>/.test(node.value);
       const isSentence = candidate(node.value, null, false);
-      if (isHuman || isSentence || hasManualTranslation) {
+      if (isHuman || isSentence || hasManualTranslation || hasHtmlFragment) {
         const original = node.value;
         const translated = await translateVisibleString(original, isHuman || hasManualTranslation ? (context || "visible") : null, isHuman);
         if (translated !== original) replacements.push({ start: node.start, end: node.end, value: JSON.stringify(translated) });
@@ -514,16 +533,19 @@ async function translateJavaScript(source, filename) {
       const isHuman = (context && HUMAN_KEYS.has(context.toLowerCase())) || directVisibleLiteral(node, parent);
       const hasHtmlTag = node.quasis.some(quasi => /<\/?[A-Za-z]/.test(quasi.value.raw));
       if (hasHtmlTag) {
-        const tagState = { inTag: false };
+        const tagState = { inTag: false, tagBuffer: "", skipTags: [] };
         for (const quasi of node.quasis) {
           const original = quasi.value.cooked ?? quasi.value.raw;
           const translated = await translateHtmlTemplateFragment(original, tagState);
           if (translated !== original) replacements.push({ start: quasi.start, end: quasi.end, value: escapeTemplateQuasi(translated) });
         }
-      } else if (isHuman) {
+      } else {
         for (const quasi of node.quasis) {
           const original = quasi.value.cooked ?? quasi.value.raw;
-          const translated = await translateVisibleString(original, context || "visible");
+          const hasManualTranslation = Boolean(context) && MANUAL_TRANSLATIONS.has(normalize(original));
+          const isSentence = candidate(original, null, false);
+          if (!isHuman && !hasManualTranslation && !isSentence) continue;
+          const translated = await translateVisibleString(original, isHuman || hasManualTranslation ? (context || "visible") : null);
           if (translated !== original) replacements.push({ start: quasi.start, end: quasi.end, value: escapeTemplateQuasi(translated) });
         }
       }
