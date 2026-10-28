@@ -505,9 +505,7 @@ async function translateJavaScript(source, filename) {
     await Promise.all(children);
   }
   await visit(ast);
-  if (!replacements.length) {
-    return file === "index.html" ? source.replaceAll(homeBrandToken, "Grain") : source;
-  }
+  if (!replacements.length) return source;
   replacements.sort((a, b) => b.start - a.start);
   let result = source;
   let lastStart = Infinity;
