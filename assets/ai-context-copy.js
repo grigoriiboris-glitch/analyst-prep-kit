@@ -177,6 +177,83 @@
     if (!ok) throw new Error('Браузер не разрешил копирование. Разреши доступ к буферу обмена или скопируй текст вручную.');
   }
 
+  function curriculumContext(button) {
+    var data = button && button.dataset ? button.dataset : {};
+    var courseId = String(data.courseId || '');
+    var lessonId = String(data.lessonId || '');
+    var courseName = String(data.courseTitle || 'Учебный модуль');
+    var lessonName = String(data.lessonTitle || 'Текущее задание');
+    var unit = String(data.lessonUnit || '');
+    var goal = String(data.lessonGoal || '');
+    var done = data.lessonDone === 'true';
+    var coursePath = String(data.coursePath || '');
+    var extra = '';
+    var catalogs = window.DataCraftLessonCatalog || {};
+    var catalog = catalogs[courseId] || [];
+    if (courseId === 'quality') catalog = catalog.length ? catalog : (catalogs['data-quality'] || []);
+    if (courseId === 'charts') catalog = catalog.length ? catalog : (catalogs['chart-literacy'] || []);
+    if (courseId === 'portfolio') catalog = catalog.length ? catalog : (catalogs['portfolio-projects'] || []);
+    var entry = Array.isArray(catalog) ? catalog.find(function (item) {
+      return String(item.id) === lessonId && (!data.parentId || !item.id || String(item.id) === lessonId);
+    }) : null;
+    if (entry) {
+      if (!goal && entry.goal) goal = String(entry.goal);
+      var pieces = [];
+      if (entry.explanation || entry.explain) pieces.push(String(entry.explanation || entry.explain));
+      if (entry.task || entry.assignment) pieces.push('Задание: ' + String(entry.task || entry.assignment));
+      if (entry.example || entry.exampleSql || entry.code) pieces.push('Пример:\\n' + String(entry.example || entry.exampleSql || entry.code));
+      if (pieces.length) extra = pieces.join('\\n\\n');
+    }
+    var instructions = [
+      'Ты — учебный ИИ-помощник Analyst Prep Kit.',
+      'Объясняй тему простым языком, пошагово и на небольших примерах.',
+      'Если ученик просит проверить решение, сначала разберись в его подходе, затем объясни ошибку и предложи способ проверить исправление.',
+      'Не придумывай отсутствующие требования и не утверждай, что выполнял код или запрос, если это не подтверждено.',
+      'Если данных контекста недостаточно, задай один конкретный уточняющий вопрос.'
+    ].join('\\n');
+    var sections = [
+      instructions,
+      'Курс: ' + courseName,
+      'Урок / задание: ' + lessonName,
+      lessonId ? 'Идентификатор: ' + lessonId : '',
+      unit ? 'Раздел: ' + unit : '',
+      goal ? 'Цель обучения: ' + goal : '',
+      'Статус: ' + (done ? 'отмечено как выполненное' : 'ещё не отмечено как выполненное'),
+      coursePath ? 'Путь к курсу: ' + coursePath : '',
+      'КОНТЕКСТ:',
+      extra || 'Карта обучения содержит название урока и доступные метаданные; если для полного объяснения нужен текст самого урока, попроси ученика открыть курс и скопировать контекст с его страницы.'
+    ];
+    return sections.filter(Boolean).join('\\n\\n').slice(0, MAX_CONTEXT_CHARS);
+  }
+
+  function bindCurriculumCopyButtons() {
+    if (document.documentElement.dataset.apkCurriculumContextBound === 'true') return;
+    document.documentElement.dataset.apkCurriculumContextBound = 'true';
+    document.addEventListener('click', async function (event) {
+      var button = event.target && event.target.closest ? event.target.closest('.curriculum-copy-context') : null;
+      if (!button) return;
+      event.preventDefault();
+      event.stopPropagation();
+      if (button.disabled) return;
+      var oldText = button.textContent;
+      button.disabled = true;
+      button.textContent = 'Готовим контекст…';
+      try {
+        await copyText(curriculumContext(button));
+        button.textContent = 'Контекст скопирован ✓';
+        button.setAttribute('aria-live', 'polite');
+        button.title = 'Вставь контекст в ChatGPT или другого ИИ-помощника';
+      } catch (error) {
+        button.textContent = 'Не удалось скопировать';
+        button.title = error && error.message ? error.message : 'Проверь разрешение буфера обмена';
+      }
+      window.setTimeout(function () {
+        button.disabled = false;
+        button.textContent = oldText;
+      }, 1800);
+    });
+  }
+
   function attachButton(root) {
     if (!root || Array.prototype.some.call(root.children, function (child) { return child.classList && child.classList.contains(BAR_CLASS); })) return;
     if (!visibleLessonRoot(root)) return;
@@ -237,6 +314,7 @@
   }
 
   function start() {
+    bindCurriculumCopyButtons();
     scan();
     if (window.MutationObserver && document.body) {
       var observer = new MutationObserver(function (records) {
