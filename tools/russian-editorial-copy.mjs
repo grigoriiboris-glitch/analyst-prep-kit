@@ -125,7 +125,6 @@ const LITERAL_REPLACEMENTS = [
   ["продолжайте сверлить, чтобы зафиксировать его", "продолжайте выполнять задания, чтобы закрепить материал"],
   ["Продолжайте сверлить, чтобы зафиксировать его", "Продолжайте выполнять задания, чтобы закрепить материал"],
   ["Группа объединяет участников в одну корзину; он не может сверлить между уровнями.", "Группа объединяет элементы в одну категорию. Перейти на следующий уровень детализации через группу нельзя."],
-  ["Положение NULL при сортировке", "Положение NULL при сортировке"],
   ["Не все фразы удалось перевести; остановка публикации, чтобы не выдавать частичную локализацию за готовую.", "Не все фразы удалось перевести; остановка публикации, чтобы не выдавать частичную локализацию за готовую."] 
 ].sort((a, b) => b[0].length - a[0].length);
 
@@ -145,8 +144,8 @@ const REGEX_REPLACEMENTS = [
 
 export function applyEditorialCorrections(value) {
   let result = String(value ?? "");
-  const leading = (result.match(/^\\s*/) || [""])[0];
-  const trailing = (result.match(/\\s*$/) || [""])[0];
+  const leading = (result.match(/^\s*/) || [""])[0];
+  const trailing = (result.match(/\s*$/) || [""])[0];
   const trimmed = result.trim();
   // “Drill” is a UI tab label in a few places, but a verb in lesson prose.
   // Handle the tab label separately before applying sentence-level wording.
