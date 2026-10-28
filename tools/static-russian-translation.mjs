@@ -331,6 +331,9 @@ function translateRaw(text) {
   const src = String(text);
   const key = normalize(src);
   if (!key) return Promise.resolve(src);
+  // Guard the last boundary as well: mixed-language line processing can call
+  // translateRaw directly and must not submit keyboard shortcuts or code tokens.
+  if (isTechnicalOnly(src) || isCodeLike(src)) return Promise.resolve(src);
   if (MANUAL_TRANSLATIONS.has(key)) {
     const translation = MANUAL_TRANSLATIONS.get(key);
     cache.set(key, translation);
