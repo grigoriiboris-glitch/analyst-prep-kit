@@ -59,8 +59,8 @@ test("escapes the rendered Mermaid source and exposes it as readable text", () =
   assert.match(html, /class="sql-mermaid-panel"/);
   assert.match(html, /class="mermaid sql-mermaid-source"/);
   assert.match(html, /Показать текст схемы/);
-  assert.match(html, /customers<br\\/>name/);
-  assert.match(html, /&lt;br\\/\&gt;/);
+  assert.ok(html.includes("customers<br/>name"));
+  assert.ok(html.includes("&lt;br/&gt;"));
   assert.doesNotMatch(html, /<script/i);
 });
 
