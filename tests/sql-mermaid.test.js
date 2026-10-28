@@ -56,7 +56,7 @@ test("escapes the rendered Mermaid source and exposes it as readable text", () =
     title: "Customers",
     ral: { sql: "SELECT name FROM customers;" }
   });
-  assert.match(html, /class="sql-mermaid-panel"/);
+  assert.ok(html.includes('class="card sql-mermaid-panel"'));
   assert.match(html, /class="mermaid sql-mermaid-source"/);
   assert.match(html, /Показать текст схемы/);
   assert.ok(html.includes("customers<br/>name"));
