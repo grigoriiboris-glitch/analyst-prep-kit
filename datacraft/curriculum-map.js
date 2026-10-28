@@ -4,11 +4,21 @@
 
   var MAP_W = 1320, MAP_H = 700, NODE_W = 136, NODE_H = 112;
   var SPRITE_CELL = 256;
+  // Recommended skill sequence: prerequisites first, then the tools and portfolio route.
+  var RECOMMENDED_ORDER = {
+    foundations:1,'business-analysis':2,quality:3,excel:4,sql:5,charts:6,postgresql:7,
+    python:8,stats:9,forecasting:10,powerbi:11,tableau:12,decision:13,portfolio:14,
+    'project-studio':15,simulator:16,interview:17,final:18
+  };
+  function recommendedStep(course) { return RECOMMENDED_ORDER[course && course.id] || 0; }
+  function formattedStep(course) { var n = recommendedStep(course); return n ? String(n).padStart(2, '0') : ''; }
+
   var STORE = {
     wallet: 'datacraft-wallet-v1',
     foundations: 'apk-foundations-progress-v1',
     quality: 'apk-quality-score',
     sql: 'sqlkit-v1',
+    postgresql: 'apk-postgresql-progress-v1',
     excel: 'epk',
     python: 'ppk',
     charts: 'clk-v1',
@@ -29,6 +39,7 @@
     {id:'foundations',spriteIdx:0,wx:185,wy:595,r:56,biome:'Лагерь у леса',cost:5,title:'Основы аналитики данных',short:'Школа исследователя',icon:'🏕️',path:'../foundations/',tracker:'foundations',total:8,unit:'уроков',stage:0,x:117,y:539,desc:'Базовая грамотность: строки и столбцы, типы данных, ключи, метрики, качество и постановка бизнес-вопроса.',requires:[]},
     {id:'quality',spriteIdx:1,wx:555,wy:555,r:58,biome:'Фермерские угодья',cost:8,title:'Качество данных',short:'Мельница очистки',icon:'🧪',path:'../data-quality/',tracker:'quality',total:5,unit:'категорий',stage:1,x:487,y:499,desc:'Научись обнаруживать пропуски, дубликаты, ошибки форматов и подозрительные значения, не удаляя данные без проверки.',requires:['foundations']},
     {id:'sql',spriteIdx:2,wx:885,wy:135,r:64,biome:'Горный хребет',cost:40,title:'SQL',short:'Шахта и кузница SQL',icon:'⚙️',path:'../sql/',tracker:'sql',total:48,unit:'уроков',stage:2,x:817,y:79,desc:'От SELECT и фильтрации к JOIN, агрегациям, CTE, оконным функциям и проверке качества результата.',requires:['foundations','quality']},
+    {id:'postgresql',spriteIdx:2,wx:1035,wy:455,r:56,biome:'Северное нагорье',cost:22,title:'PostgreSQL',short:'Лаборатория PostgreSQL',icon:'🐘',path:'../postgresql/',tracker:'postgresql',total:30,unit:'уроков',stage:3,x:967,y:399,desc:'PostgreSQL с нуля: типы, JOIN, CTE, оконные функции, JSONB, индексы, планы выполнения и итоговый аналитический кейс.',requires:['sql']},
     {id:'excel',spriteIdx:3,wx:725,wy:595,r:60,biome:'Фермерские угодья',cost:40,title:'Excel',short:'Поля таблиц Excel',icon:'📗',path:'../excel/',tracker:'excel',total:51,unit:'уроков',stage:2,x:657,y:539,desc:'Формулы, поиск, очистка, сводные таблицы, проверка вычислений и аналитические отчёты.',requires:['foundations','quality']},
     {id:'charts',spriteIdx:4,wx:435,wy:215,r:54,biome:'Предгорье',cost:12,title:'Грамотность графиков',short:'Башня визуализации',icon:'📈',path:'../chart-literacy/',tracker:'charts',total:13,unit:'уроков',stage:2,x:367,y:159,desc:'Выбор подходящего графика, правильное чтение визуализаций и поиск вводящих в заблуждение представлений.',requires:['foundations','quality']},
     {id:'python',spriteIdx:5,wx:495,wy:318,r:58,biome:'Мастерские',cost:30,title:"Питон и панды",short:'Кузница Python',icon:'🐍',path:'../python/',tracker:'python',total:42,unit:'уроков',stage:3,x:427,y:269,desc:'Код для повторяемой обработки данных: базовый Python, pandas, преобразования, объединение и проверка результатов.',requires:['sql','excel']},
@@ -64,7 +75,7 @@
   var BY_ID = {}, ALL = [], selectedId = 'foundations', hoveredId = null, currentFilter = 'all';
   var animEnabled = !(window.matchMedia && window.matchMedia("(предпочитает уменьшенное движение: уменьшить)").matches);
   var graph = [
-    ['foundations','quality'],['quality','sql'],['quality','excel'],['quality','charts'],
+    ['foundations','quality'],['quality','sql'],['sql','postgresql'],['quality','excel'],['quality','charts'],
     ['sql','python'],['excel','python'],['sql','stats'],['excel','stats'],
     ['charts','forecasting'],['stats','forecasting'],
     ['sql','powerbi'],['excel','powerbi'],['charts','powerbi'],
@@ -436,6 +447,8 @@
       }
       case 'sql':
         s = readJSON(STORE.sql) || {}; count = uniqueArrayCount(s.doneLessons); break;
+      case 'postgresql':
+        s = readJSON(STORE.postgresql) || {}; count = uniqueArrayCount(s.doneLessons); total = 30; label = 'уроков'; break;
       case 'excel':
         s = readJSON(STORE.excel) || {}; count = uniqueArrayCount(s.lessonsDone); break;
       case 'python':
@@ -605,6 +618,8 @@
       }
       case 'sql':
         s = readJSON(STORE.sql) || {}; return Array.isArray(s.doneLessons) && s.doneLessons.map(String).indexOf(String(lesson.id)) !== -1;
+      case 'postgresql':
+        s = readJSON(STORE.postgresql) || {}; return Array.isArray(s.doneLessons) && s.doneLessons.map(String).indexOf(String(lesson.id)) !== -1;
       case 'excel':
         s = readJSON(STORE.excel) || {}; return Array.isArray(s.lessonsDone) && s.lessonsDone.map(String).indexOf(String(lesson.id)) !== -1;
       case 'python':
@@ -657,6 +672,7 @@
       case 'foundations': return 'foundations:lesson:' + lesson.id;
       case 'quality': return 'quality:category:' + lesson.id;
       case 'sql': return 'sql:lesson:' + lesson.id;
+      case 'postgresql': return 'postgresql:lesson:' + lesson.id;
       case 'excel': return 'excel:lesson:' + lesson.id;
       case 'python': return 'python:lesson:' + lesson.id;
       case 'powerbi': return 'powerbi:lesson:' + lesson.id;
@@ -809,7 +825,7 @@
     var currencyNote = '<div class="curriculum-wallet-line"><span>🪙 В кошельке: <strong>' + wallet.balance + '</strong></span><span>Цена постройки: <strong>' + (st.built ? 'оплачено' : (course.cost || 0) + ' 🪙') + '</strong></span><span>Всего заработано: ' + wallet.totalEarned + ' 🪙</span></div>';
     detail.innerHTML =
       '<div class="curriculum-detail-eyebrow">' + safeText(stageLabel) + '</div>' +
-      '<h3>' + safeText(course.icon || '🏗️') + ' ' + safeText(course.title) + '</h3>' +
+'<h3>' + safeText(course.icon || '🏗️') + ' ' + (recommendedStep(course) ? '<span class="curriculum-order-badge" style="display:inline-block;margin:0 7px 0 2px;padding:3px 8px;border:1px solid #59846a;border-radius:999px;background:#244331;color:#c7f6d8;font-size:11px;vertical-align:middle">ШАГ ' + formattedStep(course) + '</span>' : '') + safeText(course.title) + '</h3>' +
       '<span class="curriculum-status ' + st.state + '">' + (st.built ? '✓ ' : st.courseComplete ? '🔨 ' : st.unlocked ? '🏗️ ' : '🔒 ') + safeText(statusText(st)) + '</span>' +
       '<p>' + safeText(course.desc || 'Дополнительный учебный маршрут.') + '</p>' +
       '<div class="curriculum-progress"><i style="width:' + p.percent + '%"></i></div>' +
@@ -828,7 +844,7 @@
       b.className = 'curriculum-course-card' + (selectedId === c.id ? ' selected' : '');
       b.setAttribute('aria-pressed', selectedId === c.id ? 'true' : 'false');
       var label = st.built ? '✓ ПОСТРОЕНО' : (!st.unlocked ? '🔒 ПУСТОЙ УЧАСТОК' : (st.courseComplete ? '🔨 ГОТОВО К СТРОЙКЕ' : '🏗️ СТРОИТСЯ'));
-      b.innerHTML = '<span class="cc-icon">' + safeText(c.icon) + '</span><span class="cc-copy"><span class="cc-title">' + safeText(c.short) + ' <small style="color:#9ab39f;font-weight:600">(' + safeText(c.title) + ')</small></span><span class="cc-meta"><span>' + safeText(formatProgress(p)) + '</span><span class="cc-state">' + label + '</span></span><span class="cc-bar"><i style="width:' + p.percent + '%"></i></span><span class="cc-cost">' + (st.built ? 'Спрайт здания возведён на карте' : 'Постройка здания: ' + (c.cost || 0) + ' 🪙') + '</span></span>';
+b.innerHTML = '<span class="cc-icon">' + safeText(c.icon) + '</span><span class="cc-copy"><span class="cc-title">' + (recommendedStep(c) ? '<b style="display:inline-block;margin-right:5px;color:#9be7b5;font-weight:900">' + formattedStep(c) + '.</b>' : '') + safeText(c.short) + ' <small style="color:#9ab39f;font-weight:600">(' + safeText(c.title) + ')</small></span><span class="cc-meta"><span>' + safeText(formatProgress(p)) + '</span><span class="cc-state">' + label + '</span></span><span class="cc-bar"><i style="width:' + p.percent + '%"></i></span><span class="cc-cost">' + (st.built ? 'Спрайт здания возведён на карте' : 'Постройка здания: ' + (c.cost || 0) + ' 🪙') + '</span></span>';
       b.addEventListener('click', function(){ selectCourse(c.id, false); });
       courseList.appendChild(b);
     });
@@ -842,7 +858,7 @@
       var top = document.createElement('div'); top.className = 'curriculum-special-top';
       var icon = document.createElement('span'); icon.className = 'curriculum-special-icon'; icon.textContent = c.icon;
       var text = document.createElement('div'); text.style.minWidth = '0';
-      var h = document.createElement('h4'); h.textContent = c.title;
+var h = document.createElement('h4'); h.textContent = (recommendedStep(c) ? formattedStep(c) + '. ' : '') + c.title;
       var desc = document.createElement('p'); desc.textContent = formatProgress(p) + ' · ' + (st.built ? 'построено' : (!st.unlocked ? 'закрыто' : 'постройка ' + (c.cost || 0) + ' 🪙'));
       text.append(h, desc); top.append(icon, text); card.append(top);
       var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'curriculum-action' + (st.unlocked ? ' primary' : '');
