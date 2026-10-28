@@ -39,7 +39,7 @@
   }
 
   function staticLessonRoots() {
-    var roots = Array.prototype.slice.call(document.querySelectorAll('article.lesson,.lesson.active,.lesson-card.active,[data-lesson-root],article[data-lesson],section[data-lesson],.study-section,.question'));
+    var roots = Array.prototype.slice.call(document.querySelectorAll('article.lesson,section.lesson,.lesson.active,.lesson-card.active,[data-lesson-root],article[data-lesson],section[data-lesson],.study-section,.question'));
     var unique = [];
     roots.forEach(function (root) {
       if (!visibleLessonRoot(root)) return;
