@@ -71,6 +71,24 @@ let unchangedStrings = 0;
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 const normalize = s => String(s ?? "").replace(/\s+/g, " ").trim().toLowerCase();
+const MANUAL_TRANSLATIONS = new Map([
+  ["Sign In", "Войти"], ["Sign in", "Войти"], ["Log in", "Войти"],
+  ["Sign Up", "Зарегистрироваться"], ["Log out", "Выйти"], ["Log Out", "Выйти"],
+  ["Welcome", "Добро пожаловать"], ["Next lesson", "Следующий урок"],
+  ["Previous lesson", "Предыдущий урок"], ["Example", "Пример"],
+  ["Try", "Попробовать"], ["Try again", "Попробовать ещё раз"],
+  ["Build", "Собрать"], ["Check", "Проверить"], ["Close", "Закрыть"],
+  ["Continue", "Продолжить"], ["Not quite", "Не совсем"],
+  ["Feedback", "Обратная связь"], ["Clear", "Очистить"],
+  ["Fill", "Заполнение"], ["Bug", "Ошибка"], ["Order", "Порядок"],
+  ["Recall", "Вспомнить"], ["Lab", "Практика"], ["Done", "Готово"],
+  ["Loading", "Загрузка"], ["Loading...", "Загрузка…"], ["Loading…", "Загрузка…"],
+  ["Start Learning", "Начать обучение"], ["Get Started", "Начать"],
+  ["Learn more", "Подробнее"], ["Your progress", "Ваш прогресс"],
+  ["Try again later", "Попробуйте позже"], ["Reset progress", "Сбросить прогресс"],
+  ["Continue with Google", "Продолжить с Google"], ["Create Account", "Создать аккаунт"]
+].map(([source, translation]) => [normalize(source), translation]));
+
 const preserveWhitespace = (source, translated) => {
   const left = (source.match(/^\s*/) || [""])[0];
   const right = (source.match(/\s*$/) || [""])[0];
@@ -275,6 +293,11 @@ function translateRaw(text) {
   const src = String(text);
   const key = normalize(src);
   if (!key) return Promise.resolve(src);
+  if (MANUAL_TRANSLATIONS.has(key)) {
+    const translation = MANUAL_TRANSLATIONS.get(key);
+    cache.set(key, translation);
+    return Promise.resolve(translation);
+  }
   if (cache.has(key)) return Promise.resolve(cache.get(key));
   if (inflight.has(key)) return inflight.get(key);
   const job = new Promise(resolve => translationQueue.push({ src, key, resolve }));
@@ -476,6 +499,16 @@ async function translateJavaScript(source, filename) {
         }
       }
       if (node.expressions.length) await Promise.all(node.expressions.map(expression => visit(expression, node, null)));
+      return;
+    }
+    if (node.type === "VariableDeclarator") {
+      const name = keyName(node.id);
+      const isVisibleUiConstant = /^(?:STAGE_LABELS|STEP_DOT_LABEL|STAGE_ASK|STAGE_NAMES|STAGE_TITLES|STAGE_ACTIONS|STAGE_BUTTONS|STAGE_COPY|STAGE_PROMPTS|BUTTON_LABELS|BUTTON_TEXTS|NAV_LABELS|TAB_LABELS|STATUS_LABELS|MENU_LABELS|ACTION_LABELS|TOAST_MESSAGES|UI_MESSAGES|UI_LABELS|LABELS|BUTTONS|DRILL_LABELS|STEP_LABELS)$/i.test(name);
+      await visit(node.init, node, isVisibleUiConstant ? "label" : null);
+      return;
+    }
+    if (node.type === "ObjectExpression") {
+      await Promise.all(node.properties.map(property => visit(property, node, context)));
       return;
     }
     if (node.type === "Property" || node.type === "PropertyDefinition") {
