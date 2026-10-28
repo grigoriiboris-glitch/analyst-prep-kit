@@ -201,8 +201,8 @@
       var pieces = [];
       if (entry.explanation || entry.explain) pieces.push(String(entry.explanation || entry.explain));
       if (entry.task || entry.assignment) pieces.push('Задание: ' + String(entry.task || entry.assignment));
-      if (entry.example || entry.exampleSql || entry.code) pieces.push('Пример:\\n' + String(entry.example || entry.exampleSql || entry.code));
-      if (pieces.length) extra = pieces.join('\\n\\n');
+      if (entry.example || entry.exampleSql || entry.code) pieces.push('Пример:\n' + String(entry.example || entry.exampleSql || entry.code));
+      if (pieces.length) extra = pieces.join('\n\n');
     }
     var instructions = [
       'Ты — учебный ИИ-помощник Analyst Prep Kit.',
@@ -210,7 +210,7 @@
       'Если ученик просит проверить решение, сначала разберись в его подходе, затем объясни ошибку и предложи способ проверить исправление.',
       'Не придумывай отсутствующие требования и не утверждай, что выполнял код или запрос, если это не подтверждено.',
       'Если данных контекста недостаточно, задай один конкретный уточняющий вопрос.'
-    ].join('\\n');
+    ].join('\n');
     var sections = [
       instructions,
       'Курс: ' + courseName,
@@ -223,7 +223,7 @@
       'КОНТЕКСТ:',
       extra || 'Карта обучения содержит название урока и доступные метаданные; если для полного объяснения нужен текст самого урока, попроси ученика открыть курс и скопировать контекст с его страницы.'
     ];
-    return sections.filter(Boolean).join('\\n\\n').slice(0, MAX_CONTEXT_CHARS);
+    return sections.filter(Boolean).join('\n\n').slice(0, MAX_CONTEXT_CHARS);
   }
 
   function bindCurriculumCopyButtons() {
