@@ -363,7 +363,7 @@ function render(){
  var summary="";try{summary=localStorage.getItem(key("summary"))||"";}catch(e){}document.getElementById("summary").value=summary;progress();
  document.getElementById("downloadFeedback").textContent="Выбран проект: "+p.title+". CSV и README можно скачать, когда будешь готов.";
 }
-function saveChecks(){var checked=[];document.querySelectorAll("#rubric input:проверено").forEach(function(c,i){checked.push(Array.prototype.indexOf.call(document.querySelectorAll("#ввод рубрики"),c));});try{localStorage.setItem(key("checks"),JSON.stringify(checked));}catch(e){}progress();}
+function saveChecks(){var checked=[];document.querySelectorAll("#ввод рубрики:проверено").forEach(function(c,i){checked.push(Array.prototype.indexOf.call(document.querySelectorAll("#ввод рубрики"),c));});try{localStorage.setItem(key("checks"),JSON.stringify(checked));}catch(e){}progress();}
 function progress(){var p=projects[current],checks=savedChecks(),count=checks.length;document.getElementById("projectProgress").style.width=(count/p.rubric.length*100)+"%";document.getElementById("projectProgressText").textContent=count+" из "+p.rubric.length+" критериев выполнено";}
 function dictionaryMarkdown(p){
  return "# Словарь полей — " + p.title + "\n\n" +
@@ -432,12 +432,12 @@ function sqlStarter(){
  "SELECT * FROM sales_lines WHERE CAST(quantity AS REAL) <= 0 OR CAST(discount_pct AS REAL) < 0 OR CAST(discount_pct AS REAL) > 100;",
  "",
  "WITH ranked AS (",
- "  SELECT *, ROW_NUMBER() OVER (РАЗДЕЛ ПО order_line_id ORDER BY order_line_id) AS rn",
+ "  SELECT *, ROW_NUMBER() OVER (РАЗДЕЛ ПО order_line_id ORDER BY order_line_id) АС р-н",
  "  ИЗ линий_продаж",
  "), почистил AS (",
  "  SELECT * FROM ranked",
- "  ГДЕ rn = 1 И CAST(количество КАК РЕАЛЬНОЕ) > 0",
- "    И CAST(discount_pct AS REAL) МЕЖДУ 0 ДО 100",
+ "  ГДЕ р-н = 1 И CAST(количество КАК РЕАЛЬНОЕ) > 0",
+ "    И CAST(Discount_pct КАК РЕАЛЬНО) МЕЖДУ 0 ДО 100",
  "    И статус_заказа = 'Оплачен'",
  "), line_metrics AS (",
  "  ВЫБИРАТЬ *,",
@@ -445,7 +445,7 @@ function sqlStarter(){
  "    CAST(количество КАК РЕАЛЬНО) * CAST(единица_стоимости_руб КАК РЕАЛЬНО) КАК стоимость_руб",
  "  ОТ очищенного",
  ")",
- "ВЫБЕРИТЕ категорию, COUNT(DISTINCT order_id) КАК оплаченные_заказы,",
+ "ВЫБЕРИТЕ категорию, COUNT(ОТЛИЧНЫЙ order_id) КАК оплаченные_заказы,",
  "       ROUND(SUM(доход_руб), 2) КАК доход_руб,",
  "       ROUND(SUM(выручка_руб - затраты_руб), 2) AS валовая_прибыль_руб.",
  "FROM line_metrics GROUP BY category ORDER BY revenue_rub DESC;",
@@ -455,16 +455,16 @@ function sqlStarter(){
  "-- Импортируй CSV в SQLite как support_tickets.",
  "SELECT ticket_id, COUNT(*) AS row_count FROM support_tickets GROUP BY ticket_id HAVING COUNT(*) > 1;",
  "SELECT * FROM support_tickets",
- "ГДЕ CAST(first_response_min AS REAL) <0",
- "   ИЛИ (NULLIF(TRIM(csat_score), '') НЕ NULL И ПРИВЕДЕНИЕ(csat_score AS REAL) НЕ МЕЖДУ 1 И 5);",
+ "ГДЕ CAST(first_response_min КАК РЕАЛЬНО) <0",
+ "   ИЛИ (NULLIF(TRIM(csat_score), '') НЕ NULL И ПРИВЕДЕНИЕ(csat_score КАК РЕАЛЬНО) НЕ МЕЖДУ 1 И 5);",
  "",
  "WITH ranked AS (",
- "  SELECT *, ROW_NUMBER() OVER (PARTITION BY Ticket_id ORDER BY Create_date DESC) AS rn",
+ "  SELECT *, ROW_NUMBER() OVER (РАЗДЕЛ ПО Ticket_id ORDER BY Create_date DESC) AS rn",
  "  ОТ support_tickets",
  "), почистил AS (",
  "  SELECT * FROM ranked WHERE rn = 1",
- "    И CAST(first_response_min AS REAL) >= 0",
- "    И (NULLIF(TRIM(csat_score), '') НУЛЕВОЕ ИЛИ ПРИВЕДЕНИЕ(csat_score AS REAL) МЕЖДУ 1 И 5)",
+ "    И CAST(first_response_min КАК РЕАЛЬНО) >= 0",
+ "    И (NULLIF(TRIM(csat_score), '') НУЛЕВОЕ ИЛИ ПРИВЕДЕНИЕ(csat_score КАК РЕАЛЬНО) МЕЖДУ 1 И 5)",
  ")",
  "ВЫБЕРИТЕ канал, COUNT(*) AS билеты,",
  "       SUM(СЛУЧАЙ, КОГДА решено = 'Нет' THEN 1 ELSE 0 END) КАК open_tickets,",
@@ -484,7 +484,7 @@ function sqlStarter(){
  "   ИЛИ CAST(трата_руб КАК РЕАЛЬНО) < 0 ИЛИ CAST(доход_руб КАК РЕАЛЬНО) < 0;",
  "",
  "WITH ranked AS (",
- "  SELECT *, ROW_NUMBER() OVER (РАЗДЕЛ ПО report_id ORDER BY report_date DESC) AS rn",
+ "  SELECT *, ROW_NUMBER() OVER (РАЗДЕЛ ПО report_id СОРТИРОВАТЬ ПО report_date DESC) АС р-н",
  "  ИЗ маркетинговых_отчетов",
  "), почистил AS (",
  "  SELECT * FROM ranked WHERE rn = 1",
@@ -494,10 +494,10 @@ function sqlStarter(){
  "    AND CAST(трата_руб КАК РЕАЛЬНО) >= 0 AND CAST(доход_руб КАК РЕАЛЬНО) >= 0",
  ")",
  "ВЫБРАТЬ канал, СУММА(показы) КАК показы, СУММА(клики) КАК клики,",
- "       ОКРУГЛ(1,0 * СУММА(клики) / НУЛЕСЛИ(СУММА(показы), 0), 4) AS ctr,",
+ "       ОКРУГЛ(1,0 * СУММА(клики) / НУЛЕСЛИ(СУММА(показы), 0), 4) AS центр,",
  "       ROUND(1,0 * SUM(покупки) / NULLIF(СУММА(клики), 0), 4) КАК коэффициент_конверсии,",
  "       ROUND(1.0 * SUM(траты_руб) / NULLIF(СУММА(покупки), 0), 2) AS cpa_руб,",
- "       ROUND(1.0 * SUM(доход_руб) / NULLIF(СУММ(трат_руб), 0), 2) AS roas",
+ "       ROUND(1.0 * SUM(доход_руб) / NULLIF(СУММ(трат_руб), 0), 2) АС Роас",
  "FROM cleaned GROUP BY channel ORDER BY roas DESC;",
  "-- ROAS не является прибылью. Добавь динамику по неделям и опиши ограничения атрибуции."
  ].join("\n");
