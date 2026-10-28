@@ -194,9 +194,16 @@
       if(window.__apkOrigTitle)document.title=window.__apkOrigTitle;
     }else{
       if(!window.__apkOrigTitle)window.__apkOrigTitle=document.title;
-      document.title=d[norm(window.__apkOrigTitle)]||window.__apkOrigTitle;
+      var sourceTitle=window.__apkOrigTitle;
+      var knownTitle=d[norm(sourceTitle)];
+      document.title=knownTitle||sourceTitle;
+      var titleJob=(!knownTitle&&!/[А-Яа-яЁё]/.test(sourceTitle)&&/[A-Za-z]/.test(sourceTitle))?online(sourceTitle):Promise.resolve(null);
       if(before!=="ru"){records=new WeakMap();tracked=new Set();}
       await scan(document.body);
+      try{
+        var translatedTitle=await titleJob;
+        if(lang==="ru"&&translatedTitle)document.title=translatedTitle;
+      }catch(_){}
       document.documentElement.classList.remove("apk-ru-pending");
     }
     updateToggle();
