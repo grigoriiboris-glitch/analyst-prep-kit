@@ -40,10 +40,25 @@ jobs:
       - name: Install build-only parser dependencies
         run: npm install --no-save --no-package-lock parse5 acorn
 
+      - name: Restore static translation cache
+        uses: actions/cache/restore@v4
+        with:
+          path: tools/static-ru-cache.json
+          key: static-russian-cache-v1-${{ hashFiles('tools/static-russian-translation.mjs') }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            static-russian-cache-v1-
+
       - name: Generate static Russian text
         env:
           NODE_OPTIONS: --max-old-space-size=4096
         run: node tools/static-russian-translation.mjs
+
+      - name: Save translation cache even when rate-limited
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: tools/static-ru-cache.json
+          key: static-russian-cache-v1-${{ hashFiles('tools/static-russian-translation.mjs') }}-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Commit generated Russian pages with concurrent-push recovery
         shell: bash

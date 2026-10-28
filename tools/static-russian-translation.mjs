@@ -144,7 +144,7 @@ function decodeBatchResponse(payload, expected) {
 }
 async function translateOne(item, recordFailure = true) {
   let lastError = "Ответ переводчика не распознан";
-  for (let attempt = 0; attempt < 4; attempt++) {
+  for (let attempt = 0; attempt < 7; attempt++) {
     try {
       const url = new URL("https://translate.googleapis.com/translate_a/single");
       url.searchParams.set("client", "gtx");
@@ -156,7 +156,12 @@ async function translateOne(item, recordFailure = true) {
         headers: { "Accept": "application/json", "User-Agent": "Mozilla/5.0" },
         signal: AbortSignal.timeout(15000)
       });
-      if (!response.ok) throw new Error("HTTP " + response.status);
+      if (!response.ok) {
+        const error = new Error("HTTP " + response.status);
+        error.status = response.status;
+        error.retryAfter = response.headers.get("retry-after");
+        throw error;
+      }
       const payload = await response.json();
       const translated = Array.isArray(payload) && Array.isArray(payload[0])
         ? payload[0].map(part => Array.isArray(part) && typeof part[0] === "string" ? part[0] : "").join("")
@@ -166,7 +171,11 @@ async function translateOne(item, recordFailure = true) {
       return translated;
     } catch (error) {
       lastError = String(error);
-      if (attempt < 3) await sleep(400 * (2 ** attempt));
+      if (attempt < 6) {
+        const retryAfterMs = Number(error.retryAfter) * 1000;
+        const backoffMs = error.status === 429 ? Math.min(30000, 2500 * (2 ** attempt)) : Math.min(12000, 500 * (2 ** attempt));
+        await sleep(Math.max(retryAfterMs || 0, backoffMs) + Math.floor(Math.random() * 350));
+      }
     }
   }
   if (recordFailure) failures.push({ text: item.src.slice(0, 120), error: lastError });
@@ -176,7 +185,8 @@ async function translateBatch(batch) {
   let values = null;
   if (batch.length > 1) {
     let lastError = "Пакетный ответ не распознан";
-    for (let attempt = 0; attempt < 4; attempt++) {
+    let lastBatchStatus = 0;
+    for (let attempt = 0; attempt < 7; attempt++) {
       try {
         // This Google endpoint accepts repeated q parameters and returns one result
         // per q. It is substantially faster than one request for each short label.
@@ -189,7 +199,12 @@ async function translateBatch(batch) {
           headers: { "Accept": "application/json", "User-Agent": "Mozilla/5.0" },
           signal: AbortSignal.timeout(15000)
         });
-        if (!response.ok) throw new Error("HTTP " + response.status);
+        if (!response.ok) {
+          const error = new Error("HTTP " + response.status);
+          error.status = response.status;
+          error.retryAfter = response.headers.get("retry-after");
+          throw error;
+        }
         const payload = await response.json();
         values = decodeBatchResponse(payload, batch.length);
         if (!values) throw new Error("Неожиданный формат пакетного ответа");
@@ -197,8 +212,25 @@ async function translateBatch(batch) {
         break;
       } catch (error) {
         lastError = String(error);
-        if (attempt < 3) await sleep(400 * (2 ** attempt));
+        lastBatchStatus = error.status || 0;
+        if (attempt < 6) {
+          const retryAfterMs = Number(error.retryAfter) * 1000;
+          const backoffMs = error.status === 429 ? Math.min(30000, 2500 * (2 ** attempt)) : Math.min(12000, 500 * (2 ** attempt));
+          await sleep(Math.max(retryAfterMs || 0, backoffMs) + Math.floor(Math.random() * 350));
+        }
       }
+    }
+    if (!values && lastBatchStatus === 429) {
+      // A single-string request would worsen the rate limit. Save these strings
+      // in the translation cache workflow and retry them on a later build.
+      console.warn("Переводчик ограничил частоту запросов; сохраняем строки для повторного запуска.");
+      for (const item of batch) {
+        failures.push({ text: item.src.slice(0, 120), error: lastError });
+        unchangedStrings++;
+        item.resolve(item.src);
+        inflight.delete(item.key);
+      }
+      return;
     }
     if (!values) console.warn("Пакетный перевод недоступен; используем одиночные запросы:", lastError);
   } else {
