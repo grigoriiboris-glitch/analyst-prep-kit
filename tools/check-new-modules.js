@@ -316,7 +316,7 @@ assert.ok(postgresqlPage.includes('href="../sql/"'), "PostgreSQL course must lin
 assert.ok(postgresqlPage.includes('src="../assets/supabase_auth_sync.js?v=3"'), "PostgreSQL progress must use shared account sync");
 assert.ok(postgresqlPage.includes('src="../assets/ai-context-copy.js"') && postgresqlPage.includes('src="app.js"'),
   "PostgreSQL course must load the AI context action and lesson app");
-for (const table of ["customers", "products", "orders", "order_items", "payments", "events", "refunds"]) {
+for (const table of ["customers", "products", "orders", "order_items", "payments", "page_events", "support_tickets"]) {
   assert.ok(postgresqlSeed.includes("CREATE TABLE " + table + " "), "PostgreSQL practice table missing: " + table);
 }
 assert.ok(postgresqlApp.includes("apk-postgresql-progress-v1") && postgresqlApp.includes("apk-postgresql-drafts-v1"),
