@@ -70,7 +70,6 @@ const LITERAL_REPLACEMENTS = [
   ["Лазурный ДП-900", "Microsoft Azure Data Fundamentals (DP-900)"],
   ["Google Аналитика (GA4)", "Google Analytics (GA4)"],
   ["намеки", "Подсказки"],
-  ["Точечная", "Точечная диаграмма"],
   ["SELECT выбирай столбцы", "SELECT указывает столбцы"],
   ["SQL использует = для равенства, а не ==", "SQL использует оператор = для проверки равенства."],
   ["COUNT(доход)", "COUNT(revenue)"],
