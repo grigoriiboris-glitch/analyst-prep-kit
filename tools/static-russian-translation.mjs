@@ -120,10 +120,12 @@ function candidate(text, context = null, htmlText = false) {
   if (isTechnicalOnly(value)) return false;
   if (/^(?:javascript:|data:|mailto:|tel:|https?:\/\/)/i.test(value)) return false;
   if (/^[\w-]+\/[\w./-]+$/.test(value)) return false;
+  // Plain HTML text is user-facing, even when it is a short single word such as
+  // "Home", "Example" or "Lessons". Code blocks are excluded by the HTML walker.
+  if (htmlText) return value.length >= 2;
   if (isCodeLike(value)) return false;
   if (value.length < 2) return false;
   if (context) return true;
-  if (htmlText) return true;
   return /\s/.test(value) && value.length > 8;
 }
 
