@@ -178,9 +178,8 @@
   }
 
   function attachButton(root) {
-    if (!root || root.querySelector(':scope > .' + BAR_CLASS) || root.dataset.apkAiContextAttached === 'true') return;
+    if (!root || Array.prototype.some.call(root.children, function (child) { return child.classList && child.classList.contains(BAR_CLASS); })) return;
     if (!visibleLessonRoot(root)) return;
-    root.dataset.apkAiContextAttached = 'true';
     root.setAttribute('data-apk-ai-context-root', 'true');
 
     var bar = document.createElement('div');
