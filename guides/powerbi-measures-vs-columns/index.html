@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Вычисляемый столбец и показатель в Power BI: решающее правило — комплект для подготовки аналитика</title>
-<meta name="description" content="Столбец маржи, суммированный по четырем строкам, показывает 120%, тогда как реальная маржа составляет 21,4%. Один вопрос определяет столбец или меру, а арифметику можно проверить вручную.">
+<title>Calculated Column vs Measure in Power BI: The Rule That Decides — Analyst Prep Kit</title>
+<meta name="description" content="A margin column summed over four rows reports 120% where the real margin is 21.4%. One question decides column or measure, with arithmetic you can check by hand.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/powerbi-measures-vs-columns/">
-<meta property="og:title" content="Вычисляемый столбец и мера в Power BI: решающее правило">
-<meta property="og:description" content="Вычисляемый столбец вычисляется один раз при загрузке данных. Показатель вычисляется каждый раз, когда зритель нажимает на ссылку. Просуммируйте столбец маржи, и вы получите 120%, где правда — 21,4%. Вот вопрос, который решает.">
+<meta property="og:title" content="Calculated Column vs Measure in Power BI: The Rule That Decides">
+<meta property="og:description" content="A calculated column is computed once when the data loads. A measure is computed every time a viewer clicks. Sum a margin column and you get 120% where the truth is 21.4%. Here is the question that decides.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/powerbi-measures-vs-columns.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/powerbi-measures-vs-columns/">
@@ -134,18 +134,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../powerbi/">Комплект Power BI</a> · <a href="../">Все руководства</a></p>
-  <h1>Вычисляемый столбец и мера в Power BI: решающее правило</h1>
-  <p class="meta">Один вопрос направляет каждое вычисление в нужное место · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-07">7 августа 2026 г.</time></p>
+  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../powerbi/">Power BI Kit</a> · <a href="../">All guides</a></p>
+  <h1>Calculated Column vs Measure in Power BI: The Rule That Decides</h1>
+  <p class="meta">One question sorts every calculation into the right home · Part of the <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-07">August 7, 2026</time></p>
 
-  <p>В конце этой страницы вы можете просмотреть любое вычисление, которое собираетесь добавить в модель Power BI, и узнать, прежде чем писать символ DAX, должен ли это быть вычисляемый столбец или мера. Вы также сможете объяснить свой выбор кому-то другому, и именно это на самом деле проверяет интервьюер, когда спрашивает. Это около двадцати минут, и каждое число на странице достаточно маленькое, чтобы его можно было сверить с арифметикой, показанной рядом с ним.</p>
+  <p>By the end of this page you can look at any calculation you are about to add to a Power BI model and know, before you write a character of DAX, whether it should be a calculated column or a measure. You will also be able to explain the choice to someone else, which is what an interviewer is really testing when they ask. It is about twenty minutes, and every number on the page is small enough to check with the arithmetic shown beside it.</p>
 
-  <p>Вот чем на самом деле заняться сегодня. Откройте свою текущую модель, найдите любой процент или соотношение, которое находится в вычисляемом столбце, и задайте по этому поводу один вопрос: зависит ли ответ от того, что отфильтровал зритель? Если да, восстановите его в качестве меры. Это единственное действие исправляет наиболее распространенную неправильную цифру в отчетах Мощность БИ.</p>
+  <p>Here is what to actually do today. Open your current model, find any percentage or ratio that lives in a calculated column, and ask one question about it: does the answer depend on what the viewer has filtered? If yes, rebuild it as a measure. That single move fixes the most common wrong number in Power BI reports.</p>
 
-  <p>Краткая версия: вычисляемый столбец вычисляется один раз для каждой строки при загрузке данных и сохраняется. Мера вычисляется во время запроса внутри любых фильтров, которые визуальный элемент имеет в данный момент. Все, чей ответ меняется в зависимости от фильтров, должно быть мерой.</p>
+  <p>The short version: a calculated column is computed once per row when the data loads, and stored. A measure is computed at query time, inside whatever filters the visual has at that moment. Anything whose answer changes with the filters must be a measure.</p>
 
-  <p>Вся развилка — это вопрос о том, когда выполняется арифметика, и это единственная идея, которую несет в себе картинка.</p>
+  <p>The whole fork is a question of when the arithmetic runs, so that is the one idea the picture carries.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 330" role="img" aria-labelledby="pbTitle pbDesc" xmlns="http://www.w3.org/2000/svg">
@@ -209,47 +209,47 @@
         <text x="430" y="250" font-size="12.5" fill="#52525B">recomputed in the filters</text>
       </g>
     </svg>
-    <figcaption>Вычисляемый столбец запускается во время обновления, и его значения замораживаются в таблице. Измерение повторяется при каждом щелчке внутри того, что в данный момент пропускает срез.</figcaption>
+    <figcaption>A calculated column runs during refresh and its values are frozen into the table. A measure reruns on every click, inside whatever the slicer currently allows through.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>Что вы узнаете</strong>
+    <strong>What you'll learn</strong>
     <ol>
-      <li>Вилка и единственный вопрос, который ее решает</li>
-      <li>Контекст строки и контекст фильтра в повседневных словах</li>
-      <li>Классический провал: столбец полей, суммированный</li>
-      <li>Правильная мера, проверенная вручную</li>
-      <li>Сколько стоят колонки в хранилище</li>
-      <li>Когда столбец является правильным ответом</li>
-      <li>Неявные и явные меры</li>
-      <li>Полное до и после</li>
-      <li>Крайние случаи, которые выдают уверенно неверные цифры</li>
-      <li>Почему это работает</li>
-      <li>Использование этого на вашей собственной модели</li>
-      <li>Все на одном экране</li>
+      <li>The fork, and the one question that decides it</li>
+      <li>Row context and filter context in everyday words</li>
+      <li>The classic failure: a margin column, summed</li>
+      <li>The measure that gets it right, checked by hand</li>
+      <li>What columns cost in storage</li>
+      <li>When a column is the right answer</li>
+      <li>Implicit and explicit measures</li>
+      <li>The full before and after</li>
+      <li>Edge cases that produce confident wrong numbers</li>
+      <li>Why this works</li>
+      <li>Using this on your own model</li>
+      <li>The whole thing on one screen</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Каждое число здесь можно проверить вручную.</strong>  DAX работает только внутри Power BI, поэтому на этой странице используется таблица из четырех строк и рядом с каждым утверждением отображается арифметика в формате 100 ÷ 600 = 16,7%. Если число на этой странице не соответствует арифметике, напечатанной рядом с ним, значит, я ошибся, и вы это заметили.</div>
+  <div class="note"><strong>Every number here is hand-checkable.</strong> DAX only runs inside Power BI, so this page uses a four-row table and shows the arithmetic beside every claim, in the style 100 ÷ 600 = 16.7%. If a number on this page does not match the arithmetic printed next to it, I got it wrong and you caught it.</div>
 
   <div class="step">
-    <h2>1. Развилка и единственный вопрос, который ее решает</h2>
+    <h2>1. The fork, and the one question that decides it</h2>
 
-    <p>Вот вилка выложена полностью, ибо выбор не очевиден с первого раза. Вопрос в следующем: где должен жить этот расчет? Есть два возможных ответа. А  <strong>Расчетный столбец</strong>  — это новый столбец, добавленный в таблицу. Power BI вычисляет свое значение один раз для каждой строки в момент загрузки данных, а затем сохраняет каждое из этих значений в модели. Значения больше никогда не изменяются до следующего обновления. А  <strong>measure</strong>  — это хранимая формула, вообще не имеющая сохраненных значений. Power BI вычисляет его заново во время запроса, то есть в тот момент, когда он нужен визуальному элементу, и вычисляет его внутри любых фильтров, которые визуальный элемент имеет в данный момент: выбор срезов, фильтры страниц, строка диаграммы, которую он заполняет.</p>
+    <p>Here is the fork laid out fully, because the choice is not obvious the first time. The question is: where should this calculation live? There are two possible answers. A <strong>calculated column</strong> is a new column added to a table. Power BI computes its value once per row, at the moment the data loads, and then stores every one of those values in the model. The values never change again until the next refresh. A <strong>measure</strong> is a stored formula with no stored values at all. Power BI computes it fresh at query time, which means the instant a visual needs it, and it computes it inside whatever filters that visual has right then: the slicer selections, the page filters, the row of the chart it is filling in.</p>
 
-    <p>Что решает между ними – это один вопрос.  <strong>Зависит ли ответ от того, что отфильтровал зритель?</strong>  Если ответ меняется, когда кто-то щелкает срез, это, должно быть, мера, поскольку значения столбца были заморожены еще до того, как появилось средство просмотра. Если ответом является фиксированный факт об одной строке, факт, который остается истинным независимо от того, кто что фильтрует, столбец разрешен, а иногда и верен.</p>
+    <p>What decides between them is one question. <strong>Does the answer depend on what the viewer has filtered?</strong> If the answer changes when someone clicks a slicer, it must be a measure, because a column's values were frozen before the viewer ever arrived. If the answer is a fixed fact about one row, a fact that stays true no matter who is filtering what, a column is allowed and sometimes right.</p>
 
-    <p>Почему этот вопрос важен: неверный ответ не приводит к ошибке. Он выдает чистое, отформатированное, правдоподобное число, которое неверно, и ничто на экране никого не предупреждает. Оставшаяся часть этой страницы представляет собой один из примеров именно этого.</p>
+    <p>Why the question matters: getting it wrong does not produce an error. It produces a clean, formatted, plausible number that is wrong, and nothing on the screen warns anyone. The rest of this page is one worked example of exactly that.</p>
   </div>
 
   <div class="step">
-    <h2>2. Контекст строки и контекст фильтра в повседневных словах</h2>
+    <h2>2. Row context and filter context in everyday words</h2>
 
-    <p>Перед пояснением: щелчок слайсером меняет карту с 21,4% до 16,7%. Один из двух инструментов мог отреагировать на этот щелчок, а другой — нет. Какой какой?</p>
+    <p>Before the explanation: a slicer click changes a card from 21.4% to 16.7%. One of the two tools could have reacted to that click and one could not. Which is which?</p>
 
-    <p>Эти две фразы звучат как жаргон, и на самом деле это всего лишь два момента из первого раздела, названного.  <strong>контекст строки</strong>  означает, что формула находится в одной строке и может видеть значения этой строки. Вычисляемый столбец имеет контекст строки: при вычислении строки 1 он видит продажи строки 1 и прибыль строки 1, и ничего больше.  <strong>Контекст фильтра</strong>  означает, что формула находится внутри набора фильтров и может видеть каждую строку, которая выдерживает их. Мера имеет контекст фильтра: когда карточка фильтруется по Востоку, мера видит сразу все строки Востока и ни одну из остальных.</p>
+    <p>These two phrases sound like jargon and they are actually just the two moments from section one, named. <strong>Row context</strong> means the formula is standing on one row and can see that row's values. A calculated column has row context: while computing row 1 it sees row 1's Sales and row 1's Profit, and nothing else. <strong>Filter context</strong> means the formula is standing inside a set of filters and can see every row that survives them. A measure has filter context: when a card is filtered to East, the measure sees all the East rows at once and none of the others.</p>
 
-    <p>Вот таблица, которую использует остальная часть страницы. Четыре ряда, два товара, два региона.</p>
+    <p>Here is the table the rest of the page uses. Four rows, two products, two regions.</p>
 
     <table>
       <tr><th>Product</th><th>Region</th><th>Sales</th><th>Profit</th></tr>
@@ -259,69 +259,69 @@
       <tr><td>B</td><td>West</td><td>300</td><td>45</td></tr>
     </table>
 
-    <p>Вычисляемый столбец просматривает эту таблицу по одной строке при загрузке и записывает одно сохраненное значение в каждую строку. Мера никогда не перемещается по строкам сама по себе. Он ждет, пока визуальный элемент передаст ему отфильтрованный срез, только Восток, только продукт B или все, а затем выполняет вычисления по этому срезу. Одна и та же таблица, два совершенно разных момента арифметики. В этом вся разница, и ответ на предварительный вопрос заключается в том, что только мера могла сдвинуться, когда это сделал срез.</p>
+    <p>A calculated column walks this table one row at a time, at load, and writes one stored value per row. A measure never walks rows on its own. It waits for a visual to hand it a filtered slice, East only, or product B only, or everything, and then computes over that slice. Same table, two completely different moments of arithmetic. That is the entire distinction, and the answer to the prequestion is that only the measure could have moved when the slicer did.</p>
   </div>
 
   <div class="step">
-    <h2>3. Классический провал: столбец полей, суммированный</h2>
+    <h2>3. The classic failure: a margin column, summed</h2>
 
-    <p>Процент маржи — это прибыль, деленная на объем продаж. Это похоже на факт о каждой строке, поэтому естественным первым инстинктом является вычисляемый столбец.</p>
+    <p>Margin percent is profit divided by sales. It looks like a fact about each row, so the natural first instinct is a calculated column.</p>
 
     <pre><code>Margin = Sales[Profit] / Sales[Sales]   -- calculated column, one value per row</code></pre>
 
-    <p>При загрузке Power BI вычисляет и сохраняет четыре значения, каждое из которых действительно соответствует своей строке.</p>
+    <p>At load, Power BI computes and stores four values, and each one is genuinely correct for its row.</p>
 
     <table>
-      <tr><th>Product</th><th>Region</th><th>Sales</th><th>Profit</th><th>Маржа (сохраняется)</th></tr>
+      <tr><th>Product</th><th>Region</th><th>Sales</th><th>Profit</th><th>Margin (stored)</th></tr>
       <tr><td>A</td><td>East</td><td>100</td><td>50</td><td>50 ÷ 100 = 50%</td></tr>
       <tr><td>A</td><td>West</td><td>200</td><td>90</td><td>90 ÷ 200 = 45%</td></tr>
       <tr><td>B</td><td>East</td><td>500</td><td>50</td><td>50 ÷ 500 = 10%</td></tr>
       <tr><td>B</td><td>West</td><td>300</td><td>45</td><td>45 ÷ 300 = 15%</td></tr>
     </table>
 
-    <p>Теперь перетащите этот столбец «Поля» на карточку. Power BI необходимо свернуть четыре сохраненных значения в одно, а для числового столбца по умолчанию используется их суммирование: 50% + 45% + 10% + 15% = 120%. В карточке указано, что общая маржа составляет 120%, что не просто неверно, но и невозможно. Вместо этого переключите агрегацию на среднее значение, и вы получите (50% + 45% + 10% + 15%) ÷ 4 = 30%, что выглядит респектабельно, но все же неверно, потому что позволяет крошечным 100-м продажам продукта A считаться точно так же, как 500-м продукту B.</p>
+    <p>Now drag that Margin column into a card. Power BI has to collapse four stored values into one, and its default for a numeric column is to sum them: 50% + 45% + 10% + 15% = 120%. The card says total margin is 120%, which is not just wrong but impossible. Switch the aggregation to average instead and you get (50% + 45% + 10% + 15%) ÷ 4 = 30%, which looks respectable and is still wrong, because it lets product A's tiny 100 in sales count exactly as much as product B's 500.</p>
 
-    <p>Истинная общая маржа — это общая прибыль по отношению к общему объему продаж: прибыль равна 50 + 90 + 50 + 45 = 235, продажи — 100 + 200 + 500 + 300 = 1100 и 235 ÷ 1100 = 21,4%. Ни 120%, ни 30% даже близко к этому не относятся.</p>
+    <p>The true overall margin is total profit over total sales: profit is 50 + 90 + 50 + 45 = 235, sales is 100 + 200 + 500 + 300 = 1,100, and 235 ÷ 1,100 = 21.4%. Neither 120% nor 30% is anywhere near it.</p>
 
-    <p>Скажите своими словами, почему появились 120%, прежде чем читать дальше. Причина в том, что проценты оснований разного размера сложить невозможно. Добавление 50 из 100 к 10 из 500, как если бы оба они были из одной базы, заставляет небольшой продукт говорить в пять раз громче, чем оправдывают его продажи. Столбец заморозил каждое соотношение на уровне строки, поэтому каждое его последующее агрегирование представляет собой агрегирование коэффициентов, а коэффициенты не агрегируются.</p>
+    <p>Say why the 120% appeared, in your own words, before reading on. The reason is that percentages of different-sized bases cannot be added. Adding 50-out-of-100 to 10-out-of-500 as if both were out of the same base makes the small product speak five times louder than its sales justify. The column froze each ratio at row level, so every aggregation of it afterwards is an aggregation of ratios, and ratios do not aggregate.</p>
   </div>
 
   <div class="step">
-    <h2>4. Правильная мера, проверенная вручную</h2>
+    <h2>4. The measure that gets it right, checked by hand</h2>
 
-    <p>Решение состоит в том, чтобы заставить подразделение ждать, пока фильтры не выполнят свою работу. Это мера.</p>
+    <p>The fix is to keep the division waiting until after the filters have done their work. That is a measure.</p>
 
     <pre><code>Margin % = DIVIDE ( SUM ( Sales[Profit] ), SUM ( Sales[Sales] ) )</code></pre>
 
-    <p><code>DIVIDE</code>  — это деление, которое возвращает пробел вместо ошибки, когда нижняя часть равна нулю, что имеет значение в тот день, когда комбинация фильтров не оставляет строк продаж. Форма формулы – весь урок: сначала суммируем, потом делим.</p>
+    <p><code>DIVIDE</code> is division that returns a blank instead of an error when the bottom is zero, which matters the day a filter combination leaves no sales rows. The shape of the formula is the whole lesson: sum first, divide last.</p>
 
-    <p>Теперь каждый фильтр, который применяет зритель, выдает честное число, поскольку суммы происходят внутри контекста фильтра. Проверьте каждый вручную:</p>
+    <p>Now every filter the viewer applies produces the honest number, because the sums happen inside the filter context. Check each one by hand:</p>
 
     <table>
-      <tr><th>Filter</th><th>Измерение вычислений</th><th>Result</th><th>В сумме столбца будет сказано</th></tr>
-      <tr><td>Без фильтра</td><td>(50+90+50+45) ÷ (100+200+500+300) = 235 ÷ 1,100</td><td>21.4%</td><td>120%</td></tr>
-      <tr><td>только восток</td><td>(50+50) ÷ (100+500) = 100 ÷ 600</td><td>16.7%</td><td>50% + 10% = 60%</td></tr>
-      <tr><td>только запад</td><td>(90+45) ÷ (200+300) = 135 ÷ 500</td><td>27.0%</td><td>45% + 15% = 60%</td></tr>
-      <tr><td>Только продукт А</td><td>(50+90) ÷ (100+200) = 140 ÷ 300</td><td>46.7%</td><td>50% + 45% = 95%</td></tr>
+      <tr><th>Filter</th><th>Measure computes</th><th>Result</th><th>Column summed would say</th></tr>
+      <tr><td>No filter</td><td>(50+90+50+45) ÷ (100+200+500+300) = 235 ÷ 1,100</td><td>21.4%</td><td>120%</td></tr>
+      <tr><td>East only</td><td>(50+50) ÷ (100+500) = 100 ÷ 600</td><td>16.7%</td><td>50% + 10% = 60%</td></tr>
+      <tr><td>West only</td><td>(90+45) ÷ (200+300) = 135 ÷ 500</td><td>27.0%</td><td>45% + 15% = 60%</td></tr>
+      <tr><td>Product A only</td><td>(50+90) ÷ (100+200) = 140 ÷ 300</td><td>46.7%</td><td>50% + 45% = 95%</td></tr>
     </table>
 
-    <p>Одна формула, четыре фильтра, четыре правильных ответа, и мере никогда не сообщали, какой фильтр будет использоваться. Это то, что вам дает «вычисление во время запроса внутри контекста фильтра». Обратите также внимание, что неправильные ответы в колонке даже не всегда являются ошибочными: Восток и Запад говорят, что 60%, в то время как правда — 16,7% против 27,0%, поэтому версия колонки полностью стирает реальную региональную разницу.</p>
+    <p>One formula, four filters, four correct answers, and the measure was never told which filter was coming. That is what "computed at query time inside the filter context" buys you. Notice too that the column's wrong answers are not even consistently wrong: East and West both say 60% while the truth is 16.7% against 27.0%, so the column version erases a real regional difference entirely.</p>
 
-    <p>Представьте на мгновение, что вы запускаете это на своей модели. Возьмите один коэффициент, о котором вы сообщаете, маржу, коэффициент конверсии, стоимость за единицу, и представьте себе срез, разрезающий его на один регион. Если сегодня это число является вычисляемым столбцом, то нарезанная версия на вашем экране представляет собой разновидность строки 60% выше.</p>
+    <p>Picture running this on your own model for a moment. Take one ratio you report, margin, conversion rate, cost per unit, and imagine a slicer cutting it to one region. If that number is a calculated column today, the sliced version on your screen is some flavour of the 60% row above.</p>
   </div>
 
   <div class="step">
-    <h2>5. Сколько стоят колонки в хранилище</h2>
+    <h2>5. What columns cost in storage</h2>
 
-    <p>Правильность — главная причина предпочтения мер, но есть и вторая, более тихая цена. Вычисляемый столбец хранит одно значение для каждой строки своей таблицы. В таблице из четырех строк это четыре числа, и никого это не волнует. В таблице фактов из десяти миллионов строк один вычисляемый столбец — это десять миллионов сохраненных значений, которые хранятся в памяти, обновляются при каждой загрузке и сжимаются хуже, чем столбцы, полученные из источника, поскольку вычисляемые столбцы вычисляются после того, как механизм уже выбрал сжатие. Независимо от размера таблицы в мере хранится только одно: текст формулы. Десять символов или Десять миллионов строк разницы в каждом расчете — это настоящий разрыв, если в модели их двадцать.</p>
+    <p>Correctness is the main reason to prefer measures, but there is a second, quieter cost. A calculated column stores one value for every row of its table. On the four-row table here that is four numbers and nobody cares. On a ten-million-row fact table, one calculated column is ten million stored values, held in memory, refreshed on every load, and compressed worse than the columns that came from the source, because calculated columns are computed after the engine has already chosen its compression. A measure stores exactly one thing regardless of table size: the formula text. Ten characters or ten million rows of difference, per calculation, is a real gap once a model has twenty of them.</p>
   </div>
 
   <div class="step">
-    <h2>6. Когда в столбце правильный ответ</h2>
+    <h2>6. When a column is the right answer</h2>
 
-    <p>Перед объяснением: вам нужен слайсер с опциями «Бюджет», «Средний диапазон» и «Премиум». Можно ли измерить мощность этого слайсера?</p>
+    <p>Before the explanation: you want a slicer with the options Budget, Mid-range, and Premium. Could a measure power that slicer?</p>
 
-    <p>Это невозможно, и это чистое правило, когда столбец правильный.  <strong>Срез, ось и легенда могут содержать только реальные столбцы.</strong>  Им нужно сохраненное значение в каждой строке для группировки. Поэтому, когда вы хотите разрезать или сгруппировать  <em>by</em>  категория, которой нет в исходных данных, вы создаете ее, и вычисляемый столбец является для нее честным домом. Ценовой диапазон — это классический случай: это фиксированный факт об одной строке, он не меняется при фильтрации пользователем, и вся его работа заключается в фильтрации.</p>
+    <p>It could not, and that is the clean rule for when a column is right. <strong>A slicer, an axis, and a legend can only hold real columns.</strong> They need a stored value on every row to group by. So when you want to slice or group <em>by</em> a category that does not exist in the source data, you build it, and a calculated column is the honest home for it. A price band is the classic case: it is a fixed fact about one row, it does not change when the viewer filters, and its whole job is to be filtered by.</p>
 
     <pre><code>Price Band =
 SWITCH ( TRUE (),
@@ -330,128 +330,128 @@ SWITCH ( TRUE (),
     "Premium"
 )</code></pre>
 
-    <p>Один абзац на  <code>SWITCH(TRUE())</code>, потому что в первый раз это выглядит странно.  <code>SWITCH</code>  обычно сопоставляет одно значение со списком точных случаев. Вручение этого  <code>TRUE()</code>  превращает его в лестницу условий, проверяемых сверху вниз, и побеждает первое условие, которое оказывается верным. Это версия аккуратной цепочки IF-ELSE в DAX, и это стандартный способ записи группирующих столбцов без вложения пяти IF друг в друга. В нашей таблице он хранит «Бюджет» для строки 100, «Средний диапазон» для строк 200 и 300 и «Премиум» для строки 500, и эти метки отвечают на решающий вопрос: никакой щелчок среза не может изменить, к какой полосе принадлежит строка стоимостью 500 долларов.</p>
+    <p>One paragraph on <code>SWITCH(TRUE())</code>, because it looks odd the first time. <code>SWITCH</code> normally matches one value against a list of exact cases. Handing it <code>TRUE()</code> turns it into a ladder of conditions checked top to bottom, and the first condition that comes up true wins. It is DAX's version of a tidy IF-ELSE chain, and it is the standard way to write banding columns without nesting five IFs inside each other. On our table it stores Budget for the 100 row, Mid-range for the 200 and 300 rows, and Premium for the 500 row, and those labels pass the deciding question: no slicer click can change which band a 500-dollar row belongs in.</p>
 
-    <p>Сами пороги диапазона, 150 и 350 здесь, заслуживают оправдательного предложения в ваших заметках к модели, а не пожимания плечами.  <a href="../data-driven-thresholds/">Выбор порогов из данных</a>  является собственным руководством.</p>
+    <p>The band thresholds themselves, 150 and 350 here, deserve a sentence of justification in your model notes rather than a shrug. <a href="../data-driven-thresholds/">Choosing thresholds from the data</a> is its own guide.</p>
   </div>
 
   <div class="step">
-    <h2>7. Неявные и явные меры</h2>
+    <h2>7. Implicit and explicit measures</h2>
 
-    <p>Перетащите пустой числовой столбец в визуальный элемент, и Power BI незаметно превратит его в агрегацию, обычно в СУММУ. Эта автоматически созданная оболочка называется  <strong>неявная мера</strong>. Ан  <strong>явная мера</strong>  это тот, который вы написали сами с именем и формулой, например, % маржи выше.</p>
+    <p>Drag a bare numeric column into a visual and Power BI quietly wraps it in an aggregation for you, usually SUM. That auto-created wrapper is called an <strong>implicit measure</strong>. An <strong>explicit measure</strong> is one you wrote yourself with a name and a formula, like the Margin % above.</p>
 
-    <p>Аналитики пишут четкие показатели по трем причинам, которые все были указаны ранее на этой странице. Во-первых, неявное значение по умолчанию — это именно та машина, которая превратила столбец поля в 120%: она суммирует все, что ей передают, независимо от того, означает ли суммирование что-либо. Во-вторых, явная мера несет в себе свое определение, поэтому процент прибыли означает прибыль от продаж в каждом визуальном элементе, каждой странице и отчете каждого коллеги, а не любую агрегацию, которую кто-то оставил выбранной. Общее письменное определение — это большая часть того, что делает метрику заслуживающей доверия.  <a href="../defining-metrics/">Определение метрик</a>  идет глубже в этом вопросе. В-третьих, только явные меры могут содержать реальную логику: РАЗДЕЛИТЬ, фильтры, сравнения времени. Привычка простая и дешевая: даже для простой суммы напишите  <code>Total Sales = SUM ( Sales[Sales] )</code>  один раз и повторно используйте его повсюду.</p>
+    <p>Analysts write explicit measures, for three reasons that all showed up earlier on this page. First, the implicit default is exactly the machine that turned the margin column into 120%: it sums whatever it is handed, whether or not summing means anything. Second, an explicit measure carries its definition with it, so Margin % means profit over sales in every visual, every page, and every colleague's report, instead of whatever aggregation someone happened to leave selected. A shared, written definition is most of what makes a metric trustworthy, and <a href="../defining-metrics/">defining metrics</a> goes deeper on that. Third, only explicit measures can hold real logic: DIVIDE, filters, time comparisons. The habit is simple and cheap: even for a plain total, write <code>Total Sales = SUM ( Sales[Sales] )</code> once and reuse it everywhere.</p>
   </div>
 
-  <h2>Полное до и после</h2>
+  <h2>The full before and after</h2>
 
-  <p>Та же таблица из четырех строк, тот же вопрос: какова наша маржа в целом и по регионам?</p>
+  <p>Same four-row table, same question: what is our margin, overall and by region?</p>
 
   <h3>Before</h3>
   <pre><code>Margin = Sales[Profit] / Sales[Sales]        -- calculated column
 -- then dragged into a card, aggregation left on the default</code></pre>
-  <p>На карте указано 120% (50% + 45% + 10% + 15%). Отфильтрованное на восток, оно составляет 60% (50% + 10%). Отфильтрованный по Западу, он также показывает 60% (45% + 15%), поэтому оба региона выглядят одинаково. Каждая из десяти миллионов строк также будет содержать сохраненную десятичную дробь. Никаких ошибок не появляется ни на каком этапе.</p>
+  <p>The card reads 120% (50% + 45% + 10% + 15%). Filtered to East it reads 60% (50% + 10%). Filtered to West it also reads 60% (45% + 15%), so the two regions look identical. Ten million rows would also be carrying a stored decimal each. No error appears at any point.</p>
 
   <h3>After</h3>
   <pre><code>Total Sales  = SUM ( Sales[Sales] )
 Total Profit = SUM ( Sales[Profit] )
 Margin %     = DIVIDE ( [Total Profit], [Total Sales] )</code></pre>
-  <p>На карте написано 21,4% (235 ÷ 1100). Восток читает 16,7% (100 ÷ 600), Запад читает 27,0% (135 ÷ 500), и региональный разрыв заметен впервые. Сохраняются три именованные формулы, нулевые значения в каждой строке, и каждый будущий визуальный элемент повторно использует одни и те же определения.</p>
+  <p>The card reads 21.4% (235 ÷ 1,100). East reads 16.7% (100 ÷ 600), West reads 27.0% (135 ÷ 500), and the regional gap is visible for the first time. Three named formulas are stored, zero values per row, and every future visual reuses the same definitions.</p>
 
   <div class="step">
-    <h2>Крайние случаи, которые выдают уверенно неверные цифры</h2>
+    <h2>Edge cases that produce confident wrong numbers</h2>
 
-    <p>До пояснения: коллега усредняет столбец маржи вместо суммирования и говорит, что проблема устранена. Это?</p>
+    <p>Before the explanation: a colleague averages the margin column instead of summing it and says the problem is fixed. Is it?</p>
 
-    <p><strong>Усреднение столбца соотношения является той же ошибкой и для более мягкой шерсти.</strong>  Это ответ на вопрос. (50% + 45% + 10% + 15%) ÷ 4 = 30%, против истины 21,4%. Невзвешенное среднее значение позволяет строке со 100 продажами учитываться так же, как и строке с 500. Оно ближе 120 %, и именно поэтому оно выдерживает проверку.</p>
+    <p><strong>Averaging the ratio column is the same mistake in a milder coat.</strong> This is the prequestion's answer. (50% + 45% + 10% + 15%) ÷ 4 = 30%, against a truth of 21.4%. An unweighted average lets a row with 100 in sales count as much as a row with 500. It is closer than 120%, which is exactly why it survives review.</p>
 
-    <p><strong>Коэффициент промежуточного итога не является суммой коэффициентов ниже него.</strong>  Даже при правильном измерении люди ожидают, что общая строка матрицы будет суммой строк выше. Для соотношения это никогда не так: 16,7% Востока и 27,0% Запада находятся выше 21,4%, а не 43,7%. Это правильное поведение, и оно стоит одного предложения в примечаниях к отчету, поэтому никто его не «исправляет».</p>
+    <p><strong>A ratio at a subtotal is not the sum of the ratios below it.</strong> Even with a correct measure, people expect the total row of a matrix to be the sum of the rows above. For a ratio it never is: East 16.7% and West 27.0% sit above a total of 21.4%, not 43.7%. That is correct behaviour, and it is worth one sentence in the report notes so nobody "fixes" it.</p>
 
-    <p><strong>Коэффициент, построенный на несвязанных итогах, игнорирует визуальное представление.</strong>  Оберните суммы в функции, которые удаляют фильтры или строят их не на той таблице, и показатель показывает 21,4% в каждой строке региональной разбивки. Симптом — это мера, повторяющая всюду одно значение; причина в том, что контекст фильтра выбрасывается.</p>
+    <p><strong>A ratio built on unrelated totals ignores the visual.</strong> Wrap the sums in functions that remove filters, or build them on the wrong table, and the measure shows 21.4% in every row of a regional breakdown. The symptom is a measure repeating one value everywhere; the cause is the filter context being thrown away.</p>
 
-    <p><strong>Вычисляемый столбец не обновляется до тех пор, пока не будет обновлен.</strong>  Столбцы вычисляются при загрузке, поэтому столбец группирования, построенный на основе вчерашних цен, остается устаревшим до следующего обновления, в то время как показатель переместился бы вместе с данными под ним. Все, что должно отслеживать данные в реальном времени, должно быть мерой.</p>
+    <p><strong>A calculated column does not update until refresh.</strong> Columns are computed at load, so a banding column built on yesterday's prices stays stale until the next refresh, while a measure would have moved with the data underneath. Anything that must track the data live has to be a measure.</p>
 
-    <p><strong>Пустые дивизии.</strong>  Отфильтруйте комбинацию со строками, но с нулевыми продажами и необработанным  <code>/</code>  ошибки или показывает бесконечность.  <code>DIVIDE</code>  возвращает пустое значение, а пустая карта — это честное отображение того, что «нет базы для деления».</p>
+    <p><strong>Blank divisions.</strong> Filter to a combination with rows but zero sales and a raw <code>/</code> errors or shows infinity. <code>DIVIDE</code> returns blank, and a blank card is the honest display for "no base to divide by".</p>
   </div>
 
-  <h2>Почему это работает</h2>
+  <h2>Why this works</h2>
 
-  <p>Ошибка поля не является причудой Мощность БИ. Это самая старая ловушка в агрегации: соотношение сумм и сумма (или среднее) отношений — это разные величины, и только первая из них отвечает «какова наша маржа». Та же самая структура лежит в основе парадокса Симпсона, когда отношения, которые имеют место в каждой подгруппе, в объединенной таблице меняются местами, поскольку размеры групп действуют как скрытые веса (Симпсоны, 1951,    <em>Журнал Королевского статистического общества, серия B</em>, 13(2), 238–241). Наши Восток и Запад оба показывают 60%, хотя на самом деле разница на десять пунктов состоит в том, что машины работают в миниатюре. Мера работает, потому что она сохраняет веса: отдельное суммирование прибыли и продаж перед разделением — это именно то вычисление, взвешенное по размеру, которое столбец выбросил, когда заморозил каждое соотношение на уровне детализации строки. Если вы знаете SQL, это та же самая дисциплина, что и  <a href="../sql-group-by-having/">Группировать по</a>: значение, вычисленное на одном уровне, не может быть случайно повторно агрегировано на другом.</p>
+  <p>The margin failure is not a Power BI quirk. It is the oldest trap in aggregation: a ratio of sums and a sum (or average) of ratios are different quantities, and only the first one answers "what is our margin". The same structure is behind Simpson's paradox, where relationships that hold in every subgroup reverse in the combined table because group sizes act as hidden weights (Simpson, 1951, <em>Journal of the Royal Statistical Society, Series B</em>, 13(2), 238–241). Our East and West both showing 60% while truly differing by ten points is that machinery running in miniature. A measure works because it keeps the weights: summing profit and sales separately before dividing is precisely the size-weighted calculation the column threw away when it froze each ratio at row grain. If you know SQL, this is the same grain discipline as <a href="../sql-group-by-having/">GROUP BY</a>: a value computed at one grain cannot be casually re-aggregated at another.</p>
 
-  <p>Есть также причина, по которой эта страница продолжала просить вас ответить, прежде чем она объяснила. Если вам предложат сформулировать ответ до того, как вы увидите правильный, это заметно улучшает прилипание материала, даже если первый ответ неправильный (Бисра, Лю, Несбит, Салими и Винн, 2018,  <em>Обзор педагогической психологии</em>, 30(3), 703–725). Обязательство «Может ли эта мера обеспечить работу слайсера?» прежде чем ответить, почему правило среза все еще будет действовать в следующем месяце.</p>
+  <p>There is also a reason this page kept asking you to answer before it explained. Being prompted to generate an answer before seeing the correct one measurably improves how well the material sticks, even when the first answer is wrong (Bisra, Liu, Nesbit, Salimi, &amp; Winne, 2018, <em>Educational Psychology Review</em>, 30(3), 703–725). Committing to "could a measure power a slicer?" before the answer is why the slicer rule will still be there next month.</p>
 
-  <h2>Использование этого на вашей собственной модели</h2>
+  <h2>Using this on your own model</h2>
 
-  <p>Одитировать всю модель за один присест — занятие утомительное, и вы забросите его на девятой колонке. Вместо этого сделайте это по порядку.</p>
+  <p>Auditing a whole model in one sitting is miserable and you will abandon it around column nine. Do this instead, in order.</p>
 
   <ol>
-    <li><strong>Перечислите вычисляемые столбцы</strong>, только имена в представлении модели. Пять минут.</li>
-    <li><strong>Задайте по одному вопросу каждому</strong>: зависит ли его ответ от того, что фильтрует зритель? Каждый процент, соотношение и промежуточная сумма не выдерживают проверки с первого взгляда.</li>
-    <li><strong>Восстановите неудачи как явные меры</strong>, суммы внутри, РАЗДЕЛИТЬ снаружи, начиная с той, которая появляется на самой просматриваемой странице.</li>
-    <li><strong>Проверяйте один номер вручную при каждой перестройке</strong>, как это сделано на этой странице: выберите небольшой фильтр, сами добавьте необработанные значения, сравните. Одно проверенное соотношение 100 ÷ 600 = 16,7% стоит больше часа наблюдения.</li>
-    <li><strong>Сохраняйте столбцы, которые проходят</strong>, полосы, флаги и категории, которые вы разрезаете, и удаляете те, на которые ничего не ссылается. Каждое удаление представляет собой возврат памяти на количество строк.</li>
+    <li><strong>List your calculated columns</strong>, just the names, in the model view. Five minutes.</li>
+    <li><strong>Ask the one question of each</strong>: does its answer depend on what the viewer filters? Every percentage, ratio, and running total fails the test on sight.</li>
+    <li><strong>Rebuild the failures as explicit measures</strong>, sums inside, DIVIDE outside, starting with the one that appears on the most-viewed page.</li>
+    <li><strong>Check one number by hand per rebuild</strong>, the way this page did: pick a small filter, add the raw values yourself, compare. One verified 100 ÷ 600 = 16.7% is worth more than an hour of eyeballing.</li>
+    <li><strong>Keep the columns that pass</strong>, the bands and flags and categories you slice by, and delete the ones nothing references. Each deletion is a row-count worth of storage back.</li>
   </ol>
 
-  <p>Если у вас под рукой есть бумага, один дополнительный рисунок стоит двух минут: перерисуйте картинку вверху этой страницы по памяти, таблицу с заблокированным дополнительным столбцом слева, срез, подающий формулу, справа. Если вы можете правильно разместить замок и петлю, не глядя, вилка у вас есть.</p>
+  <p>If you have paper nearby, one optional drawing is worth the two minutes: redraw the picture at the top of this page from memory, a table with a locked extra column on the left, a slicer feeding a formula on the right. If you can place the lock and the loop correctly without looking, you own the fork.</p>
 
-  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: SQL, Excel, Power BI, Tableau и связанные с ними рабочие привычки.</div>
+  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: SQL, Excel, Power BI, Tableau, and the working habits around them.</div>
 
-  <h2>Все на одном экране</h2>
+  <h2>The whole thing on one screen</h2>
 
-  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
+  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
 
   <table>
     <tr><th>Question</th><th>Answer</th></tr>
-    <tr><td>Расчетный столбец</td><td>Вычисляется один раз для каждой строки при загрузке данных, значения сохраняются в модели.</td></tr>
-    <tr><td>Measure</td><td>Формула вычисляется во время запроса внутри текущих фильтров визуального элемента. Ничего не хранится в каждой строке.</td></tr>
-    <tr><td>Решающий вопрос</td><td>Зависит ли ответ от того, что отфильтровал зритель? Да означает мера.</td></tr>
-    <tr><td>контекст строки</td><td>Стою в одной строке и вижу значения этой строки. Что есть в столбце.</td></tr>
-    <tr><td>Контекст фильтра</td><td>Стою внутри текущих фильтров и вижу все уцелевшие строки. Какая есть мера.</td></tr>
-    <tr><td>Почему суммирование столбца отношений не удается</td><td>Соотношения оснований разного размера складывать нельзя. 50% + 45% + 10% + 15% = 120%.</td></tr>
-    <tr><td>Почему усреднение также не работает</td><td>Невзвешенный: маленькие строки учитываются так же, как и большие. 30% против правды в 21,4%.</td></tr>
-    <tr><td>Правильная форма</td><td>Сначала суммируем, а потом делим:  <code>DIVIDE(SUM(Profit), SUM(Sales))</code>.</td></tr>
-    <tr><td>РАЗДЕЛИТЬ против /</td><td>DIVIDE возвращает пустое значение с нулевой базой вместо ошибки.</td></tr>
-    <tr><td>Когда столбец правильный</td><td>Сохраненный факт об одной строке, по которой вы хотите разрезать, сгруппировать или отфильтровать. Группы, флаги, категории.</td></tr>
-    <tr><td>ПЕРЕКЛЮЧАТЕЛЬ(ИСТИНА())</td><td>Лестница условий, побеждает первый верный. Стандартный рисунок полос.</td></tr>
-    <tr><td>Стоимость хранения</td><td>Столбец: одно сохраненное значение в каждой строке, плохо сжато. Мера: только текст формулы.</td></tr>
-    <tr><td>неявная мера</td><td>Автоматическое агрегирование Power BI применяется к пустому столбцу. По умолчанию СУММА, имеет смысл или нет.</td></tr>
-    <tr><td>явная мера</td><td>Названо, написано вами, одно определение используется повсюду. Что пишут аналитики.</td></tr>
-    <tr><td>Промежуточные итоги соотношения</td><td>Никогда не сумма строк выше. 16,7% и 27,0% правильно составляют 21,4%.</td></tr>
-    <tr><td>Устаревший столбец</td><td>Столбцы обновляются только при обновлении. Логика отслеживания в реальном времени должна быть мерой.</td></tr>
+    <tr><td>Calculated column</td><td>Computed once per row at data load, values stored in the model.</td></tr>
+    <tr><td>Measure</td><td>Formula computed at query time, inside the visual's current filters. Nothing stored per row.</td></tr>
+    <tr><td>The deciding question</td><td>Does the answer depend on what the viewer has filtered? Yes means measure.</td></tr>
+    <tr><td>Row context</td><td>Standing on one row, seeing that row's values. What a column has.</td></tr>
+    <tr><td>Filter context</td><td>Standing inside the current filters, seeing all surviving rows. What a measure has.</td></tr>
+    <tr><td>Why summing a ratio column fails</td><td>Ratios of different-sized bases cannot be added. 50% + 45% + 10% + 15% = 120%.</td></tr>
+    <tr><td>Why averaging it also fails</td><td>Unweighted: small rows count as much as big ones. 30% against a truth of 21.4%.</td></tr>
+    <tr><td>The right shape</td><td>Sum first, divide last: <code>DIVIDE(SUM(Profit), SUM(Sales))</code>.</td></tr>
+    <tr><td>DIVIDE vs /</td><td>DIVIDE returns blank on a zero base instead of an error.</td></tr>
+    <tr><td>When a column is right</td><td>A stored fact about one row you want to slice, group, or filter by. Bands, flags, categories.</td></tr>
+    <tr><td>SWITCH(TRUE())</td><td>A ladder of conditions, first true one wins. The standard banding pattern.</td></tr>
+    <tr><td>Storage cost</td><td>Column: one stored value per row, poorly compressed. Measure: the formula text only.</td></tr>
+    <tr><td>Implicit measure</td><td>The auto-aggregation Power BI applies to a bare column. Defaults to SUM, meaningful or not.</td></tr>
+    <tr><td>Explicit measure</td><td>Named, written by you, one definition reused everywhere. What analysts ship.</td></tr>
+    <tr><td>Ratio subtotals</td><td>Never the sum of the rows above. 16.7% and 27.0% correctly total 21.4%.</td></tr>
+    <tr><td>Stale column</td><td>Columns update at refresh only. Live-tracking logic must be a measure.</td></tr>
   </table>
 
-  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Прежде чем писать какое-либо вычисление, скажите вслух, перемещается ли его ответ при щелчке слайсера. Ход означает меру, суммы внутри и деление в последнюю очередь. Неправильная версия никогда не дает ошибок. Он прекрасно форматируется и отправляется.</div>
+  <div class="note"><strong>The one habit to keep.</strong> Before writing any calculation, say out loud whether its answer moves when a slicer clicks. Moves means measure, sums inside and the division last. The wrong version never errors. It formats itself nicely and ships.</div>
 
-  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Моя первая колонка о марже выдержала три проверки отчетов, потому что 30% выглядели правдоподобными для бизнеса, и никто, включая меня, не добавлял цифры вручную. Как дольше всего в одном из ваших отчетов существовало неправильное соотношение и что в конечном итоге выявило его?</p>
+  <p>One last thought, and I would genuinely like other people's answers. My first margin column survived three report reviews, because 30% looked plausible for the business and nobody, including me, added the numbers by hand. What is the longest a wrong ratio has lived in one of your reports, and what finally exposed it?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Симпсон, Э. Х. (1951). Интерпретация взаимодействия в таблицах сопряженности.  <em>Журнал Королевского статистического общества, серия B</em>, 13(2), 238–241.</li>
-    <li>Бисра К., Лю К., Несбит Дж. К., Салими Ф. и Винн П. Х. (2018). Побуждение к самообъяснению: метаанализ.  <em>Обзор педагогической психологии</em>, 30(3), 703–725.</li>
-    <li>Кодд, EF (1970). Реляционная модель данных для крупных общих банков данных.  <em>Коммуникации ACM</em>, 13(6), 377–387.</li>
+    <li>Simpson, E. H. (1951). The interpretation of interaction in contingency tables. <em>Journal of the Royal Statistical Society, Series B</em>, 13(2), 238–241.</li>
+    <li>Bisra, K., Liu, Q., Nesbit, J. C., Salimi, F., &amp; Winne, P. H. (2018). Inducing self-explanation: A meta-analysis. <em>Educational Psychology Review</em>, 30(3), 703–725.</li>
+    <li>Codd, E. F. (1970). A relational model of data for large shared data banks. <em>Communications of the ACM</em>, 13(6), 377–387.</li>
   </ul>
 
   <div class="book">
-    <strong>Мера и вычисляемый столбец дают два разных ответа на одно и то же явление.</strong>
-    <p><em>Power BI для аналитиков</em>  это 187 страниц, мер и столбцов, сравниваемых по тому, когда оценивается каждая из них и как это влияет на общую сумму.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/power-bi-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=power-bi-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-powerbi-measures-vs-columns'})">Power BI для аналитиков, 19 долларов США →</a>
+    <strong>The measure and the calculated column give two different answers for the same thing.</strong>
+    <p><em>Power BI for Analysts</em> is 187 pages, measures and columns compared on when each one is evaluated, and what that does to a total.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/power-bi-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=power-bi-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-powerbi-measures-vs-columns'})">Power BI for Analysts, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>Практикуйте вилку до тех пор, пока она не станет рефлекторной.</strong>
-    <p style="margin:6px 0 0">The <a href="../../powerbi/">Комплект Power BI</a>  отрабатывает именно такого рода решения: проработанные примеры DAX, флэш-карточки с контекстом строк и фильтров, а также пробный экзамен, на котором вас просят разместить вычисления так, как это сделал бы интервьюер. Теперь вы владеете правилом; комплект — это повторы. Ничего устанавливать, учетная запись не требуется.</p>
-    <a class="btn" href="../../powerbi/">Откройте комплект Power BI →</a>
+    <strong>Practice the fork until it is reflex.</strong>
+    <p style="margin:6px 0 0">The <a href="../../powerbi/">Power BI Kit</a> drills exactly this kind of decision: worked DAX examples, flash cards on row and filter context, and a mock exam that asks you to place calculations the way an interviewer would. You now own the rule; the kit is the repetitions. Nothing to install, no account needed.</p>
+    <a class="btn" href="../../powerbi/">Open the Power BI Kit →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../data-driven-thresholds/">Пороги, управляемые данными</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../budget-vs-actual-variance/">Бюджет и фактическое отклонение</a> · <a href="../choose-the-right-chart/">Выберите правильный график</a> · <a href="../excel-sumifs/">СУМИМС в Excel</a> · <a href="../vlookup-vs-xlookup/">ВПР против XLOOKUP</a> · <a href="../correlation-vs-causation/">Корреляция против причинно-следственной связи</a> · <a href="../pandas-groupby/">панды группируются</a> · <a href="../excel-dashboard-build-order/">Порядок построения панели мониторинга Excel</a> · <a href="../excel-label-rows-before-charting/">Пометьте строки перед построением диаграммы</a> · <a href="../build-a-tableau-dashboard/">Создайте панель управления Tableau</a> · <a href="../tableau-concepts/">Концепции таблиц</a> · <a href="../tableau-relationships/">Табличные отношения</a> · <a href="../build-a-risk-index/">Создайте индекс риска</a> · <a href="../report-vs-analysis/">Отчет против анализа</a> · <a href="../what-is-data-analysis/">Что такое анализ данных?</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../powerbi-sum-vs-sumx/">SUM против SUMX в DAX</a> · <a href="../powerbi-row-level-security/">Безопасность на уровне строк в Power BI</a> · <a href="../../powerbi/">Комплект Power BI</a> · <a href="../../excel/">Excel комплект</a> · <a href="../../projects/">Портфельные проекты</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
+    <a href="../../">← Analyst Prep Kit</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../data-driven-thresholds/">Data-Driven Thresholds</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../budget-vs-actual-variance/">Budget vs Actual Variance</a> · <a href="../choose-the-right-chart/">Choose the Right Chart</a> · <a href="../excel-sumifs/">SUMIFS in Excel</a> · <a href="../vlookup-vs-xlookup/">VLOOKUP vs XLOOKUP</a> · <a href="../correlation-vs-causation/">Correlation vs Causation</a> · <a href="../pandas-groupby/">pandas GroupBy</a> · <a href="../excel-dashboard-build-order/">Excel Dashboard Build Order</a> · <a href="../excel-label-rows-before-charting/">Label Rows Before Charting</a> · <a href="../build-a-tableau-dashboard/">Build a Tableau Dashboard</a> · <a href="../tableau-concepts/">Tableau Concepts</a> · <a href="../tableau-relationships/">Tableau Relationships</a> · <a href="../build-a-risk-index/">Build a Risk Index</a> · <a href="../report-vs-analysis/">Report vs Analysis</a> · <a href="../what-is-data-analysis/">What Is Data Analysis?</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../powerbi-sum-vs-sumx/">SUM vs SUMX in DAX</a> · <a href="../powerbi-row-level-security/">Row-Level Security in Power BI</a> · <a href="../../powerbi/">Power BI Kit</a> · <a href="../../excel/">Excel Kit</a> · <a href="../../projects/">Portfolio Projects</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

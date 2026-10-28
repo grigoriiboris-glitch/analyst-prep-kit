@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Месячный рост SQL: LAG, формула роста и ловушки — комплект для подготовки аналитика</title>
-<meta name="description" content="Формула роста за месяц, LAG() в повседневных словах, и ловушка, когда один пропущенный месяц приводит к тому, что SQL сообщает о фальшивом падении на 30,6%. Каждый запрос выполняется на реальной таблице.">
+<title>Month-over-Month Growth in SQL: LAG, the Growth Formula, and the Traps — Analyst Prep Kit</title>
+<meta name="description" content="The MoM growth formula, LAG() in everyday words, and the trap where one skipped month makes SQL report a fake 30.6% drop. Every query run on a real table.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-month-over-month/">
-<meta property="og:title" content="Месячный рост SQL: LAG, формула роста и ловушки">
-<meta property="og:description" content="Этот месяц минус прошлый месяц, разделенный на последний месяц. Звучит просто, пока целочисленное деление не вернет ноль, первый месяц не станет NULL, а пробел заставит май сравниваться с мартом.">
+<meta property="og:title" content="Month-over-Month Growth in SQL: LAG, the Growth Formula, and the Traps">
+<meta property="og:description" content="This month minus last month, divided by last month. Sounds simple until integer division returns zero, the first month goes NULL, and a gap makes May compare itself to March.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/sql-month-over-month.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-month-over-month/">
@@ -134,18 +134,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-кит</a> · <a href="../">Все руководства</a></p>
-  <h1>Месячный рост SQL: LAG, формула роста и ловушки</h1>
-  <p class="meta">Этот месяц по сравнению с прошлым месяцем, и три причины, по которым SQL незаметно ошибается · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-07">7 августа 2026 г.</time></p>
+  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../sql/">SQL Kit</a> · <a href="../">All guides</a></p>
+  <h1>Month-over-Month Growth in SQL: LAG, the Growth Formula, and the Traps</h1>
+  <p class="meta">This month against last month, and the three ways SQL quietly gets it wrong · Part of the <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-07">August 7, 2026</time></p>
 
-  <p>К концу этой страницы вы можете написать запрос на ежемесячный рост и доверять его ответу. Вы узнаете формулу роста и как ее сказать в предложении, что  <code>LAG()</code>  на самом деле так и есть, а также три ловушки, которые выдают неправильные проценты без ошибок: целочисленное деление, пустой первый месяц и отсутствующий месяц. Это около двадцати минут.</p>
+  <p>By the end of this page you can write a month-over-month growth query and trust its answer. You will know the growth formula and how to say it in a sentence, what <code>LAG()</code> actually does, and the three traps that produce wrong percentages without producing an error: integer division, the empty first month, and the missing month. It is about twenty minutes.</p>
 
-  <p>Вот чем на самом деле заняться сегодня. Прежде чем доверять уже написанному запросу роста, запустите одну проверку: подсчитайте отдельные месяцы в ваших данных и сравните их с календарем. Если какой-либо месяц отсутствует, по крайней мере один из ваших показателей роста сравнивает не ту пару месяцев.</p>
+  <p>Here is what to actually do today. Before you trust any growth query you have already written, run one check: count the distinct months in your data and compare that count to the calendar. If any month is missing, at least one of your growth numbers is comparing the wrong pair of months.</p>
 
-  <p>Краткая версия: рост в этом месяце минус прошлый месяц, разделенный на последний месяц.  <code>LAG()</code>  извлекает значение прошлого месяца в строку этого месяца. Но  <code>LAG()</code>  извлекает предыдущую строку, а не предыдущий месяц, и это одно и то же, если не пропущен ни один месяц.</p>
+  <p>The short version: growth is this month minus last month, divided by last month. <code>LAG()</code> fetches last month's value onto this month's row. But <code>LAG()</code> fetches the previous row, not the previous month, and those are only the same thing when no month is missing.</p>
 
-  <p>Это последнее различие очень острое, поэтому оно дает представление о картине.</p>
+  <p>That last distinction is the one that bites, so it gets the picture.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 300" role="img" aria-labelledby="momTitle momDesc" xmlns="http://www.w3.org/2000/svg">
@@ -195,28 +195,28 @@
         </defs>
       </g>
     </svg>
-    <figcaption>LAG соединяет каждую строку со строкой над ней. Слева апрель отсутствует, поэтому май спокойно сравнивает себя с мартом. Справа календарная строка за апрель делает каждую стрелку настоящим соседом.</figcaption>
+    <figcaption>LAG connects each row to the row above it. On the left, April is missing, so May quietly compares itself to March. On the right, a calendar row for April makes every arrow a true neighbor.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>Что вы узнаете</strong>
+    <strong>What you'll learn</strong>
     <ol>
-      <li>Формула роста и как ее сказать в предложении</li>
-      <li>Сначала одна строка в месяц, затем сравнение</li>
-      <li>ЛАГ в обиходных словах</li>
-      <li>Две тихие ловушки: целочисленное деление и NULL в первый месяц.</li>
-      <li>Ловушка пропавшего месяца показана на самом деле</li>
-      <li>Полное до и после</li>
-      <li>Крайние случаи: чтение негативов, форматирование, соотношение месячного месяца к годовому отчету</li>
-      <li>Почему это работает</li>
-      <li>Использование этого в вашем собственном проекте</li>
-      <li>Все на одном экране</li>
+      <li>The growth formula, and how to say it in a sentence</li>
+      <li>One row per month first, then compare</li>
+      <li>LAG in everyday words</li>
+      <li>Two quiet traps: integer division and the NULL first month</li>
+      <li>The missing-month trap, shown actually happening</li>
+      <li>The full before and after</li>
+      <li>Edge cases: reading negatives, formatting, MoM against YoY</li>
+      <li>Why this works</li>
+      <li>Using this on your own project</li>
+      <li>The whole thing on one screen</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Проработанный пример реальный.</strong>  Каждый запрос на этой странице выполнялся в SQLite по таблице заказов из двенадцати строк, показанной ниже, и каждый вывод вставлялся из выполнения. В SQLite есть оконные функции начиная с версии 3.25, поэтому сегодня вы можете воспроизвести все это на своем компьютере. Если сама группировка новая, прочтите  <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a>  сначала и возвращайся.</div>
+  <div class="note"><strong>The worked example is real.</strong> Every query on this page ran in SQLite against the twelve-row orders table shown below, and every output is pasted from the run. SQLite has had window functions since version 3.25, so you can reproduce all of it on your own machine today. If grouping itself is new, read <a href="../sql-group-by-having/">GROUP BY and HAVING</a> first and come back.</div>
 
-  <p>Вот весь набор данных. Двенадцать заказов, пять месяцев, а в апреле заказов вообще нет. Этот пустой апрель нарочно, потому что это звезда ловушки номер три.</p>
+  <p>Here is the whole dataset. Twelve orders, five months, and no orders at all in April. That empty April is on purpose, because it is the star of trap number three.</p>
 
   <table>
     <tr><th>order_id</th><th>order_date</th><th>amount</th></tr>
@@ -235,23 +235,23 @@
   </table>
 
   <div class="step">
-    <h2>1. Формула роста и как ее выразить в предложении</h2>
+    <h2>1. The growth formula, and how to say it in a sentence</h2>
 
-    <p>До пояснения: выручка была 250 в январе и 300 в феврале. Прежде чем прочитать формулу, произнесите вслух темпы роста за февраль.</p>
+    <p>Before the explanation: revenue was 250 in January and 300 in February. Say the February growth rate out loud before you read the formula.</p>
 
-    <p>Месячный рост равен этому месяцу минус прошлый месяц, разделенному на последний месяц. В цифрах: 300 минус 250 — 50, а 50 разделить на 250 — 0,2, что составляет 20%. Деление — это часть, которую люди пропускают при разговоре, и именно она делает число сопоставимым. Скачок на 50 — это огромная ошибка для тележки с кофе и ошибка округления для авиакомпании. Деление на последний месяц превращает необработанные изменения в долю от того, с чего вы начали.</p>
+    <p>Month-over-month growth is this month minus last month, divided by last month. In numbers: 300 minus 250 is 50, and 50 divided by 250 is 0.2, which is 20%. The division is the part people skip when talking, and it is the part that makes the number comparable. A jump of 50 is huge for a coffee cart and a rounding error for an airline. Dividing by last month turns the raw change into a share of where you started.</p>
 
-    <p>Версия предложения имеет значение, потому что вас будут спрашивать об этом на собеседованиях и в коридорах. Практикуйте именно такую ​​формулу: «Доход вырос на 20% по сравнению с предыдущим месяцем, с 250 в январе до 300 в феврале». Сначала оцените, затем два необработанных числа. Использование обоих защитит вас, потому что процент без базы скрывает небольшие числа, а необработанное изменение без базы скрывает масштаб.</p>
+    <p>The sentence version matters because you will be asked for it in interviews and in hallways. Practice this exact shape: "Revenue grew 20% month over month, from 250 in January to 300 in February." Rate first, then the two raw numbers. Giving both protects you, because a percentage with no base hides small numbers, and a raw change with no base hides scale.</p>
 
-    <p>Одна словарная заметка. «Месяц за месяцем» всегда означает текущий месяц по сравнению с месяцем, предшествующим ему. Сравнивать июнь с июнем прошлого года — это «год по сравнению с прошлым годом», и они отвечают на разные вопросы. Седьмой раздел возвращается к этому.</p>
+    <p>One vocabulary note. "Month over month" always means this month compared to the month immediately before it. Comparing June to last June is "year over year," and the two answer different questions. Section seven comes back to that.</p>
   </div>
 
   <div class="step">
-    <h2>2. Сначала одна строка в месяц, затем сравнение</h2>
+    <h2>2. One row per month first, then compare</h2>
 
-    <p>Перед пояснением: таблица заказов состоит из двенадцати строк, охватывающих пять месяцев. Сколько строк должна иметь таблица, в которой вы сравниваете соседей?</p>
+    <p>Before the explanation: the orders table has twelve rows covering five months. How many rows should the table you compare neighbors on have?</p>
 
-    <p>Пять. Рост — это сравнение месяцев, поэтому, прежде чем какое-либо сравнение может произойти, данные должны стать одной строкой в ​​месяц. Это зерновой ход. Зерно — это то, что означает одна строка: сейчас одна строка — это один заказ, а вопрос требует, чтобы одна строка соответствовала одному месяцу.  <code>GROUP BY</code>  делает этот шаг, и  <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a>  покрывает его полностью, если коллапс кажется волшебным.</p>
+    <p>Five. Growth is a comparison between months, so before any comparing can happen, the data has to become one row per month. This is a grain move. Grain is what one row means: right now one row is one order, and the question needs one row to be one month. <code>GROUP BY</code> makes that move, and <a href="../sql-group-by-having/">GROUP BY and HAVING</a> covers it in full if the collapse feels magic.</p>
 
     <pre><code>SELECT strftime('%Y-%m', order_date) AS month,
        SUM(amount) AS revenue
@@ -259,7 +259,7 @@ FROM orders
 GROUP BY strftime('%Y-%m', order_date)
 ORDER BY month;</code></pre>
 
-    <p>The <code>strftime('%Y-%m', ...)</code>  часть сокращает полную дату, например 2025-01-04, до месяца, 2025-01. В других базах данных это записано по-другому:  <code>DATE_TRUNC('month', order_date)</code>  в PostgreSQL,  <code>FORMAT(order_date, 'yyyy-MM')</code>  в SQL-сервере. Везде одна и та же идея. Вот реальный результат.</p>
+    <p>The <code>strftime('%Y-%m', ...)</code> part chops a full date like 2025-01-04 down to its month, 2025-01. Other databases spell this differently: <code>DATE_TRUNC('month', order_date)</code> in PostgreSQL, <code>FORMAT(order_date, 'yyyy-MM')</code> in SQL Server. Same idea everywhere. Here is the real output.</p>
 
     <table>
       <tr><th>month</th><th>revenue</th></tr>
@@ -270,15 +270,15 @@ ORDER BY month;</code></pre>
       <tr><td>2025-06</td><td>250</td></tr>
     </table>
 
-    <p>Проверьте это вручную один раз, потому что доверие к остальной части страницы вытекает из этой таблицы. Январь — это 120 плюс 80 плюс 50, что составляет 250. Март — это 200 плюс 60 плюс 100, что составляет 360. И обратите внимание, чего в таблице нет: апрельской строки. Нулевые заказы означают отсутствие строк для группировки, поэтому апрель здесь не равен нулю. Оно отсутствует. Имейте это в виду.</p>
+    <p>Check it by hand once, because trust in the rest of the page flows from this table. January is 120 plus 80 plus 50, which is 250. March is 200 plus 60 plus 100, which is 360. And notice what the table does not have: an April row. Zero orders means zero rows to group, so April is not zero here. It is absent. Keep that in mind.</p>
   </div>
 
   <div class="step">
-    <h2>3. ЛАГ в повседневных словах</h2>
+    <h2>3. LAG in everyday words</h2>
 
-    <p>Перед объяснением: у вас есть пять ежемесячных строк, и вам нужно, чтобы каждая строка также знала доход предыдущей строки. Куда физически пойдет это число?</p>
+    <p>Before the explanation: you have five monthly rows and you need each row to also know the previous row's revenue. Where would that number physically go?</p>
 
-    <p>В ту же строку, в новом столбце. В этом вся работа  <code>LAG()</code>. Говоря повседневными словами: отсортируйте строки, затем для каждой строки доберитесь до строки выше и скопируйте значение вниз.  <code>LAG(revenue) OVER (ORDER BY month)</code>  говорит: «Отсортируйте по месяцам, а затем передайте в каждую строку доход из предыдущей строки». Это оконная функция, что означает, что она может видеть соседние строки, не сворачивая их.  <a href="../sql-window-functions/">Оконные функции</a>  охватывает эту семью должным образом.</p>
+    <p>Onto the same row, in a new column. That is the whole job of <code>LAG()</code>. In everyday words: sort the rows, then for each row, reach up to the row above and copy a value down. <code>LAG(revenue) OVER (ORDER BY month)</code> says "sort by month, then hand every row the revenue from the row before it." It is a window function, which means it can see neighboring rows without collapsing them, and <a href="../sql-window-functions/">window functions</a> covers that family properly.</p>
 
     <pre><code>WITH monthly AS (
   SELECT strftime('%Y-%m', order_date) AS month,
@@ -301,31 +301,31 @@ ORDER BY month;</code></pre>
       <tr><td>2025-06</td><td>250</td><td>250</td></tr>
     </table>
 
-    <p>Если прошлый месяц находится рядом с этим месяцем, рост представляет собой простую арифметическую операцию в одной строке: доход минус prev_revenue, деленный на prev_revenue. Но сначала посмотрите внимательно на этот результат. Две из пяти строк уже содержат оставшиеся ловушки на этой странице. Значение prev_revenue за январь равно NULL. А prev_revenue Мэй — 360, что является числом марта. У обоих есть свой раздел.</p>
+    <p>Once last month sits beside this month, growth is plain arithmetic on one row: revenue minus prev_revenue, divided by prev_revenue. But look closely at that output first. Two of the five rows already contain this page's remaining traps. January's prev_revenue is NULL. And May's prev_revenue is 360, which is March's number. Both get their own section.</p>
 
-    <p>The <code>ORDER BY month</code>  внутри круглых скобок это не украшение. LAG понятия не имеет, что такое месяц. Он знает только «строку перед этой в том порядке, который мне дали». Выполните сортировку по неправильному столбцу, и LAG с радостью выдаст вам доход по какой-то несвязанной строке.</p>
+    <p>The <code>ORDER BY month</code> inside the parentheses is not decoration. LAG has no idea what a month is. It only knows "the row before this one in the order I was given." Sort by the wrong column and LAG will cheerfully hand you the revenue of some unrelated row.</p>
   </div>
 
   <div class="step">
-    <h2>4. Две тихие ловушки: целочисленное деление и нулевой первый месяц.</h2>
+    <h2>4. Two quiet traps: integer division and the NULL first month</h2>
 
-    <p>Перед пояснением: 50 разделить на 250 равно 0,2. Что ответит база данных, если оба числа храниться как целые числа?</p>
+    <p>Before the explanation: 50 divided by 250 is 0.2. What will a database answer if both numbers are stored as whole numbers?</p>
 
-    <p>Ноль. В большинстве баз данных при делении одного целого числа на другое остаток выбрасывается, поскольку столбец целых чисел обещает целые числа. Так  <code>(revenue - prev_revenue) / prev_revenue</code>  равно 50/250, то есть целочисленное деление округляет до 0. Любой темп роста между минус 99% и плюс 99% становится нулевым, запрос выполняется без нареканий, и в отчете говорится, что рост остается неизменным. Я сравнивал именно это с этой таблицей и каждый месяц получал 0.</p>
+    <p>Zero. In most databases, dividing one integer by another throws away the remainder, because an integer column promises whole numbers. So <code>(revenue - prev_revenue) / prev_revenue</code> is 50 / 250, which integer division rounds down to 0. Every growth rate between minus 99% and plus 99% becomes zero, the query runs without complaint, and the report says growth is flat. I ran exactly that against this table and every single month came back 0.</p>
 
-    <p>Исправление состоит в том, чтобы принудительно выполнить десятичную математику до того, как произойдет деление. Умножение на  <code>100.0</code>  сначала делает это, потому что одно десятичное число в выражении делает все выражение десятичным:</p>
+    <p>The fix is to force decimal math before the division happens. Multiplying by <code>100.0</code> first does it, because one decimal number in the expression makes the whole expression decimal:</p>
 
     <pre><code>ROUND(100.0 * (revenue - prev_revenue) / prev_revenue, 1) AS growth_pct</code></pre>
 
-    <p>Это возвращает 20,0 для февраля вместо 0.  <code>CAST(revenue AS REAL)</code>  выполняет ту же работу, если вы предпочитаете, чтобы это было прописано.</p>
+    <p>That returns 20.0 for February instead of 0. <code>CAST(revenue AS REAL)</code> does the same job if you prefer it spelled out.</p>
 
-    <p>Вторая тихая ловушка – январь. Его prev_revenue равно NULL, потому что LAG добрался до первой строки и ничего там не нашел. NULL — это SQL-маркер неизвестного, дыра, куда может попасть значение, и  <a href="../sql-null/">НУЛЬ в SQL</a>  это целое руководство о том, как ведут себя эти дыры. Здесь поведение на самом деле милосердное: арифметика с NULL дает NULL, поэтому январский рост печатается как NULL, а не как поддельное число. Оставьте это так. НУЛЕВЫЙ первый месяц — это честный ответ, потому что рост до начала ваших данных действительно неизвестен. Единственная ошибка — «фиксировать» его на ноль, что означает фиксированный рост, для которого у вас нет доказательств.</p>
+    <p>The second quiet trap is January. Its prev_revenue is NULL, because LAG reached up from the first row and found nothing there. NULL is SQL's marker for unknown, a hole where a value would go, and <a href="../sql-null/">NULL in SQL</a> is a whole guide on how those holes behave. Here the behavior is actually merciful: arithmetic with NULL yields NULL, so January's growth prints as NULL rather than as a fake number. Leave it that way. A NULL first month is the honest answer, because growth from before your data started is genuinely unknown. The only mistake is "fixing" it to zero, which claims flat growth you have no evidence for.</p>
   </div>
 
   <div class="step">
-    <h2>5. Ловушка пропавшего месяца, происходящая на самом деле</h2>
+    <h2>5. The missing-month trap, shown actually happening</h2>
 
-    <p>Вот полный запрос наивного роста. Выглядит законченным. Скажите, каким будет майский рост_процента и по отношению к какому месяцу, прежде чем смотреть на результат.</p>
+    <p>Here is the full naive growth query. It looks finished. Say what May's growth_pct will be, and against which month, before you look at the output.</p>
 
     <pre><code>WITH monthly AS (
   SELECT strftime('%Y-%m', order_date) AS month,
@@ -350,11 +350,11 @@ ORDER BY month;</code></pre>
       <tr><td>2025-06</td><td>250</td><td>250</td><td>0.0</td></tr>
     </table>
 
-    <p>Майский ряд сообщает о падении на 30,6%. Это число указано из месяца в месяц, а не из месяца в месяц. В апреле не было заказов, поэтому в апреле нет строки, поэтому строка над маем — это март. LAG отлично справился со своей задачей: достал предыдущий ряд. Предыдущий ряд был два календарных месяца назад. Ничто не ошибается, ничего не предупреждает, и теперь в отчете говорится о снижении на один месяц, хотя на самом деле это двухмесячный спад с мертвым месяцем посередине.</p>
+    <p>The May row reports a 30.6% drop. That number is labeled month over month, and it is not month over month. April had no orders, so April has no row, so the row above May is March. LAG did its job perfectly: it fetched the previous row. The previous row was two calendar months ago. Nothing errors, nothing warns, and the report now says one month's decline when the truth is a two-month slide with a dead month in the middle.</p>
 
-    <p>Прежде чем читать исправление, скажите вслух, почему Мэй сравнила себя с Мартом. Если вы сможете это сформулировать, вы сможете найти это в любом запросе до конца вашей карьеры.</p>
+    <p>Say out loud why May compared itself to March before reading the fix. If you can state it, you can spot it in any query for the rest of your career.</p>
 
-    <p>Решение состоит в том, чтобы самостоятельно создать календарь и прикрепить к нему данные, чтобы в каждом месяце была строка, независимо от того, были ли в нем заказы. В SQLite рекурсивный CTE генерирует месяцы. PostgreSQL имеет  <code>generate_series</code>  для одного и того же задания, а на складе вы обычно присоединяетесь к уже существующей таблице измерений даты.</p>
+    <p>The fix is to build the calendar yourself and attach the data to it, so every month has a row whether or not it had orders. In SQLite a recursive CTE generates the months. PostgreSQL has <code>generate_series</code> for the same job, and in a warehouse you usually join to a date dimension table that already exists.</p>
 
     <pre><code>WITH RECURSIVE calendar(month) AS (
   SELECT '2025-01'
@@ -381,7 +381,7 @@ FROM calendar c
 LEFT JOIN monthly m ON m.month = c.month
 ORDER BY c.month;</code></pre>
 
-    <p>Три небольшие детали несут вес.  <code>LEFT JOIN</code>  сохраняется каждый календарный месяц, даже если нет соответствующих заказов.  <code>COALESCE(m.revenue, 0)</code>  превращает пустой апрель в настоящий ноль, и это правильно, потому что нулевые заказы действительно означали нулевой доход. И  <code>NULLIF(..., 0)</code>  защищает деление: рост с нулевого месяца будет делиться на ноль, поэтому вместо этого возвращается NULL. Вот реальный результат.</p>
+    <p>Three small parts carry the weight. The <code>LEFT JOIN</code> keeps every calendar month even when no orders match it. <code>COALESCE(m.revenue, 0)</code> turns the empty April into an actual zero, which is correct here because zero orders really did mean zero revenue. And <code>NULLIF(..., 0)</code> guards the division: growth from a zero month would divide by zero, so it returns NULL instead. Here is the real output.</p>
 
     <table>
       <tr><th>month</th><th>revenue</th><th>prev_revenue</th><th>growth_pct</th></tr>
@@ -393,13 +393,13 @@ ORDER BY c.month;</code></pre>
       <tr><td>2025-06</td><td>250</td><td>250</td><td>0.0</td></tr>
     </table>
 
-    <p>Теперь история правдива. Апрель упал на 100% и ни к чему. Мэйский рост равен NULL, поскольку процентное увеличение от нуля не определено, а NULL — это честный способ вывести неопределенное значение. Фальшивое месячное падение на 30,6% исчезло, его заменило то, что произошло на самом деле: крах и перезапуск.</p>
+    <p>Now the story is true. April fell 100%, to nothing. May's growth is NULL because a percentage climb from zero is undefined, and NULL is the honest way to print undefined. The fake single-month 30.6% drop is gone, replaced by what actually happened: a collapse and a restart.</p>
   </div>
 
   <div class="step">
-    <h2>6. Полное до и после</h2>
+    <h2>6. The full before and after</h2>
 
-    <p>Та же таблица, тот же вопрос: как растет выручка из месяца в месяц?</p>
+    <p>Same table, same question: how is revenue growing month over month?</p>
 
     <h3>Before</h3>
     <pre><code>WITH monthly AS (
@@ -413,7 +413,7 @@ SELECT month, revenue,
          / LAG(revenue) OVER (ORDER BY month) AS growth
 FROM monthly;</code></pre>
 
-    <p>Три дефекта, ноль сообщений об ошибках. При целочисленном делении каждый темп роста выводится как 0. Отсутствие апреля сравнивает май с мартом. И ничто на экране не сообщает читателю, что что-то произошло.</p>
+    <p>Three defects, zero error messages. Integer division makes every growth rate print as 0. The missing April makes May compare against March. And nothing on the screen tells the reader either thing happened.</p>
 
     <h3>After</h3>
     <pre><code>-- ============================================================
@@ -449,102 +449,102 @@ FROM calendar c
 LEFT JOIN monthly m ON m.month = c.month
 ORDER BY c.month;</code></pre>
 
-    <p>Присутствует каждый охранник, и каждый излагает свою причину в комментарии, в стиле  <a href="../sql-teaching-comments/">Как комментировать SQL, чтобы он обучал</a>. Рецензент теперь может не согласиться с выбором вместо того, чтобы обнаружить его.</p>
+    <p>Every guard is present and every guard states its reason in a comment, in the style from <a href="../sql-teaching-comments/">how to comment SQL so it teaches</a>. A reviewer can now disagree with a choice instead of discovering it.</p>
 
-    <p>Представьте, что прямо сейчас запускаете версию после в своей таблице доходов или подписок. Какой месяц вернется со ссорой, о которой вы не знали? Если вы не можете ответить, то именно это и является причиной его запуска. И узор станет вашим только после того, как его нарисуют ваши пальцы, так что    <a href="../../drill/">введите запрос самостоятельно</a>  а не вставлять его.</p>
+    <p>Picture running the after version on your own revenue or signups table right now. Which month would come back with a gap row you did not know about? If you cannot answer, that is precisely the reason to run it. And the pattern only becomes yours once your fingers have produced it, so <a href="../../drill/">type the query yourself</a> rather than pasting it.</p>
   </div>
 
   <div class="step">
-    <h2>7. Крайние случаи: чтение негативов, форматирование, соотношение месячного и годового показателей.</h2>
+    <h2>7. Edge cases: reading negatives, formatting, MoM against YoY</h2>
 
-    <p>Перед пояснением: в один месяц выручка упала на 30%, а в следующем выросла на 30%. Вернулся ли он туда, где все началось?</p>
+    <p>Before the explanation: revenue fell 30% one month, then rose 30% the next. Is it back where it started?</p>
 
-    <p><strong>Нет, и это ловушка отрицательного роста показателей.</strong>  Уменьшение на 30% от 100 — это 70. Увеличение на 30% от 70 — это 91. Процентные изменения складываются независимо от того, где они происходят, поэтому для того, чтобы отменить падение, требуется больший подъем. Когда вы представляете падение, назовите и уровень: «на 30,6%, с 360 до 250». Пара уровней удерживает читателей от мысленного изменения процентного значения.</p>
+    <p><strong>No, and that is the negative-growth reading trap.</strong> Down 30% from 100 is 70. Up 30% from 70 is 91. Percent changes compound from wherever they land, so a drop needs a larger rise to undo it. When you present a fall, say the level too: "down 30.6%, from 360 to 250." The level pair keeps readers from mentally reversing the percentage.</p>
 
-    <p><strong>Форматируем в последний момент.</strong>  Сохраняйте рост в виде простого числа, например -30,6, на протяжении всего SQL и позволяйте уровню отчета добавлять знак процента. Строки типа «-30,6%» невозможно отсортировать, усреднить или составить диаграмму, и кто-то всегда пытается это сделать.  <code>ROUND(x, 1)</code>  достаточна точность для деловой аудитории; 20,03847% не сообщают ничего такого, чего не сообщает 20,0%.</p>
+    <p><strong>Format at the last moment.</strong> Keep growth as a plain number, like -30.6, all the way through the SQL, and let the report layer add the percent sign. Strings like '-30.6%' cannot be sorted, averaged, or charted, and someone always tries. <code>ROUND(x, 1)</code> is enough precision for a business audience; 20.03847% communicates nothing that 20.0% does not.</p>
 
-    <p><strong>Крошечная база дает глупый процент.</strong>  Рост от 2 до 10 составляет 400%. Правда и бесполезно. Когда последний месяц близок к нулю, сообщите о необработанном изменении вместе со ставкой или подавите ставку ниже записанного вами минимального уровня.</p>
+    <p><strong>A tiny base makes a silly percentage.</strong> Growth from 2 to 10 is 400%. True, and useless. When last month is near zero, report the raw change alongside the rate or suppress the rate below a floor you write down.</p>
 
-    <p><strong>Месяц месяца шумен там, где календарь сезонный.</strong>    Продажи мороженого падают каждый сентябрь, и никто не должен получать тревожные электронные письма по этому поводу. Месяц за месяцем задается вопрос «что только что изменилось», что усиливает сезонность и разовые всплески. Из года в год июнь сравнивается с июнем прошлого года, поэтому сезон сводится на нет, и тенденция проявляется. Используйте Мама, чтобы быстро обнаружить повороты, г/г, чтобы спокойно констатировать тенденцию, и обе линии на одном графике, когда аудитория может это принять.    <a href="../../forecasting/">Комплект прогнозирования</a>  корректно работает с сезонностью, в том числе когда «падение» — это просто дыхание календаря.</p>
+    <p><strong>MoM is noisy where the calendar is seasonal.</strong> Ice cream sales fall every September, and no one should get an alarmed email about it. Month over month asks "what just changed," so it amplifies seasonality and one-off spikes. Year over year compares June to last June, so the season cancels out and the trend shows through. Use MoM to detect turns quickly, YoY to state the trend calmly, and both lines on the same chart when the audience can take it. The <a href="../../forecasting/">Forecasting Kit</a> works through seasonality properly, including when a "drop" is just the calendar breathing.</p>
   </div>
 
-  <h2>Почему это работает</h2>
+  <h2>Why this works</h2>
 
-  <p>Движение зерна во втором разделе не является выбором стиля. В реляционной модели результатом запроса является отношение, и каждая строка отношения содержит один факт в одном зерне (Кодд, 1970,    <em>Коммуникации ACM</em>, 13(6), 377–387). «Рост» — это факт о паре месяцев, поэтому запрос должен сначала создать строки, зернистостью которых является месяц, а затем связать соседей. Весь контракт LAG, предыдущая строка в указанном порядке, имеет смысл только потому, что строки под ним означают один месяц каждая. Каждая ловушка на этой странице — это место, где порядок строк или зернистость строк молча перестали соответствовать календарю.</p>
+  <p>The grain move in section two is not a style choice. In the relational model a query result is a relation, and each row of a relation states one fact at one grain (Codd, 1970, <em>Communications of the ACM</em>, 13(6), 377–387). "Growth" is a fact about a pair of months, so the query must first manufacture rows whose grain is the month, then relate neighbors. LAG's entire contract, the previous row in a stated order, is only meaningful because the rows beneath it were made to mean one month each. Every trap on this page is a place where the row order or the row grain silently stopped matching the calendar.</p>
 
-  <p>Эта страница также продолжала просить вас ответить, прежде чем она вам сказала. Это намеренно. Попытка ответить до того, как вы увидите решение, заметно улучшает память на материал, даже если попытка неверна (Бисра, Лю, Несбит, Салими и Винн, 2018,  <em>Обзор педагогической психологии</em>, 30(3), 703–725). А практика извлечения информации лучше перечитывания для сохранения в течение любого интервала, важного для работы (Краснее &amp; выбирать карпа, 2006,    <em>Психологическая наука</em>, 17(3), 249–255). Шпаргалка внизу предназначена для поиска, а не для перечитывания.</p>
+  <p>This page also kept asking you to answer before it told you. That is deliberate. Attempting an answer before seeing the solution measurably improves memory for the material, even when the attempt is wrong (Bisra, Liu, Nesbit, Salimi, &amp; Winne, 2018, <em>Educational Psychology Review</em>, 30(3), 703–725). And practicing retrieval beats rereading for retention over any interval that matters for a job (Roediger &amp; Karpicke, 2006, <em>Psychological Science</em>, 17(3), 249–255). The cheat sheet at the bottom is built for retrieval, not for rereading.</p>
 
-  <h2>Использование этого в вашем собственном проекте</h2>
+  <h2>Using this on your own project</h2>
 
-  <p>Модернизация каждого запроса роста, который вы когда-либо отправляли, — это ужасно, и вы не закончите его. Вместо этого сделайте это по порядку.</p>
+  <p>Retrofitting every growth query you have ever shipped is miserable, and you will not finish it. Do this instead, in order.</p>
 
   <ol>
-    <li><strong>Запустите проверку количества месяцев</strong>  в первую очередь в самом читаемом отчете.  <code>SELECT COUNT(DISTINCT strftime('%Y-%m', order_date)) FROM orders</code>, а затем сравните с количеством календарных месяцев, которые должны охватывать ваши данные. Несоответствие означает, что по крайней мере одно сравнение LAG в данный момент неверно.</li>
-    <li><strong>Add <code>prev_revenue</code>  как видимый столбец</strong>  в этом отчете речь идет не только о процентах. Читатель, который может видеть 250 и 360 рядом друг с другом, уловит неправильную пару, которую скрывает одинокий -30,6.</li>
-    <li><strong>Put <code>100.0</code>  или  <code>CAST</code>  в каждом подразделении</strong>, even where today's column types are decimal. Column types change; the guard is free.</li>
-    <li><strong>Создайте или одолжите один календарный стол</strong>  и с этого момента присоединяйте к нему каждый временной ряд. Один CTE, написанный один раз, вставленный навсегда.</li>
-    <li><strong>Напишите причины охранников в комментариях.</strong>  в том же проходе, пока еще помнишь почему.</li>
+    <li><strong>Run the month-count check</strong> on your most-read report first. <code>SELECT COUNT(DISTINCT strftime('%Y-%m', order_date)) FROM orders</code>, then compare against the number of calendar months your data should span. A mismatch means at least one LAG comparison is wrong right now.</li>
+    <li><strong>Add <code>prev_revenue</code> as a visible column</strong> in that report, not just the percentage. A reader who can see 250 and 360 side by side will catch a wrong pairing that a lone -30.6 hides.</li>
+    <li><strong>Put <code>100.0</code> or a <code>CAST</code> in every division</strong>, even where today's column types are decimal. Column types change; the guard is free.</li>
+    <li><strong>Build or borrow one calendar table</strong> and join every time series to it from now on. One CTE, written once, pasted forever.</li>
+    <li><strong>Write the guards' reasons as comments</strong> in the same pass, while you still remember why.</li>
   </ol>
 
-  <p>Если у вас под рукой есть бумага, один рисунок стоит пяти минут и это необязательно. Нарисуйте свои собственные последние шесть месяцев в виде ячеек в столбце, стрелками от каждого поля к указанному выше, затем вычеркните любой месяц, который, как вы подозреваете, может быть пустым в данных, и посмотрите, какая стрелка только что стала ложью. Перерисовка фигуры по памяти – это повторение поиска и самопроверка в одном лице.</p>
+  <p>If you have paper nearby, one drawing is worth five minutes and it is optional. Draw your own last six months as boxes in a column, arrows from each box to the one above, then cross out any month you suspect might be empty in the data and see which arrow just became a lie. Redrawing the figure from memory is a retrieval rep and a self-check in one.</p>
 
-  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: SQL, Excel, Tableau и связанные с ними рабочие привычки.</div>
+  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: SQL, Excel, Tableau, and the working habits around them.</div>
 
-  <h2>Все на одном экране</h2>
+  <h2>The whole thing on one screen</h2>
 
-  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
+  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
 
   <table>
-    <tr><th>Concept</th><th>Что это такое</th></tr>
-    <tr><td>Формула роста за месяц</td><td>Этот месяц минус прошлый месяц, разделенный на последний месяц.</td></tr>
-    <tr><td>Версия предложения</td><td>«Месячный рост вырос на 20%, с 250 до 300». Оцените, затем оба уровня.</td></tr>
-    <tr><td>Шаг первый, всегда</td><td>GROUP BY до одной строки в месяц. Для роста сначала нужно месячное зерно.</td></tr>
-    <tr><td><code>LAG(x) OVER (ORDER BY m)</code></td><td>Отсортируйте строки, затем скопируйте значение предыдущей строки в эту строку.</td></tr>
-    <tr><td>Чего не знает ЛАГ</td><td>Все о календарях. Он извлекает предыдущую строку.</td></tr>
-    <tr><td>Ловушка целочисленного деления</td><td>50/250 равно 0, если оба являются целыми числами. Сначала умножьте на 100,0.</td></tr>
-    <tr><td>Рост за первый месяц</td><td>NULL и оставьте его NULL. Рост по сравнению с предыдущими данными неизвестен.</td></tr>
-    <tr><td>Ловушка пропавшего месяца</td><td>Гэп делает пару LAG несмежными месяцами. Май против марта, молча.</td></tr>
-    <tr><td>Исправление</td><td>Создайте календарь, LEFT JOIN данных к нему, COALESCE до 0.</td></tr>
-    <tr><td>Инструменты календаря</td><td>Рекурсивный CTE в SQLite,генерировать_серию в PostgreSQL, измерение даты в хранилище.</td></tr>
-    <tr><td>Рост с нуля</td><td>Неопределенный. NULLIF(предыдущий, 0) выводит значение NULL, а не ошибку.</td></tr>
-    <tr><td>Читая осень</td><td>Снижение на 30%, а затем повышение на 30% не является фиксированным. Всегда указывайте уровни со ставкой.</td></tr>
-    <tr><td>Formatting</td><td>Сохраняйте числовое значение в SQL, ОКРУГЛИТЕ до одного десятичного знака, добавьте % на уровне отчета.</td></tr>
-    <tr><td>М/м против г/г</td><td>Мама быстро обнаруживает повороты, но усиливает сезонность. Год назад отменяет сезон.</td></tr>
+    <tr><th>Concept</th><th>What it is</th></tr>
+    <tr><td>MoM growth formula</td><td>This month minus last month, divided by last month.</td></tr>
+    <tr><td>The sentence version</td><td>"Grew 20% month over month, from 250 to 300." Rate, then both levels.</td></tr>
+    <tr><td>Step one, always</td><td>GROUP BY to one row per month. Growth needs month grain first.</td></tr>
+    <tr><td><code>LAG(x) OVER (ORDER BY m)</code></td><td>Sort the rows, then copy the previous row's value onto this row.</td></tr>
+    <tr><td>What LAG does not know</td><td>Anything about calendars. It fetches the previous ROW.</td></tr>
+    <tr><td>Integer division trap</td><td>50 / 250 is 0 when both are integers. Multiply by 100.0 first.</td></tr>
+    <tr><td>First month's growth</td><td>NULL, and leave it NULL. Growth from before the data is unknown.</td></tr>
+    <tr><td>Missing-month trap</td><td>A gap makes LAG pair non-adjacent months. May vs March, silently.</td></tr>
+    <tr><td>The fix</td><td>Generate a calendar, LEFT JOIN the data to it, COALESCE to 0.</td></tr>
+    <tr><td>Calendar tools</td><td>Recursive CTE in SQLite, generate_series in PostgreSQL, date dimension in a warehouse.</td></tr>
+    <tr><td>Growth from zero</td><td>Undefined. NULLIF(prev, 0) makes it print as NULL, not an error.</td></tr>
+    <tr><td>Reading a fall</td><td>Down 30% then up 30% is not flat. Always give the levels with the rate.</td></tr>
+    <tr><td>Formatting</td><td>Keep it numeric in SQL, ROUND to one decimal, add % in the report layer.</td></tr>
+    <tr><td>MoM vs YoY</td><td>MoM detects turns fast but amplifies seasonality. YoY cancels the season.</td></tr>
   </table>
 
-  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Если вы больше ничего не извлекаете из этой страницы, никогда не доверяйте LAG в отношении дат, пока не убедитесь, что в каждом календарном периоде есть строка. Неправильный показатель роста никогда не выглядит неправильным. Это выглядит как результат со знаком минус и одним десятичным знаком. Если запрос на рост дает сбой, который не описан на этой странице, существует общая  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>.</div>
+  <div class="note"><strong>The one habit to keep.</strong> If you take nothing else from this page, never trust a LAG over dates until you have confirmed every calendar period has a row. The wrong growth number never looks wrong. It looks like a result, with a minus sign and one decimal place. If a growth query breaks in a way this page does not cover, there is a general <a href="../technical-tenacity/">diagnosis loop for being stuck</a>.</div>
 
-  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Мои фальшивые -30,6% было легко уловить, потому что я специально создал разрыв. В реальных данных разрыв обычно представляет собой сбой загрузки, который никто не заметил, а это означает, что показатель роста был неверным в течение нескольких месяцев, прежде чем кто-либо его проверил. Как долго в отчете, который вы унаследовали, сохранялись неверные цифры тренда, и что в конечном итоге выявило их?</p>
+  <p>One last thought, and I would genuinely like other people's answers. My fake -30.6% was easy to catch because I built the gap on purpose. In real data the gap is usually a loading failure nobody noticed, which means the growth number was wrong for months before anyone looked. What is the longest a wrong trend number has survived in a report you inherited, and what finally exposed it?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Кодд, EF (1970). Реляционная модель данных для крупных общих банков данных.  <em>Коммуникации ACM</em>, 13(6), 377–387.</li>
-    <li>Бисра К., Лю К., Несбит Дж. К., Салими Ф. и Винн П. Х. (2018). Побуждение к самообъяснению: метаанализ.  <em>Обзор педагогической психологии</em>, 30(3), 703–725.</li>
-    <li>Рёдигер, Х.Л., и Карпике, Дж.Д. (2006). Улучшенное обучение с помощью тестов: прохождение тестов на память улучшает долгосрочное запоминание.  <em>Психологическая наука</em>, 17(3), 249–255.</li>
+    <li>Codd, E. F. (1970). A relational model of data for large shared data banks. <em>Communications of the ACM</em>, 13(6), 377–387.</li>
+    <li>Bisra, K., Liu, Q., Nesbit, J. C., Salimi, F., &amp; Winne, P. H. (2018). Inducing self-explanation: A meta-analysis. <em>Educational Psychology Review</em>, 30(3), 703–725.</li>
+    <li>Roediger, H. L., &amp; Karpicke, J. D. (2006). Test-enhanced learning: Taking memory tests improves long-term retention. <em>Psychological Science</em>, 17(3), 249–255.</li>
   </ul>
 
   <div class="book">
-    <strong>Число месяцев по месяцам верное, а месяц, с которым оно сравнивается, был случайностью.</strong>
-    <p><em>SQL для аналитиков</em>  составляет 458 страниц, записаны сравнения периодов, включая то, как определить, как малый базовый месяц влияет на проценты.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-month-over-month'})">SQL для аналитиков, 19 $ →</a>
+    <strong>The month over month number is right and the month it compares to was a fluke.</strong>
+    <p><em>SQL for Analysts</em> is 458 pages, period comparisons written out, including how to say what a small base month does to a percentage.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-month-over-month'})">SQL for Analysts, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>Попрактикуйтесь в ЛАГе, держа перед собой стол.</strong>
-    <p style="margin:6px 0 0">The <a href="../../sql/">SQL-кит</a>  запускает SQLite в браузере, так что вы можете построить ежемесячную сводку, посмотреть, как LAG смещает столбец вниз, и намеренно разбить его с интервалом в месяц. Рядом с ним лежат рабочие примеры, карточки и пробный экзамен. Ничего устанавливать, учетная запись не требуется.</p>
-    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
+    <strong>Practice LAG with a table in front of you.</strong>
+    <p style="margin:6px 0 0">The <a href="../../sql/">SQL Kit</a> runs SQLite in the browser, so you can build the monthly rollup, watch LAG shift the column down, and break it with a gap month on purpose. Worked examples, flash cards, and a mock exam sit alongside it. Nothing to install, no account needed.</p>
+    <a class="btn" href="../../sql/">Open the SQL Kit →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../sql-window-functions/">Оконные функции</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-null/">НУЛЬ в SQL</a> · <a href="../sql-find-duplicates/">Найти дубликаты в SQL</a> · <a href="../sql-ctes/">SQL CTE</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-foundations/">Основы SQL</a> · <a href="../sql-case-expression/">выражение CASE</a> · <a href="../sql-count-function/">СЧЕТ в SQL</a> · <a href="../sql-aliasing/">SQL-псевдонимы</a> · <a href="../sql-teaching-comments/">Комментарий SQL, чтобы он научился</a> · <a href="../../drill/">SQL-детализация</a> · <a href="../pandas-groupby/">панды группируются</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../data-driven-thresholds/">Пороги, управляемые данными</a> · <a href="../budget-vs-actual-variance/">Бюджет и фактическое отклонение</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../report-vs-analysis/">Отчет против анализа</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../sql/">SQL-кит</a> · <a href="../../forecasting/">Комплект прогнозирования</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
+    <a href="../../">← Analyst Prep Kit</a> · <a href="../sql-window-functions/">Window Functions</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../sql-null/">NULL in SQL</a> · <a href="../sql-find-duplicates/">Find Duplicates in SQL</a> · <a href="../sql-ctes/">SQL CTEs</a> · <a href="../sql-joins/">SQL JOINs</a> · <a href="../sql-foundations/">SQL Foundations</a> · <a href="../sql-case-expression/">The CASE Expression</a> · <a href="../sql-count-function/">COUNT in SQL</a> · <a href="../sql-aliasing/">SQL Aliases</a> · <a href="../sql-teaching-comments/">Comment SQL So It Teaches</a> · <a href="../../drill/">SQL Drill</a> · <a href="../pandas-groupby/">pandas groupby</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../set-up-a-sql-database/">Set Up a SQL Database</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../data-driven-thresholds/">Data-Driven Thresholds</a> · <a href="../budget-vs-actual-variance/">Budget vs Actual Variance</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../report-vs-analysis/">Report vs Analysis</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../sql/">SQL Kit</a> · <a href="../../forecasting/">Forecasting Kit</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
   <script src="../../assets/plan-return.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Как согласовать две таблицы в SQL, если количество строк совпадает — комплект подготовки аналитика</title>
-<meta name="description" content="Обе таблицы имели 16 строк и отличались на 400. Полное внешнее соединение, которое находит только то, что находится на каждой стороне, сравнение значений для совпадающих строк и отпечаток пальца, который локализует разницу.">
+<title>How to Reconcile Two Tables in SQL When the Row Counts Match — Analyst Prep Kit</title>
+<meta name="description" content="Both tables had 16 rows and differed by 400. The full outer join that finds what is on each side only, the value comparison for matched rows, and the fingerprint that localises a difference.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-reconciliation/">
-<meta property="og:title" content="Как согласовать две таблицы в SQL, если количество строк совпадает">
-<meta property="og:description" content="16 рядов против 16 рядов и 400 недостающих. Одна строка потеряна, одна изобретена, одно значение изменено, одно написание изменено, а количество строк говорит о том, что все в порядке.">
+<meta property="og:title" content="How to Reconcile Two Tables in SQL When the Row Counts Match">
+<meta property="og:description" content="16 rows against 16 rows, and 400 missing. One row lost, one invented, one value changed, one spelling changed, and a row count that says everything is fine.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/sql-reconciliation.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-reconciliation/">
@@ -134,18 +134,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-кит</a> · <a href="../">Все руководства</a></p>
-  <h1>Как согласовать две таблицы в SQL, если количество строк совпадает</h1>
-  <p class="meta">Количество строк такое же, четыреста пропущено · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-08">8 августа 2026 г.</time></p>
+  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../sql/">SQL Kit</a> · <a href="../">All guides</a></p>
+  <h1>How to Reconcile Two Tables in SQL When the Row Counts Match</h1>
+  <p class="meta">Same number of rows, four hundred missing · Part of the <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-08">August 8, 2026</time></p>
 
-  <p>К концу этой страницы вы сможете сравнить две версии одной и той же таблицы и точно сказать, в чем разница: какие строки существуют только с одной стороны, какие строки существуют с обеих сторон, но не совпадают, в каких столбцах находятся разногласия и сколько денег все это занимает. Прошло около двадцати пяти минут, и каждый запрос и результат, представленные ниже, были выполнены.</p>
+  <p>By the end of this page you can compare two versions of the same table and say exactly what is different: which rows exist on only one side, which rows exist on both but disagree, which columns the disagreements are in, and how much money the whole thing accounts for. It is about twenty-five minutes, and every query and result below was run.</p>
 
-  <p>Вот что нужно сделать сегодня с любыми двумя таблицами, которые должны совпадать. После сравнения количества строк также сравните общее количество. Выберите самый важный числовой столбец и просуммируйте его с обеих сторон. Подсчет строк — это проверка, которая проходит, пока данные неверны, а сумма по тем же строкам — это тридцать секунд дополнительной работы, которая выявляет целый класс ошибок, которые счетчик не видит.</p>
+  <p>Here is what to do today, on any two tables that are supposed to match. After you compare the row counts, compare a total as well. Pick the most important numeric column and sum it on both sides. Row counts are the check that passes while the data is wrong, and a sum on the same rows is thirty seconds of extra work that catches an entire class of failure the count cannot see.</p>
 
-  <p>Краткая версия: сопоставьте две таблицы по их ключу с помощью полного внешнего соединения, затем классифицируйте каждый ключ как сопоставленный, измененный, только исходный или только целевой.</p>
+  <p>The short version: match the two tables on their key with a full outer join, then classify every key as matched, changed, source only or target only.</p>
 
-  <p>Идея состоит в том, чтобы две стопки одинаковой высоты не содержали одинаковых строк, поэтому картина понятна.</p>
+  <p>Two stacks of equal height that do not contain the same rows is the idea, so it gets the picture.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 316" role="img" aria-labelledby="rcTitle rcDesc" xmlns="http://www.w3.org/2000/svg">
@@ -198,56 +198,56 @@
         </g>
       </g>
     </svg>
-    <figcaption>Обе стороны занимают по шестнадцать рядов, поэтому счет согласен. Две пары расходятся в своих значениях, одна строка существует только слева, а другая только справа, и ничего из этого не видно из двух итогов внизу.</figcaption>
+    <figcaption>Both sides hold sixteen rows, so the count agrees. Two pairs disagree on their values, one row exists only on the left and one only on the right, and none of that is visible from the two totals underneath.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>Что вы узнаете</strong>
+    <strong>What you'll learn</strong>
     <ol>
-      <li>Проверка, которая проходит и ничего не доказывает</li>
-      <li>Матч на ключе в обоих направлениях</li>
-      <li>Сравните значения в совпадающих строках</li>
-      <li>Одно резюме, в котором все сказано</li>
-      <li>Столбец за столбцом</li>
-      <li>Различия, которые не увидит знак равенства</li>
-      <li>Отпечатки пальцев: один номер на стол</li>
-      <li>Что делать с тем, что вы найдете</li>
-      <li>Полное до и после</li>
-      <li>Крайние случаи, которые нарушают примирение</li>
-      <li>Почему это работает</li>
-      <li>Использование этого в вашем собственном проекте</li>
-      <li>Все на одном экране</li>
+      <li>The check that passes and proves nothing</li>
+      <li>Match on the key, in both directions</li>
+      <li>Compare the values on matched rows</li>
+      <li>One summary that says everything</li>
+      <li>Column by column</li>
+      <li>The differences an equals sign will not see</li>
+      <li>Fingerprints: one number per table</li>
+      <li>What to do with what you find</li>
+      <li>The full before and after</li>
+      <li>Edge cases that break a reconciliation</li>
+      <li>Why this works</li>
+      <li>Using this on your own project</li>
+      <li>The whole thing on one screen</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Каждый результат на этой странице реален.</strong>  Таблица заказов из шестнадцати строк, используемая в этом наборе руководств, и ее перенесенная копия, загруженная в DuckDB и сравненная. Копия была повреждена четырьмя конкретными способами, и смысл страницы в том, что вам не сообщают, какие именно четыре, пока запросы не найдут их.</div>
+  <div class="note"><strong>Every result on this page is real.</strong> The sixteen-row orders table used across this set of guides, and a migrated copy of it, loaded into DuckDB and compared. The copy was damaged in four specific ways, and the point of the page is that you are not told which four until the queries find them.</div>
 
   <div class="step">
-    <h2>1. Проверка, которая проходит и ничего не доказывает</h2>
+    <h2>1. The check that passes and proves nothing</h2>
 
-    <p>Перед пояснением: таблица была скопирована из одной системы в другую. Скажите, что вы бы проверили в первую очередь.</p>
+    <p>Before the explanation: a table has been copied from one system to another. Say what you would check first.</p>
 
-    <p>Почти все говорят о количестве строк, и вот оно.</p>
+    <p>Almost everybody says the row count, and here it is.</p>
 
     <pre><code>source_rows | target_rows
          16 |          16</code></pre>
 
-    <p>Шестнадцать против шестнадцати. В большинстве случаев миграции именно на этом проверка прекращается, заявка закрывается, а проблема всплывает через шесть недель в финансовом отчете.</p>
+    <p>Sixteen against sixteen. On most migrations that is where the checking stops, the ticket gets closed, and the problem surfaces six weeks later in a finance report.</p>
 
-    <p>Теперь еще один запрос к тем же двум таблицам.</p>
+    <p>Now one more query, on the same two tables.</p>
 
     <pre><code>source_revenue | target_revenue | difference
           9890 |           9490 |        400</code></pre>
 
-    <p>Четыреста не хватает, у экземпляра с нужным количеством рядов. Строки и значения — это две разные вещи, и счетчик может ответить только на вопрос о строках.</p>
+    <p>Four hundred is missing, from a copy with exactly the right number of rows. Rows and values are two different things, and a count can only ever answer a question about rows.</p>
 
-    <p>Причина в том, что счет не бесполезен, он просто первый. Подсчет строк выявляет самые большие сбои: ничего не загружено, наполовину загружено, все загружено дважды. Он не может уловить ничего, что оставляет подсчет нетронутым, и оставшаяся часть этой страницы посвящена тому, насколько это важно.</p>
+    <p>The reason to lead with this is that the count is not useless, it is just first. A row count catches the biggest failures: nothing loaded, half loaded, everything loaded twice. It cannot catch anything that leaves the count intact, and the rest of this page is about how much that is.</p>
   </div>
 
   <div class="step">
-    <h2>2. Матч по ключу в обоих направлениях.</h2>
+    <h2>2. Match on the key, in both directions</h2>
 
-    <p>Для сравнения строк вам нужен ключ: столбец или набор столбцов, который идентифицирует один и тот же реальный объект в обеих таблицах. Тогда  <strong>полное внешнее соединение</strong>  по этому ключу, который сохраняет строки, которые не совпадают с любой стороны, и один взгляд на то, где находятся нули.</p>
+    <p>To compare rows you need a key: the column, or set of columns, that identifies the same real thing in both tables. Then a <strong>full outer join</strong> on that key, which keeps rows that fail to match from either side, and one look at where the nulls fall.</p>
 
     <pre><code>SELECT COALESCE(s.order_id, t.order_id) AS order_id,
        CASE WHEN t.order_id IS NULL THEN 'source only'
@@ -259,19 +259,19 @@ WHERE s.order_id IS NULL OR t.order_id IS NULL;
 1008 | source only
 1017 | target only</code></pre>
 
-    <p>Приказ 1008 существует в исходнике, а не в копии: он утерян. Заказ 1017 существует в копии, а не в исходнике: он был придуман, что обычно означает, что загрузка выполнялась дважды или тестовая запись ускользнула.</p>
+    <p>Order 1008 exists in the source and not in the copy: it was lost. Order 1017 exists in the copy and not in the source: it was invented, which usually means a load ran twice or a test record escaped.</p>
 
-    <p>Один проиграл, другой выиграл, так что счет стал равным. Это не совпадение, придуманное для этой страницы; это обычная форма неудачного повтора, и именно поэтому граф согласился.</p>
+    <p>One lost and one gained, so the count came out even. That is not a coincidence dreamed up for this page; it is the ordinary shape of a botched rerun, and it is exactly why the count agreed.</p>
 
-    <p>Здесь всю работу выполняет полное внешнее соединение, и стоит пояснить, почему внутреннее соединение не работает: внутреннее соединение сохраняет только совпадающие строки, а это набор, который не содержит ни одной из ваших проблем. Если объединения еще не выполняются автоматически,  <a href="../sql-joins/">руководство по объединениям</a>  покрывает, какие строки сохраняет каждый вид.</p>
+    <p>The full outer join is doing the work here, and it is worth being clear about why an inner join would not: an inner join keeps only the rows that matched, which is the set that contains neither of your problems. If joins are not yet automatic, <a href="../sql-joins/">the joins guide</a> covers which rows each kind keeps.</p>
 
-    <p>В некоторых двигателях отсутствует  <code>FULL OUTER JOIN</code>. Портативная замена — это два антисоединения, по одному в каждом направлении, в сочетании с  <code>UNION ALL</code>, с использованием  <code>NOT EXISTS</code>  скорее, чем  <code>NOT IN</code>  по причине в  <a href="../sql-null/">НУЛЕВОЕ руководство</a>.</p>
+    <p>Some engines lack <code>FULL OUTER JOIN</code>. The portable substitute is two anti-joins, one in each direction, combined with <code>UNION ALL</code>, using <code>NOT EXISTS</code> rather than <code>NOT IN</code> for the reason in <a href="../sql-null/">the NULL guide</a>.</p>
   </div>
 
   <div class="step">
-    <h2>3. Сравните значения в совпадающих строках.</h2>
+    <h2>3. Compare the values on matched rows</h2>
 
-    <p>Строки, присутствующие с обеих сторон, все равно могут не совпадать, поэтому объедините их и сравните каждый столбец.</p>
+    <p>Rows present on both sides can still disagree, so join them and compare every column.</p>
 
     <pre><code>SELECT s.order_id, s.region, t.region, s.units, t.units
 FROM orders s JOIN orders_target t USING (order_id)
@@ -285,54 +285,54 @@ WHERE s.region     IS DISTINCT FROM t.region
 1003 | East | east | 3 | 3
 1010 | East | East | 5 | 4</code></pre>
 
-    <p>Два ряда. Приказ 1003 имеет те же номера и другое написание региона. Приказ 1010 имеет пять единиц в исходнике и четыре в копии, куда и пошли недостающие 400: один стол в 220 стал четырьмя единицами вместо пяти, потеря 220, плюс потерянные 480 в приказе 1008 и изобретенные 300 в приказе 1017. Эту арифметику стоит произнести вслух, потому что способность точно объяснить число 400 — это разница между открытием и беспокойством: 480 снаружи, 300 внутри, 220 выбриты, что в сумме дает 400.</p>
+    <p>Two rows. Order 1003 has the same numbers and a different spelling of its region. Order 1010 has five units in the source and four in the copy, which is where the missing 400 went: one desk at 220 became four units instead of five, a loss of 220, plus order 1008's 480 lost and order 1017's 300 invented. That arithmetic is worth doing out loud, because being able to explain the 400 exactly is the difference between a finding and a worry: 480 out, 300 in, 220 shaved, which nets to 400.</p>
 
-    <p><code>IS DISTINCT FROM</code>  это оператор, который следует использовать, а не  <code>&lt;&gt;</code>, и разница имеет значение. Равнина  <code>&lt;&gt;</code>  сравнение с нулевым значением возвращает значение «неизвестно», а не «истина», поэтому значение, которое было заполнено в источнике, и значение, равное нулю в копии, не будет помечено.  <code>IS DISTINCT FROM</code>    рассматривает нулевой как значение, как и любое другое, и возвращает Верно для этого случая, а это именно то, что нужно для сверки.</p>
+    <p><code>IS DISTINCT FROM</code> is the operator to use rather than <code>&lt;&gt;</code>, and the difference matters. A plain <code>&lt;&gt;</code> comparison involving a null returns unknown rather than true, so a value that was populated in the source and null in the copy would not be flagged. <code>IS DISTINCT FROM</code> treats null as a value like any other and returns true for that case, which is exactly what a reconciliation needs.</p>
   </div>
 
   <div class="step">
-    <h2>4. Одно резюме, которое говорит все</h2>
+    <h2>4. One summary that says everything</h2>
 
-    <p>Два запроса выше — это то, на что вы смотрите; это то, что вы сообщаете. Одна строка, четыре числа, и они должны сложиться.</p>
+    <p>The two queries above are what you look at; this is what you report. One row, four numbers, and they have to add up.</p>
 
     <pre><code>matched | changed | source_only | target_only | total_keys
      13 |       2 |           1 |           1 |         17</code></pre>
 
-    <p>Тринадцать рядов одинаковы с обеих сторон. Двое существуют на обоих и не согласны. Один только в источнике и один только в цели. Было задействовано семнадцать различных ключей, что больше, чем есть в каждой таблице, поскольку объединение двух таблиц из шестнадцати строк, отличающихся на одну строку в каждую сторону, равно семнадцати.</p>
+    <p>Thirteen rows are identical on both sides. Two exist on both and disagree. One is only in the source and one only in the target. Seventeen distinct keys were involved, which is more than either table has, because the union of two sixteen-row tables that differ by one row each way is seventeen.</p>
 
-    <p>Проверьте это в обоих направлениях: 13 + 2 + 1 только источник равен 16, количество источников. 13 + 2 + 1 только цель равна 16, количество целей. Если эти два сложения не соответствуют двум подсчетам строк, ключ не уникален, и об этом рассказывается в десятом разделе.</p>
+    <p>Check it in both directions: 13 + 2 + 1 source-only is 16, the source count. 13 + 2 + 1 target-only is 16, the target count. If those two additions do not come out to the two row counts, the key is not unique and section ten is about that.</p>
 
-    <p>Эта таблица является результатом. «С миграцией все в порядке» — это не утверждение, на основании которого можно действовать; «Тринадцать строк идентичны, две изменены, одна потеряна, одна добавлена, а чистая разница в доходах составляет 400» — это записка о передаче, и для ее выполнения требуется один запрос.</p>
+    <p>This table is the deliverable. "The migration is fine" is not a statement anybody can act on; "thirteen rows identical, two changed, one lost, one added, and a net difference of 400 in revenue" is a handover note, and it takes one query.</p>
   </div>
 
   <div class="step">
-    <h2>5. Столбец за столбцом</h2>
+    <h2>5. Column by column</h2>
 
-    <p>Как только вы узнаете, что две строки не совпадают, следующий полезный вопрос — в каких столбцах, потому что это указывает на причину, а не на симптом.</p>
+    <p>Once you know two rows disagree, the useful next question is which columns, because that points at the cause rather than the symptom.</p>
 
     <pre><code>order_date | rep | region | product | units | unit_price
          0 |   0 |      1 |       0 |     1 |          0</code></pre>
 
-    <p>Одно разногласие в регионе и одно в подразделениях, и больше нигде. Эта форма сообщает вам то, чего нет в списке плохих строк: это не разрывная загрузка, поскольку разрывная загрузка повреждает столбец во многих строках. Два разных столбца, каждый из которых ошибочен в одной строке, выглядят как два отдельных инцидента, вероятно, ручное редактирование и транскрипция.</p>
+    <p>One disagreement in region and one in units, and nothing anywhere else. That shape tells you something a list of bad rows does not: this is not a broken load, because a broken load damages a column across many rows. Two different columns each wrong on one row looks like two separate incidents, probably a manual edit and a transcription.</p>
 
-    <p>Сравните это с формой, которую вы бы увидели, если бы, скажем, каждая дата была сдвинута на день:  <code>order_date</code>  будет читаться 16, а все остальное 0, и вы будете смотреть на часовые пояса, а не на строки. Тот же запрос, совершенно другой вывод, и их отличает количество столбцов, а не список строк.</p>
+    <p>Contrast it with the shape you would see if, say, every date were shifted by a day: <code>order_date</code> would read 16 and everything else 0, and you would go looking at time zones rather than at rows. Same query, completely different conclusion, and it is the column counts rather than the row list that distinguishes them.</p>
 
-    <p>Скажите вслух, что бы вы заподозрили, если бы  <code>unit_price</code>  вернулся как 14 из 16. При загрузке применялось округление или валютная разница, и вам приходилось читать код загрузки, а не данные.</p>
+    <p>Say out loud what you would suspect if <code>unit_price</code> came back as 14 out of 16. A rounding or currency difference applied at load, and you would go and read the load code rather than the data.</p>
   </div>
 
   <div class="step">
-    <h2>6. Разницы, которую не увидит знак равенства</h2>
+    <h2>6. The differences an equals sign will not see</h2>
 
-    <p>Перед пояснением: регион по порядку 1003 — «Восток» в одной таблице и «Восток» в другой. Скажите, замечает ли сравнение SQL.</p>
+    <p>Before the explanation: the region on order 1003 is "East" in one table and "east" in the other. Say whether a SQL comparison notices.</p>
 
     <pre><code>'East' = 'east'                  false
 LOWER('East') = LOWER('east')    true</code></pre>
 
-    <p>В этом движке сравнение строк чувствительно к регистру, поэтому оно было уловлено. Не каждый механизм сортировки или сортировки столбцов ведет себя таким образом, и при сортировке без учета регистра эта строка будет указана как совпадающая. Какой общий урок:  <strong>примирение столь же строго, как и его сравнение.</strong>  Прежде чем доверять чистому результату, проверьте само сравнение на известной разнице.</p>
+    <p>In this engine string comparison is case sensitive, so it was caught. Not every engine or column collation behaves that way, and on a case-insensitive collation that row would have been reported as matching. Which is the general lesson: <strong>a reconciliation is only as strict as its comparison.</strong> Test the comparison itself on a known difference before trusting a clean result.</p>
 
-    <p>При наивном сравнении обычно ускользают четыре вида различий. Случай, как указано выше. Завершающий пробел, где «Север» и «Север» отличаются для компьютера, а не для человека. Числовая точность: 10,00 и 10,004 отображаются как 10,00. И даты, несущие в себе время, где один и тот же день в разные часы сравнивается неодинаково.</p>
+    <p>Four kinds of difference routinely slip through a naive comparison. Case, as above. Trailing whitespace, where "North " and "North" differ to a computer and not to a person. Numeric precision, where 10.00 and 10.004 both display as 10.00. And dates carrying a time, where the same day at different hours compares unequal.</p>
 
-    <p>Стоит обратить внимание и на более тонкую ошибку, потому что именно это происходит, когда люди примиряются, группируясь, а не используя ключ. Сравнение количества регионов в двух таблицах дает следующее:</p>
+    <p>There is also a subtler failure worth seeing, because it is what happens when people reconcile by grouping rather than by key. Comparing region counts on the two tables gives this:</p>
 
     <pre><code>region | source_rows | target_rows
 East   |           4 |           3
@@ -341,24 +341,24 @@ South  |           4 |           4
 West   |           3 |           3
 east   |        NULL |           1</code></pre>
 
-    <p>Появился пятый регион. Общие итоги по-прежнему равны шестнадцати, все отдельные строки присутствуют, и теперь в отчете есть категория, о которой никто никогда не слышал. Это тот же режим отказа, что и для любого почти повторяющегося значения, и процедура очистки для него находится в режиме  <a href="../excel-clean-messy-data/">найти персонажа, которого не видишь</a>.</p>
+    <p>A fifth region has appeared. The grand totals still agree at sixteen, the individual rows are all present, and the report now has a category nobody has ever heard of. That is the same failure mode as any near-duplicate value, and the cleaning routine for it is in <a href="../excel-clean-messy-data/">finding the character you cannot see</a>.</p>
   </div>
 
   <div class="step">
-    <h2>7. Отпечатки пальцев: по одному номеру на стол.</h2>
+    <h2>7. Fingerprints: one number per table</h2>
 
-    <p>Соединение двух таблиц построчно — это нормально при шестнадцати строках и дорого при двухстах миллионах, особенно когда они находятся в разных системах и для сравнения одну из них необходимо отправить по сети.</p>
+    <p>Joining two tables row by row is fine at sixteen rows and expensive at two hundred million, especially when they live in different systems and one of them has to be shipped across a network to be compared.</p>
 
-    <p>Более дешевый ход — это отпечаток пальца: хэшируйте каждую строку в число и складывайте числа. При сложении не учитывается порядок, поэтому две таблицы, содержащие одинаковые строки в разном порядке, дают одинаковую сумму.</p>
+    <p>The cheaper move is a fingerprint: hash each row into a number and add the numbers up. Addition does not care about order, so two tables holding the same rows in different orders produce the same total.</p>
 
     <pre><code>SELECT SUM(HASH(order_id, order_date, rep, region, product, units, unit_price)) FROM orders;
 
 source  128147106948374048609
 target  136663960016580492445</code></pre>
 
-    <p>Разные, поэтому таблицы различаются, и для каждой стороны потребовался один проход, при этом ничего не переносилось, кроме одного числа. Это ничего не говорит вам о том, где именно ведется торговля.</p>
+    <p>Different, so the tables differ, and that took one pass over each side with nothing to transfer but a single number. It tells you nothing about where, which is the trade.</p>
 
-    <p>Вы получаете информацию о том, где именно, снимая отпечатки пальцев с групп, а не со всей таблицы. Здесь по регионам:</p>
+    <p>You get the where back by fingerprinting groups instead of the whole table. Here, per region:</p>
 
     <pre><code>region | same
 East   | false
@@ -367,36 +367,36 @@ South  | true
 West   | false
 east   | false</code></pre>
 
-    <p>Север и Юг доказуемо идентичны и не нуждаются в дополнительной проверке. Все по-другому на Востоке, Западе и в призрачном регионе. В большой таблице вы берете отпечатки пальцев по месяцам или по диапазону ключей, находите несколько сегментов, которые отличаются, и только затем выполняете сравнение на уровне строк. В этом вся стратегия: дешево сравнить, сузить, а потом присмотреться.</p>
+    <p>North and South are provably identical and need no further checking. Everything different is in East, West and the phantom region. On a large table you would fingerprint by month or by key range, find the handful of buckets that differ, and only then do the row-level comparison on those. That is the whole strategy: compare cheaply, narrow, then look closely.</p>
 
-    <p>Одно предостережение. Хэш-функции различаются в зависимости от движка, поэтому отпечаток пальца, вычисленный в Постгрес, не будет совпадать с отпечатком пальца, вычисленным в SQL-сервер, а для сравнения между системами требуется хэш, который могут вычислить оба, обычно MD5 объединенной, последовательно отформатированной строки. Большая часть этой работы — добиться идентичного форматирования с обеих сторон.</p>
+    <p>One caution. Hash functions differ between engines, so a fingerprint computed in Postgres will not match one computed in SQL Server, and comparing across systems needs a hash both can compute, usually MD5 of a concatenated, consistently formatted string. Getting the formatting identical on both sides is most of that job.</p>
   </div>
 
   <div class="step">
-    <h2>8. Что делать с найденным</h2>
+    <h2>8. What to do with what you find</h2>
 
-    <p>Примирение, которое заканчивается списком разногласий, — это полдела. У каждой категории свой следующий ход.</p>
+    <p>A reconciliation that ends in a list of differences is half a job. Each category has a different next move.</p>
 
     <table>
-      <tr><th>Finding</th><th>Обычно означает</th><th>Следующий ход</th></tr>
-      <tr><td>Только источник</td><td>Строки удалены фильтром, неудачным пакетом или ошибкой преобразования типа.</td><td>Найдите закономерность: все ли это одна дата, один регион, один продукт?</td></tr>
-      <tr><td>Только таргетинг</td><td>Нагрузка, запускавшаяся дважды, или тестовые данные</td><td>Проверьте, являются ли они дубликатами настоящих ключей или совершенно новыми.</td></tr>
-      <tr><td>Изменено, один столбец, много строк</td><td>Преобразование, применяемое при загрузке</td><td>Прочтите логику загрузки. Это вопрос кода, а не вопроса данных.</td></tr>
-      <tr><td>Изменено, много столбцов, мало строк</td><td>Ручное редактирование после загрузки</td><td>Узнайте, кому разрешено редактировать цель напрямую</td></tr>
+      <tr><th>Finding</th><th>Usually means</th><th>Next move</th></tr>
+      <tr><td>Source only</td><td>Rows dropped by a filter, a failed batch, or a type conversion error</td><td>Find the pattern: are they all one date, one region, one product?</td></tr>
+      <tr><td>Target only</td><td>A load that ran twice, or test data</td><td>Check whether they are duplicates of real keys or entirely new ones</td></tr>
+      <tr><td>Changed, one column, many rows</td><td>A transformation applied at load</td><td>Read the load logic. This is a code question, not a data question.</td></tr>
+      <tr><td>Changed, many columns, few rows</td><td>Manual edits after the load</td><td>Find out who is allowed to edit the target directly</td></tr>
     </table>
 
-    <p>И записывайте то, что вы нашли, даже если оно небольшое, потому что для человека, получающего систему, важно число, а не количество строк. «Четыреста из 9890, что составляет 4,0%, в две строки, оба объяснены» — это предложение, которое кто-то может подписать. Пробный прогон миграции существует для того, чтобы выработать именно это предложение, прежде чем кто-либо станет зависеть от новой системы, и  <a href="../migration-dry-run/">руководство по пробному запуску</a>  вот где это вписывается в более широкий процесс.</p>
+    <p>And write down what you found even when it is small, because the number that matters to the person receiving the system is the money, not the rows. "Four hundred out of 9,890, which is 4.0%, in two rows, both explained" is a sentence somebody can sign off. A migration dry run exists to produce exactly that sentence before anybody depends on the new system, and <a href="../migration-dry-run/">the dry run guide</a> is where this fits in the wider process.</p>
   </div>
 
-  <h2>Полное до и после</h2>
+  <h2>The full before and after</h2>
 
-  <p>Те же две таблицы, тот же вопрос: сработала ли копия?</p>
+  <p>Same two tables, same question: did the copy work?</p>
 
   <h3>Before</h3>
   <pre><code>SELECT COUNT(*) FROM orders;          -- 16
 SELECT COUNT(*) FROM orders_target;   -- 16
 -- "counts match, we are good"</code></pre>
-  <p>Прошел, закрылся и ошибся. Четыреста из 9890 отсутствуют, один заказ исчез, один заказ, которого никогда не было, теперь в системе, в одном заказе неверное количество и создан пятый регион.</p>
+  <p>Passed, closed, and wrong. Four hundred of 9,890 is missing, one order has vanished, one order that never existed is now in the system, one order has the wrong quantity, and a fifth region has been created.</p>
 
   <h3>After</h3>
   <pre><code>-- 1. counts and a total, together
@@ -418,108 +418,108 @@ region 1, units 1, everything else 0
 -- 6. the arithmetic of the difference
 -480 lost, +300 invented, -220 shaved   =   -400</code></pre>
 
-  <p>Утверждение, и именно поэтому второй запрос не является необязательным:  <strong>подсчет строк 16 против 16 был верным, обнадеживающим и совершенно слепым к потерянной строке, изобретенной строке, измененному количеству и изобретенной области.</strong></p>
+  <p>The claim, and it is why the second query is not optional: <strong>a row count of 16 against 16 was true, reassuring, and completely blind to a lost row, an invented row, a changed quantity and an invented region.</strong></p>
 
   <div class="step">
-    <h2>Крайние случаи, которые нарушают примирение</h2>
+    <h2>Edge cases that break a reconciliation</h2>
 
-    <p>Шесть, которые стоит знать.</p>
+    <p>Six worth knowing.</p>
 
-    <p><strong>Ключ не уникален.</strong>  Если у какой-либо стороны есть ключ дважды, соединение умножается, и каждый последующий подсчет будет неправильным. Сначала проверьте обе стороны:  <code>COUNT(*)</code> against <code>COUNT(DISTINCT key)</code>, на каждом столе, прежде чем присоединиться к чему-либо.</p>
+    <p><strong>The key is not unique.</strong> If either side has the key twice, the join multiplies and every count afterwards is wrong. Check both sides first: <code>COUNT(*)</code> against <code>COUNT(DISTINCT key)</code>, on each table, before joining anything.</p>
 
-    <p><strong>Ключ не тот ключ.</strong>  Перенумерация систем. Если цель назначила свои собственные идентификаторы, вы сопоставляете естественный ключ, а если такового нет, вы перешли в  <a href="../entity-resolution/">Разрешение объекта</a>.</p>
+    <p><strong>The key is not the same key.</strong> Systems renumber. If the target assigned its own identifiers, you are matching on a natural key, and if there is not one you have crossed into <a href="../entity-resolution/">entity resolution</a>.</p>
 
-    <p><strong>Законные различия.</strong>  Цель может намеренно исключать отмененные записи или хранить другой формат даты. Прежде чем проводить сравнение, согласуйте ожидаемые различия в письменном виде, иначе вы сообщите о них как об ошибках.</p>
+    <p><strong>Legitimate differences.</strong> The target may deliberately exclude cancelled records or hold a different date format. Agree the expected differences in writing before running the comparison, or you will report them as faults.</p>
 
-    <p><strong>Сравнивая в разные моменты.</strong>  Живой источник изменяется во время его проверки, поэтому разница в нескольких последних строках может быть скорее временем, чем ошибкой. Сначала сделайте снимок обеих сторон, вот что  <a href="../sql-temp-tables-vs-views/">временная таблица</a>  это для.</p>
+    <p><strong>Comparing at different moments.</strong> A live source changes while you are checking it, so a difference of a few recent rows may be time rather than error. Snapshot both sides first, which is what <a href="../sql-temp-tables-vs-views/">a temp table</a> is for.</p>
 
-    <p><strong>Плавающая точка.</strong>  Две системы могут вычислить одинаковую сумму и не согласиться в пятнадцатом десятичном знаке. Прежде чем сравнивать деньги, округлите их до точности, которая важна для бизнеса.</p>
+    <p><strong>Floating point.</strong> Two systems can compute the same total and disagree in the fifteenth decimal place. Round explicitly to the precision the business cares about before comparing money.</p>
 
-    <p><strong>Нулевые значения по сравнению с неправильным оператором.</strong> <code>&lt;&gt;</code>  молча пропускает изменение значения на нулевое. Использовать  <code>IS DISTINCT FROM</code>, а если в вашем движке его нет,  <code>COALESCE</code>  обе стороны к контрольному значению, которое не может встречаться в данных.</p>
+    <p><strong>Nulls compared with the wrong operator.</strong> <code>&lt;&gt;</code> silently misses a value-to-null change. Use <code>IS DISTINCT FROM</code>, and if your engine lacks it, <code>COALESCE</code> both sides to a sentinel value that cannot occur in the data.</p>
   </div>
 
-  <h2>Почему это работает</h2>
+  <h2>Why this works</h2>
 
-  <p>Причина, по которой количество строк кажется достаточным, а не является таковым, заключается в том, что оно измеряет одно измерение качества, а их несколько. Структуры оценки качества данных последовательно разбивают их на отдельные измерения, полноту, точность, последовательность и т. д. именно потому, что они не работают независимо друг от друга, а показатель одного ничего не говорит о других (Внутренний, Каппьелло, Франкаланчи &amp; Маурино, 2009,    <em>Обзоры вычислительной техники ACM</em>, 41(3), 1–52). Подсчет строк — это проверка полноты, причем слабая: она обнаруживает недостающие строки только тогда, когда на их место ничего не поступает. Каждая из четырех проверок на этой странице охватывает разные аспекты, поэтому они обнаруживают четыре разные проблемы и почему выполнение одной из них не составляет большей части работы.</p>
+  <p>The reason the row count feels sufficient and is not is that it measures one dimension of quality and there are several. Frameworks for assessing data quality consistently break it into separate dimensions, completeness, accuracy, consistency and so on, precisely because they fail independently and a measure of one says nothing about the others (Batini, Cappiello, Francalanci, &amp; Maurino, 2009, <em>ACM Computing Surveys</em>, 41(3), 1–52). A row count is a completeness check, and a weak one: it detects missing rows only when nothing arrives to take their place. The four checks on this page each cover a different dimension, which is why they find four different problems, and why running one of them is not most of the job.</p>
 
-  <p>Стратегия отпечатков пальцев, описанная в седьмом разделе, — это старая идея, имеющая название. Если вы хешируете небольшие фрагменты данных, а затем объединяете эти хэши, вы можете сравнить две большие коллекции, почти ничего не меняя, а затем сузить область до отличающейся части, перейдя к любому объединенному хешу, который не совпадает; это иерархическое сравнение является основой конструкции Меркла и именно поэтому каждая крупномасштабная система синхронизации использует ту или иную его версию (Меркл, 1988,    <em>Достижения в криптологии — КРИПТО '87</em>, 369–378). Отпечатки всей таблицы, затем по регионам, а затем по строкам — это идея, реализуемая вручную с помощью трех запросов.</p>
+  <p>The fingerprint strategy in section seven is an old idea with a name. If you hash small pieces of data and then combine those hashes, you can compare two large collections by exchanging almost nothing, and you can then narrow down to the differing part by descending into whichever combined hash disagrees; that hierarchical comparison is the core of Merkle's construction and is why every large-scale synchronisation system uses some version of it (Merkle, 1988, <em>Advances in Cryptology — CRYPTO '87</em>, 369–378). Fingerprinting the whole table, then by region, then by row is that idea done by hand with three queries.</p>
 
-  <p>Одно примечание к вопросам, заданным на этой странице, перед каждым ответом. Объяснение шага самому себе до того, как объяснение будет показано, улучшит то, что вы из него сохраните, поэтому стоит угадать количество строк, прежде чем читать общее количество (Чи, Басок, Льюис, Рейманн &amp; Глейзер, 1989,    <em>Когнитивная наука</em>, 13(2), 145–182).</p>
+  <p>One note on the questions this page asked before each answer. Explaining a step to yourself before being shown the explanation improves what you retain of it, which is why it is worth guessing at the row count before reading the total (Chi, Bassok, Lewis, Reimann, &amp; Glaser, 1989, <em>Cognitive Science</em>, 13(2), 145–182).</p>
 
-  <h2>Использование этого в вашем собственном проекте</h2>
+  <h2>Using this on your own project</h2>
 
-  <p>Полное сравнение огромной таблицы на уровне строк является дорогостоящим и обычно ненужным. Вместо этого сделайте это по порядку.</p>
+  <p>A full row-level comparison of a huge table is expensive and usually unnecessary. Do this instead, in order.</p>
 
   <ol>
-    <li><strong>Убедитесь, что ключ уникален с обеих сторон</strong>  прежде всего. От этого зависит каждое число после этого.</li>
-    <li><strong>Сравните количество и сумму вместе.</strong>  Никогда не считайте в одиночку.</li>
-    <li><strong>Отпечаток пальца от естественного ведра</strong>, месяц, регион или диапазон ключей и найдите сегменты, которые отличаются.</li>
-    <li><strong>Полное внешнее соединение только внутри этих сегментов</strong>и классифицируйте каждый ключ по четырем категориям.</li>
-    <li><strong>Подсчитайте разногласия в каждом столбце</strong>, потому что форма называет причину.</li>
-    <li><strong>Напишите резюме в виде предложения, в котором есть деньги.</strong>и перечислите ожидаемые различия отдельно от неожиданных.</li>
+    <li><strong>Check the key is unique on both sides</strong> before anything else. Every number after this depends on it.</li>
+    <li><strong>Compare counts and a total together.</strong> Never the count alone.</li>
+    <li><strong>Fingerprint by a natural bucket</strong>, month or region or key range, and find the buckets that differ.</li>
+    <li><strong>Full outer join inside those buckets only</strong>, and classify every key into the four categories.</li>
+    <li><strong>Count the disagreements per column</strong>, because the shape names the cause.</li>
+    <li><strong>Write the summary as a sentence with money in it</strong>, and list the expected differences separately from the unexpected ones.</li>
   </ol>
 
-  <p>Если у вас под рукой есть бумага, один дополнительный эскиз стоит пяти минут. Нарисуйте два прямоугольника и между ними напишите четыре категории: совпадающие, измененные, только левые, только правые. Затем напишите рядом с каждым, какое число вы ожидаете получить, если бы копия была идеальной. Три из них равны нулю, и если вы укажете это явно, прежде чем что-либо запускать, это не позволит объяснить ненулевое значение.</p>
+  <p>If you have paper nearby, one optional sketch is worth five minutes. Draw two boxes and, between them, write the four categories: matched, changed, only left, only right. Then write beside each one what number you would expect it to hold if the copy were perfect. Three of them are zero, and being explicit about that before you run anything is what stops a non-zero being explained away.</p>
 
-  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>. Если вы предпочитаете вводить запросы, а не читать о них,  <a href="../../drill/">SQL-детализация</a>  дает вам по одному выполняемому запросу к реальной базе данных.</div>
+  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>. If you would rather type queries than read about them, the <a href="../../drill/">SQL Drill</a> gives you one runnable query at a time against a real database.</div>
 
-  <h2>Все на одном экране</h2>
+  <h2>The whole thing on one screen</h2>
 
-  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
+  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
 
   <table>
-    <tr><th>Thing</th><th>Что он делает</th></tr>
-    <tr><td>Количество строк</td><td>Ничего не ловит загружено, загружено наполовину, загружено вдвое. Ничего больше.</td></tr>
-    <tr><td>Посчитайте плюс итог</td><td>Ловит весь класс, который граф не может. Тридцать секунд.</td></tr>
-    <tr><td>Первая проверка всего</td><td>Ключевые уникальности с обеих сторон:  <code>COUNT(*)</code> against <code>COUNT(DISTINCT key)</code>.</td></tr>
-    <tr><td>Нахождение односторонних строк</td><td><code>FULL OUTER JOIN</code>, затем посмотрите, где находятся нули.</td></tr>
-    <tr><td>Нет полного внешнего соединения</td><td>Two <code>NOT EXISTS</code>  анти-объединения с  <code>UNION ALL</code>.</td></tr>
-    <tr><td>Сравнение значений</td><td><code>IS DISTINCT FROM</code>, никогда  <code>&lt;&gt;</code>.</td></tr>
-    <tr><td>Why</td><td><code>&lt;&gt;</code>  относительно нуля неизвестно, поэтому строка не помечается.</td></tr>
-    <tr><td>Четыре категории</td><td>Сопоставлено, изменено, только источник, только цель.</td></tr>
-    <tr><td>Примирение</td><td>Совпадение + изменение + одностороннее должно равняться количеству каждой строки.</td></tr>
-    <tr><td>Количество по столбцу</td><td>Один столбец, много строк — это ошибка загрузки. Многие столбцы и несколько строк — это редактирование вручную.</td></tr>
-    <tr><td>Регистр и пробелы</td><td>Может быть перехвачен или не пойман, в зависимости от сопоставления. Проверьте это.</td></tr>
-    <tr><td>Групповое сравнение</td><td>Создает категорию, когда значение различается в зависимости от регистра. Итоги по-прежнему совпадают.</td></tr>
-    <tr><td>Fingerprint</td><td><code>SUM(HASH(cols))</code>. Заказ независимый, один номер, без детализации.</td></tr>
-    <tr><td>Localising</td><td>Отпечаток пальца для каждого сегмента, затем сравнивайте строки только по сегментам, которые отличаются.</td></tr>
-    <tr><td>По системам</td><td>Хэш-функции различаются. Используйте MD5 строки идентичного формата.</td></tr>
-    <tr><td>Результат</td><td>Предложение с деньгами и ожидаемыми различиями, перечисленными отдельно.</td></tr>
+    <tr><th>Thing</th><th>What it does</th></tr>
+    <tr><td>Row count</td><td>Catches nothing loaded, half loaded, doubled. Nothing else.</td></tr>
+    <tr><td>Count plus a total</td><td>Catches the whole class the count cannot. Thirty seconds.</td></tr>
+    <tr><td>First check of all</td><td>Key uniqueness on both sides: <code>COUNT(*)</code> against <code>COUNT(DISTINCT key)</code>.</td></tr>
+    <tr><td>Finding one-sided rows</td><td><code>FULL OUTER JOIN</code>, then look at where the nulls are.</td></tr>
+    <tr><td>No FULL OUTER JOIN</td><td>Two <code>NOT EXISTS</code> anti-joins with <code>UNION ALL</code>.</td></tr>
+    <tr><td>Comparing values</td><td><code>IS DISTINCT FROM</code>, never <code>&lt;&gt;</code>.</td></tr>
+    <tr><td>Why</td><td><code>&lt;&gt;</code> against a null is unknown, so the row is not flagged.</td></tr>
+    <tr><td>The four categories</td><td>Matched, changed, source only, target only.</td></tr>
+    <tr><td>The reconciliation</td><td>Matched + changed + one-sided must equal each row count.</td></tr>
+    <tr><td>Per-column counts</td><td>One column many rows is a load bug. Many columns few rows is manual edits.</td></tr>
+    <tr><td>Case and whitespace</td><td>May or may not be caught, depending on collation. Test it.</td></tr>
+    <tr><td>Grouped comparison</td><td>Invents a category when a value differs by case. Totals still agree.</td></tr>
+    <tr><td>Fingerprint</td><td><code>SUM(HASH(cols))</code>. Order independent, one number, no detail.</td></tr>
+    <tr><td>Localising</td><td>Fingerprint per bucket, then row-compare only the buckets that differ.</td></tr>
+    <tr><td>Across systems</td><td>Hash functions differ. Use MD5 of an identically formatted string.</td></tr>
+    <tr><td>The deliverable</td><td>A sentence with the money in it, and the expected differences listed separately.</td></tr>
   </table>
 
-  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Никогда не сообщайте о количестве строк без суммы рядом с ним. Подсчет — это проверка, которая согласуется, пока одна строка потеряна и вместо нее изобретена другая, а итог — это единственная строка дополнительной работы, которая делает невозможным промахнуться. Если сверка ведет себя не так, как описано на этой странице, существует общая  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>.</div>
+  <div class="note"><strong>The one habit to keep.</strong> Never report a row count without a total beside it. The count is the check that agrees while a row is lost and another invented in its place, and the total is the one line of extra work that makes that impossible to miss. If a reconciliation misbehaves in a way this page does not cover, there is a general <a href="../technical-tenacity/">diagnosis loop for being stuck</a>.</div>
 
   <p>One last thought, and I would genuinely like other people's answers. The one I remember was a migration signed off on matching row counts, where a rerun had dropped one batch and added another, and the two happened to be almost the same size; the difference surfaced four months later as a supplier chasing an invoice that no longer existed in either system. What has a matching row count hidden from you?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Батини К., Каппиелло К., Франкаланчи К. и Маурино А. (2009). Методологии оценки и улучшения качества данных.  <em>Обзоры вычислительной техники ACM</em>, 41(3), 1–52.</li>
-    <li>Меркл, RC (1988). Цифровая подпись, основанная на обычной функции шифрования.  <em>Достижения в криптологии — КРИПТО '87</em>, 369–378.</li>
-    <li>Чи, М.Т.Х., Бассок, М., Льюис, М.В., Рейманн, П. и Глейзер, Р. (1989). Самообъяснения: как учащиеся изучают и используют примеры при обучении решению проблем.  <em>Когнитивная наука</em>, 13(2), 145–182.</li>
+    <li>Batini, C., Cappiello, C., Francalanci, C., &amp; Maurino, A. (2009). Methodologies for data quality assessment and improvement. <em>ACM Computing Surveys</em>, 41(3), 1–52.</li>
+    <li>Merkle, R. C. (1988). A digital signature based on a conventional encryption function. <em>Advances in Cryptology — CRYPTO '87</em>, 369–378.</li>
+    <li>Chi, M. T. H., Bassok, M., Lewis, M. W., Reimann, P., &amp; Glaser, R. (1989). Self-explanations: How students study and use examples in learning to solve problems. <em>Cognitive Science</em>, 13(2), 145–182.</li>
   </ul>
 
   <div class="book">
-    <strong>Обе таблицы имеют одинаковое количество строк, но итоговые суммы по-прежнему различаются.</strong>
-    <p><em>SQL для аналитиков</em>  это 458 страниц, полное внешнее соединение, сравнение значений и отпечаток пальца, который определяет, где две таблицы расходятся.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-reconciliation'})">SQL для аналитиков, 19 $ →</a>
+    <strong>Both tables have the same row count and the totals still differ.</strong>
+    <p><em>SQL for Analysts</em> is 458 pages, the full outer join, the value comparison and the fingerprint that finds where two tables disagree.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-reconciliation'})">SQL for Analysts, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>Потренируйтесь согласовывать две таблицы, которые почти совпадают.</strong>
-    <p style="margin:6px 0 0">The <a href="../../sql/">SQL-кит</a>  дает вам повторы: копии, поврежденные способами, которые вам нужно найти, полные внешние соединения для классификации и отпечатки пальцев, которые нужно сузить, а также флэш-карты, на которых оператор сравнения улавливает, какой тип разницы. Теперь вы владеете методом; комплект - это практика. Ничего устанавливать, учетная запись не требуется.</p>
-    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
+    <strong>Practice reconciling two tables that nearly match.</strong>
+    <p style="margin:6px 0 0">The <a href="../../sql/">SQL Kit</a> gives you the repetitions: copies damaged in ways you have to find, full outer joins to classify, and fingerprints to narrow with, plus flash cards on which comparison operator catches which kind of difference. You now own the method; the kit is the practice. Nothing to install, no account needed.</p>
+    <a class="btn" href="../../sql/">Open the SQL Kit →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../migration-dry-run/">Миграционный пробный период</a> · <a href="../what-is-data-migration/">Что такое миграция данных?</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-null/">НУЛЬ в SQL</a> · <a href="../sql-find-duplicates/">Найти дубликаты в SQL</a> · <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../sql-temp-tables-vs-views/">Таблица темпов и представление</a> · <a href="../sql-subqueries/">Подзапрос против CTE</a> · <a href="../../sql/">SQL-кит</a> · <a href="../migration-cutover/">Переключение миграции</a> · <a href="../migration-uat/">Миграция УАТ</a> · <a href="../excel-clean-messy-data/">Очистите беспорядочные данные</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../projects/">Портфельные проекты</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
+    <a href="../../">← Analyst Prep Kit</a> · <a href="../migration-dry-run/">The Migration Dry Run</a> · <a href="../what-is-data-migration/">What Is Data Migration?</a> · <a href="../sql-joins/">SQL JOINs</a> · <a href="../sql-null/">NULL in SQL</a> · <a href="../sql-find-duplicates/">Find Duplicates in SQL</a> · <a href="../entity-resolution/">Entity Resolution</a> · <a href="../sql-temp-tables-vs-views/">Temp Table vs View</a> · <a href="../sql-subqueries/">Subquery vs CTE</a> · <a href="../../sql/">SQL Kit</a> · <a href="../migration-cutover/">Migration Cutover</a> · <a href="../migration-uat/">Migration UAT</a> · <a href="../excel-clean-messy-data/">Clean Messy Data</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../projects/">Portfolio Projects</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
   <script src="../../assets/plan-return.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

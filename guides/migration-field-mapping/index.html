@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Сопоставление полей при миграции данных: построение плана — комплект для подготовки аналитика</title>
-<meta name="description" content="Как создать документ сопоставления полей для миграции данных: что нужно каждой строке, как обрабатывать поля без дома, почему один уникальный идентификатор связывает все вместе и почему ничего не перемещается, пока карта не будет подписана.">
+<title>Field Mapping in a Data Migration: Building the Blueprint &mdash; Analyst Prep Kit</title>
+<meta name="description" content="How to build a field mapping document for a data migration: what each row needs, how to handle fields with no home, why one unique ID ties everything together, and why nothing moves until the map is signed off.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/migration-field-mapping/">
-<meta property="og:title" content="Этап 3. Нанесите на карту поля">
-<meta property="og:description" content="Как создать документ сопоставления полей для миграции данных: что нужно каждой строке, как обрабатывать поля без дома, почему один уникальный идентификатор связывает все вместе и почему ничего не перемещается, пока карта не будет подписана.">
+<meta property="og:title" content="Stage 3: Map the Fields">
+<meta property="og:description" content="How to build a field mapping document for a data migration: what each row needs, how to handle fields with no home, why one unique ID ties everything together, and why nothing moves until the map is signed off.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/migration-field-mapping/">
 <meta name="twitter:card" content="summary_large_image">
@@ -133,89 +133,89 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../">Все руководства</a> &middot; <a href="../data-migration-stages/">Серия «Миграция данных»</a></p>
-  <h1>Этап 3. Нанесите на карту поля</h1>
-  <p class="meta">Этап 3 из 8 · Каждое поле становится домом прежде, чем что-либо начнет двигаться · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-07-30">30 июля 2026 г.</time></p>
+  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../">All Guides</a> &middot; <a href="../data-migration-stages/">Data Migration Series</a></p>
+  <h1>Stage 3: Map the Fields</h1>
+  <p class="meta">Stage 3 of 8 &middot; Every field gets a home before anything moves &middot; Part of the <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-07-30">July 30, 2026</time></p>
 
-  <p>Карта полей представляет собой построчный список, в котором указано, чем каждое поле старой системы становится в новой. Это план всей работы, документ, который подписывает клиент, и ничего не загружается, пока он не будет согласован. В этой статье рассказывается о том, что происходит в каждой строке, как обрабатывать поля, которым некуда идти, а также о правиле идентификатора, которое объединяет записи и документы.</p>
+  <p>The field map is a line by line list saying what each field in the old system becomes in the new one. It is the blueprint for the entire job, it is the document the client signs, and nothing loads until it is agreed. This article covers what goes in each row, how to handle fields with nowhere to go, and the ID rule that keeps records and documents together.</p>
 
-  <p><strong>Краткая версия.</strong>  Одна строка на каждое исходное поле. Каждый ряд заканчивается домом, трансформацией или письменным решением о том, что он не путешествует.</p>
+  <p><strong>The short version.</strong> One row per source field. Every row ends in a home, a transformation, or a written decision that it does not travel.</p>
 
-  <h2>Что содержит строка сопоставления</h2>
-  <p>Перед списком: как вы думаете, какую колонку забывают люди и которая потом вызывает больше всего споров?</p>
+  <h2>What a mapping row contains</h2>
+  <p>Before the list: what do you think is the column people forget, that causes the most arguments later?</p>
   <table>
-    <tr><th>Column</th><th>Почему это там</th></tr>
-    <tr><td>Исходная таблица и поле</td><td>Именно откуда это взялось</td></tr>
-    <tr><td>Примеры значений</td><td>Три настоящие ценности. Это то, что делает карту доступной для просмотра человеком, не имеющим технических знаний.</td></tr>
-    <tr><td>Целевое поле</td><td>Где он приземляется или «не мигрировал»</td></tr>
-    <tr><td>Требуется в цели</td><td>Да или нет. Устраняет проблему с заготовками при профилировании</td></tr>
-    <tr><td>Transformation</td><td>Что должно измениться в ценности, словами</td></tr>
-    <tr><td>Решение и кто его принял</td><td>Колонку люди забывают. Спустя полгода это единственное, что разрешает спор.</td></tr>
+    <tr><th>Column</th><th>Why it is there</th></tr>
+    <tr><td>Source table and field</td><td>Exactly where it comes from</td></tr>
+    <tr><td>Sample values</td><td>Three real values. This is what makes the map reviewable by someone who is not technical</td></tr>
+    <tr><td>Target field</td><td>Where it lands, or "not migrated"</td></tr>
+    <tr><td>Required in target</td><td>Yes or no. Drives the blanks problem from profiling</td></tr>
+    <tr><td>Transformation</td><td>What has to change about the value, in words</td></tr>
+    <tr><td>Decision and who made it</td><td>The column people forget. Six months later, this is the only thing that settles a dispute</td></tr>
   </table>
-  <p>Столбец образцовых значений превращает карту из технического документа в нечто, что клиент действительно может проверить. Никто не может просмотреть поле под названием  <code>cl_stat_cd</code>. Каждый сможет просмотреть его, как только увидит, что он соответствует требованиям ACT, INACT и HOLD.</p>
+  <p>The sample values column is what turns the map from a technical document into something a client can actually check. Nobody can review a field called <code>cl_stat_cd</code>. Everybody can review it once they see that it holds ACT, INACT and HOLD.</p>
 
-  <h2>Поля, которым некуда идти</h2>
-  <p>Они есть в каждой миграции. Старая система отслеживала то, чего не отслеживает новая, или отслеживала это где-то в другом месте. Есть четыре честных результата, и вы выбираете по одному на каждое поле.</p>
-  <p><strong>Он соответствует другому полю.</strong>  Отлично. Запишите преобразование.</p>
-  <p><strong>Оно сливается с другим полем.</strong>  Две адресные строки становятся одной. Запишите правило соединения, включая то, что происходит, когда одна сторона пуста.</p>
-  <p><strong>Он попадает в заметки или настраиваемое поле.</strong>  Клапан давления. Используйте его с осторожностью, поскольку о значении в поле примечаний невозможно сообщить, и клиент в конечном итоге захочет сообщить об этом.</p>
-  <p><strong>Он не путешествует.</strong>  Настоящий ответ, требующий максимально четкой письменной записи. Назовите поле, объясните, почему, и получите его подтверждение наряду с исключениями, согласованными на  <a href="../migration-kickoff-scope/">kickoff</a>.</p>
-  <p>Скажите, к какому из этих четырех вы бы подтолкнули клиента в сфере, которую никто не использовал с 2018 года. Затем прочитайте следующую строку. Это четвертый, и количество строк профилирования — ваше доказательство.</p>
+  <h2>Fields with nowhere to go</h2>
+  <p>Every migration has them. The old system tracked something the new one does not, or tracks it somewhere different. There are four honest outcomes and you pick one per field.</p>
+  <p><strong>It maps to a different field.</strong> Fine. Write the transformation down.</p>
+  <p><strong>It merges with another field.</strong> Two address lines becoming one. Write down the joining rule, including what happens when one side is empty.</p>
+  <p><strong>It goes into a notes or custom field.</strong> The pressure valve. Use it sparingly, because a value in a notes field cannot be reported on, and the client will eventually want to report on it.</p>
+  <p><strong>It does not travel.</strong> A real answer, and the one that needs the clearest written record. Name the field, say why, and get it confirmed alongside the exclusions agreed at <a href="../migration-kickoff-scope/">kickoff</a>.</p>
+  <p>Say which of those four you would push a client towards for a field nobody has used since 2018. Then read the next line. It is the fourth one, and the profiling row count is your evidence.</p>
 
-  <h2>Один идентификатор связывает все воедино</h2>
-  <p>Выберите один идентификатор для каждой реальной вещи, обычно клиента, и используйте его во всем. Записи ссылаются на это. Документы ссылаются на это. Ваши рабочие файлы ссылаются на него.</p>
-  <p>Вот что останавливает сирот. Документ, на котором указано имя клиента и ничего больше, — это документ, который в конечном итоге будет прикреплен не к тому человеку или никому. Документ, загруженный с идентификатором клиента, попадает туда, где ему и место.</p>
-  <p>Ключ старой системы обычно лучше носить с собой, даже если новая система генерирует свой собственный. Сохраните таблицу перехода от старого идентификатора к новому идентификатору. Он понадобится вам во время  <a href="../migration-dry-run/">Сухой пробег</a>, и он понадобится вам снова, если что-то придется перезагрузить.</p>
+  <h2>One ID ties it together</h2>
+  <p>Pick a single identifier per real thing, usually the client, and carry it through everything. Records reference it. Documents reference it. Your working files reference it.</p>
+  <p>This is what stops orphans. A document loaded with the client's name on it and nothing else is a document that will end up attached to the wrong person or to nobody. A document loaded with the client ID lands where it belongs.</p>
+  <p>The old system's key is usually the right thing to carry, even when the new system generates its own. Keep a crosswalk table of old ID to new ID. You will need it during the <a href="../migration-dry-run/">dry run</a>, and you will need it again if anything has to be reloaded.</p>
 
-  <h2>Документы — это тоже данные</h2>
-  <p>К файлам относятся второстепенно, а в регулируемой отрасли они составляют половину работы. С каждым документом нужно обращаться так же, как с записью: откуда он взят, как он называется, какого он типа, какая на нем дата, кому он принадлежит и где он находится.</p>
-  <p>Если часть исходного текста является бумажной, это отдельный рабочий поток со своей собственной временной шкалой. Сканирование и индексирование выполняются параллельно, и обычно именно они определяют дату запуска. Поставьте его на критический путь на первой, а не на шестой неделе.</p>
+  <h2>Documents are data too</h2>
+  <p>Files get treated as an afterthought and they are half the job in a regulated industry. Every document needs the same treatment as a record: where it comes from, what it is called, what type it is, what date it carries, who it belongs to, and where it lands.</p>
+  <p>If some of the source is paper, that is a separate workstream with its own timeline. Scanning and indexing runs in parallel and it is usually the thing that determines the go-live date. Put it on the critical path in week one, not week six.</p>
 
-  <h2>Получение подписи</h2>
-  <p>Не отправляйте таблицу с четырьмястами строк и не просите одобрения. Вы получите молчание, а молчание не является одобрением.</p>
-  <p>Отправьте его по частям, чтобы клиент мог его просмотреть. По одной таблице за раз, с отмеченными строками, требующими решения, и всем механическим способом, свернутым в сводную строку. Запросите решение по отмеченным строкам по дате.</p>
-  <p>Ворота закрываются, когда в каждой строке есть цель или письменное решение, и клиент подтвердил. На это электронное письмо с подтверждением вы будете указывать каждый раз, когда кто-то скажет, что данные неверны. Он преобразует вопрос «правильно ли это» в вопрос «соответствует ли это тому, что мы договорились», на который вы можете ответить за десять секунд.</p>
+  <h2>Getting it signed off</h2>
+  <p>Do not send a spreadsheet with four hundred rows and ask for approval. You will get silence, and silence is not approval.</p>
+  <p>Send it in pieces the client can actually review. One table at a time, with the rows needing a decision marked and everything mechanical collapsed into a summary line. Ask for a decision on the marked rows by a date.</p>
+  <p>The gate closes when every row has a target or a written decision, and the client has confirmed. That confirmation email is the one you will point at every time somebody says the data is wrong. It converts the question from "is this right" to "does this match what we agreed", which you can answer in ten seconds.</p>
 
-  <h2>Одна привычка</h2>
-  <p>Ничто не движется, пока карта не будет подписана. Ни тестовой загрузки, ни быстрой выборки, ничего. Правило работает только в том случае, если у него нет исключений, потому что первое исключение — это то, которое кто-то запомнит.</p>
-  <p>Вы когда-нибудь получали в наследство систему, в которой вы не могли сказать, для чего предназначено поле? Что должна была сказать карта?</p>
+  <h2>The one habit</h2>
+  <p>Nothing moves until the map is signed off. Not a test load, not a quick sample, nothing. The rule only works if it has no exceptions, because the first exception is the one somebody remembers.</p>
+  <p>Have you ever inherited a system where you could not tell what a field was for? What would the map have needed to say?</p>
 
 <div class="seriesnav">
-  <p class="up">Дальше</p>
-  <a class="next" href="../migration-cleaning/">Этап 4: Очистка и устранение дублирования →</a>
-  <p class="then">Ранее:  <a href="../migration-profiling/">Этап 2. Профилирование источника</a> &nbsp;&middot;&nbsp; <a href="../data-migration-stages/">Все восемь этапов</a></p>
+  <p class="up">Up next</p>
+  <a class="next" href="../migration-cleaning/">Stage 4: Clean and De-dupe &rarr;</a>
+  <p class="then">Previously: <a href="../migration-profiling/">Stage 2: Profile the Source</a> &nbsp;&middot;&nbsp; <a href="../data-migration-stages/">All eight stages</a></p>
 </div>
 
   <div class="cta">
-    <strong>Проверочная работа выполняется на языке SQL, а не на продвинутом уровне SQL.</strong>
-    <p style="margin:6px 0 0">Подсчет строк, группировка для поиска дубликатов и объединение для поиска потерянных строк покрывает большую часть того, что требует от вас миграция.  <a href="../../sql/">SQL-кит</a>  обучает этим движениям по порядку, имея данные перед вами.</p>
-    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
-    <p style="margin:10px 0 0;font-size:15px">Или сразу начните вводить:  <a href="../../drill/">открыть SQL-детализация</a>, тринадцать запросов, каждый из которых добавляет что-то одно к последнему.</p>
+    <strong>The checking work is SQL, and it is not advanced SQL.</strong>
+    <p style="margin:6px 0 0">Counting rows, grouping to find duplicates, and joining to find orphans covers most of what a migration asks of you. The <a href="../../sql/">SQL Kit</a> teaches those moves in order, with the data in front of you.</p>
+    <a class="btn" href="../../sql/">Open the SQL Kit &rarr;</a>
+    <p style="margin:10px 0 0;font-size:15px">Or start typing straight away: <a href="../../drill/">open SQL Drill</a>, thirteen queries that each add one thing to the last.</p>
   </div>
 
   <div class="book">
-    <strong>Весь пробег в одном месте.</strong>
-    <p>Вы переносите записи клиента в новую систему, и вас беспокоит та неделя, когда клиент замолкает.  <em>Руководство по миграции данных</em>  это все восемь этапов по порядку, 63 страницы, от первой стартовой встречи до гиперпомощи, так что вы можете пройти один, не опоздав на три недели с важным вопросом.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/data-migration-playbook?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=data-migration-playbook" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-migration-field-mapping'})">Руководство по миграции данных, 29 долларов США →</a>
+    <strong>The whole run, in one place.</strong>
+    <p>You are moving a client’s records into a new system, and the part that worries you is the week the client goes quiet. <em>The Data Migration Playbook</em> is all eight stages in order, 63 pages, from the first kickoff meeting through hypercare, so you can run one without finding the important question three weeks too late.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/data-migration-playbook?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=data-migration-playbook" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-migration-field-mapping'})">The Data Migration Playbook, $29 &rarr;</a>
   </div>
 
 
   <h2>References</h2>
   <ol class="refs">
-    <li>Халлер К., Маттес Ф. и Шульц К. (2012). Подробная модель процесса для крупномасштабных проектов миграции данных.  <em>Системы бизнес-информации (BIS 2012), Конспекты лекций по обработке бизнес-информации, 117</em>. Спрингер.</li>
-    <li>Ван, Р.Ю., и Стронг, Д.М. (1996). За пределами точности: что качество данных означает для потребителей данных.  <em>Журнал информационных систем управления, 12</em>(4), 5&ndash;33.</li>
+    <li>Haller, K., Matthes, F., &amp; Schulz, C. (2012). A detailed process model for large scale data migration projects. <em>Business Information Systems (BIS 2012), Lecture Notes in Business Information Processing, 117</em>. Springer.</li>
+    <li>Wang, R. Y., &amp; Strong, D. M. (1996). Beyond accuracy: What data quality means to data consumers. <em>Journal of Management Information Systems, 12</em>(4), 5&ndash;33.</li>
   </ol>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../sql-count-function/">СЧЕТ в SQL</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../sql/">SQL-кит</a> · <a href="../../projects/">Портфельные проекты</a>
+    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../entity-resolution/">Entity Resolution</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../sql-count-function/">COUNT in SQL</a> · <a href="../sql-joins/">SQL JOINs</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../sql/">SQL Kit</a> · <a href="../../projects/">Portfolio Projects</a>
     
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Как найти повторяющиеся строки в SQL (и решить, что считать одной) — комплект для подготовки аналитика</title>
-<meta name="description" content="Шаблон GROUP BY HAVING, который перечисляет все дубликаты, десятисекундный тест COUNT для любой таблицы и почему аналитики отмечают лишние таблицы, а не удаляют их.">
+<title>How to Find Duplicate Rows in SQL (and Decide What Counts as One) — Analyst Prep Kit</title>
+<meta name="description" content="The GROUP BY HAVING pattern that lists every duplicate, a ten-second COUNT test for any table, and why analysts mark extras instead of deleting them.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-find-duplicates/">
-<meta property="og:title" content="Как найти повторяющиеся строки в SQL (и решить, что считать одной)">
-<meta property="og:description" content="Таблица из 14 строк с 11 реальными клиентами скрывает три дополнительные копии. Вот десятисекундный тест, который их находит, шаблон GROUP BY HAVING, который их перечисляет, и почему маркировка лучше удаления.">
+<meta property="og:title" content="How to Find Duplicate Rows in SQL (and Decide What Counts as One)">
+<meta property="og:description" content="A 14-row table with 11 real customers hides three extra copies. Here is the ten-second test that finds them, the GROUP BY HAVING pattern that lists them, and why marking beats deleting.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/sql-find-duplicates.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-find-duplicates/">
@@ -134,18 +134,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-кит</a> · <a href="../">Все руководства</a></p>
-  <h1>Как найти повторяющиеся строки в SQL (и решить, что считать одной)</h1>
-  <p class="meta">Сначала определите дубликат, затем GROUP BY найдет каждую копию · Написано для прослушивания · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-07">7 августа 2026 г.</time></p>
+  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../sql/">SQL Kit</a> · <a href="../">All guides</a></p>
+  <h1>How to Find Duplicate Rows in SQL (and Decide What Counts as One)</h1>
+  <p class="meta">Define the duplicate first, then one GROUP BY finds every copy · Written to be listened to · Part of the <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-07">August 7, 2026</time></p>
 
-  <p>В конце этой страницы вы можете проверить любую таблицу на наличие повторяющихся строк, составить список всех копий и отметить, какую из них следует сохранить, и все это с помощью понятных вам запросов. Вы также будете знать шаг, который следует выполнить перед любым запросом: решить, что означает «дубликат» для этой таблицы, потому что две строки могут совпадать во всем или в одном столбце, и это разные проблемы с разными исправлениями. Это около двадцати минут.</p>
+  <p>By the end of this page you can check any table for duplicate rows, list every copy, and mark which one to keep, all with queries you understand. You will also know the step that comes before any query: deciding what "duplicate" means for this table, because two rows can match on everything or on one column, and those are different problems with different fixes. It is about twenty minutes.</p>
 
-  <p>Вот что на самом деле с этим делать. В следующей таблице, которую вы получите, запустите одно сравнение прежде всего:  <code>COUNT(*)</code> against <code>COUNT(DISTINCT key)</code>. Если эти два числа различаются, в таблице есть дубликаты, и теперь вы узнаете об этом еще до того, как это произойдет в первом отчете.</p>
+  <p>Here is what to actually do with it. On the next table you are handed, run one comparison before anything else: <code>COUNT(*)</code> against <code>COUNT(DISTINCT key)</code>. If the two numbers differ, the table has duplicates, and now you know before your first report does.</p>
 
-  <p>Краткая версия: группируйте по столбцам, которые определяют дубликат, сохраняйте группы там, где  <code>COUNT(*)</code>  больше единицы, и отметьте дополнительные функции значком  <code>ROW_NUMBER</code>  вместо того, чтобы удалять их.</p>
+  <p>The short version: group by the columns that define a duplicate, keep the groups where <code>COUNT(*)</code> is above one, and mark extras with <code>ROW_NUMBER</code> instead of deleting them.</p>
 
-  <p>Одна картинка несет в себе весь метод. Строки с общим ключом сворачиваются в сегменты, а сегменты, содержащие более одной строки, являются вашими дубликатами.</p>
+  <p>One picture carries the whole method. Rows that share a key collapse into buckets, and the buckets holding more than one row are your duplicates.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 300" role="img" aria-labelledby="dupTitle dupDesc" xmlns="http://www.w3.org/2000/svg">
@@ -200,70 +200,70 @@
         <text x="576" y="180" font-size="14" font-weight="700" fill="#B45309">2 copies</text>
       </g>
     </svg>
-    <figcaption>Сгруппируйте строки по столбцам, которые определяют дубликат. Ведра одного уникальны и отпадают. Ведра выше единицы — это ваши дубликаты, а счетчик показывает, сколько копий.</figcaption>
+    <figcaption>Group rows by the columns that define a duplicate. Buckets of one are unique and fall away. Buckets above one are your duplicates, and the count says how many copies.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>Что вы узнаете</strong>
+    <strong>What you'll learn</strong>
     <ol>
-      <li>Решите, что считать дубликатом, прежде чем писать что-либо.</li>
-      <li>Десятисекундный тест на любом столе</li>
-      <li>Перечислите дубликаты с помощью GROUP BY и HAVING.</li>
-      <li>Просматривайте полные повторяющиеся строки, а не только сводку.</li>
-      <li>Отметьте хранителей и статистов с помощью ROW_NUMBER</li>
-      <li>Шаблон удаления, указанный один раз, с ограждениями</li>
-      <li>Полное до и после</li>
-      <li>Крайние случаи, из-за которых поиск дубликатов идет не так</li>
-      <li>Почему это работает</li>
-      <li>Использование этого в вашем собственном проекте</li>
-      <li>Все на одном экране</li>
+      <li>Decide what counts as a duplicate before you write anything</li>
+      <li>The ten-second test on any table</li>
+      <li>List the duplicates with GROUP BY and HAVING</li>
+      <li>See the full duplicate rows, not just the summary</li>
+      <li>Mark keepers and extras with ROW_NUMBER</li>
+      <li>The delete pattern, stated once, with the guard rails</li>
+      <li>The full before and after</li>
+      <li>Edge cases that make duplicate hunts go wrong</li>
+      <li>Why this works</li>
+      <li>Using this on your own project</li>
+      <li>The whole thing on one screen</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Проработанный пример реальный.</strong>  Каждое число на этой странице взято из 14-строчной таблицы клиентов, которую я построил с тремя дубликатами, специально засеянными, и каждый запрос выполнялся к ней в SQLite, прежде чем его выходные данные были вставлены сюда. Таблица достаточно маленькая, чтобы ее можно было проверить на глаз, и в этом суть: каждый результат вы можете подтвердить самостоятельно. Если  <code>GROUP BY</code>  сам новый, читайте  <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a>  сначала и возвращайся.</div>
+  <div class="note"><strong>The worked example is real.</strong> Every number on this page comes from a 14-row customers table I built with three duplicates seeded on purpose, and every query was run against it in SQLite before its output was pasted here. The table is small enough to check by eye, which is the point: you can confirm every result yourself. If <code>GROUP BY</code> itself is new, read <a href="../sql-group-by-having/">GROUP BY and HAVING</a> first and come back.</div>
 
-  <p>Вот таблица. Четырнадцать строк, и система регистрации дала сбой тремя разными способами.</p>
+  <p>Here is the table. Fourteen rows, and the signup system has misbehaved in three different ways.</p>
 
   <table>
     <tr><th>customer_id</th><th>email</th><th>full_name</th><th>city</th><th>signup_date</th></tr>
-    <tr><td>101</td><td>ana@keller.com</td><td>Ана Келлер</td><td>Austin</td><td>2026-01-04</td></tr>
-    <tr><td>102</td><td>ben.ortiz@mail.com</td><td>Бен Ортис</td><td>Dallas</td><td>2026-01-09</td></tr>
-    <tr><td>103</td><td>cara.li@mail.com</td><td>Дорогая Ли</td><td>Austin</td><td>2026-01-15</td></tr>
+    <tr><td>101</td><td>ana@keller.com</td><td>Ana Keller</td><td>Austin</td><td>2026-01-04</td></tr>
+    <tr><td>102</td><td>ben.ortiz@mail.com</td><td>Ben Ortiz</td><td>Dallas</td><td>2026-01-09</td></tr>
+    <tr><td>103</td><td>cara.li@mail.com</td><td>Cara Li</td><td>Austin</td><td>2026-01-15</td></tr>
     <tr><td>104</td><td>dev.p@mail.com</td><td>Dev Patel</td><td>Houston</td><td>2026-01-20</td></tr>
-    <tr><td>105</td><td>ella.r@mail.com</td><td>Элла Рейес</td><td>Dallas</td><td>2026-02-02</td></tr>
-    <tr><td>106</td><td>finn.w@mail.com</td><td>Найти Уолша</td><td>Austin</td><td>2026-02-11</td></tr>
-    <tr><td>103</td><td>cara.li@mail.com</td><td>Дорогая Ли</td><td>Austin</td><td>2026-01-15</td></tr>
-    <tr><td>107</td><td>gus.m@mail.com</td><td>Гас Моран</td><td>Houston</td><td>2026-02-19</td></tr>
-    <tr><td>108</td><td>hana.s@mail.com</td><td>Хана Сато</td><td>Dallas</td><td>2026-02-25</td></tr>
-    <tr><td>105</td><td>ella.r@mail.com</td><td>Элла Рейес</td><td>Форт-Уэрт</td><td>2026-03-01</td></tr>
-    <tr><td>109</td><td>ivan.k@mail.com</td><td>Иван Кова</td><td>Austin</td><td>2026-03-06</td></tr>
-    <tr><td>103</td><td>cara.li@mail.com</td><td>Дорогая Ли</td><td>Austin</td><td>2026-01-15</td></tr>
-    <tr><td>110</td><td>jo.b@mail.com</td><td>Да Брандт</td><td>Houston</td><td>2026-03-14</td></tr>
-    <tr><td>111</td><td>ben.ortiz@mail.com</td><td>Бенджамин Ортис</td><td>Dallas</td><td>2026-03-20</td></tr>
+    <tr><td>105</td><td>ella.r@mail.com</td><td>Ella Reyes</td><td>Dallas</td><td>2026-02-02</td></tr>
+    <tr><td>106</td><td>finn.w@mail.com</td><td>Finn Walsh</td><td>Austin</td><td>2026-02-11</td></tr>
+    <tr><td>103</td><td>cara.li@mail.com</td><td>Cara Li</td><td>Austin</td><td>2026-01-15</td></tr>
+    <tr><td>107</td><td>gus.m@mail.com</td><td>Gus Moran</td><td>Houston</td><td>2026-02-19</td></tr>
+    <tr><td>108</td><td>hana.s@mail.com</td><td>Hana Sato</td><td>Dallas</td><td>2026-02-25</td></tr>
+    <tr><td>105</td><td>ella.r@mail.com</td><td>Ella Reyes</td><td>Fort Worth</td><td>2026-03-01</td></tr>
+    <tr><td>109</td><td>ivan.k@mail.com</td><td>Ivan Kova</td><td>Austin</td><td>2026-03-06</td></tr>
+    <tr><td>103</td><td>cara.li@mail.com</td><td>Cara Li</td><td>Austin</td><td>2026-01-15</td></tr>
+    <tr><td>110</td><td>jo.b@mail.com</td><td>Jo Brandt</td><td>Houston</td><td>2026-03-14</td></tr>
+    <tr><td>111</td><td>ben.ortiz@mail.com</td><td>Benjamin Ortiz</td><td>Dallas</td><td>2026-03-20</td></tr>
   </table>
 
   <div class="step">
-    <h2>1. Решите, что считать дубликатом, прежде чем писать что-либо.</h2>
+    <h2>1. Decide what counts as a duplicate before you write anything</h2>
 
-    <p>Перед пояснением: клиент 103 появляется три раза, причем все столбцы идентичны. Клиент 105 появляется дважды с двумя разными городами. Электронная почта Бена Ортиса отображается под двумя разными идентификаторами. Какие из этих трех являются дубликатами?</p>
+    <p>Before the explanation: customer 103 appears three times with every column identical. Customer 105 appears twice with two different cities. Ben Ortiz's email appears under two different ids. Which of those three are duplicates?</p>
 
-    <p>На этот вопрос нет однозначного ответа, и это настоящий первый шаг в любой охоте за дубликатами. «Дубликат» не является свойством данных. Вы принимаете решение о том, какие столбцы должны совпадать, прежде чем две строки будут означать одно и то же. Есть три общих ответа, и каждый из них ведет к разным запросам и разным процедурам очистки.</p>
+    <p>That question has no single answer, and that is the real first step of any duplicate hunt. "Duplicate" is not a property of the data. It is a decision you make about which columns have to match before two rows mean the same thing. There are three common answers, and each one leads to a different query and a different cleanup.</p>
 
     <ul>
-      <li><strong>Весь ряд одинаковый.</strong>  Каждый столбец совпадает, как клиент 103. Почти всегда это случайная загрузка: один и тот же файл импортирован дважды, повторная вставка, копипаста. Дополнительные копии не несут никакой информации, и их можно безопасно удалить после пометки.</li>
-      <li><strong>Тот же естественный ключ, остальное отличается.</strong>  Естественный ключ — это столбец, который идентифицирует вещь в реальном мире, например  <code>customer_id</code>. У клиента 105 один идентификатор и два города, поэтому одна строка устарела, а другая — текущая. Удаление неправильной копии уничтожает реальную информацию, поэтому здесь решается, какую копию оставить, а не сколько удалить.</li>
-      <li><strong>Тот же человек, другое написание.</strong>  Бен Ортис и Бенджамин Ортис обмениваются электронными письмами, но ничего  <code>GROUP BY</code>  может точно совпасть. Ни один запрос на этой странице не обнаружит эту пару как совпадение имени. Эта проблема называется разрешением сущностей: она решает, когда две записи, написанные по-разному, являются одной и той же реальной вещью.  <a href="../entity-resolution/">Свой собственный гид</a>.</li>
+      <li><strong>Whole row identical.</strong> Every column matches, like customer 103. This is almost always a loading accident: the same file imported twice, a retried insert, a copy-paste. The extra copies carry no information and are safe to remove once marked.</li>
+      <li><strong>Same natural key, rest differs.</strong> A natural key is the column that identifies the thing in the real world, like <code>customer_id</code>. Customer 105 has one id and two cities, so one row is stale and one is current. Removing the wrong one destroys real information, so here the decision is which copy to keep, not just how many to remove.</li>
+      <li><strong>Same person, different spelling.</strong> Ben Ortiz and Benjamin Ortiz share an email but nothing a <code>GROUP BY</code> can match exactly. No query on this page will catch that pair as a name match. That problem is called entity resolution, deciding when two differently-written records are the same real thing, and it gets <a href="../entity-resolution/">its own guide</a>.</li>
     </ul>
 
-    <p>Итак, развилка: какие столбцы определяют «то же самое»? Все это означает, что вы охотитесь за несчастными случаями при погрузке. Естественный ключ означает, что вы ищете противоречивые версии. Ни то, ни другое не означает, что вы можете охотиться на людей, и это другой инструмент. Все, что ниже, работает для первых двух, а запросы отличаются только тем, что вы ставите после  <code>GROUP BY</code>.</p>
+    <p>So the fork is: which columns define "the same"? All of them means you are hunting loading accidents. The natural key means you are hunting conflicting versions. Neither means you may be hunting people, and that is a different tool. Everything below works for the first two, and the queries only differ in what you put after <code>GROUP BY</code>.</p>
   </div>
 
   <div class="step">
-    <h2>2. Десятисекундный тест на любом столе</h2>
+    <h2>2. The ten-second test on any table</h2>
 
-    <p>Прежде чем объяснить: не оглядываясь на таблицу, как бы вы получили одно число, которое говорит о том, появляется ли какой-либо идентификатор дважды?</p>
+    <p>Before the explanation: without looking back at the table, how would you get one number that says whether any id appears twice?</p>
 
-    <p>Посчитайте ряды двумя способами.  <code>COUNT(*)</code>  считает каждую строку.  <code>COUNT(DISTINCT customer_id)</code>  подсчитывает, сколько существует различных значений идентификаторов. Если каждый идентификатор появляется один раз, два числа совпадают. Любой разрыв между ними — это количество дополнительных копий.</p>
+    <p>Count the rows two ways. <code>COUNT(*)</code> counts every row. <code>COUNT(DISTINCT customer_id)</code> counts how many different id values exist. If every id appears once, the two numbers match. Any gap between them is the number of extra copies.</p>
 
     <pre><code>SELECT COUNT(*)                    AS total_rows,
        COUNT(DISTINCT customer_id) AS distinct_ids
@@ -274,17 +274,17 @@ FROM customers;</code></pre>
       <tr><td>14</td><td>11</td></tr>
     </table>
 
-    <p>Четырнадцать строк, одиннадцать различных идентификаторов, поэтому три строки — это дополнительные копии чего-то. Это запрос, который я выполняю для каждой таблицы, которую мне передают, перед любым соединением и перед любым отчетом, потому что он занимает около десяти секунд и меняет то, чему я доверяю. Он не сообщает вам, какие строки являются копиями. Оно говорит вам, нужна ли охота вообще, а 14 против 11 говорят, что да.</p>
+    <p>Fourteen rows, eleven distinct ids, so three rows are extra copies of something. This is the query I run on every table anyone hands me, before any join and before any report, because it takes about ten seconds and it changes what I trust. It does not tell you which rows are the copies. It tells you whether the hunt is needed at all, and 14 against 11 says yes.</p>
 
-    <div class="note"><strong>Особенно запустите тест на ключе соединения.</strong>  Если вы собираетесь присоединиться к  <code>customer_id</code>  и в этой таблице 14 строк для 11 идентификаторов, соединение будет умножать строки, и каждый последующий счетчик будет совершенно неправильным. Десять секунд здесь экономят день там.</div>
+    <div class="note"><strong>Run the test on the join key especially.</strong> If you are about to join on <code>customer_id</code> and this table has 14 rows for 11 ids, the join will multiply rows and every count downstream will be quietly wrong. Ten seconds here saves an afternoon there.</div>
   </div>
 
   <div class="step">
-    <h2>3. Перечислите дубликаты с помощью GROUP BY и HAVING.</h2>
+    <h2>3. List the duplicates with GROUP BY and HAVING</h2>
 
-    <p>До пояснения: тест говорит, что существуют три лишние строки. Что бы вы сгруппировали, чтобы узнать, каким клиентам они принадлежат?</p>
+    <p>Before the explanation: the test says three extra rows exist. What would you group by to find out which customers they belong to?</p>
 
-    <p>Сгруппируйте столбцы из вашего первого шага, подсчитайте каждый сегмент и оставьте только сегменты с более чем одной строкой.  <code>HAVING</code>  — это предложение, которое фильтрует группы после их формирования, то есть именно в тот момент, когда существует счетчик.</p>
+    <p>Group by the columns from your step-one decision, count each bucket, and keep only the buckets with more than one row. <code>HAVING</code> is the clause that filters groups after they are formed, which is exactly the moment the count exists.</p>
 
     <pre><code>SELECT customer_id, COUNT(*) AS copies
 FROM customers
@@ -298,9 +298,9 @@ ORDER BY copies DESC;</code></pre>
       <tr><td>105</td><td>2</td></tr>
     </table>
 
-    <p>Два покупателя, пять рядов между ними, трое из них статисты. Это как раз и объясняет пробел на втором этапе: 14 строк минус 11 идентификаторов — это 3, и вот они, две дополнительные копии 103 плюс одна дополнительная копия 105.</p>
+    <p>Two customers, five rows between them, three of which are extras. That accounts exactly for the gap in step two: 14 rows minus 11 ids is 3, and here they are, two extra copies of 103 plus one extra of 105.</p>
 
-    <p>Чтобы вместо этого искать дубликаты всей строки, поместите каждый столбец в  <code>GROUP BY</code>. Теперь сегмент формируется только тогда, когда строки совпадают во всем.</p>
+    <p>To hunt whole-row duplicates instead, put every column in the <code>GROUP BY</code>. Now a bucket only forms when rows match on everything.</p>
 
     <pre><code>SELECT customer_id, email, full_name, city, signup_date,
        COUNT(*) AS copies
@@ -310,18 +310,18 @@ HAVING COUNT(*) > 1;</code></pre>
 
     <table>
       <tr><th>customer_id</th><th>email</th><th>full_name</th><th>city</th><th>signup_date</th><th>copies</th></tr>
-      <tr><td>103</td><td>cara.li@mail.com</td><td>Дорогая Ли</td><td>Austin</td><td>2026-01-15</td><td>3</td></tr>
+      <tr><td>103</td><td>cara.li@mail.com</td><td>Cara Li</td><td>Austin</td><td>2026-01-15</td><td>3</td></tr>
     </table>
 
-    <p>Обратите внимание, что изменилось. Клиент 105 исчез из этого результата, поскольку ее две строки различаются по городам, поэтому они никогда не попадают в одну и ту же корзину. Прежде чем читать дальше, скажите своими словами, почему эти два запроса расходятся по поводу 105. Если вы можете это объяснить, у вас есть весь метод:  <code>GROUP BY</code>    список — это ваше определение дубликата, записанное в виде кода.</p>
+    <p>Notice what changed. Customer 105 vanished from this result, because her two rows differ on city, so they never land in the same bucket. Say why the two queries disagree about 105, in your own words, before reading on. If you can explain it, you have the whole method: the <code>GROUP BY</code> list is your definition of duplicate, written as code.</p>
   </div>
 
   <div class="step">
-    <h2>4. Просматривайте полные повторяющиеся строки, а не только сводку.</h2>
+    <h2>4. See the full duplicate rows, not just the summary</h2>
 
-    <p>Перед пояснением: в сводке говорится, что у клиента 105 есть две копии, но чтобы решить, какую оставить, вам нужно увидеть обе строки рядом. В сгруппированном результате их невозможно отобразить, поскольку группировка их свернула. Как их вернуть?</p>
+    <p>Before the explanation: the summary says customer 105 has two copies, but to decide which to keep you need to see both rows side by side. The grouped result cannot show them, because grouping collapsed them. How do you get them back?</p>
 
-    <p>Используйте сводку в качестве списка покупок. Сначала найдите идентификаторы с дубликатами, затем извлеките каждую строку, идентификатор которой есть в этом списке.  <code>IN</code>  это самый простой способ сказать это.</p>
+    <p>Use the summary as a shopping list. First find the ids with duplicates, then pull every row whose id is on that list. <code>IN</code> is the plainest way to say it.</p>
 
     <pre><code>SELECT *
 FROM customers
@@ -335,22 +335,22 @@ ORDER BY customer_id, signup_date;</code></pre>
 
     <table>
       <tr><th>customer_id</th><th>email</th><th>full_name</th><th>city</th><th>signup_date</th></tr>
-      <tr><td>103</td><td>cara.li@mail.com</td><td>Дорогая Ли</td><td>Austin</td><td>2026-01-15</td></tr>
-      <tr><td>103</td><td>cara.li@mail.com</td><td>Дорогая Ли</td><td>Austin</td><td>2026-01-15</td></tr>
-      <tr><td>103</td><td>cara.li@mail.com</td><td>Дорогая Ли</td><td>Austin</td><td>2026-01-15</td></tr>
-      <tr><td>105</td><td>ella.r@mail.com</td><td>Элла Рейес</td><td>Dallas</td><td>2026-02-02</td></tr>
-      <tr><td>105</td><td>ella.r@mail.com</td><td>Элла Рейес</td><td>Форт-Уэрт</td><td>2026-03-01</td></tr>
+      <tr><td>103</td><td>cara.li@mail.com</td><td>Cara Li</td><td>Austin</td><td>2026-01-15</td></tr>
+      <tr><td>103</td><td>cara.li@mail.com</td><td>Cara Li</td><td>Austin</td><td>2026-01-15</td></tr>
+      <tr><td>103</td><td>cara.li@mail.com</td><td>Cara Li</td><td>Austin</td><td>2026-01-15</td></tr>
+      <tr><td>105</td><td>ella.r@mail.com</td><td>Ella Reyes</td><td>Dallas</td><td>2026-02-02</td></tr>
+      <tr><td>105</td><td>ella.r@mail.com</td><td>Ella Reyes</td><td>Fort Worth</td><td>2026-03-01</td></tr>
     </table>
 
-    <p>Five rows, and now the two problems look as different as they are. Customer 103 is three identical rows: a loading accident, nothing to decide. Customer 105 is two versions of one person: Dallas in February, Fort Worth in March, and someone has to say which city is true. A join back to the same summary gives the identical result, and I ran both to confirm: the same five rows either way. Use whichever reads better to you; <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a>  охватывает форму присоединения.</p>
+    <p>Five rows, and now the two problems look as different as they are. Customer 103 is three identical rows: a loading accident, nothing to decide. Customer 105 is two versions of one person: Dallas in February, Fort Worth in March, and someone has to say which city is true. A join back to the same summary gives the identical result, and I ran both to confirm: the same five rows either way. Use whichever reads better to you; <a href="../sql-joins/">SQL joins</a> covers the join form.</p>
   </div>
 
   <div class="step">
-    <h2>5. Отметьте хранителей и статистов с помощью ROW_NUMBER.</h2>
+    <h2>5. Mark keepers and extras with ROW_NUMBER</h2>
 
-    <p>Перед пояснением: теперь вы можете видеть все пять повторяющихся строк. Какой столбец, добавленный в таблицу, позволит кому-либо еще действовать с ним, не переделывая вашу работу?</p>
+    <p>Before the explanation: you can now see all five duplicate rows. What single column, added to the table, would let anyone else act on them without redoing your work?</p>
 
-    <p>Номер копии.  <code>ROW_NUMBER()</code>  — это оконная функция, то есть она вычисляет значение для каждой строки, ничего не сворачивая.  <code>PARTITION BY customer_id</code>  перезапускает нумерацию для каждого клиента, и  <code>ORDER BY signup_date</code>  решает, кто получит номер один. Итак, копия номер 1 — ваш хранитель, а все, что выше 1, — лишнее, согласно записанному вами правилу.</p>
+    <p>A copy number. <code>ROW_NUMBER()</code> is a window function, which means it computes a value for every row without collapsing anything. <code>PARTITION BY customer_id</code> restarts the numbering for each customer, and <code>ORDER BY signup_date</code> decides who gets number one. So copy number 1 is your keeper and everything above 1 is an extra, by a rule you wrote down.</p>
 
     <pre><code>SELECT customer_id, city, signup_date,
        ROW_NUMBER() OVER (
@@ -360,7 +360,7 @@ ORDER BY customer_id, signup_date;</code></pre>
 FROM customers
 ORDER BY customer_id, copy_number;</code></pre>
 
-    <p>Дублированные клиенты возвращаются под таким номером.</p>
+    <p>The duplicated customers come back numbered like this.</p>
 
     <table>
       <tr><th>customer_id</th><th>city</th><th>signup_date</th><th>copy_number</th></tr>
@@ -368,20 +368,20 @@ ORDER BY customer_id, copy_number;</code></pre>
       <tr><td>103</td><td>Austin</td><td>2026-01-15</td><td>2</td></tr>
       <tr><td>103</td><td>Austin</td><td>2026-01-15</td><td>3</td></tr>
       <tr><td>105</td><td>Dallas</td><td>2026-02-02</td><td>1</td></tr>
-      <tr><td>105</td><td>Форт-Уэрт</td><td>2026-03-01</td><td>2</td></tr>
+      <tr><td>105</td><td>Fort Worth</td><td>2026-03-01</td><td>2</td></tr>
     </table>
 
-    <p>Каждый второй клиент просто получает копию номер 1. Оберните ее в подзапрос и сохраните.  <code>copy_number &gt; 1</code>  и у вас есть ровно три дополнительных ряда, которые я проверил, чтобы подтвердить: два дополнительных ряда для 103 и ряд Форт-Уэрта для 105.</p>
+    <p>Every other customer simply gets copy number 1. Wrap it in a subquery and keep <code>copy_number &gt; 1</code> and you have exactly the three extras, which I ran to confirm: two extra rows for 103 and the Fort Worth row for 105.</p>
 
-    <p>Вот ответвление варианта «сохранить против удаления», потому что это реальное решение. Удаление дополнительных данных делает таблицу чистой, но уничтожает улики, и если ваше правило хранителя было неверным, правильная строка исчезнет. При выборе дополнительных элементов сохраняется каждая строка и добавляется столбец, в котором указано, какую из них следует использовать в отчетах. Маркировка стоит одного столбца. Удаление стоит возможности изменить свое мнение. Вот почему работающие аналитики сначала отмечают и редко удаляют: фильтруют отчеты по  <code>copy_number = 1</code>  и вы получите все преимущества удаления без какого-либо риска. Обратите внимание, что в запросе видно правило маркировки: для 105  <code>ORDER BY signup_date</code>  сделал новый ряд в Форт-Уэрте дополнительным. Если компания говорит о новых победах, переверните заказ на  <code>signup_date DESC</code>  и вратарь тоже переворачивается. Правило представляет собой код, поэтому его можно просматривать и оспаривать.</p>
+    <p>Here is the fork on keep-versus-delete, because it is a real decision. Deleting extras makes the table clean but destroys the evidence, and if your keeper rule was wrong, the right row is gone. Marking extras keeps every row and adds a column that says which one the reports should use. Marking costs one column. Deleting costs the ability to change your mind. That is why working analysts mark first and delete rarely: filter reports to <code>copy_number = 1</code> and you get every benefit of the delete with none of the risk. Notice the marking rule is visible in the query: for 105, <code>ORDER BY signup_date</code> made the newer Fort Worth row the extra. If the business says newest wins, flip the order to <code>signup_date DESC</code> and the keeper flips too. The rule is code, so it can be reviewed and argued with.</p>
 
-    <p>Семейство оконных функций идет гораздо дальше этого трюка.  <a href="../sql-window-functions/">Оконные функции</a>  проходит через него правильно. Если вам нужен узор на пальцах, а не в закладках,  <a href="../../drill/">введите запрос самостоятельно</a>    несколько раз в SQL-тренировка.</p>
+    <p>The window function family goes much further than this one trick, and <a href="../sql-window-functions/">window functions</a> walks through it properly. If you want the pattern in your fingers rather than your bookmarks, <a href="../../drill/">type the query yourself</a> a few times in the SQL Drill.</p>
   </div>
 
   <div class="step">
-    <h2>6. Схема удаления, указанная один раз, с ограждением</h2>
+    <h2>6. The delete pattern, stated once, with the guard rails</h2>
 
-    <p>Иногда ответ действительно заключается в удалении строк, обычно в случае аварийной загрузки всей строки, например, клиента 103. Вот шаблон, один раз. В SQLite каждая строка имеет скрытую  <code>rowid</code>, поэтому оставьте самый маленький  <code>rowid</code>  на каждого клиента и удалите остальные. Другие базы данных используют  <code>ctid</code>, идентификатор системы или  <code>ROW_NUMBER</code>  подзапрос, но форма та же.</p>
+    <p>Sometimes the answer really is to remove rows, usually for whole-row loading accidents like customer 103. Here is the pattern, once. In SQLite every row has a hidden <code>rowid</code>, so keep the smallest <code>rowid</code> per customer and delete the rest. Other databases use <code>ctid</code>, a system id, or a <code>ROW_NUMBER</code> subquery, but the shape is the same.</p>
 
     <pre><code>DELETE FROM customers
 WHERE rowid NOT IN (
@@ -390,18 +390,18 @@ WHERE rowid NOT IN (
     GROUP BY customer_id
 );</code></pre>
 
-    <p>Я запустил его на обработанной таблице, и последующие счетчики составили 11 строк и 11 различных идентификаторов: десятисекундный тест теперь пройден. Два ограждения, и они не являются обязательными.</p>
+    <p>I ran it on the worked table, and the counts after were 11 rows and 11 distinct ids: the ten-second test now passes. Two guard rails, and they are not optional.</p>
 
     <ul>
-      <li><strong>Сначала запустите его как SELECT.</strong> Change <code>DELETE FROM customers</code> to <code>SELECT * FROM customers</code>  с тем же самым  <code>WHERE</code>и прочитайте строки, которые умрут. На этой таблице показаны именно три статиста и ничего больше. Если выбор вас удивил, то удаление тоже произойдет, за исключением того, что удаление не позволяет вам смотреть дважды.</li>
-      <li><strong>Сохраните исходную таблицу.</strong>  Выполните удаление копии или сначала запишите удаленные строки в боковую таблицу. Обратите внимание, что этот шаблон удаления сохраняет произвольную самую раннюю загруженную строку, а не выбранную, поэтому в случае конфликтов с одинаковыми ключами, таких как клиент 105, он может молча сохранять устаревший город. Именно поэтому маркировка стояла на первом месте.</li>
+      <li><strong>Run it as a SELECT first.</strong> Change <code>DELETE FROM customers</code> to <code>SELECT * FROM customers</code> with the same <code>WHERE</code>, and read the rows that would die. On this table that shows exactly the three extras and nothing else. If the select surprises you, the delete would have too, except the delete does not let you look twice.</li>
+      <li><strong>Keep the original table.</strong> Do the delete on a copy, or write the deleted rows to a side table first. Note that this delete pattern keeps an arbitrary earliest-loaded row, not a chosen one, so for same-key conflicts like customer 105 it can silently keep the stale city. That is exactly why marking came first.</li>
     </ul>
   </div>
 
   <div class="step">
-    <h2>7. Полное до и после</h2>
+    <h2>7. The full before and after</h2>
 
-    <p>Та же таблица, тот же вопрос: у каких клиентов есть повторяющиеся строки, и какая копия должна стоять?</p>
+    <p>Same table, same question: which customers have duplicate rows, and which copy should stand?</p>
 
     <h3>Before</h3>
     <pre><code>SELECT customer_id, COUNT(*)
@@ -409,7 +409,7 @@ FROM customers
 GROUP BY customer_id
 HAVING COUNT(*) > 1;</code></pre>
 
-    <p>Правильно, и недостаточно, чтобы действовать. Он называет номера 103 и 105, но не показывает ни одной из их строк, не указывает правила хранителя и не дает следующему человеку ничего для просмотра.</p>
+    <p>Correct, and not enough to act on. It names 103 and 105 but shows none of their rows, states no keeper rule, and gives the next person nothing to review.</p>
 
     <h3>After</h3>
     <pre><code>-- ============================================================
@@ -431,108 +431,108 @@ SELECT customer_id, email, full_name, city, signup_date,
 FROM customers
 ORDER BY customer_id, copy_number;</code></pre>
 
-    <p>Присутствует каждая строка, записано правило хранителя, с которым рецензент может не согласиться, известный конфликт назван, а последующие запросы просто фильтруются, чтобы  <code>copy_number = 1</code>. Формат комментариев тот же, что и у  <a href="../sql-teaching-comments/">Как комментировать SQL, чтобы он обучал</a>.</p>
+    <p>Every row is present, the keeper rule is written where a reviewer can disagree with it, the known conflict is named, and downstream queries just filter to <code>copy_number = 1</code>. The comment format is the one from <a href="../sql-teaching-comments/">how to comment SQL so it teaches</a>.</p>
 
-    <p>Теперь представьте, как выполняется запрос маркировки для вашей самой большой таблицы, секционированной по ее естественному ключу. Какой столбец вы бы поместили в  <code>ORDER BY</code>  принять решение о хранителе, и могли бы вы защитить этот выбор перед лицом, владеющим данными?</p>
+    <p>Now picture running the marking query on your own biggest table, partitioned by whatever its natural key is. Which column would you put in the <code>ORDER BY</code> to decide the keeper, and could you defend that choice to the person who owns the data?</p>
   </div>
 
   <div class="step">
-    <h2>8. Крайние случаи, из-за которых поиск дубликатов идет не так, как надо</h2>
+    <h2>8. Edge cases that make duplicate hunts go wrong</h2>
 
-    <p>Перед объяснением: ваш дублирующийся запрос возвращает ноль строк, но следующий отчет по-прежнему учитывает клиентов дважды. Каким образом оба этих утверждения могут быть правдой одновременно?</p>
+    <p>Before the explanation: your duplicate query returns zero rows, but a report downstream still double-counts customers. What are the ways both of those can be true at once?</p>
 
-    <p>Пять, каждая из которых стоила кому-то реального времени.</p>
+    <p>Five that each cost someone real time.</p>
 
-    <p><strong>Вы сгруппировали по неправильному определению.</strong>  Это ответ с нулевыми строками. Группировка по каждому столбцу не находит дубликатов в таблице, где один и тот же идентификатор встречается дважды в разных городах, точно так же, как клиент 105. Когда запрос всей строки возвращается чистым, запустите версию с естественным ключом, прежде чем объявлять таблицу чистой.</p>
+    <p><strong>You grouped by the wrong definition.</strong> This is the zero-rows answer. Grouping by every column finds no duplicates in a table where the same id appears twice with different cities, exactly like customer 105. When the whole-row query comes back clean, run the natural-key version before declaring the table clean.</p>
 
-    <p><strong>Дубликатов нет в этой таблице.</strong>  Соединение может умножать строки, даже если обе таблицы проходят десятисекундный тест на своих собственных ключах, если вы объединяете столбец, который не уникален ни в одной из таблиц. Если отчет имеет двойной подсчет, проверьте ключ соединения на каждой стороне, а не только идентификатор.</p>
+    <p><strong>The duplicates are not in this table.</strong> A join can multiply rows even when both tables pass the ten-second test on their own keys, if you join on a column that is not unique in either table. When a report double-counts, test the join key on each side, not just the id.</p>
 
-    <p><strong>Близкие совпадения ускользают от каждой точной группы.</strong>  Конечные пробелы, заглавные буквы и варианты написания — это разные значения.  <code>GROUP BY</code>. На моем столе специально стоит один из них: Бен Ортис и Бенджамин Ортис. Группировка по электронной почте выявляет эту пару, и я запустил ее:  <code>ben.ortiz@mail.com</code>  показывает 2 копии под 2 разными идентификаторами. Но группировка по имени никогда не поможет, и истинное нечеткое сопоставление  <a href="../entity-resolution/">Разрешение объекта</a>, а не больший GROUP BY.</p>
+    <p><strong>Near-matches slip every exact grouping.</strong> Trailing spaces, capital letters, and spelling variants are all different values to <code>GROUP BY</code>. My table holds one of these on purpose: Ben Ortiz and Benjamin Ortiz. Grouping by email catches that pair, and I ran it: <code>ben.ortiz@mail.com</code> shows 2 copies under 2 different ids. But grouping by name never will, and true fuzzy matching is <a href="../entity-resolution/">entity resolution</a>, not a bigger GROUP BY.</p>
 
-    <p><strong>NULL группируются вместе.</strong>  Две строки с отсутствующим адресом электронной почты попадают в одну корзину, поскольку при группировке все NULL-значения рассматриваются как одно значение. Ведро заготовок со счетом 40 – это не 40 дубликатов. В 40 строках отсутствует ключ, и это отдельная находка, о которой стоит сообщить отдельно.</p>
+    <p><strong>NULLs group together.</strong> Two rows with a missing email land in the same bucket, because grouping treats all NULLs as one value. A bucket of blanks with a count of 40 is not 40 duplicates. It is 40 rows missing their key, which is a different finding worth reporting on its own.</p>
 
-    <p><strong>Дубликаты, обнаруженные во время миграции, — это симптом, а не рутинная работа.</strong>  При профилировании исходной системы до того, как миграция обнаружит дубликаты, подсчет свидетельствует о том, как вела себя старая система: повторные попытки сохранения, объединение офисов, пользователи, работающие над ошибкой. Запишите, откуда они взялись, прежде чем их кто-нибудь очистит, потому что шаблон предсказывает, что еще не так.  <a href="../migration-profiling/">Профилирование данных перед миграцией</a>  охватывает этот рабочий процесс.</p>
+    <p><strong>Duplicates found during a migration are a symptom, not a chore.</strong> When profiling a source system before a migration turns up duplicates, the count is evidence about how the old system behaved: retried saves, merged offices, users working around a bug. Log where they came from before anyone cleans them, because the pattern predicts what else is wrong. <a href="../migration-profiling/">Profiling data before a migration</a> covers that workflow.</p>
   </div>
 
-  <h2>Почему это работает</h2>
+  <h2>Why this works</h2>
 
-  <p>Метод опирается на одно свойство группировки. Группировка разбивает строки на непересекающиеся наборы по значению, поэтому две строки попадают в один и тот же набор точно тогда, когда они совпадают в каждом сгруппированном столбце. Это делает  <code>GROUP BY</code>    перечислите точное, осуществимое изложение вашего повторяющегося определения, а не расплывчатое намерение. Реляционная модель с самого начала рассматривала таблицы как наборы строк (Кодд, 1970,    <em>Коммуникации ACM</em>, 13(6), 377–387), поэтому именно точное совпадение — это все, что база данных дает вам изначально, и почему для определения одного и того же человека с разным написанием нужны отдельные инструменты.</p>
+  <p>The method leans on one property of grouping. Grouping partitions rows into disjoint sets by value, so two rows land in the same set exactly when they match on every grouped column. That makes the <code>GROUP BY</code> list a precise, executable statement of your duplicate definition, rather than a vague intention. The relational model has treated tables as sets of rows this way from the start (Codd, 1970, <em>Communications of the ACM</em>, 13(6), 377–387), which is also why exact matching is all a database gives you natively, and why same-person-different-spelling needs separate tooling.</p>
 
-  <p>Привычка ставить отметки имеет более простое оправдание: она делает каждое решение обратимым. Правило хранителя живет в  <code>ORDER BY</code>  что рецензент может читать и перелистывать, а дополнительные материалы остаются на диске до тех пор, пока кто-то, обладающий властью над данными, не скажет иное. Удаление незаметно внедряет одно и то же правило и обеспечивает его постоянное применение.</p>
+  <p>The marking habit has a plainer justification: it keeps every decision reversible. The keeper rule lives in an <code>ORDER BY</code> that a reviewer can read and flip, and the extras stay on disk until someone with authority over the data says otherwise. A delete embeds the same rule invisibly and enforces it permanently.</p>
 
-  <p>Есть также причина, по которой эта страница продолжает просить вас ответить, прежде чем она объяснит. Попытка ответить до того, как вы увидите решение, значительно улучшит то, что вы сохраните, даже если ваша попытка окажется ошибочной (Бисра, Лю, Несбит, Салими и Винн, 2018,  <em>Обзор педагогической психологии</em>, 30(3), 703–725), а практика извлечения информации превосходит перечитывание того же материала (Краснее &amp; выбирать карпа, 2006,    <em>Психологическая наука</em>, 17(3), 249–255). Решение о том, считать ли клиента 105 дубликатом (прежде чем я вам сказал, это зависит от того, почему три определения вернутся к вам на клавиатуре).</p>
+  <p>There is also a reason this page keeps asking you to answer before it explains. Attempting an answer before seeing the solution measurably improves what you retain, even when your attempt is wrong (Bisra, Liu, Nesbit, Salimi, &amp; Winne, 2018, <em>Educational Psychology Review</em>, 30(3), 703–725), and practicing retrieval outperforms rereading the same material (Roediger &amp; Karpicke, 2006, <em>Psychological Science</em>, 17(3), 249–255). Deciding whether customer 105 counts as a duplicate, before I told you it depends, is why the three definitions will come back to you at a keyboard.</p>
 
-  <h2>Использование этого в вашем собственном проекте</h2>
+  <h2>Using this on your own project</h2>
 
-  <p>Проверка каждой вашей таблицы на наличие дубликатов за один присест — это утомительно, и вы оставите ее за четвертым столом. Вместо этого сделайте это по порядку.</p>
+  <p>Auditing every table you own for duplicates in one sitting is miserable, and you will abandon it around table four. Do this instead, in order.</p>
 
   <ol>
-    <li><strong>Запустите десятисекундный тест на одной таблице, от которой больше всего зависит ваш текущий отчет.</strong> <code>COUNT(*)</code> against <code>COUNT(DISTINCT key)</code>. Если они совпадают, остановитесь. У вас есть ответ на сегодня.</li>
-    <li><strong>Если они различаются, запишите повторяющееся определение в одном предложении.</strong>  прежде чем прикасаться к клавиатуре. «Один и тот же идентификатор клиента» и «идентичная строка» приводят к разным запросам, и если вы выберете один из них вслух, вы не сможете их смешивать.</li>
-    <li><strong>Перечислите правонарушителей с помощью GROUP BY и HAVING,</strong>  затем вытащите полные строки назад с помощью  <code>IN</code>. Прочтите их. Сами строки обычно сообщают вам, какая из трех проблем у вас возникла.</li>
-    <li><strong>Отметьте хранителей ROW_NUMBER и письменным правилом.</strong>  Отфильтруйте отчеты по копии номер 1. Ничего не удаляйте на этой неделе.</li>
-    <li><strong>Передайте конфликтные строки тому, кто владеет данными.</strong>  Два города Эллы Рейес не являются проблемой запроса, и если вы сделаете вид, что это не так, вы просто переместите ошибку в ваш отчет.</li>
+    <li><strong>Run the ten-second test on the one table your current report depends on most.</strong> <code>COUNT(*)</code> against <code>COUNT(DISTINCT key)</code>. If they match, stop. You have your answer for today.</li>
+    <li><strong>If they differ, write down your duplicate definition in one sentence</strong> before touching the keyboard. "Same customer_id" and "identical row" lead to different queries, and picking one out loud stops you blending them.</li>
+    <li><strong>List the offenders with GROUP BY and HAVING,</strong> then pull the full rows back with <code>IN</code>. Read them. The rows themselves usually tell you which of the three problems you have.</li>
+    <li><strong>Mark keepers with ROW_NUMBER and a written rule.</strong> Filter reports to copy number 1. Do not delete anything this week.</li>
+    <li><strong>Take the conflict rows to whoever owns the data.</strong> Ella Reyes's two cities are not a query problem, and pretending otherwise just moves the error into your report.</li>
   </ol>
 
-  <p>Если у вас есть бумага поблизости и у вас есть пять минут, один дополнительный рисунок зафиксирует метод. Нарисуйте восемь строк, дайте трем из них общую отметку, сверните строки в сегменты и напишите рядом с ними количество ведер. Обведите ведра над одним. Перерисовка этого по памяти — честная проверка того, владеете ли вы этой идеей.</p>
+  <p>If you have paper nearby and five minutes, one optional drawing locks the method in. Draw eight rows, give three of them a shared mark, collapse the rows into buckets, and write each bucket's count beside it. Circle the buckets above one. Redrawing that from memory is a fair test of whether you own the idea.</p>
 
-  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: SQL, Tableau, миграция данных и связанные с ними рабочие привычки.</div>
+  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: SQL, Tableau, data migration, and the working habits around them.</div>
 
-  <h2>Все на одном экране</h2>
+  <h2>The whole thing on one screen</h2>
 
-  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
+  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
 
   <table>
-    <tr><th>Concept</th><th>Что он делает</th></tr>
-    <tr><td>Первый шаг</td><td>Решите, какие столбцы определяют «то же самое». Это решение выбирает запрос.</td></tr>
-    <tr><td>Дубликат всей строки</td><td>Каждый столбец соответствует. Обычно это авария при погрузке. Безопасно удалить после маркировки.</td></tr>
-    <tr><td>Дубликат с естественным ключом</td><td>Тот же реальный идентификатор, другие столбцы отличаются. Кто-то должен выбрать истинную версию.</td></tr>
-    <tr><td>Тот же человек, разное написание</td><td>Точного совпадения не существует. Это разрешение сущностей, отдельный инструмент.</td></tr>
-    <tr><td>Десятисекундный тест</td><td><code>COUNT(*)</code> vs <code>COUNT(DISTINCT key)</code>. Любой пробел – это количество доп.</td></tr>
-    <tr><td>Список дубликатов</td><td><code>GROUP BY key HAVING COUNT(*) &gt; 1</code>. Список GROUP BY — это ваше определение.</td></tr>
-    <tr><td>Посмотреть полные строки</td><td><code>WHERE key IN (the summary)</code>, или присоединитесь к нему снова. В любом случае одни и те же строки.</td></tr>
-    <tr><td>Хранители отметок</td><td><code>ROW_NUMBER() OVER (PARTITION BY key ORDER BY rule)</code>. Копия 1 сохраняется, копия выше 1 является дополнительной.</td></tr>
-    <tr><td>Зачем отмечать, а не удалять</td><td>Маркировка двусторонняя, и правило хранителя остается видимым. Удаление — ни то, ни другое.</td></tr>
-    <tr><td>Шаблон удаления</td><td>Keep <code>MIN(rowid)</code>  за ключ, остальные удалите. ВЫБЕРИТЕ его первым. Сохраните исходную таблицу.</td></tr>
-    <tr><td>Дубликатов не найдено</td><td>Прежде чем объявить таблицу чистой, проверьте другое определение.</td></tr>
-    <tr><td>В любом случае сообщите о двойном учете</td><td>Проверьте клавишу соединения с обеих сторон. Объединяет несколько строк, каждая из которых выглядит чистой по отдельности.</td></tr>
-    <tr><td>НУЛЕВЫЕ ключи</td><td>Все значения NULL делят одну корзину. В этом подсчете отсутствуют данные, а не дубликаты.</td></tr>
-    <tr><td>Во время миграции</td><td>Дубликаты являются свидетельством исходной системы. Зарегистрируйте их перед очисткой.</td></tr>
+    <tr><th>Concept</th><th>What it does</th></tr>
+    <tr><td>First step</td><td>Decide which columns define "the same". That decision picks the query.</td></tr>
+    <tr><td>Whole-row duplicate</td><td>Every column matches. Usually a loading accident. Safe to remove once marked.</td></tr>
+    <tr><td>Natural-key duplicate</td><td>Same real-world id, other columns differ. Someone must pick the true version.</td></tr>
+    <tr><td>Same person, different spelling</td><td>No exact match exists. That is entity resolution, a separate tool.</td></tr>
+    <tr><td>The ten-second test</td><td><code>COUNT(*)</code> vs <code>COUNT(DISTINCT key)</code>. Any gap is the number of extras.</td></tr>
+    <tr><td>List duplicates</td><td><code>GROUP BY key HAVING COUNT(*) &gt; 1</code>. The GROUP BY list is your definition.</td></tr>
+    <tr><td>See the full rows</td><td><code>WHERE key IN (the summary)</code>, or join back to it. Same rows either way.</td></tr>
+    <tr><td>Mark keepers</td><td><code>ROW_NUMBER() OVER (PARTITION BY key ORDER BY rule)</code>. Copy 1 keeps, above 1 is extra.</td></tr>
+    <tr><td>Why mark, not delete</td><td>Marking is reversible and the keeper rule stays visible. Deleting is neither.</td></tr>
+    <tr><td>The delete pattern</td><td>Keep <code>MIN(rowid)</code> per key, delete the rest. SELECT it first. Keep the original table.</td></tr>
+    <tr><td>Zero duplicates found</td><td>Check the other definition before declaring the table clean.</td></tr>
+    <tr><td>Report double-counts anyway</td><td>Test the join key on both sides. Joins multiply rows that each look clean alone.</td></tr>
+    <tr><td>NULL keys</td><td>All NULLs share one bucket. That count is missing data, not duplicates.</td></tr>
+    <tr><td>During a migration</td><td>Duplicates are evidence about the source system. Log them before cleaning them.</td></tr>
   </table>
 
-  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Если вы больше ничего не берете с этой страницы, запустите  <code>COUNT(*)</code> against <code>COUNT(DISTINCT key)</code>  на каждой таблице, прежде чем доверять числу из нее. Десять секунд, и именно в этом разница между поиском дубликатов и тем, чтобы их нашел ваш заинтересованный человек. Если поиск дубликатов дает сбой, который не описан на этой странице, существует общая  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>.</div>
+  <div class="note"><strong>The one habit to keep.</strong> If you take nothing else from this page, run <code>COUNT(*)</code> against <code>COUNT(DISTINCT key)</code> on every table before you trust a number from it. Ten seconds, and it is the difference between finding the duplicates and having your stakeholder find them. If a duplicate hunt breaks in a way this page does not cover, there is a general <a href="../technical-tenacity/">diagnosis loop for being stuck</a>.</div>
 
-  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Моим любимым дубликатом, когда-либо найденным, был клиент, который существовал дважды, потому что оба офиса клялись, что зарегистрировали ее первым. Какова самая странная причина появления дубликата в ваших данных, и нашел ли его запрос или это сделал человек?</p>
+  <p>One last thought, and I would genuinely like other people's answers. My favorite duplicate ever found was a customer who existed twice because two offices both swore they had onboarded her first. What is the strangest reason a duplicate has turned up in your data, and did the query find it or did a person?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Кодд, EF (1970). Реляционная модель данных для крупных общих банков данных.  <em>Коммуникации ACM</em>, 13(6), 377–387.</li>
-    <li>Бисра К., Лю К., Несбит Дж. К., Салими Ф. и Винн П. Х. (2018). Побуждение к самообъяснению: метаанализ.  <em>Обзор педагогической психологии</em>, 30(3), 703–725.</li>
-    <li>Рёдигер, Х.Л., и Карпике, Дж.Д. (2006). Улучшенное обучение с помощью тестов: прохождение тестов на память улучшает долгосрочное запоминание.  <em>Психологическая наука</em>, 17(3), 249–255.</li>
+    <li>Codd, E. F. (1970). A relational model of data for large shared data banks. <em>Communications of the ACM</em>, 13(6), 377–387.</li>
+    <li>Bisra, K., Liu, Q., Nesbit, J. C., Salimi, F., &amp; Winne, P. H. (2018). Inducing self-explanation: A meta-analysis. <em>Educational Psychology Review</em>, 30(3), 703–725.</li>
+    <li>Roediger, H. L., &amp; Karpicke, J. D. (2006). Test-enhanced learning: Taking memory tests improves long-term retention. <em>Psychological Science</em>, 17(3), 249–255.</li>
   </ul>
 
   <div class="book">
-    <strong>Количество строк слишком велико, и каждая строка выглядит на экране уникально.</strong>
-    <p><em>SQL для аналитиков</em>  составляет 458 страниц, GROUP BY и HAVING используются для поиска того, что дублируется, прежде чем оно достигнет общего количества.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-find-duplicates'})">SQL для аналитиков, 19 $ →</a>
+    <strong>The row count is too high and every row looks unique on screen.</strong>
+    <p><em>SQL for Analysts</em> is 458 pages, GROUP BY and HAVING used to find what is duplicated before it reaches a total.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-find-duplicates'})">SQL for Analysts, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>Потренируйтесь на реальных таблицах перед собой.</strong>
-    <p style="margin:6px 0 0">The <a href="../../sql/">SQL-кит</a>  запускает SQLite в браузере, поэтому вы можете заполнять дубликаты, выслеживать их и наблюдать за изменением количества по ходу работы. Рядом с ним лежат рабочие примеры, карточки и пробный экзамен. Ничего устанавливать, учетная запись не требуется.</p>
-    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
+    <strong>Practice the pattern with real tables in front of you.</strong>
+    <p style="margin:6px 0 0">The <a href="../../sql/">SQL Kit</a> runs SQLite in the browser, so you can seed duplicates, hunt them down, and watch the counts change as you go. Worked examples, flash cards, and a mock exam sit alongside it. Nothing to install, no account needed.</p>
+    <a class="btn" href="../../sql/">Open the SQL Kit →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../sql-null/">НУЛЬ в SQL</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-window-functions/">Оконные функции</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-count-function/">СЧЕТ в SQL</a> · <a href="../sql-month-over-month/">Месяц за месяцем в SQL</a> · <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../migration-profiling/">Профилирование миграции</a> · <a href="../sql-foundations/">Основы SQL</a> · <a href="../sql-ctes/">SQL CTE</a> · <a href="../sql-case-expression/">выражение CASE</a> · <a href="../sql-aliasing/">SQL-псевдонимы</a> · <a href="../sql-teaching-comments/">Комментарий SQL, чтобы он научился</a> · <a href="../../drill/">SQL-детализация</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../data-migration-stages/">Этапы миграции данных</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../sql/">SQL-кит</a> · <a href="../../projects/">Портфельные проекты</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
+    <a href="../../">← Analyst Prep Kit</a> · <a href="../sql-null/">NULL in SQL</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../sql-window-functions/">Window Functions</a> · <a href="../sql-joins/">SQL JOINs</a> · <a href="../sql-count-function/">COUNT in SQL</a> · <a href="../sql-month-over-month/">Month-over-Month in SQL</a> · <a href="../entity-resolution/">Entity Resolution</a> · <a href="../migration-profiling/">Migration Profiling</a> · <a href="../sql-foundations/">SQL Foundations</a> · <a href="../sql-ctes/">SQL CTEs</a> · <a href="../sql-case-expression/">The CASE Expression</a> · <a href="../sql-aliasing/">SQL Aliases</a> · <a href="../sql-teaching-comments/">Comment SQL So It Teaches</a> · <a href="../../drill/">SQL Drill</a> · <a href="../set-up-a-sql-database/">Set Up a SQL Database</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../data-migration-stages/">Data Migration Stages</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../sql/">SQL Kit</a> · <a href="../../projects/">Portfolio Projects</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
   <script src="../../assets/plan-return.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Как закомментировать несколько строк в SQL (и раскомментировать) — комплект подготовки аналитика</title>
-<meta name="description" content="Два синтаксиса комментариев, одно сочетание клавиш для каждого редактора и блокировка комментариев, останавливающая выполнение запроса. Как отключить часть запроса на время тестирования и как вернуть ее обратно.">
+<title>How to Comment Out Multiple Lines in SQL (and Uncomment) &mdash; Analyst Prep Kit</title>
+<meta name="description" content="Two comment syntaxes, one keyboard shortcut per editor, and the block comment trap that stops a query running. How to switch a chunk of a query off while you test, and how to get it back.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-comment-multiple-lines/">
-<meta property="og:title" content="Комментирование нескольких строк SQL и их повторное раскомментирование">
-<meta property="og:description" content="Блочные комментарии не вложены. Это одно правило объясняет большинство ошибок, с которыми сталкиваются люди при тестировании запроса.">
+<meta property="og:title" content="Commenting Out Several Lines of SQL, and Uncommenting Them Again">
+<meta property="og:description" content="Block comments do not nest. That one rule explains most of the errors people hit while testing a query.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-comment-multiple-lines/">
 <meta name="twitter:card" content="summary_large_image">
@@ -164,38 +164,38 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../../sql/">SQL-кит</a></p>
-  <h1>Комментирование нескольких строк SQL и их повторное раскомментирование</h1>
-  <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Каждый пример на этой странице был запущен до его публикации.</p>
+  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../../sql/">SQL Kit</a></p>
+  <h1>Commenting Out Several Lines of SQL, and Uncommenting Them Again</h1>
+  <p class="meta">Michael Nocito &middot; Updated August 2026 &middot; Every example on this page was run before it was published</p>
 
-  <p>Вы тестируете длинный запрос и хотите выполнить его без последних трех объединений. Или вы написали заметку, занимающую пять строк. Оба требуют одновременного отключения нескольких строк, и SQL предоставляет вам два способа сделать это, которые ведут себя по-разному в момент перекрытия.</p>
+  <p>You are testing a long query and want to run it without the last three joins. Or you have written a note that runs over five lines. Both need several lines switched off at once, and SQL gives you two ways to do it that behave differently the moment they overlap.</p>
 
-  <p>Что вы делаете: используйте ярлык редактора для переключения  <code>--</code>  в каждой выбранной строке. Это быстрее, чем ввод блочного комментария, и его нельзя нарушить комментарием, уже находящимся внутри выделения.</p>
+  <p>What you do: use the editor shortcut to toggle <code>--</code> on every selected line. It is faster than typing a block comment and it cannot be broken by a comment already inside the selection.</p>
 
-  <p><strong>Краткая версия.</strong>  Блочные комментарии не являются вложенными, поэтому  <code>/*</code>  внутри вашего блока ничего не происходит, и первый  <code>*/</code>  заканчивает все.</p>
+  <p><strong>The short version.</strong> Block comments do not nest, so a <code>/*</code> inside your block does nothing and the first <code>*/</code> ends everything.</p>
 
-  <h2>Два синтаксиса</h2>
+  <h2>The two syntaxes</h2>
   <pre><code>-- a line comment. Everything after the two dashes, to the end of the line.
 
 /* a block comment.
    It can run over
    as many lines as you like. */</code></pre>
-  <p>Оба являются стандартными SQL и оба работают в PostgreSQL, MySQL, SQL-сервер, Оракул, SQLite, Снежинка и БигQuery. В MySQL есть одно дополнительное правило, которое стоит знать:    <code>--</code>  после него должен идти пробел или управляющий символ, поэтому  <code>--this</code>  это не комментарий, пока  <code>-- this</code>  является. Писать пробел всегда — это привычка, которая позволяет избежать всего этого вопроса.</p>
+  <p>Both are standard SQL and both work in PostgreSQL, MySQL, SQL Server, Oracle, SQLite, Snowflake and BigQuery. MySQL has one extra rule worth knowing: <code>--</code> must be followed by a space or a control character, so <code>--this</code> is not a comment there while <code>-- this</code> is. Writing the space always is the habit that avoids the whole question.</p>
 
-  <h2>Ярлык от редактора</h2>
+  <h2>The shortcut, by editor</h2>
   <table>
-    <tr><th>Editor</th><th>Переключить комментарий к строке</th></tr>
-    <tr><td>DBeaver</td><td>Ctrl+/ (Cmd+/ на Мак)</td></tr>
+    <tr><th>Editor</th><th>Toggle line comment</th></tr>
+    <tr><td>DBeaver</td><td>Ctrl+/ (Cmd+/ on Mac)</td></tr>
     <tr><td>VS Code, Azure Data Studio</td><td>Ctrl+/</td></tr>
-    <tr><td>DataGrip и IDE JetBrains</td><td>Ctrl+/ и Ctrl+Shift+/ для блока</td></tr>
-    <tr><td>Студия управления SQL-сервером</td><td>Ctrl+К, затем Ctrl+С, чтобы прокомментировать, Ctrl+К, затем Ctrl+U, чтобы раскомментировать.</td></tr>
+    <tr><td>DataGrip and the JetBrains IDEs</td><td>Ctrl+/, and Ctrl+Shift+/ for a block</td></tr>
+    <tr><td>SQL Server Management Studio</td><td>Ctrl+K then Ctrl+C to comment, Ctrl+K then Ctrl+U to uncomment</td></tr>
     <tr><td>pgAdmin</td><td>Ctrl+/</td></tr>
-    <tr><td>MySQL рабочая среда</td><td>Ctrl+/</td></tr>
-    <tr><td>Разработчик Oracle SQL</td><td>Ctrl+/</td></tr>
+    <tr><td>MySQL Workbench</td><td>Ctrl+/</td></tr>
+    <tr><td>Oracle SQL Developer</td><td>Ctrl+/</td></tr>
   </table>
-  <p>Выделите строки, нажмите ярлык, и каждая строка получит  <code>--</code>  на фронте. Нажмите еще раз, и они оторвутся. Этот переключатель — самый полезный ярлык в редакторе SQL, и большинство людей никогда его не находят.</p>
+  <p>Select the lines, press the shortcut, and each line gets <code>--</code> at the front. Press it again and they come off. That toggle is the single most useful shortcut in a SQL editor and most people never find it.</p>
 
-  <h2>Гнездовая ловушка</h2>
+  <h2>The nesting trap</h2>
   <pre><code>/* switching this section off for now
 SELECT customer_id,
        SUM(amount) AS total   /* only shipped orders */
@@ -203,76 +203,76 @@ FROM orders
 WHERE status = 'shipped'
 GROUP BY customer_id
 */</code></pre>
-  <p>Это не делает то, на что похоже. Блок заканчивается на  <strong>first</strong> <code>*/</code>, который стоит после «только отправленные заказы». Все из  <code>FROM orders</code>  и далее снова является живым SQL, и завершающий  <code>*/</code>  внизу теперь синтаксическая ошибка.</p>
-  <p>База данных не является неудобной. Стандартные комментарии блоков SQL не вложены, и сканер просто берет первый встреченный закрывающий маркер. PostgreSQL — единственное распространенное исключение: он поддерживает вложенные блочные комментарии, а это означает, что запрос, который работает там, может потерпеть неудачу везде.</p>
-  <p>Защита заключается в использовании строковых комментариев для внешнего отключения, что и производит ярлык редактора:</p>
+  <p>This does not do what it looks like. The block ends at the <strong>first</strong> <code>*/</code>, which is the one after "only shipped orders". Everything from <code>FROM orders</code> onwards is live SQL again, and the trailing <code>*/</code> at the bottom is now a syntax error.</p>
+  <p>The database is not being awkward. Standard SQL block comments do not nest, and the scanner simply takes the first closing marker it meets. PostgreSQL is the one common exception: it does support nested block comments, which means a query that works there can fail everywhere else.</p>
+  <p>The defence is to use line comments for the outer switch-off, which is exactly what the editor shortcut produces:</p>
   <pre><code>-- switching this section off for now
 -- SELECT customer_id,
 --        SUM(amount) AS total   /* only shipped orders */
 -- FROM orders
 -- WHERE status = 'shipped'
 -- GROUP BY customer_id</code></pre>
-  <p>Комментарии к строке не могут быть закрыты ничем досрочно, поскольку их областью действия является строка.</p>
+  <p>Line comments cannot be closed early by anything, because their scope is the line.</p>
 
-  <div class="note"><strong>Закомментируйте строку, а не предложение.</strong>  Удаление линии из середины  <code>WHERE</code>  может оставить висеть  <code>AND</code>, поэтому запрос завершается неудачно на следующей строке, и ошибка указывает на бесполезное место. Напишите условия с оператором в начале каждой строки и проблема исчезнет.</div>
+  <div class="note"><strong>Comment out the line, not the clause.</strong> Removing a line from the middle of a <code>WHERE</code> can leave a dangling <code>AND</code>, so the query fails on the next line and the error points somewhere unhelpful. Write conditions with the operator at the start of each line and the problem disappears.</div>
 
-  <h2>Тестирование запроса путем отключения частей</h2>
-  <p>Техника, которая делает длинные запросы управляемыми: закомментируйте все после первого соединения, запустите его, подсчитайте строки, затем добавляйте по одному соединению обратно и наблюдайте за подсчетом.</p>
+  <h2>Testing a query by switching parts off</h2>
+  <p>The technique that makes long queries manageable: comment out everything after the first join, run it, count the rows, then add one join back at a time and watch the count.</p>
   <pre><code>SELECT COUNT(*)
 FROM orders o
 JOIN customers c ON c.customer_id = o.customer_id
 -- JOIN payments  p ON p.order_id    = o.order_id
 -- JOIN regions   r ON r.region_id   = c.region_id
 ;</code></pre>
-  <p>Раскомментируйте одну строку, запустите заново, сравните. Любое соединение, которое изменяет счетчик, представляет собой либо фильтрацию строк, либо их умножение, и об обоих стоит знать, прежде чем что-либо суммировать. Это метод обнаружения в  <a href="../sql-join-duplicate-rows/">почему объединение дублирует строки</a>.</p>
-  <p>При этом поставьте точку с запятой на отдельной строке. Тогда комментирование последнего соединения не приводит к комментированию терминатора.</p>
+  <p>Uncomment one line, re-run, compare. Any join that changes the count is either filtering rows or multiplying them, and both are worth knowing about before you sum anything. That is the detection method in <a href="../sql-join-duplicate-rows/">why a join duplicates rows</a>.</p>
+  <p>Put the semicolon on its own line while you are doing this. Then commenting out the last join does not also comment out the terminator.</p>
 
-  <h2>Оставляем хорошие комментарии</h2>
-  <p>Комментарии, которые стоит сохранить, — это не те комментарии, которые повторяют SQL. Это те, которые читатель не может вывести:</p>
+  <h2>Leaving the good comments in</h2>
+  <p>The comments worth keeping are not the ones that repeat the SQL. They are the ones a reader cannot deduce:</p>
   <pre><code>-- Excludes status 'test' because the ZZ accounts are load-test data.
 -- Confirmed with the ops team, 12 Aug 2026.
 WHERE status &lt;&gt; 'test'
 
 -- Amount is in pence in this table, unlike orders_v2.
 SELECT SUM(amount) / 100.0 AS pounds</code></pre>
-  <p>Почему исключена строка, в каком блоке находится столбец, кто и когда согласовал правило. Более полный метод их записи находится в  <a href="../sql-teaching-comments/">обучающие комментарии</a>.</p>
+  <p>Why a row is excluded, which unit a column is in, who agreed a rule and when. A fuller method for writing these is in <a href="../sql-teaching-comments/">teaching comments</a>.</p>
 
-  <h2>Как применить это в своей работе</h2>
+  <h2>How to apply this to your own work</h2>
   <ol>
-    <li>Изучите ярлык переключения для редактора, который вы используете каждый день. Оно окупается в первый же день.</li>
-    <li>Используйте комментарии к строкам для всего, что вы хотите сохранить, и блокируйте комментарии только для временного отключения.</li>
-    <li>Напишите условия с помощью  <code>AND</code>  в начале строки, чтобы любую отдельную строку можно было аккуратно закомментировать.</li>
-    <li>Добавляйте по одному объединению за раз и проверяйте количество строк после каждого. Это самая дешевая проверка правильности в SQL.</li>
-    <li>Прежде чем сохранить запрос, удалите закомментированные эксперименты. Файл, полный мертвого SQL, — это файл, который никто не может определить, является ли он актуальным.</li>
+    <li>Learn the toggle shortcut for the editor you use every day. It repays itself the first afternoon.</li>
+    <li>Use line comments for anything you intend to keep, and block comments only for temporary switching off.</li>
+    <li>Write conditions with <code>AND</code> at the start of the line so any single line can be commented out cleanly.</li>
+    <li>Add one join at a time and check the row count after each. It is the cheapest correctness check in SQL.</li>
+    <li>Before saving a query, delete the commented-out experiments. A file full of dead SQL is a file nobody can tell is current.</li>
   </ol>
 
-  <h2>Единственная привычка, которую нужно сохранить</h2>
-  <p>Закомментируйте, чтобы проверить, а затем удалите, а не оставляйте. Закомментированный код не может сказать, является ли это заметкой, экспериментом или правилом, которое было в спешке отключено, и спустя шесть месяцев никто не может сказать, что именно.</p>
+  <h2>The one habit to keep</h2>
+  <p>Comment out to test, then delete rather than leaving it. Commented code has no way to say whether it is a note, an experiment or a rule that was turned off in a hurry, and six months later nobody can tell which.</p>
 
-  <p>Сколько закомментированных строк содержится в запросе, который вы выполняете чаще всего?</p>
+  <p>How many commented-out lines are in the query you run most often?</p>
 
-  <div class="note"><strong>Написано из стандарта и инструментов.</strong>  Комментарии к строкам и блокам являются стандартными SQL; блокировать комментарии можно в PostgreSQL, а не в других основных движках; MySQL требует пробела после двух тире.</div>
+  <div class="note"><strong>Written from the standard and the tools.</strong> Line and block comments are both standard SQL; block comments nest in PostgreSQL and not in the other major engines; MySQL requires a space after the two dashes.</div>
 
   <div class="book">
-    <strong>Комментирование блока для его проверки — самый дешевый метод отладки в SQL.</strong>
-    <p><em>SQL для аналитиков</em>  — это 458 страниц, которые считывают запросы построчно в повседневных словах, поэтому ошибочный результат нужно где-то отслеживать, а не перепечатывать, пока он не станет выглядеть лучше.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-comment-multiple-lines'})">SQL для аналитиков, 19 $ →</a>
+    <strong>Commenting a block out to test it is the cheapest debugging technique in SQL.</strong>
+    <p><em>SQL for Analysts</em> is 458 pages that read queries line by line in everyday words, so a result that came back wrong has somewhere to be traced instead of being retyped until it looks better.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-comment-multiple-lines'})">SQL for Analysts, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>Комментарии — это то, как запрос объясняет сам себя.</strong>
-    <p style="margin:6px 0 0"><a href="../sql-comments/">Комментарии в SQL</a>  полностью охватывает оба синтаксиса,  <a href="../sql-comment-syntax-by-database/">синтаксис по базе данных</a>  охватывает различия и  <a href="../sql-teaching-comments/">обучающие комментарии</a>  охватывает их написание, чтобы кто-то другой мог прочитать запрос.</p>
-    <a class="btn" href="../sql-comments/">Читать комментарии в SQL →</a>
+    <strong>Comments are how a query explains itself.</strong>
+    <p style="margin:6px 0 0"><a href="../sql-comments/">Comments in SQL</a> covers both syntaxes in full, <a href="../sql-comment-syntax-by-database/">the syntax by database</a> covers the differences, and <a href="../sql-teaching-comments/">teaching comments</a> covers writing them so somebody else can read the query.</p>
+    <a class="btn" href="../sql-comments/">Read Comments in SQL &rarr;</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql-comments/">Комментарии в SQL</a> &middot; <a href="../sql-comment-syntax-by-database/">Синтаксис комментариев по базе данных</a> &middot; <a href="../sql-teaching-comments/">обучающие комментарии</a> &middot; <a href="../sql-comment-on-table/">КОММЕНТАРИЙ К ТАБЛИЦЕ</a> &middot; <a href="../review-ai-generated-sql/">Обзор SQL, сгенерированного ИИ</a> &middot; <a href="../../drill/">SQL-детализация</a> &middot; <a href="../../sql/">SQL-кит</a>
-    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
+    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../sql-comments/">Comments in SQL</a> &middot; <a href="../sql-comment-syntax-by-database/">Comment Syntax by Database</a> &middot; <a href="../sql-teaching-comments/">Teaching Comments</a> &middot; <a href="../sql-comment-on-table/">COMMENT ON TABLE</a> &middot; <a href="../review-ai-generated-sql/">Review AI-Generated SQL</a> &middot; <a href="../../drill/">SQL Drill</a> &middot; <a href="../../sql/">SQL Kit</a>
+    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

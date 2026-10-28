@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>VLOOKUP или XLOOKUP: какой использовать и как переключаться — комплект для подготовки аналитика</title>
-<meta name="description" content="У VLOOKUP есть три способа передать вам неправильное значение без ошибки. Вот как выглядит каждый из них, как аргументы XLOOKUP удаляют все три и когда вам все равно нужно читать VLOOKUP.">
+<title>VLOOKUP vs XLOOKUP: Which One to Use, and How to Switch — Analyst Prep Kit</title>
+<meta name="description" content="VLOOKUP has three ways to hand you a wrong value without an error. Here is what each one looks like, how XLOOKUP's arguments remove all three, and when you still need to read VLOOKUP anyway.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/vlookup-vs-xlookup/">
-<meta property="og:title" content="VLOOKUP против XLOOKUP: какой использовать и как переключаться">
-<meta property="og:description" content="ВПР учитывает позицию столбца, по умолчанию соответствует приблизительному совпадению и выглядит только правильно. Каждый из них представляет собой молчаливый неправильный ответ, ожидающий своего часа, и каждый соответствует одному аргументу XLOOKUP, который его удаляет.">
+<meta property="og:title" content="VLOOKUP vs XLOOKUP: Which One to Use, and How to Switch">
+<meta property="og:description" content="VLOOKUP counts to a column position, defaults to approximate match, and only looks right. Each of those is a silent wrong answer waiting to happen, and each maps to one XLOOKUP argument that removes it.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/vlookup-vs-xlookup.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/vlookup-vs-xlookup/">
@@ -134,18 +134,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../excel/">Excel комплект</a> · <a href="../">Все руководства</a></p>
-  <h1>VLOOKUP против XLOOKUP: какой использовать и как переключаться</h1>
-  <p class="meta">Две формулы, одна работа и три молчаливых неудачи, разделяющие их · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-07">7 августа 2026 г.</time></p>
+  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../excel/">Excel Kit</a> · <a href="../">All guides</a></p>
+  <h1>VLOOKUP vs XLOOKUP: Which One to Use, and How to Switch</h1>
+  <p class="meta">Two formulas, one job, and three silent failures that separate them · Part of the <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-07">August 7, 2026</time></p>
 
-  <p>К концу этой страницы вы сможете написать обе формулы поиска, прочитать любую из чужой книги и намеренно выбирать между ними. Вы узнаете три конкретных способа, которыми VLOOKUP возвращает неправильное значение, не показывая ошибку, и какой аргумент XLOOKUP удаляет каждый из них. Это около двадцати минут.</p>
+  <p>By the end of this page you can write both lookup formulas, read either one in someone else's workbook, and pick between them on purpose. You will know the three specific ways VLOOKUP returns a wrong value without showing an error, and which XLOOKUP argument removes each one. It is about twenty minutes.</p>
 
-  <p>Вот что на самом деле с этим делать. Откройте книгу, которую вы используете, найдите одну ВПР и проверьте ее последний аргумент. Если последний аргумент отсутствует, эта формула может сегодня молча вернуть неправильное значение строки, и в разделе 3 показано, как именно.</p>
+  <p>Here is what to actually do with it. Open a workbook you use, find one VLOOKUP, and check its last argument. If the last argument is missing, that formula can return the wrong row's value today, silently, and section 3 shows you exactly how.</p>
 
-  <p>Короткая версия: напишите XLOOKUP, чтобы узнать что-нибудь новое. В любом случае научитесь читать VLOOKUP, потому что старые книги, старые версии Excel и интервьюеры все еще говорят на нем.</p>
+  <p>The short version: write XLOOKUP for anything new. Learn to read VLOOKUP anyway, because older workbooks, older Excel versions, and interviewers all still speak it.</p>
 
-  <p>Основное отличие — одна картинка. ВПР отсчитывает путь до позиции столбца. XLOOKUP указывает непосредственно на два столбца.</p>
+  <p>The core difference is one picture. VLOOKUP counts its way to a column position. XLOOKUP points at two columns directly.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 330" role="img" aria-labelledby="lkTitle lkDesc" xmlns="http://www.w3.org/2000/svg">
@@ -197,248 +197,248 @@
         <text x="40" y="303" font-size="13.5" fill="#09090B">A counted position lands wherever the count ends. A pointed-at column stays itself when the table changes.</text>
       </g>
     </svg>
-    <figcaption>ВПР подсчитывает столбцы, поэтому вставленный столбец смещается туда, где находится счетчик. XLOOKUP присваивает своим столбцам имена, поэтому они сохраняются при вставке.</figcaption>
+    <figcaption>VLOOKUP counts columns, so an inserted column shifts where the count lands. XLOOKUP names its columns, so they survive the insert.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>Что вы узнаете</strong>
+    <strong>What you'll learn</strong>
     <ol>
-      <li>Что на самом деле делает поиск</li>
-      <li>ВПР, аргумент за аргументом</li>
-      <li>Три причины, по которым VLOOKUP идет не так, как надо</li>
-      <li>XLOOKUP и какой сбой удаляет каждый аргумент</li>
-      <li>Полное до и после</li>
-      <li>Крайние случаи, которые нарушают поиск в реальных книгах</li>
-      <li>Какой из них использовать: вилка по имени</li>
-      <li>Почему это работает</li>
-      <li>Использование этого в своей книге</li>
-      <li>Все на одном экране</li>
+      <li>What a lookup actually does</li>
+      <li>VLOOKUP, argument by argument</li>
+      <li>The three ways VLOOKUP goes silently wrong</li>
+      <li>XLOOKUP, and which failure each argument removes</li>
+      <li>The full before and after</li>
+      <li>Edge cases that break lookups in real workbooks</li>
+      <li>Which one to use: the fork, named</li>
+      <li>Why this works</li>
+      <li>Using this on your own workbook</li>
+      <li>The whole thing on one screen</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Проработанный пример намеренно небольшой.</strong>    Десять сотрудников, четыре столбца, каждый результат на этой странице вычислен и сверен с этой точной таблицей. Вот он, расположенный в ячейках от A1 до D11, с ЭмпИД в столбце A, именем в B, отделом C и зарплатой в D.</div>
+  <div class="note"><strong>The worked example is small on purpose.</strong> Ten employees, four columns, every result on this page computed and checked against this exact table. Here it is, sitting in cells A1 to D11, with EmpID in column A, Name in B, Department in C, and Salary in D.</div>
 
   <table>
     <tr><th>EmpID</th><th>Name</th><th>Department</th><th>Salary</th></tr>
-    <tr><td>1001</td><td>Эйден Кросс</td><td>Finance</td><td>54,200</td></tr>
-    <tr><td>1002</td><td>Беа Ортис</td><td>Marketing</td><td>58,900</td></tr>
-    <tr><td>1003</td><td>Чэнь Ву</td><td>Finance</td><td>61,500</td></tr>
-    <tr><td>1004</td><td>Дана Рейес</td><td>Operations</td><td>49,800</td></tr>
-    <tr><td>1006</td><td>Элиф Кая</td><td>Marketing</td><td>63,100</td></tr>
-    <tr><td>1007</td><td>Фрэнк Осей</td><td>Operations</td><td>52,400</td></tr>
-    <tr><td>1008</td><td>Джиа Тран</td><td>Finance</td><td>67,250</td></tr>
-    <tr><td>1009</td><td>Хьюго Линд</td><td>IT</td><td>71,000</td></tr>
-    <tr><td>1010</td><td>Айви Нэш</td><td>IT</td><td>59,600</td></tr>
-    <tr><td>1012</td><td>Джон Парк</td><td>Marketing</td><td>55,300</td></tr>
+    <tr><td>1001</td><td>Aiden Cross</td><td>Finance</td><td>54,200</td></tr>
+    <tr><td>1002</td><td>Bea Ortiz</td><td>Marketing</td><td>58,900</td></tr>
+    <tr><td>1003</td><td>Chen Wu</td><td>Finance</td><td>61,500</td></tr>
+    <tr><td>1004</td><td>Dana Reyes</td><td>Operations</td><td>49,800</td></tr>
+    <tr><td>1006</td><td>Elif Kaya</td><td>Marketing</td><td>63,100</td></tr>
+    <tr><td>1007</td><td>Frank Osei</td><td>Operations</td><td>52,400</td></tr>
+    <tr><td>1008</td><td>Gia Tran</td><td>Finance</td><td>67,250</td></tr>
+    <tr><td>1009</td><td>Hugo Lind</td><td>IT</td><td>71,000</td></tr>
+    <tr><td>1010</td><td>Ivy Nash</td><td>IT</td><td>59,600</td></tr>
+    <tr><td>1012</td><td>Jon Park</td><td>Marketing</td><td>55,300</td></tr>
   </table>
 
-  <p>Прежде чем мы начнем, обратите внимание на две вещи в столбце ID. Нет 1005 и 1011. Эти пробелы не опечатка. Это ловушка в разделе 3.</p>
+  <p>Notice two things about the ID column before we start. There is no 1005 and no 1011. Those gaps are not a typo. They are the trap in section 3.</p>
 
   <div class="step">
-    <h2>1. Что на самом деле делает поиск</h2>
+    <h2>1. What a lookup actually does</h2>
 
-    <p>Перед пояснением: у вас есть лист заказа с идентификаторами сотрудников, а на другом листе - таблица выше. Какие две отдельные вещи должна сделать формула, чтобы поставить отдел каждого сотрудника рядом с его заказами?</p>
+    <p>Before the explanation: you have an order sheet with employee IDs on it, and the table above on another sheet. What are the two separate things a formula has to do to put each employee's department next to their orders?</p>
 
-    <p>Он должен найти строку, а затем вернуть значение. Вот и вся работа. Поиск берет имеющееся у вас значение, идентификатор, например 1008, находит строку в другой таблице, где находится это значение, и возвращает что-то еще из этой же строки, например отдел. Найдите строку, верните значение. Каждая когда-либо написанная формула поиска представляет собой эти два хода.</p>
+    <p>It has to find the row, then bring a value back. That is the whole job. A lookup takes a value you have, an ID like 1008, finds the row in another table where that value lives, and returns something else from that same row, like the department. Find the row, bring a value back. Every lookup formula ever written is those two moves.</p>
 
-    <p>Это важно, потому что эти два хода терпят неудачу по-разному. Обнаружив неправильную строку, вы получите реальную ценность от не того человека. Возвращение неправильного столбца дает вам реально выглядящее значение неправильного типа. Оба прекрасно выглядят на экране, поэтому при поиске возникают тихие ошибки в электронных таблицах.</p>
+    <p>This matters because the two moves fail differently. Finding the wrong row gives you a real-looking value from the wrong person. Bringing back the wrong column gives you a real-looking value of the wrong kind. Both look fine on the screen, which is why lookups are where quiet spreadsheet errors live.</p>
 
-    <p>Если вы знаете SQL, поиск — это соединение одной рукой. Комплект Excel  <a href="../../excel/">уроки поиска</a>  и  <a href="../sql-joins/">Руководство по SQL-СОЕДИНЕНИЯ</a>  одна и та же идея в двух диалектах.</p>
+    <p>If you know SQL, a lookup is a join with one hand. The Excel Kit's <a href="../../excel/">lookup lessons</a> and the <a href="../sql-joins/">SQL joins guide</a> are the same idea in two dialects.</p>
   </div>
 
   <div class="step">
-    <h2>2. ВПР, аргумент за аргументом</h2>
+    <h2>2. VLOOKUP, argument by argument</h2>
 
-    <p>Перед пояснением: VLOOKUP принимает четыре аргумента, и только один из них — это число, которое нужно посчитать вручную. Какой аргумент, по вашему мнению, вызывает больше всего проблем?</p>
+    <p>Before the explanation: VLOOKUP takes four arguments, and only one of them is a number you have to count by hand. Which argument would you guess causes the most breakage?</p>
 
-    <p>Вот формула, которая извлекает отдел Джии Тран из таблицы выше.</p>
+    <p>Here is the formula that fetches Gia Tran's department from the table above.</p>
 
     <pre><code>=VLOOKUP(1008, A2:D11, 3, FALSE)</code></pre>
 
-    <p>Прочитайте слева направо.  <strong>1008</strong>  это значение, которое нужно найти.  <strong>А2: Д11</strong>  — это вся таблица для поиска, и VLOOKUP будет искать 1008 только в первом столбце этого диапазона.  <strong>3</strong>  означает вернуть третий столбец диапазона, считая слева, то есть столбец C, Отдел.  <strong>FALSE</strong>  означает, что совпадение должно быть точным.</p>
+    <p>Read it left to right. <strong>1008</strong> is the value to find. <strong>A2:D11</strong> is the whole table to search, and VLOOKUP will only look for 1008 in the first column of that range. <strong>3</strong> means bring back the third column of the range, counting from the left, so column C, Department. <strong>FALSE</strong> means the match must be exact.</p>
 
-    <p>Запустите его, и вы получите  <code>Finance</code>. Измените 3 на 4, и вы получите 67 250 — зарплату. Оба варианта верны, и я проверил их по таблице вручную и с помощью компьютера.</p>
+    <p>Run it and you get <code>Finance</code>. Change the 3 to a 4 and you get 67,250, the salary. Both of those are correct, and I checked them against the table by hand and by computer.</p>
 
-    <p>Учтенный аргумент, 3, является тем, который вызывает больше всего поломок, а четвертый аргумент находится на втором месте, потому что люди его не учитывают. В следующем разделе показаны оба сбоя.</p>
+    <p>The counted argument, the 3, is the one that causes the most breakage, and the fourth argument is a close second because people leave it out. The next section shows both failures happening.</p>
   </div>
 
   <div class="step">
-    <h2>3. Три причины, по которым VLOOKUP идет не так, как надо</h2>
+    <h2>3. The three ways VLOOKUP goes silently wrong</h2>
 
-    <p>Перед объяснением: слово, за которое следует держаться,  <em>silently</em>. Сообщение об ошибке раздражает, но честно. Как бы выглядел сбой поиска, если бы он вообще не выдавал ошибок?</p>
+    <p>Before the explanation: the word to hold onto is <em>silently</em>. An error message is annoying but honest. What would a lookup failure look like if it produced no error at all?</p>
 
-    <p>Казалось бы, нормальный ответ. Вот три способа, которыми VLOOKUP создает его.</p>
+    <p>It would look like a normal answer. Here are the three ways VLOOKUP produces one.</p>
 
-    <h3>Ошибка 1: столбцы подсчитываются, поэтому вставка столбца нарушает его.</h3>
+    <h3>Failure 1: it counts columns, so inserting a column breaks it</h3>
 
-    <p>3 в  <code>=VLOOKUP(1008, A2:D11, 3, FALSE)</code>  не привязан к столбцу «Отдел». Он прикреплен к позиции три. Теперь коллега вставляет столбец «Электронная почта» между «Имя» и «Отдел», что совершенно нормально. Третья позиция теперь — электронная почта. Формула возвращает  <code>gia@co.com</code>  где раньше был отдел, без ошибок, и каждая формула, указывающая на эту таблицу, мгновенно смещается.</p>
+    <p>The 3 in <code>=VLOOKUP(1008, A2:D11, 3, FALSE)</code> is not attached to the Department column. It is attached to the position three. Now a colleague inserts an Email column between Name and Department, which is a completely normal thing to do. Position three is now Email. The formula returns <code>gia@co.com</code> where a department used to be, with no error, and every formula pointing at that table shifts at once.</p>
 
-    <p>По крайней мере, его видно, потому что адрес электронной почты в столбце отдела выглядит неправильно. Если бы вставленный столбец содержал другой текст в форме отдела, все бы выглядело не так.</p>
+    <p>That one is at least visible, because an email address in a department column looks wrong. If the inserted column had held another department-shaped text, nothing would look wrong at all.</p>
 
-    <h3>Ошибка 2: по умолчанию используется приблизительное совпадение, поэтому отсутствующий идентификатор возвращает неправильное значение строки.</h3>
+    <h3>Failure 2: the default is approximate match, so a missing ID returns the wrong row's value</h3>
 
-    <p>Это то, что стоит людям реальных денег. Если вы опустите четвертый аргумент, ВПР по умолчанию будет использовать приблизительное совпадение. Приблизительное совпадение означает: если точного значения нет, возьмите наибольшее значение, которое все еще ниже него. В нашей таблице нет сотрудника 1005. Посмотрите, что делает каждая версия.</p>
+    <p>This is the one that costs people real money. If you leave off the fourth argument, VLOOKUP defaults to approximate match. Approximate match means: if the exact value is not there, take the largest value that is still below it. Our table has no employee 1005. Watch what each version does.</p>
 
     <pre><code>=VLOOKUP(1005, A2:D11, 3, FALSE)   → #N/A
 =VLOOKUP(1005, A2:D11, 3)          → Operations</code></pre>
 
-    <p>Первый говорит правду: числа 1005 не существует. Второй спускается на номер 1004, Дана Рейес, и передает вам свой отдел.  <code>Operations</code>, как будто это был ответ. Вместо этого попросите столбец 4, и вы получите ее зарплату в размере 49 800 долларов, прикрепленную к несуществующему сотруднику. Никаких ошибок, никаких предупреждений, чистый, уверенный неправильный номер. Попросите недостающий ID 1011 тем же способом и получите  <code>IT</code>, из ряда Айви Нэш.</p>
+    <p>The first one tells the truth: 1005 does not exist. The second one slides down to 1004, Dana Reyes, and hands you her department, <code>Operations</code>, as if it were the answer. Ask for column 4 instead and you get her salary, 49,800, attached to an employee who does not exist. No error, no warning, a clean confident wrong number. Ask for missing ID 1011 the same way and you get <code>IT</code>, from Ivy Nash's row.</p>
 
-    <p>Скажите своими словами, почему приблизительная версия вернула Шефу, прежде чем читать дальше. Если вы можете объяснить слайд до 1004, вы достаточно хорошо понимаете причину неудачи, чтобы заметить ее в рабочей тетради.</p>
+    <p>Say in your own words why the approximate version returned Operations before reading on. If you can explain the slide down to 1004, you understand the failure well enough to spot it in a workbook.</p>
 
-    <p>У приблизительного соответствия есть реальная задача: групповой поиск, например, определение того, к какой налоговой группе или уровню комиссионных относится число. Для поиска идентификаторов это генератор неправильных ответов.</p>
+    <p>Approximate match has a real job: banded lookups, like finding which tax bracket or commission tier a number falls into. For finding IDs, it is a wrong answer generator.</p>
 
-    <h3>Ошибка 3: это может только выглядеть правильно</h3>
+    <h3>Failure 3: it can only look right</h3>
 
-    <p>ВПР выполняет поиск в первом столбце заданного вами диапазона и возвращает столбцы справа от него. Если у вас есть имя и вам нужен идентификатор, а столбец идентификатора находится слева от столбца имени, VLOOKUP не сможет этого сделать. Люди решают эту проблему, переупорядочивая исходные данные или создавая хрупкие вспомогательные столбцы, что означает, что ограничения инструмента теперь меняют форму книги.</p>
+    <p>VLOOKUP searches the first column of the range you give it, and returns columns to the right of it. If you have a name and want the ID, and the ID column sits to the left of the name column, VLOOKUP cannot do it. People work around this by rearranging their source data or by writing fragile helper columns, which means the tool's limitation is now reshaping the workbook.</p>
   </div>
 
   <div class="step">
-    <h2>4. XLOOKUP и какой сбой устраняет каждый аргумент</h2>
+    <h2>4. XLOOKUP, and which failure each argument removes</h2>
 
-    <p>Прежде чем объяснить: зная три ошибки, что бы вы изменили в аргументах ВПР, если бы вам разрешили их перепроектировать?</p>
+    <p>Before the explanation: knowing the three failures, what would you change about VLOOKUP's arguments if you were allowed to redesign them?</p>
 
-    <p>Редизайн Майкрософт назывался XLOOKUP, и он выглядит как список исправлений. Вот тот же поиск.</p>
+    <p>Microsoft's redesign was XLOOKUP, and it reads like a list of fixes. Here is the same lookup.</p>
 
     <pre><code>=XLOOKUP(1008, A2:A11, C2:C11)</code></pre>
 
-    <p>Четыре аргумента имеют значение, и каждый из них закрывает дыру.</p>
+    <p>Four arguments matter, and each one closes a hole.</p>
 
-    <p><strong>lookup_value</strong>  — это значение, которое нужно найти, такое же, как и раньше: 1008.</p>
+    <p><strong>lookup_value</strong> is the value to find, same as before: 1008.</p>
 
-    <p><strong>lookup_array</strong>  — столбец для поиска с прямым именем: A2:A11. Поскольку вы сами даете имя столбцу поиска, он может располагаться в любом месте листа, в том числе справа от ответа.  <code>=XLOOKUP("Gia Tran", B2:B11, A2:A11)</code>  смотрит влево и возвращает 1008. Это устраняет ошибку 3.</p>
+    <p><strong>lookup_array</strong> is the column to search in, named directly: A2:A11. Because you name the search column yourself, it can sit anywhere in the sheet, including to the right of the answer. <code>=XLOOKUP("Gia Tran", B2:B11, A2:A11)</code> looks left and returns 1008. That removes failure 3.</p>
 
-    <p><strong>return_array</strong>  — это столбец, который нужно вернуть, он также имеет прямое имя: C2:C11. В формуле нет учитываемой позиции. Вставьте столько столбцов, сколько захотите, и C2:C11 будет следовать за столбцом «Отдел» везде, где Excel его смещает, поскольку Excel обновляет ссылки и никогда не обновляет введенный номер 3. Это устраняет ошибку 1.</p>
+    <p><strong>return_array</strong> is the column to bring back, also named directly: C2:C11. There is no counted position anywhere in the formula. Insert as many columns as you like and C2:C11 follows the Department column wherever Excel shifts it, because Excel updates references and never updates a typed number 3. That removes failure 1.</p>
 
-    <p><strong>if_not_found</strong>  — четвертый аргумент, и он необязателен в безопасном направлении. Во-первых, значением по умолчанию XLOOKUP является точное совпадение, поэтому  <code>=XLOOKUP(1005, A2:A11, C2:C11)</code> returns <code>#N/A</code>    вместо того, чтобы скатиться к Дане Рейес. Опасное значение по умолчанию исчезло, что устраняет ошибку 2. Во-вторых, если вам нужно что-то более дружелюбное, чем #Н/Д, вы указываете это в самой формуле:</p>
+    <p><strong>if_not_found</strong> is the fourth argument, and it is optional in the safe direction. First, XLOOKUP's default is exact match, so <code>=XLOOKUP(1005, A2:A11, C2:C11)</code> returns <code>#N/A</code> instead of sliding to Dana Reyes. The dangerous default is gone, which removes failure 2. Second, if you want something friendlier than #N/A, you say so in the formula itself:</p>
 
     <pre><code>=XLOOKUP(1005, A2:A11, C2:C11, "Not found")   → Not found</code></pre>
 
-    <p>С помощью VLOOKUP вы добились такого поведения, обернув все это в другую функцию:  <code>=IFERROR(VLOOKUP(...), "Not found")</code>, который также поглощает все остальные ошибки, которые может возникнуть в формуле, включая те, которые вам нужно было увидеть.  <code>if_not_found</code>  улавливает ровно одно условие — пропущенное значение — и пропускает реальные ошибки.</p>
+    <p>With VLOOKUP you got that behaviour by wrapping the whole thing in another function, <code>=IFERROR(VLOOKUP(...), "Not found")</code>, which also swallows every other error the formula might raise, including the ones you needed to see. <code>if_not_found</code> catches exactly one condition, the missing value, and lets real errors through.</p>
 
-    <p>Представьте себе, что вы запускаете это в справочной таблице, которую вы на самом деле используете: названный столбец идентификатора, названный столбец ответа и сообщение об отсутствующем значении, записанное там, где его сможет увидеть следующий читатель. Этот мысленный пробег стоит большего, чем простое перечитывание этого раздела.</p>
+    <p>Picture running that on a lookup table you actually use: the ID column named, the answer column named, and the missing-value message written where the next reader can see it. That mental run is worth more than rereading this section.</p>
   </div>
 
   <div class="step">
-    <h2>5. Полное до и после</h2>
+    <h2>5. The full before and after</h2>
 
-    <p>Та же таблица, та же задача: укажите отдел каждого сотрудника рядом с его идентификатором и скажите что-нибудь разумное, когда идентификатора нет в файле.</p>
+    <p>Same table, same task: put each employee's department next to their ID, and say something sensible when the ID is not on file.</p>
 
     <h3>Before</h3>
     <pre><code>=IFERROR(VLOOKUP(E2, A2:D11, 3, FALSE), "Not found")</code></pre>
 
-    <p>Это работает сегодня. Он также имеет три долга по содержанию. 3 ломается в тот день, когда кто-то вставляет столбец. ЛОЖЬ необходимо запоминать каждый раз, потому что ее забывание не приводит к ошибке. А оболочка ЕСЛИОШИБКА с радостью скроет действительно неработающую ссылку за словами «Не найдено».</p>
+    <p>This works today. It also carries three maintenance debts. The 3 breaks the day someone inserts a column. The FALSE has to be remembered every single time, because forgetting it does not error. And the IFERROR wrapper will happily hide a genuinely broken reference behind the words Not found.</p>
 
     <h3>After</h3>
     <pre><code>=XLOOKUP(E2, A2:A11, C2:C11, "Not found")</code></pre>
 
-    <p>Короче, и все долги пропали. Столбец поиска и столбец возврата имеют имена, совпадение по умолчанию является точным, и только действительно отсутствующий идентификатор выдает сообщение «Не найдено». Для E2 = 1008 обе формулы возвращают Финансы. Для E2 = 1005 оба возвращают значение «Не найдено». Разница в том, что произойдет с каждой формулой в течение следующего года редактирования.</p>
+    <p>Shorter, and every debt is gone. The search column and the return column are both named, the match is exact by default, and only a genuinely missing ID produces Not found. For E2 = 1008 both formulas return Finance. For E2 = 1005 both return Not found. The difference is what happens to each formula over the next year of edits.</p>
   </div>
 
   <div class="step">
-    <h2>6. Крайние случаи, которые нарушают поиск в реальных книгах</h2>
+    <h2>6. Edge cases that break lookups in real workbooks</h2>
 
-    <p>Перед объяснением: поиск возвращает #Н/Д для идентификатора, который вы можете увидеть прямо здесь, в таблице. Что бы вы проверили в первую очередь?</p>
+    <p>Before the explanation: a lookup returns #N/A for an ID you can see, right there, in the table. What is the first thing you would check?</p>
 
-    <p>Четыре дела, каждое из которых стоило кому-то дня.</p>
+    <p>Four cases that each cost someone an afternoon.</p>
 
-    <p><strong>Номер сохраняется в виде текста.</strong>  Это ответ на предварительный вопрос, и он самый распространенный. Ячейка, показывающая 1008, может содержать текст «1008», часто помеченный маленькой зеленой угловой отметкой. Число 1008 и текст «1008» не совпадают ни по одной функции. Исправьте столбец один раз, используя данные, текст в столбцы, или умножьте идентификаторы на 1, вместо того чтобы исправлять каждую формулу.</p>
+    <p><strong>The number is stored as text.</strong> This is the answer to the prequestion, and it is the most common one. A cell showing 1008 might hold the text "1008", often flagged by a small green corner mark. The number 1008 and the text "1008" do not match each other, in either function. Fix the column once, with Data, Text to Columns, or multiply the IDs by 1, rather than patching every formula.</p>
 
-    <p><strong>Повторяющиеся идентификаторы возвращают только первое совпадение.</strong>  Обе функции останавливаются при первом попадании сверху вниз. Если 1008 появляется дважды, вы получаете значение верхней строки и не предупреждаете о существовании второй строки. Если дубликаты вообще возможны, сначала посчитайте их.  <a href="../excel-sumifs/">Руководство по COUNTIFS</a>  показывает однострочную проверку, и  <a href="../sql-find-duplicates/">поиск дубликатов в SQL</a>  это тот же аудит в базе данных.</p>
+    <p><strong>Duplicate IDs return the first match only.</strong> Both functions stop at the first hit, top down. If 1008 appears twice, you get the upper row's value and no warning that a second row exists. When duplicates are even possible, count them first. The <a href="../excel-sumifs/">COUNTIFS guide</a> shows the one-line check, and <a href="../sql-find-duplicates/">finding duplicates in SQL</a> is the same audit in a database.</p>
 
-    <p><strong>Невидимые пробелы разрывают матч.</strong>  «Гиа Тран» с пробелом в конце имеет другое значение, чем «Гиа Тран». Данные, вставленные из других систем, постоянно содержат их.  <code>TRIM</code>  по дороге в загадку #Н/Д позже.</p>
+    <p><strong>Invisible spaces break the match.</strong> "Gia Tran " with a trailing space is a different value from "Gia Tran". Data pasted from other systems carries these constantly. <code>TRIM</code> on the way in beats a mystery #N/A later.</p>
 
-    <p><strong>В старом Excel нет XLOOKUP.</strong>  XLOOKUP существует в Excel 2021, Excel 365 и текущей версии Excel в Интернете. В книге, открытой в Excel 2019 или более ранней версии, отображается  <code>#NAME?</code>  где был каждый XLOOKUP. Если ваш файл должен переместиться в неизвестные версии, это реальная причина написать VLOOKUP, и он принадлежит к ответвлению ниже.</p>
+    <p><strong>Old Excel does not have XLOOKUP.</strong> XLOOKUP exists in Excel 2021, Excel 365, and current Excel on the web. A workbook opened in Excel 2019 or earlier shows <code>#NAME?</code> where every XLOOKUP was. If your file must travel to unknown versions, that is a real reason to write VLOOKUP, and it belongs in the fork below.</p>
   </div>
 
-  <h2>7. Какой использовать: вилку по имени</h2>
+  <h2>7. Which one to use: the fork, named</h2>
 
-  <p>Вопрос: для поиска, который вы собираетесь написать, вы используете XLOOKUP или VLOOKUP?</p>
+  <p>The question: for the lookup you are about to write, do you use XLOOKUP or VLOOKUP?</p>
 
-  <p>Возможные ответы и что каждый из них будет означать.  <strong>XLOOKUP</strong>  означает, что формула называет оба столбца, точно соответствует по умолчанию, обрабатывает пропущенные значения в своем четвертом аргументе и может смотреть в любом направлении.  <strong>VLOOKUP</strong>  означает, что формула работает где угодно, включая Excel 2019 и более ранние версии, и мгновенно читается двадцатипятилетними пользователями электронных таблиц, ценой подсчитываемого столбца, рискованного значения по умолчанию и поиска только вправо.</p>
+  <p>The possible answers, and what each would mean. <strong>XLOOKUP</strong> means the formula names both columns, matches exactly by default, handles missing values in its own fourth argument, and can look in any direction. <strong>VLOOKUP</strong> means the formula runs anywhere, including Excel 2019 and earlier, and is instantly readable to twenty-five years of spreadsheet users, at the price of the counted column, the risky default, and the rightward-only search.</p>
 
-  <p>Что решает: где будет жить рабочая книга. Если у каждого, кто открывает его, есть Excel 2021, 365 или веб-версия, каждый раз пишите XLOOKUP, и это мой честный вариант по умолчанию. Если файл должен открываться в более старой версии Excel или стандартом вашей команды является VLOOKUP, а книга уже заполнена им, всегда пишите VLOOKUP с введенным значением FALSE и рассматривайте значение FALSE как непередаваемое.</p>
+  <p>What decides: where the workbook will live. If everyone opening it has Excel 2021, 365, or the web version, write XLOOKUP, every time, and this is my honest default. If the file must open in older Excel, or your team's standard is VLOOKUP and the workbook is full of it already, write VLOOKUP with FALSE typed in, always, and treat the FALSE as non-negotiable.</p>
 
-  <p>Почему это важно: цена неправильного выбора не зависит от стиля. Выбор XLOOKUP для старой аудитории Excel означает, что ваш лист будет поврежден с #NAME? в каждой ячейке. Выбор VLOOKUP без FALSE означает, что лист прибудет в работу и появится позже. Среди этих двух ошибок видимая поломка — более дешевая ошибка, но вам не обязательно совершать ни одну из них.</p>
+  <p>Why it matters: the cost of choosing wrong is not style points. Choosing XLOOKUP for an old-Excel audience means your sheet arrives broken with #NAME? in every cell. Choosing VLOOKUP without FALSE means the sheet arrives working and lies later. Between those two, the visible breakage is the cheaper mistake, but you do not have to make either one.</p>
 
-  <p>И независимо от того, что вы пишете, вы читаете и то, и другое. В старых книгах используется VLOOKUP, и интервьюеры по-прежнему запрашивают его по имени, отчасти для того, чтобы узнать, знаете ли вы, почему здесь указано ЛОЖЬ. Быть человеком, который может объяснить недостающий четвертый аргумент, стоит в этой комнате больше, чем предпочтение новой функции.</p>
+  <p>And regardless of what you write, you read both. Older workbooks are VLOOKUP all the way down, and interviewers still ask for it by name, partly to see whether you know why the FALSE is there. Being the person who can explain the missing fourth argument is worth more in that room than preferring the newer function.</p>
 
-  <h2>Почему это работает</h2>
+  <h2>Why this works</h2>
 
-  <p>Глубокая разница заключается в ссылке по позиции и ссылке по имени. Напечатанный номер столбца — это факт о текущей форме таблицы, а форма таблицы — это то, что больше всего меняется в электронных таблицах. Ссылка на диапазон, такая как C2:C11, является фактом идентичности, а собственный механизм Excel поддерживает актуальность идентичности при перемещении столбцов. XLOOKUP безопаснее не потому, что он новее, а потому, что каждый хрупкий позиционный факт в VLOOKUP стал именованной ссылкой или явным выбором. Тот же принцип лежит в основе того, почему аналитики SQL избегают  <code>SELECT *</code>  и почему  <a href="../defining-metrics/">определенные метрики</a>  побеждайте запомненные: вещи, названные явно, сохраняются при изменении, а вещи, подсчитанные неявно, — нет.</p>
+  <p>The deep difference is reference by position against reference by name. A typed column number is a fact about the table's current shape, and the table's shape is the thing spreadsheets change most. A range reference like C2:C11 is a fact about identity, and Excel's own machinery keeps identity up to date when columns move. XLOOKUP is safer not because it is newer, but because every fragile positional fact in VLOOKUP became a named reference or an explicit choice. The same principle is why SQL analysts avoid <code>SELECT *</code> and why <a href="../defining-metrics/">defined metrics</a> beat remembered ones: things named explicitly survive change, things counted implicitly do not.</p>
 
-  <p>Эта страница также продолжает задавать вам вопросы, прежде чем давать ответы, и это намеренно. По данным более чем шестидесяти исследований, предложение учащемуся объяснить что-то самому себе до или во время получения объяснения достоверно улучшает понимание по сравнению с простым чтением (Бисра, Лю, Несбит, Салями &amp; Победить, 2018,    <em>Обзор педагогической психологии</em>, 30(3), 703–725). А практика поиска, закрытие страницы и самостоятельное создание синтаксиса создает удержание, чего не дает повторное чтение (Краснее &amp; выбирать карпа, 2006,    <em>Психологическая наука</em>, 17(3), 249–255). Шпаргалка внизу предназначена именно для этого.</p>
+  <p>This page also kept asking you questions before giving answers, and that is deliberate. Prompting a learner to explain a thing to themselves, before or while the explanation arrives, reliably improves understanding compared to just reading, across more than sixty studies (Bisra, Liu, Nesbit, Salimi, &amp; Winne, 2018, <em>Educational Psychology Review</em>, 30(3), 703–725). And practising retrieval, closing the page and producing the syntax yourself, builds retention that rereading does not (Roediger &amp; Karpicke, 2006, <em>Psychological Science</em>, 17(3), 249–255). The cheat sheet at the bottom is built for exactly that use.</p>
 
-  <h2>Использование этого в своей книге</h2>
+  <h2>Using this on your own workbook</h2>
 
-  <p>Преобразование каждого VLOOKUP в большой книге за один присест — занятие ужасное, и на полпути вы перестанете доверять своим собственным изменениям. Вместо этого сделайте это по порядку.</p>
+  <p>Converting every VLOOKUP in a big workbook in one sitting is miserable, and halfway through you will stop trusting your own edits. Do this instead, in order.</p>
 
   <ol>
-    <li><strong>Сначала найдите ВПР без четвертого аргумента.</strong>  Ctrl+Ф для        <code>VLOOKUP(</code>  и прочитайте окончание каждого из них. Те, у которых отсутствует значение FALSE, представляют собой действующие риски приблизительного совпадения, и они являются единственными срочными.</li>
-    <li><strong>Исправьте это, добавив FALSE, а не переписав.</strong>  Минимальное возможное изменение, которое легче всего проверить и делается за считанные минуты.</li>
-    <li><strong>Напишите XLOOKUP для всего нового</strong>    с сегодняшнего дня, если он есть в вашем Эксель. Совершенно новая формула не требует дополнительных затрат.</li>
-    <li><strong>Преобразовывайте старые формулы только тогда, когда вы их все равно трогаете.</strong>  Работающий ВПР с FALSE в стабильной таблице никому не повредит.</li>
-    <li><strong>После любого преобразования проверьте одну известную строку.</strong>  Выберите идентификатор, ответ на который вам известен, как и ваш собственный, и подтвердите, что новая формула возвращает его, прежде чем двигаться дальше.</li>
+    <li><strong>Find the VLOOKUPs with no fourth argument first.</strong> Ctrl+F for <code>VLOOKUP(</code> and read each one's ending. The ones missing FALSE are live approximate-match risks, and they are the only urgent ones.</li>
+    <li><strong>Fix those by adding FALSE, not by rewriting.</strong> Smallest possible change, easiest to verify, done in minutes.</li>
+    <li><strong>Write XLOOKUP for everything new</strong> from today, if your Excel has it. A brand-new formula costs nothing extra to get right.</li>
+    <li><strong>Convert old formulas only when you touch them anyway.</strong> A working VLOOKUP with FALSE in a stable table is not hurting anyone.</li>
+    <li><strong>After any conversion, check one known row.</strong> Pick an ID whose answer you know, like your own, and confirm the new formula returns it before moving on.</li>
   </ol>
 
-  <p>Если у вас есть бумага и пять минут, один дополнительный рисунок зафиксирует идею. Дважды нарисуйте таблицу из четырех столбцов. В первом нарисуйте переходы подсчета VLOOKUP: один, два, три, затем вставьте столбец и посмотрите, куда приземлится счетчик. На втором этапе нарисуйте две стрелки XLOOKUP к именованным столбцам, вставьте тот же столбец и убедитесь, что стрелки все еще держатся. Если на вашем рисунке показано, почему один ломается, а другой нет, значит, он принадлежит вам.</p>
+  <p>If you have paper and five minutes, one optional drawing locks the idea in. Draw a four-column table twice. On the first, draw VLOOKUP's counting hops, one, two, three, then insert a column and watch where the count lands. On the second, draw XLOOKUP's two arrows to named columns, insert the same column, and see that the arrows still hold. If your drawing shows why one breaks and one does not, you own this.</p>
 
-  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: Excel, SQL, Tableau и связанные с ними рабочие привычки.</div>
+  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: Excel, SQL, Tableau, and the working habits around them.</div>
 
-  <h2>Все на одном экране</h2>
+  <h2>The whole thing on one screen</h2>
 
-  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
+  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
 
   <table>
-    <tr><th>Concept</th><th>Ответ</th></tr>
-    <tr><td>Что делает поиск</td><td>Находит строку в другой таблице по значению и возвращает одно значение из этой строки.</td></tr>
-    <tr><td>Синтаксис ВПР</td><td><code>=VLOOKUP(value, table, column_number, FALSE)</code></td></tr>
-    <tr><td>Ошибка 1</td><td>Номер столбца является счетной позицией. Вставка столбца автоматически сдвигает его.</td></tr>
-    <tr><td>Ошибка 2</td><td>Отсутствие четвертого аргумента означает приблизительное совпадение. Отсутствующий идентификатор возвращает значение неправильной строки без ошибок.</td></tr>
-    <tr><td>Ошибка 3</td><td>ВПР ищет только первый столбец и возвращает только столбцы справа от него.</td></tr>
-    <tr><td>Синтаксис: XLOOKUP.</td><td><code>=XLOOKUP(value, lookup_array, return_array, if_not_found)</code></td></tr>
-    <tr><td>Что убирает неудачу 1</td><td><code>return_array</code>: именованный диапазон, который Excel указывает на правый столбец.</td></tr>
-    <tr><td>Что убирает неудачу 2</td><td>Точное совпадение используется по умолчанию в XLOOKUP. Нет аргументов, чтобы забыть.</td></tr>
-    <tr><td>Что убирает неудачу 3</td><td><code>lookup_array</code>  — это любой столбец, поэтому ответ может находиться с любой стороны.</td></tr>
-    <tr><td><code>if_not_found</code></td><td>Заменяет оболочку ЕСЛИОШИБКА и перехватывает только пропущенное значение, а не все ошибки.</td></tr>
-    <tr><td>Реальная работа приблизительного матча</td><td>Бандажный поиск: налоговые группы, уровни комиссий. Никогда не проводите поиск по идентификатору.</td></tr>
-    <tr><td>Duplicates</td><td>Обе функции молча возвращают первое совпадение сверху вниз. Сначала посчитайте.</td></tr>
-    <tr><td>#Н/Д для видимого значения</td><td>Сначала проверьте число, хранящееся в виде текста, а затем конечные пробелы.</td></tr>
-    <tr><td>#ИМЯ? повсюду</td><td>Файл был открыт в Excel 2019 или более ранней версии, в которой нет XLOOKUP.</td></tr>
-    <tr><td>Вилка</td><td>Современная аудитория Excel: XLOOKUP. Неизвестные или старые версии: VLOOKUP с значением FALSE, всегда вводится.</td></tr>
+    <tr><th>Concept</th><th>The answer</th></tr>
+    <tr><td>What a lookup does</td><td>Finds a row in another table by a value, brings one value back from that row.</td></tr>
+    <tr><td>VLOOKUP syntax</td><td><code>=VLOOKUP(value, table, column_number, FALSE)</code></td></tr>
+    <tr><td>Failure 1</td><td>The column number is a counted position. Inserting a column silently shifts it.</td></tr>
+    <tr><td>Failure 2</td><td>Omitting the fourth argument means approximate match. A missing ID returns the wrong row's value with no error.</td></tr>
+    <tr><td>Failure 3</td><td>VLOOKUP searches only the first column and returns only columns to its right.</td></tr>
+    <tr><td>XLOOKUP syntax</td><td><code>=XLOOKUP(value, lookup_array, return_array, if_not_found)</code></td></tr>
+    <tr><td>What removes failure 1</td><td><code>return_array</code>: a named range that Excel keeps pointed at the right column.</td></tr>
+    <tr><td>What removes failure 2</td><td>Exact match is XLOOKUP's default. No argument to forget.</td></tr>
+    <tr><td>What removes failure 3</td><td><code>lookup_array</code> is any column, so the answer can sit on either side.</td></tr>
+    <tr><td><code>if_not_found</code></td><td>Replaces the IFERROR wrapper, and catches only the missing value, not every error.</td></tr>
+    <tr><td>Approximate match's real job</td><td>Banded lookups: tax brackets, commission tiers. Never ID lookups.</td></tr>
+    <tr><td>Duplicates</td><td>Both functions return the first match, top down, silently. Count first.</td></tr>
+    <tr><td>#N/A on a visible value</td><td>Check number-stored-as-text first, then trailing spaces.</td></tr>
+    <tr><td>#NAME? everywhere</td><td>The file was opened in Excel 2019 or earlier, which has no XLOOKUP.</td></tr>
+    <tr><td>The fork</td><td>Modern Excel audience: XLOOKUP. Unknown or old versions: VLOOKUP with FALSE, always typed.</td></tr>
   </table>
 
-  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Если вы больше ничего не берете с этой страницы, никогда не оставляйте режим сопоставления поиска на волю случая. XLOOKUP по умолчанию или VLOOKUP с введенным FALSE и проверять одну известную строку после каждого редактирования. Неправильный ответ на поиск никогда не выглядит неправильным. Похоже на название отдела.</div>
+  <div class="note"><strong>The one habit to keep.</strong> If you take nothing else from this page, never leave a lookup's match mode to chance. XLOOKUP by default, or VLOOKUP with FALSE typed in, and check one known row after every edit. The wrong lookup answer never looks wrong. It looks like a department name.</div>
 
-  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Моей худшей ошибкой поиска было приблизительное совпадение, при котором на присвоение номеров ушедшего сотрудника тому, кто сидел над пробелом, ушли недели. Как долго молчащая ошибка поиска существовала в одной из ваших книг, прежде чем кто-то ее обнаружил, и что в конце концов выдало ее?</p>
+  <p>One last thought, and I would genuinely like other people's answers. My worst lookup bug was an approximate match that spent weeks assigning a departed employee's numbers to whoever sat above the gap. What is the longest a silent lookup error has lived in one of your workbooks before someone caught it, and what finally gave it away?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Бисра К., Лю К., Несбит Дж. К., Салими Ф. и Винн П. Х. (2018). Побуждение к самообъяснению: метаанализ.  <em>Обзор педагогической психологии</em>, 30(3), 703–725.</li>
-    <li>Рёдигер, Х.Л., и Карпике, Дж.Д. (2006). Улучшенное обучение с помощью тестов: прохождение тестов на память улучшает долгосрочное запоминание.  <em>Психологическая наука</em>, 17(3), 249–255.</li>
+    <li>Bisra, K., Liu, Q., Nesbit, J. C., Salimi, F., &amp; Winne, P. H. (2018). Inducing self-explanation: A meta-analysis. <em>Educational Psychology Review</em>, 30(3), 703–725.</li>
+    <li>Roediger, H. L., &amp; Karpicke, J. D. (2006). Test-enhanced learning: Taking memory tests improves long-term retention. <em>Psychological Science</em>, 17(3), 249–255.</li>
   </ul>
 
   <div class="book">
-    <strong>Поиск работает на вашем компьютере и не работает на том, на котором установлена ​​более старая версия Эксель.</strong>
-    <p><em>Excel для аналитиков</em>  составляет 378 страниц, VLOOKUP, XLOOKUP и INDEX MATCH сравниваются аргумент за аргументом, включая случаи сбоя каждого из них.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-vlookup-vs-xlookup'})">Excel для аналитиков, 19 долларов США →</a>
+    <strong>The lookup works on your machine and breaks on the one that has an older Excel.</strong>
+    <p><em>Excel for Analysts</em> is 378 pages, VLOOKUP, XLOOKUP and INDEX MATCH compared argument by argument, including where each one fails.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-vlookup-vs-xlookup'})">Excel for Analysts, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>Потренируйтесь в обоих поисках, держа перед собой таблицу.</strong>
-    <p style="margin:6px 0 0">VLOOKUP и XLOOKUP — это уроки модуля 1 в  <a href="../../excel/">Excel комплект</a>: вы пишете формулы для реальных таблиц, проверяете свои ответы и детализируете синтаксис до тех пор, пока ЛОЖЬ не станет автоматическим. Рядом находятся флеш-карты и пробный экзамен. Ничего устанавливать, учетная запись не требуется.</p>
-    <a class="btn" href="../../excel/">Откройте набор Excel →</a>
+    <strong>Practice both lookups with a table in front of you.</strong>
+    <p style="margin:6px 0 0">VLOOKUP and XLOOKUP are Unit 1 lessons in the <a href="../../excel/">Excel Kit</a>: you write the formulas against real tables, check your answers, and drill the syntax until the FALSE is automatic. Flash cards and a mock exam sit alongside. Nothing to install, no account needed.</p>
+    <a class="btn" href="../../excel/">Open the Excel Kit →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../excel-sumifs/">СУММИФЫ и СЧЁТЕЛИ</a> · <a href="../excel-absolute-vs-relative-references/">Абсолютные и относительные ссылки</a> · <a href="../budget-vs-actual-variance/">Бюджет и фактическое отклонение</a> · <a href="../excel-dashboard-build-order/">Порядок построения панели мониторинга Excel</a> · <a href="../excel-label-rows-before-charting/">Пометьте строки перед построением диаграммы</a> · <a href="../../excel/">Excel комплект</a> · <a href="../what-is-data-analysis/">Что такое анализ данных?</a> · <a href="../report-vs-analysis/">Отчет против анализа</a> · <a href="../choose-your-analyst-role/">Выберите роль аналитика</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-foundations/">Основы SQL</a> · <a href="../sql-find-duplicates/">Найти дубликаты в SQL</a> · <a href="../sql-null/">НУЛЬ в SQL</a> · <a href="../pandas-groupby/">панды группируются</a> · <a href="../choose-the-right-chart/">Выберите правильный график</a> · <a href="../correlation-vs-causation/">Корреляция против причинно-следственной связи</a> · <a href="../powerbi-measures-vs-columns/">Меры Power BI против столбцов</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../git-for-analysts/">Git для аналитиков</a> · <a href="../../projects/">Портфельные проекты</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
+    <a href="../../">← Analyst Prep Kit</a> · <a href="../excel-sumifs/">SUMIFS and COUNTIFS</a> · <a href="../excel-absolute-vs-relative-references/">Absolute vs Relative References</a> · <a href="../budget-vs-actual-variance/">Budget vs Actual Variance</a> · <a href="../excel-dashboard-build-order/">Excel Dashboard Build Order</a> · <a href="../excel-label-rows-before-charting/">Label Rows Before Charting</a> · <a href="../../excel/">Excel Kit</a> · <a href="../what-is-data-analysis/">What Is Data Analysis?</a> · <a href="../report-vs-analysis/">Report vs Analysis</a> · <a href="../choose-your-analyst-role/">Choose Your Analyst Role</a> · <a href="../sql-joins/">SQL JOINs</a> · <a href="../sql-foundations/">SQL Foundations</a> · <a href="../sql-find-duplicates/">Find Duplicates in SQL</a> · <a href="../sql-null/">NULL in SQL</a> · <a href="../pandas-groupby/">pandas groupby</a> · <a href="../choose-the-right-chart/">Choose the Right Chart</a> · <a href="../correlation-vs-causation/">Correlation vs Causation</a> · <a href="../powerbi-measures-vs-columns/">Power BI Measures vs Columns</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../entity-resolution/">Entity Resolution</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../git-for-analysts/">Git for Analysts</a> · <a href="../../projects/">Portfolio Projects</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

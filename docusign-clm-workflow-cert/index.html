@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="ru" data-theme="light" data-static-ru="true">
+<html lang="en" data-theme="light">
 <head>
-
+<script src="../assets/ru-localization-boot.js"></script>
   <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
   <script>
     (function () {
@@ -28,9 +28,9 @@
   </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Подготовка Docusign CLM Workflow Pro · Подготовительный комплект для аналитика</title>
+<title>Docusign CLM Workflow Pro Prep · Analyst Prep Kit</title>
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/docusign-clm-workflow-cert/">
-<meta name="description" content="Подготовка к экзамену Документируйте CLM Workflow Pro. Подробное учебное пособие по Конструктор рабочих процессов CLM, переменным и XML, шагам создания и подписи, триггерам и ограничениям обслуживания, а также практический экзамен из 44 вопросов, оцениваемый по реальному проходному баллу 80%.">
+<meta name="description" content="Prep for the Docusign CLM Workflow Pro exam. An area-by-area study guide of the CLM Workflow Designer, variables and XML, the generation and signature steps, triggers and service limits, plus a 44-question practice exam graded against the real 80% pass mark.">
 <link rel="stylesheet" href="../assets/grain/grain.css">
 <link rel="stylesheet" href="../assets/grain/zinc-sky.css"><!-- Zinc & Sky palette rollout -->
 <style>
@@ -251,14 +251,14 @@ footer{margin-top:50px;padding-top:24px;border-top:1px solid var(--border);text-
 </head>
 <body>
 <nav>
-  <button class="nav-btn" onclick="window.location='../index.html'" title="Вернуться ко всем комплектам">← Все комплекты</button>
-  <span class="nav-title"><span class="logo-mark"><i data-lucide="badge-check"></i></span>Подготовка Документация CLM Workflow Pro</span>
+  <button class="nav-btn" onclick="window.location='../index.html'" title="Back to all kits">← All Kits</button>
+  <span class="nav-title"><span class="logo-mark"><i data-lucide="badge-check"></i></span>Docusign CLM Workflow Pro Prep</span>
   <button class="nav-btn" id="navHome" onclick="setView('home')">Home</button>
-  <button class="nav-btn" id="navStudy" onclick="setView('study')">Учебное руководство</button>
-  <button class="nav-btn" id="navExam" onclick="setView('exam')">Практический экзамен</button>
+  <button class="nav-btn" id="navStudy" onclick="setView('study')">Study Guide</button>
+  <button class="nav-btn" id="navExam" onclick="setView('exam')">Practice Exam</button>
   <button class="nav-btn" id="navResults" onclick="setView('results')" style="display:none">Results</button>
   <div class="nav-spacer"></div>
-  <button class="nav-btn" onclick="resetAll()" title="Сбросить прогресс"><i data-lucide="rotate-ccw"></i>Reset</button>
+  <button class="nav-btn" onclick="resetAll()" title="Reset progress"><i data-lucide="rotate-ccw"></i>Reset</button>
   <button class="nav-btn" onclick="toggleTheme()"><span id="themeIcon"><i data-lucide="sun"></i></span></button>
 </nav>
 
@@ -286,7 +286,7 @@ function save(){ localStorage.setItem(STORE, JSON.stringify(state)); }
 function getCoachKey(){ return localStorage.getItem('apk-coach-key') || ''; }
 function setCoachKey(k){
   localStorage.setItem('apk-coach-key', k.trim());
-  toast(k.trim() ? "Ключ сохранен. Подсказки включены." : "Ключ очищен.");
+  toast(k.trim() ? 'Key saved. Hints are on.' : 'Key cleared.');
   render();
 }
 function stripTags(html){
@@ -299,8 +299,8 @@ async function hintCall(prompt, targetId){
   if(!el) return;
   const key = getCoachKey();
   el.classList.add('show');
-  if(!key){ el.textContent = "Добавьте свой ключ Антропный API на главной странице в разделе «Подсказки», чтобы включить подсказки."; return; }
-  el.textContent = "Думая…";
+  if(!key){ el.textContent = 'Add your Anthropic API key on the home page under Hints to turn hints on.'; return; }
+  el.textContent = 'Thinking…';
   try{
     const res = await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
@@ -308,36 +308,36 @@ async function hintCall(prompt, targetId){
       body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:350,messages:[{role:'user',content:prompt}]})
     });
     const data = await res.json();
-    if(!res.ok){ el.textContent = data?.error?.message || "Запрос отклонен. Проверьте свой ключ."; return; }
-    el.textContent = data.content?.[0]?.text || "Никакого ответа. Проверьте свой ключ.";
-  } catch(e){ el.textContent = "Запрос не выполнен. Проверьте свой ключ и соединение."; }
+    if(!res.ok){ el.textContent = data?.error?.message || 'Request refused. Check your key.'; return; }
+    el.textContent = data.content?.[0]?.text || 'No response. Check your key.';
+  } catch(e){ el.textContent = 'Request failed. Check your key and your connection.'; }
 }
-const TUTOR_ROLE = `Вы откровенный преподаватель Документация CLM, помогающий кому-то подготовиться к экзамену Документируйте CLM Workflow Pro. Этот экзамен охватывает администрирование рабочих процессов Документация CLM: конструктор рабочих процессов, этапы рабочего процесса (автоматическое управление документами, человек, механизм, интеграция, планирование и связь), переменные и выражения XML-параметры, xPath и C#, этапы создания документов и электронной подписи, способы запуска рабочих процессов, ограничения услуг, обработку ошибок и публикацию. Речь идет о Документация CLM, а НЕ CLM.CM (более старая платформа SpringCM).`;
+const TUTOR_ROLE = `You are a plain-spoken Docusign CLM tutor helping someone study for the Docusign CLM Workflow Pro exam. That exam covers administering Docusign CLM workflows: the workflow designer, workflow steps (automated document management, human, engine, integration, scheduling and communication), variables and the Params XML, XPath and C# expressions, document generation and eSignature steps, how workflows are started, service limits, error handling and publishing. It is about Docusign CLM, NOT CLM.CM (the older SpringCM platform).`;
 function hintStudy(key, i){
   const s = STUDY.find(x=>x.key===key);
   if(!s) return;
   const fact = stripTags(s.must[i]);
   const prompt = `${TUTOR_ROLE}
 
-Объясните этот экзаменационный вопрос иначе, чем написано здесь:
+Explain this exam point a different way than it is written here:
 "${fact}"
 
-Правила: максимум 3 предложения. Одна идея в предложении. Используйте повседневное сравнение, если это помогает. Скажите, что, скорее всего, об этом спросят на экзамене. Никакой преамбулы, никакого повторения вопроса.`;
+Rules: 3 sentences at most. One idea per sentence. Use an everyday comparison if it helps. Say what the exam is likely to ask about it. No preamble, no restating the question.`;
   hintCall(prompt, 'hint-resp-' + key + '-' + i);
 }
 function hintQuestion(qid){
   const q = QUESTIONS.find(x=>x.id===qid);
   if(!q) return;
   const chosen = state.answers[qid];
-  const picked = Array.isArray(chosen) ? chosen.map(i=>stripTags(q.choices[i])).join(' / ') : (chosen!==undefined ? stripTags(q.choices[chosen]) : "(нет ответа)");
+  const picked = Array.isArray(chosen) ? chosen.map(i=>stripTags(q.choices[i])).join(' / ') : (chosen!==undefined ? stripTags(q.choices[chosen]) : '(no answer)');
   const right = q.type==='ms' ? q.correct.map(i=>stripTags(q.choices[i])).join(' / ') : stripTags(q.choices[q.correct]);
-  const prompt = `${TUTOR_ROLE} Студент неправильно ответил на этот практический вопрос.
+  const prompt = `${TUTOR_ROLE} A student got this practice question wrong.
 
-Вопрос: ${stripTags(q.q)}
-Они выбрали: ${picked}
-Правильный ответ: ${right}
+Question: ${stripTags(q.q)}
+They picked: ${picked}
+Correct answer: ${right}
 
-Максимум в трех предложениях скажите, что вас, вероятно, смутило, а затем приведите одно простое правило, которое разделяет эти два понятия. Никакой преамбулы.`;
+In 3 sentences at most, say what they were probably confusing, then give one plain rule that keeps the two apart. No preamble.`;
   hintCall(prompt, 'hint-resp-q-' + qid);
 }
 
@@ -348,49 +348,49 @@ function hintQuestion(qid){
    starting and limits). The percentages are OUR study allocation and are labeled as such
    on the page. */
 const DOMAIN_INFO = {
-  d1:{label:"Зона 1", name:"Основы дизайнера рабочих процессов", weight:25, color:'var(--c-d1)',
-      hint:"Страница «Рабочие процессы», начальные типы контента, «Начало» и «Окончание», соединительные линии по выводу последнего действия, сохранение, версии, публикация, клонирование, шаблоны, страница «Активность».",
+  d1:{label:'Area 1', name:'Workflow Designer fundamentals', weight:25, color:'var(--c-d1)',
+      hint:'The Workflows page, kick-off content types, Start and Finish, connecting lines by last action output, saving, versions, publishing, cloning, templates, the Activity page.',
       docPath:'https://support.docusign.com/s/document-item?language=en_US&bundleId=yks1643320936212&topicId=zyz1677247832120.html&_LANG=enus',
-      docLabel:"Создайте рабочий процесс в Документация CLM"},
-  d2:{label:"Зона 2", name:'Data: variables, XML, XPath and expressions', weight:30, color:'var(--c-d2)',
-      hint:"Переменная Параметры, типы переменных, системные переменные и переменные курсора, оценка xPath, шаги обновления переменной, выражения C#, решение и правило, циклы, шаги поиска, обновления метаданных.",
+      docLabel:'Create a Workflow in Docusign CLM'},
+  d2:{label:'Area 2', name:'Data: variables, XML, XPath and expressions', weight:30, color:'var(--c-d2)',
+      hint:'The Params variable, the variable types, system and caret variables, Evaluate an xPath, Update Variable steps, C# expressions, Decision vs Rule, loops, Find steps, metadata updates.',
       docPath:'https://support.docusign.com/s/document-item?language=en_US&bundleId=yks1643320936212&topicId=ref34fe83d1-1d73-4e4e-9685-283c759b8526.html&_LANG=enus',
-      docLabel:"Переменные, которые можно создавать в рабочих процессах Документация CLM"},
-  d3:{label:"Зона 3", name:"Этапы создания, проверки и подписи", weight:30, color:'var(--c-d3)',
-      hint:"Действия и задачи, выполняемые человеком, группы задач, сроки выполнения и напоминания, отмена, создание документов, отправка на подпись или проверка и отправка на подпись, ожидание подписи, электронная почта или документ электронной почты, обновление безопасности.",
+      docLabel:'Variables That You Can Create in Docusign CLM Workflows'},
+  d3:{label:'Area 3', name:'Generation, review and signature steps', weight:30, color:'var(--c-d3)',
+      hint:'Human steps and tasks, task groups, due dates and reminders, cancellation, Document Generation, Send for Signature vs Review and Send for Signature, Wait for Signature, Email vs Email Document, Update Security.',
       docPath:'https://support.docusign.com/s/document-item?language=en_US&bundleId=yks1643320936212&topicId=qkt1576610095922.html&_LANG=enus',
-      docLabel:"Этапы человеческого рабочего процесса в Документация CLM"},
-  d4:{label:"Зона 4", name:"Запуск рабочих процессов, лимиты и администрирование", weight:15, color:'var(--c-d4)',
-      hint:"Каждый способ запуска рабочего процесса, ограничения выражения и активности, что означает «приостановлено», графики очистки, редактирование, UAT в производство, этапы интеграции.",
+      docLabel:'Human Workflow Steps in Docusign CLM'},
+  d4:{label:'Area 4', name:'Starting workflows, limits and administration', weight:15, color:'var(--c-d4)',
+      hint:'Every way a workflow starts, the expression and activity limits, what "paused" means, purge schedules, redaction, UAT to Production, integration steps.',
       docPath:'https://support.docusign.com/s/document-item?language=en_US&bundleId=pxt1643324456371&topicId=woi1737643109961.html&_LANG=enus',
-      docLabel:"Ограничения службы Документация CLM"}
+      docLabel:'Docusign CLM Service Limits'}
 };
 const DOMAIN_ORDER = ['d1','d2','d3','d4'];
 
 /* ============== STUDY GUIDE ============== */
 const STUDY = [
-  {key:'d1', title:"Основы Дизайнер рабочих процессов: холст, шаги, версии, публикация",
+  {key:'d1', title:'Workflow Designer fundamentals: canvas, steps, versions, publishing',
     must:[
-      `<strong>Где живут рабочие процессы.</strong> Select <em>Admin</em> в заголовке навигации, затем <em>Workflows</em> under <strong>Инструменты автоматизации</strong>. Страница «Рабочие процессы» имеет две вкладки: <strong>Configuration</strong> (дизайны) и <strong>Activity</strong> (работающие и готовые экземпляры). <em>Новый рабочий процесс</em> offers <em>Расширенный рабочий процесс</em> or <em>Используйте шаблон</em>.`,
-      `<strong>Имя рабочего процесса содержит 100 буквенно-цифровых символов.</strong> Рабочий процесс <em>variable</em> имя сохраняется <code>250</code>. Два разных лимита, и экзамен любит их менять местами.`,
-      `<strong>Пять ответов на вопрос «Какой тип контента положит начало этому рабочему процессу?»</strong>: <em>Конфигурация создания документов</em>, <em>Документ</em> (созданный, отредактированный или загруженный), <em>Пользовательский XML</em>, <em>Папка</em>, и <em>Этот рабочий процесс начнется без контента</em>. Выберите последний и входящую переменную содержимого (<code>Params</code>) пусто.`,
-      `<strong>Дизайнер только английский.</strong> Документация говорит, чтобы сохранить <em>Язык учетной записи по умолчанию</em> настройка учетной записи на английском языке при использовании конструктора рабочих процессов. Другие языки могут вызвать проблемы с рабочими процессами.`,
-      `<strong>Строим на холсте.</strong> The <strong>Start</strong> шаг уже находится на холсте, когда открывается дизайнер. Вы ищете <em>Добавить шаги</em> список, перетащите шаг на холст, выберите шаг и перетащите линию к следующему, затем установите поля каждого шага в <strong>Свойства шага</strong> панель справа.`,
-      `<strong>Каждая соединительная линия несет в себе условие.</strong> Select the arrow and choose from <em>Перейдите по этой ссылке, если результат последнего действия</em>, например <code>Success</code>. Шаги маршрутизируются по их последнему результату действия, и каждый тип шага имеет свой собственный список выходов.`,
-      `<strong>Шаг «Начало» имеет три настройки, которые стоит знать.</strong>: <em>Имя рабочего процесса</em>, <em>Отправка уведомления, когда рабочий процесс обнаруживает ошибку</em> (с <em>Пользователи для получения уведомлений</em>), и <em>Отслеживайте и записывайте активность рабочего процесса</em> для отчетности.`,
-      `<strong>Отделка не является украшением.</strong> Шаг Заканчивать сообщает механизму, где рабочий процесс успешно завершается. Он должен присутствовать и быть достигнутым, чтобы возобновить ожидающий родительский рабочий процесс. Без него рабочий процесс, который останавливается на неудачном этапе, отображается как <em>Complete</em> в мониторе активности. У вас может быть более одного шага завершения.`,
-      `<strong>Сохранение не является публикацией.</strong> <em>Сохраните изменения</em> предоставляет вам неопубликованный рабочий процесс на вкладке Конфигурация. Чтобы запустить его, выберите <em>Создание и публикация версий</em> кнопку и на <strong>Версии и публикация</strong> выбор панели <em>Publish</em> для версии, над которой вы работаете. Затем он показывает <em>Published</em> статус.`,
-      `<strong>Запуск вручную.</strong> На вкладке Конфигурация установите флажок рядом с опубликованным рабочим процессом и выберите <em>Начать рабочий процесс</em>. Вы можете выбрать документ, чтобы начать его, или выбрать <em>ПРЕДОСТАВИТЬ ПОЛЬЗОВАТЕЛЬСКИЕ ПАРАМЕТРЫ</em> и вставьте параметры. Затем экземпляр появится на странице «Активность».`,
-      `<strong>Клонировать = Экспортировать JSON, Импортировать JSON.</strong> Откройте проект, выберите <em>Export</em> and <em>Экспорт JSON</em>, создайте новый расширенный рабочий процесс, выберите <em>Import</em>, выберите файл, дайте ему новое имя и сохраните. Изменения клона никогда не затрагивают оригинал. При переходе от UAT к производству используются одни и те же экспорт и импорт.`,
-      `<strong>Удаление является щадящим.</strong> При удалении рабочего процесса выполняемые экземпляры завершаются без ошибок. Только после того, как они закончат, рабочий процесс исчезнет из учетной записи.`,
-      `<strong>Имя и описание шага.</strong> Каждому шагу автоматически присваивается уникальное имя шага, и Документация рекомендует оставить имя по умолчанию. Описание шага отображается под шагом на холсте. <em>and</em> в мониторе процесса, поэтому это важно для устранения неполадок.`,
-      `<strong>Пять семейств ступеней</strong>: <em>автоматизированный документооборот</em> (создавать, перемещать, отправлять по электронной почте, блокировать, атрибутировать документы), <em>human</em> (задачи на странице Задачи), <em>engine</em> (переменные, циклы, решения, подпроцессы), <em>integration</em> (Salesforce, REST, API электронной подписи) и <em>планирование и общение</em> (таймеры, напоминания, электронные письма).`,
-      `<strong>Дорожка, Пул и Группа не являются ступеньками.</strong> Это наглядные пособия, которые рисуют на холсте цветную рамку с надписью и изменяемым размером. Они ничего не делают во время выполнения. Дорожка может находиться внутри пула.`,
-      `<strong>Шесть шаблонов рабочих процессов</strong>: внутреннее утверждение, запуск другого процесса, редактирование документа, согласование, маршрутизация и подпись. Они предназначены для «администраторов и полных подписчиков с привилегиями рабочего процесса», их можно открыть в дизайнере для детальной настройки, а выбор их триггера — <em>Пропустить сейчас</em> or <em>Генерация документов</em>.`,
+      `<strong>Where workflows live.</strong> Select <em>Admin</em> in the navigation header, then <em>Workflows</em> under <strong>Automation Tools</strong>. The Workflows page has two tabs: <strong>Configuration</strong> (the designs) and <strong>Activity</strong> (the running and finished instances). <em>New Workflow</em> offers <em>Advanced Workflow</em> or <em>Use a Template</em>.`,
+      `<strong>A workflow name holds 100 alphanumeric characters.</strong> A workflow <em>variable</em> name holds <code>250</code>. Two different limits, and the exam likes to swap them.`,
+      `<strong>Five answers to "What type of content will kick off this workflow?"</strong>: <em>A document generation configuration</em>, <em>A document</em> (created, edited or uploaded), <em>Custom XML</em>, <em>A folder</em>, and <em>This workflow will start without content</em>. Pick the last one and the incoming content variable (<code>Params</code>) is empty.`,
+      `<strong>The designer is English only.</strong> Docusign says to keep the <em>Default Account Language</em> account setting on English when using the workflow designer. Other languages might cause problems with workflows.`,
+      `<strong>Building on the canvas.</strong> The <strong>Start</strong> step is already on the canvas when the designer opens. You search the <em>Add Steps</em> list, drag a step onto the canvas, select a step and drag a line to the next one, then set each step's fields in the <strong>Step Properties</strong> panel on the right.`,
+      `<strong>Every connecting line carries a condition.</strong> Select the arrow and choose from <em>Follow this link if last action output is</em>, for example <code>Success</code>. Steps route by their last action output, and each step type has its own list of outputs.`,
+      `<strong>The Start step has three settings worth knowing</strong>: <em>Workflow Name</em>, <em>Send a notification when workflow encounters an error</em> (with <em>Users To Receive Notification</em>), and <em>Track and record workflow activity</em> for reporting.`,
+      `<strong>Finish is not decoration.</strong> The Finish step tells the engine where the workflow successfully concludes. It must be present and reached to resume a waiting parent workflow. Without it, a workflow that stops at a failed step shows as <em>Complete</em> in the activity monitor. You can have more than one Finish step.`,
+      `<strong>Saving is not publishing.</strong> <em>Save your changes</em> gives you an unpublished workflow on the Configuration tab. To run it, select the <em>Create and publish versions</em> button, and on the <strong>Versions and Publishing</strong> panel select <em>Publish</em> for the version you are working on. It then shows a <em>Published</em> status.`,
+      `<strong>Starting one by hand.</strong> On the Configuration tab, tick the box next to a published workflow and select <em>Start Workflow</em>. You can choose a document to kick it off, or select <em>PROVIDE CUSTOM PARAMETERS</em> and paste parameters. The instance then appears on the Activity page.`,
+      `<strong>Clone = Export JSON, Import JSON.</strong> Open the design, select <em>Export</em> and <em>Export JSON</em>, create a new Advanced Workflow, select <em>Import</em>, pick the file, give it a new name and save. Changes to the clone never touch the original. The UAT to Production move uses the exact same export and import.`,
+      `<strong>Deleting is gentle.</strong> When you delete a workflow, in-progress instances complete without error. Only after they finish is the workflow gone from the account.`,
+      `<strong>Step Name and Step Description.</strong> Every step gets an automatically unique Step Name, and Docusign recommends keeping the default. The Step Description shows below the step on the canvas <em>and</em> in the process monitor, which is why it matters for troubleshooting.`,
+      `<strong>Five families of steps</strong>: <em>automated document management</em> (create, move, email, lock, attribute documents), <em>human</em> (tasks on a Tasks page), <em>engine</em> (variables, loops, decisions, sub-workflows), <em>integration</em> (Salesforce, REST, eSignature API), and <em>scheduling and communication</em> (timers, reminders, emails).`,
+      `<strong>Lane, Pool and Group are not steps.</strong> They are visual aids that draw a labeled, resizable, colored box on the canvas. They do nothing at run time. A Lane can sit inside a Pool.`,
+      `<strong>Six workflow templates</strong>: Internal Approval, Start Another Process, Edit Document, Negotiation, Routing, and Signature. They are for "administrators and full subscribers with workflow privileges", they can be opened in the designer for detailed customization, and their trigger choice is <em>Skip for now</em> or <em>Document Generation</em>.`,
       `<strong>The Activity page is the process monitor.</strong> Filter by <em>Workflow</em>, <em>Last Updated</em> and <em>Workflow Status</em>, then select a workflow name to open it. The Workflow Information panel shows <em>Total Activities Executed</em>, and the <em>Variables &amp; Values</em> list shows every variable, including the caret ones.`,
-      `<strong>Поиск внутри большого дизайна.</strong> Дизайнер может искать шаги, группы или дорожки по имени, поэтому ответом на вопрос «как найти один шаг в 200-шаговом рабочем процессе» является собственный поиск дизайнера, а не фильтр активности.`
+      `<strong>Search inside a big design.</strong> The designer can search for steps, groups or lanes by name, so the answer to "how do I find one step in a 200-step workflow" is the designer's own search, not the Activity filter.`
     ],
-    miscon:`<strong>Заблуждение, которое следует разоблачить:</strong> «Я сохранил его, поэтому он будет работать». Сохранение создает <em>unpublished</em> рабочий процесс. Ничто, запускающее рабочий процесс (интеллектуальное правило, конфигурация создания документа, поток Salesforce, настраиваемое действие, диалоговое окно «Запуск рабочего процесса»), не может использовать его до публикации версии. Действие Схема работы Salesforce идет дальше и требует <em>exact</em> имя <em>active</em> рабочий процесс. Если в вопросе говорится: «Рабочий процесс никогда не запускается», сначала найдите слово «опубликовано».`,
+    miscon:`<strong>Misconception to bust:</strong> "I saved it, so it will run." Saving creates an <em>unpublished</em> workflow. Nothing that starts a workflow (a smart rule, a document generation configuration, a Salesforce Flow, a custom action, the Start Workflow dialog) can use it until a version is published. The Salesforce Flow action goes further and needs the <em>exact</em> name of an <em>active</em> workflow. When a question says "the workflow never starts", look for the word published first.`,
     viz:`<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:12px">
       <span style="padding:4px 9px;border-radius:6px;background:var(--surf);border:1px solid var(--border)">New Workflow</span>
       <span style="color:var(--dim)">→</span>
@@ -405,82 +405,82 @@ const STUDY = [
       <span style="padding:4px 9px;border-radius:6px;background:var(--surf);border:1px solid var(--border)">Start, then watch Activity</span>
     </div><div style="color:var(--dim);font-size:12px;margin-top:7px">The highlighted step is the one people skip. Nothing can start an unpublished workflow.</div>`},
 
-  {key:'d2', title:"Данные в рабочих процессах: переменные, XML-параметры, xPath, выражения.",
+  {key:'d2', title:'Data in workflows: variables, Params XML, XPath, expressions',
     must:[
-      `<strong>Переменные — это контейнеры.</strong> Существует три вида: переменные <em>ты создаешь</em>, <strong>system</strong> переменные, которые собирают данные об экземпляре, и <strong>caret</strong> переменные, которые CLM создает при выполнении действия. Совет Документация: следите за небольшим количеством переменных и используйте переменные XML для одновременного хранения нескольких точек данных.`,
-      `<strong>Параметры — это входящий контент.</strong> Он хранит все, что инициировало рабочий процесс. Имя по умолчанию: <code>Params</code> и вы можете переименовать его. Правило, которое хочет экзамен: <strong>не изменять параметры</strong>. Скопируйте его в другую переменную и работайте с копией, чтобы исходные данные триггера оставались нетронутыми для отладки.`,
-      `<strong>Параметры из создания документа</strong> переносит значения формы в узел с именем <code>TemplateFieldData</code>. Схема Параметры заполняется только после того, как связанная конфигурация создания документа один раз инициировала рабочий процесс. Метод Документация: построить <em>empty</em> рабочего процесса, подключите его к конфигурации, запустите один раз, а затем скопируйте XML в реальный рабочий процесс.`,
-      `<strong>Простые типы переменных</strong>: <em>Date</em>, <em>Number</em> (должно быть целым числом, которое можно использовать непосредственно в выражениях C#), <em>Text</em>, и <em>Список идентификаторов</em> (только идентификаторы многих документов или папок, что позволяет уменьшить размер переменной). Ан <em>Iterator</em> указывает на повторяющийся узел внутри другой переменной XML.`,
-      `<strong>Переменные типа XML</strong>: <em>Actor</em> (пользователь CLM с предопределенной схемой: имя, адрес электронной почты, идентификатор пользователя), <em>Пользовательский XML</em> (любая структура; вставьте или загрузите XML для определения схемы или определите узлы по одному), <em>Document</em>, и <em>Folder</em>. Найти документ сохраняется в переменной Документ; Найдите папку в переменной  папка.`,
-      `<strong>Правила именования Документация прямо заявляют.</strong> Используйте краткое и значимое имя. Начинайте с заглавной буквы каждого слова. Используйте целые слова, без сокращений. Имя переменной может быть до <code>250</code> буквенно-цифровые символы.`,
-      `<strong>Четыре системные переменные</strong>: <code><%#System.Link%></code> (ссылка на задачу, уникальная для экземпляра), <code><%#Система.Дата%></code>, <code><%#System.Time%></code> (оба по локали сервера) и <code>%#System.Uid%</code>, идентификатор экземпляра. Документация советует всегда включать Уид в электронные письма о сбоях или ошибках. Чтобы просмотреть список, экспортируйте рабочий процесс в формате JSON.`,
-      `<strong>Переменные курсора начинаются с ^.</strong> CLM создает их, например, после завершения действия. <code>^Найти идентификаторы документов 1.</code> после шага «Найти документ» находит один документ. Они отображаются в списке «Переменные и значения» на странице «Действия». Выражения могут их читать: <code>ПолучитьVariableValue("^Одобрить 1 комментарий")</code>.`,
-      `<strong>Обновление значения переменной имеет три выхода.</strong>: <em>Updated</em>, <em>Не обновлено</em> and <em>Failed</em>. Его данные живут только внутри одного экземпляра. Чтобы получить данные, вы запускаете дополнительный рабочий процесс с <em>Workflow</em> шаг, использовать <em>Обновить родительскую переменную</em> от дочернего процесса (этот шаг можно использовать только в дочернем рабочем процессе) или используйте <em>Установить выходные данные рабочего процесса</em>. Вы не можете использовать обновление значения переменной для системных переменных, переменных курсора или параметров.`,
-      `<strong>Оценка xPath</strong> запускает выражение xPath для переменной (Параметры, XML-документа, XML-папки, чего-либо со схемой XML) и возвращает один из четырех типов результатов: <em>Boolean</em>, <em>Number</em> (Двойной), <em>String</em>, или <em>Набор узлов</em>. Собственный пример Документация: <code>//Элемент системы показателей[./Тема/текст()='Компенсация' и ./Уровень риска/текст()='Высокий']</code>.`,
+      `<strong>Variables are containers.</strong> There are three kinds: variables <em>you create</em>, <strong>system</strong> variables that capture data about the instance, and <strong>caret</strong> variables that CLM creates when an action occurs. Docusign's advice: keep the number of variables small and use XML variables to hold several data points at once.`,
+      `<strong>Params is the incoming content.</strong> It stores whatever triggered the workflow. The default name is <code>Params</code> and you may rename it. The rule the exam wants: <strong>do not modify Params</strong>. Copy it to another variable and work on the copy, so the original trigger data stays intact for debugging.`,
+      `<strong>Params from document generation</strong> carries the form's values in a node called <code>TemplateFieldData</code>. The Params schema is only populated after an associated document generation configuration has triggered the workflow once. Docusign's method: build an <em>empty</em> workflow, connect it to the configuration, run it once, then copy the XML into the real workflow.`,
+      `<strong>The simple variable types</strong>: <em>Date</em>, <em>Number</em> (must be an integer, usable directly in C# expressions), <em>Text</em>, and <em>ID List</em> (just the IDs of many documents or folders, which keeps the variable small). An <em>Iterator</em> points to a repeating node inside another XML variable.`,
+      `<strong>The XML-type variables</strong>: <em>Actor</em> (a CLM user, with a predefined schema: name, email, user ID), <em>Custom XML</em> (any structure; paste or upload XML to define the schema, or define nodes one at a time), <em>Document</em>, and <em>Folder</em>. Find Document stores into a Document variable; Find Folder into a Folder variable.`,
+      `<strong>Naming rules Docusign states outright.</strong> Use a succinct, meaningful name. Capitalize the first letter of every word. Use whole words, no abbreviations. A variable name can be up to <code>250</code> alphanumeric characters.`,
+      `<strong>Four system variables</strong>: <code>&lt;%#System.Link%&gt;</code> (a task link unique to the instance), <code>&lt;%#System.Date%&gt;</code>, <code>&lt;%#System.Time%&gt;</code> (both by server locale), and <code>%#System.Uid%</code>, the instance ID. Docusign says to always include the Uid in emails about failures or errors. To see the list, export the workflow as JSON.`,
+      `<strong>Caret variables start with ^.</strong> CLM creates them when an action completes, for example <code>^Find Document 1DocumentIds</code> after a Find Document step finds one document. They appear in the Variables &amp; Values list on the Activity page. Expressions can read them: <code>GetVariableValue("^Approve 1Comments")</code>.`,
+      `<strong>Update Variable Value has three outputs</strong>: <em>Updated</em>, <em>Not Updated</em> and <em>Failed</em>. Its data lives only inside the one instance. To get data out you start a sub-workflow with the <em>Workflow</em> step, use <em>Update Parent Variable</em> from the child (that step can only be used in a child workflow), or use <em>Set Workflow Output</em>. You cannot use Update Variable Value on system variables, caret variables, or Params.`,
+      `<strong>Evaluate an xPath</strong> runs an XPath expression against a variable (Params, a document XML, a folder XML, anything with an XML schema) and returns one of four result types: <em>Boolean</em>, <em>Number</em> (Double), <em>String</em>, or <em>Node Set</em>. Docusign's own example: <code>//ScorecardElement[./Topic/text()='Indemnification' and ./RiskLevel/text()='High']</code>.`,
       `<strong>Three ways to load a variable from a file.</strong> <em>Update Variable From XML</em> uses an XPath to pull a node from an XML file in CLM. <em>Update Variable from CSV</em> looks up a row by a column value (the lookup column should be unique; if not, the first match wins). <em>Create Variable from CSV</em> ingests a whole CSV into a Custom XML variable: the CSV must be in a CLM folder, have a header row and at least two columns, stay under <code>1 MB</code>, and the variable it creates cannot exceed <code>5 MB</code>.`,
-      `<strong>Выражения — это C#.</strong> Вы открываете построитель выражений с помощью значка рядом с полем, вводите поле ввода C# и <em>Save</em> подтверждает это. Можно использовать только пространства имен из белого списка Документ. Прочитайте переменную, отличную от XML, с помощью <code>ПолучитьVariableValue("имя")</code> и переменная XML с <code>_context.XmlVariables["имя"].ValueString</code>.`,
-      `<strong>Текущая дата превосходит ДатаВремя.Сейчас.</strong> <em>Текущая дата</em> дает дату в часовом поясе вашей учетной записи. <em>ДатаВремя.Сейчас</em> дает время машины, выполняющей выражение, без гарантированного часового пояса. Используйте ДатаВремя.Сейчас только тогда, когда время суток имеет значение и <em>ДатаВремя.UTCNow</em> плюс конвертация, когда вам нужна конкретная зона.`,
-      `<strong>Не пишите выражение для задания, которое может выполнить поле.</strong> Лучшая практика Документация: замените выражения, которые вызывают только ПолучитьVariableValue, или объедините строки, например, помещая переменные прямо в поле. <code><%#Variable.SubmitedBy%></code>. Объедините выражения, которые работают с одними и теми же данными. Каждое выражение учитывается в лимите 300 на 15 минут.`,
-      `<strong>Решение против правила.</strong> A <em>Rule</em> оценивает одно условие и выводит <em>True</em> or <em>False</em>. А <em>Decision</em> занимает несколько <em>If</em> условия, каждое из которых имеет свою собственную именованную выходную строку плюс <em>Else</em> путь по умолчанию. За задачей маршрутизации «обычно следует этап принятия решения».`,
-      `<strong>Шаги цикла.</strong> <em>Для цикла</em> увеличивает переменную на 1 каждый цикл, пока она не совпадет <em>Количество петель</em>. <em>Для каждого цикла</em> выполняет итерацию Итератора по XML, последовательного по умолчанию или параллельного, с выходными данными <em>Step</em>, <em>Конец цикла</em> and <em>Failure</em>. <em>Следующий цикл</em> — это дополнительный визуальный маркер завершения. Это не обязательно, но все равно учитывается в лимите активности.`,
-      `<strong>Шаги поиска имеют четыре выхода, а успех — это ловушка.</strong> Поиск документов по папке и поиск документов по метаданным. <code>50</code> документы по умолчанию и до <code>200</code>. Их результаты <em>Success</em> (запустилось без ошибок, найдено или нет), <em>Failure</em>, <em>Match</em> (по крайней мере один найден) и <em>Нет совпадений</em>. Найти группу также возвращает значение до 200. Найти пользователя может храниться только в переменной Актер.`,
-      `<strong>Обновить значение метаданных документа можно двумя способами.</strong> <em>Выберите атрибут</em> устанавливает атрибуты по одному. <em>XML</em> для массовых обновлений и удалений требуется одна полезная нагрузка: она начинается с <code><UpdateMetadata UpdateType="Patch"></code> or <code>"Помещать"</code> (PATCH используется по умолчанию) и <code>Удалить = "истина"</code> работает только под PATCH. Обновления XML касаются только пользовательских атрибутов; стандартные атрибуты, такие как Вечеринка, проходят <em>Изменение атрибутов соглашения CLM</em>.`
+      `<strong>Expressions are C#.</strong> You open the Expression Builder from the icon next to a field, type in the C# Input field, and <em>Save</em> validates it. Only namespaces on Docusign's allowlist may be used. Read a non-XML variable with <code>GetVariableValue("name")</code> and an XML variable with <code>_context.XmlVariables["name"].ValueString</code>.`,
+      `<strong>Current Date beats DateTime.Now.</strong> <em>Current Date</em> gives the date in your account's time zone. <em>DateTime.Now</em> gives the time of the machine running the expression, with no guaranteed time zone. Use DateTime.Now only when the time of day matters, and <em>DateTime.UtcNow</em> plus a conversion when you need a specific zone.`,
+      `<strong>Do not write an expression for a job a field can do.</strong> Docusign's best practice: replace expressions that only call GetVariableValue or concatenate strings by dropping variables straight into the field, for example <code>&lt;%#Variable.SubmittedBy%&gt;</code>. Combine expressions that work on the same data. Every expression counts against the 300-per-15-minute limit.`,
+      `<strong>Decision vs Rule.</strong> A <em>Rule</em> evaluates one condition and outputs <em>True</em> or <em>False</em>. A <em>Decision</em> takes several <em>If</em> conditions, each with its own named output string, plus an <em>Else</em> default path. A Routing task is "commonly followed by a Decision step".`,
+      `<strong>The loop steps.</strong> <em>For Loop</em> counts a variable up by 1 each cycle until it matches <em>Number of loops</em>. <em>For-Each Loop</em> iterates an Iterator over XML, serial by default or parallel, with outputs <em>Step</em>, <em>Loop End</em> and <em>Failure</em>. <em>Next Loop</em> is an optional visual end marker. It is not required, but it still counts toward the activity limit.`,
+      `<strong>Find steps have four outputs, and Success is the trap.</strong> Find Documents by Folder and Find Documents by Metadata return <code>50</code> documents by default and up to <code>200</code>. Their outputs are <em>Success</em> (ran without error, found or not), <em>Failure</em>, <em>Match</em> (at least one found) and <em>No Match</em>. Find Party also returns up to 200. Find User can only store into an Actor variable.`,
+      `<strong>Update Document Metadata Value has two methods.</strong> <em>Choose attribute</em> sets attributes one at a time. <em>XML</em> takes one payload for bulk updates and deletions: it starts with <code>&lt;UpdateMetadata UpdateType="Patch"&gt;</code> or <code>"Put"</code> (PATCH is the default), and <code>Delete="true"</code> only works under PATCH. XML updates cover custom attributes only; standard attributes such as Party go through <em>Edit CLM Agreement Attributes</em>.`
     ],
-    miscon:`<strong>Заблуждение, которое следует разоблачить:</strong> «Если шаг «Найти» пошел по пути успеха, он что-то нашел». Успешный поиск документов по папке означает, что шаг был выполнен без ошибок независимо от того, вернулся документ или нет. Пути, которые говорят что-либо о результатах, <em>Match</em> and <em>Нет совпадений</em>. Рабочий процесс, который завершается успешно, а затем пытается использовать найденный документ, представляет собой классическую ошибку «работает при тестировании, завершается сбоем в пустой папке».`,
+    miscon:`<strong>Misconception to bust:</strong> "If the Find step took the Success path, it found something." Success on Find Documents by Folder means the step ran without error, whether or not a document came back. The paths that say anything about results are <em>Match</em> and <em>No Match</em>. A workflow that routes on Success and then tries to use the found document is the classic "works in testing, fails on an empty folder" bug.`,
     viz:`<div style="display:flex;gap:10px;flex-wrap:wrap">
       <div style="border:1px solid var(--border);border-radius:6px;padding:8px 12px;background:var(--surf)"><b>Created</b> <span style="color:var(--dim);font-size:13px">Date, Number, Text, ID List, Iterator, Actor, Custom XML, Document, Folder</span></div>
       <div style="border:1px solid var(--border);border-radius:6px;padding:8px 12px;background:var(--surf)"><b>System</b> <span style="color:var(--dim);font-size:13px">System.Link, Date, Time, Uid</span></div>
       <div style="border:1px solid var(--border);border-radius:6px;padding:8px 12px;background:var(--surf)"><b>Caret ^</b> <span style="color:var(--dim);font-size:13px">made by a completed step</span></div>
     </div><div style="color:var(--dim);font-size:12px;margin-top:7px">Params is the created one you never edit in place.</div>`},
 
-  {key:'d3', title:"Этапы создания, проверки и подписи",
+  {key:'d3', title:'Generation, review and signature steps',
     must:[
-      `<strong>Действия, выполняемые человеком, становятся задачами на странице «Задачи» исполнителя, а список</strong>: утверждение, выбор, выбор документов, выбор пользователей, создание или загрузка документа, сверка данных, редактирование документа, редактирование формы, заполнение формы, форма полностраничного редактирования, просмотр и отправка на внешнее рассмотрение, просмотр и отправка на подпись, просмотр данных и маршрутизация. Если названия шага вопроса нет в этом списке, возможно, это автоматизированный шаг.`,
-      `<strong>Утвердите маршруты по решению.</strong> Выбор уполномоченного по утверждению или отклонению становится выходным путем шага. Надписи кнопок можно настраивать (по умолчанию <em>Approve</em> and <em>Reject</em>), а комментарии могут быть обязательными, необязательными или опущенными. А <em>Сценическое имя</em> подает отчет «Шаги рабочего процесса»; а <em>Отображаемое имя</em> — это то, что пользователь видит в столбце «Имя задачи».`,
-      `<strong>Назначение имеет три циферблата.</strong> Назначьте пользователю или группе задач. Для нескольких человек, <em>Любой правопреемник</em> выполняет задание по первому ответу, при этом <em>Все правопреемники</em> ждет всех. <em>Распределяйте задачи по порядку</em> передает его первому человеку, затем следующему.`,
-      `<strong>Группа задач — это совокупность пользователей, которые совместно используют список задач.</strong> Участникам может быть предоставлено семь разрешений: «Владелец группы задач», «Просмотр группы задач», «Просмотр выделенного элемента», «Специальная задача выбора» (заявка), «Может выполнять распределение на основе пользователей» (перераспределение), «Вернуть в группу задач» и «Автоматическая отправка» (позволить рабочим процессам автоматически назначаться этому участнику). Оставьте поле «Назначенный группы задач» пустым, и задача станет доступна всей группе.`,
-      `<strong>Сроки выполнения: от 0 до 999 единиц месяцев, недель, дней, часов или минут.</strong>, с возможностью до пяти дополнительных приращений. Если вы установили дату сдачи, вам также следует подключить <em>Тайм-аут – действие</em> путь, потому что именно туда идет шаг, когда никто не действует.`,
-      `<strong>Рабочий день составляет 8 часов.</strong> With <em>Используйте только рабочие дни</em>, «1 день» (24 часа) превращается в три рабочих дня. Чтобы выполнить задачу на два рабочих дня позже, установите время ожидания <code>16 часов</code>. Параметр 2 дня и 8 часов становится 7 рабочими днями.`,
+      `<strong>Human steps become tasks on the assignee's Tasks page, and the roster is</strong>: Approve, Choice, Choose Documents, Choose Users, Create or Upload Doc, Data Reconciliation, Edit Document, Edit Form, Fill Form, Full Page Edit Form, Review and Send for External Review, Review and Send for Signature, Review Data, and Routing. If a question's step name is not on this list, it is probably an automated step.`,
+      `<strong>Approve routes on the decision.</strong> The assignee's approve or reject choice becomes the step's output path. The button labels are customizable (defaults <em>Approve</em> and <em>Reject</em>), and Comments can be required, optional or omitted. A <em>Stage Name</em> feeds the Workflow Steps report; a <em>Display Name</em> is what the user sees in the Task Name column.`,
+      `<strong>Assignment has three dials.</strong> Assign to a user or to a task group. For several people, <em>Any one assignee</em> completes the task on the first response, while <em>All of the assignees</em> waits for everyone. <em>Assign tasks in order</em> hands it to the first person, then the next.`,
+      `<strong>A task group is a collection of users who share a task list.</strong> Members can be given seven permissions: Task Group Owner, View Task Group, View Allocated Item, Ad Hoc Pick Task (claim), Can Do User Based Allocation (reallocate), Put Back in Task Group, and Automatic Dispatch (let workflows auto-assign to this member). Leave the Task Group Assignee blank and the task is available to the whole group.`,
+      `<strong>Due dates: 0 to 999 units of months, weeks, days, hours or minutes</strong>, with up to five extra increments. If you set a due date you should also wire the <em>Timeout - Action</em> path, because that is where the step goes when nobody acts.`,
+      `<strong>A business day is 8 hours.</strong> With <em>Use business days only</em>, "1 day" (24 hours) becomes three business days. To make a task due two business days later, set the timeout to <code>16 hours</code>. A setting of 2 days and 8 hours becomes 7 business days.`,
       `<strong>When the first reminder fires.</strong> With <em>Send reminder after execution</em> selected, the first reminder goes out that long <em>after the task is created</em>. Without it, it goes out that long <em>before the due date</em>. No due date at all, and it fires after the First Reminder interval from creation. A reminder runs on a parallel thread; the task stays pending.`,
-      `<strong>Выбор против маршрутизации.</strong> Оба просят человека выбрать путь. Выбор имеет фиксированный список вводимых вами параметров. Маршрутизация может заполнять свои параметры из списка, разделенного запятыми или вертикальной чертой, встроенного в построитель выражений, поэтому варианты выбора могут быть динамическими. Оба шага' <em>Ссылка на следующий шаг</em> Опция работает только в том случае, если следующий шаг человека назначен тому же пользователю, и ее нельзя включать на последнем шаге человека.`,
-      `<strong>Отмена шага.</strong> Tick <em>Включить отмену шага</em> на человеческом шаге и <em>Шаг отменен</em> появляется вывод. Вы должны подключить его, иначе отмена может привести к сбою рабочего процесса. Отменяемыми этапами являются «Утверждение», «Выбор», «Редактирование документа», «Просмотр и отправка на внешнее рассмотрение», «Просмотр и отправка на подпись», «Просмотр данных» и «Маршрутизация». Пользователь отказывается от просмотра документа с помощью <em>Отменить текущий шаг</em> на вкладке «Активность». Открытые задачи на этом шаге отменяются, извлечённый документ регистрируется, а завершенные задачи остаются нетронутыми.`,
-      `<strong>Кто может отменить.</strong> Собственные авторизованные пользователи или группы задач этого шага, а также лица, обладающие делегированными разрешениями, включающими <em>Отмена шага рабочего процесса</em>. Отдельный трюк для «Выбор пользователей» и «Выбор документов»: включите <em>ActionRejected</em> вывод, и в задаче появляется кнопка «Отмена», направляющая туда, куда вы указали эту строку.`,
-      `<strong>Генерация документов — это автоматизированный этап.</strong> Вы называете существующий <em>Конфигурация создания документа</em> и <em>Template</em> внутри него, при необходимости, идентификатор объекта Salesforce и данные канала либо как <em>Обновить значения</em> пары или входную переменную XML. Его результаты <em>Success</em>, <em>Условный успех</em> and <em>Failure</em>.`,
-      `<strong>Два отправителя подписи, один официант.</strong> <em>Отправить на подпись</em> является автоматическим. <em>Рассмотрение и отправка на подпись</em> — это человеческая задача, в ходе которой пользователь готовит конверт. <strong>Параметр «Ожидание подписи» необходимо использовать с параметрами «Просмотр» и «Отправить на подпись», но не следует использовать с параметрами «Отправить на подпись».</strong> Оба отправителя принимают форматы DOC, DOCX и PDF, а получателям не обязательно быть пользователями CLM.`,
-      `<strong>Фирменные пошаговые правила, которые молча терпят неудачу в дикой природе.</strong> Если получатель в поле «Кому» также отображается в примененном шаблоне конверта, этот шаг не будет выполнен. <em>Дни истечения срока действия</em> достигает максимума в <code>180</code>. А <em>Пароль подписывающего лица</em> является необязательным. Электронная подпись <em>Отправить позже</em> опция несовместима с функцией «Просмотр и отправка на подпись», а подготовка длинного конверта может попасть в CLM. <em>Таймаут простоя сеанса</em>.`,
-      `<strong>Документы, Документы и шаблоны, Шаблон конверта.</strong> Plain <em>Documents</em> отправляет файлы без шаблона. <em>Документы и шаблоны</em> применяет метаданные шаблона конверта (получатели, сообщение) к каждому документу, но не к документам шаблона. <em>Шаблон конверта</em> поле применяет настройки, получателей <em>and</em> документы из шаблона ко всему выбранному. Шаблоны уже должны существовать в учетной записи электронной подписи.`,
-      `<strong>Подождите, пока Подпись наблюдает за событиями аудита</strong>: нет, отправлено, просмотрено, подписано, отклонено, делегировано, письмо отклонено, запечатано. Его выходные данные: «Отменено», «Подписано», «Отклонено», «Обновлено», «Сбой» и «Тайм-аут». <em>Отменить электронную подпись</em> это отдельный автоматический шаг, который отменяет запрос.`,
-      `<strong>Электронная почта против электронного документа.</strong> <em>Email</em> (этап планирования и связи) отправляет сообщение с параметрами «От», «Кому», «CC», «СК», «Тема» и «Тело», а тема и тело могут быть выражениями. <em>Отправить документ по электронной почте</em> (автоматический этап документа) прикрепляет документы, отправляет их как <em>Native</em> or <em>PDF</em>, позволяет <code>50</code> получатели и <code>20,48 МБ</code> вложений и может добавить подпись CLM отправителя из «Моих настроек».`,
-      `<strong>Просмотр данных</strong> назначает до <code>50</code> атрибуты одного пользователя или одной группы задач для просмотра и заполнения в задаче. Поддерживаются: сторона, тип, значение, дата вступления в силу, дата истечения срока действия и пользовательское число, десятичное число, дата, раскрывающийся список, динамический раскрывающийся список и каскадный раскрывающийся список. Не поддерживается: атрибуты Актер и Автономер. Для этапов извлечения данных ИИ требуется этап просмотра данных в том же рабочем процессе.`,
+      `<strong>Choice vs Routing.</strong> Both ask a person to pick a path. Choice has a fixed list of options you type in. Routing can fill its options from a comma- or pipe-delimited list built in the expression builder, so the choices can be dynamic. Both steps' <em>Link to next step</em> option only works when the next human step is assigned to the same user, and must not be enabled on the last human step.`,
+      `<strong>Step cancellation.</strong> Tick <em>Enable Step Cancellation</em> on a human step and a <em>Step Cancelled</em> output appears. You must connect it, or cancellation can fail the workflow. The cancellable steps are Approve, Choice, Edit Document, Review and Send for External Review, Review and Send for Signature, Review Data and Routing. A user cancels from Document Review with <em>Cancel Current Step</em> on the Activity tab. Open tasks under the step are cancelled, a checked-out document is checked in, and completed tasks are untouched.`,
+      `<strong>Who may cancel.</strong> The step's own authorized users or task groups, or anyone holding a delegated permission that includes <em>Workflow Step Cancellation</em>. A separate trick for Choose Users and Choose Documents: enable the <em>ActionRejected</em> output and a Cancel button appears on the task, routing wherever you pointed that line.`,
+      `<strong>Document Generation is an automated step.</strong> You name an existing <em>Document Generation Configuration</em> and the <em>Template</em> inside it, optionally a Salesforce Object Id, and feed data either as <em>Update Value(s)</em> pairs or an input XML variable. Its outputs are <em>Success</em>, <em>Conditional Success</em> and <em>Failure</em>.`,
+      `<strong>Two signature senders, one waiter.</strong> <em>Send for Signature</em> is automatic. <em>Review and Send for Signature</em> is a human task where the user prepares the envelope. <strong>Wait for Signature must be used with Review and Send for Signature, and must not be used with Send for Signature.</strong> Both senders accept DOC, DOCX and PDF, and recipients do not have to be CLM users.`,
+      `<strong>Signature step rules that fail silently in the wild.</strong> If a recipient in the To field also appears in an applied envelope template, the step fails. <em>Expiration Days</em> tops out at <code>180</code>. A <em>Signer Password</em> is optional. The eSignature <em>Send Later</em> option is not compatible with Review and Send for Signature, and a long envelope prep can hit the CLM <em>Idle Session Timeout</em>.`,
+      `<strong>Documents, Documents and Templates, Envelope Template.</strong> Plain <em>Documents</em> sends files with no template. <em>Documents and Templates</em> applies an envelope template's metadata (recipients, message) to each document but not the template's documents. The <em>Envelope Template</em> field applies settings, recipients <em>and</em> documents from the template to everything selected. Templates must already exist in the eSignature account.`,
+      `<strong>Wait for Signature watches audit events</strong>: None, Sent, Viewed, Signed, Rejected, Delegated, EmailBounced, Sealed. Its outputs are Cancelled, Signed, Rejected, Updated, Failure and Timed Out. <em>Cancel Electronic Signature</em> is the separate automated step that withdraws a request.`,
+      `<strong>Email vs Email Document.</strong> <em>Email</em> (a scheduling and communication step) sends a message with From, To, CC, BCC, Subject and Body, and the subject and body can be expressions. <em>Email Document</em> (an automated document step) attaches documents, sends them as <em>Native</em> or <em>PDF</em>, allows <code>50</code> recipients and <code>20.48 MB</code> of attachments, and can add the sender's CLM signature from My Preferences.`,
+      `<strong>Review Data</strong> assigns up to <code>50</code> attributes to one user or one task group to review and populate in a task. Supported: Party, Type, Value, Effective Date, Expiration Date, and custom Number, Decimal, Date, Dropdown, Dynamic Dropdown and Cascading Dropdown. Not supported: Actor and Autonumber attributes. The AI data-extraction steps require a Review Data step in the same workflow.`,
       `<strong>Update Security</strong> sets a user's access on documents or folders: Inherit from Parent Folder, No Access, View, View &amp; Create, View &amp; Edit, View, Edit &amp; Delete, View, Edit, Delete &amp; Set Access, or a Security Variable. Docusign's best practices: select <em>Wait for the update to complete</em>, assign to groups not users, skip administrators (they already have full access), avoid duplicate rules, and apply security right after creating a folder.`
     ],
-    miscon:`<strong>Заблуждение, которое следует разоблачить:</strong> «Отправить на подпись, затем дождаться подписи». Документ Документация прямолинеен: дождитесь пары подписи с <em>Рассмотрение и отправка на подпись</em> и не должен использоваться с <em>Отправить на подпись</em>. Автоматический отправитель уже отслеживает конверт по собственному пути вывода. Поставьте официанта после неправильного отправителя, и рабочий процесс останется там.`,
+    miscon:`<strong>Misconception to bust:</strong> "Send for Signature, then Wait for Signature." Docusign's doc is blunt: Wait for Signature pairs with <em>Review and Send for Signature</em> and must not be used with <em>Send for Signature</em>. The automatic sender already tracks the envelope through its own output path. Put the waiter after the wrong sender and the workflow sits there.`,
     viz:`<div style="display:flex;gap:10px;flex-wrap:wrap">
       <div style="border:1px solid var(--border);border-radius:6px;padding:8px 12px;background:var(--surf)"><b>Send for Signature</b> <span style="color:var(--dim);font-size:13px">automatic, no task</span></div>
       <div style="border:1px solid var(--border);border-radius:6px;padding:8px 12px;background:var(--surf)"><b>Review and Send for Signature</b> <span style="color:var(--dim);font-size:13px">human task, then ↓</span></div>
       <div style="border:1px solid var(--border);border-radius:6px;padding:8px 12px;background:var(--surf);border-color:var(--accent)"><b>Wait for Signature</b> <span style="color:var(--dim);font-size:13px">only after the human one</span></div>
     </div><div style="color:var(--dim);font-size:12px;margin-top:7px">Same pattern for external review: an automatic sender, a human sender, one waiter.</div>`},
 
-  {key:'d4', title:"Запуск рабочих процессов, лимиты и администрирование",
+  {key:'d4', title:'Starting workflows, limits and administration',
     must:[
-      `<strong>В любом случае начинается опубликованный рабочий процесс.</strong> Вручную на вкладке Конфигурация. Из <em>Умное правило</em> чьи действия <em>Начать рабочий процесс</em>. Из <em>Конфигурация создания документа</em> связано с этим. Из электронной подписи <em>Соглашение Действие</em> установите значение «Начать рабочий процесс». Из потока продаж Salesforce <em>Запустить рабочий процесс Документация CLM</em> действие. Из файлов CLM <em>пользовательское действие</em>. Из родительского рабочего процесса <em>Workflow</em> шаг. Или он ожидает в середине потока вызова API с <em>Ждите сигнала</em>.`,
-      `<strong>Умное правило: действие «Начать рабочий процесс»</strong> действителен с <em>События документа</em> and <em>Запланированные события</em>, и для этого требуется «ранее определенный и опубликованный расширенный рабочий процесс». Пример правила Документация: событие <em>Документ добавлен</em>, <em>Выполнить как: указанный пользователь</em>, фильтрует подпапку и имя типа «NDA», действие <em>Начать рабочий процесс</em>.`,
-      `<strong>Схема работы Salesforce</strong> требуется Средство запуска приложений Docusign 6.3 или выше. Действие занимает <em>Идентификатор записи</em> и <em>Имя рабочего процесса</em>, а имя должно совпадать с точным именем активного рабочего процесса CLM. Ошибка в написании или неактивный рабочий процесс означает, что Salesforce не сможет его запустить. Старый маршрут — это пользовательская кнопка на макете страницы.`,
-      `<strong>Дополнительное действие CLM-файлы</strong> встроен в администраторе под <em>Навигация и действия</em>, настройка <em>Действия с файлами CLM</em>. Его <em>Что должно делать это действие?</em> is <em>Начать рабочий процесс</em>, и он может передавать выбранные идентификаторы документов и идентификатор триггерного пользователя в рабочий процесс.`,
-      `<strong>Действия по соглашению передают данные конверта в рабочий процесс в виде пользовательского XML.</strong> Затем вы извлекаете поля с помощью Оценить xPath, например имя получателя в <code>/Параметры/конверт/получатели/подписавшие/элемент/имя/текст()</code> или название первого документа в <code>/Params/envelope/envelopeDocuments/item[order/text()=1]/name/text()</code>.`,
-      `<strong>Ограничение в 300 выражений приостанавливается, оно не дает сбоя.</strong>Экземпляр рабочего процесса может оценить <code>300</code> выражения в любом 15-минутном окне. При этом CLM приостанавливает работу экземпляра и отправляет электронное письмо пользователям в <em>Пользователь уведомления об ошибках расширенного рабочего процесса</em> настройка аккаунта. Если никто не предпринимает никаких действий до запланированного дня очистки, рабочий процесс прерывается и очищается. Это касается новых редакций, созданных с 12 августа 2025 г. (UAT) и 2 сентября 2025 г. (Производственная версия).`,
-      `<strong>Лимит активности — 10 000 на инстанс.</strong> для редакций, опубликованных после 28 апреля 2022 г. (UAT) и 13 мая 2022 г. (Производство); в более старых версиях сохраняется 100 000. Каждый выполненный шаг — это одно действие, включая следующий цикл. При превышении лимита экземпляр приостанавливается и назначается дата очистки, и только служба поддержки Документация может поднять ее. Отдельно не более <code>5,000</code> действия могут выполняться последовательно без участия человека или асинхронных действий.`,
-      `<strong>Выполнение или пауза имеет срок годности.</strong> 365 дней в производстве и 90 дней в UAT, затем CLM прерывает проверку и планирует очистку. Рабочий процесс, который система приостановила из-за достижения какого-либо ограничения, начинает очищаться через 30 дней после приостановки.`,
-      `<strong>График очистки — это настройка учетной записи.</strong> <em>Дней после завершения рабочего процесса</em> and <em>Дни после сбоя рабочего процесса</em> оба принимают <code>7</code> to <code>30</code> и по умолчанию <code>7</code>. <em>Отложить очистку для рабочих процессов с подпроцессами</em>, в настройках «Рабочий процесс и задачи», сохраняет родительские, дочерние и одноуровневые данные до завершения последнего.`,
-      `<strong>Пропускная способность на аккаунт.</strong> Рабочих процессов, запущенных в час: <code>100</code> в UAT <code>1,000</code> в производстве. Казни за 15 минут: <code>500</code> в UAT <code>12,000</code> в производстве. Выполнение засчитывается при запуске рабочего процесса. <em>or</em> возобновляется с асинхронного этапа, такого как отправка на подпись.`,
-      `<strong>Ограничения по размеру.</strong> Одна переменная: <code>5 МБ</code>. Все переменные в одном рабочем процессе: <code>25 МБ</code>. Вывод одной оценки выражения: <code>1 МБ</code>. Пользовательский интерфейс показывает максимум <code>1,000</code> выполненные шаги рабочего процесса.`,
-      `<strong>Редактирование конфиденциальных значений.</strong> В переменной отметьте галочкой <em>Не отображать значение переменной</em> и монитор процесса показывает <em>Redacted</em> в разделе «Информация о шаге» и «Переменные и значения». Он не редактирует данные, передаваемые функцией Обновить родительскую переменную, и записанное в журнал выражение по-прежнему отображает данные переменной. Документация предупреждает, что ненужное редактирование вредит работе службы поддержки по устранению неполадок.`,
-      `<strong>УАТ к Производство экспортное и импортное.</strong> Экспортируйте JSON из UAT, импортируйте его в новый рабочий процесс в Производство, переименуйте, сохраните, переназначьте любые шаги рабочего процесса Маэстро в рабочие процессы Построитель производственных процессов, затем опубликуйте и запустите. Имена Построитель рабочих процессов должны быть уникальными в рабочей среде, иначе вызов завершится неудачно.`,
-      `<strong>Детские рабочие процессы и абортированные родители.</strong> Если родительский процесс завершается сбоем или прерывается, дочерний процесс, ожидающий асинхронного шага (например, «Ожидание подписи»), прерывается, когда CLM его проверяет, примерно через 24 часа после даты последней обработки действия. Дочерний элемент, который закончит до того, как проверка выживет.`,
-      `<strong>Три этапа уборки.</strong> <em>Logger</em> записывает сообщение в монитор рабочего процесса. <em>Обновить информацию</em> устанавливает столбец «Информация» на страницах «Задачи» и «Действия рабочего процесса». <em>Установить имя процесса рабочего процесса</em> называет процесс в отчете «Шаги рабочего процесса», и его необходимо настроить только в родительском элементе.`,
-      `<strong>Этапы интеграции</strong>: HTTP-клиент (исходящий HTTPS/REST), вызов веб-службы, Salesforce ETL (данные Salesforce в реальном времени в формате XML), обновление Salesforce (по образцу SOQL), создание нового объекта Salesforce, добавление задачи Salesforce, добавление истории активности Salesforce, Excel ЭТЛ, соединения (соединители NetSuite и Финансовые показатели рабочего дня, добавляемые первыми на странице «Соединения») и рабочий процесс Маэстро (запускает рабочий процесс Построитель рабочих процессов).`
+      `<strong>Every way a published workflow starts.</strong> By hand from the Configuration tab. From a <em>smart rule</em> whose action is <em>Start Workflow</em>. From a <em>document generation configuration</em> linked to it. From an eSignature <em>Agreement Action</em> set to Start Workflow. From a Salesforce Flow's <em>Start Docusign CLM Workflow</em> action. From a CLM Files <em>custom action</em>. From a parent workflow's <em>Workflow</em> step. Or it waits mid-stream for an API call with <em>Wait for Signal</em>.`,
+      `<strong>The smart rule Start Workflow action</strong> is valid with <em>Document Events</em> and <em>Scheduled Events</em>, and it needs "a previously defined and published advanced workflow". Docusign's sample rule: event <em>Document Added</em>, <em>Execute As: Specified User</em>, filters on subfolder and name like "NDA", action <em>Start Workflow</em>.`,
+      `<strong>Salesforce Flow</strong> needs Docusign Apps Launcher 6.3 or higher. The action takes a <em>Record Id</em> and a <em>Workflow Name</em>, and the name must be the exact name of an active CLM workflow. A misspelling or an inactive workflow means Salesforce cannot trigger it. The older route is a custom button on a page layout.`,
+      `<strong>A CLM Files custom action</strong> is built in Admin under <em>Navigation &amp; Actions</em>, customizing <em>CLM Files Actions</em>. Its <em>What should this action do?</em> is <em>Start workflow</em>, and it can pass the selected document IDs and the triggering user's ID into the workflow.`,
+      `<strong>Agreement Actions hand envelope data to a workflow as custom XML.</strong> You then pull fields out with Evaluate an xPath, for example the recipient name at <code>/Params/envelope/recipients/signers/item/name/text()</code> or the first document's name at <code>/Params/envelope/envelopeDocuments/item[order/text()=1]/name/text()</code>.`,
+      `<strong>The 300-expression limit pauses, it does not fail.</strong> A workflow instance may evaluate <code>300</code> expressions in any 15-minute window. Over that, CLM pauses the instance and emails the users in the <em>Advanced Workflow Error Notification User</em> account setting. If nobody acts before the scheduled purge day, the workflow is aborted and purged. It applies to new revisions created from August 12, 2025 (UAT) and September 2, 2025 (Production).`,
+      `<strong>The activity limit is 10,000 per instance</strong> for revisions published after April 28, 2022 (UAT) and May 13, 2022 (Production); older revisions keep 100,000. Every executed step is one activity, including Next Loop. Over the limit the instance is paused and given a purge date, and only Docusign Support can raise it. Separately, no more than <code>5,000</code> activities can run consecutively without a human or asynchronous step.`,
+      `<strong>Executing or Paused has a shelf life.</strong> 365 days in Production and 90 days in UAT, then CLM aborts the revision and schedules the purge. A workflow that the system paused for hitting any limit begins purging 30 days after the pause.`,
+      `<strong>The purge schedule is an account setting.</strong> <em>Days after Workflow Completes</em> and <em>Days after Workflow Fails</em> both accept <code>7</code> to <code>30</code> and default to <code>7</code>. <em>Delay purge for workflows with sub-workflows</em>, under the Workflow &amp; Tasks settings, keeps parent, child and sibling data until the last one finishes.`,
+      `<strong>Throughput per account.</strong> Workflows started per hour: <code>100</code> in UAT, <code>1,000</code> in Production. Executions per 15 minutes: <code>500</code> in UAT, <code>12,000</code> in Production. An execution is counted when a workflow starts <em>or</em> resumes from an asynchronous step such as sending for signature.`,
+      `<strong>Size limits.</strong> One variable: <code>5 MB</code>. All variables in one workflow: <code>25 MB</code>. Output of one expression evaluation: <code>1 MB</code>. The UI shows at most <code>1,000</code> executed steps for a workflow.`,
+      `<strong>Redacting sensitive values.</strong> On a variable, tick <em>Do not display variable value</em> and the process monitor shows <em>Redacted</em> in Step Information and Variables &amp; Values. It does not redact data passed by Update Parent Variable, and a logged expression still shows its variable data. Docusign warns that needless redaction hurts Support's troubleshooting.`,
+      `<strong>UAT to Production is export and import.</strong> Export JSON from UAT, import it into a new workflow in Production, rename, save, repoint any Maestro Workflow steps to Production Workflow Builder workflows, then publish and start. Workflow Builder names must be unique in Production or the call fails.`,
+      `<strong>Child workflows and aborted parents.</strong> If a parent fails or aborts, a child waiting on an asynchronous step (such as Wait for Signature) gets aborted when CLM checks it, roughly 24 hours after the activity's last processing date. A child that finishes before the check survives.`,
+      `<strong>Three housekeeping steps.</strong> <em>Logger</em> writes a message into the workflow monitor. <em>Update Information</em> sets the Info column on the Tasks and Workflow Activity pages. <em>Set Workflow Process Name</em> names the process on the Workflow Steps report, and only needs setting in the parent.`,
+      `<strong>The integration steps</strong>: Http Client (outbound HTTPS/REST), Invoke Web Service, Salesforce ETL (real-time Salesforce data into XML), Update Salesforce (modeled on SOQL), Create New Salesforce Object, Add Salesforce Task, Add Salesforce Activity History, Excel ETL, Connections (NetSuite and Workday Financials connectors, added first on the Connections page), and Maestro Workflow (triggers a Workflow Builder workflow).`
     ],
-    miscon:`<strong>Заблуждение, которое следует разоблачить:</strong> «Приостановленный рабочий процесс не удался». Приостановка — это реакция CLM на ограничение обслуживания: слишком много выражений, слишком много действий. Экземпляр активен, электронное письмо отправляется пользователям расширенного уведомления об ошибках рабочего процесса, и служба поддержки может снять ограничение активности, чтобы вы могли возобновить ее. Что превращает паузу в настоящую потерю, так это бездействие, потому что рабочий процесс, приостановленный по лимиту, начинает очищаться через 30 дней.`,
+    miscon:`<strong>Misconception to bust:</strong> "A paused workflow has failed." Paused is CLM's response to a service limit: too many expressions, too many activities. The instance is alive, an email goes to the Advanced Workflow Error Notification users, and Support can lift the activity limit so you can resume it. What turns a pause into a real loss is doing nothing, because a limit-paused workflow starts purging 30 days later.`,
     viz:`<div style="display:flex;gap:10px;flex-wrap:wrap">
       <div style="border:1px solid var(--border);border-radius:6px;padding:8px 12px;background:var(--surf)"><b>300</b> <span style="color:var(--dim);font-size:13px">expressions / 15 min, then paused</span></div>
       <div style="border:1px solid var(--border);border-radius:6px;padding:8px 12px;background:var(--surf)"><b>10,000</b> <span style="color:var(--dim);font-size:13px">activities per instance, then paused</span></div>
@@ -497,188 +497,188 @@ const STUDY = [
    type 'mc' → correct: index · type 'ms' → correct: [indices] (choose all that apply) */
 const QUESTIONS = [
   /* ---------- AREA 1 · Workflow Designer fundamentals (11) ---------- */
-  {id:'q1', domain:'d1', type:'mc', q:`Какова максимальная длина имени рабочего процесса в Документация CLM?`,
-    choices:[`50 буквенно-цифровых символов`, `100 буквенно-цифровых символов`, `250 буквенно-цифровых символов`, `255 символов`],
+  {id:'q1', domain:'d1', type:'mc', q:`What is the maximum length of a workflow name in Docusign CLM?`,
+    choices:[`50 alphanumeric characters`, `100 alphanumeric characters`, `250 alphanumeric characters`, `255 characters`],
     correct:1,
-    explain:`Имена рабочих процессов ограничены <strong>100</strong> буквенно-цифровые символы. Число 250 — это предел рабочего процесса. <em>variable</em> имя.`},
-  {id:'q2', domain:'d1', type:'ms', q:`Какие параметры отображаются в разделе «Какой тип контента будет запускать этот рабочий процесс?» при создании расширенного рабочего процесса? <em>Выберите все, что применимо.</em>`,
-    choices:[`Конфигурация создания документов`, `Пользовательский XML`, `Умное правило`, `Этот рабочий процесс начнется без контента`],
+    explain:`Workflow names are limited to <strong>100</strong> alphanumeric characters. The 250 figure is the limit for a workflow <em>variable</em> name.`},
+  {id:'q2', domain:'d1', type:'ms', q:`Which options appear under "What type of content will kick off this workflow?" when creating an Advanced Workflow? <em>Choose all that apply.</em>`,
+    choices:[`A document generation configuration`, `Custom XML`, `A smart rule`, `This workflow will start without content`],
     correct:[0,1,3],
-    explain:`Пять вариантов: конфигурация создания документа, документ, пользовательский XML, папка и запуск без содержимого. Умное правило – это способ <em>trigger</em> рабочий процесс, а не начальный тип контента.`},
-  {id:'q3', domain:'d1', type:'mc', q:`Администратор выбирает «Этот рабочий процесс начнется без содержимого». Что верно в отношении переменной Параметры?`,
-    choices:[`Он содержит папку, с которой запустился рабочий процесс.`, `Это пусто`, `Он удален из рабочего процесса.`, `Он содержит пользователя, который запустил рабочий процесс.`],
+    explain:`The five choices are a document generation configuration, a document, custom XML, a folder, and start without content. A smart rule is a way to <em>trigger</em> a workflow, not a kick-off content type.`},
+  {id:'q3', domain:'d1', type:'mc', q:`An administrator chooses "This workflow will start without content". What is true about the Params variable?`,
+    choices:[`It holds the folder that started the workflow`, `It is empty`, `It is removed from the workflow`, `It holds the user who started the workflow`],
     correct:1,
-    explain:`Формулировка Документация: если вы выберете этот вариант, ваша переменная входящего контента (Параметры) будет пустой. Переменная все еще существует; в нем просто нет ничего.`},
-  {id:'q4', domain:'d1', type:'mc', q:`Рабочий процесс не имеет этапа завершения. Он останавливается на этапе утверждения из-за сбоя. Что показывает монитор активности?`,
+    explain:`Docusign's wording: if you choose this option, your incoming content (Params) variable is empty. The variable still exists; it just has nothing in it.`},
+  {id:'q4', domain:'d1', type:'mc', q:`A workflow has no Finish step. It stops at an Approve step because of a failure. What does the activity monitor show?`,
     choices:[`Failed`, `Paused`, `Complete`, `Aborted`],
     correct:2,
-    explain:`Без шага «Завершение» рабочий процесс выглядит как <strong>Complete</strong> хотя оно и не закончилось. Шаг Заканчивать позволяет движку выделять ошибки и возобновлять ожидающий родительский процесс.`},
-  {id:'q5', domain:'d1', type:'mc', q:`Что должно произойти после редактирования рабочего процесса, прежде чем изменения смогут вступить в силу?`,
-    choices:[`Select Save your changes; saving makes the version live`, `Откройте панель «Версии и публикация» и выберите «Опубликовать» для версии.`, `Запустите рабочий процесс на вкладке «Активность».`, `Экспортируйте рабочий процесс в формате JSON и повторно импортируйте его.`],
+    explain:`Without a Finish step the workflow shows as <strong>Complete</strong> even though it did not finish. The Finish step is what lets the engine highlight errors and resume a waiting parent.`},
+  {id:'q5', domain:'d1', type:'mc', q:`After editing a workflow, what must happen before the changes can execute?`,
+    choices:[`Select Save your changes; saving makes the version live`, `Open the Versions and Publishing panel and select Publish for the version`, `Start the workflow from the Activity tab`, `Export the workflow as JSON and re-import it`],
     correct:1,
-    explain:`При сохранении у вас останется неопубликованный рабочий процесс. <em>Создание и публикация версий</em> Кнопка открывает панель «Версии и публикация», где вы выбираете «Опубликовать», и версия показывает статус «Опубликовано».`},
-  {id:'q6', domain:'d1', type:'mc', q:`Как создать копию существующего проекта рабочего процесса, чтобы его можно было изменить для других целей?`,
-    choices:[`Выберите «Клонировать» на вкладке «Конфигурация».`, `Экспортируйте дизайн в формате JSON, создайте новый расширенный рабочий процесс и импортируйте JSON.`, `Выберите «Сохранить как» на панели инструментов дизайнера.`, `Опубликуйте новую версию оригинала и переименуйте ее.`],
+    explain:`Saving leaves you with an unpublished workflow. The <em>Create and publish versions</em> button opens the Versions and Publishing panel, where you select Publish and the version shows a Published status.`},
+  {id:'q6', domain:'d1', type:'mc', q:`How do you create a copy of an existing workflow design so you can change it for a different purpose?`,
+    choices:[`Select Clone on the Configuration tab`, `Export the design as JSON, create a new Advanced Workflow, and import the JSON`, `Select Save As in the designer toolbar`, `Publish a new version of the original and rename it`],
     correct:1,
-    explain:`Клонирование — это экспорт и импорт: экспортируйте JSON из оригинала, выберите «Новый рабочий процесс», «Расширенный рабочий процесс», затем импортируйте файл и присвойте ему новое имя. Тот же механизм перемещает рабочий процесс из UAT в производство.`},
-  {id:'q7', domain:'d1', type:'mc', q:`Что происходит с незавершенными экземплярами, когда администратор удаляет рабочий процесс?`,
-    choices:[`Они немедленно прерываются`, `Они завершаются без ошибок, а затем рабочий процесс больше не доступен.`, `Они приостановлены до восстановления рабочего процесса.`, `Их очищают на следующий день чистки.`],
+    explain:`Cloning is export and import: Export JSON from the original, New Workflow, Advanced Workflow, then Import the file and give it a new name. The same mechanism moves a workflow from UAT to Production.`},
+  {id:'q7', domain:'d1', type:'mc', q:`What happens to in-progress instances when an administrator deletes a workflow?`,
+    choices:[`They are aborted immediately`, `They complete without error, and then the workflow is no longer available`, `They are paused until the workflow is restored`, `They are purged on the next purge day`],
     correct:1,
-    explain:`Удаление рабочего процесса позволяет выполняющимся экземплярам завершиться без ошибок. Рабочий процесс исчезает из учетной записи после его завершения.`},
-  {id:'q8', domain:'d1', type:'mc', q:`Какой параметр находится на этапе «Начало» расширенного рабочего процесса?`,
-    choices:[`Отправка уведомления, когда рабочий процесс обнаруживает ошибку`, `Дни после сбоя рабочего процесса`, `Используйте только рабочие дни`, `Дождитесь завершения обновления`],
+    explain:`Deleting a workflow lets in-progress instances complete without error. The workflow disappears from the account after they finish.`},
+  {id:'q8', domain:'d1', type:'mc', q:`Which setting is found on the Start step of an advanced workflow?`,
+    choices:[`Send a notification when workflow encounters an error`, `Days after Workflow Fails`, `Use business days only`, `Wait for the update to complete`],
     correct:0,
-    explain:`Шаг «Начало» содержит имя рабочего процесса, флажок уведомления об ошибке со списком «Пользователи для получения уведомлений», а также «Отслеживание и запись активности рабочего процесса». Дни очистки — это настройки учетной записи; рабочие дни принадлежат человеческим шагам; опция ожидания принадлежит обновлению безопасности.`},
-  {id:'q9', domain:'d1', type:'mc', q:`Что из перечисленного НЕ является функциональным этапом рабочего процесса?`,
-    choices:[`Logger`, `Lane`, `Таймер Триггер`, `Rule`],
+    explain:`The Start step holds the Workflow Name, the error notification checkbox with its Users To Receive Notification list, and Track and record workflow activity. The purge days are account settings; business days belong to human steps; the wait option belongs to Update Security.`},
+  {id:'q9', domain:'d1', type:'mc', q:`Which of these is NOT a functional workflow step?`,
+    choices:[`Logger`, `Lane`, `Timer Trigger`, `Rule`],
     correct:1,
-    explain:`«Дорожка», «Пул» и «Группа» — это наглядные пособия, обозначающие участки холста. В Документация говорится, что это не функциональные этапы рабочего процесса. Регистратор, триггер таймера и правило выполняются.`},
-  {id:'q10', domain:'d1', type:'mc', q:`Сколько предопределенных шаблонов рабочих процессов предоставляет Документация CLM и какой из них является одним из них?`,
-    choices:[`Четыре, включая массовый импорт`, `Шесть, включая переговоры`, `Шесть, включая «умное правило»`, `Восемь, включая сверку данных`],
+    explain:`Lane, Pool and Group are visual aids that label sections of the canvas. Docusign states they are not functional workflow steps. Logger, Timer Trigger and Rule all execute.`},
+  {id:'q10', domain:'d1', type:'mc', q:`How many predefined workflow templates does Docusign CLM provide, and which of these is one of them?`,
+    choices:[`Four, including Bulk Import`, `Six, including Negotiation`, `Six, including Smart Rule`, `Eight, including Data Reconciliation`],
     correct:1,
-    explain:`Шесть шаблонов: «Внутреннее утверждение», «Начать другой процесс», «Редактировать документ», «Переговоры», «Маршрутизация» и «Подпись». Согласование данных — это человеческий шаг, а не шаблон.`},
-  {id:'q11', domain:'d1', type:'mc', q:`Где вы читаете число в разделе «Общее количество выполненных действий» для текущего рабочего процесса?`,
-    choices:[`Вкладка «Конфигурация» в строке рабочего процесса.`, `Панель «Информация о рабочем процессе» после открытия рабочего процесса на странице «Действия».`, `Панель «Версии и публикация»`, `Настройки учетной записи в разделе «Рабочий процесс и задачи»`],
+    explain:`Six templates: Internal Approval, Start Another Process, Edit Document, Negotiation, Routing and Signature. Data Reconciliation is a human step, not a template.`},
+  {id:'q11', domain:'d1', type:'mc', q:`Where do you read the number under "Total Activities Executed" for a running workflow?`,
+    choices:[`The Configuration tab, in the workflow's row`, `The Workflow Information panel after opening the workflow from the Activity page`, `The Versions and Publishing panel`, `Account Settings under Workflow &amp; Tasks`],
     correct:1,
-    explain:`Откройте «Администратор», «Рабочие процессы», при необходимости отфильтруйте список «Действия», выберите имя рабочего процесса и прочитайте «Всего выполненных действий» на панели «Информация о рабочем процессе». Рабочий процесс, приостановленный из-за ограничения, показывает сообщение в разделе «Состояние».`},
+    explain:`Open Admin, Workflows, filter the Activity list if needed, select the workflow name, and read Total Activities Executed on the Workflow Information panel. A paused-for-limit workflow shows a message under Status.`},
 
   /* ---------- AREA 2 · Data: variables, XML, XPath and expressions (13) ---------- */
-  {id:'q12', domain:'d2', type:'mc', q:`Что, по мнению Документация, следует делать с переменной Параметры, когда вам нужно манипулировать ее данными?`,
-    choices:[`Отредактируйте его на месте, обновив значение переменной.`, `Скопируйте его в новую переменную и манипулируйте копией.`, `Сначала переименуй его, а потом отредактируй`, `Сначала преобразуйте его в JSON`],
+  {id:'q12', domain:'d2', type:'mc', q:`What does Docusign say you should do with the Params variable when you need to manipulate its data?`,
+    choices:[`Edit it in place with Update Variable Value`, `Copy it to a new variable and manipulate the copy`, `Rename it first, then edit it`, `Convert it to JSON first`],
     correct:1,
-    explain:`Не изменяйте содержимое Параметры. Сохраните точные данные, которые запустили рабочий процесс для отладки, и работайте с копией.`},
-  {id:'q13', domain:'d2', type:'mc', q:`Рабочий процесс запускается при создании документа. Какой узел внутри Параметры содержит значения, введенные пользователем в форму?`,
+    explain:`Do not modify your Params content. Retain the exact data that triggered the workflow for debugging, and work on a copy.`},
+  {id:'q13', domain:'d2', type:'mc', q:`A workflow is triggered by document generation. Which node inside Params holds the values the user typed into the form?`,
     choices:[`<code>FormValues</code>`, `<code>TemplateFieldData</code>`, `<code>envelope</code>`, `<code>MetadataGroups</code>`],
     correct:1,
-    explain:`Для триггеров создания документов узел под названием <strong>TemplateFieldData</strong> содержит заполненные поля формы. <code>envelope</code> это то, что отправляет действие по соглашению об электронной подписи; <code>MetadataGroups</code> — это схема массового обновления метаданных.`},
-  {id:'q14', domain:'d2', type:'ms', q:`Какие из этих переменных типа XML используются в рабочем процессе Документация CLM? <em>Выберите все, что применимо.</em>`,
-    choices:[`Actor`, `Folder`, `Number`, `Пользовательский XML`],
+    explain:`For document generation triggers, a node called <strong>TemplateFieldData</strong> contains the populated form fields. <code>envelope</code> is what an eSignature Agreement Action sends; <code>MetadataGroups</code> is the bulk metadata update schema.`},
+  {id:'q14', domain:'d2', type:'ms', q:`Which of these are XML-type variables in a Docusign CLM workflow? <em>Choose all that apply.</em>`,
+    choices:[`Actor`, `Folder`, `Number`, `Custom XML`],
     correct:[0,1,3],
-    explain:`Актер, Пользовательский XML, Документ и Папка — это переменные типа XML. Число — это простая переменная, и ее входное значение должно быть целым числом.`},
-  {id:'q15', domain:'d2', type:'mc', q:`Какая переменная содержит только идентификаторы многих документов или папок, сохраняя при этом небольшой размер сохраняемого результата?`,
-    choices:[`Iterator`, `Список идентификаторов`, `Document`, `Text`],
+    explain:`Actor, Custom XML, Document and Folder are the XML-type variables. Number is a simple variable and its input must be an integer.`},
+  {id:'q15', domain:'d2', type:'mc', q:`Which variable holds only the IDs of many documents or folders, keeping the stored result small?`,
+    choices:[`Iterator`, `ID List`, `Document`, `Text`],
     correct:1,
-    explain:`Переменная списка идентификаторов хранит только идентификаторы, например результат поиска документов по папке, когда вам не нужен полный XML-документ. Итератор указывает на повторяющийся узел в другой переменной XML.`},
-  {id:'q16', domain:'d2', type:'mc', q:`Какую системную переменную Документация рекомендует всегда включать в электронные письма, уведомляющие пользователей о сбоях или ошибках?`,
-    choices:[`<code><%#System.Link%></code>`, `<code><%#Система.Дата%></code>`, `<code>%#System.Uid%</code>`, `<code><%#System.Time%></code>`],
+    explain:`An ID List variable stores just the IDs, for example the result of Find Documents by Folder when you do not need the full document XML. An Iterator points to a repeating node in another XML variable.`},
+  {id:'q16', domain:'d2', type:'mc', q:`Which system variable does Docusign say to always include in emails that notify users about failures or errors?`,
+    choices:[`<code>&lt;%#System.Link%&gt;</code>`, `<code>&lt;%#System.Date%&gt;</code>`, `<code>%#System.Uid%</code>`, `<code>&lt;%#System.Time%&gt;</code>`],
     correct:2,
-    explain:`System.Uid — это идентификатор экземпляра рабочего процесса, и Документация рекомендует всегда включать его в электронные письма об ошибках или сбоях. Система.Ссылка — это ссылка на задачу, которая уникальна для каждого экземпляра и отличается в дочернем рабочем процессе.`},
-  {id:'q17', domain:'d2', type:'mc', q:`Переменная с именем <code>^Найти идентификаторы документов 1.</code> появится в списке «Переменные и значения». Что создало это?`,
-    choices:[`Администратор, используя вкладку «Переменные»`, `Документация CLM после завершения этапа поиска документа`, `Схема Параметры из создания документа`, `Действие «Экспорт JSON»`],
+    explain:`System.Uid is the workflow instance ID, and Docusign says to always include it in failure or error emails. System.Link is the task link, which is unique per instance and different in a child workflow.`},
+  {id:'q17', domain:'d2', type:'mc', q:`A variable named <code>^Find Document 1DocumentIds</code> appears in the Variables &amp; Values list. What created it?`,
+    choices:[`An administrator, using the Variables tab`, `Docusign CLM, when a Find Document step completed`, `The Params schema from document generation`, `The Export JSON action`],
     correct:1,
-    explain:`Переменные, начинающиеся с символа курсора (^), создаются CLM при выполнении действия. Здесь записано, что шаг «Найти документ» обнаружил один идентификатор документа.`},
-  {id:'q18', domain:'d2', type:'mc', q:`Какой шаг можно использовать только внутри дочернего (под) рабочего процесса?`,
-    choices:[`Установить выходные данные рабочего процесса`, `Обновить родительскую переменную`, `Обновить значение переменной`, `Ресурсная переменная`],
+    explain:`Variables that start with a caret (^) are created by CLM when an action occurs. This one records that a Find Document step located one document ID.`},
+  {id:'q18', domain:'d2', type:'mc', q:`Which step can be used only inside a child (sub) workflow?`,
+    choices:[`Set Workflow Output`, `Update Parent Variable`, `Update Variable Value`, `Resource Variable`],
     correct:1,
-    explain:`Обновить родительскую переменную изменяет родительскую переменную и «может использоваться только во вложенном рабочем процессе». Установить выходные данные рабочего процесса также передает данные вверх, но в Документация указано ограничение на обновление родительской переменной.`},
-  {id:'q19', domain:'d2', type:'ms', q:`Какие типы результатов может возвращать шаг «Оценить xPath»? <em>Выберите все, что применимо.</em>`,
-    choices:[`Boolean`, `Набор узлов`, `Actor`, `String`],
+    explain:`Update Parent Variable changes a variable in the parent and "can be used only in a sub-workflow". Set Workflow Output also passes data up, but the restriction Docusign states is on Update Parent Variable.`},
+  {id:'q19', domain:'d2', type:'ms', q:`Which result types can the Evaluate an xPath step return? <em>Choose all that apply.</em>`,
+    choices:[`Boolean`, `Node Set`, `Actor`, `String`],
     correct:[0,1,3],
-    explain:`Логическое значение, число (Двойной), строка и набор узлов (XPathNodeIterator). Актер — это тип переменной, а не результат XPath.`},
-  {id:'q20', domain:'d2', type:'mc', q:`Каков максимальный размер файла CSV, используемого на этапе создания переменной из CSV?`,
-    choices:[`1 МБ`, `5 МБ`, `25 МБ`, `200 МБ`],
+    explain:`Boolean, Number (Double), String and Node Set (XPathNodeIterator). Actor is a variable type, not an XPath result.`},
+  {id:'q20', domain:'d2', type:'mc', q:`What is the maximum size of the CSV file used by the Create Variable from CSV step?`,
+    choices:[`1 MB`, `5 MB`, `25 MB`, `200 MB`],
     correct:0,
-    explain:`CSV не может превышать <strong>1 МБ</strong>; переменная, создаваемая шагом, не может превышать 5 МБ. 25 МБ — это общее количество всех переменных в рабочем процессе, а 200 МБ — ограничение вывода документов объединения.`},
-  {id:'q21', domain:'d2', type:'mc', q:`Какое выражение считывает значение переменной рабочего процесса, отличной от XML, с именем Номер контракта?`,
-    choices:[`<code>_context.XmlVariables["ContractNumber"].ValueString</code>`, `<code>ПолучитьVariableValue("НомерКонтракта")</code>`, `<code>Params.ContractNumber</code>`, `<code>System.Variables.ContractNumber</code>`],
+    explain:`The CSV cannot exceed <strong>1 MB</strong>; the variable the step creates cannot exceed 5 MB. 25 MB is the total for all variables in a workflow, and 200 MB is the Combine Documents output cap.`},
+  {id:'q21', domain:'d2', type:'mc', q:`Which expression reads the value of a non-XML workflow variable named ContractNumber?`,
+    choices:[`<code>_context.XmlVariables["ContractNumber"].ValueString</code>`, `<code>GetVariableValue("ContractNumber")</code>`, `<code>Params.ContractNumber</code>`, `<code>System.Variables.ContractNumber</code>`],
     correct:1,
-    explain:`<code>ПолучитьVariableValue("имя")</code> предназначен для переменных, отличных от XML. <code>_context.XmlVariables[...].ValueString</code> форма предназначена для переменных XML.`},
-  {id:'q22', domain:'d2', type:'mc', q:`Выражению требуется сегодняшняя дата в часовом поясе учетной записи, и время суток не учитывается. Что следует использовать?`,
-    choices:[`<code>ДатаВремя.Сейчас</code>`, `Текущая дата`, `<code>ДатаВремя.UTCNow</code>`, `<code>Система.Время</code>`],
+    explain:`<code>GetVariableValue("name")</code> is for non-XML variables. The <code>_context.XmlVariables[...].ValueString</code> form is for XML variables.`},
+  {id:'q22', domain:'d2', type:'mc', q:`An expression needs today's date in the account's time zone and does not care about the time of day. Which should it use?`,
+    choices:[`<code>DateTime.Now</code>`, `Current Date`, `<code>DateTime.UtcNow</code>`, `<code>System.Time</code>`],
     correct:1,
-    explain:`Текущая дата создает дату для часового пояса учетной записи. ДатаВремя.Сейчас дает время машины, выполняющей выражение, без гарантированной зоны, поэтому Документация рекомендует его только тогда, когда время суток имеет значение.`},
-  {id:'q23', domain:'d2', type:'mc', q:`Каковы результаты шага Правила?`,
-    choices:[`Успех и неудача`, `Правда и ложь`, `Совпадение и несовпадение`, `Именованный вывод для каждого условия плюс Еще`],
+    explain:`Current Date produces the date for the account's time zone. DateTime.Now gives the time of the machine running the expression with no guaranteed zone, so Docusign recommends it only when the time of day matters.`},
+  {id:'q23', domain:'d2', type:'mc', q:`What are the outputs of a Rule step?`,
+    choices:[`Success and Failure`, `True and False`, `Match and No Match`, `A named output per condition plus Else`],
     correct:1,
-    explain:`Правило оценивает одно условие и выводит значение «Истина» или «Ложь». Именованные выходные данные плюс Еще описывают этап принятия решения.`},
-  {id:'q24', domain:'d2', type:'mc', q:`Поиск документов по папкам выполняется в пустой папке без ошибок. Каким путям вывода он следует?`,
-    choices:[`Только неудача`, `Только нет совпадений`, `Успех и отсутствие совпадений`, `Успех и совпадение`],
+    explain:`A Rule evaluates one condition and outputs True or False. The named outputs plus Else describe the Decision step.`},
+  {id:'q24', domain:'d2', type:'mc', q:`Find Documents by Folder runs on an empty folder with no errors. Which output paths does it follow?`,
+    choices:[`Failure only`, `No Match only`, `Success and No Match`, `Success and Match`],
     correct:2,
-    explain:`Успех отмечается, когда шаг выполняется без ошибок, независимо от того, был ли возвращен документ. Нет совпадений, если ничего не найдено. Маршрут по совпадению или несоответствию, когда результат имеет значение.`},
+    explain:`Success is followed whenever the step runs without error, regardless of whether a document was returned. No Match is followed when nothing was found. Route on Match or No Match when the result matters.`},
 
   /* ---------- AREA 3 · Generation, review and signature steps (13) ---------- */
-  {id:'q25', domain:'d3', type:'mc', q:`Задача назначается трем пользователям с выбранным параметром «Любой исполнитель». Когда задача будет выполнена?`,
-    choices:[`Когда все трое ответят`, `Когда первый из них ответит`, `Когда владелец группы задач одобряет`, `Когда срок сдачи пройдет`],
+  {id:'q25', domain:'d3', type:'mc', q:`A task is assigned to three users with "Any one assignee" selected. When is the task complete?`,
+    choices:[`When all three respond`, `When the first of them responds`, `When the task group owner approves`, `When the due date passes`],
     correct:1,
-    explain:`Любой уполномоченный означает, что ответ одного человека завершает задачу. Все правопреемники — это вариант, который ждет всех.`},
-  {id:'q26', domain:'d3', type:'mc', q:`Какое разрешение группы задач позволяет участнику претендовать на задачу, назначенную группе?`,
-    choices:[`Автоматическая отправка`, `Специальная задача выбора`, `Вернуть в группу задач`, `Просмотр назначенного элемента`],
+    explain:`Any one assignee means a response from a single person completes the task. All of the assignees is the option that waits for everyone.`},
+  {id:'q26', domain:'d3', type:'mc', q:`Which task group permission lets a member claim a task that is assigned to the group?`,
+    choices:[`Automatic Dispatch`, `Ad Hoc Pick Task`, `Put Back in Task Group`, `View Allocated Item`],
     correct:1,
     explain:`Ad Hoc Pick Task is "claim a task that is assigned to the task group". Automatic Dispatch lets workflows assign tasks to the member; Put Back in Task Group returns a task from an assignee to the group.`},
-  {id:'q27', domain:'d3', type:'mc', q:`Шаг использует только рабочие дни. Администратор хочет, чтобы задача была выполнена через два рабочих дня после назначения. Какое значение тайм-аута является правильным?`,
-    choices:[`2 дня`, `48 часов`, `16 часов`, `6 дней`],
+  {id:'q27', domain:'d3', type:'mc', q:`A step uses business days only. The administrator wants the task due two business days after assignment. What timeout value is correct?`,
+    choices:[`2 days`, `48 hours`, `16 hours`, `6 days`],
     correct:2,
-    explain:`CLM измеряет рабочий день как 8 часов, поэтому 16 часов — это два рабочих дня. «2 дня» будут составлять 48 часов, что в продукте считается шестью рабочими днями.`},
-  {id:'q28', domain:'d3', type:'mc', q:`У задачи есть 30-дневный срок выполнения, 5-дневное первое напоминание, и параметр «Отправить напоминание после выполнения» НЕ выбран. Когда будет отправлено первое напоминание?`,
-    choices:[`5 дней после создания задачи`, `25 дней после создания задачи`, `30 дней после создания задачи`, `Immediately`],
+    explain:`CLM measures a business day as 8 hours, so 16 hours is two business days. "2 days" would be 48 hours, which the product reads as six business days.`},
+  {id:'q28', domain:'d3', type:'mc', q:`A task has a 30-day due date, a 5-day First Reminder, and "Send reminder after execution" is NOT selected. When is the first reminder sent?`,
+    choices:[`5 days after the task is created`, `25 days after the task is created`, `30 days after the task is created`, `Immediately`],
     correct:1,
-    explain:`Без параметра «Отправить напоминание после выполнения» напоминание срабатывает в срок за вычетом первого интервала напоминания: 5 дней до 30-го дня, то есть через 25 дней после создания. Если выбран этот вариант, он сработает через 5 дней после создания.`},
-  {id:'q29', domain:'d3', type:'mc', q:`Какой человеческий шаг может заполнить свои параметры из списка, разделенного запятыми или вертикальной чертой, встроенного в построитель выражений?`,
+    explain:`Without "Send reminder after execution", the reminder fires at the due date minus the first reminder interval: 5 days before day 30, which is 25 days after creation. With the option selected it would fire 5 days after creation.`},
+  {id:'q29', domain:'d3', type:'mc', q:`Which human step can populate its options from a comma- or pipe-delimited list built in the expression builder?`,
     choices:[`Choice`, `Approve`, `Routing`, `Decision`],
     correct:2,
-    explain:`Именно здесь маршрутизация отличается от выбора: ее параметры могут определяться динамически из ограниченного списка. Решение — это шаг двигателя, а не человека.`},
-  {id:'q30', domain:'d3', type:'mc', q:`Администратор включает отмену шага на этапе утверждения. Что еще они должны сделать?`,
-    choices:[`Ничего, отмена маршрутов до завершения автоматически`, `Подключите новый выход «Шаг отменен» к следующему шагу.`, `Добавьте после него шаг «Ожидание сигнала».`, `Предоставьте каждому сотруднику профиль администратора CLM.`],
+    explain:`Routing differs from Choice precisely here: its options can be determined dynamically from a delimited list. Decision is an engine step, not a human one.`},
+  {id:'q30', domain:'d3', type:'mc', q:`An administrator enables step cancellation on an Approve step. What else must they do?`,
+    choices:[`Nothing, cancellation routes to Finish automatically`, `Connect the new "Step Cancelled" output to a subsequent step`, `Add a Wait for Signal step after it`, `Give every assignee the CLM Admin profile`],
     correct:1,
-    explain:`Включение отмены отображает выходные данные «Шаг отменен», и Документация предупреждает, что вам необходимо определить путь, по которому следует идти после отмены, иначе рабочий процесс может завершиться неудачей.`},
-  {id:'q31', domain:'d3', type:'ms', q:`Какие действия человека можно отменить с помощью функции отмены шагов? <em>Выберите все, что применимо.</em>`,
-    choices:[`Approve`, `Рассмотрение и отправка на подпись`, `Заполнить форму`, `Routing`],
+    explain:`Enabling cancellation exposes a Step Cancelled output, and Docusign warns you must define the path to take after cancellation or the workflow could fail.`},
+  {id:'q31', domain:'d3', type:'ms', q:`Which human steps can be cancelled with the step cancellation feature? <em>Choose all that apply.</em>`,
+    choices:[`Approve`, `Review and Send for Signature`, `Fill Form`, `Routing`],
     correct:[0,1,3],
-    explain:`Отменяемыми этапами являются «Утверждение», «Выбор», «Редактирование документа», «Просмотр и отправка на внешнее рассмотрение», «Просмотр и отправка на подпись», «Просмотр данных» и «Маршрутизация». Формы заполнения нет в списке.`},
-  {id:'q32', domain:'d3', type:'mc', q:`Каковы пути вывода на этапе создания документа?`,
-    choices:[`Успех и неудача`, `Успех, условный успех и неудача`, `Совпадение и несовпадение`, `Сгенерировано, загружено и не выполнено`],
+    explain:`The cancellable steps are Approve, Choice, Edit Document, Review and Send for External Review, Review and Send for Signature, Review Data and Routing. Fill Form is not on the list.`},
+  {id:'q32', domain:'d3', type:'mc', q:`What are the output paths of the Document Generation step?`,
+    choices:[`Success and Failure`, `Success, Conditional Success and Failure`, `Match and No Match`, `Generated, Uploaded and Failed`],
     correct:1,
-    explain:`Генерация документа имеет три пути вывода: успех, условный успех и неудача.`},
-  {id:'q33', domain:'d3', type:'mc', q:`С каким шагом необходимо совместить «Ожидание подписи»?`,
-    choices:[`Отправить на подпись`, `Рассмотрение и отправка на подпись`, `Отменить электронную подпись`, `Отправить на внешнюю проверку`],
+    explain:`Document Generation has three step output paths: Success, Conditional Success and Failure.`},
+  {id:'q33', domain:'d3', type:'mc', q:`Which step must Wait for Signature be paired with?`,
+    choices:[`Send for Signature`, `Review and Send for Signature`, `Cancel Electronic Signature`, `Send for External Review`],
     correct:1,
-    explain:`Документация: вы должны использовать «Ожидание подписи» на шаге «Просмотр и отправка на подпись» и не должны использовать его на шаге «Отправить на подпись».`},
-  {id:'q34', domain:'d3', type:'mc', q:`Каково максимальное значение срока действия в днях на этапе подписи?`,
-    choices:[`30 дней`, `90 дней`, `120 дней`, `180 дней`],
+    explain:`Docusign: you must use Wait for Signature with the Review and Send for Signature step, and must not use it with the Send for Signature step.`},
+  {id:'q34', domain:'d3', type:'mc', q:`What is the maximum value for Expiration Days on a signature step?`,
+    choices:[`30 days`, `90 days`, `120 days`, `180 days`],
     correct:3,
-    explain:`Максимальное значение срока действия составляет 180. Оно определяет количество дней до истечения срока действия запроса на подпись.`},
-  {id:'q35', domain:'d3', type:'mc', q:`Получатель, указанный в поле «Кому» на шаге «Отправить на подпись», также является получателем в примененном шаблоне конверта. Что происходит?`,
-    choices:[`Получатель получает два электронных письма и подписывает один раз.`, `Шаг не удался`, `Получатель шаблона игнорируется`, `Шаг ждет администратора`],
+    explain:`Expiration Days tops out at 180. It sets how many days before the signature request expires.`},
+  {id:'q35', domain:'d3', type:'mc', q:`A recipient listed in the To field of a Send for Signature step is also a recipient in the applied envelope template. What happens?`,
+    choices:[`The recipient gets two emails and signs once`, `The step fails`, `The template recipient is ignored`, `The step waits for an administrator`],
     correct:1,
-    explain:`Если получатели в поле «Кому» идентичны получателям в любом примененном шаблоне конверта электронной подписи, этот шаг не будет выполнен. Дублирующиеся электронные письма — это предупреждение о совпадении получателей в двух шаблонах, но не в этом случае.`},
-  {id:'q36', domain:'d3', type:'mc', q:`На каком этапе документы отправляются в виде вложений и можно указать до 50 получателей?`,
-    choices:[`Email`, `Отправить документ по электронной почте`, `Отправить на внешнюю проверку`, `Обновить информацию`],
+    explain:`If recipients in the To field are identical to recipients in any applied eSignature envelope template, the step fails. Duplicate emails are the warning for overlapping recipients across two templates, not this case.`},
+  {id:'q36', domain:'d3', type:'mc', q:`Which step sends documents as attachments and allows up to 50 recipients?`,
+    choices:[`Email`, `Email Document`, `Send for External Review`, `Update Information`],
     correct:1,
-    explain:`Электронный документ прикрепляет документы (собственный или PDF), позволяет использовать 50 получателей и вложения размером 20,48 МБ. На этапе обычной электронной почты сообщение отправляется без вложений документов.`},
-  {id:'q37', domain:'d3', type:'mc', q:`Какие рекомендации предлагает Документация для этапа рабочего процесса обновления безопасности?`,
-    choices:[`Назначьте безопасность отдельным пользователям для точности`, `Включите администраторов, чтобы их доступ фиксировался.`, `Выберите «Подождать завершения обновления», чтобы расчет безопасности завершился до следующего шага.`, `Примените явную безопасность к каждой ветке дерева папок.`],
+    explain:`Email Document attaches documents (Native or PDF), allows 50 recipients and 20.48 MB of attachments. The plain Email step sends a message without document attachments.`},
+  {id:'q37', domain:'d3', type:'mc', q:`Which best practice does Docusign give for the Update Security workflow step?`,
+    choices:[`Assign security to individual users for precision`, `Include administrators so their access is recorded`, `Select "Wait for the update to complete" so the security calculation finishes before the next step`, `Apply explicit security on every branch of the folder tree`],
     correct:2,
-    explain:`Первая практика в документе — включить параметр «Дождитесь завершения обновления». Там также говорится, что следует использовать группы, а не пользователей, пропускать администраторов (у них уже есть полный доступ), избегать дублирования и разрешать веткам наследовать от корня.`},
+    explain:`The doc's first practice is to enable Wait for the update to complete. It also says to use groups not users, skip administrators (they already have full access), avoid duplicates, and let branches inherit from the root.`},
 
   /* ---------- AREA 4 · Starting workflows, limits and administration (7) ---------- */
-  {id:'q38', domain:'d4', type:'mc', q:`Поток Salesforce использует действие «Начать рабочий процесс Документация CLM», но рабочий процесс никогда не запускается. Какая наиболее вероятная причина по мнению Документация?`,
-    choices:[`Поток запускается по записи`, `Имя рабочего процесса написано с ошибкой или рабочий процесс неактивен.`, `Идентификатор записи — это возможность`, `Рабочий процесс имеет этап завершения.`],
+  {id:'q38', domain:'d4', type:'mc', q:`A Salesforce Flow uses the Start Docusign CLM Workflow action but the workflow never starts. Which is the most likely cause according to Docusign?`,
+    choices:[`The Flow is record-triggered`, `The workflow name is misspelled or the workflow is inactive`, `The Record Id is an Opportunity`, `The workflow has a Finish step`],
     correct:1,
-    explain:`Документация: необходимо ввести точное имя активного рабочего процесса CLM. Ошибка в написании или неактивный рабочий процесс означает, что Salesforce не сможет его запустить. Для действия также требуется Панель запуска приложений 6.3 или более поздней версии.`},
-  {id:'q39', domain:'d4', type:'mc', q:`Для каких типов событий интеллектуальных правил действует действие «Начать рабочий процесс»?`,
-    choices:[`Документировать только события`, `Только события папки`, `Документирование событий и запланированные события`, `Все типы событий`],
+    explain:`Docusign: you must enter the exact name of an active CLM workflow. A misspelling or an inactive workflow means Salesforce cannot trigger it. The action also needs Apps Launcher 6.3 or higher.`},
+  {id:'q39', domain:'d4', type:'mc', q:`With which smart rule event types is the Start Workflow action valid?`,
+    choices:[`Document Events only`, `Folder Events only`, `Document Events and Scheduled Events`, `All event types`],
     correct:2,
-    explain:`Запуск рабочего процесса действителен для событий документа и запланированных событий и требует заранее определенного и опубликованного расширенного рабочего процесса. Настройка безопасности связана с событиями папки.`},
-  {id:'q40', domain:'d4', type:'mc', q:`Экземпляр рабочего процесса оценивает более 300 выражений за 15-минутное окно. Что происходит?`,
-    choices:[`Экземпляр выходит из строя и выполняет откат`, `Экземпляр приостанавливается, и электронное письмо отправляется пользователям, указанным в настройке пользователя расширенного уведомления об ошибках рабочего процесса.`, `Очередь дополнительных выражений для следующего окна`, `Рабочий процесс не опубликован`],
+    explain:`Start Workflow is valid with Document Events and Scheduled Events, and it requires a previously defined and published advanced workflow. Set Security is the one tied to Folder Events.`},
+  {id:'q40', domain:'d4', type:'mc', q:`A workflow instance evaluates more than 300 expressions in a 15-minute window. What happens?`,
+    choices:[`The instance fails and rolls back`, `The instance is paused and an email goes to the users in the Advanced Workflow Error Notification User setting`, `The extra expressions queue for the next window`, `The workflow is unpublished`],
     correct:1,
-    explain:`Достижение предела приостанавливает экземпляр и уведомляет пользователей расширенного уведомления об ошибках рабочего процесса. Если до запланированного дня очистки не предпринято никаких действий, рабочий процесс прерывается и очищается.`},
-  {id:'q41', domain:'d4', type:'mc', q:`Каков лимит активности на экземпляр рабочего процесса для редакций, опубликованных после 13 мая 2022 г. в рабочей среде?`,
+    explain:`Hitting the limit pauses the instance and notifies the Advanced Workflow Error Notification users. If no action is taken before the scheduled purge day, the workflow is aborted and purged.`},
+  {id:'q41', domain:'d4', type:'mc', q:`What is the activity limit per workflow instance for revisions published after May 13, 2022 in Production?`,
     choices:[`1,000`, `5,000`, `10,000`, `100,000`],
     correct:2,
-    explain:`10 000 действий на экземпляр для новых версий; в более старых версиях сохраняется 100 000. Отдельно 5000 — это ограничение на количество последовательных действий без участия человека или асинхронных шагов, а 1000 — это количество выполненных шагов, отображаемых в пользовательском интерфейсе.`},
-  {id:'q42', domain:'d4', type:'mc', q:`Какой диапазон принимает настройка очистки «Дни после завершения рабочего процесса» и какое значение используется по умолчанию?`,
-    choices:[`от 1 до 365, по умолчанию 90`, `от 7 до 30, по умолчанию 7`, `от 0 до 30, по умолчанию 0`, `от 7 до 90, по умолчанию 30`],
+    explain:`10,000 activities per instance for new revisions; older revisions keep 100,000. Separately, 5,000 is the cap on consecutive activities without a human or asynchronous step, and 1,000 is how many executed steps the UI will show.`},
+  {id:'q42', domain:'d4', type:'mc', q:`What range does the "Days after Workflow Completes" purge setting accept, and what is its default?`,
+    choices:[`1 to 365, default 90`, `7 to 30, default 7`, `0 to 30, default 0`, `7 to 90, default 30`],
     correct:1,
-    explain:`Обе настройки очистки принимают период от 7 до 30 дней, по умолчанию — 7. Диапазон от 0 до 365 со значением по умолчанию 90 — это сохранение мусора, это другая настройка.`},
-  {id:'q43', domain:'d4', type:'mc', q:`Как долго рабочий процесс может оставаться в состоянии «Выполнение» или «Приостановлено» в производственной среде, прежде чем CLM прервет его?`,
-    choices:[`30 дней`, `90 дней`, `180 дней`, `365 дней`],
+    explain:`Both purge settings accept 7 through 30 days and default to 7. The 0 to 365 range with a 90 default is trash retention, a different setting.`},
+  {id:'q43', domain:'d4', type:'mc', q:`How long can a workflow stay in Executing or Paused status in a Production environment before CLM aborts it?`,
+    choices:[`30 days`, `90 days`, `180 days`, `365 days`],
     correct:3,
-    explain:`365 дней в производстве, 90 дней в UAT. Рабочий процесс, который система приостановила из-за достижения лимита, начинает очищаться через 30 дней после приостановки.`},
-  {id:'q44', domain:'d4', type:'mc', q:`Администратор ставит галочку «Не отображать значение переменной» для переменной. Что из этого до сих пор НЕ отредактировано?`,
-    choices:[`Значение, отображаемое на панели «Информация о шаге».`, `Значение в списке «Переменные и значения».`, `Переменные данные внутри выражения, которое регистрируется`, `Значение, отображаемое на мониторе процесса`],
+    explain:`365 days in Production, 90 days in UAT. A workflow the system paused for hitting a limit starts purging 30 days after the pause.`},
+  {id:'q44', domain:'d4', type:'mc', q:`An administrator ticks "Do not display variable value" on a variable. Which of these is still NOT redacted?`,
+    choices:[`The value shown in the Step Information panel`, `The value in the Variables &amp; Values list`, `Variable data inside an expression that gets logged`, `The value shown in the process monitor`],
     correct:2,
-    explain:`Редактирование заменяет значение на «Отредактировано» в мониторе процесса, «Информация о шаге» и «Переменные и значения». Он не распространяется на данные, передаваемые при обновлении родительской переменной, и записанное в журнал выражение по-прежнему отображает данные переменной.`}
+    explain:`Redaction replaces the value with "Redacted" in the process monitor, Step Information and Variables &amp; Values. It does not cover data passed by Update Parent Variable, and a logged expression still shows its variable data.`}
 ];
 
 /* ============== VIEW ROUTING ============== */
@@ -699,7 +699,7 @@ function render(){
 }
 
 function setView(v, opts){
-  if(v === 'results' && !state.submitted){ toast("Завершите и отправьте экзамен, чтобы увидеть результаты."); return; }
+  if(v === 'results' && !state.submitted){ toast('Finish and submit the exam to see results.'); return; }
   state.view = v;
   save();
   render();
@@ -757,7 +757,7 @@ function renderHome(){
         const d = DOMAIN_INFO[k];
         return `<div class="dw-row">
           <span class="dw-label" style="color:${d.color}">${d.label} · ${d.name}</span>
-          <span class="dw-bar"><span class="dw-fill" style="width:${d.weight}%;background:${d.color};дисплей:блокировать"></span></span>
+          <span class="dw-bar"><span class="dw-fill" style="width:${d.weight}%;background:${d.color};display:block"></span></span>
           <span class="dw-pct" style="color:${d.color}">${d.weight}%</span>
         </div>`;
       }).join('')}
@@ -773,40 +773,40 @@ function renderHome(){
       </a>
       <a class="cta-card primary" onclick="setView('exam')">
         <div class="cta-icon"><i data-lucide="clipboard-list"></i></div>
-        <div class="cta-title">${state.submitted ? "Проверьте свой экзамен" : (inProgress ? "Возобновить пробный экзамен" : "Сдать практический экзамен")}</div>
-        <div class="cta-desc">${state.submitted ? `Вы забили ${calcScore().total}/${total}. Откройте повторно, чтобы просмотреть ответы, или повторите попытку.` : `44 вопроса по четырем областям с оценкой 80%, как в реальности. Включает вопросы с несколькими ответами, чтобы вы попрактиковались в внимательном чтении. ${answered ? `Вы ответили ${answered}/${total}.` : ''}`}</div>
-        <div class="cta-link">${state.submitted ? "Посмотреть результаты →" : (inProgress ? "Продолжить →" : 'Start →')}</div>
+        <div class="cta-title">${state.submitted ? 'Review your exam' : (inProgress ? 'Resume the practice exam' : 'Take the practice exam')}</div>
+        <div class="cta-desc">${state.submitted ? `You scored ${calcScore().total}/${total}. Reopen to review the answers, or retake it.` : `44 questions across the four areas, graded at 80% like the real thing. Includes multiple-response questions so you practise reading carefully. ${answered ? `You've answered ${answered}/${total}.` : ''}`}</div>
+        <div class="cta-link">${state.submitted ? 'Review results →' : (inProgress ? 'Continue →' : 'Start →')}</div>
       </a>
     </div>
 
     <div class="method-callout">
-      <strong>🗣️ Скажите это вслух.</strong> Это экзамен по названию ступени. Большинство вопросов сводятся к двум вещам, которые звучат одинаково: «Отправить на подпись или проверку» и «Отправить на подпись», электронное письмо или документ по электронной почте, выбор или маршрутизация, правило или решение, успех или совпадение, сохранение или публикация, приостановка или неудача. Если вы можете произнести вслух разницу в одном предложении, формулировка вопроса перестанет иметь значение.
+      <strong>🗣️ Say it out loud.</strong> This is a step-name exam. Most questions come down to two things that sound alike: Send for Signature or Review and Send for Signature, Email or Email Document, Choice or Routing, Rule or Decision, Success or Match, saved or published, paused or failed. If you can say the difference in one sentence out loud, the phrasing of the question stops mattering.
     </div>
 
     <div class="method-callout" style="border-left-color:var(--c-d1)">
-      <strong>Восемь промахов – это весь бюджет.</strong> Сорок вопросов при 80% означают 32 правильных паса и 31 нет. Большая часть недостатков — это числа и имена путей вывода, поэтому в учебном пособии все ограничения, значения по умолчанию и список вывода собраны в одном месте, а не запрятаны в прозе.
+      <strong>Eight misses is the whole budget.</strong> Forty questions at 80% means 32 correct passes and 31 does not. A lot of the shortfall is numbers and output-path names, so the study guide puts every limit, default and output list in one place rather than burying them in prose.
     </div>
 
     ${needsReviewCount()>0?`<div class="method-callout" style="border-left-color:var(--warn)">
-      <strong>🔁 ${needsReviewCount()} concept${needsReviewCount()===1?'':'s'} отмечено для проверки.</strong> Вы оценили ${needsReviewCount()===1?'it':'them'} "Not yet" or "Almost" in the study guide. <a href="#" onclick="openReview();return false;">Filter to just those →</a>
+      <strong>🔁 ${needsReviewCount()} concept${needsReviewCount()===1?'':'s'} flagged for review.</strong> You rated ${needsReviewCount()===1?'it':'them'} "Not yet" or "Almost" in the study guide. <a href="#" onclick="openReview();return false;">Filter to just those →</a>
     </div>`:''}
 
     <div class="method-callout" style="border-left-color:var(--accent)">
-      <strong>💡Подсказки.</strong> ${getCoachKey()
+      <strong>💡 Hints.</strong> ${getCoachKey()
         ? `Hints are on. Every study-guide point has a <em>Stuck? Get a hint →</em> button that explains it a different way, and every missed exam question gets one too. <a href="#" onclick="setCoachKey('');return false;">Turn hints off</a>`
-        : `Необязательный. Вставьте ключ Антропный API, и каждый пункт учебного пособия получит <em>Застрявший? Получить подсказку →</em> кнопка, которая объясняет это по-другому. Пропущенные экзаменационные вопросы тоже получают один. Ключ хранится только в этом браузере, и это тот же ключ, который используют комплекты SQL, Excel, Python, Power BI, Tableau и Статистика.
+        : `Optional. Paste an Anthropic API key and every study-guide point gets a <em>Stuck? Get a hint →</em> button that explains it a different way. Missed exam questions get one too. The key is stored only in this browser, and it is the same key the SQL, Excel, Python, Power BI, Tableau and Stats kits use.
       <div class="hint-key-row">
         <input id="hintKey" type="password" placeholder="sk-ant-..." autocomplete="off">
-        <button type="button" onclick="setCoachKey(document.getElementById('hintKey').value)">Сохранить ключ</button>
+        <button type="button" onclick="setCoachKey(document.getElementById('hintKey').value)">Save key</button>
       </div>`}
     </div>
 
     <div class="method-callout" style="border-left-color:var(--c-d3)">
-      <strong>Чем кормится этот значок.</strong> В документе Документация CLM Workflow Pro указан как рекомендуемая подготовка к <a href="https://dsucustomers.docusign.com/certified-docusign-clm-implementation-consultant" target="_blank" rel="noopener">Сертифицированный консультант по внедрению Документация CLM</a> Экзамен: 65 вопросов, 70 % для успешной сдачи, 90 минут под контролем и 45 дней ожидания, если вы его пропустите. Другим перечисленным шагом является <a href="https://dsucustomers.docusign.com/exam-docusign-clm-administration-pro" target="_blank" rel="noopener">CLM Администрирование Про</a> значок. Сами значки Про не имеют блокировки.
+      <strong>What this badge feeds.</strong> Docusign lists CLM Workflow Pro as recommended preparation for the <a href="https://dsucustomers.docusign.com/certified-docusign-clm-implementation-consultant" target="_blank" rel="noopener">Certified Docusign CLM Implementation Consultant</a> exam: 65 items, 70% to pass, 90 minutes, proctored, and a 45-day wait if you miss it. The other listed step is the <a href="https://dsucustomers.docusign.com/exam-docusign-clm-administration-pro" target="_blank" rel="noopener">CLM Administration Pro</a> badge. The Pro badges themselves have no lockout.
     </div>
 
     <div class="method-callout" style="border-left-color:var(--c-d2)">
-      <strong>Также здесь:</strong> the <a href="../docusign-clm-cert/">Комплект Docusign CLM Администрирование Pro</a>, который охватывает консоль администратора, безопасность и пользователей, а также <a href="../docusign-cert/">Комплект Docusign eSignature Administration Pro</a> для подписавшей стороны. Разные экзамены, одна и та же форма.
+      <strong>Also here:</strong> the <a href="../docusign-clm-cert/">Docusign CLM Administration Pro kit</a>, which covers the admin console, security and users, and the <a href="../docusign-cert/">Docusign eSignature Administration Pro kit</a> for the signing side. Different exams, same shape.
     </div>
   `;
 }
@@ -814,11 +814,11 @@ function renderHome(){
 function renderStudy(){
   return `
     <div class="study-intro">
-      <p><strong>Дизайнер рабочих процессов, по одной области за раз.</strong> Щелкните область, чтобы развернуть ее. Каждая точка — это шаг, настройка, ограничение или поведение, которые должен знать администратор рабочего процесса; желтые выноски — это путаница, для устранения которой написан экзамен.</p>
-      <p>Каждый пункт соответствует руководству Документирование рабочих процессов CLM, странице ограничений службы CLM, руководству Умные правила или руководству CLM для Salesforce на сайте support.docusign.com. Каждая область связана с основным источником внизу.</p>
+      <p><strong>The Workflow Designer, one area at a time.</strong> Click an area to expand. Every point is a step, a setting, a limit or a behavior a workflow administrator has to know; the yellow callouts are the confusions the exam is written to catch.</p>
+      <p>Every point traces to the Docusign CLM Workflows guide, the CLM service limits page, the Smart Rules guide or the CLM for Salesforce guide on support.docusign.com. Each area links to its main source at the bottom.</p>
     </div>
-    <button class="expand-all" onclick="toggleAllStudy()">${allStudyOpen() ? "Свернуть все" : "Развернуть все"}</button>
-    <класс кнопки="развернуть-все ${state.reviewFilter?'rf-on':''}" onclick="toggleReviewFilter()">${state.reviewFilter ? `Показан только обзор потребностей (${needsReviewCount()}), показать все` : `Фильтр: требует проверки (${needsReviewCount()})`}</button>
+    <button class="expand-all" onclick="toggleAllStudy()">${allStudyOpen() ? 'Collapse all' : 'Expand all'}</button>
+    <button class="expand-all ${state.reviewFilter?'rf-on':''}" onclick="toggleReviewFilter()">${state.reviewFilter ? `Showing needs-review only (${needsReviewCount()}), show all` : `Filter: needs review (${needsReviewCount()})`}</button>
     ${STUDY.map(s=>{
       const d = DOMAIN_INFO[s.key];
       const vis = s.must.map((m,i)=>({m,i})).filter(x=>{
@@ -829,17 +829,17 @@ function renderStudy(){
       if(state.reviewFilter && vis.length===0) return '';
       const open = state.reviewFilter ? true : !!state.openSections[s.key];
       return `
-        <div class="раздел-исследования" ${open?'open':''}" id="исследование-${s.key}">
+        <div class="study-section ${open?'open':''}" id="study-${s.key}">
           <div class="study-head" onclick="toggleStudy('${s.key}')">
             <span class="study-pill" style="color:${d.color}">${d.label} · ${d.weight}%</span>
             <span class="study-title">${s.title}</span>
             <span class="study-toggle">▸</span>
           </div>
           <div class="study-body">
-            ${state.reviewFilter?'':`<div class="study-viz"><div class="sv-cap"><i data-lucide="monitor"></i> Посмотри это</div>${s.viz}</div>`}
+            ${state.reviewFilter?'':`<div class="study-viz"><div class="sv-cap"><i data-lucide="monitor"></i> See it</div>${s.viz}</div>`}
             <ul>${vis.map(x=>studyItemHTML(s.key,x.i,x.m)).join('')}</ul>
             ${state.reviewFilter?'':`<div class="miscon">${s.miscon}</div>`}
-            <a class="study-link" href="${d.docPath}" цель="_пустой" отн.="открывашка">Источник: ${d.docLabel} →</a>
+            <a class="study-link" href="${d.docPath}" target="_blank" rel="noopener">Source: ${d.docLabel} →</a>
           </div>
         </div>
       `;
@@ -851,8 +851,8 @@ function renderStudy(){
 function studyItemHTML(key,i,m){
   const id = key+'-'+i;
   const lvl = state.conf[id];
-  const chip = (l,txt)=>`<класс кнопки="конф-чип ${lvl===l?('on '+l):''}" onclick="rateConf('${id}','${l}')">${txt}</button>`;
-  return `<li>${m}<div class="li-foot"><span class="conf-chips">${chip('low',"✗ Пока нет")}${chip('mid','~ Almost')}${chip('high',"✓ Иметь это")}</span><button class="hint-btn" onclick="hintStudy('${key}',${i})">Застряли? Получить подсказку →</button></div><div class="hint-resp" id="hint-resp-${id}"></div></li>`;
+  const chip = (l,txt)=>`<button class="conf-chip ${lvl===l?('on '+l):''}" onclick="rateConf('${id}','${l}')">${txt}</button>`;
+  return `<li>${m}<div class="li-foot"><span class="conf-chips">${chip('low','✗ Not yet')}${chip('mid','~ Almost')}${chip('high','✓ Have it')}</span><button class="hint-btn" onclick="hintStudy('${key}',${i})">Stuck? Get a hint →</button></div><div class="hint-resp" id="hint-resp-${id}"></div></li>`;
 }
 function rateConf(id,lvl){
   if(state.conf[id]===lvl) delete state.conf[id];
@@ -861,7 +861,7 @@ function rateConf(id,lvl){
 }
 function needsReviewCount(){ return Object.values(state.conf).filter(v=>v==='low'||v==='mid').length; }
 function toggleReviewFilter(){
-  if(!state.reviewFilter && needsReviewCount()===0){ toast("Сначала оцените концепцию «Еще нет» или «Почти», а затем отфильтруйте только их."); return; }
+  if(!state.reviewFilter && needsReviewCount()===0){ toast('Rate a concept "Not yet" or "Almost" first, then filter to just those.'); return; }
   state.reviewFilter = !state.reviewFilter;
   save(); render();
 }
@@ -902,7 +902,7 @@ function syncTimerLoop(){
     }
     if(left <= 0){
       clearInterval(timerInterval);
-      toast("Упражнение по темпу завершено. Экзамен сдан.");
+      toast("Pacing drill over. Exam submitted.");
       submitExam(true);
     }
   }, 500);
@@ -921,18 +921,18 @@ function renderExam(){
   if(state.examStart === null && !state.submitted){
     return `
       <div class="start-card">
-        <h2>Практический экзамен · ${QUESTIONS.length} questions</h2>
-        <p>Распространено на четыре области администрирования рабочих процессов CLM. Один вопрос за раз. Выберите ответ, и он зафиксирует вас и продвинет вас дальше. Некоторые вопросы типа «выберите все подходящие» без частичной оценки, поэтому прочитайте их дважды. Все оценивается сразу при отправке.</p>
+        <h2>Practice Exam · ${QUESTIONS.length} questions</h2>
+        <p>Spread across the four areas of CLM workflow administration. One question at a time. Pick an answer and it locks in and moves you on. Some questions are "choose all that apply" with no partial credit, so read them twice. Everything grades at once when you submit.</p>
         <div class="start-actions">
-          <button class="btn btn-primary" onclick="startExam(false)">Начните без ограничения по времени</button>
-          <button class="btn btn-ghost" onclick="startExam(true)">Тренировка по темпу, ${EXAM_MINUTES}:00 ⏱</button>
+          <button class="btn btn-primary" onclick="startExam(false)">Start with no time limit</button>
+          <button class="btn btn-ghost" onclick="startExam(true)">Pacing drill, ${EXAM_MINUTES}:00 ⏱</button>
         </div>
       </div>
       <div class="method-callout">
-        <strong>На настоящем экзамене нет часов.</strong> Документация оценивает около ${EXAM_MINUTES} минут и сохраняет ваш прогресс, если вы остановитесь на полпути, поэтому честная репетиция не рассчитана по времени. Упражнение на темп подойдет только в том случае, если вы хотите попрактиковаться в том, чтобы не думать слишком много.
+        <strong>The real exam has no clock.</strong> Docusign estimates about ${EXAM_MINUTES} minutes and saves your progress if you stop partway, so untimed is the honest rehearsal. The pacing drill is here only if you want to practise not overthinking.
       </div>
       <div class="method-callout" style="border-left-color:var(--warn)">
-        <strong>Восемь промахов – это весь бюджет.</strong> Настоящий экзамен — это 40 заданий на 80%, то есть 32 сдаются правильно, а 31 — нет. Ответьте на все. Задание без ответа оценивается так же, как и неправильное.
+        <strong>Eight misses is the whole budget.</strong> The real exam is 40 items at 80%, so 32 correct passes and 31 does not. Answer everything. An unanswered item scores the same as a wrong one.
       </div>
     `;
   }
@@ -943,8 +943,8 @@ function renderExam(){
   const left = timeLeftMs();
 
   let topBtn;
-  if(state.submitted) topBtn = `<button class="exam-submit-btn" onclick="setView('results')">Посмотреть результаты →</button>`;
-  else topBtn = `<button class="exam-submit-btn" onclick="submitExam()" ${answered===0?'disabled':''}>${answered===total?"Сдать экзамен":'Submit ('+answered+'/'+total+' answered)'}</button>`;
+  if(state.submitted) topBtn = `<button class="exam-submit-btn" onclick="setView('results')">View results →</button>`;
+  else topBtn = `<button class="exam-submit-btn" onclick="submitExam()" ${answered===0?'disabled':''}>${answered===total?'Submit exam':'Submit ('+answered+'/'+total+' answered)'}</button>`;
 
   const i = clampQIdx();
   const q = QUESTIONS[i];
@@ -955,17 +955,17 @@ function renderExam(){
     if(state.submitted) cls += isCorrect(qq) ? ' ok' : ' no';
     else if(hasAnswer(qq)) cls += ' done';
     if(n === i) cls += ' cur';
-    return `<класс кнопки="${cls}" onclick="gotoQ(${n})" заголовок="Вопрос ${n+1}"></button>`;
+    return `<button class="${cls}" onclick="gotoQ(${n})" title="Question ${n+1}"></button>`;
   }).join('');
 
   let html = `
     <div class="exam-header">
       <div class="exam-header-row">
         <div class="exam-title-block">
-          <div class="exam-mini-title">Практический экзамен по CLM Рабочий процесс Pro${state.timed?" · упражнение на темп":''}</div>
+          <div class="exam-mini-title">CLM Workflow Pro practice exam${state.timed?' · pacing drill':''}</div>
           <div class="exam-q-progress"><span>${answered}</span> of ${total} answered</div>
         </div>
-        ${(!state.submitted && state.timed && left!==null) ? `<класс диапазона="экзамен-таймер${left<5*60000?' low':''}" id="examTimer">${fmtTime(left)}</span>` : ''}
+        ${(!state.submitted && state.timed && left!==null) ? `<span class="exam-timer${left<5*60000?' low':''}" id="examTimer">${fmtTime(left)}</span>` : ''}
         ${topBtn}
       </div>
       <div class="exam-progress-bar"><div class="exam-progress-fill" style="width:${pct}%"></div></div>
@@ -983,27 +983,27 @@ function renderExam(){
   if(!state.submitted){
     if(q.type === 'ms' && hasAnswer(q)){
       primary = isLast
-        ? `<button class="btn btn-primary" onclick="submitExam()">Зафиксируйте и отправьте →</button>`
-        : `<button class="btn btn-primary" onclick="gotoQ(${i+1})">Зафиксировать и продолжить →</button>`;
+        ? `<button class="btn btn-primary" onclick="submitExam()">Lock in &amp; submit →</button>`
+        : `<button class="btn btn-primary" onclick="gotoQ(${i+1})">Lock in &amp; continue →</button>`;
     } else if(isLast && answered > 0){
-      primary = `<button class="btn btn-primary" onclick="submitExam()">Сдать экзамен →</button>`;
+      primary = `<button class="btn btn-primary" onclick="submitExam()">Submit exam →</button>`;
     }
   }
 
   html += `
     <div class="q-nav">
-      <button class="btn btn-outline btn-sm" onclick="gotoQ(${i-1})" ${i===0?'disabled':''}> ← Предыдущий</button>
+      <button class="btn btn-outline btn-sm" onclick="gotoQ(${i-1})" ${i===0?'disabled':''}>← Prev</button>
       <div class="spacer"></div>
       ${primary}
-      <button class="btn btn-outline btn-sm" onclick="gotoQ(${i+1})" ${isLast?'disabled':''}>Далее →</button>
+      <button class="btn btn-outline btn-sm" onclick="gotoQ(${i+1})" ${isLast?'disabled':''}>Next →</button>
     </div>
   `;
 
   if(!state.submitted){
     html += `<div class="lockin-hint">${q.type==='ms'
-      ? "Выберите каждый подходящий вариант, а затем зафиксируйте его. Никакого частичного кредита. Вам нужны все правильные и ни одного неправильного."
-      : "Выберите ответ, и он зафиксируется, а затем продвинет вас дальше. Используйте «Предыдущий» или панели выше, чтобы изменить его перед отправкой."}
-      Ничто не оценивается, пока вы не отправите заявку.</div>`;
+      ? 'Choose every option that applies, then lock it in. No partial credit. You need all the right ones and none of the wrong ones.'
+      : 'Pick an answer and it locks in, then moves you on. Use Prev or the bars above to change it before you submit.'}
+      Nothing is graded until you submit.</div>`;
   }
   return html;
 }
@@ -1049,19 +1049,19 @@ function renderQuestion(q){
     }
     const letter = String.fromCharCode(65+i);
     const mark = isMs ? (picked ? '☑' : '☐') : letter;
-    return `<класс кнопки="${cls}" onclick="${isMs?`answerMs('${q.id}',${i})`:`answerMc('${q.id}',${i})`}" ${state.submitted?'disabled':''}>
+    return `<button class="${cls}" onclick="${isMs?`answerMs('${q.id}',${i})`:`answerMc('${q.id}',${i})`}" ${state.submitted?'disabled':''}>
       <span class="choice-letter">${mark}</span>
       <span class="choice-text">${c}</span>
     </button>`;
   }).join('')}</div>`;
 
   const explanation = state.submitted
-    ? `<div class="explanation show"><strong>${isCorrect(q) ? 'Correct.' : "Берегись: "}</strong> ${q.explain}${isCorrect(q) ? '' : `<div style="margin-top:10px"><button class="hint-btn" onclick="hintQuestion('${q.id}')">Все еще неясно? Получить подсказку →</button></div><div class="hint-resp" id="hint-resp-q-${q.id}"></div>`}</div>`
+    ? `<div class="explanation show"><strong>${isCorrect(q) ? 'Correct.' : 'Heads up: '}</strong> ${q.explain}${isCorrect(q) ? '' : `<div style="margin-top:10px"><button class="hint-btn" onclick="hintQuestion('${q.id}')">Still unclear? Get a hint →</button></div><div class="hint-resp" id="hint-resp-q-${q.id}"></div>`}</div>`
     : '';
 
   return `
-    <класс div="q-карта${stateCls}" id="q-${q.id}">
-      <div class="q-num">Question ${idx} of ${QUESTIONS.length}${isMs?"<span class=\"ms-tag\">· множественный ответ</span>":''}</div>
+    <div class="q-card${stateCls}" id="q-${q.id}">
+      <div class="q-num">Question ${idx} of ${QUESTIONS.length}${isMs?'<span class="ms-tag">· multiple response</span>':''}</div>
       <div class="q-text">${q.q}</div>
       ${body}
       ${explanation}
@@ -1103,7 +1103,7 @@ function submitExam(auto){
   if(state.submitted) return;
   const answered = Object.keys(state.answers).length;
   if(!auto && answered < QUESTIONS.length){
-    if(!confirm(`Вы ответили ${answered} of ${QUESTIONS.length}. Вопросы без ответа считаются неправильными, как и настоящий экзамен. Все равно отправить?`)) return;
+    if(!confirm(`You've answered ${answered} of ${QUESTIONS.length}. Unanswered questions count as wrong, like the real exam. Submit anyway?`)) return;
   }
   state.submitted = true;
   state.qIdx = 0;
@@ -1129,10 +1129,10 @@ const PASS_PCT = 80;
 const READY_PCT = 88; // our recommendation, NOT Docusign's. Margin for a harder question set
 
 function verdictFor(pct){
-  if(pct >= READY_PCT) return {label:"Вдали от линии 80%, есть свободное место. Забронируйте это.", tone:'good'};
-  if(pct >= PASS_PCT) return {label:"За чертой 80%, но тонкий. Закройте самое слабое место, а затем забронируйте его.", tone:'warn'};
-  if(pct >= 65) return {label:"Под чертой, и это цифры, которые вам стоят. Поработайте над учебным пособием, а затем пересдайте это.", tone:'warn'};
-  return {label:"Холодный старт. Прочтите все четыре раздела до конца, а затем повторите это.", tone:'bad'};
+  if(pct >= READY_PCT) return {label:'Clear of the 80% line with room to spare. Book it.', tone:'good'};
+  if(pct >= PASS_PCT) return {label:'Over the 80% line, but thin. Close your weakest area, then book it.', tone:'warn'};
+  if(pct >= 65) return {label:'Under the line, and it is the numbers costing you. Work the study guide, then retake this.', tone:'warn'};
+  return {label:'Cold start. Read all four areas end to end, then retake this.', tone:'bad'};
 }
 
 function renderResults(){
@@ -1142,11 +1142,11 @@ function renderResults(){
   const pass = pct >= PASS_PCT;
   return `
     <div class="results-hero">
-      <div class="results-eyebrow">Практический экзамен · Результаты</div>
+      <div class="results-eyebrow">Practice exam · Results</div>
       <div class="score-big">${score.total}<small>/${score.outOf}</small></div>
       <div class="score-verdict">${pct}%. ${v.label}</div>
-      <div class="scaled-box">На фоне реального бара: <сильный стиль="цвет:${pass?'var(--good)':'var(--bad)'}">${pct}%</strong> <span style="color:var(--dim)">против. ${PASS_PCT}% нужный</span></div>
-      <p class="score-sub" style="margin-top:14px">Настоящий экзамен — это 40 заданий, оцениваемых по абсолютному проценту правильных ответов. <strong>80%</strong> пасов, так что восемь промахов — это весь бюджет. Мы предлагаем ${READY_PCT}%+ здесь перед бронированием, просто как запас для набора вопросов, который формулирует вещи по-другому.</p>
+      <div class="scaled-box">Against the real bar: <strong style="color:${pass?'var(--good)':'var(--bad)'}">${pct}%</strong> <span style="color:var(--dim)">vs. ${PASS_PCT}% needed</span></div>
+      <p class="score-sub" style="margin-top:14px">The real exam is 40 items graded on raw percent correct, and <strong>80%</strong> passes, so eight misses is the entire budget. We suggest ${READY_PCT}%+ here before booking, purely as margin for a question set that phrases things differently.</p>
     </div>
 
     <div class="results-grid">
@@ -1154,10 +1154,10 @@ function renderResults(){
         const d = DOMAIN_INFO[k];
         const s = score.byDomain[k];
         const p = Math.round(100*s.correct/s.total);
-        const hint = p === 100 ? "Чистая развертка. Двигаться дальше."
-          : p >= 80 ? `Почти там. Перечитайте <href="#изучать-${k}" onclick="setView('study',{scrollToSection:'${k}'}); вернуть ложь;">${d.label} раздел исследования</a> один раз.`
-          : p >= 50 ? `Шаткие, и при 80% пройти это дорого. <href="#изучать-${k}" onclick="setView('study',{scrollToSection:'${k}'});return false;">Study section</a> · ${d.hint}`
-          : `Сначала сосредоточьтесь здесь. ${d.hint} <a href="#study-${k}" onclick="setView('study',{scrollToSection:'${k}'});return false;">Open the study section</a>.`;
+        const hint = p === 100 ? 'Clean sweep. Move on.'
+          : p >= 80 ? `Nearly there. Reread the <a href="#study-${k}" onclick="setView('study',{scrollToSection:'${k}'});return false;">${d.label} study section</a> once.`
+          : p >= 50 ? `Shaky, and at 80% to pass that is expensive. <a href="#study-${k}" onclick="setView('study',{scrollToSection:'${k}'});return false;">Study section</a> · ${d.hint}`
+          : `Focus here first. ${d.hint} <a href="#study-${k}" onclick="setView('study',{scrollToSection:'${k}'});return false;">Open the study section</a>.`;
         return `
           <div class="results-row">
             <div class="results-row-top">
@@ -1173,15 +1173,15 @@ function renderResults(){
     </div>
 
     <div class="results-actions">
-      <button class="btn btn-ghost" onclick="setView('exam')">Просмотрите ответы и пояснения</button>
-      <button class="btn btn-ghost" onclick="setView('study')">Открыть учебное пособие</button>
-      <button class="btn btn-primary" onclick="retake()">Пересдать экзамен <i data-lucide="rotate-ccw" style="width:14px;height:14px;vertical-align:-2px"></i></button>
+      <button class="btn btn-ghost" onclick="setView('exam')">Review answers &amp; explanations</button>
+      <button class="btn btn-ghost" onclick="setView('study')">Open study guide</button>
+      <button class="btn btn-primary" onclick="retake()">Retake exam <i data-lucide="rotate-ccw" style="width:14px;height:14px;vertical-align:-2px"></i></button>
     </div>
   `;
 }
 
 function retake(){
-  if(!confirm("Очистить свои ответы и пересдать пробный экзамен?")) return;
+  if(!confirm('Clear your answers and retake the practice exam?')) return;
   state.answers = {};
   state.submitted = false;
   state.examStart = null;
@@ -1199,13 +1199,13 @@ function attachFooter(app){
     <div class="footer-links">
       <a href="../docusign-clm-cert/">Docusign CLM Admin Pro Prep</a>
       <a href="../docusign-cert/">Docusign eSignature Pro Prep</a>
-      <a href="../tableau-cert/">Подготовка к сертификату Tableau</a>
-      <a href="../powerbi-cert/">Подготовка сертификата Power BI</a>
-      <a href="../excel-cert/">Подготовка сертификата Excel</a>
-      <a href="https://dsucustomers.docusign.com/exam-docusign-clm-workflow-pro" target="_blank" rel="noopener">Официальная страница экзамена</a>
-      <a href="../">← Все комплекты</a>
+      <a href="../tableau-cert/">Tableau Cert Prep</a>
+      <a href="../powerbi-cert/">Power BI Cert Prep</a>
+      <a href="../excel-cert/">Excel Cert Prep</a>
+      <a href="https://dsucustomers.docusign.com/exam-docusign-clm-workflow-pro" target="_blank" rel="noopener">Official exam page</a>
+      <a href="../">← All Kits</a>
     </div>
-    Часть <a href="../">Подготовительный комплект для аналитика</a> · Прогресс сохраняется локально · Не связан с Документ. Всегда проверяйте официальную страницу экзамена на предмет текущего формата и правил.
+    Part of the <a href="../">Analyst Prep Kit</a> · Progress saved locally · Not affiliated with Docusign. Always check the official exam page for current format and policies
   `;
   app.appendChild(f);
 }
@@ -1216,17 +1216,17 @@ function toggleTheme(){
   const next = cur === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('apk-theme', next);
-  document.getElementById('themeIcon').innerHTML = "<я данные-ясный=\"" + (next === 'dark' ? 'sun' : 'moon') + '"></i>';
+  document.getElementById('themeIcon').innerHTML = '<i data-lucide="' + (next === 'dark' ? 'sun' : 'moon') + '"></i>';
   if(window.grainRefreshIcons)grainRefreshIcons();else if(window.lucide)lucide.createIcons();
 }
 (function initTheme(){
   const saved = localStorage.getItem('apk-theme');
   if(saved) document.documentElement.setAttribute('data-theme', saved);
-  document.getElementById('themeIcon').innerHTML = "<я данные-ясный=\"" + (document.documentElement.getAttribute('data-theme')==='dark'?'sun':'moon') + '"></i>';
+  document.getElementById('themeIcon').innerHTML = '<i data-lucide="' + (document.documentElement.getAttribute('data-theme')==='dark'?'sun':'moon') + '"></i>';
 })();
 
 function resetAll(){
-  if(!confirm("Удалить все ответы и сбросить экзамен + учебное пособие?")) return;
+  if(!confirm('Clear all answers and reset the exam + study guide?')) return;
   localStorage.removeItem(STORE);
   location.reload();
 }
@@ -1282,18 +1282,18 @@ function grainRefreshIcons(){
 .apk-about h3:first-child{margin-top:0}
 </style>
 <section class="apk-about">
-  <h3>Полезные руководства</h3>
+  <h3>Related guides</h3>
   <ul>
-    <li><a href="../docusign-clm-cert/">Подготовка Docusign CLM Администрирование Pro</a></li>
-    <li><a href="../docusign-clm-implementation-cert/">Документация CLM Подготовка к внедрению</a></li>
-    <li><a href="../guides/what-is-data-migration/">Что такое миграция данных</a></li>
+    <li><a href="../docusign-clm-cert/">Docusign CLM Administration Pro prep</a></li>
+    <li><a href="../docusign-clm-implementation-cert/">Docusign CLM Implementation Pro prep</a></li>
+    <li><a href="../guides/what-is-data-migration/">What data migration is</a></li>
   </ul>
-  <p><a href="../guides/">Просмотреть все руководства</a> · <a href="../">Все комплекты</a></p>
+  <p><a href="../guides/">Browse all guides</a> · <a href="../">All kits</a></p>
 </section>
 <!-- APK:KIT-SEO:END -->
 <script src="../assets/datacraft-economy.js"></script>
 <script src="../assets/progress-state.js"></script>
 <script src="../assets/supabase_auth_sync.js?v=3"></script>
-
+<script src="../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

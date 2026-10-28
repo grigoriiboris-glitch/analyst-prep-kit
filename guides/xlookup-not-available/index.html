@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
+<html lang="en">
 <head>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>XLOOKUP недоступен? Почему и какая замена работает — комплект для подготовки аналитика</title>
-<meta name="description" content="XLOOKUP поставляется только с Майкрософт 365 и Excel 2021. Почему формула превращается в _xlfn.XLOOKUP, когда коллега открывает ваш файл, и замену INDEX MATCH, которая повсюду выполняет одни и те же пять действий.">
+<title>XLOOKUP Not Available? Why, and the Replacement That Works &mdash; Analyst Prep Kit</title>
+<meta name="description" content="XLOOKUP ships with Microsoft 365 and Excel 2021 only. Why the formula turns into _xlfn.XLOOKUP when a colleague opens your file, and the INDEX MATCH replacement that does the same five jobs everywhere.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/xlookup-not-available/">
-<meta property="og:title" content="XLOOKUP недоступен: почему он отсутствует и что использовать вместо него">
-<meta property="og:description" content="_xlfn.XLOOKUP означает, что функция не существует в этой версии. Пять замен, которые это делают.">
+<meta property="og:title" content="XLOOKUP Is Not Available: Why It Is Missing and What to Use Instead">
+<meta property="og:description" content="_xlfn.XLOOKUP means the function does not exist in that version. The five replacements that do.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/xlookup-not-available/">
 <meta name="twitter:card" content="summary_large_image">
@@ -164,98 +164,98 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../../excel/">Excel комплект</a></p>
-  <h1>XLOOKUP недоступен: почему он отсутствует и что использовать вместо него</h1>
-  <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Все числа на этой странице были обработаны до их публикации.</p>
+  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../../excel/">Excel Kit</a></p>
+  <h1>XLOOKUP Is Not Available: Why It Is Missing and What to Use Instead</h1>
+  <p class="meta">Michael Nocito &middot; Updated August 2026 &middot; Every number on this page was worked before it was published</p>
 
-  <p>Ты пишешь <code>=XLOOKUP(...)</code>, работает, отправляешь файл, а коллега отвечает скриншотом  <code>#NAME?</code>  и формула, которая читается  <code>=_xlfn.XLOOKUP(...)</code>. Ничего не сломано. Их Excel не содержит этой функции.</p>
+  <p>You write <code>=XLOOKUP(...)</code>, it works, you send the file, and a colleague replies with a screenshot of <code>#NAME?</code> and a formula that reads <code>=_xlfn.XLOOKUP(...)</code>. Nothing is broken. Their Excel does not contain that function.</p>
 
-  <p>Что вы делаете: используете  <code>INDEX</code> and <code>MATCH</code>  для всего, что будет открыто кем-то, чью версию вы не контролируете. Он выполняет ту же работу и работает с девяностых годов.</p>
+  <p>What you do: use <code>INDEX</code> and <code>MATCH</code> for anything that will be opened by somebody whose version you do not control. It does the same jobs and it has worked since the nineties.</p>
 
-  <p><strong>Краткая версия.</strong> <code>_xlfn.</code>  перед именем функции означает «эта версия никогда не слышала об этой функции».</p>
+  <p><strong>The short version.</strong> <code>_xlfn.</code> in front of a function name means "this version has never heard of this function".</p>
 
-  <h2>В каких версиях есть XLOOKUP</h2>
+  <h2>Which versions have XLOOKUP</h2>
   <table>
-    <tr><th>Version</th><th>XLOOKUP</th><th>Динамические массивы</th></tr>
-    <tr><td>Майкрософт 365</td><td>Yes</td><td>Yes</td></tr>
-    <tr><td>Эксель 2021, 2024</td><td>Yes</td><td>Yes</td></tr>
-    <tr><td>Эксель 2019</td><td>No</td><td>No</td></tr>
-    <tr><td>Excel 2016 и более ранние версии</td><td>No</td><td>No</td></tr>
-    <tr><td>Excel в Интернете</td><td>Yes</td><td>Yes</td></tr>
-    <tr><td>Excel для Мак 365</td><td>Yes</td><td>Yes</td></tr>
+    <tr><th>Version</th><th>XLOOKUP</th><th>Dynamic arrays</th></tr>
+    <tr><td>Microsoft 365</td><td>Yes</td><td>Yes</td></tr>
+    <tr><td>Excel 2021, 2024</td><td>Yes</td><td>Yes</td></tr>
+    <tr><td>Excel 2019</td><td>No</td><td>No</td></tr>
+    <tr><td>Excel 2016 and earlier</td><td>No</td><td>No</td></tr>
+    <tr><td>Excel on the web</td><td>Yes</td><td>Yes</td></tr>
+    <tr><td>Excel for Mac 365</td><td>Yes</td><td>Yes</td></tr>
   </table>
-  <p>Чтобы проверить свои собственные: «Файл», «Учетная запись» и прочитайте строку в разделе «О Excel». Если там написано Майкрософт 365, значит, он у вас есть. Если там назван год, найдите этот год в таблице.</p>
-  <p>То же правило применимо и к другим новым функциям, с которыми люди сталкиваются:  <code>XMATCH</code>, <code>FILTER</code>, <code>UNIQUE</code>, <code>SORT</code>, <code>SEQUENCE</code>, <code>LET</code>, <code>TEXTSPLIT</code>, <code>TEXTBEFORE</code>. Все они одинаково терпят неудачу в Excel 2019 и более ранних версиях:  <code>_xlfn.</code>  спереди.</p>
+  <p>To check your own: File, Account, and read the line under About Excel. If it says Microsoft 365, you have it. If it names a year, look that year up in the table.</p>
+  <p>The same rule applies to the other new functions people hit this with: <code>XMATCH</code>, <code>FILTER</code>, <code>UNIQUE</code>, <code>SORT</code>, <code>SEQUENCE</code>, <code>LET</code>, <code>TEXTSPLIT</code>, <code>TEXTBEFORE</code>. All of them fail the same way on Excel 2019 and earlier, with <code>_xlfn.</code> in front.</p>
 
-  <div class="note"><strong>Отметка проверки совместимости здесь не поможет.</strong>  Excel предупредит вас о том, что функция не поддерживается при сохранении в более старом формате, но современная функция в файле .xlsx просто перемещается как имя, которое другая версия не может разрешить. Единственное реальное решение — не использовать его и не отправлять значения.</div>
+  <div class="note"><strong>Ticking the compatibility checker does not help here.</strong> Excel will warn you that a feature is unsupported when saving to an older format, but a modern function in an .xlsx file simply travels as a name the other version cannot resolve. The only real fix is not to use it, or to send values.</div>
 
-  <h2>Пять профессий в переводе</h2>
+  <h2>The five jobs, translated</h2>
   <table>
-    <tr><th>Job</th><th>XLOOKUP</th><th>Работает везде</th></tr>
-    <tr><td>Ищите по ключу</td><td><code>=XLOOKUP(A2,Ids,Names)</code></td><td><code>=INDEX(Names,MATCH(A2,Ids,0))</code></td></tr>
-    <tr><td>Посмотрите налево</td><td>Та же формула, без изменений</td><td><code>INDEX MATCH</code>  делает это изначально тоже</td></tr>
-    <tr><td>Ручка не найдена</td><td><code>=XLOOKUP(A2,Ids,Names,"none")</code></td><td><code>=IFERROR(INDEX(...),"none")</code></td></tr>
-    <tr><td>Полосчатый поиск</td><td><code>=XLOOKUP(A2,Bounds,Bands,,-1)</code></td><td><code>=INDEX(Bands,MATCH(A2,Bounds,1))</code></td></tr>
-    <tr><td>Return several columns</td><td><code>=XLOOKUP(A2,Ids,B:D)</code></td><td>One <code>INDEX MATCH</code>  за столбец</td></tr>
+    <tr><th>Job</th><th>XLOOKUP</th><th>Works everywhere</th></tr>
+    <tr><td>Look up by key</td><td><code>=XLOOKUP(A2,Ids,Names)</code></td><td><code>=INDEX(Names,MATCH(A2,Ids,0))</code></td></tr>
+    <tr><td>Look to the left</td><td>Same formula, no change</td><td><code>INDEX MATCH</code> does this natively too</td></tr>
+    <tr><td>Handle not found</td><td><code>=XLOOKUP(A2,Ids,Names,"none")</code></td><td><code>=IFERROR(INDEX(...),"none")</code></td></tr>
+    <tr><td>Banded lookup</td><td><code>=XLOOKUP(A2,Bounds,Bands,,-1)</code></td><td><code>=INDEX(Bands,MATCH(A2,Bounds,1))</code></td></tr>
+    <tr><td>Return several columns</td><td><code>=XLOOKUP(A2,Ids,B:D)</code></td><td>One <code>INDEX MATCH</code> per column</td></tr>
   </table>
-  <p>The <code>MATCH</code>  Третий аргумент — тот, с которым следует быть осторожным.  <code>0</code>  означает «точный» и это то, что вам нужно почти всегда.  <code>1</code>  означает наибольшее значение, меньшее или равное, требует сортировки списка по возрастанию и является способом построения групповых поисков, таких как налоговые группы. Это дело рассматривается в  <a href="../excel-approximate-match-lookup/">Поиск приблизительных совпадений</a>.</p>
+  <p>The <code>MATCH</code> third argument is the one to be careful with. <code>0</code> means exact and is what you want almost always. <code>1</code> means largest value less than or equal, requires the list sorted ascending, and is how banded lookups such as tax brackets are built. That case is worked in <a href="../excel-approximate-match-lookup/">approximate match lookups</a>.</p>
 
-  <h2>Отправка файла команде смешанной версии</h2>
+  <h2>Sending a file to a mixed-version team</h2>
   <ol>
-    <li>Спросите один раз, какую версию используют получатели, и запишите ее. Оно редко меняется.</li>
-    <li>Стройте с  <code>INDEX MATCH</code>  если какой-либо из них выпущен в 2019 году или ранее.</li>
-    <li>Если файл представляет собой отчет, а не модель, вставьте значения перед отправкой. Никому не нужны ваши формулы, чтобы прочитать число.</li>
-    <li>Полностью избегайте функций динамических массивов в общих файлах. Даже там, где они открываются, разлитый диапазон ведет себя по-другому, а старые версии вообще не разливаются.</li>
-    <li>Протестируйте, открыв собственный файл в Excel в Интернете, который бесплатен и имеет собственный набор функций.</li>
+    <li>Ask which version the recipients run, once, and write it down. It rarely changes.</li>
+    <li>Build with <code>INDEX MATCH</code> if any of them is 2019 or earlier.</li>
+    <li>If the file is a report rather than a model, paste values before sending. Nobody needs your formulas to read a number.</li>
+    <li>Avoid dynamic array functions in shared files entirely. Even where they open, a spilled range behaves differently, and older versions will not spill at all.</li>
+    <li>Test by opening your own file in Excel on the web, which is free and enforces its own function set.</li>
   </ol>
 
-  <h2>Если вам уже отправили один</h2>
-  <p>Вы не можете заставить эту функцию работать, поэтому у вас есть три варианта в порядке предпочтения:</p>
+  <h2>If you have already been sent one</h2>
+  <p>You cannot make the function work, so you have three choices, in order of preference:</p>
   <ol>
-    <li>Попросите отправителя предоставить копию, содержащую только значения. Самый быстрый и обычно все, что вам нужно.</li>
-    <li>Откройте файл в Excel в Интернете с помощью бесплатной учетной записи Майкрософт.  Он поддерживает XLOOKUP и вычисляет результаты, которые затем можно скопировать.</li>
-    <li>Перепишите формулы так  <code>INDEX MATCH</code>. Функция «Найти и заменить» выполняет большую часть работы, если шаблон согласован, но проверьте каждый из них: XLOOKUP с четвертым аргументом имеет поведение «не найдено», которое ваша замена должна воспроизвести.</li>
+    <li>Ask the sender for a values-only copy. Fastest, and usually all you needed.</li>
+    <li>Open the file in Excel on the web with a free Microsoft account. It supports XLOOKUP and will calculate the results, which you can then copy out.</li>
+    <li>Rewrite the formulas as <code>INDEX MATCH</code>. Find and Replace does most of the work if the pattern is consistent, but check every one: an XLOOKUP with a fourth argument has a not-found behaviour your replacement has to reproduce.</li>
   </ol>
 
-  <h2>Почему INDEX MATCH все равно стоит изучить</h2>
-  <p>Это не понижение рейтинга. Смотрится в любую сторону, не ломается при вставке столбца в середину таблицы, а  <code>MATCH</code>  можно использовать повторно: вычислите номер строки один раз в отдельной ячейке и получите двенадцать  <code>INDEX</code>  формулы читают его, что быстрее, чем двенадцать независимых поисков. Полное лечение в  <a href="../excel-index-match/">ИНДЕКСНОЕ СОВПАДЕНИЕ</a>.</p>
+  <h2>Why INDEX MATCH is worth learning anyway</h2>
+  <p>It is not a downgrade. It looks in any direction, it does not break when a column is inserted in the middle of the table, and the <code>MATCH</code> can be reused: compute the row number once in its own cell and have twelve <code>INDEX</code> formulas read it, which is faster than twelve independent lookups. The full treatment is in <a href="../excel-index-match/">INDEX MATCH</a>.</p>
 
-  <h2>Как применить это в своей работе</h2>
+  <h2>How to apply this to your own work</h2>
   <ol>
-    <li>Проверьте файл и учетную запись сегодня, чтобы знать, на чем строите.</li>
-    <li>Спросите двух наиболее частых получателей, какую версию они используют.</li>
-    <li>Найдите в общих книгах  <code>XLOOKUP</code>, <code>FILTER</code> and <code>UNIQUE</code>и преобразуйте те, которые покидают вашу машину.</li>
-    <li>Сохраните один скретч-лист вместе со своим эталоном.  <code>INDEX MATCH</code>  шаблон в нем, поэтому его написание — это копирование и редактирование, а не запоминание.</li>
-    <li>Сделайте значения вставки значением по умолчанию для всего, что вы отправляете в виде готового отчета.</li>
+    <li>Check File, Account today so you know what you are building on.</li>
+    <li>Ask your two most frequent recipients what version they run.</li>
+    <li>Search your shared workbooks for <code>XLOOKUP</code>, <code>FILTER</code> and <code>UNIQUE</code>, and convert the ones that leave your machine.</li>
+    <li>Keep one scratch sheet with your standard <code>INDEX MATCH</code> pattern in it, so writing it is copy and edit rather than recall.</li>
+    <li>Make paste-values the default for anything you send as a finished report.</li>
   </ol>
 
-  <h2>Единственная привычка, которую нужно сохранить</h2>
-  <p>Создайте самую старую версию, которая откроет файл. Это стоит немного более длинной формулы и удаляет из вашей недели целую категорию «это работает на моем».</p>
+  <h2>The one habit to keep</h2>
+  <p>Build for the oldest version that will open the file. It costs a slightly longer formula and it removes an entire category of "it works on mine" from your week.</p>
 
-  <p>Знаете ли вы, какую версию Excel использует человек, который чаще всего открывает ваши файлы?</p>
+  <p>Do you know which Excel version the person who opens your files most often is running?</p>
 
-  <div class="note"><strong>Написано из поставляемых версий.</strong>    XLOOKUP появился в Майкрософт 365 и доступен в Excel 2021 и более поздних версиях. Бессрочные версии не получают новых функций после выпуска, поэтому Excel 2019 их не получит.</div>
+  <div class="note"><strong>Written from the shipped versions.</strong> XLOOKUP arrived with Microsoft 365 and is in Excel 2021 and later. Perpetual versions do not gain functions after release, so Excel 2019 will not get it.</div>
 
   <div class="book">
-    <strong>Формула, которая работает на вашей машине и не работает на другой, — это проблема версии, а не проблемы формулы.</strong>
-    <p><em>Excel для аналитиков</em>  состоит из 378 страниц, на которых каждая формула и диалог читаются по одному, поэтому книга перестает быть местом, где появляются числа, и становится тем местом, которое вы можете проверить.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-xlookup-not-available'})">Excel для аналитиков, 19 долларов США →</a>
+    <strong>A formula that works on your machine and breaks on theirs is a version problem, not a formula problem.</strong>
+    <p><em>Excel for Analysts</em> is 378 pages that read every formula and dialog one at a time, so the workbook stops being a place where numbers appear and becomes one you can check.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-xlookup-not-available'})">Excel for Analysts, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>Изучите замену, и вас перестанет волновать, какая версия установлена.</strong>
-    <p style="margin:6px 0 0"><a href="../vlookup-vs-xlookup/">ВПР против XLOOKUP</a>  это полное сравнение, и  <a href="../excel-index-match/">ИНДЕКСНОЕ СОВПАДЕНИЕ</a>  это версия, которая работает везде.  <a href="../../excel/">Excel комплект</a>  сверлит все три.</p>
-    <a class="btn" href="../excel-index-match/">Читать ИНДЕКСНОЕ СООТВЕТСТВИЕ →</a>
+    <strong>Learn the replacement and you stop caring which version is installed.</strong>
+    <p style="margin:6px 0 0"><a href="../vlookup-vs-xlookup/">VLOOKUP against XLOOKUP</a> is the full comparison, and <a href="../excel-index-match/">INDEX MATCH</a> is the version that works everywhere. The <a href="../../excel/">Excel Kit</a> drills all three.</p>
+    <a class="btn" href="../excel-index-match/">Read INDEX MATCH &rarr;</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../vlookup-vs-xlookup/">ВПР против XLOOKUP</a> &middot; <a href="../excel-index-match/">ИНДЕКСНОЕ СОВПАДЕНИЕ</a> &middot; <a href="../lookup-returns-na/">Когда поиск возвращает #Н/Д</a> &middot; <a href="../excel-two-way-lookup/">Двусторонний поиск</a> &middot; <a href="../excel-dynamic-arrays/">Динамические массивы</a> &middot; <a href="../../excel/">Excel комплект</a>
-    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
+    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../vlookup-vs-xlookup/">VLOOKUP vs XLOOKUP</a> &middot; <a href="../excel-index-match/">INDEX MATCH</a> &middot; <a href="../lookup-returns-na/">When a Lookup Returns #N/A</a> &middot; <a href="../excel-two-way-lookup/">Two-Way Lookup</a> &middot; <a href="../excel-dynamic-arrays/">Dynamic Arrays</a> &middot; <a href="../../excel/">Excel Kit</a>
+    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Анализ удержания когорты в SQL, шаг за шагом — комплект подготовки аналитика</title>
-<meta name="description" content="Сгруппируйте клиентов по их первому месяцу, посчитайте, сколько из них вернутся в каждый последующий месяц, и прочитайте треугольник. Включает два определения оставшегося, которые дают 50% и 33% из одних и тех же данных.">
+<title>Cohort Retention Analysis in SQL, Step by Step — Analyst Prep Kit</title>
+<meta name="description" content="Group customers by their first month, count how many come back in each later month, and read the triangle. Includes the two definitions of retained that give 50% and 33% from the same data.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-cohort-retention/">
-<meta property="og:title" content="Анализ удержания когорты в SQL, шаг за шагом">
-<meta property="og:description" content="Четыре коротких шага к треугольнику удержания и определяющий вопрос под ним: означает ли «сохраненный» активный в этом месяце или активный каждый месяц с тех пор? Эта же когорта ответила 50% или 33%.">
+<meta property="og:title" content="Cohort Retention Analysis in SQL, Step by Step">
+<meta property="og:description" content="Four short steps to a retention triangle, and the definition question underneath it: does retained mean active this month, or active every month since? The same cohort answers 50% or 33%.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/sql-cohort-retention.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-cohort-retention/">
@@ -134,18 +134,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-кит</a> · <a href="../">Все руководства</a></p>
-  <h1>Анализ удержания когорты в SQL, шаг за шагом</h1>
-  <p class="meta">Четыре коротких вопроса и определяющий вопрос под ними · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-08">8 августа 2026 г.</time></p>
+  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../sql/">SQL Kit</a> · <a href="../">All guides</a></p>
+  <h1>Cohort Retention Analysis in SQL, Step by Step</h1>
+  <p class="meta">Four short queries, and the definition question underneath them · Part of the <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-08">August 8, 2026</time></p>
 
-  <p>К концу этой страницы вы можете отнести каждого клиента к тому месяцу, в котором он прибыл, измерить, сколько из каждой группы прибытия возвращается в каждом последующем месяце, построить треугольник, который это показывает, и точно сказать, какое из двух разумных определений «сохраненного» использует ваш номер. Прошло около двадцати пяти минут, и каждый запрос и результат, представленные ниже, были выполнены.</p>
+  <p>By the end of this page you can put every customer into the month they arrived, measure how many of each arrival group come back in each later month, build the triangle that shows it, and say precisely which of two reasonable definitions of "retained" your number uses. It is about twenty-five minutes, and every query and result below was run.</p>
 
-  <p>Вот что нужно сделать сегодня, прежде чем писать что-либо из этого. Запишите, что будет означать одна строка вашей готовой таблицы, в предложении с двумя датами: «из клиентов, чья первая покупка была в месяце X, столько же купили снова в месяце Y». Все на этой странице — это предложение, преобразованное в SQL, и большинство чисел удержания, которые оказались неправильными, были неправильными в предложении.</p>
+  <p>Here is what to do today, before writing any of it. Write down what one row of your finished table will mean, in a sentence with two dates in it: "of the customers whose first purchase was in month X, this many bought again in month Y." Everything on this page is that sentence turned into SQL, and most retention numbers that turn out to be wrong were wrong in the sentence.</p>
 
-  <p>Вкратце: пометьте каждого клиента по его первому месяцу, пометьте каждое событие, через сколько месяцев оно произошло, а затем посчитайте отдельных клиентов по паре.</p>
+  <p>The short version: tag every customer with their first month, tag every event with how many months after that it happened, then count distinct customers per pair.</p>
 
-  <p>Форма, к которой вы стремитесь, — это идея, поэтому она отражает картину.</p>
+  <p>The shape you are heading for is the idea, so it gets the picture.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 244" role="img" aria-labelledby="crTitle crDesc" xmlns="http://www.w3.org/2000/svg">
@@ -178,46 +178,46 @@
         </g>
       </g>
     </svg>
-    <figcaption>Каждая группа начинает свою деятельность в свой месяц прибытия, и за ней можно наблюдать только до тех пор, пока она существует. Пустые ячейки в правом нижнем углу не содержат недостающих данных, это месяцы, которые еще не произошли, и обработка их нулями — это наиболее распространенный способ сделать удержание хуже, чем оно есть на самом деле.</figcaption>
+    <figcaption>Every group starts at its own arrival month and can only be observed for as long as it has existed. The empty cells in the lower right are not missing data, they are months that have not happened yet, and treating them as zeros is the most common way to make retention look worse than it is.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>Что вы узнаете</strong>
+    <strong>What you'll learn</strong>
     <ol>
-      <li>Что такое когорта и решение, которое ее определяет</li>
-      <li>Шаг первый: первый месяц для всех</li>
-      <li>Шаг второй: сколько месяцев спустя</li>
-      <li>Шаг третий: треугольник</li>
-      <li>Засчитывается в счет ставок</li>
-      <li>Клиенты, а не покупки</li>
-      <li>Два определения сохраненного</li>
-      <li>Сохранение доходов</li>
-      <li>Полное до и после</li>
-      <li>Пограничные случаи, нарушающие когортную таблицу</li>
-      <li>Почему это работает</li>
-      <li>Использование этого в вашем собственном проекте</li>
-      <li>Все на одном экране</li>
+      <li>What a cohort is, and the decision that defines it</li>
+      <li>Step one: everyone's first month</li>
+      <li>Step two: how many months later</li>
+      <li>Step three: the triangle</li>
+      <li>Counts against rates</li>
+      <li>Customers, not purchases</li>
+      <li>Two definitions of retained</li>
+      <li>Revenue retention</li>
+      <li>The full before and after</li>
+      <li>Edge cases that break a cohort table</li>
+      <li>Why this works</li>
+      <li>Using this on your own project</li>
+      <li>The whole thing on one screen</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Каждый результат на этой странице реален.</strong>  Двенадцать клиентов, девятнадцать покупок, 2430 доходов с 6 января по 25 марта 2026 года, загружены в DuckDB и отправлены запросы. Достаточно маленький, чтобы проверить каждое число вручную, и в этом вся суть: создайте когортный запрос на данных, которые вы можете пересчитать на пальцах, прежде чем указывать на миллионы строк.</div>
+  <div class="note"><strong>Every result on this page is real.</strong> Twelve customers, nineteen purchases, 2,430 in revenue, from 6 January to 25 March 2026, loaded into DuckDB and queried. Small enough to check every number by hand, which is the point: build a cohort query on data you can count on your fingers before pointing it at millions of rows.</div>
 
   <div class="step">
-    <h2>1. Что такое когорта и решение, которое ее определяет</h2>
+    <h2>1. What a cohort is, and the decision that defines it</h2>
 
-    <p>Когорта — это группа клиентов, у которых есть общая отправная точка, и почти всегда этой отправной точкой является момент их прибытия. Сгруппируйте по месяцам прибытия, а затем наблюдайте за каждой группой с течением времени. Причина, по которой это вообще нужно делать, заключается в том, что в одном общем числе удержанных смешиваются люди, присоединившиеся на прошлой неделе, и люди, присоединившиеся три года назад, и это разные группы населения, имеющие разный опыт.</p>
+    <p>A cohort is a group of customers who share a starting point, and almost always that starting point is when they arrived. Group by arrival month, then watch each group over time. The reason to do it at all is that a single overall retention number mixes people who joined last week with people who joined three years ago, and those are different populations having different experiences.</p>
 
-    <p>Перед пояснением: в вашей таблице указаны дата первой покупки, дата регистрации и дата первого входа в систему. Скажите, какой из них определяет когорту.</p>
+    <p>Before the explanation: your table has a first-purchase date, a signup date and a first-login date. Say which one defines the cohort.</p>
 
-    <p>Какой бы из них вы ни смогли защитить на собрании, и вам придется выбрать его перед написанием SQL, потому что впоследствии ответ меняется на каждое число. Первая покупка подходит для удержания вопроса о платежном поведении. Регистрация подойдет, если вы измеряете, конвертирует ли продукт людей. Это не те же самые клиенты и не те же месяцы, и таблица, в которой написано «когорта», не говоря уже об этом, не является выводом. Записать это - это все  <a href="../defining-metrics/">определение метрики</a>, применяется здесь.</p>
+    <p>Whichever one you can defend in the meeting, and you have to pick before writing SQL, because the answer changes every number afterwards. First purchase is right for a retention question about paying behaviour. Signup is right if you are measuring whether the product converts people. They are not the same customers and they are not the same months, and a table that says "cohort" without saying which is not a finding. Getting that written down is the whole of <a href="../defining-metrics/">defining a metric</a>, applied here.</p>
 
-    <p>На этой странице используется первая покупка в таблице покупок с тремя столбцами: клиент, дата, сумма. Девятнадцать рядов, двенадцать клиентов.</p>
+    <p>This page uses first purchase, on a purchases table with three columns: customer, date, amount. Nineteen rows, twelve customers.</p>
   </div>
 
   <div class="step">
-    <h2>2. Шаг первый: первый месяц для всех</h2>
+    <h2>2. Step one: everyone's first month</h2>
 
-    <p>Один агрегат дает каждому клиенту группу, и это единственное место, где слово  <code>MIN</code>  появляется.</p>
+    <p>One aggregate gives every customer a cohort, and it is the only place the word <code>MIN</code> appears.</p>
 
     <pre><code>SELECT customer_id,
        MIN(purchase_date)                              AS first_purchase,
@@ -233,21 +233,21 @@ C5  | 2026-01-28 | 2026-01-01
 C6  | 2026-02-03 | 2026-02-01
 ...</code></pre>
 
-    <p>Две вещи, на которые стоит обратить внимание. Когорта представляет собой  <em>date</em>, первое число месяца, а не строка, по всем причинам, указанным в  <a href="../sql-dates/">руководство по датам</a>: он сортируется в хронологическом порядке, его можно вычесть и присоединить к календарю. И каждый покупатель появляется ровно один раз, поэтому эту таблицу можно безопасно присоединить к покупкам, ничего не умножая.</p>
+    <p>Two things worth noticing. The cohort is a <em>date</em>, the first of the month, not a string, for all the reasons in <a href="../sql-dates/">the date guide</a>: it sorts chronologically, it can be subtracted from, and it can be joined to a calendar. And every customer appears exactly once, which makes this a table you can safely join back to the purchases without multiplying anything.</p>
 
-    <p>Подсчет дает знаменатели для всего анализа:</p>
+    <p>Counting it gives the denominators for the whole analysis:</p>
 
     <pre><code>2026-01-01 | 5
 2026-02-01 | 4
 2026-03-01 | 3</code></pre>
 
-    <p>Пять, четыре и три, что в сумме дает двенадцать, количество клиентов. Проверяйте эту сумму каждый раз. Если размер когорты не соответствует количеству ваших клиентов, значит, кто-то сделал две первые покупки, а это означает, что ключ клиента не уникален.</p>
+    <p>Five, four and three, which adds to twelve, the number of customers. Check that sum every time. If cohort sizes do not add up to your customer count, somebody has two first purchases, which means the customer key is not unique.</p>
   </div>
 
   <div class="step">
-    <h2>3. Шаг второй: сколько месяцев спустя</h2>
+    <h2>3. Step two: how many months later</h2>
 
-    <p>Соедините таблицу первых месяцев с каждой покупкой и вычтите месяцы.</p>
+    <p>Join the first-month table back onto every purchase and subtract, in months.</p>
 
     <pre><code>SELECT p.customer_id,
        f.cohort,
@@ -265,26 +265,26 @@ C6 | 2026-02-01 | 2026-02-01 | 0
 C6 | 2026-02-01 | 2026-03-01 | 1
 ...</code></pre>
 
-    <p>That <code>month_no</code>  столбец — вот и вся хитрость. Он преобразует календарное время во время с момента прибытия, поэтому клиента, присоединившегося в январе, и клиента, присоединившегося в марте, можно сравнить в одном возрасте. Без него вы можете сравнивать только календарные месяцы, что смешивает возрасты и является причиной того, что простой ежемесячный подсчет активности никогда не отвечает на вопрос об удержании.</p>
+    <p>That <code>month_no</code> column is the whole trick. It converts calendar time into time-since-arrival, so a customer who joined in January and one who joined in March can be compared at the same age. Without it you can only compare calendar months, which mixes ages together and is the reason a plain monthly active count never answers a retention question.</p>
 
-    <p>Две детали. Усеките обе части до месяца перед вычитанием, иначе покупка 2-го числа следующего месяца и покупка 30-го числа того же месяца окажутся в разных корзинах с разницей в день. А месяц 0 существует по своей конструкции: все активны в том месяце, в котором они прибыли, поэтому первый столбец когортной таблицы всегда указывает размер когорты.</p>
+    <p>Two details. Truncate both sides to the month before subtracting, or a purchase on the 2nd of the next month and one on the 30th of the same month will land in different buckets by a day. And month 0 exists by construction: everybody is active in the month they arrived, so the first column of a cohort table is always the cohort size.</p>
   </div>
 
   <div class="step">
-    <h2>4. Шаг третий: треугольник</h2>
+    <h2>4. Step three: the triangle</h2>
 
-    <p>Теперь посчитайте отдельных клиентов на когорту за месяц. Здесь он изложен так, как его читают люди, с номерами месяцев вверху:</p>
+    <p>Now count distinct customers per cohort per month number. Here it is laid out the way people read it, with the month numbers across the top:</p>
 
     <pre><code>cohort     |  m0 |  m1 |  m2
 2026-01-01 |   5 |   3 |   2
 2026-02-01 |   4 |   2 |   .
 2026-03-01 |   3 |   . |   .</code></pre>
 
-    <p>Прочтите первую строку: пять клиентов пришли в январе, трое из них купили снова в феврале, двое купили в марте. Сверьте его вручную со списком на третьем этапе, и вы найдете C1, C2 и C3 в первом месяце, а также C1 и C2 во втором месяце.</p>
+    <p>Read the first row: five customers arrived in January, three of them bought again in February, two bought in March. Check it by hand against the list in step three and you will find C1, C2 and C3 in month 1, and C1 and C2 in month 2.</p>
 
-    <p>Пробелы в правом нижнем углу не являются недостающими данными. Февральская когорта существует всего два месяца, поэтому у нее еще нет месяца 2, а у марта нет месяца 1. Это самая важная вещь, которую нужно сделать правильно при представлении одного из них, потому что заполнение этих ячеек нулями превращает «мы еще не знаем» в «никто не вернулся», а затем среднее значение по столбцу падает по причине, не имеющей ничего общего с продуктом.</p>
+    <p>The gaps in the lower right are not missing data. February's cohort has only existed for two months, so it has no month 2 yet, and March's has no month 1. That is the single most important thing to get right when presenting one of these, because filling those cells with zeros turns "we do not know yet" into "nobody came back", and the average down a column then falls for a reason that has nothing to do with the product.</p>
 
-    <p>Запрос один  <code>CASE</code>  за столбец, что подходит для трех и громоздко для двенадцати. Версия, которая масштабируется, вместо этого возвращает одну строку на ячейку и позволяет инструменту создания отчетов расположить ее:</p>
+    <p>The query is one <code>CASE</code> per column, which is fine for three and unwieldy for twelve. The version that scales returns one row per cell instead and lets the reporting tool lay it out:</p>
 
     <pre><code>SELECT cohort, month_no, COUNT(DISTINCT customer_id) AS active
 FROM act
@@ -293,9 +293,9 @@ ORDER BY 1, 2;</code></pre>
   </div>
 
   <div class="step">
-    <h2>5. Учитывается в ставках</h2>
+    <h2>5. Counts against rates</h2>
 
-    <p>Подсчеты — это то, что вы проверяете; цены - это то, что вы сравниваете. Объединение размеров когорт обратно дает и то, и другое.</p>
+    <p>Counts are what you check; rates are what you compare. Joining the cohort sizes back gives both.</p>
 
     <pre><code>cohort     | size | month_no | active | retention_pct
 2026-01-01 |    5 |        0 |      5 |         100.0
@@ -305,58 +305,58 @@ ORDER BY 1, 2;</code></pre>
 2026-02-01 |    4 |        1 |      2 |          50.0
 2026-03-01 |    3 |        0 |      3 |         100.0</code></pre>
 
-    <p>Месяц 0 по определению равен 100% в каждой строке, что является скорее полезной проверкой, чем выводом: если он не равен 100%, объединение теряет строки.</p>
+    <p>Month 0 is 100% in every row by definition, which is a useful check rather than a finding: if it is not 100%, the join lost rows.</p>
 
-    <p>Теперь сравнение, для которого существует таблица. Январь сохранил 60% в первом месяце, а февраль сохранил 50%. Скажите вслух, действительно ли это снижение, прежде чем читать дальше.</p>
+    <p>Now the comparison the table exists for. January retained 60% at month 1 and February retained 50%. Say out loud whether that is a real decline before reading on.</p>
 
-    <p>Это три клиента против двух в когортах из пяти и четырех человек. Перемещение одного клиента меняет январь на 20 пунктов, а февраль — на 25. На основе этих данных честным выводом является то, что когорты слишком малы для сравнения, и вы говорите об этом, публикуя подсчеты рядом со ставками, поэтому в таблице выше есть и то, и другое. Проценты в крошечных знаменателях — это наиболее явно неправильные цифры в аналитике.</p>
+    <p>It is three customers against two, on cohorts of five and four. A single customer moving changes January by 20 points and February by 25. On this data the honest sentence is that the cohorts are too small to compare, and the way you say that is by publishing the counts next to the rates, which is why the table above has both. Percentages on tiny denominators are the most confidently wrong numbers in analytics.</p>
   </div>
 
   <div class="step">
-    <h2>6. Клиенты, а не покупки</h2>
+    <h2>6. Customers, not purchases</h2>
 
-    <p>Перед пояснением: один январский покупатель покупает в январе дважды. Скажите, что это делает с ячейкой месяца 0, если вы считаете с помощью  <code>COUNT(*)</code>.</p>
+    <p>Before the explanation: one January customer buys twice in January. Say what that does to the month 0 cell if you count with <code>COUNT(*)</code>.</p>
 
-    <p>Добавление именно этого клиента в данные и параллельное выполнение обоих подсчетов:</p>
+    <p>Adding exactly that customer to the data and running both counts side by side:</p>
 
     <pre><code>cohort     | month_no | purchases | customers
 2026-01-01 |        0 |         7 |         6
 2026-01-01 |        1 |         3 |         3
 2026-01-01 |        2 |         2 |         2</code></pre>
 
-    <p>Семь покупок, шесть клиентов. В когорте шесть человек и  <code>COUNT(*)</code>  утверждает семь, поэтому месяц 0 получается со значением 116,7%, а все, что ниже него, разделено на неверный знаменатель.</p>
+    <p>Seven purchases, six customers. The cohort has six people in it and <code>COUNT(*)</code> claims seven, so month 0 comes out at 116.7% and everything below it is divided by the wrong denominator.</p>
 
-    <p>Удержание — это вопрос о людях, поэтому каждый показатель в когортной таблице  <code>COUNT(DISTINCT customer_id)</code>. Единственное исключение — это когда вы действительно имеете в виду частоту заказов, и тогда столбец следует называть иначе, чем «Удержание».</p>
+    <p>Retention is a question about people, so every count in a cohort table is <code>COUNT(DISTINCT customer_id)</code>. The only exception is when you genuinely mean order frequency, and then the column should be called something other than retention.</p>
   </div>
 
   <div class="step">
-    <h2>7. Два определения оставшегося</h2>
+    <h2>7. Two definitions of retained</h2>
 
-    <p>Это та часть, которая решает, согласны ли две команды, и она невидима в SQL, если вы ее не ищете.</p>
+    <p>This is the part that decides whether two teams agree, and it is invisible in the SQL unless you look for it.</p>
 
-    <p>Добавьте в январскую когорту одного клиента, который покупает в январе, ничего не покупает в феврале и возвращается в марте. Когорта увеличилась с пяти до шести, и треугольник теперь гласит:</p>
+    <p>Add one customer to the January cohort who buys in January, buys nothing in February, and comes back in March. The cohort goes from five to six, and the triangle now reads:</p>
 
     <pre><code>cohort     | size | month_no | active | retention_pct
 2026-01-01 |    6 |        0 |      6 |         100.0
 2026-01-01 |    6 |        1 |      3 |          50.0
 2026-01-01 |    6 |        2 |      3 |          50.0</code></pre>
 
-    <p>Удержание не упало между месяцем 1 и месяцем 2. Согласно этому определению, его вообще нельзя рассматривать как кривую выживания, потому что клиент, который терпит неудачу и возвращается, учитывается снова. У этого определения есть имя, которое стоит использовать:  <strong>активен в месяце N</strong>.</p>
+    <p>Retention did not fall between month 1 and month 2. Under this definition it cannot be read as a survival curve at all, because a customer who lapses and returns is counted again. That definition has a name worth using: <strong>active in month N</strong>.</p>
 
-    <p>Другое определение спрашивает, кто проявлял активность каждый месяц с момента прибытия. По тем же шести клиентам:</p>
+    <p>The other definition asks who has been active in every month since arriving. On the same six customers:</p>
 
     <pre><code>cohort_size | active in m2 | active every month
           6 |            3 |                  2</code></pre>
 
-    <p>Трое против двух, что составляет 50% против 33,3% для той же когорты в том же месяце. Ни один из запросов не является неправильным. Они отвечают на разные вопросы, и разница — один клиент, который взял отпуск на месяц.</p>
+    <p>Three against two, which is 50% against 33.3% for the same cohort in the same month. Neither query is wrong. They answer different questions, and the difference is one customer who took a month off.</p>
 
-    <p>Что использовать, зависит от бизнеса. Для подписки, срок действия которой означает отмену, фраза «активна каждый месяц с тех пор» ближе к истине. Для магазина, где люди покупают, когда им что-то нужно, «активен в месяце N» является разумным, и пробел не является убытком. Запишите выбор в заголовок столбца, а не в комментарий, поскольку заголовок столбца — единственная перемещаемая часть.</p>
+    <p>Which to use depends on the business. For a subscription, where lapsing means cancelling, "active every month since" is closer to the truth. For a shop, where people buy when they need something, "active in month N" is the sensible one and a gap is not a loss. Write the choice into the column heading, not into a comment, because the column heading is the only part that travels.</p>
   </div>
 
   <div class="step">
-    <h2>8. Сохранение доходов</h2>
+    <h2>8. Revenue retention</h2>
 
-    <p>Тот же скелет с  <code>SUM(amount)</code>  вместо подсчета отвечает на другой и зачастую более полезный вопрос: не сколько вернулось, а сколько.</p>
+    <p>The same skeleton with <code>SUM(amount)</code> instead of a count answers a different and often more useful question: not how many came back, but how much.</p>
 
     <pre><code>cohort     | month_no | revenue
 2026-01-01 |        0 |     610
@@ -366,16 +366,16 @@ ORDER BY 1, 2;</code></pre>
 2026-02-01 |        1 |     310
 2026-03-01 |        0 |     420</code></pre>
 
-    <p>Эти шесть ячеек в сумме дают 2430, то есть общую сумму таблицы покупок, поэтому никакие деньги не были потеряны или пересчитаны на пути через объединение. Это сверка является проверкой, которую необходимо сохранить:  <strong>каждая ячейка таблицы доходов когорты, сложенная вместе, должна равняться исходной сумме.</strong></p>
+    <p>Those six cells add to 2,430, which is the total of the purchases table, so no money has been lost or double counted on the way through the join. That reconciliation is the check to keep: <strong>every cell of a cohort revenue table, added together, must equal the source total.</strong></p>
 
-    <p>Если прочитать его рядом со таблицей клиентов, он заслуживает своего места. Январь сохранила 60% клиентов в первый месяц и 62,3% выручки, 380 из 610, поэтому те, кто остался, тратили примерно на том же уровне. Когда эти два процента резко расходятся, получается следующее: сохранение половины ваших клиентов и 90% ваших денег — это совсем другое дело, чем сохранение половины каждого из них.</p>
+    <p>Reading it alongside the customer table is where it earns its place. January kept 60% of its customers into month 1 and 62.3% of its revenue, 380 out of 610, so the ones who stayed were spending at about the same rate. When the two percentages diverge sharply, that is the finding: keeping half your customers and 90% of your money is a very different business from keeping half of each.</p>
 
-    <p>Представьте на мгновение свой собственный стол для клиентов. Если бы вы построили это сегодня, что бы вы ожидали упасть быстрее: количество или доход? Это ожидание стоит записать, прежде чем запускать его.</p>
+    <p>Picture your own customer table for a moment. If you built this today, which would you expect to fall faster, the count or the revenue? That expectation is worth writing down before you run it.</p>
   </div>
 
-  <h2>Полное до и после</h2>
+  <h2>The full before and after</h2>
 
-  <p>Тот же вопрос: удерживаем ли мы клиентов, которых получаем?</p>
+  <p>Same question: are we keeping the customers we get?</p>
 
   <h3>Before</h3>
   <pre><code>SELECT DATE_TRUNC('month', purchase_date) AS month,
@@ -385,7 +385,7 @@ FROM purchases GROUP BY 1 ORDER BY 1;
 2026-01-01 | 5
 2026-02-01 | 7
 2026-03-01 | 7</code></pre>
-  <p>Ежемесячно активные клиенты, что выглядит как рост и ничего не говорит об удержании. Он смешивает новых клиентов с возвращающимися, поэтому месяц может оставаться неизменным, пока каждый существующий клиент уйдет и будет заменен. Нет ни знаменателя, ни возраста, ни способа отличить эти две истории друг от друга.</p>
+  <p>Monthly active customers, which looks like growth and says nothing about retention. It mixes brand new customers with returning ones, so a month can hold flat while every existing customer leaves and is replaced. There is no denominator, no age, and no way to tell those two stories apart.</p>
 
   <h3>After</h3>
   <pre><code>WITH first_p AS (
@@ -407,111 +407,111 @@ SELECT g.cohort, s.n AS cohort_size, g.month_no, g.active,
 FROM grid g JOIN sizes s USING (cohort)
 ORDER BY g.cohort, g.month_no;</code></pre>
 
-  <p>Четыре именованных шага с количеством строк в каждом, знаменателем для каждой ставки и столбцом месяца 0 со значением 100 % в качестве встроенной проверки. Треугольник честен в том, что еще не произошло.</p>
+  <p>Four named steps with a row count each, a denominator on every rate, and the month 0 column sitting at 100% as a built-in check. The triangle is honest about what has not happened yet.</p>
 
-  <p>Заявление, и именно оно является причиной существования седьмого раздела:  <strong>в одной и той же январской когорте в том же месяце сохраняется 50% или 33,3%, в зависимости от того, какое определение слова вы использовали, а длина SQL для обоих составляет четыре строки.</strong></p>
+  <p>The claim, and it is the reason section seven exists: <strong>the same January cohort in the same month is 50% retained or 33.3% retained depending on which definition of the word you used, and the SQL for both is four lines long.</strong></p>
 
   <div class="step">
-    <h2>Пограничные случаи, нарушающие когортную таблицу</h2>
+    <h2>Edge cases that break a cohort table</h2>
 
-    <p>Шесть, которые пройдут.</p>
+    <p>Six that get through.</p>
 
-    <p><strong>Нули в будущих ячейках.</strong> A <code>LEFT JOIN</code>  в полную сетку пар когорт по месяцам поможет заполнить все пробелы нулями, включая месяцы, которые еще не произошли. Фильтровать по  <code>cohort + month_no &lt;= the last complete month</code>  прежде чем кто-либо усреднит столбец.</p>
+    <p><strong>Zeros in the future cells.</strong> A <code>LEFT JOIN</code> onto a full grid of cohort-by-month pairs will helpfully fill every gap with zero, including the months that have not happened. Filter to <code>cohort + month_no &lt;= the last complete month</code> before anyone averages a column.</p>
 
-    <p><strong>Неполный текущий месяц.</strong>  Самый последний столбец всегда является неполным, поэтому он всегда выглядит как свернувшийся. Либо исключите это, либо назовите это, та же дисциплина, что и  <a href="../excel-month-over-month/">неполный месяц в тренде</a>.</p>
+    <p><strong>An incomplete current month.</strong> The most recent column is always partial, so it always looks like a collapse. Either exclude it or label it, the same discipline as <a href="../excel-month-over-month/">a partial month in a trend</a>.</p>
 
-    <p><strong>Ключ клиента — это не один клиент.</strong>  Если люди могут создать две учетные записи, вторая создает новую когорту, а первая, похоже, уходит. То есть  <a href="../entity-resolution/">Разрешение объекта</a>, и это одновременно льстит оттоку и снижает удержание клиентов.</p>
+    <p><strong>The customer key is not one customer.</strong> If people can create two accounts, their second one starts a new cohort and their first one appears to churn. That is <a href="../entity-resolution/">entity resolution</a>, and it flatters churn and depresses retention at the same time.</p>
 
-    <p><strong>Возвраты и отмены учитываются как активность.</strong>  Строка возврата — это строка покупки в большинстве схем. Решите, считается ли клиент, который только что-то вернул, удержанным, и отфильтруйте его до этапа когорты, а не после него.</p>
+    <p><strong>Refunds and cancellations counted as activity.</strong> A refund row is a purchase row in most schemas. Decide whether a customer who only returned something counts as retained, and filter before the cohort step, not after.</p>
 
-    <p><strong>Заполненная история.</strong>  Если старые данные были перенесены с указанием даты загрузки, а не даты события, каждый перенесенный клиент присоединяется к одной и той же фальшивой когорте, которая выглядит как одна огромная группа со странным сроком хранения. Прежде чем верить чему-либо, проверьте размеры когорт на предмет подозрительного всплеска.</p>
+    <p><strong>Backfilled history.</strong> If old data was migrated with a load date rather than an event date, every migrated customer joins the same fake cohort, which appears as one enormous group with strange retention. Check the cohort sizes for a suspicious spike before believing anything.</p>
 
-    <p><strong>Крошечные когорты.</strong>  Когорта из четырех человек не может дать процент, достойный сравнения. Опубликуйте подсчеты и установите нижний предел, ниже которого вы будете показывать только подсчеты, тот же аргумент, что и нижний предел для малых групп в  <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a>.</p>
+    <p><strong>Tiny cohorts.</strong> A cohort of four cannot produce a percentage worth comparing. Publish the counts, and set a floor below which you show the count only, the same argument as the small-group floor in <a href="../sql-group-by-having/">GROUP BY and HAVING</a>.</p>
   </div>
 
-  <h2>Почему это работает</h2>
+  <h2>Why this works</h2>
 
-  <p>Когортная таблица представляет собой анализ выживаемости с учетом статистики. Причина, по которой это должен быть треугольник, та же самая, по которой исследования выживаемости существуют как отдельная область: новейшие субъекты не наблюдались так долго, как самые старые, поэтому их более поздние результаты скорее неизвестны, чем отрицательны. Стандартный подход к этой ситуации, оценивающий выживаемость по записям, в которых за некоторыми субъектами просто не наблюдали достаточно долго, - это то, что изложили Каплан и Мейер, и ключевой шаг заключается в том, что ненаблюдаемый период должен быть исключен, а не засчитан как неудача (Каплан &amp; Мейер, 1958,    <em>Журнал Американской статистической ассоциации</em>, 53(282), 457–481). Заполнение нижних правых ячеек нулями — это именно та ошибка, которую призван избежать их метод, и это самая распространенная ошибка в колоде удержания.</p>
+  <p>A cohort table is a survival analysis with the statistics taken out. The reason it has to be a triangle is the same reason survival studies exist as a separate field: the newest subjects have not been observed for as long as the oldest ones, so their later outcomes are unknown rather than negative. The standard treatment of that situation, estimating survival from records where some subjects have simply not been followed long enough, is what Kaplan and Meier set out, and the key move is that an unobserved period must be excluded rather than counted as a failure (Kaplan &amp; Meier, 1958, <em>Journal of the American Statistical Association</em>, 53(282), 457–481). Filling the lower-right cells with zeros is precisely the error their method exists to avoid, and it is the commonest mistake in a retention deck.</p>
 
-  <p>Другая половина страницы, два определения, вообще не является проблемой SQL. Анализ клиентской базы рассматривает «все еще клиент» как нечто, что нужно моделировать, а не наблюдать, потому что в условиях отсутствия контракта никто не говорит вам, что они ушли; разрыв в покупках соответствует как оттоку, так и тому, что клиент совершает покупки дважды в год (Фейдер &amp; Харди, 2009,    <em>Журнал интерактивного маркетинга</em>, 23(1), 61–69). Это как раз тот клиент из седьмого отдела, который пропустил февраль. Будут ли они считаться сохраненными в марте, это выбор моделирования, и самое честное, что нужно сделать в отчете, — это указать этот выбор в заголовке столбца.</p>
+  <p>The other half of the page, the two definitions, is not a SQL problem at all. Customer-base analysis treats "still a customer" as something that has to be modelled rather than observed, because in a non-contractual setting nobody tells you they have left; a gap in purchasing is consistent both with churn and with a customer who buys twice a year (Fader &amp; Hardie, 2009, <em>Journal of Interactive Marketing</em>, 23(1), 61–69). That is exactly the customer in section seven who skipped February. Whether they count as retained in March is a modelling choice, and the honest thing to do in a report is to name the choice in the column heading.</p>
 
-  <p>Одно замечание в шпаргалке ниже. Он создан для того, чтобы его просматривали и вспоминали, а не перечитывали, потому что сам акт тестирования сам по себе является обучающим мероприятием, а не просто его измерением (Краснее &amp; выбирать карпа, 2006,    <em>Перспективы психологической науки</em>, 1(3), 181–210).</p>
+  <p>One note on the cheat sheet below. It is built to be covered and recalled rather than reread, because the act of testing yourself is itself a learning event rather than merely a measurement of one (Roediger &amp; Karpicke, 2006, <em>Perspectives on Psychological Science</em>, 1(3), 181–210).</p>
 
-  <h2>Использование этого в вашем собственном проекте</h2>
+  <h2>Using this on your own project</h2>
 
-  <p>Создание всего за один раз — вот почему групповые запросы оказываются непроверяемыми. Вместо этого сделайте это по порядку.</p>
+  <p>Building the full thing in one go is how cohort queries end up unverifiable. Do this instead, in order.</p>
 
   <ol>
-    <li><strong>Сначала напишите предложение.</strong>  «Из клиентов, чей первый X был в месяце A, многие сделали Y в месяце B». Обе половины нуждаются в определении.</li>
-    <li><strong>Создайте первый шаг самостоятельно</strong>  и убедитесь, что размеры когорт увеличивают количество ваших клиентов.</li>
-    <li><strong>Создайте второй шаг самостоятельно</strong>  и убедитесь, что количество строк по-прежнему равно количеству событий, с которых вы начали. Соединение, которое меняет, что-то умножает.</li>
-    <li><strong>Убедитесь, что столбец месяца 0 равен 100 %.</strong>  прежде чем смотреть на что-либо еще.</li>
-    <li><strong>Публикация имеет значение помимо ставок</strong>, и скройте процент тех случаев, когда когорта слишком мала, чтобы ее поддерживать.</li>
-    <li><strong>Отметьте неполные ячейки как неизвестные</strong>, никогда не равен нулю и исключает текущий неполный месяц.</li>
+    <li><strong>Write the sentence first.</strong> "Of the customers whose first X was in month A, this many did Y in month B." Both halves need a definition.</li>
+    <li><strong>Build step one on its own</strong> and check that the cohort sizes add to your customer count.</li>
+    <li><strong>Build step two on its own</strong> and check that the row count still equals the number of events you started with. A join that changes it has multiplied something.</li>
+    <li><strong>Check the month 0 column is 100%</strong> before looking at anything else.</li>
+    <li><strong>Publish counts beside rates</strong>, and hide the percentage where the cohort is too small to support one.</li>
+    <li><strong>Mark the incomplete cells as unknown</strong>, never as zero, and exclude the current partial month.</li>
   </ol>
 
-  <p>Если у вас под рукой есть бумага, один дополнительный эскиз стоит пяти минут. Нарисуйте пустой треугольник с вашими месяцами по бокам и номерами месяцев вверху, затем заштрихуйте ячейки, которые могут содержать числа сегодняшнего дня. Незаштрихованная область — это то, что ваш запрос не должен заполнять, и нарисовать ее быстрее, чем спорить о ней после того, как колода построена.</p>
+  <p>If you have paper nearby, one optional sketch is worth five minutes. Draw the triangle empty, with your own months down the side and month numbers across the top, then shade the cells that could possibly contain a number today. The unshaded region is what your query must not fill in, and drawing it is faster than arguing about it after the deck is built.</p>
 
-  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>. Если вы предпочитаете вводить запросы, а не читать о них,  <a href="../../drill/">SQL-детализация</a>  дает вам по одному выполняемому запросу к реальной базе данных.</div>
+  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>. If you would rather type queries than read about them, the <a href="../../drill/">SQL Drill</a> gives you one runnable query at a time against a real database.</div>
 
-  <h2>Все на одном экране</h2>
+  <h2>The whole thing on one screen</h2>
 
-  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
+  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
 
   <table>
-    <tr><th>Thing</th><th>Что он делает</th></tr>
-    <tr><td>когорта</td><td>Клиенты, у которых общий стартовый месяц.</td></tr>
-    <tr><td>Первое решение</td><td>Какое событие запускает часы: регистрация, первая покупка, первый вход.</td></tr>
-    <tr><td>Шаг первый</td><td><code>MIN(date)</code>  за клиента, сокращенно до месяца.</td></tr>
-    <tr><td>Размер когорты</td><td>Должно увеличиться количество ваших клиентов.</td></tr>
-    <tr><td>Шаг второй</td><td><code>DATEDIFF('month', cohort, activity_month)</code>.</td></tr>
-    <tr><td>Обрезать обе стороны</td><td>Или покупка, сделанная с разницей в день, попадает в другую корзину.</td></tr>
-    <tr><td>Месяц 0</td><td>Всегда размер когорты. Всегда 100%. Проверка, а не вывод.</td></tr>
-    <tr><td>Шаг третий</td><td><code>COUNT(DISTINCT customer_id)</code>  на когорту в месяц.</td></tr>
-    <tr><td>Никогда НЕ СЧИТАЙТЕ(*)</td><td>Две покупки за один месяц — это 117% удержания.</td></tr>
-    <tr><td>Пустые ячейки</td><td>Месяцы, которых не было. Не нули.</td></tr>
-    <tr><td>активен в месяце N</td><td>Учитывает возвращающегося просроченного клиента. Можно подняться.</td></tr>
-    <tr><td>Активен каждый месяц</td><td>Кривая выживания. Можно только спуститься.</td></tr>
-    <tr><td>Пропасть между ними</td><td>В той же когорте здесь 50% против 33,3%.</td></tr>
-    <tr><td>Сохранение доходов</td><td>Тот же скелет,  <code>SUM(amount)</code>. Ячейки должны добавляться к исходной сумме.</td></tr>
-    <tr><td>Читаем их вместе</td><td>Число клиентов сократилось на 40%, а выручка упала на 38% — это совсем другая история, чем 40% и 10%.</td></tr>
-    <tr><td>Маленькие когорты</td><td>Один клиент поднимает ставку на двадцать пунктов. Покажите счет.</td></tr>
-    <tr><td>Текущий месяц</td><td>Частичный, поэтому всегда выглядит как обвал. Исключить или пометить.</td></tr>
+    <tr><th>Thing</th><th>What it does</th></tr>
+    <tr><td>A cohort</td><td>Customers who share a starting month.</td></tr>
+    <tr><td>The first decision</td><td>Which event starts the clock: signup, first purchase, first login.</td></tr>
+    <tr><td>Step one</td><td><code>MIN(date)</code> per customer, truncated to the month.</td></tr>
+    <tr><td>Cohort sizes</td><td>Must add up to your customer count.</td></tr>
+    <tr><td>Step two</td><td><code>DATEDIFF('month', cohort, activity_month)</code>.</td></tr>
+    <tr><td>Truncate both sides</td><td>Or a purchase a day apart lands in a different bucket.</td></tr>
+    <tr><td>Month 0</td><td>Always the cohort size. Always 100%. A check, not a finding.</td></tr>
+    <tr><td>Step three</td><td><code>COUNT(DISTINCT customer_id)</code> per cohort per month number.</td></tr>
+    <tr><td>Never COUNT(*)</td><td>Two purchases in one month becomes 117% retention.</td></tr>
+    <tr><td>The empty cells</td><td>Months that have not happened. Not zeros.</td></tr>
+    <tr><td>Active in month N</td><td>Counts a returning lapsed customer. Can go up.</td></tr>
+    <tr><td>Active every month</td><td>A survival curve. Can only go down.</td></tr>
+    <tr><td>The gap between them</td><td>On the same cohort here, 50% against 33.3%.</td></tr>
+    <tr><td>Revenue retention</td><td>Same skeleton, <code>SUM(amount)</code>. Cells must add to the source total.</td></tr>
+    <tr><td>Reading them together</td><td>Customers down 40% and revenue down 38% is a different story from 40% and 10%.</td></tr>
+    <tr><td>Small cohorts</td><td>One customer moves the rate by twenty points. Show the count.</td></tr>
+    <tr><td>The current month</td><td>Partial, so it always looks like a collapse. Exclude or label.</td></tr>
   </table>
 
-  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Укажите размер когорты рядом с каждым процентом в самой таблице. Удержание — это соотношение с крошечным знаменателем, гораздо чаще, чем кто-либо признает, и этот показатель — единственная вещь на странице, которая останавливает споры о 50% и 33%, как если бы это были показатели, а не два клиента. Если когортный запрос ведет себя не так, как описано на этой странице, существует общая причина:  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>.</div>
+  <div class="note"><strong>The one habit to keep.</strong> Put the cohort size next to every percentage, in the table itself. Retention is a ratio with a tiny denominator far more often than anyone admits, and the count is the only thing on the page that stops 50% and 33% being argued about as if they were measurements rather than two customers. If a cohort query misbehaves in a way this page does not cover, there is a general <a href="../technical-tenacity/">diagnosis loop for being stuck</a>.</div>
 
-  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Тот, который я помню, представлял собой колоду удержания, где последние три когорты были заполнены нулями за месяцы, которые они не прожили, поэтому каждая диаграмма была наклонена вниз вправо, и вся компания потратила четверть, объясняя снижение, которое было артефактом запроса. Что такого в запросе вам сказала когортная таблица?</p>
+  <p>One last thought, and I would genuinely like other people's answers. The one I remember was a retention deck where the newest three cohorts had been filled in with zeros for months they had not lived through, so every chart bent downwards at the right and the whole company spent a quarter explaining a decline that was an artefact of the query. What has a cohort table told you that turned out to be about the query?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Каплан Э.Л. и Мейер П. (1958). Непараметрическая оценка по неполным наблюдениям.  <em>Журнал Американской статистической ассоциации</em>, 53(282), 457–481.</li>
-    <li>Фейдер, П.С., и Харди, Б.Г.С. (2009). Вероятностные модели для анализа клиентской базы.  <em>Журнал интерактивного маркетинга</em>, 23(1), 61–69.</li>
-    <li>Рёдигер, Х.Л., и Карпике, Дж.Д. (2006). Сила проверки памяти: фундаментальные исследования и последствия для образовательной практики.  <em>Перспективы психологической науки</em>, 1(3), 181–210.</li>
+    <li>Kaplan, E. L., &amp; Meier, P. (1958). Nonparametric estimation from incomplete observations. <em>Journal of the American Statistical Association</em>, 53(282), 457–481.</li>
+    <li>Fader, P. S., &amp; Hardie, B. G. S. (2009). Probability models for customer-base analysis. <em>Journal of Interactive Marketing</em>, 23(1), 61–69.</li>
+    <li>Roediger, H. L., &amp; Karpicke, J. D. (2006). The power of testing memory: Basic research and implications for educational practice. <em>Perspectives on Psychological Science</em>, 1(3), 181–210.</li>
   </ul>
 
   <div class="book">
-    <strong>График удержания нарисован, и вы не можете сказать, в каком месяце началась каждая когорта.</strong>
-    <p><em>SQL для аналитиков</em>  составляет 458 страниц, групповые запросы создают одно соединение за раз, поэтому у каждого процента есть знаменатель, который вы можете назвать.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-cohort-retention'})">SQL для аналитиков, 19 $ →</a>
+    <strong>The retention chart is drawn and you cannot say which month each cohort started.</strong>
+    <p><em>SQL for Analysts</em> is 458 pages, cohort queries built one join at a time, so every percentage has a denominator you can name.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-cohort-retention'})">SQL for Analysts, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>Практикуйте групповые запросы на данных, которые можно посчитать вручную.</strong>
-    <p style="margin:6px 0 0">The <a href="../../sql/">SQL-кит</a>  дает вам повторения: таблицы первых событий, которые нужно построить, номера месяцев, которые нужно вычислить, треугольники, которые нужно собрать, и карточки с информацией о том, какой именно счет принадлежит какой ячейке. Теперь вы владеете методом; комплект - это практика. Ничего устанавливать, учетная запись не требуется.</p>
-    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
+    <strong>Practice cohort queries on data you can count by hand.</strong>
+    <p style="margin:6px 0 0">The <a href="../../sql/">SQL Kit</a> gives you the repetitions: first-event tables to build, month numbers to compute, triangles to assemble, and flash cards on exactly which count belongs in which cell. You now own the method; the kit is the practice. Nothing to install, no account needed.</p>
+    <a class="btn" href="../../sql/">Open the SQL Kit →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../sql-dates/">Функции даты SQL</a> · <a href="../sql-subqueries/">Подзапрос против CTE</a> · <a href="../sql-running-total/">Проведение итогов в SQL</a> · <a href="../sql-window-functions/">Оконные функции</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-ctes/">SQL CTE</a> · <a href="../../sql/">SQL-кит</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../excel-month-over-month/">Месяц за месяцем в Excel</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../report-vs-analysis/">Отчет против анализа</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../projects/">Портфельные проекты</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
+    <a href="../../">← Analyst Prep Kit</a> · <a href="../sql-dates/">SQL Date Functions</a> · <a href="../sql-subqueries/">Subquery vs CTE</a> · <a href="../sql-running-total/">Running Total in SQL</a> · <a href="../sql-window-functions/">Window Functions</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../sql-joins/">SQL JOINs</a> · <a href="../sql-ctes/">SQL CTEs</a> · <a href="../../sql/">SQL Kit</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../entity-resolution/">Entity Resolution</a> · <a href="../excel-month-over-month/">Month-over-Month in Excel</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../report-vs-analysis/">Report vs Analysis</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../projects/">Portfolio Projects</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
   <script src="../../assets/plan-return.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

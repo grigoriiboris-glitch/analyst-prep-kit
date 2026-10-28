@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>КОММЕНТАРИЙ К ТАБЛИЦЕ: Синтаксис для всех четырех баз данных — комплект подготовки аналитика</title>
-<meta name="description" content="COMMENT ON TABLE хранит описание внутри самой базы данных. Точный синтаксис для PostgreSQL, Оракул, MySQL и SQL-сервер, как читать комментарии и что в них писать.">
+<title>COMMENT ON TABLE: The Syntax for All Four Databases &mdash; Analyst Prep Kit</title>
+<meta name="description" content="COMMENT ON TABLE stores a description inside the database itself. The exact syntax for PostgreSQL, Oracle, MySQL and SQL Server, how to read the comments back, and what to write in them.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-comment-on-table/">
-<meta property="og:title" content="КОММЕНТАРИЙ К ТАБЛИЦЕ в SQL">
-<meta property="og:description" content="Как прикрепить описание к таблице или столбцу внутри самой базы данных, в PostgreSQL, Оракул, MySQL и SQL-сервер.">
+<meta property="og:title" content="COMMENT ON TABLE in SQL">
+<meta property="og:description" content="How to attach a description to a table or column inside the database itself, in PostgreSQL, Oracle, MySQL and SQL Server.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-comment-on-table/">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/sql-comment-on-table.png">
@@ -152,139 +152,139 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-кит</a> · <a href="../">Все руководства</a></p>
-  <h1>КОММЕНТАРИЙ К ТАБЛИЦЕ</h1>
-  <p class="meta">Как хранить описание в базе данных, где его сможет найти следующий аналитик · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-11">11 августа 2026 г.</time></p>
+  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../sql/">SQL Kit</a> · <a href="../">All Guides</a></p>
+  <h1>COMMENT ON TABLE</h1>
+  <p class="meta">How to store a description inside the database, where the next analyst will actually find it · Part of the <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-11">August 11, 2026</time></p>
 
-  <p>В SQL есть две совершенно разные вещи, называемые комментариями, и при поиске одной из них вы получаете страницы, посвященные другой.</p>
-  <p>Большинство людей имеют в виду  <code>--</code>, что останавливает выполнение строки вашего запроса. Если вы пришли именно за этим, это описано в  <a href="../sql-comments/">Как комментировать в SQL</a>.</p>
-  <p>Эта страница о другом.  <code>COMMENT ON TABLE</code>  — это оператор, который вы запускаете, и он записывает описание в базу данных, прикрепленное к таблице. В следующем году он все еще будет там для коллеги, который никогда не видел ваш файл запроса.</p>
+  <p>There are two completely different things in SQL called a comment, and searching for one gets you pages about the other.</p>
+  <p>The one most people mean is <code>--</code>, which stops a line of your query from running. If that is what you came for, it is covered in <a href="../sql-comments/">how to comment in SQL</a>.</p>
+  <p>This page is about the other one. <code>COMMENT ON TABLE</code> is a statement you run, and it writes a description into the database, attached to the table. It is still there next year, for a colleague who has never seen your query file.</p>
 
-  <div class="note"><strong>Краткая версия.</strong> <code>COMMENT ON TABLE orders IS 'One row per order line, not per order.';</code>    в PostgreSQL и Оракул. MySQL и SQL-сервер требуют разных операторов, как показано ниже.</div>
+  <div class="note"><strong>The short version.</strong> <code>COMMENT ON TABLE orders IS 'One row per order line, not per order.';</code> in PostgreSQL and Oracle. MySQL and SQL Server each need a different statement, both below.</div>
 
   <div class="toc">
-    <strong>Что здесь</strong>
+    <strong>What's here</strong>
     <ol>
-      <li>Почему это вообще стоит делать</li>
-      <li>PostgreSQL и Оракул</li>
+      <li>Why this is worth doing at all</li>
+      <li>PostgreSQL and Oracle</li>
       <li>MySQL</li>
-      <li>SQL-сервер</li>
-      <li>SQLite, который не может этого сделать</li>
-      <li>Читаю комментарии назад</li>
-      <li>Что собственно написать в одном</li>
-      <li>Шпаргалка</li>
+      <li>SQL Server</li>
+      <li>SQLite, which cannot do this</li>
+      <li>Reading the comments back</li>
+      <li>What to actually write in one</li>
+      <li>Cheat sheet</li>
     </ol>
   </div>
 
-  <h2>Почему это вообще стоит делать</h2>
-  <p>Каждый аналитик открывал таблицу, которая называлась примерно так:  <code>cust_txn_f</code>  со столбцом под названием  <code>flag_3</code>  и не у кого было спросить.</p>
-  <p>Знания существовали когда-то. Это было в сообщении Слабый, или в электронной таблице, или в чьей-то голове. Его не было в базе данных, поэтому он не сохранился.</p>
-  <p>Комментарий к таблице сохраняется, поскольку он перемещается вместе с описываемым объектом. Сделайте резервную копию базы данных, и комментарий тоже появится. Наведите каталог данных или инструмент BI на базу данных, и большинство из них автоматически прочитают эти описания и покажут их людям, которые никогда не будут писать запросы.</p>
-  <p>На одну таблицу уходит около двадцати секунд. Это самая дешевая документация в работе.</p>
+  <h2>Why this is worth doing at all</h2>
+  <p>Every analyst has opened a table called something like <code>cust_txn_f</code> with a column called <code>flag_3</code> and had nobody left to ask.</p>
+  <p>The knowledge existed once. It was in a Slack message, or a spreadsheet, or somebody's head. It was not in the database, so it did not survive.</p>
+  <p>A table comment survives because it travels with the object it describes. Back up the database and the comment comes too. Point a data catalogue or a BI tool at the database and most of them read these descriptions automatically and show them to people who will never write a query.</p>
+  <p>It takes about twenty seconds per table. It is the cheapest documentation in the job.</p>
 
-  <h2>PostgreSQL и Оракул</h2>
-  <p>Оба используют стандартный оператор, и форма у них одинакова.</p>
+  <h2>PostgreSQL and Oracle</h2>
+  <p>Both use the standard statement, and the shape is the same for either.</p>
   <pre><code>COMMENT ON TABLE orders IS 'One row per order line, not per order.';
 
 COMMENT ON COLUMN orders.status IS 'Values: new, paid, shipped, refunded. Set by the billing job, not the web app.';</code></pre>
-  <p>Три вещи о его поведении, все из документации PostgreSQL:</p>
+  <p>Three things about how it behaves, all from the PostgreSQL documentation:</p>
   <ul>
-    <li>Для каждого объекта сохраняется только один комментарий. Повторный запуск заменяет текст, а не добавляет второй.</li>
-    <li>Чтобы удалить комментарий, установите для него значение  <code>NULL</code>: <code>COMMENT ON TABLE orders IS NULL;</code></li>
-    <li>Комментарии удаляются автоматически при удалении объекта, поэтому вы никогда не оставите без внимания.</li>
+    <li>Only one comment is stored per object. Running it again replaces the text, it does not add a second one.</li>
+    <li>To remove a comment, set it to <code>NULL</code>: <code>COMMENT ON TABLE orders IS NULL;</code></li>
+    <li>Comments are dropped automatically when the object is dropped, so you never leave orphans behind.</li>
   </ul>
-  <p>Вы должны владеть объектом, чтобы комментировать его, и это стоит знать, прежде чем вы напишете тридцать таких писем и обнаружите, что половина из них отклонена.</p>
+  <p>You have to own the object to comment on it, which is worth knowing before you write thirty of these and find half of them rejected.</p>
 
   <h2>MySQL</h2>
-  <p>MySQL не имеет  <code>COMMENT ON</code>  заявление. Комментарий — это предложение, прикрепленное к таблице или столбцу, и оно находится внутри  <code>CREATE TABLE</code> or <code>ALTER TABLE</code>.</p>
+  <p>MySQL has no <code>COMMENT ON</code> statement. The comment is a clause attached to the table or column instead, and it goes inside <code>CREATE TABLE</code> or <code>ALTER TABLE</code>.</p>
   <pre><code>CREATE TABLE orders (
   id      INT PRIMARY KEY COMMENT 'Order line ID, not order ID',
   status  VARCHAR(20)     COMMENT 'new, paid, shipped, refunded'
 ) COMMENT = 'One row per order line, not per order.';</code></pre>
-  <p>В уже существующей таблице используйте  <code>ALTER TABLE</code>:</p>
+  <p>On a table that already exists, use <code>ALTER TABLE</code>:</p>
   <pre><code>ALTER TABLE orders COMMENT = 'One row per order line, not per order.';</code></pre>
-  <p>Ограничения документированы, и их стоит знать, прежде чем писать эссе: комментарий к таблице может содержать 2048 символов, комментарий к столбцу — 1024.</p>
-  <div class="note"><strong>Одна ловушка в колонном варианте.</strong>  Изменение комментария столбца в MySQL означает перезапись полного определения столбца, потому что  <code>ALTER TABLE ... MODIFY COLUMN</code>  заменяет его. Пропустить  <code>NOT NULL</code>  или значение по умолчанию, и вы незаметно изменили столбец, а не только его описание. Скопируйте определение из  <code>SHOW CREATE TABLE</code>  первый.</div>
+  <p>The limits are documented and worth knowing before you write an essay: a table comment can be 2048 characters, a column comment 1024.</p>
+  <div class="note"><strong>One trap in the column version.</strong> Changing a column comment in MySQL means restating the column's full definition, because <code>ALTER TABLE ... MODIFY COLUMN</code> replaces it. Leave out <code>NOT NULL</code> or the default and you have quietly changed the column, not just its description. Copy the definition from <code>SHOW CREATE TABLE</code> first.</div>
 
-  <h2>SQL-сервер</h2>
-  <p>SQL-сервер не имеет  <code>COMMENT</code>  заявление любого рода. Он хранит подобные вещи как расширенное свойство, которое представляет собой имя и значение, прикрепленные к объекту. Соглашение заключается в том, чтобы назвать свойство  <code>MS_Description</code>, потому что это то, что ищет SSMS и большинство инструментов.</p>
+  <h2>SQL Server</h2>
+  <p>SQL Server has no <code>COMMENT</code> statement of any kind. It stores this sort of thing as an extended property, which is a name and value bolted onto an object. The convention is to name the property <code>MS_Description</code>, because that is the one SSMS and most tools look for.</p>
   <pre><code>EXEC sp_addextendedproperty
   @name = N'MS_Description',
   @value = N'One row per order line, not per order.',
   @level0type = N'SCHEMA', @level0name = N'dbo',
   @level1type = N'TABLE',  @level1name = N'orders';</code></pre>
-  <p>Для получения того же результата требуется гораздо больше ввода, чем в других базах данных. Использовать  <code>sp_updateextendedproperty</code>  изменить одно и  <code>sp_dropextendedproperty</code>  удалить его, так как  <code>sp_addextendedproperty</code>  ошибки, если свойство уже существует.</p>
+  <p>It is much more typing than the other databases for the same result. Use <code>sp_updateextendedproperty</code> to change one and <code>sp_dropextendedproperty</code> to remove it, since <code>sp_addextendedproperty</code> errors if the property is already there.</p>
 
-  <h2>SQLite, который не может этого сделать</h2>
-  <p>SQLite не имеет возможности хранить описание таблицы или столбца. Нет  <code>COMMENT ON</code>  и никаких расширенных свойств.</p>
-  <p>Вместо этого люди ставят  <code>--</code>  комментарий в  <code>CREATE TABLE</code>  само заявление. SQLite сохраняет исходный текст оператора в  <code>sqlite_master.sql</code>, комментарии и все такое, чтобы заметку можно было восстановить:</p>
+  <h2>SQLite, which cannot do this</h2>
+  <p>SQLite has no way to store a table or column description. There is no <code>COMMENT ON</code> and no extended properties.</p>
+  <p>What people do instead is put a <code>--</code> comment in the <code>CREATE TABLE</code> statement itself. SQLite keeps the original text of the statement in <code>sqlite_master.sql</code>, comments and all, so the note is recoverable:</p>
   <pre><code>SELECT sql FROM sqlite_master WHERE name = 'orders';</code></pre>
-  <p>Это обходной путь, а не функция. Ни один инструмент не будет читать это как описание. Если документация важна для проекта SQLite, храните ее в репозитории рядом с файлом схемы.</p>
+  <p>It is a workaround, not a feature. No tool will read it as a description. If documentation matters on a SQLite project, keep it in the repository next to the schema file.</p>
 
-  <h2>Читаю комментарии назад</h2>
-  <p>Написать их – это полдела. Возможность вытащить их все делает их полезными.</p>
+  <h2>Reading the comments back</h2>
+  <p>Writing them is half the job. Being able to pull them all out is what makes them useful.</p>
   <table>
-    <tr><th>Database</th><th>Как читать комментарии</th></tr>
-    <tr><td>PostgreSQL</td><td><code>\d+ tablename</code>  в psql или  <code>obj_description()</code> and <code>col_description()</code>  функции в запросе</td></tr>
+    <tr><th>Database</th><th>How to read the comments</th></tr>
+    <tr><td>PostgreSQL</td><td><code>\d+ tablename</code> in psql, or the <code>obj_description()</code> and <code>col_description()</code> functions in a query</td></tr>
     <tr><td>Oracle</td><td>Query <code>USER_TAB_COMMENTS</code> and <code>USER_COL_COMMENTS</code></td></tr>
-    <tr><td>MySQL</td><td><code>SHOW CREATE TABLE</code>, <code>SHOW FULL COLUMNS</code>, или  <code>information_schema.TABLES.TABLE_COMMENT</code> and <code>information_schema.COLUMNS.COLUMN_COMMENT</code></td></tr>
-    <tr><td>SQL-сервер</td><td><code>fn_listextendedproperty</code>или  <code>sys.extended_properties</code> view</td></tr>
-    <tr><td>SQLite</td><td>Не поддерживается. Читать  <code>sqlite_master.sql</code>  и надеюсь, что кто-нибудь оставил записку</td></tr>
+    <tr><td>MySQL</td><td><code>SHOW CREATE TABLE</code>, <code>SHOW FULL COLUMNS</code>, or <code>information_schema.TABLES.TABLE_COMMENT</code> and <code>information_schema.COLUMNS.COLUMN_COMMENT</code></td></tr>
+    <tr><td>SQL Server</td><td><code>fn_listextendedproperty</code>, or the <code>sys.extended_properties</code> view</td></tr>
+    <tr><td>SQLite</td><td>Not supported. Read <code>sqlite_master.sql</code> and hope somebody left a note</td></tr>
   </table>
-  <p>Маршруты MySQL и PostgreSQL полезны, поскольку это обычные запросы. Это означает, что вы можете объединить их со списком столбцов и создать словарь данных для всей схемы за один раз, что очень полезно иметь в портфолио проекта.</p>
+  <p>The MySQL and PostgreSQL routes are the useful ones, because they are ordinary queries. That means you can join them to the column list and produce a data dictionary for the whole schema in one go, which is a genuinely good thing to have in a portfolio project.</p>
 
-  <h2>Что собственно написать в одном</h2>
-  <p>Синтаксис требует минуты, чтобы изучить. Решение о том, что будет в строке, является важной частью, и это такое же решение, как и любой другой комментарий.</p>
-  <p>Описание заслуживает своего места только в том случае, если оно говорит что-то, о чем еще не говорит название.  <code>COMMENT ON TABLE orders IS 'The orders table'</code>  это хуже, чем ничего, потому что оно похоже на документацию и не содержит ее.</p>
-  <p>То, что имя действительно не может сказать вам, стоит двадцати секунд:</p>
+  <h2>What to actually write in one</h2>
+  <p>The syntax takes a minute to learn. Deciding what goes in the string is the part that matters, and it is the same judgment as any other comment.</p>
+  <p>A description earns its place only if it says something the name does not already say. <code>COMMENT ON TABLE orders IS 'The orders table'</code> is worse than nothing, because it looks like documentation and carries none.</p>
+  <p>The things a name genuinely cannot tell you are worth the twenty seconds:</p>
   <ul>
-    <li><strong>Что такое один ряд.</strong>  Самое полезное предложение о любом столе. Одна строка на заказ, на строку заказа или на заказ в день.</li>
-    <li><strong>Откуда берутся данные и как часто.</strong>  Загружается каждую ночь из биллинговой системы или записывается приложением в реальном времени.</li>
-    <li><strong>Что означают значения.</strong>  Для любого столбца, содержащего коды или флаги, перечислите их.</li>
-    <li><strong>Что в этом плохого.</strong>  Строки до 2023 года не имеют региона. Это предложение экономит кому-то целый день.</li>
+    <li><strong>What one row is.</strong> The single most useful sentence about any table. One row per order, or per order line, or per order per day.</li>
+    <li><strong>Where the data comes from and how often.</strong> Loaded nightly from the billing system, or written live by the app.</li>
+    <li><strong>What the values mean.</strong> For any column holding codes or flags, list them.</li>
+    <li><strong>What is wrong with it.</strong> Rows before 2023 have no region. That sentence saves someone a full day.</li>
   </ul>
-  <p>Последний пункт люди упускают из виду, и он наиболее ценен. Тот же принцип, подробно описанный в полном формате, находится в  <a href="../sql-teaching-comments/">Как комментировать SQL, чтобы он обучал</a>.</p>
+  <p>That last one is the one people leave out, and it is the most valuable. The same principle written out at length, with a full format, is in <a href="../sql-teaching-comments/">how to comment SQL so it teaches</a>.</p>
 
-  <h2>Шпаргалка</h2>
+  <h2>Cheat sheet</h2>
   <table>
-    <tr><th>Database</th><th>Добавить описание таблицы</th><th>Удалить это</th></tr>
+    <tr><th>Database</th><th>Add a table description</th><th>Remove it</th></tr>
     <tr><td>PostgreSQL</td><td><code>COMMENT ON TABLE t IS 'text';</code></td><td><code>COMMENT ON TABLE t IS NULL;</code></td></tr>
     <tr><td>Oracle</td><td><code>COMMENT ON TABLE t IS 'text';</code></td><td><code>COMMENT ON TABLE t IS '';</code></td></tr>
     <tr><td>MySQL</td><td><code>ALTER TABLE t COMMENT = 'text';</code></td><td><code>ALTER TABLE t COMMENT = '';</code></td></tr>
-    <tr><td>SQL-сервер</td><td><code>sp_addextendedproperty</code> with <code>MS_Description</code></td><td><code>sp_dropextendedproperty</code></td></tr>
-    <tr><td>SQLite</td><td>Не поддерживается</td><td>Непригодный</td></tr>
+    <tr><td>SQL Server</td><td><code>sp_addextendedproperty</code> with <code>MS_Description</code></td><td><code>sp_dropextendedproperty</code></td></tr>
+    <tr><td>SQLite</td><td>Not supported</td><td>Not applicable</td></tr>
   </table>
 
-  <h2>Тот, кто напишет первым</h2>
-  <p>Если вы сделаете это сегодня ровно для одной таблицы, напишите предложение, в котором будет указано, что представляет собой одна строка. Это вопрос, который задает каждый новичок, на него имя таблицы почти никогда не дает ответа, и неправильное решение приводит к двойному подсчету итогов.</p>
+  <h2>The one to write first</h2>
+  <p>If you do this for exactly one table today, write the sentence that says what one row is. It is the question every new person asks, it is the one the table name almost never answers, and getting it wrong is how double-counted totals happen.</p>
 
-  <p>Выберите таблицу, которую вы чаще всего объясняли вслух в этом году. Это объяснение является комментарием.</p>
+  <p>Pick the table you have explained out loud most often this year. That explanation is the comment.</p>
 
   <div class="book">
-    <strong>Описание таблицы поможет только в том случае, если кто-то напишет хорошее описание. Это стандарт, а не утверждение.</strong>
-    <p><em>Система комментариев SQL</em>    — это двухрежимный стандарт, 12-балльная критерий оценки и агент для Клод или ЧатGPT, который применяет оба режима к запросам, которые вы фактически пишете.</p>
-    <a class="booklink" href="https://gumroad.com/u/qk4rqagf" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','comment_system_click',{kit:'guide-sql-comment-on-table'})">Система комментариев SQL, 29 долларов США →</a>
+    <strong>A table description only helps if someone writes a good one. That is a standard, not a statement.</strong>
+    <p><em>The SQL Comment System</em> is the two-mode standard, a 12-point scoring rubric, and an agent for Claude or ChatGPT that applies both to the queries you actually write.</p>
+    <a class="booklink" href="https://gumroad.com/u/qk4rqagf" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','comment_system_click',{kit:'guide-sql-comment-on-table'})">The SQL Comment System, $29 &rarr;</a>
   </div>
 
-  <p style="font-size:13px;color:var(--muted);margin:14px 0 0;line-height:1.6">Хотите более широкий навык, а не одну привычку?  <em>SQL для аналитиков</em>  читает запросы построчно простыми словами, и это та же привычка, по которой написаны эти комментарии.  <a href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-comment-on-table'})">SQL для аналитиков, 19 $ →</a></p>
+  <p style="font-size:13px;color:var(--muted);margin:14px 0 0;line-height:1.6">Want the wider skill rather than the one habit? <em>SQL for Analysts</em> reads queries line by line in plain words, which is the same habit these comments are written in. <a href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-comment-on-table'})">SQL for Analysts, $19 &rarr;</a></p>
 
   <div class="cta">
-    <strong>Пишите запросы, а не просто читайте их.</strong>
-    <p style="margin:6px 0 0">The <a href="../../sql/">SQL-кит</a>  охватывает SELECT, WHERE, JOIN и GROUP BY с отработанными примерами, практикой и пробным экзаменом, и все это в браузере. Если у вас еще нет базы данных для практики, начните с  <a href="../set-up-a-sql-database/">установка за пятнадцать минут</a>.</p>
-    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
-    <p style="margin:10px 0 0;font-size:15px">Или введите их самостоятельно по одному:  <a href="../../drill/">открыть SQL-детализация</a>, тринадцать запросов, каждый из которых добавляет что-то одно к последнему.</p>
+    <strong>Write the queries, do not just read them.</strong>
+    <p style="margin:6px 0 0">The <a href="../../sql/">SQL Kit</a> covers SELECT, WHERE, JOIN and GROUP BY with worked examples, practice and a mock exam, all in the browser. If you have no database to practice on yet, start by <a href="../set-up-a-sql-database/">setting one up in fifteen minutes</a>.</p>
+    <a class="btn" href="../../sql/">Open the SQL Kit →</a>
+    <p style="margin:10px 0 0;font-size:15px">Or type them yourself one at a time: <a href="../../drill/">open SQL Drill</a>, thirteen queries that each add one thing to the last.</p>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql-comments/">Как комментировать в SQL</a> · <a href="../sql-comment-syntax-by-database/">Синтаксис комментариев по базе данных</a> · <a href="../sql-teaching-comments/">Комментирование SQL для обучения</a> · <a href="../sql-foundations/">Основы SQL</a> · <a href="../sql-null/">НУЛЬ в SQL</a> · <a href="../documenting-data-limitations/">Документирование ограничений данных</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../which-sql-database-to-install/">какую базу данных установить</a> · <a href="../../drill/">SQL-детализация</a> · <a href="../../sql/">SQL-кит</a>
-    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
+    <a href="../../">← Analyst Prep Kit</a> &middot; <a href="../sql-comments/">How to Comment in SQL</a> · <a href="../sql-comment-syntax-by-database/">Comment Syntax by Database</a> · <a href="../sql-teaching-comments/">Commenting SQL So It Teaches</a> · <a href="../sql-foundations/">SQL Foundations</a> · <a href="../sql-null/">NULL in SQL</a> · <a href="../documenting-data-limitations/">Documenting Data Limitations</a> · <a href="../set-up-a-sql-database/">Set Up a SQL Database</a> · <a href="../which-sql-database-to-install/">Which Database to Install</a> · <a href="../../drill/">SQL Drill</a> · <a href="../../sql/">SQL Kit</a>
+    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

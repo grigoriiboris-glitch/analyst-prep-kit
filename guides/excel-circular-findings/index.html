@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Циклический анализ: открытие, которое было всего лишь вашим собственным определением — комплект для подготовки аналитика</title>
-<meta name="description" content="Самоконтроль, который фиксирует циклические результаты: мог ли этот вывод прийти каким-либо другим способом, учитывая то, как я определил вещи? Настоящая ошибка при построении информационной панели, почему круговые результаты выглядят чище, чем реальные, а цикличность в четырех местах скрывается.">
+<title>Circular Analysis: The Finding That Was Just Your Own Definition — Analyst Prep Kit</title>
+<meta name="description" content="The self-audit that catches circular results: could this finding have come out any other way, given how I defined things? A real near-miss from a live dashboard build, why circular results look cleaner than real ones, and the four places circularity hides.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-circular-findings/">
-<meta property="og:title" content="Открытие, которое было всего лишь вашим собственным определением">
-<meta property="og:description" content="0%, спрятанные в диапазоне $20+, выглядели открытием. Скрытое определялось как сумма менее 20 долларов. Карта была определением, отраженным в ответ.">
+<meta property="og:title" content="The Finding That Was Just Your Own Definition">
+<meta property="og:description" content="0% hidden in the $20+ band looked like a discovery. Hidden was defined as under $20. The chart was the definition, reflected back.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-circular-findings/">
 <meta name="twitter:card" content="summary_large_image">
@@ -106,141 +106,141 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../excel/">Excel комплект</a> · <a href="../excel-dashboard-build-order/">Статья 0: порядок сборки</a></p>
-  <h1>Открытие, которое было всего лишь вашим собственным определением</h1>
-  <p class="meta">Статья 14 Excel для бизнес-аналитиков · Проверка рассуждений, которую не может выполнить ни одна формула · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-07">7 августа 2026 г.</time></p>
+  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../excel/">Excel Kit</a> · <a href="../excel-dashboard-build-order/">Article 0: the build order</a></p>
+  <h1>The Finding That Was Just Your Own Definition</h1>
+  <p class="meta">Article 14 of Excel for Business Analysts · The reasoning check no formula can run for you · Part of the <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-07">August 7, 2026</time></p>
 
-  <p>Эта статья предлагает вам метод самопроверки, который выявляет самый досадный тип ошибок в анализе, когда каждое число вычисляется правильно, а результат по-прежнему бесполезен. Тест состоит из одного вопроса:  <strong>мог ли этот результат получиться каким-либо другим способом, учитывая то, как я определил вещи?</strong>  Если ответ отрицательный, это не открытие. Это ваш собственный фильтр, носящий диаграмму.</p>
+  <p>This article gives you the self-audit that catches the most embarrassing class of mistake in analysis, the one where every number is computed correctly and the finding is still worthless. The test is one question: <strong>could this result have come out any other way, given how I defined things?</strong> If the answer is no, it is not a finding. It is your own filter, wearing a chart.</p>
 
-  <p>Это почти произошло в  <a href="../excel-dashboard-build-order/">сборка этой серии</a>, и тот, кто чуть не промахнулся, — лучший учитель по этой теме, потому что на экране все было не так. Арифметика была идеальной. Рассуждения съели свой собственный хвост.</p>
+  <p>It nearly happened in <a href="../excel-dashboard-build-order/">the build behind this series</a>, and the near-miss is the best teacher this topic has, because nothing on screen was wrong. The arithmetic was perfect. The reasoning had eaten its own tail.</p>
 
-  <div class="note"><strong>Краткая версия.</strong>  Прежде чем представить какой-либо поразительный результат, спросите, гарантируют ли его ваши собственные определения. И относитесь к подозрительно чистым результатам, 0% и 100%, как к сказке: циклические результаты оказываются чище реальных, потому что на самом деле ничто с ними не борется.</div>
+  <div class="note"><strong>The short version.</strong> Before presenting any striking result, ask whether your own definitions guaranteed it. And treat suspiciously clean results, 0% and 100%, as the tell: circular findings come out cleaner than real ones, because nothing in reality is fighting them.</div>
 
   <div class="toc">
-    <strong>Что здесь</strong>
+    <strong>What's here</strong>
     <ol>
-      <li>Чуть не промахнулся, именно так, как это произошло</li>
-      <li>Почему круговые результаты выглядят лучше реальных</li>
-      <li>Тест, примененный в одном предложении</li>
-      <li>Четыре места скрывают округлость</li>
-      <li>Что делать, если вы поймали одного</li>
-      <li>Почему это работает</li>
-      <li>Проведите его на основе собственных выводов</li>
-      <li>Шпаргалка</li>
+      <li>The near-miss, exactly as it happened</li>
+      <li>Why circular results look better than real ones</li>
+      <li>The test, applied in one sentence</li>
+      <li>The four places circularity hides</li>
+      <li>What to do when you catch one</li>
+      <li>Why this works</li>
+      <li>Run it on your own findings</li>
+      <li>A cheat sheet</li>
     </ol>
   </div>
 
-  <h2>Чуть не промахнулся, именно так, как это произошло</h2>
-  <p>Сборка сократила любимые игры по ценовому диапазону, за  <a href="../excel-pivot-table-question/">статья 5</a>  поворот, спрашивая, какая доля каждой полосы осталась скрытой. Группа стоимостью 20 долларов и выше вернулась  <strong>0% скрыто</strong>. Чисто, ярко, наглядно: дорогие игры всегда можно найти.</p>
-  <p>Остановитесь и запустите тест самостоятельно, прежде чем читать дальше: флаг скрытой жемчужины сборки был определен еще на этапе данных как более 2000 отзывов, более 95% положительных, примерно с 200 тысячами владельцев,  <strong>и цена не более 20 долларов</strong>. Теперь скажите, какая доля игр стоимостью более 20 долларов могла быть помечена как скрытая.</p>
-  <p>Ноль. Не потому, что обнаружат дорогие игры. Поскольку в определении «скрытости» был установлен ценовой потолок, поэтому диапазон $20+ был исключен из скрытости по своей конструкции. Карта была бы определением, отраженным перед ее автором, облаченным в открытие. Его поймали перед отправкой и уронили. Схема ничего не стоит. Представление этого стоило бы доверия к каждой честной диаграмме на странице.</p>
+  <h2>The near-miss, exactly as it happened</h2>
+  <p>The build cut the loved games by price band, per <a href="../excel-pivot-table-question/">article 5's</a> pivot, asking what share of each band stayed hidden. The $20-and-up band came back <strong>0% hidden</strong>. Clean, striking, chartable: expensive games always get found.</p>
+  <p>Stop and run the test yourself before reading on: the build's hidden-gem flag was defined, back at the data stage, as 2,000+ reviews, 95%+ positive, under roughly 200k owners, <strong>and price at or under $20</strong>. Now say what share of $20+ games could ever have been flagged hidden.</p>
+  <p>Zero. Not because expensive games get discovered. Because the definition of hidden had a price ceiling in it, so the $20+ band was excluded from hiddenness by construction. The chart would have been the definition, reflected back at its author, dressed as a discovery. It was caught before shipping and dropped. The chart cost nothing. Presenting it would have cost the credibility of every honest chart on the page.</p>
 
-  <h2>Почему круговые результаты выглядят лучше реальных</h2>
-  <p>Вот что делает этот класс ошибок скорее опасным, чем просто глупым: циклические результаты красивее реальных. Реальные результаты оказываются беспорядочными (32% против 17%), с исключениями и шумом, потому что реальность отталкивает их. Круговые результаты выходят чистыми: 0% против 21%, потому что с ними ничего не борется. Единственная действующая сила — это ваше собственное определение, и оно никогда не противоречит само себе.</p>
-  <p>Итак, инстинкт, который говорит: «Какой чистый результат!» указывает совершенно неверный путь. Чистота не является признаком сильной находки. При 0% или 100% это самый сильный намек на то, что результат заслуживает теста, а не диаграммы. Идеальное число обычно чем-то гарантируется, и этим чем-то обычно являетесь вы.</p>
+  <h2>Why circular results look better than real ones</h2>
+  <p>Here is what makes this class of error dangerous rather than merely silly: circular results are prettier than real ones. Real findings come out messy, 32% against 17%, with exceptions and noise, because reality pushes back. Circular results come out clean, 0% against 21%, because nothing is fighting them. The only force in play is your own definition, and it never disagrees with itself.</p>
+  <p>So the instinct that says "what a clean result!" is pointing exactly the wrong way. Cleanliness is not a sign of a strong finding. At 0% or 100%, it is the single strongest hint that the result deserves the test, not a chart. A number that perfect has usually been guaranteed by something, and the something is usually you.</p>
 
-  <h2>Тест, примененный в одном предложении</h2>
-  <p>Аудит стоит одно предложение за одно заключение. Произнесите вывод, затем произнесите рядом с ним свои определения и прислушайтесь к совпадениям:</p>
+  <h2>The test, applied in one sentence</h2>
+  <p>The audit costs one sentence per finding. Say the finding, then say your definitions next to it, and listen for overlap:</p>
   <pre><code>Finding:     "$20+ games are 0% hidden."
 Definition:  "Hidden means loved, small audience, AND under $20."
 Overlap:     the finding's cut (price) appears inside the definition. Circular.</code></pre>
-  <p>На фоне честных выводов та же проверка проходит заметно: «найденные игры охватывают в 21,2 раза аудиторию скрытых» сокращается  <em>audience</em>, и аудитория... тоже фигурирует в определении, не так ли? Владельцы менее 200 тыс. являются частью скрытых. Вот почему в заголовке сборки сравниваются средние показатели по всей любимой аудитории, а не прославляется тот факт, что скрытые игры имеют небольшую аудиторию, что снова было бы определением. Границей между ними является именно этот аудит, проводимый предложение за предложением.</p>
-  <p>Обратите внимание, что ни одна формула не выполнялась.  <a href="../excel-check-your-work/">Проверки по статье 2</a>  поймать неправильную арифметику. Этот тест выявляет неправильные рассуждения, и ничто на экране никогда не будет указывать на неправильные рассуждения, поскольку экран знает только то, что вы определили.</p>
+  <p>Against an honest finding, the same audit passes visibly: "found games reach 21.2x the audience of hidden ones" cuts on <em>audience</em>, and audience... appears in the definition too, doesn't it? Under 200k owners is part of hidden. That is why the build's headline compares averages across the whole loved population rather than celebrating that hidden games have small audiences, which would be the definition again. The line between the two is exactly this audit, run sentence by sentence.</p>
+  <p>Notice no formula ran. <a href="../excel-check-your-work/">Article 2's checks</a> catch wrong arithmetic. This test catches wrong reasoning, and nothing on the screen will ever flag wrong reasoning, because the screen only knows what you defined.</p>
 
-  <h2>Четыре места скрывают округлость</h2>
+  <h2>The four places circularity hides</h2>
   <table>
-    <tr><th>Shape</th><th>Как это выглядит</th><th>Вопрос о раздаче</th></tr>
-    <tr><td>Вырезание столбца внутри собственного фильтра</td><td>Ценовой диапазон сократился выше</td><td>Появляется ли столбец группировки в определении измеряемого объекта?</td></tr>
-    <tr><td>Фильтрация результатов, а затем измерение результатов</td><td>«Среди ушедших клиентов уровень удержания низкий»</td><td>Фильтр уже определил измерение?</td></tr>
-    <tr><td>Survivorship</td><td>Изучайте только те игры, которые получили обзоры, а затем делайте вывод, что игры, прошедшие обзоры, преуспевают.</td><td>Кто вообще никогда не попадал в данные?</td></tr>
-    <tr><td>Порог, который вы установили, а затем обнаружили</td><td>Отметить более 2000 отзывов как проверенные, а затем найти проверенные игры с большим количеством отзывов.</td><td>Является ли открытие просто порогом, прочитанным вслух?</td></tr>
+    <tr><th>Shape</th><th>What it looks like</th><th>The giveaway question</th></tr>
+    <tr><td>Cutting on a column inside your own filter</td><td>The price-band cut above</td><td>Does the group-by column appear in the definition of the thing measured?</td></tr>
+    <tr><td>Filtering on the outcome, then measuring the outcome</td><td>"Among churned customers, retention is low"</td><td>Did the filter already decide the measurement?</td></tr>
+    <tr><td>Survivorship</td><td>Studying only the games that got reviews, then concluding reviewed games do well</td><td>Who never made it into the data at all?</td></tr>
+    <tr><td>A threshold you set, then discovered</td><td>Flagging 2,000+ reviews as proven, then finding proven games have many reviews</td><td>Is the finding just the threshold read back aloud?</td></tr>
   </table>
-  <p>Все четыре — одна ошибка с разными входами: в вопрос протащили какую-то часть ответа. Скажите, какой из четырех наиболее подвержен вашему текущему проекту. Если у него есть какой-либо определенный флаг, какой-либо порог или какая-либо отфильтрованная совокупность, по крайней мере один вход открыт.</p>
+  <p>All four are one mistake with different entrances: some part of the answer was smuggled into the question. Say which of the four your current project is most exposed to. If it has any defined flag, any threshold, or any filtered population, at least one entrance is open.</p>
 
-  <h2>Что делать, если вы поймали одного</h2>
-  <p><strong>Скиньте график. Сохраните заметку.</strong>  В рабочих записях сборки фиксируются снижение цены, чистый результат, проверка и падение. Этот бумажный след стоит больше, чем когда-либо был график, и не только в частном порядке: «Я провел снижение цен, получил подозрительно чистый результат, выяснил, что он был круговым, и отказался от него» — это более сильная вещь, которую можно сказать в интервью, чем любой график на странице. Он демонстрирует редчайший навык в этой области — проверку собственных рассуждений, в чем и заключается разница между  <a href="../report-vs-analysis/">получение цифр и проведение анализа</a>.</p>
-  <p>Затем, если вопрос ниже был реальным, задайте его еще раз, не допуская повторения. «Влияет ли цена на открытие?» выживает, спрашивается у любимых игр с снятым с флага ценовым потолком или напрямую у аудитории. Круглая версия умирает. Любопытство, стоящее за этим, обычно заслуживает того, чтобы жить.</p>
+  <h2>What to do when you catch one</h2>
+  <p><strong>Drop the chart. Keep the note.</strong> The build's working notes record the price cut, the clean result, the audit, and the drop. That paper trail is worth more than the chart ever was, and not just privately: "I ran the price cut, got a suspiciously clean result, worked out it was circular, and dropped it" is a stronger thing to say in an interview than any chart on the page. It demonstrates the rarest skill in the field, auditing your own reasoning, which is the difference between <a href="../report-vs-analysis/">producing numbers and producing analysis</a>.</p>
+  <p>Then, if the question underneath was real, re-ask it without the circularity. "Does price affect discovery?" survives, asked of the loved games with the price ceiling removed from the flag, or asked of audience directly. The circular version dies. The curiosity behind it usually deserves to live.</p>
 
-  <h2>Почему это работает</h2>
-  <p>Общая ошибка, от которой это защищает, стара и хорошо документирована: люди проверяют идеи способами, которые не могут их опровергнуть. Селекционные эксперименты Уэйсона показали, что даже при выполнении крошечных логических задач большинство людей проверяют случаи, которые могли бы подтвердить их правило, и пропускают те, которые могли бы его нарушить (Уэйсон, 1968,    <em>Ежеквартальный журнал экспериментальной психологии</em>, 20(3), 273-281). Круговой разрез — это предвзятость, встроенная в электронную таблицу: анализ построен таким образом, что никакие данные никогда не могут оказаться противоречивыми.</p>
-  <p>Аудит работает, потому что он вызывает неподтверждающий вопрос, который уклончивость пропускает: что нужно было бы сделать, чтобы этот результат получился другим? Когда честный ответ — «ничего, мои определения это запрещают», анализ никогда не является проверкой. Это было эхо.</p>
+  <h2>Why this works</h2>
+  <p>The general failure this guards against is old and well documented: people test ideas in ways that cannot disconfirm them. Wason's selection experiments showed that even in tiny logical tasks, most people check the cases that could confirm their rule and skip the ones that could break it (Wason, 1968, <em>Quarterly Journal of Experimental Psychology</em>, 20(3), 273-281). A circular cut is that bias built into a spreadsheet: the analysis is constructed so no data could ever come back disagreeing.</p>
+  <p>The audit works because it forces the disconfirming question the bias skips: what would it have taken for this result to come out differently? When the honest answer is "nothing, my definitions forbade it," the analysis was never a test. It was an echo.</p>
 
-  <h2>Проведите его на основе собственных выводов</h2>
+  <h2>Run it on your own findings</h2>
   <ol>
-    <li><strong>Перечислите результаты текущей страницы в виде предложений.</strong>, каждый со своим номером, за  <a href="../excel-kpi-row/">статья 12</a>.</li>
-    <li><strong>Под каждым напишите определения, на которых оно основано.</strong>  Каждый флаг, порог и фильтр в игре.</li>
-    <li><strong>Ищите совпадение.</strong>  Столбец, который появляется как в разрезе результатов, так и в определении, является сигналом тревоги.</li>
-    <li><strong>Придайте дополнительное подозрение 0%, 100% и всему, что вы считаете чистым.</strong></li>
-    <li><strong>Отбросьте то, что терпит неудачу, обратите внимание на то, что вы уронили</strong>и перезадайте честную версию вопроса, если она есть.</li>
+    <li><strong>List your current page's findings as sentences</strong>, each with its number, per <a href="../excel-kpi-row/">article 12</a>.</li>
+    <li><strong>Under each, write the definitions it stands on.</strong> Every flag, threshold and filter in play.</li>
+    <li><strong>Look for the overlap.</strong> A column that appears in both the finding's cut and a definition is the alarm.</li>
+    <li><strong>Give extra suspicion to 0%, 100%, and anything you caught yourself calling clean.</strong></li>
+    <li><strong>Drop what fails, note what you dropped</strong>, and re-ask the honest version of the question if there is one.</li>
   </ol>
 
   <div class="book">
-    <strong>Находка была реальной. Кроме того, это был всего лишь ваш собственный фильтр, возвращенный вам.</strong>
-    <p><em>Excel для аналитиков</em>  состоит из 378 страниц, о том, как аналитик формулирует вопрос так, чтобы ответ не был встроен в него, с практическими вопросами, в которых печатается ответ и причина, по которой он правильный.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-circular-findings'})">Excel для аналитиков, 19 долларов США →</a>
+    <strong>The finding was real. It was also just your own filter, handed back to you.</strong>
+    <p><em>Excel for Analysts</em> is 378 pages, how an analyst frames a question so the answer is not built into it, with practice questions that print the answer and the reason it is right.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-circular-findings'})">Excel for Analysts, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>Формулы — это легкая половина. Это другая половина.</strong>
-    <p style="margin:6px 0 0">The <a href="../../excel/">Excel комплект</a>  тренирует механику и  <a href="../defining-metrics/">Определение метрик</a>  рассказывает о том, как пишутся определения, чтобы их можно было проверить позже. Оба подпитывают привычку, которой учит эта страница.</p>
-    <a class="btn" href="../../excel/" onclick="if(window.gtag)gtag('event','prompt_pack_click',{kit:'guide-excel-circular'})">Откройте набор Excel →</a>
+    <strong>The formulas are the easy half. This is the other half.</strong>
+    <p style="margin:6px 0 0">The <a href="../../excel/">Excel Kit</a> drills the mechanics, and <a href="../defining-metrics/">Defining Metrics</a> covers how definitions get written so they can be audited later. Both feed the habit this page teaches.</p>
+    <a class="btn" href="../../excel/" onclick="if(window.gtag)gtag('event','prompt_pack_click',{kit:'guide-excel-circular'})">Open the Excel Kit →</a>
   </div>
 
-  <h2>Шпаргалка</h2>
+  <h2>A cheat sheet</h2>
   <table>
-    <tr><th>Signal</th><th>Прочтите это как</th></tr>
-    <tr><td>Результат ровно 0% или 100%</td><td>Запускайте тест перед любым графиком</td></tr>
-    <tr><td>Столбец группировки появляется в определении</td><td>Циркуляр. Откажитесь от сокращений или измените определение</td></tr>
-    <tr><td>«Могло ли все сложиться иначе?» отвечает нет</td><td>Не находка. Эхо</td></tr>
-    <tr><td>Фильтруется по измеряемому результату</td><td>Фильтр уже ответил на вопрос</td></tr>
-    <tr><td>В данных присутствуют только выжившие</td><td>Назовите кого-то пропавшего, прежде чем делать какие-либо выводы</td></tr>
-    <tr><td>Пойманный круговой результат</td><td>Сбросьте таблицу, сохраните себе заметку, переспросите честно.</td></tr>
+    <tr><th>Signal</th><th>Read it as</th></tr>
+    <tr><td>A result of exactly 0% or 100%</td><td>Run the test before any chart</td></tr>
+    <tr><td>The group-by column appears in a definition</td><td>Circular. Drop the cut or change the definition</td></tr>
+    <tr><td>"Could this have come out differently?" answers no</td><td>Not a finding. An echo</td></tr>
+    <tr><td>Filtered on the outcome being measured</td><td>The filter already answered the question</td></tr>
+    <tr><td>Only survivors in the data</td><td>Name who is missing before concluding anything</td></tr>
+    <tr><td>A caught circular result</td><td>Drop the chart, keep the note, re-ask honestly</td></tr>
   </table>
 
-  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Прежде чем представить какой-либо поразительный результат, произнесите вслух свои определения рядом с ним. Чем чище число, тем большее значение имеет предложение.</div>
+  <div class="note"><strong>The one habit to keep.</strong> Before presenting any striking result, say your definitions out loud next to it. The cleaner the number, the more the sentence matters.</div>
 
   <div class="series">
-    <strong>Серия: Excel для бизнес-аналитиков.</strong>
-    <p style="margin:6px 0 8px">Каждая статья создается за один этап  <a href="../excel-dashboard-build-order/">та же настоящая сборка</a>, в порядке сборки. Ссылки активируются по мере публикации каждой из них.</p>
+    <strong>The series: Excel for Business Analysts.</strong>
+    <p style="margin:6px 0 8px">Every article comes out of one step of <a href="../excel-dashboard-build-order/">the same real build</a>, in build order. Links go live as each one publishes.</p>
     <ol start="0">
-      <li value="0"><a href="../excel-dashboard-build-order/">Создайте информационную панель в следующем порядке: правильно, затем ясно, затем убедительно.</a></li>
-      <li><a href="../excel-label-rows-before-charting/">Пометьте свои строки, прежде чем составлять их диаграмму.</a></li>
-      <li><a href="../excel-check-your-work/">Проверяйте свою работу, прежде чем это сделает кто-то другой</a></li>
-      <li><a href="../excel-name-your-data/">Назовите свои данные, чтобы ваши формулы перестали нарушаться</a></li>
-      <li><a href="../excel-csv-import-leading-zeros/">Диалог, который незаметно удаляет ваши почтовые индексы</a></li>
-      <li><a href="../excel-pivot-table-question/">Сводная таблица — это вопрос, а не отчет</a></li>
-      <li><a href="../excel-sum-of-id-trap/">Excel просто суммировал ваши идентификационные номера и ничего не сказал.</a></li>
-      <li><a href="../excel-pivot-percentages/">Проценты — это вся история, а Excel их скрывает</a></li>
-      <li><a href="../excel-custom-number-formats/">Покажите единицу, не нарушая цифру</a></li>
-      <li><a href="../excel-pick-the-chart/">Выберите диаграмму, ваш номер уже определен</a></li>
-      <li><a href="../excel-chart-design-basics/">Основы проектирования диаграмм: уберите что-то, а затем укажите</a></li>
-      <li><a href="../excel-if-family/">По одной строке за раз или все строки сразу</a></li>
-      <li><a href="../excel-kpi-row/">Четыре числа сверху обозначают более четырех графиков.</a></li>
-      <li><a href="../excel-sort-your-bars/">Отсортируйте гистограмму, иначе это ничего не значит</a></li>
-      <li>Открытие, которое было всего лишь вашим собственным определением (эта статья)</li>
-      <li><a href="../excel-character-encoding/">Имена появились как тарабарщина, а Excel ничего не сказал</a></li>
-      <li><a href="../excel-slicers/">Сделайте по одному управляющему диску для каждой диаграммы на странице.</a></li>
-      <li><a href="../excel-dashboard-claim/">Напишите предложение, о котором спорит ваша панель мониторинга</a></li>
+      <li value="0"><a href="../excel-dashboard-build-order/">Build a dashboard in this order: correct, then clear, then compelling</a></li>
+      <li><a href="../excel-label-rows-before-charting/">Label your rows before you chart them</a></li>
+      <li><a href="../excel-check-your-work/">Check your work before anyone else does</a></li>
+      <li><a href="../excel-name-your-data/">Name your data so your formulas stop breaking</a></li>
+      <li><a href="../excel-csv-import-leading-zeros/">The dialog that quietly deletes your zip codes</a></li>
+      <li><a href="../excel-pivot-table-question/">A pivot table is a question, not a report</a></li>
+      <li><a href="../excel-sum-of-id-trap/">Excel just summed your ID numbers and said nothing</a></li>
+      <li><a href="../excel-pivot-percentages/">Percentages are the whole story and Excel hides them</a></li>
+      <li><a href="../excel-custom-number-formats/">Show the unit without breaking the number</a></li>
+      <li><a href="../excel-pick-the-chart/">Pick the chart your number already decided</a></li>
+      <li><a href="../excel-chart-design-basics/">Chart design basics: take things away, then point</a></li>
+      <li><a href="../excel-if-family/">One row at a time, or all rows at once</a></li>
+      <li><a href="../excel-kpi-row/">Four numbers across the top do more than four charts</a></li>
+      <li><a href="../excel-sort-your-bars/">Sort your bar chart or it means nothing</a></li>
+      <li>The finding that was just your own definition (this article)</li>
+      <li><a href="../excel-character-encoding/">The names came in as gibberish and Excel said nothing</a></li>
+      <li><a href="../excel-slicers/">Make one control drive every chart on the page</a></li>
+      <li><a href="../excel-dashboard-claim/">Write the sentence your dashboard is arguing</a></li>
     </ol>
   </div>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Уэйсон, ПК (1968). Рассуждение о правиле.  <em>Ежеквартальный журнал экспериментальной психологии</em>, 20(3), 273-281.</li>
+    <li>Wason, P. C. (1968). Reasoning about a rule. <em>Quarterly Journal of Experimental Psychology</em>, 20(3), 273-281.</li>
   </ul>
 
-  <p>Ваш ответ из раздела «Возможные ошибки»: доля игр стоимостью более 20 долларов, которые когда-либо могли быть помечены как скрытые: сколько времени вам понадобилось, чтобы увидеть гарантированный ноль? Именно эта задержка, ощущаемая изнутри, является причиной того, что эта проверка должна стать привычкой, а не инстинктом.</p>
+  <p>Your answer from the near-miss section, the share of $20+ games that could ever be flagged hidden: how long did it take you to see the zero was guaranteed? That delay, felt from inside, is why this audit has to be a habit and not an instinct.</p>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../excel-dashboard-build-order/">Порядок строительства (статья 0)</a> · <a href="../excel-absolute-vs-relative-references/">Абсолютные и относительные ссылки</a> · <a href="../excel-check-your-work/">Проверьте свою работу (статья 2)</a> · <a href="../excel-pivot-percentages/">Базовые проценты (статья 7)</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../data-driven-thresholds/">Пороги, управляемые данными</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../report-vs-analysis/">Отчет против анализа</a> · <a href="../what-is-data-analysis/">Что такое анализ данных?</a> · <a href="../../excel/">Excel комплект</a> · <a href="../../viz/">Виз Дрель</a> · <a href="../../projects/">Портфельные проекты</a>
-    <a class="coffee" href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a>
+    <a href="../../">← Analyst Prep Kit</a> · <a href="../excel-dashboard-build-order/">The Build Order (Article 0)</a> · <a href="../excel-absolute-vs-relative-references/">Absolute vs Relative References</a> · <a href="../excel-check-your-work/">Check Your Work (Article 2)</a> · <a href="../excel-pivot-percentages/">Pivot Percentages (Article 7)</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../data-driven-thresholds/">Data-Driven Thresholds</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../report-vs-analysis/">Report vs Analysis</a> · <a href="../what-is-data-analysis/">What Is Data Analysis?</a> · <a href="../../excel/">Excel Kit</a> · <a href="../../viz/">Viz Drill</a> · <a href="../../projects/">Portfolio Projects</a>
+    <a class="coffee" href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

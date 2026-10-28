@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>RANK, DENSE_RANK и ROW_NUMBER в SQL — комплект подготовки аналитика</title>
-<meta name="description" content="Три функции ранжирования различаются только тем, как они обрабатывают ничью. Вот одна таблица, которая это показывает, вопрос, на который каждая из них отвечает, и одни и те же первые три, возвращающие 6, 8 или 10 строк в зависимости от того, что вы выберете.">
+<title>RANK vs DENSE_RANK vs ROW_NUMBER in SQL &mdash; Analyst Prep Kit</title>
+<meta name="description" content="The three ranking functions differ only in how they treat a tie. Here is the one table that shows it, the question each one answers, and the same top three returning 6, 8 or 10 rows depending on which you pick.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-rank-vs-dense-rank-vs-row-number/">
-<meta property="og:title" content="RANK против DENSE_RANK против ROW_NUMBER в SQL">
-<meta property="og:description" content="Три функции ранжирования различаются только тем, как они обрабатывают ничью. Одна и та же тройка верхних возвращает 6, 8 или 10 строк в зависимости от того, какую из них вы выберете.">
+<meta property="og:title" content="RANK vs DENSE_RANK vs ROW_NUMBER in SQL">
+<meta property="og:description" content="The three ranking functions differ only in how they treat a tie. The same top three returns 6, 8 or 10 rows depending on which one you pick.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-rank-vs-dense-rank-vs-row-number/">
 <meta name="twitter:card" content="summary_large_image">
@@ -130,15 +130,15 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-кит</a></p>
-  <h1>RANK против DENSE_RANK против ROW_NUMBER в SQL</h1>
-  <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Каждый запрос на этой странице был выполнен до его публикации.</p>
+  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../sql/">SQL Kit</a></p>
+  <h1>RANK vs DENSE_RANK vs ROW_NUMBER in SQL</h1>
+  <p class="meta">Michael Nocito · Updated August 2026 · Every query on this page was run before it was published</p>
 
-  <p>К концу этой страницы вы каждый раз будете выбирать правильную функцию ранжирования примерно за пять секунд. Эти три функции выполняют одну и ту же работу и различаются ровно в одном: что они делают, когда две строки связаны. Эта единственная разница определяет, сколько строк вернет ваша «тройка лучших», а в таблице из десяти строк ниже ответ будет 6, 8 или 10 строк в зависимости от того, какую из них вы выбрали.</p>
+  <p>By the end of this page you will pick the right ranking function in about five seconds, every time. The three functions do the same job and differ on exactly one thing: what they do when two rows tie. That single difference decides how many rows your "top three" returns, and on the ten-row table below the answer is 6, 8 or 10 rows depending on which one you chose.</p>
 
-  <p>Что вы делаете, это выбираете по вопросу. «Дайте мне три ряда» — это  <code>ROW_NUMBER</code>. «Дайте мне всех, кто находится на первых трёх позициях» — это  <code>RANK</code>. «Дайте мне всех, кто набрал три лучших балла» — это  <code>DENSE_RANK</code>. В оставшейся части этой страницы показано, как работает каждый из них, поэтому вы можете наблюдать за изменением количества строк.</p>
+  <p>What you do is choose by the question. "Give me three rows" is <code>ROW_NUMBER</code>. "Give me everyone in the top three positions" is <code>RANK</code>. "Give me everyone at the top three scores" is <code>DENSE_RANK</code>. The rest of this page shows each one running, so you can watch the row count change.</p>
 
-  <p><strong>Краткая версия.</strong>  Все три числовых ряда по порядку. Они расходятся во мнениях только по поводу связей.</p>
+  <p><strong>The short version.</strong> All three number rows in order. They only disagree about ties.</p>
 
   <figure>
     <svg viewBox="0 0 640 210" role="img" aria-labelledby="tiedesc" xmlns="http://www.w3.org/2000/svg">
@@ -165,11 +165,11 @@
         <line x1="401" y1="153" x2="419" y2="153" stroke="#A1A1AA" stroke-width="1.5"/>
       </g>
     </svg>
-    <figcaption>Две ничьи, три ответа. Зачеркнутые цифры — это те, которые РАНГ пропускает.</figcaption>
+    <figcaption>Two ties, three answers. The crossed out numbers are the ones RANK skips.</figcaption>
   </figure>
 
-  <h2>Таблица, на которой выполняются примеры</h2>
-  <p>Десять торговых представителей, два региона, по одной колонке закрытых сделок. Он специально маленький, поэтому вы можете проверить каждое число на этой странице вручную.</p>
+  <h2>The table the examples run on</h2>
+  <p>Ten sales reps, two regions, one column of closed deals each. It is small on purpose, so you can check every number on this page by hand.</p>
   <pre><code>CREATE TABLE sales(rep TEXT, region TEXT, deals INT, signed_on TEXT);
 
 INSERT INTO sales VALUES
@@ -183,10 +183,10 @@ INSERT INTO sales VALUES
 ('Hale',   'South',11,'2026-07-08'),
 ('Iyer',   'South',11,'2026-07-12'),
 ('Jansen', 'South', 4,'2026-07-14');</code></pre>
-  <p>У Севера есть две связи. Альварес и Бреннан закрыли по 12 сделок, а Чо и Диас закрыли по 9. Саут имеет тройную ничью с 11 сделками. Эти связи и являются темой этой страницы.</p>
+  <p>North has two ties. Alvarez and Brennan both closed 12, and Cho and Diaz both closed 9. South has a three way tie at 11 deals. Those ties are the whole subject of this page.</p>
 
-  <h2>Все трое рядом, в одном ряду</h2>
-  <p>Прежде чем вы прочитаете результат: Альварес и Бреннан закрыли 12. Какое число, по вашему мнению, даст каждая функция Чо, который закрыл 9?</p>
+  <h2>All three, side by side, on the same rows</h2>
+  <p>Before you read the output: Alvarez and Brennan both closed 12. What number do you expect each function to give Cho, who closed 9?</p>
   <pre><code>SELECT rep, deals,
        ROW_NUMBER() OVER (ORDER BY deals DESC) AS rn,
        RANK()       OVER (ORDER BY deals DESC) AS rk,
@@ -201,16 +201,16 @@ WHERE region = 'North';</code></pre>
     <tr><td>Diaz</td><td>9</td><td>4</td><td>3</td><td>2</td></tr>
     <tr><td>Ellis</td><td>7</td><td>5</td><td>5</td><td>3</td></tr>
   </table>
-  <p>Прочитайте каждый столбец, и правило сформулирует себя.</p>
-  <p><code>ROW_NUMBER</code>  раздает от 1 до 5 и никогда не повторяется. Он должен дать Альваресу и Бреннану разные числа, поэтому выбирает одного из них вторым, причем выбирает произвольно. Запустите тот же запрос завтра, и Бреннан окажется первым.</p>
-  <p><code>RANK</code>  дает обеим 12 1, затем переходит к 3 для Чо. 2 пропало, потому что ничья уже использовала это место. Чо действительно третий представитель в списке.</p>
-  <p><code>DENSE_RANK</code>  дает обеим 12-кам 1, затем дает Чо 2. Он подсчитывает количество отдельных сделок, а не рядов. На Севере существует три графа, поэтому его число останавливается на 3.</p>
-  <p>Прежде чем читать дальше, произнесите это вслух: почему можно  <code>RANK</code>  пропустить номер, пока  <code>DENSE_RANK</code>  никогда не сможет? Ответ в том, что каждый из них имеет значение.  <code>RANK</code>  считает места в списке.  <code>DENSE_RANK</code>  считает различные значения.</p>
-  <div class="note"><strong>Без связей все три идентичны.</strong>  Если в столбце, по которому выполняется сортировка, нет повторяющихся значений, три функции возвращают одни и те же числа, и выбор не имеет значения. Вот почему это сбивает людей с толку на производстве, а не на практике. Запрос работает до тех пор, пока две строки не свяжутся.</div>
+  <p>Read down each column and the rule states itself.</p>
+  <p><code>ROW_NUMBER</code> hands out 1 to 5 and never repeats. It has to give Alvarez and Brennan different numbers, so it picks one of them to be second, and it picks arbitrarily. Run the same query tomorrow and Brennan can be first.</p>
+  <p><code>RANK</code> gives both 12s a 1, then jumps to 3 for Cho. The 2 is gone because the tie already used that place up. Cho really is the third rep down the list.</p>
+  <p><code>DENSE_RANK</code> gives both 12s a 1, then gives Cho a 2. It is counting distinct deal counts, not rows. Three counts exist in North, so its numbers stop at 3.</p>
+  <p>Say this one out loud before reading on: why can <code>RANK</code> skip a number while <code>DENSE_RANK</code> never can? The answer is in what each one counts. <code>RANK</code> counts places in the list. <code>DENSE_RANK</code> counts distinct values.</p>
+  <div class="note"><strong>With no ties, all three are identical.</strong> If the column you sort on has no repeated values, the three functions return the same numbers and the choice does not matter. That is why this trips people up in production rather than in practice. The query is fine until the day two rows tie.</div>
 
-  <h2>Используйте ROW_NUMBER, если вам нужна ровно одна строка на группу.</h2>
-  <p>Во-первых: вам нужен один лучший представитель в каждом регионе. Какой из трех вы можете использовать безопасно?</p>
-  <p>Only <code>ROW_NUMBER</code>, потому что он единственный, который обещает одну строку с номером 1. Пронумеруйте строки внутри каждой области, а затем оставьте строки с номером 1.</p>
+  <h2>Use ROW_NUMBER when you want exactly one row per group</h2>
+  <p>First: you want the single best rep in each region. Which of the three can you use safely?</p>
+  <p>Only <code>ROW_NUMBER</code>, because it is the only one that promises a single row numbered 1. Number the rows inside each region, then keep the ones numbered 1.</p>
   <pre><code>SELECT rep, region, deals
 FROM (
   SELECT rep, region, deals,
@@ -224,13 +224,13 @@ WHERE rn = 1;</code></pre>
     <tr><td>Alvarez</td><td>North</td><td>12</td></tr>
     <tr><td>Fowler</td><td>South</td><td>15</td></tr>
   </table>
-  <p>Там работают две вещи.  <code>PARTITION BY region</code>  перезапускает нумерацию для каждого региона, так что оба региона получают свою собственную 1. И  <code>signed_on</code>  является тай-брейком. Альварес и Бреннан закрыли по 12, так что все решает более ранняя дата подписания.</p>
-  <p>Без этого второго столбца сортировки победителем становится та строка, которую движок выдал первой, и она может меняться между запусками. Так:  <strong>всегда давай  <code>ROW_NUMBER</code>  тай-брейк.</strong>  Подойдет любой столбец, который не может повторяться, и первичный ключ является самым безопасным. Это наиболее распространенный дефект в реальных запросах дедупликации. Они бегут, возвращают нужное количество строк и каждый раз спокойно выбирают другую строку.</p>
-  <p>Та же форма, другая работа. Таким же образом вы исключаете одну строку из каждого набора дубликатов. Разделите строку по тому, что делает строку дубликатом, упорядочите по версии, которую вы хотите сохранить, и возьмите номер 1. Поиск этих наборов в первую очередь описан в разделе  <a href="../sql-find-duplicates/">как найти повторяющиеся строки</a>.</p>
+  <p>Two things are doing work there. <code>PARTITION BY region</code> restarts the numbering for each region, so both regions get their own 1. And <code>signed_on</code> is a tiebreaker. Alvarez and Brennan both closed 12, so the earlier signing date decides it.</p>
+  <p>Without that second sort column the winner is whichever row the engine happened to produce first, and it can change between runs. So: <strong>always give <code>ROW_NUMBER</code> a tiebreaker.</strong> Any column that cannot repeat will do, and a primary key is the safest one. This is the most common defect in real deduplication queries. They run, they return the right number of rows, and they quietly pick a different row each time.</p>
+  <p>Same shape, different job. This is also how you keep one row out of each set of duplicates. Partition by whatever makes a row a duplicate, order by the version you want to keep, and take number 1. Finding those sets in the first place is covered in <a href="../sql-find-duplicates/">how to find duplicate rows</a>.</p>
 
-  <h2>Используйте RANK, когда связанные строки заслуживают одного и того же места.</h2>
-  <p>Перед запросом: три представителя на юге заключили 11 сделок. Должна ли таблица лидеров назвать одного из них четвертым?</p>
-  <p>Нет, и вот что  <code>RANK</code>  это для. Это правило медали. Два золота означают отсутствие серебра.</p>
+  <h2>Use RANK when tied rows deserve the same place</h2>
+  <p>Before the query: three reps in South are tied at 11 deals. Should the leaderboard call one of them fourth?</p>
+  <p>No, and that is what <code>RANK</code> is for. It is the medal rule. Two golds means no silver.</p>
   <pre><code>SELECT rep, region, deals
 FROM (
   SELECT rep, region, deals,
@@ -239,7 +239,7 @@ FROM (
 ) ranked
 WHERE rk &lt;= 3
 ORDER BY region, deals DESC;</code></pre>
-  <p>Это возвращает  <strong>8 рядов</strong>, а не 6.</p>
+  <p>That returns <strong>8 rows</strong>, not 6.</p>
   <table>
     <tr><th>rep</th><th>region</th><th>deals</th><th>place</th></tr>
     <tr><td>Alvarez</td><td>North</td><td>12</td><td>1</td></tr>
@@ -251,13 +251,13 @@ ORDER BY region, deals DESC;</code></pre>
     <tr><td>Hale</td><td>South</td><td>11</td><td>2</td></tr>
     <tr><td>Iyer</td><td>South</td><td>11</td><td>2</td></tr>
   </table>
-  <p>Норт делает четыре повторения, потому что обе его пары равны. Юг вносит четыре, потому что все три представителя из 11 занимают второе место. Эллис и Янсен — единственные два представителя, которые пропускают этот фильтр.</p>
-  <p>Это то поведение, которое вы хотите в отношении всего, что человек будет воспринимать как позицию. Никто не хочет объяснять, почему один из трёх представителей с одинаковыми номерами был опубликован как четвёртый.</p>
-  <p>Это также поведение, которое удивляет приборную панель. Если плитка построена по три строки на регион и связи данных,  <code>RANK</code>  вручает восемь. Это дизайнерское решение, и лучше его принять намеренно, чем обнаружить в понедельник.</p>
+  <p>North contributes four reps, because both of its pairs tied. South contributes four, because the three reps on 11 all hold second place. Ellis and Jansen are the only two reps this filter drops.</p>
+  <p>This is the behaviour you want on anything a person will read as a standing. Nobody wants to explain why one of three reps with identical numbers was published as fourth.</p>
+  <p>It is also the behaviour that surprises a dashboard. If a tile is built for three rows per region and the data ties, <code>RANK</code> hands it eight. That is a design decision, and it is better made on purpose than discovered on a Monday.</p>
 
-  <h2>Используйте DENSE_RANK, если вам нужны первые N значений.</h2>
-  <p>Во-первых: сколько различных сделок имеется на Севере и сколько на Юге?</p>
-  <p>Три на севере, это 12, 9 и 7. Три на юге, это 15, 11 и 4.  <code>DENSE_RANK</code>  нумерует эти значения, а не строки, поэтому запрашивает  <code>dr &lt;= 3</code>  спрашивает для всех, кто находится на трех верхних значениях.</p>
+  <h2>Use DENSE_RANK when you want the top N values</h2>
+  <p>First: how many distinct deal counts are there in North, and how many in South?</p>
+  <p>Three in North, which are 12, 9 and 7. Three in South, which are 15, 11 and 4. <code>DENSE_RANK</code> numbers those values rather than the rows, so asking for <code>dr &lt;= 3</code> asks for everyone sitting at the top three values.</p>
   <pre><code>SELECT rep, region, deals
 FROM (
   SELECT rep, region, deals,
@@ -266,79 +266,79 @@ FROM (
 ) ranked
 WHERE dr &lt;= 3
 ORDER BY region, deals DESC;</code></pre>
-  <p>Это возвращает  <strong>все 10 рядов</strong>, поскольку каждый представитель в этой таблице входит в тройку крупнейших сделок в своем регионе. В десяти строках это выглядит как фильтр, который ничего не делает. На реальных данных все наоборот. Это то, как вы говорите «каждый клиент из трех верхних уровней расходов», не зная заранее, сколько это клиентов.</p>
-  <p>Вот три функции с одним и тем же фильтром, по одной строке каждая.</p>
+  <p>That returns <strong>all 10 rows</strong>, because every rep in this table sits at one of their region's top three deal counts. On ten rows that looks like a filter doing nothing. On real data it is the opposite. It is how you say "every customer in the top three spending tiers" without knowing in advance how many customers that is.</p>
+  <p>Here are the three functions with the same filter, one line each.</p>
   <table>
-    <tr><th>Function</th><th>Filter</th><th>Строки возвращены</th><th>То, что вы просили</th></tr>
-    <tr><td><code>ROW_NUMBER</code></td><td><code>rn &lt;= 3</code></td><td>6</td><td>Три строки на регион</td></tr>
-    <tr><td><code>RANK</code></td><td><code>rk &lt;= 3</code></td><td>8</td><td>Все в тройке лидеров</td></tr>
-    <tr><td><code>DENSE_RANK</code></td><td><code>dr &lt;= 3</code></td><td>10</td><td>Все, кто входит в тройку крупнейших сделок, имеют значение</td></tr>
+    <tr><th>Function</th><th>Filter</th><th>Rows returned</th><th>What you asked for</th></tr>
+    <tr><td><code>ROW_NUMBER</code></td><td><code>rn &lt;= 3</code></td><td>6</td><td>Three rows per region</td></tr>
+    <tr><td><code>RANK</code></td><td><code>rk &lt;= 3</code></td><td>8</td><td>Everyone in the top three places</td></tr>
+    <tr><td><code>DENSE_RANK</code></td><td><code>dr &lt;= 3</code></td><td>10</td><td>Everyone at the top three deal counts</td></tr>
   </table>
-  <p>Одна таблица, один фильтр, три строки. В этом вся суть этой страницы в одной строке. «Тройка лучших» не является уточнением, пока вы не скажете, какой из этих трех вы имели в виду.</p>
-  <p>Представьте на мгновение свой собственный стол. Возьмите столбец, по которому вы ранжируетесь, и спросите, как часто две строки в нем имеют одинаковое значение. Если там часто встречаются связи, этот выбор уже меняет число, которое кто-то читает.</p>
+  <p>One table, one filter, three row counts. That is the whole point of this page in a single line. "Top three" is not a specification until you say which of those three you meant.</p>
+  <p>Picture your own table for a moment. Take the column you rank on and ask how often two rows share a value in it. If ties are common there, this choice is already changing a number somebody is reading.</p>
 
-  <h2>Пограничные случаи, которые стоит знать</h2>
-  <p><strong>Вы не можете фильтровать рейтинг в  <code>WHERE</code>.</strong> Writing <code>WHERE ROW_NUMBER() OVER (...) = 1</code>  это ошибка на каждом двигателе. Функции окон прорабатываются после  <code>WHERE</code>  уже запущен, поэтому номера еще не существует. Вот почему каждый пример здесь помещает ранжирование в подзапрос или  <a href="../sql-ctes/">CTE</a>  и фильтрует вне его.</p>
-  <p><strong>NULL нужно указать, где сидеть.</strong>  Представитель с  <code>NULL</code>  сделки все еще получают номер. SQLite и MySQL лечат  <code>NULL</code>    как наименьшее значение, поэтому при сортировке по убыванию оно ставится последним. PostgreSQL и Оракул считают его самым большим, поэтому та же сортировка по убыванию ставит его на первое место в таблице лидеров. Скажи, что ты хочешь с    <code>ORDER BY deals DESC NULLS LAST</code>  где ваш движок поддерживает это, вместо того, чтобы наследовать значение по умолчанию, которое меняется, когда это делает база данных.</p>
-  <p><strong><code>PARTITION BY</code>  является необязательным.  <code>ORDER BY</code>  нет.</strong>  Пропустить  <code>PARTITION BY</code>  и вы ранжируете всю таблицу, а это зачастую именно то, что вам нужно. Пропустить  <code>ORDER BY</code>  и цифры ничего не значат, потому что ничто не решает, что означает первое.</p>
-  <p><strong>Еще двое в одной семье.</strong> <code>NTILE(4)</code>  разбивает отсортированные строки на четыре сегмента и помечает каждую строку соответствующим сегментом, таким образом строятся квартили.  <code>PERCENT_RANK()</code>  дает место в виде дроби от 0 до 1, что вам нужно, когда две группы имеют разные размеры и необработанное место не может сравниваться.</p>
-  <p><strong>Поддержка сейчас универсальна, но не древняя.</strong>    Функции ранжирования появились в SQL-сервер 2005, PostgreSQL 8.4, MySQL 8.0 и SQLite 3.25. Если    <code>ROW_NUMBER</code>  выдает синтаксическую ошибку, проверьте версию, прежде чем проверять синтаксис.</p>
+  <h2>Edge cases worth knowing</h2>
+  <p><strong>You cannot filter on the ranking in <code>WHERE</code>.</strong> Writing <code>WHERE ROW_NUMBER() OVER (...) = 1</code> is an error on every engine. Window functions are worked out after <code>WHERE</code> has already run, so the number does not exist yet. That is why every example here wraps the ranking in a subquery or a <a href="../sql-ctes/">CTE</a> and filters outside it.</p>
+  <p><strong>NULL has to be told where to sit.</strong> A rep with <code>NULL</code> deals still gets a number. SQLite and MySQL treat <code>NULL</code> as the smallest value, so a descending sort puts it last. PostgreSQL and Oracle treat it as the largest, so the same descending sort puts it first, at the top of your leaderboard. Say what you want with <code>ORDER BY deals DESC NULLS LAST</code> where your engine supports it, rather than inheriting a default that changes when the database does.</p>
+  <p><strong><code>PARTITION BY</code> is optional. <code>ORDER BY</code> is not.</strong> Leave out <code>PARTITION BY</code> and you rank the whole table, which is often exactly what you want. Leave out <code>ORDER BY</code> and the numbers mean nothing, because nothing decided what first means.</p>
+  <p><strong>Two more in the same family.</strong> <code>NTILE(4)</code> splits the sorted rows into four buckets and labels each row with its bucket, which is how quartiles get built. <code>PERCENT_RANK()</code> gives the place as a fraction between 0 and 1, which is what you want when two groups are different sizes and a raw place would not compare.</p>
+  <p><strong>Support is universal now, but not ancient.</strong> Ranking functions arrived in SQL Server 2005, PostgreSQL 8.4, MySQL 8.0 and SQLite 3.25. If <code>ROW_NUMBER</code> throws a syntax error, check the version before you check the syntax.</p>
 
-  <h2>Почему числа ведут себя таким образом</h2>
-  <p>Три функции — это не три версии одной идеи. Они считают три разные вещи, и названия говорят, какие именно.</p>
-  <p><code>ROW_NUMBER</code>  считает строки. Пять рядов, пять цифр, повтор невозможен.</p>
-  <p><code>RANK</code>  сообщает место, равное единице плюс количество обыгравших вас рядов. Ничто не сравнится с Альваресом или Бреннаном, поэтому оба имеют 1. Два ряда превосходят Чо, поэтому Чо равен 3. Пропущенная 2 выпадает из этого определения. Это не отдельное правило, которое следует запомнить.</p>
-  <p><code>DENSE_RANK</code>  подсчитывает различные значения, что равно единице плюс количество различных значений над вами. Одно значение больше 9, поэтому 9 равно 2.</p>
-  <p>Запуск всех трех одновременно обходится дешевле, чем кажется. База данных отвечает на оконные функции, сортируя строки один раз для каждого отдельного раздела и сортируя их, а затем просматривая их, чтобы создать каждую функцию, которая разделяет эту сортировку (С ним, Кундхиканджана, Кемпер, &amp; Нойманн, 2015,    <em>Труды Фонда ВЛДБ</em>, 8(10), 1058–1069). Все трое здесь разделяют одно  <code>ORDER BY deals DESC</code>, поэтому включение всех трех в запрос, пока вы принимаете решение, почти бесплатно. Сравнивать их на собственных данных дешевле, чем гадать.</p>
+  <h2>Why the numbers behave this way</h2>
+  <p>The three functions are not three versions of one idea. They count three different things, and the names say which.</p>
+  <p><code>ROW_NUMBER</code> counts rows. Five rows, five numbers, and no repeat is possible.</p>
+  <p><code>RANK</code> reports place, which is one plus the number of rows that beat you. Nothing beats Alvarez or Brennan, so both are 1. Two rows beat Cho, so Cho is 3. The skipped 2 falls out of that definition. It is not a separate rule to remember.</p>
+  <p><code>DENSE_RANK</code> counts distinct values, which is one plus the number of distinct values above you. One value beats 9, so 9 is 2.</p>
+  <p>Running all three at once costs less than it looks. A database answers window functions by sorting the rows once for each distinct partition and sort it sees, then sweeping through in order to produce every function that shares that sort (Leis, Kundhikanjana, Kemper, &amp; Neumann, 2015, <em>Proceedings of the VLDB Endowment</em>, 8(10), 1058&ndash;1069). All three here share one <code>ORDER BY deals DESC</code>, so putting all three in a query while you decide is close to free. Comparing them on your own data is cheaper than guessing.</p>
 
-  <h2>Как применить это в своей работе</h2>
+  <h2>How to apply this to your own work</h2>
   <ol>
-    <li>Найдите в своих файлах один запрос, который возвращает первое N. Посмотрите на столбец сортировки и спросите, могут ли в нем связать две строки.</li>
-    <li>Если есть возможность, добавьте в запрос все три функции и запустите его один раз. Столбец, который не совпадает с остальными, расскажет вам, что на самом деле делает ваш текущий запрос.</li>
-    <li>Решайте по вопросу, а не по коду. Фиксированное количество строк  <code>ROW_NUMBER</code>. Место это  <code>RANK</code>. Высшие ценности  <code>DENSE_RANK</code>.</li>
-    <li>Дайте каждому  <code>ROW_NUMBER</code>  вы держите колонку тай-брейка в своей  <code>ORDER BY</code>, даже если сегодня ничья кажется невозможной.</li>
-    <li>Не проверяйте каждый ранжирующий запрос в базе кода на этой неделе. Эта работа жалкая и по большей части бесполезная. Исправляйте их по мере их появления, начиная с того, что человек считает стоящим.</li>
+    <li>Find one query in your files that returns a top N. Look at the sort column and ask whether two rows can tie on it.</li>
+    <li>If they can, add all three functions to the query and run it once. The column that disagrees with the others tells you what your current query is really doing.</li>
+    <li>Decide from the question, not the code. A fixed number of rows is <code>ROW_NUMBER</code>. A place is <code>RANK</code>. Top values is <code>DENSE_RANK</code>.</li>
+    <li>Give every <code>ROW_NUMBER</code> you keep a tiebreaker column in its <code>ORDER BY</code>, even when a tie looks impossible today.</li>
+    <li>Do not sweep every ranking query in the codebase this week. That job is miserable and mostly wasted. Fix them as they come back up, starting with anything a person reads as a standing.</li>
   </ol>
-  <p>Если у вас под рукой есть бумага, напишите на странице пять северных строк и пронумеруйте их три раза, по одному разу для каждой функции. Если вы сделаете это вручную один раз, то вам придется прочитать таблицу дважды, и пропущенные 2 перестанут быть тем, что вам нужно запомнить.</p>
+  <p>If you have paper nearby, write the five North rows down the page and number them three times, once per function. Doing it by hand once beats reading the table twice, and the skipped 2 stops being something you have to memorise.</p>
 
-  <h2>Шпаргалка</h2>
+  <h2>Cheat sheet</h2>
   <table>
-    <tr><th>Function</th><th>На галстуке</th><th>1, 1, тогда?</th><th>Доберитесь до этого, когда</th></tr>
-    <tr><td><code>ROW_NUMBER()</code></td><td>Разбивает его произвольно</td><td>1, 2, 3</td><td>Вам нужно ровно N строк или по одной строке на группу.</td></tr>
-    <tr><td><code>RANK()</code></td><td>Тот же номер, затем пропуски</td><td>1, 1, 3</td><td>Место имеет значение, а связанные строки имеют одно общее значение.</td></tr>
-    <tr><td><code>DENSE_RANK()</code></td><td>Тот же номер, без пропуска</td><td>1, 1, 2</td><td>Вам нужны верхние N значений, сколько бы строк ни было</td></tr>
-    <tr><td><code>NTILE(n)</code></td><td>Наполняет ведра по порядку</td><td>Этикетки для ведер</td><td>Квартили, децили, группы даже по размеру</td></tr>
-    <tr><td><code>PERCENT_RANK()</code></td><td>Связанные строки имеют общую долю</td><td>от 0 до 1</td><td>Сравнение мест в группах разного размера</td></tr>
+    <tr><th>Function</th><th>On a tie</th><th>1, 1, then?</th><th>Reach for it when</th></tr>
+    <tr><td><code>ROW_NUMBER()</code></td><td>Splits it, arbitrarily</td><td>1, 2, 3</td><td>You need exactly N rows, or one row per group</td></tr>
+    <tr><td><code>RANK()</code></td><td>Same number, then skips</td><td>1, 1, 3</td><td>Place matters and tied rows share one</td></tr>
+    <tr><td><code>DENSE_RANK()</code></td><td>Same number, no skip</td><td>1, 1, 2</td><td>You want the top N values, however many rows that is</td></tr>
+    <tr><td><code>NTILE(n)</code></td><td>Fills buckets in order</td><td>Bucket labels</td><td>Quartiles, deciles, even sized groups</td></tr>
+    <tr><td><code>PERCENT_RANK()</code></td><td>Tied rows share a fraction</td><td>0 to 1</td><td>Comparing places across groups of different sizes</td></tr>
   </table>
 
-  <h2>Единственная привычка, которую нужно сохранить</h2>
-  <p>Прежде чем составить рейтинг, скажите вслух, что должен делать галстук. Разделите его, разделите место или разделите ценность. Функция — это любая из трех, которые вы только что сказали, и каждый аргумент о числе ниже по потоку на самом деле является аргументом об этом предложении.</p>
+  <h2>The one habit to keep</h2>
+  <p>Before you write a ranking, say what a tie should do out loud. Split it, share the place, or share the value. The function is whichever of those three you just said, and every argument about the number downstream is really an argument about that sentence.</p>
 
-  <p>Какой из трех запросов вы используете чаще всего, и выбрали ли вы его или это был первый, который вы выучили?</p>
+  <p>Which of the three is in the query you run most, and did you choose it, or was it the first one you learned?</p>
 
-  <div class="note"><strong>Каждый номер здесь был проведён до того, как был опубликован.</strong>  Десять строк выше — это весь набор данных, поэтому вы можете вставить  <code>CREATE TABLE</code>  в любой сеанс SQLite, PostgreSQL или MySQL и воспроизведите 6, 8 и 10 самостоятельно.</div>
+  <div class="note"><strong>Every number here was run before it was published.</strong> The ten rows above are the whole dataset, so you can paste the <code>CREATE TABLE</code> into any SQLite, PostgreSQL or MySQL session and reproduce the 6, the 8 and the 10 yourself.</div>
 
   <div class="book">
-    <strong>Здесь вы выбрали правильную функцию. Следующий вопрос – какие из этих цифр вообще относятся к отчету.</strong>
-    <p><em>SQL для аналитиков</em>  это 458 страниц, которые построчно считывают запросы повседневными словами, включая оконные функции, поэтому выбор происходит на основе вопроса, а не на основе последнего скопированного вами примера.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=sql-rank-vs-dense-rank-vs-row-number" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-rank-vs-dense-rank-vs-row-number'})">SQL для аналитиков, 19 $ →</a>
+    <strong>You picked the right function here. The next question is which of these numbers belongs in the report at all.</strong>
+    <p><em>SQL for Analysts</em> is 458 pages that read queries line by line in everyday words, window functions included, so the choice comes from the question instead of from the last example you copied.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=sql-rank-vs-dense-rank-vs-row-number" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-rank-vs-dense-rank-vs-row-number'})">SQL for Analysts, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>Введите их самостоятельно, по одному.</strong>
-    <p style="margin:6px 0 0">The <a href="../../sql/">SQL-кит</a>  охватывает SELECT, WHERE, JOIN и GROUP BY с отработанными примерами, практикой и пробным экзаменом, и все это в браузере. Более широкое семейство оконных функций, включая текущие итоги и  <code>LAG</code>, находится в  <a href="../sql-window-functions/">Оконные функции SQL</a>.</p>
-    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
-    <p style="margin:10px 0 0;font-size:15px">Или получите повторения:  <a href="../../drill/">открыть SQL-детализация</a>  и вводите по одному исполняемому запросу за раз.</p>
+    <strong>Type these yourself, one at a time.</strong>
+    <p style="margin:6px 0 0">The <a href="../../sql/">SQL Kit</a> covers SELECT, WHERE, JOIN and GROUP BY with worked examples, practice and a mock exam, all in the browser. The wider window function family, including running totals and <code>LAG</code>, is in <a href="../sql-window-functions/">SQL window functions</a>.</p>
+    <a class="btn" href="../../sql/">Open the SQL Kit →</a>
+    <p style="margin:10px 0 0;font-size:15px">Or get the reps in: <a href="../../drill/">open SQL Drill</a> and type one runnable query at a time.</p>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql-window-functions/">Оконные функции</a> · <a href="../sql-ctes/">SQL CTE</a> · <a href="../sql-find-duplicates/">Найти повторяющиеся строки</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-null/">НУЛЬ в SQL</a> · <a href="../sql-subqueries/">SQL-подзапросы</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../../drill/">SQL-детализация</a> · <a href="../../sql/">SQL-кит</a>
-    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <a href="../../">← Analyst Prep Kit</a> &middot; <a href="../sql-window-functions/">Window Functions</a> · <a href="../sql-ctes/">SQL CTEs</a> · <a href="../sql-find-duplicates/">Find Duplicate Rows</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../sql-joins/">SQL JOINs</a> · <a href="../sql-null/">NULL in SQL</a> · <a href="../sql-subqueries/">SQL Subqueries</a> · <a href="../set-up-a-sql-database/">Set Up a SQL Database</a> · <a href="../../drill/">SQL Drill</a> · <a href="../../sql/">SQL Kit</a>
+    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

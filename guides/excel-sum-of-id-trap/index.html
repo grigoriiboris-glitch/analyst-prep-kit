@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Сумма Идентификатор приложения: почему Excel суммирует ваши идентификационные номера в точках и десятисекундное исправление — комплект для подготовки аналитика</title>
-<meta name="description" content="Перетащите столбец в значения сводной таблицы, и Excel выберет сумму для любых числовых значений, включая идентификационные коды. Тест, который уловит это: будет ли сложение двух из них вместе что-нибудь означать? Настройки поля значения, количество. Из реальной сборки, где это происходило четыре раза.">
+<title>Sum of AppID: Why Excel Sums Your ID Numbers in Pivots, and the Ten-Second Fix — Analyst Prep Kit</title>
+<meta name="description" content="Drop a column into a pivot's Values and Excel picks Sum for anything numeric, including ID codes. The test that catches it: would adding two of these together mean anything? Value Field Settings, Count. From a real build where it happened four times.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-sum-of-id-trap/">
-<meta property="og:title" content="Excel просто суммировал ваши идентификационные номера и ничего не сказал.">
-<meta property="og:description" content="Сумма Идентификатор приложения читается как данные для любого, кто просматривает. Тест: будет ли сложение двух из них означать что-нибудь?">
+<meta property="og:title" content="Excel Just Summed Your ID Numbers and Said Nothing">
+<meta property="og:description" content="Sum of AppID reads like data to anyone skimming. The test: would adding two of these together mean anything?">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-sum-of-id-trap/">
 <meta name="twitter:card" content="summary_large_image">
@@ -106,143 +106,143 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../excel/">Excel комплект</a> · <a href="../excel-dashboard-build-order/">Статья 0: порядок сборки</a></p>
-  <h1>Excel просто суммировал ваши идентификационные номера и ничего не сказал.</h1>
-  <p class="meta">Статья 6 Excel для бизнес-аналитиков · Самая распространенная ловушка поворота и однострочный тест, который ее ловит · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-07">7 августа 2026 г.</time></p>
+  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../excel/">Excel Kit</a> · <a href="../excel-dashboard-build-order/">Article 0: the build order</a></p>
+  <h1>Excel Just Summed Your ID Numbers and Said Nothing</h1>
+  <p class="meta">Article 6 of Excel for Business Analysts · The most common pivot trap, and the one-line test that catches it · Part of the <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-07">August 7, 2026</time></p>
 
-  <p>В этой статье представлен тест, который выявляет наиболее распространенные ошибки новичков в сводных таблицах, а также десятисекундное исправление. Тест состоит из одной строки:  <strong>будет ли сложение двух из них вместе что-нибудь означать?</strong>  Если ответ отрицательный, столбец является меткой, и его нельзя суммировать.</p>
+  <p>This article gives you the test that catches the most common beginner mistake in pivot tables, and the ten-second fix. The test is one line: <strong>would adding two of these together mean anything?</strong> If the answer is no, the column is a label, and it must never be summed.</p>
 
-  <p>Ошибка происходит без ваших действий. Вы перетаскиваете столбец в область значений сводной таблицы, и Excel самостоятельно решает, как его суммировать. Для любых числовых значений он выбирает Сумма. Если в этом столбце был идентификатор, теперь у вас есть сумма набора идентификационных кодов, напечатанная с той же достоверностью, что и доход.</p>
+  <p>The mistake happens without you doing anything wrong. You drag a column into a pivot's Values area, and Excel decides, on its own, how to summarize it. For anything numeric, it picks Sum. If that column was an ID, you now have the sum of a set of ID codes, printed with the same confidence as revenue.</p>
 
-  <div class="note"><strong>Краткая версия.</strong>  Некоторые столбцы представляют собой этикетки с номерами: идентификаторы, молнии, годы, номера телефонов, номера счетов. Считайте их или группируйте по ним, но никогда не суммируйте. Исправление — «Настройки поля значения, сумма для подсчета».</div>
+  <div class="note"><strong>The short version.</strong> Some columns are labels wearing a number's clothes: IDs, zips, years, phone numbers, invoice numbers. Count them or group by them, never sum them. The fix is Value Field Settings, Sum to Count.</div>
 
-  <p>Это не гипотетически. В  <a href="../excel-dashboard-build-order/">сборка этой серии</a>, более 82 956 игр Пар, именно эта ловушка сработала на шаге 3, выдержала первый взгляд и была обнаружена проверочной ячейкой. Затем оно появилось еще в трех полях на той же странице.</p>
+  <p>This is not hypothetical. In <a href="../excel-dashboard-build-order/">the build behind this series</a>, over 82,956 Steam games, this exact trap fired in step 3, survived a first glance, and was caught by a check cell. Then it turned up in three more fields on the same page.</p>
 
   <div class="toc">
-    <strong>Что здесь</strong>
+    <strong>What's here</strong>
     <ol>
-      <li>Что произошло в сборке</li>
-      <li>Почему сумма используется по умолчанию</li>
-      <li>Почему он выдерживает обзор</li>
-      <li>Тест и типы столбцов, которые он помечает.</li>
-      <li>Десятисекундное исправление</li>
-      <li>Семья, которой принадлежит эта ловушка</li>
-      <li>Запустите его в своем файле</li>
-      <li>Шпаргалка</li>
+      <li>What happened in the build</li>
+      <li>Why Sum is the default</li>
+      <li>Why it survives review</li>
+      <li>The test, and the column types it flags</li>
+      <li>The ten-second fix</li>
+      <li>The family this trap belongs to</li>
+      <li>Run it on your own file</li>
+      <li>A cheat sheet</li>
     </ol>
   </div>
 
-  <h2>Что произошло в сборке</h2>
-  <p>Поворот от  <a href="../excel-pivot-table-question/">статья 5</a>    должен был ответить: сколько игр в каждом сегменте, как доля от общего числа? Идентификатор приложения перешел в «Значения», поскольку для счетчика требуется любой всегда заполненный столбец, а Идентификатор приложения заполняется в каждой строке.</p>
-  <p>Эксель сделал это  <em>Сумма Идентификатор приложения</em>. Центр суммировал идентификационные коды игр каждой группы и сообщал долю каждой группы в общей сумме идентификаторов. Группа любимых и найденных составила 0,45% от общего числа.</p>
-  <p>Остановитесь на этом номере на секунду. Он маленький, в нем есть десятичные дроби, он не круглый. Это похоже на ответ. Правильная цифра, подсчет, составила 0,71%: 590 игр из 82 956. Обе цифры правдоподобны. Ничто на экране их не отличало.  <a href="../excel-check-your-work/">проверить ячейку из статьи 2</a>  делал.</p>
-  <p>Перед следующим разделом скажите вслух, что на самом деле вычислила сумма Идентификатор приложения. Суть в усилении предложения: «он суммировал каталожные номера 590 видеоигр». Сказано вслух, абсурд слышен. На экране этого никогда не происходит.</p>
+  <h2>What happened in the build</h2>
+  <p>The pivot from <a href="../excel-pivot-table-question/">article 5</a> was meant to answer: how many games in each segment, as a share of the total? AppID went into Values, because a count needs any always-filled column, and AppID is filled on every row.</p>
+  <p>Excel made it <em>Sum of AppID</em>. The pivot summed the ID codes of each group's games and reported each group's share of the total ID sum. The loved-and-found group came out as 0.45% of the total.</p>
+  <p>Stop on that number for a second. It is small, it has decimals, it is not round. It looks exactly like an answer. The correct figure, a count, was 0.71%: 590 games of 82,956. Both numbers are plausible. Nothing on the screen distinguished them. The <a href="../excel-check-your-work/">check cell from article 2</a> did.</p>
+  <p>Before the next section, say out loud what Sum of AppID actually computed. Forcing the sentence is the point: "it added up the catalog numbers of 590 video games." Said aloud, the absurdity is audible. On screen, it never is.</p>
 
-  <h2>Почему сумма используется по умолчанию</h2>
-  <p>Правило Excel механическое. Столбец, помещенный в «Значения», получает «Сумму», если он числовой, и «Количество», если он содержит текст или пробелы. Это правило не является неправильным; для истинных величин, таких как цена и доход, это именно то, что вам нужно, а именно количества — это то, для чего были созданы значения.</p>
-  <p>Правило дает сбой, потому что оно не видит смысла. Для удобства идентификатор хранится в виде числа, но это имя, записанное цифрами. Excel не имеет возможности узнать об этом, поэтому решение по умолчанию принимается вами, и оно принимается автоматически от вашего имени каждый раз, когда вы не читаете угол поворота.</p>
+  <h2>Why Sum is the default</h2>
+  <p>Excel's rule is mechanical. A column dropped into Values gets Sum if it is numeric, Count if it holds text or blanks. The rule is not wrong; for true quantities like price and revenue it is exactly what you want, and quantities are what Values was built for.</p>
+  <p>The rule misfires because it cannot see meaning. An ID is stored as a number for convenience, but it is a name written in digits. Excel has no way to know that, so the decision defaults to you, and it gets made silently on your behalf every time you do not read the corner of the pivot.</p>
 
-  <h2>Почему он выдерживает обзор</h2>
-  <p>Суммирование идентификаторов не приводит к ошибкам и не дает явно неправильных чисел. Получается большая, уверенная, совершенно бессмысленная фигура. Сводная ячейка с номером 41 283 904 117 не похожа на ошибку. Это похоже на большие данные.</p>
-  <p>Хуже того, неудача незаметно усугубляется. Доля, вычисленная из абсурдной суммы, например 0,45% в сборке, небольшая, аккуратная и имеет форму любого честного процента вокруг нее. Рецензенты ищут цифры, которые кажутся неправильными. Эта ловушка выдает цифры, которые выглядят правильно, поэтому контрмерой является проверка, вычисляемая вторым способом, а не более пристальный взгляд.</p>
+  <h2>Why it survives review</h2>
+  <p>Summing IDs does not error, and it does not produce an obviously broken number. It produces a large, confident, completely meaningless figure. A pivot cell reading 41,283,904,117 does not look like a bug. It looks like big data.</p>
+  <p>Worse, the failure compounds quietly. A share computed from a nonsense total, like the build's 0.45%, is small, tidy, and shaped like every honest percentage around it. Reviewers scan for numbers that look wrong. This trap produces numbers that look right, which is why the countermeasure is a check computed a second way, not a harder stare.</p>
 
-  <h2>Тест и типы столбцов, которые он помечает.</h2>
-  <p>Запустите однострочный тест для любого столбца, прежде чем он перейдет в «Значения»: будет ли что-нибудь означать сложение двух таких столбцов?</p>
+  <h2>The test, and the column types it flags</h2>
+  <p>Run the one-line test on any column before it goes into Values: would adding two of these together mean anything?</p>
   <table>
-    <tr><th>Column</th><th>Два сложены вместе</th><th>Verdict</th></tr>
-    <tr><td>Price</td><td>Цены на две игры: реальные деньги</td><td>Количество. Суммировать</td></tr>
-    <tr><td>Среднее время игры</td><td>Значимо в контексте</td><td>Количество. Сумма или среднее</td></tr>
-    <tr><td>AppID</td><td>Два каталожных номера: ерунда</td><td>Этикетка. Посчитайте или сгруппируйте по</td></tr>
-    <tr><td>Почтовый индекс</td><td>08053 плюс 02134: ерунда</td><td>Этикетка. И увидеть  <a href="../excel-csv-import-leading-zeros/">статья 4</a></td></tr>
-    <tr><td>Year</td><td>2015 плюс 2019 — 4034: ерунда</td><td>Этикетка. Группируйте по этому, никогда не суммируйте.</td></tr>
-    <tr><td>Номер счета, телефон, артикул, идентификатор сотрудника</td><td>Ерунда, каждый раз</td><td>Этикетки, все они</td></tr>
+    <tr><th>Column</th><th>Two added together</th><th>Verdict</th></tr>
+    <tr><td>Price</td><td>Two games' prices: real money</td><td>Quantity. Sum away</td></tr>
+    <tr><td>Median playtime</td><td>Meaningful in context</td><td>Quantity. Sum or average</td></tr>
+    <tr><td>AppID</td><td>Two catalog numbers: nonsense</td><td>Label. Count or group by</td></tr>
+    <tr><td>Zip code</td><td>08053 plus 02134: nonsense</td><td>Label. And see <a href="../excel-csv-import-leading-zeros/">article 4</a></td></tr>
+    <tr><td>Year</td><td>2015 plus 2019 is 4034: nonsense</td><td>Label. Group by it, never sum it</td></tr>
+    <tr><td>Invoice number, phone, SKU, employee ID</td><td>Nonsense, every time</td><td>Labels, all of them</td></tr>
   </table>
-  <p>Год заслуживает своего приговора, потому что именно он дурачит опытных людей. Оно действительно числовое, имеет значение порядок, вычитание даже что-то значит. Дополнения по-прежнему нет. Любая сводная таблица, показывающая сумму года, имеет эту ошибку.</p>
+  <p>Year deserves its own sentence, because it is the one that fools experienced people. It is genuinely numeric, ordering matters, subtraction even means something. Addition still does not. Any pivot showing Sum of Year has this bug.</p>
 
-  <h2>Десятисекундное исправление</h2>
+  <h2>The ten-second fix</h2>
   <ol>
-    <li><strong>Прочитайте угол.</strong>    Поле «Значения» и заголовок сводной таблицы называют операцию: «Сумма Идентификатор приложения», «Количество Идентификатор приложения». Прочтите его, прежде чем читать какой-либо рисунок. В этом вся привычка.</li>
-    <li><strong>Щелкните поле в разделе «Значения» &gt; «Настройки поля значений».</strong></li>
-    <li><strong>Выберите «Счет». ХОРОШО.</strong>    В заголовке теперь указано количество Идентификатор приложения, а предложение из    <a href="../excel-pivot-table-question/">статья 5</a>  вернулся к тому, кого вы хотели спросить.</li>
+    <li><strong>Read the corner.</strong> The Values box and the pivot's header name the operation: Sum of AppID, Count of AppID. Read it before reading any figure. This is the whole habit.</li>
+    <li><strong>Click the field in Values &gt; Value Field Settings.</strong></li>
+    <li><strong>Choose Count. OK.</strong> The header now says Count of AppID, and the sentence from <a href="../excel-pivot-table-question/">article 5</a> is back to the one you meant to ask.</li>
   </ol>
-  <p>Затем сделайте то, что должна была сделать сборка: проверьте другие поля на странице. Эта ошибка распространяется группами, потому что одно и то же сопротивление создает каждый поворот на листе. Один найден означает, что вероятны другие.</p>
+  <p>Then do what the build had to do: check the other fields on the page. This mistake travels in groups, because the same drag built every pivot on the sheet. One found means others likely.</p>
 
-  <h2>Семья, которой принадлежит эта ловушка</h2>
-  <p>Это вторая из трех статей об одном и том же: Excel решает, какие у вас данные, и никогда об этом не упоминает.</p>
-  <p><a href="../excel-csv-import-leading-zeros/">статья 4</a>  это решение при импорте: 08053 становится числом 8053. Эта статья является решением при анализе: столбец идентификатора становится количеством. Статья 15, более поздняя в этой серии, является самой уродливой из трех: алфавит файла угадан неправильно, а 6% названий столбцов повреждены.</p>
-  <p>Общая защита для всех трех одна и та же: знайте, какие из ваших столбцов являются метками, объявляйте их там, где инструмент позволяет вам, и читайте то, что инструмент решил, где он не спрашивает. Метки подсчитываются и группируются. Количества суммируются и усредняются. Одно это различие, примененное к трем дверям, замыкает семью.</p>
+  <h2>The family this trap belongs to</h2>
+  <p>This is the second of three articles about the same underlying thing: Excel deciding what your data is, and never mentioning it.</p>
+  <p><a href="../excel-csv-import-leading-zeros/">Article 4</a> is the decision at import: 08053 becomes the number 8053. This article is the decision at analysis: an ID column becomes a quantity. Article 15, later in the series, is the ugliest of the three: a file's alphabet guessed wrong, and 6% of a column's names corrupted.</p>
+  <p>The common defense across all three is the same: know which of your columns are labels, declare them where the tool lets you, and read what the tool decided where it does not ask. Labels are counted and grouped. Quantities are summed and averaged. That one distinction, applied at three doors, closes the family.</p>
 
-  <h2>Запустите его в своем файле</h2>
+  <h2>Run it on your own file</h2>
   <ol>
-    <li><strong>Откройте любую книгу, в которой есть поворот.</strong>  Ваш или по наследству.</li>
-    <li><strong>Прочтите каждую запись о ценностях.</strong>  Только углы: Сумма чего, Количество чего, Среднее чего.</li>
-    <li><strong>Запустите тест для каждого суммируемого столбца.</strong>  Будет ли сложение двух вместе что-нибудь означать?</li>
-    <li><strong>Исправьте любую суммируемую метку.</strong>  Настройки поля значения, количество. Обратите внимание, какое число было до и после, потому что кто-то, возможно, уже процитировал первое.</li>
-    <li><strong>Добавьте чек.</strong>  Один СЧЁТЕСЛИ рядом с данными для одной группы, за  <a href="../excel-check-your-work/">статья 2</a>, поэтому следующий молчаливый дефолт ловится арифметикой, а не удачей.</li>
+    <li><strong>Open any workbook with a pivot in it.</strong> Yours or inherited.</li>
+    <li><strong>Read every Values entry.</strong> Just the corners: Sum of what, Count of what, Average of what.</li>
+    <li><strong>Run the test on each summed column.</strong> Would adding two together mean anything?</li>
+    <li><strong>Fix any label that is being summed.</strong> Value Field Settings, Count. Note what the number was before and after, because someone may have already quoted the before.</li>
+    <li><strong>Add the check.</strong> One COUNTIF beside the data for one group, per <a href="../excel-check-your-work/">article 2</a>, so the next silent default gets caught by arithmetic instead of luck.</li>
   </ol>
 
   <div class="book">
-    <strong>Excel суммировал ваши идентификационные номера и без слов сообщил общую сумму.</strong>
-    <p><em>Excel для аналитиков</em>  это 378 страниц, однострочный тест, который фиксирует агрегирование полей таким образом, что это ничего не значит.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-sum-of-id-trap'})">Excel для аналитиков, 19 долларов США →</a>
+    <strong>Excel summed your ID numbers and reported the total without a word.</strong>
+    <p><em>Excel for Analysts</em> is 378 pages, the one-line test that catches a field being aggregated in a way that means nothing.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-sum-of-id-trap'})">Excel for Analysts, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>Сделайте рабочий процесс поворота автоматическим.</strong>
-    <p style="margin:6px 0 0">The <a href="../../excel/">Excel комплект</a>  тренирует поворотные элементы, COUNTIF и остальную часть аналитического Excel с проработанными примерами и пробным экзаменом. Тест ваш с этой страницы. Рефлекс чтения угла приходит с повторениями.</p>
-    <a class="btn" href="../../excel/" onclick="if(window.gtag)gtag('event','prompt_pack_click',{kit:'guide-excel-sum-of-id'})">Откройте набор Excel →</a>
+    <strong>Make the pivot workflow automatic.</strong>
+    <p style="margin:6px 0 0">The <a href="../../excel/">Excel Kit</a> drills pivots, COUNTIF and the rest of analyst Excel with worked examples and a mock exam. The test is yours from this page. The reflex of reading the corner comes with reps.</p>
+    <a class="btn" href="../../excel/" onclick="if(window.gtag)gtag('event','prompt_pack_click',{kit:'guide-excel-sum-of-id'})">Open the Excel Kit →</a>
   </div>
 
-  <h2>Шпаргалка</h2>
+  <h2>A cheat sheet</h2>
   <table>
-    <tr><th>Situation</th><th>Do</th><th>Следите за</th></tr>
-    <tr><td>Любой столбец, вводящий значения</td><td>Запустите тест: будет ли что-нибудь означать добавление двух?</td><td>Нет, значит ярлык. Посчитайте или сгруппируйте по нему</td></tr>
-    <tr><td>Чтение любого свода, вашего или чужого</td><td>Сначала прочитайте угол: Сумма, Количество</td><td>Перед любой фигурой, каждый раз</td></tr>
-    <tr><td>Сумма найденного идентификатора</td><td>Настройки поля значения, количество</td><td>Проверьте остальную часть страницы. Он путешествует группами</td></tr>
-    <tr><td>Подсчет строк</td><td>Любой всегда заполненный столбец, для которого установлено значение «Количество».</td><td>Столбец с пробелами занижает</td></tr>
-    <tr><td>Годы в повороте</td><td>Строки, как группировка</td><td>Сумма года всегда является ошибкой</td></tr>
-    <tr><td>Доля, полученная в результате пивота</td><td>Пересчитать одну группу вручную</td><td>0,45% и 0,71% выглядят одинаково честными</td></tr>
+    <tr><th>Situation</th><th>Do</th><th>Watch for</th></tr>
+    <tr><td>Any column entering Values</td><td>Run the test: would adding two mean anything?</td><td>No means label. Count it or group by it</td></tr>
+    <tr><td>Reading any pivot, yours or not</td><td>Read the corner first: Sum of, Count of</td><td>Before any figure, every time</td></tr>
+    <tr><td>Sum of an ID found</td><td>Value Field Settings, Count</td><td>Check the rest of the page. It travels in groups</td></tr>
+    <tr><td>Counting rows</td><td>Any always-filled column, set to Count</td><td>A column with blanks undercounts</td></tr>
+    <tr><td>Years in a pivot</td><td>Rows, as a group-by</td><td>Sum of Year is always the bug</td></tr>
+    <tr><td>A share that came from a pivot</td><td>Recompute one group by hand</td><td>0.45% and 0.71% look equally honest</td></tr>
   </table>
 
-  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Прочтите угол поворота, прежде чем читать какое-либо число в нем. Сумма, Количество, Среднее значение: операция является заявкой, и она печатается тут же.</div>
+  <div class="note"><strong>The one habit to keep.</strong> Read the corner of the pivot before you read any number in it. Sum of, Count of, Average of: the operation is the claim, and it is printed right there.</div>
 
   <div class="series">
-    <strong>Серия: Excel для бизнес-аналитиков.</strong>
-    <p style="margin:6px 0 8px">Каждая статья создается за один этап  <a href="../excel-dashboard-build-order/">та же настоящая сборка</a>, в порядке сборки. Ссылки активируются по мере публикации каждой из них.</p>
+    <strong>The series: Excel for Business Analysts.</strong>
+    <p style="margin:6px 0 8px">Every article comes out of one step of <a href="../excel-dashboard-build-order/">the same real build</a>, in build order. Links go live as each one publishes.</p>
     <ol start="0">
-      <li value="0"><a href="../excel-dashboard-build-order/">Создайте информационную панель в следующем порядке: правильно, затем ясно, затем убедительно.</a></li>
-      <li><a href="../excel-label-rows-before-charting/">Пометьте свои строки, прежде чем составлять их диаграмму.</a></li>
-      <li><a href="../excel-check-your-work/">Проверяйте свою работу, прежде чем это сделает кто-то другой</a></li>
-      <li><a href="../excel-name-your-data/">Назовите свои данные, чтобы ваши формулы перестали нарушаться</a></li>
-      <li><a href="../excel-csv-import-leading-zeros/">Диалог, который незаметно удаляет ваши почтовые индексы</a></li>
-      <li><a href="../excel-pivot-table-question/">Сводная таблица — это вопрос, а не отчет</a></li>
-      <li>Excel просто суммировал ваши идентификационные номера и ничего не сказал (эта статья)</li>
-      <li><a href="../excel-pivot-percentages/">Проценты — это вся история, а Excel их скрывает</a></li>
-      <li><a href="../excel-custom-number-formats/">Покажите единицу, не нарушая цифру</a></li>
-      <li><a href="../excel-pick-the-chart/">Выберите диаграмму, ваш номер уже определен</a></li>
-      <li><a href="../excel-chart-design-basics/">Основы проектирования диаграмм: уберите что-то, а затем укажите</a></li>
-      <li><a href="../excel-if-family/">По одной строке за раз или все строки сразу</a></li>
-      <li><a href="../excel-kpi-row/">Четыре числа сверху обозначают более четырех графиков.</a></li>
-      <li><a href="../excel-sort-your-bars/">Отсортируйте гистограмму, иначе это ничего не значит</a></li>
-      <li><a href="../excel-circular-findings/">Открытие, которое было всего лишь вашим собственным определением</a></li>
-      <li><a href="../excel-character-encoding/">Имена появились как тарабарщина, а Excel ничего не сказал</a></li>
-      <li><a href="../excel-slicers/">Сделайте по одному управляющему диску для каждой диаграммы на странице.</a></li>
-      <li><a href="../excel-dashboard-claim/">Напишите предложение, о котором спорит ваша панель мониторинга</a></li>
+      <li value="0"><a href="../excel-dashboard-build-order/">Build a dashboard in this order: correct, then clear, then compelling</a></li>
+      <li><a href="../excel-label-rows-before-charting/">Label your rows before you chart them</a></li>
+      <li><a href="../excel-check-your-work/">Check your work before anyone else does</a></li>
+      <li><a href="../excel-name-your-data/">Name your data so your formulas stop breaking</a></li>
+      <li><a href="../excel-csv-import-leading-zeros/">The dialog that quietly deletes your zip codes</a></li>
+      <li><a href="../excel-pivot-table-question/">A pivot table is a question, not a report</a></li>
+      <li>Excel just summed your ID numbers and said nothing (this article)</li>
+      <li><a href="../excel-pivot-percentages/">Percentages are the whole story and Excel hides them</a></li>
+      <li><a href="../excel-custom-number-formats/">Show the unit without breaking the number</a></li>
+      <li><a href="../excel-pick-the-chart/">Pick the chart your number already decided</a></li>
+      <li><a href="../excel-chart-design-basics/">Chart design basics: take things away, then point</a></li>
+      <li><a href="../excel-if-family/">One row at a time, or all rows at once</a></li>
+      <li><a href="../excel-kpi-row/">Four numbers across the top do more than four charts</a></li>
+      <li><a href="../excel-sort-your-bars/">Sort your bar chart or it means nothing</a></li>
+      <li><a href="../excel-circular-findings/">The finding that was just your own definition</a></li>
+      <li><a href="../excel-character-encoding/">The names came in as gibberish and Excel said nothing</a></li>
+      <li><a href="../excel-slicers/">Make one control drive every chart on the page</a></li>
+      <li><a href="../excel-dashboard-claim/">Write the sentence your dashboard is arguing</a></li>
     </ol>
   </div>
 
-  <p>Прочитайте углы последней опоры, которую вы отправили. Что указано в каждом поле «Ценности», и это ли предложение вы имели в виду?</p>
+  <p>Go read the corners of the last pivot you shipped. What does each Values box say it did, and is that the sentence you meant?</p>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../excel-dashboard-build-order/">Порядок строительства (статья 0)</a> · <a href="../excel-absolute-vs-relative-references/">Абсолютные и относительные ссылки</a> · <a href="../excel-label-rows-before-charting/">Пометьте свои строки (статья 1)</a> · <a href="../excel-check-your-work/">Проверьте свою работу (статья 2)</a> · <a href="../excel-name-your-data/">Назовите свои данные (статья 3)</a> · <a href="../excel-csv-import-leading-zeros/">Диалоговое окно импорта CSV (статья 4)</a> · <a href="../excel-pivot-table-question/">Разворот – это вопрос (статья 5)</a> · <a href="../sql-count-function/">СЧЕТ в SQL</a> · <a href="../what-is-data-analysis/">Что такое анализ данных?</a> · <a href="../../excel/">Excel комплект</a> · <a href="../../viz/">Виз Дрель</a> · <a href="../../projects/">Портфельные проекты</a>
-    <a class="coffee" href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a>
+    <a href="../../">← Analyst Prep Kit</a> · <a href="../excel-dashboard-build-order/">The Build Order (Article 0)</a> · <a href="../excel-absolute-vs-relative-references/">Absolute vs Relative References</a> · <a href="../excel-label-rows-before-charting/">Label Your Rows (Article 1)</a> · <a href="../excel-check-your-work/">Check Your Work (Article 2)</a> · <a href="../excel-name-your-data/">Name Your Data (Article 3)</a> · <a href="../excel-csv-import-leading-zeros/">The CSV Import Dialog (Article 4)</a> · <a href="../excel-pivot-table-question/">A Pivot Is a Question (Article 5)</a> · <a href="../sql-count-function/">COUNT in SQL</a> · <a href="../what-is-data-analysis/">What Is Data Analysis?</a> · <a href="../../excel/">Excel Kit</a> · <a href="../../viz/">Viz Drill</a> · <a href="../../projects/">Portfolio Projects</a>
+    <a class="coffee" href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

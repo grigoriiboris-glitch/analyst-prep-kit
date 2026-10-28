@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Профилирование данных перед миграцией: проверки, меняющие план — комплект для подготовки аналитика</title>
-<meta name="description" content="Как профилировать исходную систему перед миграцией данных: семь проверок, которые необходимо выполнить для каждого извлечения, что каждая из них говорит о сроках и как превратить результаты в решения по объему, а не в сюрпризы.">
+<title>Data Profiling Before a Migration: The Checks That Change the Plan &mdash; Analyst Prep Kit</title>
+<meta name="description" content="How to profile a source system before a data migration: the seven checks to run on every extract, what each one tells you about the timeline, and how to turn findings into scope decisions rather than surprises.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/migration-profiling/">
-<meta property="og:title" content="Этап 2. Профилирование источника">
-<meta property="og:description" content="Как профилировать исходную систему перед миграцией данных: семь проверок, которые необходимо выполнить для каждого извлечения, что каждая из них говорит о сроках и как превратить результаты в решения по объему, а не в сюрпризы.">
+<meta property="og:title" content="Stage 2: Profile the Source">
+<meta property="og:description" content="How to profile a source system before a data migration: the seven checks to run on every extract, what each one tells you about the timeline, and how to turn findings into scope decisions rather than surprises.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/migration-profiling/">
 <meta name="twitter:card" content="summary_large_image">
@@ -133,95 +133,95 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../">Все руководства</a> &middot; <a href="../data-migration-stages/">Серия «Миграция данных»</a></p>
-  <h1>Этап 2. Профилирование источника</h1>
-  <p class="meta">Этап 2 из 8 · Узнайте, что там на самом деле, прежде чем обещать даты · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-07-30">30 июля 2026 г.</time></p>
+  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../">All Guides</a> &middot; <a href="../data-migration-stages/">Data Migration Series</a></p>
+  <h1>Stage 2: Profile the Source</h1>
+  <p class="meta">Stage 2 of 8 &middot; Find out what is really in there, before you promise dates &middot; Part of the <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-07-30">July 30, 2026</time></p>
 
-  <p>Профилирование — это анализ реальных данных, чтобы выяснить, что в них содержится на самом деле. Это занимает день или два, и это единственный этап, результаты которого говорят вам, честен ли ваш график. В этой статье рассказывается о семи проверках, которые необходимо выполнить для каждого извлечения, и о том, что каждая из них меняет.</p>
+  <p>Profiling is looking at the real data to find out what is actually in it. It takes a day or two and it is the only stage whose output tells you whether your timeline is honest. This article gives you the seven checks to run on every extract and what each one changes.</p>
 
-  <p><strong>Краткая версия.</strong>  Проведите одни и те же семь проверок в каждой таблице, прежде чем что-либо картировать, и превратите каждый результат либо в правило, либо в решение об объеме, либо в риск для плана.</p>
+  <p><strong>The short version.</strong> Run the same seven checks on every table before you map anything, and turn each finding into either a rule, a scope decision, or a risk on the plan.</p>
 
-  <h2>Почему это отдельная сцена</h2>
-  <p>Как вы думаете, в чем разница между профилированием и очисткой? Ответьте, прежде чем читать дальше.</p>
-  <p>Профилирование выясняет, что там. Уборка что-то с этим делает. Они объединяются во многих статьях, и объединение их стоит вам того момента, когда результаты все еще могут изменить план. После того, как вы очиститесь, вы уже выбрали подход.</p>
-  <p>Профилирование также дает вам возможность сказать, когда клиент спрашивает, сколько времени это займет. «Двенадцать процентов ваших записей о клиентах не имеют основного адреса, и это поле является обязательным в новой системе» — это реальный разговор. Интуитивное чувство — нет.</p>
+  <h2>Why this is its own stage</h2>
+  <p>What do you think the difference is between profiling and cleaning? Answer before reading on.</p>
+  <p>Profiling finds out what is there. Cleaning does something about it. They get merged in a lot of write-ups, and merging them costs you the moment where the findings could still change the plan. Once you are cleaning, you have already committed to an approach.</p>
+  <p>Profiling also gives you something to say when a client asks how long this will take. "Twelve percent of your client records have no primary address, and that field is required in the new system" is a real conversation. A gut feeling is not.</p>
 
-  <h2>Семь проверок</h2>
-  <p>Запустите их для каждой таблицы. Все они представляют собой несколько строк SQL, и большинство из них представляют собой  <a href="../sql-count-function/">СЧИТАТЬ с помощью GROUP BY</a>.</p>
-  <p><strong>1. Количество строк.</strong>  Сколько строк в каждой таблице. Запишите их. Все, что вы делаете позже, сравнивается с этим числом, и это базовый уровень для  <a href="../migration-dry-run/">reconciliation</a>.</p>
-  <p><strong>2. Пробелы в обязательных полях.</strong>  Для каждого поля, требуемого целевой системой, подсчитайте, сколько исходных строк не содержат ничего. Эта единственная проверка преподносит большинство сюрпризов.</p>
-  <p><strong>3. Различные значения в полях, которые должны представлять собой список.</strong>  Поле статуса с шестью допустимыми значениями в новой системе и четырьмя сотнями различных строк в старой означает, что кто-то вводил произвольный текст. Это отдельный картографический проект.</p>
-  <p><strong>4. Дубликаты на идентификационном поле.</strong>  Группируйте по тому, что должно быть уникальным, и учитывайте все, что появляется более одного раза. Это первый взгляд на работу по дедупликации.</p>
-  <p><strong>5. Сироты.</strong>  Дети без родителей. Документы без клиента, визиты без сотрудника. Их находит левое соединение, где правая часть равна нулю.</p>
-  <p><strong>6. Форматы.</strong>  Даты, номера телефонов, идентификаторы. Посмотрите на фактические строки, а не на тип столбца. Столбец даты, хранящийся в виде текста, будет содержать как минимум три формата и как минимум одну невозможную дату.</p>
-  <p><strong>7. Диапазоны и выбросы.</strong>  Минимум и максимум на каждую дату и число. Там указаны дата рождения в 1899 году и дата посещения в 2087 году, и оба будут отклонены загрузчиком в самый неподходящий момент.</p>
-  <p>Представьте себе, как выполняется проверка номер три в знакомой вам системе. Как вы думаете, сколько разных способов люди пишут один и тот же статус? Это число — ваша рабочая нагрузка по картографированию.</p>
+  <h2>The seven checks</h2>
+  <p>Run these per table. All of them are a few lines of SQL, and most are a <a href="../sql-count-function/">COUNT with GROUP BY</a>.</p>
+  <p><strong>1. Row counts.</strong> How many rows in each table. Write them down. Everything you do later gets compared to this number, and it is the baseline for <a href="../migration-dry-run/">reconciliation</a>.</p>
+  <p><strong>2. Blanks in required fields.</strong> For every field the target system requires, count how many source rows have nothing in it. This single check produces most of the surprises.</p>
+  <p><strong>3. Distinct values in fields that should be a list.</strong> A status field with six allowed values in the new system, holding four hundred distinct strings in the old one, means somebody was typing free text. That is a mapping project of its own.</p>
+  <p><strong>4. Duplicates on the identifying field.</strong> Group by whatever should be unique and count anything appearing more than once. This is the first sight of the de-duplication work.</p>
+  <p><strong>5. Orphans.</strong> Children with no parent. Documents with no client, visits with no staff member. A left join where the right side is null finds them.</p>
+  <p><strong>6. Formats.</strong> Dates, phone numbers, identifiers. Look at the actual strings, not the column type. A date column stored as text will contain at least three formats and at least one impossible date.</p>
+  <p><strong>7. Ranges and outliers.</strong> Minimum and maximum on every date and number. A birth date in 1899 and a visit dated 2087 are both in there, and both will be rejected by the loader at the worst possible moment.</p>
+  <p>Picture running check three on a system you know. How many different ways do you think people have spelled the same status? That number is your mapping workload.</p>
 
-  <h2>Превращение результатов в решения</h2>
-  <p>Находка, которая останется в ваших заметках, ничего не стоит. Каждый становится ровно одной из трех вещей.</p>
-  <p><strong>Правило.</strong>  Исправление механическое и безопасное. Обрезайте пробелы, стандартизируйте формат даты, переводите код в верхний регистр. Это входит в работу по преобразованию и не требует участия клиента.</p>
-  <p><strong>Решение по объему.</strong>  Исправление требует, чтобы человек что-то решил. Четыреста текстовых статусов, объединенных в шесть, означают, что кто-то должен сказать, что есть что, и что кто-то является клиентом. Это решение с указанием даты.</p>
-  <p><strong>Риск.</strong>  На открытие может потребоваться время, но вы пока не можете этого сказать. Поместите это на план, назвав напротив него. Риск, который был в плане со второй недели, является обычным событием проекта. Тот же риск, о котором говорилось на восьмой неделе, — это провал.</p>
+  <h2>Turning findings into decisions</h2>
+  <p>A finding that stays in your notes is worth nothing. Every one becomes exactly one of three things.</p>
+  <p><strong>A rule.</strong> The fix is mechanical and safe. Trim whitespace, standardize a date format, upper case a code. This goes into the transformation work and needs no client input.</p>
+  <p><strong>A scope decision.</strong> The fix requires a human to decide something. Four hundred free text statuses collapsing into six means somebody has to say which is which, and that somebody is the client. This is a decision with a date attached.</p>
+  <p><strong>A risk.</strong> The finding might cost time and you cannot yet tell. Put it on the plan with a name against it. A risk that was on the plan since week two is a normal project event. The same risk raised in week eight is a failure.</p>
 
-  <h2>Что чаще всего меняет план</h2>
-  <p>Три вывода в порядке того, как часто они переносят дату.</p>
-  <p><strong>Обязательное поле, которое в исходном коде чаще всего пусто.</strong>  Не существует правила, которое изобретает данные. Либо клиент заполняет его, либо цель принимает значение по умолчанию, либо поле не переносится. Все трое ведут разговор.</p>
-  <p><strong>Произвольный текст, в котором цель хочет получить список.</strong>  Кто-то должен сопоставить каждое значение, и только клиент знает, что означают лишние значения.</p>
-  <p><strong>Том, о котором вам не сказали.</strong>  В экстракте хранится больше истории, чем в описанном контракте, или хранилище документов в четыре раза превышает размер, о котором говорили. Это меняет технический подход, а не только график.</p>
+  <h2>What changes the plan most often</h2>
+  <p>Three findings, in order of how often they move a date.</p>
+  <p><strong>A required field that is mostly empty in the source.</strong> There is no rule that invents data. Either the client fills it, or the target accepts a default, or the field does not migrate. All three take a conversation.</p>
+  <p><strong>Free text where the target wants a list.</strong> Someone has to map every value, and only the client knows what the odd ones mean.</p>
+  <p><strong>Volume you were not told about.</strong> The extract holds more history than the contract described, or the document store is four times the size anyone said. This changes the technical approach, not just the schedule.</p>
 
-  <h2>Запишите это вот так</h2>
+  <h2>Write it down like this</h2>
   <table>
     <tr><th>Check</th><th>Finding</th><th>Becomes</th><th>Owner</th></tr>
-    <tr><td>Пробелы обязательны</td><td>12% клиентов не имеют основного адреса</td><td>Решение по объему</td><td>Client</td></tr>
-    <tr><td>Различные ценности</td><td>412 строк статуса, цель позволяет 6</td><td>Решение по объему</td><td>Client</td></tr>
-    <tr><td>Formats</td><td>Даты в 3 форматах, 40 невозможных</td><td>Список правил и исключений</td><td>Us</td></tr>
-    <tr><td>Volume</td><td>Хранилище документов в 4 раза превышает оценку</td><td>Risk</td><td>Us</td></tr>
+    <tr><td>Blanks in required</td><td>12% of clients have no primary address</td><td>Scope decision</td><td>Client</td></tr>
+    <tr><td>Distinct values</td><td>412 status strings, target allows 6</td><td>Scope decision</td><td>Client</td></tr>
+    <tr><td>Formats</td><td>Dates in 3 formats, 40 impossible</td><td>Rule plus exception list</td><td>Us</td></tr>
+    <tr><td>Volume</td><td>Document store is 4x the estimate</td><td>Risk</td><td>Us</td></tr>
   </table>
-  <p>Этот стол — ворота. Он закрывается, когда у каждой строки есть владелец и дата, и отправляется клиенту как часть электронного письма с подведением итогов этапа.</p>
+  <p>That table is the gate. It closes when every row has an owner and a date, and it goes to the client as part of the stage wrap up email.</p>
 
-  <h2>Откуда это взялось</h2>
-  <p>Модель процесса миграции, построенная Халлером, Маттесом и Шульцем, ставит этап анализа перед проектированием по той же причине, что и здесь: предполагается, что результаты должны служить основой для плана, но они не могут этого сделать, если они появятся после него. В более широкой литературе по качеству данных это рассматривается как пригодность для использования (от Ванга и Стронга). Данные не являются хорошими или плохими в абстрактном смысле. Этого достаточно для определенной цели, и целью здесь являются правила целевой системы.</p>
+  <h2>Where this comes from</h2>
+  <p>The migration process model built by Haller, Matthes and Schulz puts an analysis stage before design for the same reason given here: the findings are supposed to feed the plan, and they cannot if they arrive after it. The wider data quality literature frames it as fitness for use, from Wang and Strong. Data is not good or bad in the abstract. It is good enough for a purpose, and the purpose here is the target system's rules.</p>
 
-  <h2>Одна привычка</h2>
-  <p>Никогда не обещайте дату, пока не посчитаете ряды. Счет дешевый, а обещание - нет.</p>
-  <p>Что самое худшее вы нашли в исходной системе, когда действительно посмотрели?</p>
+  <h2>The one habit</h2>
+  <p>Never promise a date before you have counted the rows. The count is cheap and the promise is not.</p>
+  <p>What is the worst thing you have found in a source system once you actually looked?</p>
 
 <div class="seriesnav">
-  <p class="up">Дальше</p>
-  <a class="next" href="../migration-field-mapping/">Этап 3: нанесите на карту поля →</a>
-  <p class="then">Ранее:  <a href="../migration-kickoff-scope/">Этап 1: Начало и масштаб</a> &nbsp;&middot;&nbsp; <a href="../data-migration-stages/">Все восемь этапов</a></p>
+  <p class="up">Up next</p>
+  <a class="next" href="../migration-field-mapping/">Stage 3: Map the Fields &rarr;</a>
+  <p class="then">Previously: <a href="../migration-kickoff-scope/">Stage 1: Kickoff and Scope</a> &nbsp;&middot;&nbsp; <a href="../data-migration-stages/">All eight stages</a></p>
 </div>
 
   <div class="cta">
-    <strong>Проверочная работа выполняется на языке SQL, а не на продвинутом уровне SQL.</strong>
-    <p style="margin:6px 0 0">Подсчет строк, группировка для поиска дубликатов и объединение для поиска потерянных строк покрывает большую часть того, что требует от вас миграция.  <a href="../../sql/">SQL-кит</a>  обучает этим движениям по порядку, имея данные перед вами.</p>
-    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
-    <p style="margin:10px 0 0;font-size:15px">Или сразу начните вводить:  <a href="../../drill/">открыть SQL-детализация</a>, тринадцать запросов, каждый из которых добавляет что-то одно к последнему.</p>
+    <strong>The checking work is SQL, and it is not advanced SQL.</strong>
+    <p style="margin:6px 0 0">Counting rows, grouping to find duplicates, and joining to find orphans covers most of what a migration asks of you. The <a href="../../sql/">SQL Kit</a> teaches those moves in order, with the data in front of you.</p>
+    <a class="btn" href="../../sql/">Open the SQL Kit &rarr;</a>
+    <p style="margin:10px 0 0;font-size:15px">Or start typing straight away: <a href="../../drill/">open SQL Drill</a>, thirteen queries that each add one thing to the last.</p>
   </div>
 
   <div class="book">
-    <strong>Весь пробег в одном месте.</strong>
-    <p>Вы переносите записи клиента в новую систему, и вас беспокоит та неделя, когда клиент замолкает.  <em>Руководство по миграции данных</em>  это все восемь этапов по порядку, 63 страницы, от первой стартовой встречи до гиперпомощи, так что вы можете пройти один, не опоздав на три недели с важным вопросом.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/data-migration-playbook?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=data-migration-playbook" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-migration-profiling'})">Руководство по миграции данных, 29 долларов США →</a>
+    <strong>The whole run, in one place.</strong>
+    <p>You are moving a client’s records into a new system, and the part that worries you is the week the client goes quiet. <em>The Data Migration Playbook</em> is all eight stages in order, 63 pages, from the first kickoff meeting through hypercare, so you can run one without finding the important question three weeks too late.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/data-migration-playbook?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=data-migration-playbook" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-migration-profiling'})">The Data Migration Playbook, $29 &rarr;</a>
   </div>
 
 
   <h2>References</h2>
   <ol class="refs">
-    <li>Халлер К., Маттес Ф. и Шульц К. (2012). Подробная модель процесса для крупномасштабных проектов миграции данных.  <em>Системы бизнес-информации (BIS 2012), Конспекты лекций по обработке бизнес-информации, 117</em>. Спрингер.</li>
-    <li>Ван, Р.Ю., и Стронг, Д.М. (1996). За пределами точности: что качество данных означает для потребителей данных.  <em>Журнал информационных систем управления, 12</em>(4), 5&ndash;33.</li>
+    <li>Haller, K., Matthes, F., &amp; Schulz, C. (2012). A detailed process model for large scale data migration projects. <em>Business Information Systems (BIS 2012), Lecture Notes in Business Information Processing, 117</em>. Springer.</li>
+    <li>Wang, R. Y., &amp; Strong, D. M. (1996). Beyond accuracy: What data quality means to data consumers. <em>Journal of Management Information Systems, 12</em>(4), 5&ndash;33.</li>
   </ol>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../sql-count-function/">СЧЕТ в SQL</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../sql/">SQL-кит</a> · <a href="../../projects/">Портфельные проекты</a>
+    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../entity-resolution/">Entity Resolution</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../sql-count-function/">COUNT in SQL</a> · <a href="../sql-joins/">SQL JOINs</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../sql/">SQL Kit</a> · <a href="../../projects/">Portfolio Projects</a>
     
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

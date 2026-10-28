@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ограничение строк Excel: 1 048 576 строк и только что полученное сообщение — комплект для подготовки аналитика</title>
-<meta name="description" content="Excel останавливается на отметке 1 048 576 строк и 16 384 столбцов, а файл, который вы открыли, возможно, уже усечен, даже не говоря об этом. Как проверить, что было потеряно, и четыре маршрута выхода, ранжированные по усилиям.">
+<title>Excel Row Limit: 1,048,576 Rows and the Message You Just Got &mdash; Analyst Prep Kit</title>
+<meta name="description" content="Excel stops at 1,048,576 rows and 16,384 columns, and the file you opened may already be truncated without saying so. How to check what was lost, and the four routes out, ranked by effort.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-row-limit/">
-<meta property="og:title" content="Этот набор данных слишком велик для сетки: ограничение на количество строк Excel и что делать">
-<meta property="og:description" content="1 048 576 строк. Как определить, молча ли Excel отказался от всего остального и четырех путей вперед.">
+<meta property="og:title" content="This Data Set Is Too Large for the Grid: The Excel Row Limit and What to Do">
+<meta property="og:description" content="1,048,576 rows. How to tell whether Excel silently dropped the rest, and the four ways forward.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-row-limit/">
 <meta name="twitter:card" content="summary_large_image">
@@ -164,101 +164,101 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../../excel/">Excel комплект</a></p>
-  <h1>Этот набор данных слишком велик для сетки: ограничение на количество строк Excel и что делать</h1>
-  <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Все числа на этой странице были обработаны до их публикации.</p>
+  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../../excel/">Excel Kit</a></p>
+  <h1>This Data Set Is Too Large for the Grid: The Excel Row Limit and What to Do</h1>
+  <p class="meta">Michael Nocito &middot; Updated August 2026 &middot; Every number on this page was worked before it was published</p>
 
-  <p>Лист Excel содержит  <strong>1,048,576</strong>  ряды и  <strong>16,384</strong>  столбцы. Это 2^20 и 2^14, выбранные при переписывании формата файла для Excel 2007, и с тех пор они не менялись. Если в файле больше строк, Excel сообщит вам, что набор данных слишком велик для сетки, и предложит частичную загрузку.</p>
+  <p>An Excel worksheet holds <strong>1,048,576</strong> rows and <strong>16,384</strong> columns. Those are 2^20 and 2^14, chosen when the file format was rewritten for Excel 2007, and they have not moved since. When a file has more rows than that, Excel tells you that the data set is too large for the grid and offers you a partial load.</p>
 
-  <p>Что вы делаете в первую очередь: выясните, действительно ли что-то было потеряно, потому что усеченный файл, который выглядит полным, — гораздо большая проблема, чем предупреждающее сообщение.</p>
+  <p>What you do first: find out whether anything was actually lost, because a truncated file that looks complete is a much bigger problem than a warning message.</p>
 
-  <p><strong>Краткая версия.</strong>  Если количество строк равно 1 048 576, вы не просматриваете все свои данные.</p>
+  <p><strong>The short version.</strong> If your row count is exactly 1,048,576, you are not looking at all your data.</p>
 
-  <h2>Проверьте, не потеряли ли вы строки</h2>
+  <h2>Check whether you lost rows</h2>
   <ol>
-    <li>Нажмите Ctrl+Конец. Если курсор попадает на строку 1 048 576, файл считается усеченным, пока не будет доказано обратное.</li>
-    <li>Подсчитайте строки источника, не открывая его. В PowerShell:  <code>(Get-Content big.csv | Measure-Object -Line).Lines</code>. В очень большом файле  <code>Get-Content -ReadCount 10000</code>  быстрее.</li>
-    <li>Сравните это количество минус один для заголовка с тем, что попало в лист.</li>
-    <li>Сравните последнюю дату или идентификатор на листе с последним в файле. Усеченная выдержка обычно останавливается в середине периода, что является признаком любого отчета, построенного на ее основе.</li>
+    <li>Press Ctrl+End. If the cursor lands on row 1,048,576, treat the file as truncated until proved otherwise.</li>
+    <li>Count the source rows without opening it. In PowerShell: <code>(Get-Content big.csv | Measure-Object -Line).Lines</code>. On a very large file, <code>Get-Content -ReadCount 10000</code> is faster.</li>
+    <li>Compare that count, minus one for the header, with what landed in the sheet.</li>
+    <li>Check the last date or ID in the sheet against the last one in the file. A truncated extract usually stops mid-period, which is the tell in any report built on top of it.</li>
   </ol>
 
-  <div class="note"><strong>Тихая версия.</strong>  Кто-то открывает CSV-файл с 3 миллионами строк, просматривает предупреждение, сохраняет его в формате .xlsx и отправляет по электронной почте. Теперь файл содержит ровно 1 048 576 строк и не содержит никаких предупреждений. Любая сумма, вычисленная на его основе, неверна на две трети, и ничто на экране об этом не говорит. Количество строк принадлежит вашему  <a href="../excel-check-your-work/">check-your-work</a>  рутина именно по этой причине.</div>
+  <div class="note"><strong>The silent version.</strong> Somebody opens a 3 million row CSV, clicks past the warning, saves as .xlsx and emails it round. The file now has exactly 1,048,576 rows and no warning attached. Any total computed from it is wrong by two thirds, and nothing on the screen says so. Row counts belong in your <a href="../excel-check-your-work/">check-your-work</a> routine for exactly this reason.</div>
 
-  <h2>Четыре выхода наружу</h2>
+  <h2>The four routes out</h2>
   <table>
-    <tr><th>Route</th><th>Effort</th><th>Используйте, когда</th></tr>
-    <tr><td>Агрегировать до того, как он достигнет Excel</td><td>Low</td><td>Вам нужны итоги, а не строки. Большинство случаев.</td></tr>
-    <tr><td>Power Query к модели данных</td><td>Low</td><td>Оставаясь в Excel, вам нужно все контролировать</td></tr>
-    <tr><td>DuckDB или SQLite</td><td>Medium</td><td>Повторяющиеся вопросы, объединения, настоящая фильтрация</td></tr>
-    <tr><td>панды или полярные</td><td>Medium</td><td>Это шаг в конвейере, который вы запустите повторно.</td></tr>
+    <tr><th>Route</th><th>Effort</th><th>Use when</th></tr>
+    <tr><td>Aggregate before it reaches Excel</td><td>Low</td><td>You need totals, not rows. Most cases.</td></tr>
+    <tr><td>Power Query to the Data Model</td><td>Low</td><td>Staying in Excel, need a pivot over everything</td></tr>
+    <tr><td>DuckDB or SQLite</td><td>Medium</td><td>Repeated questions, joins, real filtering</td></tr>
+    <tr><td>pandas or Polars</td><td>Medium</td><td>It is a step in a pipeline you will re-run</td></tr>
   </table>
 
-  <h3>Сначала агрегировать</h3>
-  <p>Честный вопрос обычно не касается трех миллионов строк. Речь идет о нескольких сотнях итоговых строк. Если файл поступает из системы с экраном экспорта, измените экспорт на группу по месяцам и категориям, прежде чем он будет доставлен. Это навсегда решает проблему, и люди пропускают этот вариант, потому что это означает, что нужно кого-то спросить.</p>
+  <h3>Aggregate first</h3>
+  <p>The honest question is usually not about three million rows. It is about a few hundred summary rows. If the file comes from a system with an export screen, change the export to group by month and category before it lands. That solves the problem permanently and is the option people skip because it means asking somebody.</p>
 
-  <h3>Power Query к модели данных</h3>
-  <p>Данные, Получить данные, Из файла, Из текста/CSV, затем  <strong>Загрузить в</strong>  и выбери  <em>Только создать соединение</em> with <em>Добавьте эти данные в модель данных</em>  поставил галочку. Строки никогда не касаются листа, поэтому ограничение в миллион строк не применяется. Создайте сводную таблицу на основе модели и агрегируйте данные Excel по всему файлу.</p>
-  <p>Две вещи, которые нужно знать. Модель сжата в памяти, поэтому файл размером 2 ГБ на диске может содержать несколько сотен мегабайт, но 32-разрядному Excel все равно будет не хватать около 2 ГБ адресного пространства. И ограничение сетки по-прежнему применяется ко всему, что вы детализируете.</p>
+  <h3>Power Query to the Data Model</h3>
+  <p>Data, Get Data, From File, From Text/CSV, then <strong>Load To</strong> and choose <em>Only Create Connection</em> with <em>Add this data to the Data Model</em> ticked. The rows never touch a worksheet, so the million row limit does not apply. Build a PivotTable on the model and Excel aggregates over the whole file.</p>
+  <p>Two things to know. The model is compressed in memory, so a file that is 2GB on disk may hold in a few hundred megabytes, but 32-bit Excel will still run out at about 2GB of address space regardless. And the grid limit still applies to anything you drill through to.</p>
 
-  <h3>Запросить файл, в котором он находится</h3>
-  <p>DuckDB читает CSV напрямую с помощью SQL без необходимости импорта:</p>
+  <h3>Query the file where it sits</h3>
+  <p>DuckDB reads a CSV directly with SQL and no import step:</p>
   <pre><code>SELECT region, COUNT(*) AS rows, SUM(amount) AS total
 FROM 'big.csv'
 GROUP BY region
 ORDER BY total DESC;</code></pre>
-  <p>Это вернет несколько строк, которые вы можете вставить в Эксель. Установка занимает несколько минут и описана в    <a href="../set-up-duckdb/">Настройка DuckDB</a>. Если вы запросите более двух раз, загрузите это в SQLite и сохраните.</p>
+  <p>That returns a handful of rows you can paste into Excel. Setup takes minutes and is covered in <a href="../set-up-duckdb/">setting up DuckDB</a>. For anything you will ask more than twice, load it into SQLite instead and keep it.</p>
 
-  <h2>Ограничение столбца и причина его достижения</h2>
-  <p>Кажется, что 16 384 столбца недостижимы, и это мешает ровно одному: повороту длинной таблицы по ширине поля со слишком большим количеством значений. Один столбец на каждого клиента или в день в течение нескольких лет. Это признак того, что форма неправильная, а не ограничение жестко. Сохраняйте данные длинными и позволяйте опорной точке расширяться во время чтения.</p>
+  <h2>The column limit, and the reason you hit it</h2>
+  <p>16,384 columns sounds unreachable, and it gets hit by exactly one thing: pivoting a long table wide on a field with too many values. One column per customer, or per day over several years. That is a sign the shape is wrong rather than the limit being tight. Keep the data long and let the pivot do the widening at read time.</p>
 
-  <h2>Другие ограничения, которые стоит знать, прежде чем их встретить</h2>
+  <h2>Other limits worth knowing before you meet them</h2>
   <table>
-    <tr><th>Limit</th><th>Value</th><th>Где оно кусает</th></tr>
-    <tr><td>Строки на листе</td><td>1,048,576</td><td>Сырые экстракты</td></tr>
-    <tr><td>Столбцов на листе</td><td>16,384</td><td>Чрезмерно повернутые таблицы</td></tr>
-    <tr><td>Персонажи в клетке</td><td>32,767</td><td>Заметки с произвольным текстом, капли JSON</td></tr>
-    <tr><td>Символы, показанные в ячейке</td><td>1,024</td><td>Текст, который выглядит обрезанным, но это не так</td></tr>
-    <tr><td>Цифры точности</td><td>15</td><td>Длинные идентификаторы превращаются в 1.23457E+17</td></tr>
-    <tr><td>Выбранные сводные поля</td><td>16 384 объекта</td><td>Развороты с очень высокой мощностью</td></tr>
+    <tr><th>Limit</th><th>Value</th><th>Where it bites</th></tr>
+    <tr><td>Rows per sheet</td><td>1,048,576</td><td>Raw extracts</td></tr>
+    <tr><td>Columns per sheet</td><td>16,384</td><td>Over-pivoted tables</td></tr>
+    <tr><td>Characters in a cell</td><td>32,767</td><td>Free-text notes, JSON blobs</td></tr>
+    <tr><td>Characters shown in a cell</td><td>1,024</td><td>Text that looks cut off but is not</td></tr>
+    <tr><td>Digits of precision</td><td>15</td><td>Long IDs turning into 1.23457E+17</td></tr>
+    <tr><td>Selected pivot fields</td><td>16,384 items</td><td>Very high cardinality pivots</td></tr>
   </table>
-  <p>15-значный ловит людей постоянно: вставьте 16-значный номер счета в ячейку «Общие», и последняя цифра навсегда станет нулевой. Перед вставкой отформатируйте столбец как текст, такая же защита, как и в  <a href="../excel-csv-import-leading-zeros/">ведущие нули при импорте CSV</a>.</p>
+  <p>The 15 digit one catches people constantly: paste a 16 digit account number into a General cell and the last digit becomes zero, permanently. Format the column as Text before pasting, the same defence as in <a href="../excel-csv-import-leading-zeros/">leading zeros on CSV import</a>.</p>
 
-  <h2>Как применить это в своей работе</h2>
+  <h2>How to apply this to your own work</h2>
   <ol>
-    <li>Добавьте количество строк в каждую книгу, начиная с импорта, и сравните его с исходным количеством. Одна клетка, одна привычка.</li>
-    <li>Когда файл приближается к миллиону строк, вообще прекратите открывать его в Excel, даже один раз.</li>
-    <li>Прежде чем придумывать что-нибудь умное, попросите владельца системы предоставить агрегированный экспорт.</li>
-    <li>Изучите маршрут модели данных один раз. Это пятнадцать минут, и это снимает ограничение для большинства отчетов.</li>
-    <li>Перед вставкой отформатируйте столбцы идентификаторов как текст и проверьте последние цифры некоторых из них после этого.</li>
+    <li>Add a row count to every workbook that starts from an import, and compare it to the source count. One cell, one habit.</li>
+    <li>When a file gets close to a million rows, stop opening it in Excel at all, even once.</li>
+    <li>Ask the system owner for an aggregated export before you build anything clever.</li>
+    <li>Learn the Data Model route once. It is fifteen minutes and it removes the limit for most reporting work.</li>
+    <li>Format ID columns as Text before any paste, and check the last digits of a few of them afterwards.</li>
   </ol>
 
-  <h2>Единственная привычка, которую нужно сохранить</h2>
-  <p>Никогда не доверяйте количеству строк, которое вы не вычислили. Счетчик — это самый дешевый анализ проверки, он выявляет усечения, дублированные соединения и неудачные фильтры, и все это прекрасно выглядит на экране.</p>
+  <h2>The one habit to keep</h2>
+  <p>Never trust a row count you did not compute. The count is the cheapest check in analysis and it catches truncation, duplicated joins and failed filters, all of which look perfectly fine on screen.</p>
 
-  <p>В книге, на которую вы больше всего полагаетесь, указано где-нибудь, со скольких строк она началась?</p>
+  <p>Does the workbook you rely on most say anywhere how many rows it started with?</p>
 
-  <div class="note"><strong>Каждый номер здесь был обработан до того, как был опубликован.</strong>  2^20 = 1048576 строк и 2^14 = 16384 столбца, без изменений с формата файла 2007 года.</div>
+  <div class="note"><strong>Every number here was worked before it was published.</strong> 2^20 = 1,048,576 rows and 2^14 = 16,384 columns, unchanged since the 2007 file format.</div>
 
   <div class="book">
-    <strong>Худшая версия этой проблемы — та, где Excel открыл файл и ничего не сказал.</strong>
-    <p><em>Excel для аналитиков</em>  состоит из 378 страниц, на которых каждая формула и диалог читаются по одному, поэтому книга перестает быть местом, где появляются числа, и становится тем местом, которое вы можете проверить.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-row-limit'})">Excel для аналитиков, 19 долларов США →</a>
+    <strong>The worst version of this problem is the one where Excel opened the file and said nothing.</strong>
+    <p><em>Excel for Analysts</em> is 378 pages that read every formula and dialog one at a time, so the workbook stops being a place where numbers appear and becomes one you can check.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-row-limit'})">Excel for Analysts, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>Как только данные перерастут сетку, следующим инструментом станет база данных.</strong>
-    <p style="margin:6px 0 0"><a href="../handle-large-datasets/">Обработка больших наборов данных</a>  работает двухгигабайтный файл впритык,  <a href="../set-up-a-sql-database/">Настройка базы данных SQL</a>  получает CSV в SQLite примерно за десять минут и  <a href="../set-up-duckdb/">DuckDB</a>  запрашивает файл, в котором он находится.</p>
-    <a class="btn" href="../handle-large-datasets/">Прочтите «Обработка больших наборов данных» →</a>
+    <strong>Once the data outgrows the grid, the next tool is a database.</strong>
+    <p style="margin:6px 0 0"><a href="../handle-large-datasets/">Handling large datasets</a> works a two gigabyte file end to end, <a href="../set-up-a-sql-database/">setting up a SQL database</a> gets a CSV into SQLite in about ten minutes, and <a href="../set-up-duckdb/">DuckDB</a> queries the file where it sits.</p>
+    <a class="btn" href="../handle-large-datasets/">Read Handling Large Datasets &rarr;</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../handle-large-datasets/">Обработка больших наборов данных</a> &middot; <a href="../open-a-large-csv/">Откройте большой CSV-файл</a> &middot; <a href="../excel-power-query/">Power Query</a> &middot; <a href="../excel-power-query-vs-power-pivot/">Power Query против Power Pivot</a> &middot; <a href="../set-up-duckdb/">Настройте DuckDB</a> &middot; <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> &middot; <a href="../../excel/">Excel комплект</a>
-    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
+    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../handle-large-datasets/">Handle Large Datasets</a> &middot; <a href="../open-a-large-csv/">Open a Large CSV</a> &middot; <a href="../excel-power-query/">Power Query</a> &middot; <a href="../excel-power-query-vs-power-pivot/">Power Query vs Power Pivot</a> &middot; <a href="../set-up-duckdb/">Set Up DuckDB</a> &middot; <a href="../set-up-a-sql-database/">Set Up a SQL Database</a> &middot; <a href="../../excel/">Excel Kit</a>
+    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Мостовая диаграмма дисперсии (водопад): постройте сложную диаграмму — комплект для подготовки аналитика</title>
-<meta name="description" content="Водопад, который начинается по плану и заканчивается по факту, с одной полосой на каждую причину. Правило упорядочивания, невидимый базовый столбец, если в вашем Excel нет каскадного типа, и проверка того, что сумма столбцов равна промежутку.">
+<title>Variance Bridge Chart (Waterfall): Build One That Adds Up &mdash; Analyst Prep Kit</title>
+<meta name="description" content="A waterfall that starts at plan and ends at actual, with one bar per reason. The ordering rule, the invisible base column if your Excel has no waterfall type, and the check that the bars sum to the gap.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/variance-bridge-chart/">
-<meta property="og:title" content="Мост дисперсии: показывает, почему сумма изменилась, а не просто то, что это произошло">
-<meta property="og:description" content="Планируйте от 400 000 до фактических 428 750 за шесть баров. Правило заказа и проверка суммы.">
+<meta property="og:title" content="The Variance Bridge: Showing Why the Total Moved, Not Just That It Did">
+<meta property="og:description" content="Plan 400,000 to actual 428,750 in six bars. The ordering rule and the sum check.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/variance-bridge-chart/">
 <meta name="twitter:card" content="summary_large_image">
@@ -164,101 +164,101 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../../excel/">Excel комплект</a></p>
-  <h1>Мост дисперсии: показывает, почему сумма изменилась, а не просто то, что это произошло</h1>
-  <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Все числа на этой странице были обработаны до их публикации.</p>
+  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../../excel/">Excel Kit</a></p>
+  <h1>The Variance Bridge: Showing Why the Total Moved, Not Just That It Did</h1>
+  <p class="meta">Michael Nocito &middot; Updated August 2026 &middot; Every number on this page was worked before it was published</p>
 
-  <p>Сумма дисперсии отвечает на один вопрос и провоцирует второй. Да, мы опережаем план на 28750. Из-за чего? Мостовая диаграмма — это ответ, представленный в виде столбцов, начиная с плана, проходя через один столбец для каждой причины и заканчивая фактическим.</p>
+  <p>A variance total answers one question and provokes a second. Yes, we are 28,750 ahead of plan. Because of what? A bridge chart is the answer laid out as bars, starting at the plan, stepping through one bar per reason, and landing on the actual.</p>
 
-  <p>Что вы делаете: определите бары, прежде чем открыть меню графика, сделайте так, чтобы их сумма была точно равна гэпу, и дайте каждому остатку собственный честный бар. Тип диаграммы занимает две минуты; декомпозиция – это работа.</p>
+  <p>What you do: decide the bars before you open the chart menu, make them sum exactly to the gap, and give any leftover its own honest bar. The chart type takes two minutes; the decomposition is the job.</p>
 
-  <p><strong>Краткая версия.</strong>  Нескладывающийся мост — это не диаграмма, это иллюстрация.</p>
+  <p><strong>The short version.</strong> A bridge that does not add up is not a chart, it is an illustration.</p>
 
-  <h2>Мост, который строит эта страница</h2>
+  <h2>The bridge this page builds</h2>
   <table>
-    <tr><th>Bar</th><th>Value</th><th>Промежуточная сумма</th><th>Что там написано</th></tr>
-    <tr><td>Budget</td><td>400,000</td><td>400,000</td><td>Начало, представленное как общее количество</td></tr>
-    <tr><td>Объем, существующие регионы</td><td>+9,200</td><td>409,200</td><td>Мы продали больше единиц, чем планировали</td></tr>
-    <tr><td>Ставка, существующие регионы</td><td>+9,350</td><td>418,550</td><td>Каждая единица соответствовала вышеуказанному плану</td></tr>
-    <tr><td>Новый регион, Центральный</td><td>+4,200</td><td>422,750</td><td>вообще не в планах</td></tr>
-    <tr><td>Потерь онлайн удалось избежать</td><td>+6,000</td><td>428,750</td><td>Потеряно на 6000 меньше запланированного</td></tr>
-    <tr><td>Actual</td><td>428,750</td><td>428,750</td><td>Конец, представленный как итог</td></tr>
+    <tr><th>Bar</th><th>Value</th><th>Running total</th><th>What it says</th></tr>
+    <tr><td>Budget</td><td>400,000</td><td>400,000</td><td>Start, plotted as a total</td></tr>
+    <tr><td>Volume, existing regions</td><td>+9,200</td><td>409,200</td><td>We sold more units than planned</td></tr>
+    <tr><td>Rate, existing regions</td><td>+9,350</td><td>418,550</td><td>Each unit came in above plan</td></tr>
+    <tr><td>New region, Central</td><td>+4,200</td><td>422,750</td><td>Not in the plan at all</td></tr>
+    <tr><td>Online losses avoided</td><td>+6,000</td><td>428,750</td><td>Lost 6,000 less than planned</td></tr>
+    <tr><td>Actual</td><td>428,750</td><td>428,750</td><td>End, plotted as a total</td></tr>
   </table>
-  <p>Четыре средних столбика составляют 9200 + 9350 + 4200 + 6000 = 28750, что равно ровно 428750 минус 400000. Вот и вся проверка моста, и делать ее стоит в ячейке с формулой, а не на глаз:</p>
+  <p>The four middle bars are 9,200 + 9,350 + 4,200 + 6,000 = 28,750, which is exactly 428,750 minus 400,000. That is the whole test of a bridge, and it is worth doing in a cell with a formula rather than by eye:</p>
   <pre><code>=SUM(middle_bars) - (end_total - start_total)</code></pre>
-  <p>В этой ячейке должно быть указано 0. Если в ней указано что-то еще, не меняйте столбцы до тех пор, пока это не произойдет. Добавьте разницу в виде полосы с названием «необъяснимое» и поместите ее на диаграмму. Рецензенты доверяют мосту с маркированным остатком гораздо больше, чем мосту, который приземляется идеально и не может быть воспроизведен.</p>
+  <p>That cell should read 0. If it reads anything else, do not adjust the bars until it does. Add the difference as a bar named "unexplained" and put it on the chart. Reviewers trust a bridge with a labelled residual far more than one that lands perfectly and cannot be reproduced.</p>
 
-  <h2>Построение в Excel</h2>
-  <h3>Excel 2016 и более поздние версии</h3>
+  <h2>Building it in Excel</h2>
+  <h3>Excel 2016 and later</h3>
   <ol>
-    <li>Разместите два столбца: метку и значение. В начале и конце хранятся итоговые значения, в средних строках — изменения, а отрицательные значения вводятся как отрицательные.</li>
-    <li>Выберите оба столбца, нажмите «Вставить», затем каскадную диаграмму в галерее диаграмм.</li>
-    <li>Щелкните первую полосу один раз, чтобы выбрать серию, щелкните еще раз, чтобы выбрать только эту точку, щелкните правой кнопкой мыши и выберите «Установить как итог». Повторите действия на последнем такте.</li>
-    <li>Включите метки данных. Мост без меток представляет собой стопку прямоугольников.</li>
+    <li>Lay out two columns: label and value. Start and end hold the totals, the middle rows hold the changes, with negatives entered as negatives.</li>
+    <li>Select both columns, Insert, then the Waterfall chart in the chart gallery.</li>
+    <li>Click the first bar once to select the series, click again to select just that point, right click, Set as Total. Repeat on the last bar.</li>
+    <li>Turn on data labels. A bridge without labels is a stack of rectangles.</li>
   </ol>
 
-  <h3>Старый Excel, или когда вам нужен полный контроль</h3>
-  <p>Используйте составной столбец с тремя сериями: невидимое основание, прибавки и убавки. База — это то, что смещает каждый стержень от оси.</p>
+  <h3>Older Excel, or when you need full control</h3>
+  <p>Use a stacked column with three series: an invisible base, the increases, and the decreases. The base is what floats each bar off the axis.</p>
   <pre><code>Base      =IF(step is a total, 0, previous running total + MIN(value,0))
 Increase  =MAX(value,0)
 Decrease  =-MIN(value,0)</code></pre>
   <p>Stack them base, increase, decrease, then set the base series fill to No fill and remove it from the legend. The connector lines that the native chart draws for you can be added as a second plot or left off; they help a reader follow a long bridge and clutter a short one.</p>
 
-  <div class="note"><strong>Ось должна начинаться с нуля, и это здесь неудобно.</strong>  Мост от 400 000 до 428 750 на нулевой оси показывает четыре крошечных полоски. Это честно, но это также бесполезно. Обычный ответ — оставить нулевую базу и поставить рядом с ней второй, меньший мост, показывающий только дисперсию от 0 до 28 750. Не обрезайте ось и не оставляйте ее без маркировки: см.  <a href="../how-charts-mislead/">Как графики вводят в заблуждение</a>.</div>
+  <div class="note"><strong>The axis has to start at zero, and that hurts here.</strong> A bridge from 400,000 to 428,750 on a zero-based axis shows four tiny slivers. That is honest, and it is also useless. The usual answer is to keep the zero base and put a second, smaller bridge beside it showing only the variance, from 0 to 28,750. Do not truncate the axis and leave it unlabelled: see <a href="../how-charts-mislead/">how charts mislead</a>.</div>
 
-  <h2>Выбор баров</h2>
-  <p>Бары – это аргумент. Три правила в порядке того, как часто они нарушаются.</p>
-  <p><strong>Сгруппируйте по виду, а затем упорядочите внутри группы.</strong>  Эффекты объема вместе, эффекты скорости вместе, разовые эффекты длятся дольше. Мост, отсортированный исключительно по размеру, выглядит как рейтинговая таблица и незаметно подразумевает, что самый большой бар является наиболее действенным, что часто противоположно истине: разовый обычно является самым большим и наименее повторяемым.</p>
-  <p><strong>От четырех до семи средних тактов.</strong>  Ниже четырех вы ничего не объяснили, а сумма еще не сказала. После семи лет читатель перестает читать надписи и начинает рассматривать формы. Если у вас есть одиннадцать причин, одиннадцатая — это не причина, это уровень детализации.</p>
-  <p><strong>Назовите полосу по причине, а не по учетной записи.</strong>  «Объем, существующие регионы» — причина. «Механизм GL 4010» — это место, где были зафиксированы деньги. Только один из них говорит кому-то, что делать по-другому.</p>
+  <h2>Choosing the bars</h2>
+  <p>The bars are the argument. Three rules, in order of how often they are broken.</p>
+  <p><strong>Group by kind, then order within the group.</strong> Volume effects together, rate effects together, one-offs last. A bridge sorted purely by size looks like a league table and quietly implies that the biggest bar is the most actionable, which is often the opposite of true: the one-off is usually the biggest and the least repeatable.</p>
+  <p><strong>Between four and seven middle bars.</strong> Below four you have not explained anything the total did not already say. Above seven the reader stops reading labels and starts looking at shapes. If you have eleven reasons, the eleventh is not a reason, it is a level of detail.</p>
+  <p><strong>Name the bar after the cause, not the account.</strong> "Volume, existing regions" is a cause. "GL 4010 movement" is a place where the money was recorded. Only one of those tells somebody what to do differently.</p>
 
-  <h2>Когда мост — это неверная карта</h2>
+  <h2>When a bridge is the wrong chart</h2>
   <table>
     <tr><th>Question</th><th>Chart</th></tr>
-    <tr><td>Почему общая сумма изменилась?</td><td>Bridge</td></tr>
-    <tr><td>Как изменилась общая сумма за двенадцать месяцев?</td><td>Line</td></tr>
-    <tr><td>Какой регион самый большой?</td><td>Сортированный бар</td></tr>
-    <tr><td>Как сейчас обстоят дела с общим разделением?</td><td>Бар, а не пирог</td></tr>
-    <tr><td>И раскол, и тренд</td><td>Небольшие кратные, по одной панели на регион</td></tr>
+    <tr><td>Why did the total change?</td><td>Bridge</td></tr>
+    <tr><td>How has the total moved over twelve months?</td><td>Line</td></tr>
+    <tr><td>Which region is biggest?</td><td>Sorted bar</td></tr>
+    <tr><td>How is the total split right now?</td><td>Bar, not a pie</td></tr>
+    <tr><td>Both a split and a trend</td><td>Small multiples, one panel per region</td></tr>
   </table>
-  <p>Мост – это конкретно  <em>с одного номера на другой номер</em>  диаграмма. Использование одного из них для отображения композиции в определенный момент времени является наиболее распространенным злоупотреблением, и в результате получается диаграмма, столбцы которой не могут в сумме дать что-либо значимое.</p>
+  <p>A bridge is specifically a <em>from one number to another number</em> chart. Using one to show a composition at a point in time is the most common misuse, and it produces a chart whose bars cannot sum to anything meaningful.</p>
 
-  <h2>Как применить это в своей работе</h2>
+  <h2>How to apply this to your own work</h2>
   <ol>
-    <li>Возьмите последнюю сумму отклонений и запишите словами четыре причины, по которым она изменилась. Если вы не можете дойти до четырех, мост преждевременен и анализ не сделан.</li>
-    <li>Поставьте число против каждой причины, затем вычислите остаток. Все, что осталось, — это настоящий бар с настоящим названием.</li>
+    <li>Take your last variance total and write down, in words, the four reasons it moved. If you cannot get to four, the bridge is premature and the analysis is not done.</li>
+    <li>Put a number against each reason, then compute the residual. Whatever is left over is a real bar with a real name.</li>
     <li>Build the two columns first and the chart last. The layout is where mistakes are visible; the chart is where they are hidden.</li>
-    <li>Добавьте контрольную ячейку, в которой должно быть указано значение «ноль», и оставьте ее в книге, а не удаляйте ее перед отправкой.</li>
-    <li>Прочитайте мост вслух слева направо как одно предложение. Если в предложении требуется  <em>а также</em>  более двух раз, у вас слишком много баров.</li>
+    <li>Add the check cell that must read zero, and leave it in the workbook rather than deleting it before you send.</li>
+    <li>Read the bridge aloud left to right as one sentence. If the sentence needs an <em>and also</em> more than twice, you have too many bars.</li>
   </ol>
 
-  <h2>Единственная привычка, которую нужно сохранить</h2>
-  <p>Стройте мост до встречи, а не ради встречи. Если столбцы не суммируются, вы нашли в данных что-то реальное, и вы нашли это, пока еще есть время изучить это, а не пока кто-то об этом спрашивает.</p>
+  <h2>The one habit to keep</h2>
+  <p>Build the bridge before the meeting, not for the meeting. If the bars do not sum, you have found something real in the data, and you have found it while there is still time to look into it rather than while somebody is asking about it.</p>
 
-  <p>Не могли бы вы назвать четыре основные причины, по которым ваш последний итоговый результат был пропущен, не открывая файл?</p>
+  <p>Could you name the four largest reasons your last total missed, without opening the file?</p>
 
-  <div class="note"><strong>Каждый номер здесь был обработан до того, как был опубликован.</strong>  9200 + 9350 + 4200 + 6000 = 28750 и 400000 + 28750 = 428750.</div>
+  <div class="note"><strong>Every number here was worked before it was published.</strong> 9,200 + 9,350 + 4,200 + 6,000 = 28,750, and 400,000 + 28,750 = 428,750.</div>
 
   <div class="book">
-    <strong>Тотал, который сдвинулся – это факт. Сумма, перенесенная по четырем названным причинам, является решением.</strong>
-    <p><em>Диаграммы и визуализация</em>  — это книга по выбору карт: что может нести каждая фигура, что она незаметно искажает и как обозначить ее, чтобы читатель мог прийти к вашему выводу без каких-либо указаний.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/charts-and-visualization?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=charts-and-visualization" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-variance-bridge-chart'})">Диаграммы и визуализация, 19 $ →</a>
+    <strong>A total that moved is a fact. A total that moved for four named reasons is a decision.</strong>
+    <p><em>Charts and Visualization</em> is the chart-choosing book: what each shape can carry, what it quietly distorts, and how to label it so the reader reaches your finding without being told.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/charts-and-visualization?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=charts-and-visualization" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-variance-bridge-chart'})">Charts and Visualization, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>График — это последний шаг. Выбор брусков – это работа.</strong>
-    <p style="margin:6px 0 0"><a href="../choose-the-right-chart/">Выбор правильного графика</a>  покрывает формы,  <a href="../how-charts-mislead/">Как графики вводят в заблуждение</a>  охватывает ось, а  <a href="../../excel/">Excel комплект</a>  имеет сборку. Арифметика за решеткой ведется  <a href="../variance-analysis-explained/">Объяснение дисперсионного анализа</a>.</p>
-    <a class="btn" href="../choose-the-right-chart/">Читать «Выбор правильного графика» →</a>
+    <strong>The chart is the last step. Choosing the bars is the work.</strong>
+    <p style="margin:6px 0 0"><a href="../choose-the-right-chart/">Choosing the right chart</a> covers the shapes, <a href="../how-charts-mislead/">how charts mislead</a> covers the axis, and the <a href="../../excel/">Excel Kit</a> has the build. The arithmetic behind the bars is in <a href="../variance-analysis-explained/">Variance Analysis Explained</a>.</p>
+    <a class="btn" href="../choose-the-right-chart/">Read Choosing the Right Chart &rarr;</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../variance-analysis-explained/">Объяснение дисперсионного анализа</a> &middot; <a href="../choose-the-right-chart/">Выберите правильный график</a> &middot; <a href="../how-charts-mislead/">Как графики вводят в заблуждение</a> &middot; <a href="../excel-chart-design-basics/">Основы проектирования диаграмм</a> &middot; <a href="../excel-sort-your-bars/">Сортируйте свои бары</a> &middot; <a href="../../excel/">Excel комплект</a>
-    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
+    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../variance-analysis-explained/">Variance Analysis Explained</a> &middot; <a href="../choose-the-right-chart/">Choose the Right Chart</a> &middot; <a href="../how-charts-mislead/">How Charts Mislead</a> &middot; <a href="../excel-chart-design-basics/">Chart Design Basics</a> &middot; <a href="../excel-sort-your-bars/">Sort Your Bars</a> &middot; <a href="../../excel/">Excel Kit</a>
+    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

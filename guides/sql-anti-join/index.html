@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Анти-соединение в SQL: NOT EXISTS vs NOT IN vs LEFT JOIN IS NULL — комплект подготовки аналитика</title>
-<meta name="description" content="Три способа найти строки, не имеющие совпадений, и один из них вообще ничего не возвращает, когда другая таблица содержит один NULL. На один и тот же вопрос ответили трижды восьми клиентам, а также где должен находиться фильтр.">
+<title>The Anti-Join in SQL: NOT EXISTS vs NOT IN vs LEFT JOIN IS NULL &mdash; Analyst Prep Kit</title>
+<meta name="description" content="Three ways to find the rows with no match, and one of them returns nothing at all when the other table holds a single NULL. The same question answered three times on eight customers, plus where the filter has to sit.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-anti-join/">
-<meta property="og:title" content="Антисоединение в SQL: NOT EXISTS vs NOT IN vs LEFT JOIN IS NULL">
-<meta property="og:description" content="Три способа найти строки без совпадений. Один NULL в другой таблице переводит одну из них из 3 строк в 0 без ошибок.">
+<meta property="og:title" content="The Anti-Join in SQL: NOT EXISTS vs NOT IN vs LEFT JOIN IS NULL">
+<meta property="og:description" content="Three ways to find rows with no match. One NULL in the other table takes one of them from 3 rows to 0, with no error.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-anti-join/">
 <meta name="twitter:card" content="summary_large_image">
@@ -130,15 +130,15 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-кит</a></p>
-  <h1>Антисоединение в SQL: NOT EXISTS vs NOT IN vs LEFT JOIN IS NULL</h1>
-  <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Каждый запрос на этой странице был выполнен до его публикации.</p>
+  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../sql/">SQL Kit</a></p>
+  <h1>The Anti-Join in SQL: NOT EXISTS vs NOT IN vs LEFT JOIN IS NULL</h1>
+  <p class="meta">Michael Nocito · Updated August 2026 · Every query on this page was run before it was published</p>
 
-  <p>Клиенты, которые никогда не заказывали. Товары никогда не продавались. Записи, которые не удалось перенести. Все это один вопрос: какие строки в этой таблице не совпадают с другими. На этой странице представлены три способа его написания: тот, который вы должны использовать по умолчанию, и причина, по которой два других работают неправильно. Для восьми клиентов, представленных ниже, двое из трех возвращают 3 строки, а один вообще ничего не возвращает.</p>
+  <p>Customers who never ordered. Products never sold. Records that failed to migrate. All of those are one question: which rows in this table have no match in that one. This page gives you the three ways to write it, the one you should default to, and the reason the other two go wrong. On the eight customers below, two of the three return 3 rows and one returns nothing at all.</p>
 
-  <p>Что вы делаете: напишите это с помощью  <code>NOT EXISTS</code>. Это единственная версия, которая ведет себя одинаково независимо от того, содержит ли другая таблица  <code>NULL</code>, а на современных двигателях он так же быстр, как и альтернативы. Оставшаяся часть этой страницы показывает, что делают два других, потому что вы встретите их в коде, написанном кем-то другим.</p>
+  <p>What you do: write it with <code>NOT EXISTS</code>. It is the only version that behaves the same whether or not the other table contains a <code>NULL</code>, and on modern engines it is as fast as the alternatives. The rest of this page shows what the other two do, because you will meet them in code somebody else wrote.</p>
 
-  <p><strong>Краткая версия.</strong>  Анти-соединение сохраняет строки, которые ничего не нашли.  <code>NOT EXISTS</code>  это безопасный способ спросить.</p>
+  <p><strong>The short version.</strong> An anti-join keeps the rows that found nothing. <code>NOT EXISTS</code> is the safe way to ask.</p>
 
   <figure>
     <svg viewBox="0 0 640 210" role="img" aria-labelledby="antidesc" xmlns="http://www.w3.org/2000/svg">
@@ -166,11 +166,11 @@
         <path d="M252 184 l14 14 M266 184 l-14 14"/>
       </g>
     </svg>
-    <figcaption>Ответом являются три ряда, которые ничего не достигают.</figcaption>
+    <figcaption>The three rows that reach nothing are the answer.</figcaption>
   </figure>
 
-  <h2>Две таблицы, на которых выполняются примеры</h2>
-  <p>Восемь клиентов и восемь заказов. Достаточно маленький, чтобы вы могли найти ответ самостоятельно до запуска любого запроса.</p>
+  <h2>The two tables the examples run on</h2>
+  <p>Eight customers and eight orders. Small enough that you can work the answer out yourself before any query runs.</p>
   <pre><code>CREATE TABLE customers(customer_id INT, name TEXT, city TEXT);
 INSERT INTO customers VALUES
 (1,'Alvarez','North'),(2,'Brennan','North'),(3,'Cho','South'),(4,'Diaz','South'),
@@ -181,51 +181,51 @@ INSERT INTO orders VALUES
 (101,1,120,'completed'),(102,1, 80,'completed'),(103,2, 50,'cancelled'),
 (104,3,300,'completed'),(105,5, 90,'completed'),(106,5, 40,'cancelled'),
 (107,8,200,'completed'),(108,NULL,60,'completed');</code></pre>
-  <p>Прочитайте строки заказа и ответ там. Появляются клиенты 1, 2, 3, 5 и 8. Клиенты 4, 6 и 7 этого не делают, то есть Диас, Фаулер и Грант. Так что правильный ответ на вопрос «кто никогда не заказывал» — три человека.</p>
-  <p>Еще одна вещь, на которую следует обратить внимание, потому что вся страница посвящена этому: заказ 108 имеет  <code>NULL</code>  клиент. Веб-форма пропустила его, или при импорте был удален ключ. Это не надуманный скандал. Таблицы поиска и столбцы внешних ключей на реальных складах хранят  <code>NULL</code>  все время.</p>
+  <p>Read the order rows and the answer is there. Customers 1, 2, 3, 5 and 8 appear. Customers 4, 6 and 7 do not, which is Diaz, Fowler and Grant. So the right answer to "who never ordered" is three people.</p>
+  <p>One more thing to notice, because the whole page turns on it: order 108 has a <code>NULL</code> customer. A web form let it through, or an import dropped the key. This is not a contrived row. Lookup tables and foreign key columns in real warehouses hold <code>NULL</code> all the time.</p>
 
-  <h2>НЕ СУЩЕСТВУЕТ, тот, который используется по умолчанию</h2>
-  <p>Перед запросом: сколько строк должно быть возвращено?</p>
-  <p>Три, как указано выше.  <code>NOT EXISTS</code>  понимает.</p>
+  <h2>NOT EXISTS, the one to default to</h2>
+  <p>Before the query: how many rows should this return?</p>
+  <p>Three, as worked out above. <code>NOT EXISTS</code> gets it.</p>
   <pre><code>SELECT c.name
 FROM customers c
 WHERE NOT EXISTS (SELECT 1
                   FROM orders o
                   WHERE o.customer_id = c.customer_id);
 -- Diaz, Fowler, Grant</code></pre>
-  <p>Прочитайте это вслух, и там будет написано, что это значит. Для каждого клиента найдите в заказах строку с идентификатором этого клиента и сохраните клиента, если не найдете ни одного.</p>
-  <p>The <code>SELECT 1</code>  выглядит странно в первый раз. Оно там, потому что  <code>EXISTS</code>  никогда не смотрит на то, что выбрал подзапрос. Он только спрашивает, вернулась ли вообще какая-либо строка, поэтому 1 является заполнителем. Вы можете написать  <code>SELECT *</code> or <code>SELECT o.order_id</code>  и получите точно такой же результат и тот же план.</p>
-  <p>Условие, связывающее две таблицы, находится внутри подзапроса. Именно это делает его коррелированным подзапросом: он выполняется для каждой строки клиента, а не один раз для всего запроса. Если ваш ключ состоит из двух столбцов, оба входят туда, соединенные с помощью  <code>AND</code>.</p>
+  <p>Read it out loud and it says what it means. For each customer, look in orders for a row with this customer's id, and keep the customer if you find none.</p>
+  <p>The <code>SELECT 1</code> looks strange the first time. It is there because <code>EXISTS</code> never looks at what the subquery selected. It only asks whether any row came back at all, so the 1 is a placeholder. You can write <code>SELECT *</code> or <code>SELECT o.order_id</code> and get exactly the same result and the same plan.</p>
+  <p>The condition that links the two tables lives inside the subquery. That is what makes it a correlated subquery: it runs against each customer row rather than once for the whole query. If your key is two columns, both go in there, joined with <code>AND</code>.</p>
 
-  <h2>NOT IN, и один NULL, который его очищает.</h2>
-  <p>Первое: тот же вопрос с  <code>NOT IN</code>. В одной строке заказа есть  <code>NULL</code>  клиент. Что вы ожидаете вернуться?</p>
+  <h2>NOT IN, and the single NULL that empties it</h2>
+  <p>First: the same question with <code>NOT IN</code>. One order row has a <code>NULL</code> customer. What do you expect to come back?</p>
   <pre><code>SELECT name
 FROM customers
 WHERE customer_id NOT IN (SELECT customer_id FROM orders);</code></pre>
-  <p><strong>Ноль строк.</strong>  Не ошибка, не предупреждение, не две строки вместо трёх. Ничего вообще, и при проверке кода запрос выглядит вполне разумным.</p>
-  <p>Вот механизм.  <code>NOT IN</code>  спрашивает для каждого клиента: «Отличается ли этот идентификатор от каждого значения в этом списке?» Одна из ценностей –  <code>NULL</code>, и SQL не может сказать, отличается ли 4 от неизвестного значения. Сравнение возвращается неизвестным. Неизвестно неверно, поэтому строка не сохраняется. Это происходит с каждым клиентом, поэтому каждый клиент удаляется.</p>
-  <p>Прежде чем читать дальше, скажите, почему это делает результат пустым, а не просто неверным. Причина в том, что неизвестное сравнение происходит для всех восьми клиентов, а не только для одного заказа с отсутствующим ключом.</p>
-  <p>Вы можете исправить это, исключив  <code>NULL</code>, и патч работает:</p>
+  <p><strong>Zero rows.</strong> Not an error, not a warning, not two rows instead of three. Nothing at all, and the query looks completely reasonable in a code review.</p>
+  <p>Here is the mechanism. <code>NOT IN</code> asks, for each customer, "is this id different from every value in that list?" One of the values is <code>NULL</code>, and SQL cannot say whether 4 is different from an unknown value. The comparison comes back unknown. Unknown is not true, so the row is not kept. That happens for every customer, so every customer is dropped.</p>
+  <p>Say why this makes the result empty rather than merely wrong before reading on. The reason is that the unknown comparison happens for all eight customers, not just for the one order with the missing key.</p>
+  <p>You can patch it by excluding the <code>NULL</code>, and the patch does work:</p>
   <pre><code>SELECT name
 FROM customers
 WHERE customer_id NOT IN (SELECT customer_id
                           FROM orders
                           WHERE customer_id IS NOT NULL);
 -- Diaz, Fowler, Grant</code></pre>
-  <p>Это работает сегодня и продолжает работать до тех пор, пока кто-нибудь не напишет тот же запрос без защиты. Это аргумент в пользу  <code>NOT EXISTS</code>  скорее как привычка, чем как спасение. Ему не нужна охрана, поэтому следующему человеку нечего забыть.</p>
-  <div class="note"><strong><code>NOT IN</code>  против письменного списка — это нормально.</strong> <code>WHERE status NOT IN ('cancelled','refunded')</code>  не имеет подзапроса и нет  <code>NULL</code>  встретиться, поэтому он ведет себя точно так, как читается. Ловушка  <code>NOT IN</code>  против столбца, потому что столбец может содержать  <code>NULL</code>  и список, который вы набрали, не может.</div>
+  <p>It works today, and it goes on working until the day somebody writes the same query without the guard. That is the argument for <code>NOT EXISTS</code> as a habit rather than as a rescue. It needs no guard, so there is nothing for the next person to forget.</p>
+  <div class="note"><strong><code>NOT IN</code> against a written out list is fine.</strong> <code>WHERE status NOT IN ('cancelled','refunded')</code> has no subquery and no <code>NULL</code> to meet, so it behaves exactly as it reads. The trap is <code>NOT IN</code> against a column, because a column can hold <code>NULL</code> and a list you typed cannot.</div>
 
-  <h2>LEFT JOIN с IS NULL, старый способ</h2>
-  <p>Перед запросом:  <code>LEFT JOIN</code>  удерживает каждого клиента и заполняет столбцы заказов  <code>NULL</code>  когда нет совпадения. Итак, какие клиенты имеют  <code>NULL</code> in <code>o.order_id</code>  после?</p>
-  <p>Трое, которые никогда не заказывали. В этом весь фокус, и он дает здесь правильный ответ.</p>
+  <h2>LEFT JOIN with IS NULL, the older way</h2>
+  <p>Before the query: a <code>LEFT JOIN</code> keeps every customer and fills the order columns with <code>NULL</code> when there is no match. So which customers have <code>NULL</code> in <code>o.order_id</code> afterwards?</p>
+  <p>The three who never ordered. That is the whole trick, and it gives the right answer here.</p>
   <pre><code>SELECT c.name
 FROM customers c
 LEFT JOIN orders o ON o.customer_id = c.customer_id
 WHERE o.order_id IS NULL;
 -- Diaz, Fowler, Grant</code></pre>
-  <p>Два правила делают эту версию честной.</p>
-  <p><strong>Протестируйте столбец, который не может быть  <code>NULL</code>  в реальных данных.</strong>  Проверьте объединенный ключ или первичный ключ другой таблицы. Если вы тестируете  <code>o.amount</code>  и для некоторых заказов действительно не указана сумма, эти клиенты присоединяются нормально и по-прежнему возвращаются как не имеющие себе равных. Запрос говорит «никогда не заказывал» и означает «никогда не заказывал или заказал с пустой суммой».</p>
-  <p><strong>Любое условие в правой таблице принадлежит к  <code>ON</code>, не в  <code>WHERE</code>.</strong>  Это то, что стоит людям дня. Спросите клиентов без  <em>completed</em>  порядок, и разница проявляется:</p>
+  <p>Two rules keep this version honest.</p>
+  <p><strong>Test a column that cannot be <code>NULL</code> in the real data.</strong> Test the joined key or the other table's primary key. If you test <code>o.amount</code> and some orders genuinely have no amount recorded, those customers join fine and still come back as unmatched. The query says "never ordered" and means "never ordered, or ordered with a blank amount".</p>
+  <p><strong>Any condition on the right-hand table belongs in <code>ON</code>, not in <code>WHERE</code>.</strong> This is the one that costs people an afternoon. Ask for customers with no <em>completed</em> order and the difference shows up:</p>
   <pre><code>-- correct: the filter is part of what counts as a match
 SELECT c.name
 FROM customers c
@@ -240,88 +240,88 @@ FROM customers c
 LEFT JOIN orders o ON o.customer_id = c.customer_id
 WHERE o.status = 'completed' AND o.order_id IS NULL;
 -- 0 rows</code></pre>
-  <p>Сломанный ничего не возвращает по причине, которую стоит сохранить. После присоединения у непревзойденного клиента появился  <code>NULL</code>  в каждом столбце заказа, поэтому  <code>o.status = 'completed'</code>  неизвестно, какие именно строки вы пытались сохранить.  <code>WHERE</code>  выбрасывает их раньше  <code>IS NULL</code>  когда-нибудь посмотрит.</p>
-  <p>Бреннан — интересный ряд в правильной версии. У Бреннана есть заказ, но он был отменен, поэтому Бреннан входит в список клиентов, которые ни разу не совершили покупку. Обычно это тот список, который действительно нужен бизнесу.</p>
-  <p>Тот же вопрос в  <code>NOT EXISTS</code>  не требует правила размещения, поскольку условие может размещаться только в одном месте:</p>
+  <p>The broken one returns nothing for a reason worth keeping. After the join, an unmatched customer has <code>NULL</code> in every order column, so <code>o.status = 'completed'</code> is unknown for exactly the rows you were trying to keep. The <code>WHERE</code> throws them out before <code>IS NULL</code> ever gets a look.</p>
+  <p>Brennan is the interesting row in the correct version. Brennan has an order, but it was cancelled, so Brennan belongs in a list of customers who have never completed a purchase. That is usually the list the business actually wanted.</p>
+  <p>The same question in <code>NOT EXISTS</code> needs no placement rule, because there is only one place the condition can go:</p>
   <pre><code>SELECT c.name
 FROM customers c
 WHERE NOT EXISTS (SELECT 1 FROM orders o
                   WHERE o.customer_id = c.customer_id
                     AND o.status = 'completed');
 -- Brennan, Diaz, Fowler, Grant</code></pre>
-  <p>Представьте на мгновение свои два стола. Если бы вы присоединились к ним и посчитали ряды, увеличился бы счет? Если бы это было так,  <code>LEFT JOIN</code>  версия выполняет дополнительную работу, которую затем приходится отменить, это следующий раздел.</p>
+  <p>Picture your own two tables for a moment. If you joined them and counted the rows, would the count go up? If it would, the <code>LEFT JOIN</code> version is doing extra work it then has to undo, which is the next section.</p>
 
-  <h2>Трое рядом</h2>
+  <h2>The three side by side</h2>
   <table>
-    <tr><th>Написано как</th><th>Строки возвращены</th><th>Ломается, когда</th><th>Требуется дополнительный уход</th></tr>
-    <tr><td><code>NOT EXISTS</code></td><td>3</td><td>Это не</td><td>None</td></tr>
-    <tr><td><code>NOT IN</code>  (подзапрос)</td><td>0</td><td>Другой столбец содержит любые  <code>NULL</code></td><td>Защитите подзапрос с помощью  <code>IS NOT NULL</code>, каждый раз</td></tr>
-    <tr><td><code>LEFT JOIN</code> + <code>IS NULL</code></td><td>3</td><td>Вы тестируете столбец, допускающий значение NULL, или фильтруете  <code>WHERE</code></td><td>Проверьте ключ; сохранять условия правой таблицы в  <code>ON</code></td></tr>
+    <tr><th>Written as</th><th>Rows returned</th><th>Breaks when</th><th>Extra care needed</th></tr>
+    <tr><td><code>NOT EXISTS</code></td><td>3</td><td>It does not</td><td>None</td></tr>
+    <tr><td><code>NOT IN</code> (subquery)</td><td>0</td><td>The other column holds any <code>NULL</code></td><td>Guard the subquery with <code>IS NOT NULL</code>, every time</td></tr>
+    <tr><td><code>LEFT JOIN</code> + <code>IS NULL</code></td><td>3</td><td>You test a nullable column, or filter in <code>WHERE</code></td><td>Test the key; keep right-table conditions in <code>ON</code></td></tr>
   </table>
-  <p>Та же таблица, тот же вопрос, три ответа. Средний ряд – не маленькая разница. Это отчет, который возвращается пустым и читается как «никто не пропал», что является наиболее убедительным неправильным ответом, который может дать запрос.</p>
+  <p>Same table, same question, three answers. The middle row is not a small difference. It is a report that comes back empty and gets read as "nobody is missing", which is the most convincing wrong answer a query can give.</p>
 
-  <h2>Пограничные случаи, которые стоит знать</h2>
-  <p><strong>Скорость не является причиной выбора между ними.</strong>    PostgreSQL и SQL-сервер распознают    <code>NOT EXISTS</code>  и  <code>LEFT JOIN</code>  шаблон и запускайте их как одну и ту же операцию против объединения, поэтому для индексированного ключа планы обычно совпадают.  <code>NOT IN</code>  это тот, который движок часто не может превратить в анти-соединение именно из-за  <code>NULL</code>  правило, которое оно должно уважать. Корректность и скорость здесь имеют одинаковое значение, что является редкой и приятной вещью.</p>
-  <p><strong>Индекс объединенного столбца имеет большее значение, чем синтаксис.</strong>  Какую бы форму вы ни выбрали, антиобъединение считывает вторую таблицу один раз для каждой строки-кандидата, поэтому индекс на  <code>orders.customer_id</code>  в этом разница между мгновенным и медленным на большом столе. Есть еще кое-что в  <a href="../sql-indexing-for-analysts/">Индексирование для аналитиков</a>.</p>
-  <p><strong>The <code>LEFT JOIN</code>  версия строит строки, которые нужно выбросить.</strong>  Покупатель с 400 заказами создает 400 объединенных строк, все из которых отбрасываются, кроме чека.  <code>NOT EXISTS</code>  может остановиться на первом найденном совпадении. На маленьких таблицах никто этого не замечает, а на широкой таблице фактов стоит знать, какая из них выполняет больше работы.</p>
-  <p><strong>Ключи с более чем одним столбцом работают одинаково.</strong>  Поместите каждую часть в подзапрос, объединенную с помощью  <code>AND</code>. <code>NOT IN</code>  здесь становится сложнее, и это еще одна причина, по которой это не значение по умолчанию.</p>
-  <p><strong><code>EXCEPT</code>  отвечает немного на другой вопрос.</strong> <code>SELECT customer_id FROM customers EXCEPT SELECT customer_id FROM orders</code>    также находит недостающие идентификаторы и при этом удаляет дубликаты. Это удобно, если вам нужен только ключевой столбец. Это неудобно, когда вам нужна остальная часть строки клиента, потому что обе стороны должны иметь совпадающие столбцы. Оракул вызывает того же оператора    <code>MINUS</code>.</p>
-  <p><strong>Пустая вторая таблица не является крайним случаем.</strong> If <code>orders</code>  не содержит строк, анти-соединение правильно возвращает каждого клиента. Людей удивляет обратное:  <code>NOT IN</code>  подзапрос, не возвращающий ни одной строки, сохраняет все, и это правильно, в то время как тот же подзапрос возвращает одну  <code>NULL</code>  ничего не держит.</p>
+  <h2>Edge cases worth knowing</h2>
+  <p><strong>Speed is not the reason to choose between them.</strong> PostgreSQL and SQL Server both recognise <code>NOT EXISTS</code> and the <code>LEFT JOIN</code> pattern and run them as the same anti-join operation, so on an indexed key the plans usually match. <code>NOT IN</code> is the one an engine often cannot turn into an anti-join, precisely because of the <code>NULL</code> rule it has to honour. Correctness and speed point the same way here, which is a rare and pleasant thing.</p>
+  <p><strong>An index on the joined column matters more than the syntax.</strong> Whichever form you pick, the anti-join reads the second table once per candidate row, so an index on <code>orders.customer_id</code> is the difference between instant and slow on a big table. There is more in <a href="../sql-indexing-for-analysts/">indexing for analysts</a>.</p>
+  <p><strong>The <code>LEFT JOIN</code> version builds rows to throw away.</strong> A customer with 400 orders produces 400 joined rows, all discarded except the check. <code>NOT EXISTS</code> can stop at the first match it finds. On small tables nobody notices, and on a wide fact table it is worth knowing which one is doing more work.</p>
+  <p><strong>Keys with more than one column work the same.</strong> Put every part in the subquery, joined with <code>AND</code>. <code>NOT IN</code> gets harder here, which is another reason it is not the default.</p>
+  <p><strong><code>EXCEPT</code> answers a slightly different question.</strong> <code>SELECT customer_id FROM customers EXCEPT SELECT customer_id FROM orders</code> also finds the missing ids, and it removes duplicates while it does so. It is neat when you want only the key column. It is awkward when you want the rest of the customer row, because the two sides must have matching columns. Oracle calls the same operator <code>MINUS</code>.</p>
+  <p><strong>An empty second table is not an edge case.</strong> If <code>orders</code> holds no rows, an anti-join correctly returns every customer. The one that surprises people is the reverse: a <code>NOT IN</code> subquery returning no rows keeps everything, which is right, while the same subquery returning one <code>NULL</code> keeps nothing.</p>
 
-  <h2>Почему существует правило NULL</h2>
-  <p>Все это не является ошибкой или особенностью движка. SQL имеет три значения истинности, а не два: Верно, Неверно и неизвестно. Любое сравнение с    <code>NULL</code>  производит неизвестное, потому что  <code>NULL</code>  означает, что значение не записано, и невозможно доказать, что ничто не равно или не равно ценности, которой ни у кого нет.</p>
-  <p><code>WHERE</code>  сохраняет строку только тогда, когда ее условие истинно. Неизвестное не соответствует действительности, поэтому неизвестные строки отбрасываются, причем так же незаметно, как и ложные. Это единственное правило объясняет все на этой странице: пустое  <code>NOT IN</code>, сломанный  <code>WHERE o.status = 'completed'</code>, и причина  <code>IS NULL</code>  существует как собственный оператор, а не как  <code>= NULL</code>.</p>
-  <p><code>NOT EXISTS</code>  обходит все это дело, никогда не сравнивая значения на верхнем уровне. Он спрашивает, пуст ли набор, и набор либо пуст, либо нет. Третьего варианта утечки не существует.</p>
+  <h2>Why the NULL rule exists</h2>
+  <p>None of this is a bug or an engine quirk. SQL has three truth values rather than two: true, false, and unknown. Any comparison with <code>NULL</code> produces unknown, because <code>NULL</code> means the value is not recorded, and nothing can be proved equal or unequal to a value nobody has.</p>
+  <p><code>WHERE</code> keeps a row only when its condition is true. Unknown is not true, so unknown rows are dropped, and they are dropped just as silently as false ones. That single rule explains everything on this page: the empty <code>NOT IN</code>, the broken <code>WHERE o.status = 'completed'</code>, and the reason <code>IS NULL</code> exists as its own operator rather than as <code>= NULL</code>.</p>
+  <p><code>NOT EXISTS</code> sidesteps the whole thing by never comparing values at the top level. It asks whether a set is empty, and a set is either empty or it is not. There is no third option to leak.</p>
 
-  <h2>Как применить это в своей работе</h2>
+  <h2>How to apply this to your own work</h2>
   <ol>
-    <li>Найдите по своим запросам  <code>NOT IN (SELECT</code>. Каждое попадание либо уже защищено  <code>IS NOT NULL</code>  или один плохой импорт отделяет от возврата ничего.</li>
-    <li>Перепишите их как  <code>NOT EXISTS</code>. Это механическое изменение, и результат идентичен на чистых данных, что облегчает проверку.</li>
-    <li>Для любого  <code>LEFT JOIN</code> plus <code>IS NULL</code>  вы держите, проверьте две вещи: тестируемый столбец не может быть  <code>NULL</code>  в реальных данных, и ни одно условие в правой таблице не находится в  <code>WHERE</code>.</li>
-    <li>Разумность проверяет каждое антисоединение с помощью арифметики. Совпадающий плюс несовпадающий должен равняться общей сумме. Здесь 5 плюс 3 равно 8.</li>
-    <li>Если результат оказывается пустым, не сообщайте о нем как «ничего не найдено», пока вы не подсчитаете всю таблицу. Пустой — это результат, который заслуживает еще одного запроса.</li>
+    <li>Search your queries for <code>NOT IN (SELECT</code>. Every hit is either already guarded with <code>IS NOT NULL</code> or is one bad import away from returning nothing.</li>
+    <li>Rewrite those as <code>NOT EXISTS</code>. It is a mechanical change and the result is identical on clean data, which makes it easy to verify.</li>
+    <li>For any <code>LEFT JOIN</code> plus <code>IS NULL</code> you keep, check two things: the tested column cannot be <code>NULL</code> in real data, and no condition on the right table sits in <code>WHERE</code>.</li>
+    <li>Sanity check every anti-join with arithmetic. Matched plus unmatched must equal the total. Here that is 5 plus 3 equals 8.</li>
+    <li>When a result comes back empty, do not report it as "none found" until you have run the count of the whole table. Empty is a result that deserves one more query.</li>
   </ol>
-  <p>Если у вас под рукой есть бумага, нарисуйте восемь клиентов в одном столбце, а заказы — в другом, затем проведите линию от каждого заказа до его покупателя. Три клиента, до которых не доходит линия, являются ответом, а заказ, в котором нет очереди на обоих концах, — это  <code>NULL</code>  который опустошает  <code>NOT IN</code>.</p>
+  <p>If you have paper nearby, draw the eight customers in one column and the orders in another, then draw a line from each order to its customer. The three customers no line reaches are the answer, and the order with no line at either end is the <code>NULL</code> that empties <code>NOT IN</code>.</p>
 
-  <h2>Шпаргалка</h2>
+  <h2>Cheat sheet</h2>
   <table>
-    <tr><th>Ты хочешь</th><th>Write</th><th>Следите за</th></tr>
-    <tr><td>Строки без совпадений</td><td><code>NOT EXISTS (SELECT 1 FROM b WHERE b.k = a.k)</code></td><td>Ничего. Это значение по умолчанию.</td></tr>
-    <tr><td>Строки без совпадений, старая кодовая база</td><td><code>LEFT JOIN b ON b.k = a.k WHERE b.k IS NULL</code></td><td>Проверьте ключ, а не столбец, допускающий значение NULL.</td></tr>
-    <tr><td>Строки без совпадений определенного типа</td><td>Поставьте условие в  <code>ON</code>  пункт или внутри  <code>NOT EXISTS</code></td><td>In <code>WHERE</code>  он возвращает ноль строк</td></tr>
-    <tr><td>Просто недостающие ключевые значения</td><td><code>SELECT k FROM a EXCEPT SELECT k FROM b</code></td><td>Обеим сторонам нужны соответствующие столбцы;  <code>MINUS</code>    на Оракул</td></tr>
-    <tr><td>Чтобы исключить короткий фиксированный список</td><td><code>NOT IN ('a','b')</code></td><td>Безопасно: типизированный список не содержит  <code>NULL</code></td></tr>
-    <tr><td>Чтобы исключить значения из столбца</td><td>Use <code>NOT EXISTS</code></td><td><code>NOT IN</code>  ничего не возвращает, если в этом столбце он есть  <code>NULL</code></td></tr>
+    <tr><th>You want</th><th>Write</th><th>Watch for</th></tr>
+    <tr><td>Rows with no match</td><td><code>NOT EXISTS (SELECT 1 FROM b WHERE b.k = a.k)</code></td><td>Nothing. This is the default.</td></tr>
+    <tr><td>Rows with no match, older codebase</td><td><code>LEFT JOIN b ON b.k = a.k WHERE b.k IS NULL</code></td><td>Test the key, not a nullable column</td></tr>
+    <tr><td>Rows with no match of a certain kind</td><td>Put the condition in the <code>ON</code> clause, or inside <code>NOT EXISTS</code></td><td>In <code>WHERE</code> it returns zero rows</td></tr>
+    <tr><td>Just the missing key values</td><td><code>SELECT k FROM a EXCEPT SELECT k FROM b</code></td><td>Both sides need matching columns; <code>MINUS</code> on Oracle</td></tr>
+    <tr><td>To exclude a short fixed list</td><td><code>NOT IN ('a','b')</code></td><td>Safe: a typed list holds no <code>NULL</code></td></tr>
+    <tr><td>To exclude values from a column</td><td>Use <code>NOT EXISTS</code></td><td><code>NOT IN</code> returns nothing if that column has one <code>NULL</code></td></tr>
   </table>
 
-  <h2>Единственная привычка, которую нужно сохранить</h2>
-  <p>Когда анти-соединение возвращает ноль строк, воспринимайте это как вопрос, а не как ответ. Посчитайте таблицу, посчитайте совпадения и проверьте, совпадают ли они. Пустой результат — это единственный вывод, который выглядит одинаково независимо от того, правильно вы спросили или нет.</p>
+  <h2>The one habit to keep</h2>
+  <p>When an anti-join returns zero rows, treat it as a question rather than an answer. Count the table, count the matches, and check they add up. An empty result is the one output that looks the same whether you asked correctly or not.</p>
 
-  <p>Какой последний результат «никто не пропал» вы сообщили, и был ли он записан с помощью  <code>NOT IN</code>?</p>
+  <p>What is the last "nobody is missing" result you reported, and was it written with <code>NOT IN</code>?</p>
 
-  <div class="note"><strong>Каждый номер здесь был проведён до того, как был опубликован.</strong>  Шестнадцать рядов, две таблицы. Вставьте их в SQLite и вы получите те же 0, те же 3 и те же 4.</div>
+  <div class="note"><strong>Every number here was run before it was published.</strong> Sixteen rows, two tables. Paste them into SQLite and you will get the same 0, the same 3, and the same 4.</div>
 
   <div class="book">
-    <strong>Пустой результат — не единственный ответ, который выглядит правильным и не является таковым.</strong>
-    <p><em>SQL для аналитиков</em>  — это 458 страниц, которые считывают запросы построчно в повседневных словах, поэтому ошибочный результат нужно где-то отслеживать, а не перепечатывать, пока он не станет выглядеть лучше.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=sql-anti-join" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-anti-join'})">SQL для аналитиков, 19 $ →</a>
+    <strong>The empty result is not the only answer that looks right and is not.</strong>
+    <p><em>SQL for Analysts</em> is 458 pages that read queries line by line in everyday words, so a result that came back wrong has somewhere to be traced instead of being retyped until it looks better.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=sql-anti-join" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-anti-join'})">SQL for Analysts, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>Напишите объединения, а не просто читайте о них.</strong>
-    <p style="margin:6px 0 0">Четыре типа соединения и то, что сохраняет каждый из них, находятся в  <a href="../sql-joins/">Объяснение SQL JOIN</a>и  <code>NULL</code>  правила этой страницы находятся в  <a href="../sql-null/">НУЛЬ в SQL</a>.  <a href="../../sql/">SQL-кит</a>  охватывает SELECT, WHERE, JOIN и GROUP BY с практикой и пробным экзаменом, и все это в браузере.</p>
-    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
-    <p style="margin:10px 0 0;font-size:15px">Или получите повторения:  <a href="../../drill/">открыть SQL-детализация</a>  и вводите по одному исполняемому запросу за раз.</p>
+    <strong>Write the joins, do not just read about them.</strong>
+    <p style="margin:6px 0 0">The four join types and what each one keeps are in <a href="../sql-joins/">SQL JOINs explained</a>, and the <code>NULL</code> rules behind this page are in <a href="../sql-null/">NULL in SQL</a>. The <a href="../../sql/">SQL Kit</a> covers SELECT, WHERE, JOIN and GROUP BY with practice and a mock exam, all in the browser.</p>
+    <a class="btn" href="../../sql/">Open the SQL Kit →</a>
+    <p style="margin:10px 0 0;font-size:15px">Or get the reps in: <a href="../../drill/">open SQL Drill</a> and type one runnable query at a time.</p>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-null/">НУЛЬ в SQL</a> · <a href="../sql-subqueries/">SQL-подзапросы</a> · <a href="../sql-find-duplicates/">Найти повторяющиеся строки</a> · <a href="../sql-reconciliation/">Согласование количества строк</a> · <a href="../sql-indexing-for-analysts/">Индексирование для аналитиков</a> · <a href="../sql-rank-vs-dense-rank-vs-row-number/">РАНГ, DENSE_RANK и ROW_NUMBER</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../../drill/">SQL-детализация</a> · <a href="../../sql/">SQL-кит</a>
-    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <a href="../../">← Analyst Prep Kit</a> &middot; <a href="../sql-joins/">SQL JOINs</a> · <a href="../sql-null/">NULL in SQL</a> · <a href="../sql-subqueries/">SQL Subqueries</a> · <a href="../sql-find-duplicates/">Find Duplicate Rows</a> · <a href="../sql-reconciliation/">Reconciling Row Counts</a> · <a href="../sql-indexing-for-analysts/">Indexing for Analysts</a> · <a href="../sql-rank-vs-dense-rank-vs-row-number/">RANK vs DENSE_RANK vs ROW_NUMBER</a> · <a href="../set-up-a-sql-database/">Set Up a SQL Database</a> · <a href="../../drill/">SQL Drill</a> · <a href="../../sql/">SQL Kit</a>
+    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

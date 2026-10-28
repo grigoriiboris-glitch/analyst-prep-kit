@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Пометьте свои строки, прежде чем составлять их диаграмму: добавьте столбец категории в Excel с помощью IF — комплект для подготовки аналитика</title>
-<meta name="description" content="Как добавить столбец категории в Excel с вложенным ЕСЛИ и почему маркировка лучше фильтрации: фильтр скрывает строки и теряет сравнение, метка сохраняет каждую строку и делает возможным построение диаграммы. Реальная формула, реальные данные, проверенные значения.">
+<title>Label Your Rows Before You Chart Them: Add a Category Column in Excel with IF — Analyst Prep Kit</title>
+<meta name="description" content="How to add a category column in Excel with a nested IF, and why labelling beats filtering: a filter hides rows and loses the comparison, a label keeps every row and makes the chart possible. Real formula, real data, checked counts.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-label-rows-before-charting/">
-<meta property="og:title" content="Пометьте свои строки, прежде чем составлять их диаграмму.">
-<meta property="og:description" content="Фильтр скрывает строки и теряет сравнение. Метка сохраняет каждую строку и делает диаграмму возможной. Один вложенный IF, выполняемый на 82 956 реальных строках.">
+<meta property="og:title" content="Label Your Rows Before You Chart Them">
+<meta property="og:description" content="A filter hides rows and loses the comparison. A label keeps every row and makes the chart possible. One nested IF, run on 82,956 real rows.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-label-rows-before-charting/">
 <meta name="twitter:card" content="summary_large_image">
@@ -106,182 +106,182 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../excel/">Excel комплект</a> · <a href="../excel-dashboard-build-order/">Статья 0: порядок сборки</a></p>
-  <h1>Пометьте свои строки, прежде чем составлять их диаграмму.</h1>
-  <p class="meta">Статья 1 Excel для бизнес-аналитиков · Один добавленный столбец, одно вложенное ЕСЛИ, выполняется на 82 956 действительных строк · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-07">7 августа 2026 г.</time></p>
+  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../excel/">Excel Kit</a> · <a href="../excel-dashboard-build-order/">Article 0: the build order</a></p>
+  <h1>Label Your Rows Before You Chart Them</h1>
+  <p class="meta">Article 1 of Excel for Business Analysts · One added column, one nested IF, run on 82,956 real rows · Part of the <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-07">August 7, 2026</time></p>
 
-  <p>В этой статье представлен один столбец, который делает возможным создание любой последующей диаграммы: столбец меток, созданный с помощью IF, который одновременно сортирует все ваши строки в именованные группы. Вы напишете формулу, проверите ее правильность и уйдете с той особенностью, которую упускают новички.</p>
+  <p>This article gives you one column that makes every later chart possible: a label column, built with IF, that sorts all your rows into named groups at once. You'll write the formula, check it landed, and walk away with the one distinction that beginners miss.</p>
 
-  <p>Отличие вот в чем. Фильтр скрывает строки. Этикетка хранит их. Если ваш вопрос сравнивает две группы, а это почти каждый вопрос, достойный диаграммы, фильтр уничтожает сравнение в тот момент, когда вы его применяете. В итоге вы видите на экране одну группу, не имея возможности составить график «остальных» и не подозревая, что чего-то не хватает.</p>
+  <p>The distinction is this. A filter hides rows. A label keeps them. If your question compares two groups, and almost every question worth a chart does, a filter destroys the comparison at the moment you apply it. You end up with one group on screen, no way to chart "the rest", and no idea that anything is missing.</p>
 
-  <div class="note"><strong>Краткая версия.</strong>  Фильтрация ответов «покажи мне эти строки». Маркировка отвечает на вопрос: «В какой группе находится каждая строка?» Графики построены по второму.</div>
+  <div class="note"><strong>The short version.</strong> Filtering answers "show me these rows." Labelling answers "which group is each row in?" Charts are built on the second one.</div>
 
-  <p>Здесь все взято из одной сборки: панель Excel с 82 956 играми Пар, та же сборка.    <a href="../excel-dashboard-build-order/">восьмиэтапный порядок сборки</a>. Это второй шаг из этих восьми. Расчеты в этой статье были проведены для реального файла перед публикацией, и вы можете  <a href="https://github.com/michaelnocito/steam-hidden-gems/tree/main/excel">скачать те же данные</a>  и следуйте дальше.</p>
+  <p>Everything here comes from one build: an Excel dashboard over 82,956 Steam games, the same build behind <a href="../excel-dashboard-build-order/">the eight-step build order</a>. This is step 2 of those eight. The counts in this article were run against the real file before publishing, and you can <a href="https://github.com/michaelnocito/steam-hidden-gems/tree/main/excel">download the same data</a> and follow along.</p>
 
   <div class="toc">
-    <strong>Что здесь</strong>
+    <strong>What's here</strong>
     <ol>
-      <li>Ловушка: фильтр кажется ответом</li>
-      <li>Что такое столбец меток</li>
-      <li>Формула: один тест за раз</li>
-      <li>Убедитесь, что метки приземлились</li>
-      <li>До и после, тот же вопрос</li>
-      <li>Когда фильтр — правильный инструмент</li>
-      <li>Почему это работает</li>
-      <li>Запустите его в своем файле</li>
-      <li>Шпаргалка</li>
+      <li>The trap: a filter feels like an answer</li>
+      <li>What a label column is</li>
+      <li>The formula, one test at a time</li>
+      <li>Check that the labels landed</li>
+      <li>Before and after, same question</li>
+      <li>When a filter is the right tool</li>
+      <li>Why this works</li>
+      <li>Run it on your own file</li>
+      <li>A cheat sheet</li>
     </ol>
   </div>
 
-  <h2>Ловушка: фильтр кажется ответом</h2>
-  <p>Сначала спрогнозируйте кое-что: если вы отфильтруете 82 956 строк до 175, которые вас интересуют, что произойдет с остальными 82 781 строками при построении диаграммы? Держи свой ответ.</p>
-  <p>Вопрос в стимовской сборке был о сравнении. Некоторые по-настоящему любимые игры нашли аудиторию, а некоторые не менее любимые остались скрытыми. Чем отличаются эти две группы?</p>
-  <p>Первый ход — это фильтр. Отфильтруйте скрытые, посмотрите на них, возможно, нанесите на карту. Это похоже на прогресс, потому что на экране теперь отображаются именно те строки, о которых вы просили.</p>
-  <p>Вот сколько вам обойдется фильтр. Группа сравнения исчезла. Найденные 590 любимых игр скрыты от глаз, поэтому фразе «скрытые игры имеют более низкие цены» нечего противопоставить. Ниже чего? В тот момент, когда вы хотите, чтобы обе группы были на одной диаграмме, а каждая сравнительная диаграмма хочет именно этого, фильтру нечего вам дать. Нужные вам строки — это те, которые вы удалили.</p>
+  <h2>The trap: a filter feels like an answer</h2>
+  <p>Predict something first: if you filter 82,956 rows down to the 175 you care about, what happens to the other 82,781 when you build a chart? Hold your answer.</p>
+  <p>The question in the Steam build was a comparison. Some genuinely loved games found an audience and some equally loved games stayed hidden. How do the two groups differ?</p>
+  <p>The beginner move is a filter. Filter to the hidden ones, look at them, maybe chart them. It feels like progress because the screen now shows exactly the rows you asked about.</p>
+  <p>Here's what the filter cost you. The comparison group is gone. The 590 loved games that got found are hidden from view, so "hidden games have lower prices" has nothing to stand next to. Lower than what? The moment you want both groups on one chart, and every comparison chart wants exactly that, the filter has nothing to give you. The rows you need are the ones you removed.</p>
 
-  <h2>Что такое столбец меток</h2>
-  <p>Столбец метки — это один новый столбец, в каждую строку которого записывается имя группы. Ни одна строка не удаляется. В каждой строке содержится ответ на один и тот же вопрос: в какой вы группе?</p>
-  <p>В сборке Пар колонка называется    <code>Segment</code>, и каждая из 82 956 игр помещается в одну из четырех групп:</p>
+  <h2>What a label column is</h2>
+  <p>A label column is one new column that writes a group name into every row. No row is removed. Every row gets an answer to the same question: which group are you in?</p>
+  <p>In the Steam build the column is called <code>Segment</code>, and it puts each of the 82,956 games into one of four groups:</p>
   <table>
     <tr><th>Label</th><th>Meaning</th><th>Rows</th></tr>
-    <tr><td>Unproven</td><td>Менее 2000 отзывов. Слишком мало, чтобы рейтинг имел большое значение</td><td>78,064</td></tr>
-    <tr><td>Проверено, не любимо</td><td>Достаточно отзывов, менее 95% положительных</td><td>4,127</td></tr>
-    <tr><td>Любимый, скрытый</td><td>Достаточно отзывов, 95%+ положительных, аудитория по-прежнему небольшая.</td><td>175</td></tr>
-    <tr><td>Понравился, нашел</td><td>Достаточно отзывов, 95%+ положительных, разразилось</td><td>590</td></tr>
+    <tr><td>Unproven</td><td>Under 2,000 reviews. Too few for the rating to mean much</td><td>78,064</td></tr>
+    <tr><td>Proven, not loved</td><td>Enough reviews, under 95% positive</td><td>4,127</td></tr>
+    <tr><td>Loved, hidden</td><td>Enough reviews, 95%+ positive, still a small audience</td><td>175</td></tr>
+    <tr><td>Loved, found</td><td>Enough reviews, 95%+ positive, broke out</td><td>590</td></tr>
   </table>
-  <p>В сумме эти четыре числа дают 82 956 — количество строк в файле. Эта дополнительная проверка имеет значение позже.</p>
-  <p>Если этот столбец существует, диаграмма становится практически бесплатной. Сводная таблица, сгруппированная по  <code>Segment</code>  считает все четыре группы за один ход. Сравнение, которое вы хотели, скрытое от найденного, представляет собой две строки этой опорной точки. Ничего не удалялось, поэтому ничего не пропало.</p>
+  <p>Those four numbers add up to 82,956, which is the row count of the file. That addition check matters later.</p>
+  <p>Once this column exists, the chart is nearly free. A pivot table grouped by <code>Segment</code> counts all four groups in one move. The comparison you wanted, hidden against found, is two rows of that pivot. Nothing was ever removed, so nothing is missing.</p>
 
-  <h2>Формула: один тест за раз</h2>
-  <p>IF задает один вопрос с ответом «да» или «нет» по одной строке и дает один из двух ответов. Вот и весь инструмент:</p>
+  <h2>The formula, one test at a time</h2>
+  <p>IF asks one yes-or-no question about one row and gives one of two answers. That's the whole tool:</p>
   <pre><code>=IF(test, value_if_yes, value_if_no)</code></pre>
-  <p>Один тест дает вам две группы. Вам нужно четыре, поэтому формула задает вопросы подряд: каждое «нет» передает строку следующему вопросу. Это все, что представляет собой вложенный IF. Следующий IF занимает место «нет» предыдущего.</p>
-  <p>Вот формула сегмента из сборки. Данные представляют собой таблицу Excel с именем  <code>Games</code>, поэтому ссылка типа  <code>[@TotalReviews]</code>    означает «значение Всего отзывов этой строки». Присвоение имени таблице — это шаг 1 порядка сборки, и для нее создается отдельная статья. А пока введите формулу в первую ячейку нового столбца с именем    <code>Segment</code>:</p>
+  <p>One test gives you two groups. You need four, so the formula asks its questions in a row: each "no" hands the row to the next question. That's all a nested IF is. The next IF sits in the "no" seat of the one before it.</p>
+  <p>Here's the Segment formula from the build. The data is an Excel Table named <code>Games</code>, so a reference like <code>[@TotalReviews]</code> means "this row's TotalReviews value." Naming the table is step 1 of the build order and it gets its own article. For now, type the formula in the first cell of a new column called <code>Segment</code>:</p>
   <pre><code>=IF([@TotalReviews]&lt;2000, "Unproven",
   IF([@PctPositive]&lt;95, "Proven, not loved",
     IF([@IsHiddenGem]=1, "Loved, hidden",
       "Loved, found")))</code></pre>
-  <p>Нажмите Входить. Поскольку данные представляют собой таблицу, Excel самостоятельно заполняет весь столбец. 82 956 строк, помеченных одним нажатием клавиши.</p>
-  <p>Прочтите это как коридор дверей. Каждый ряд идет вверху.</p>
+  <p>Press Enter. Because the data is a table, Excel fills the whole column down on its own. 82,956 rows, labelled in one keystroke.</p>
+  <p>Read it as a corridor of doors. Every row walks in at the top.</p>
   <table>
     <tr><th>Question</th><th>Yes</th><th>No</th></tr>
-    <tr><td>Менее 2000 отзывов?</td><td>Labelled <code>Unproven</code>, сделанный</td><td>Следующий вопрос</td></tr>
-    <tr><td>Менее 95% положительных результатов?</td><td>Labelled <code>Proven, not loved</code>, сделанный</td><td>Следующий вопрос</td></tr>
-    <tr><td>Отмечено как скрытое сокровище?</td><td>Labelled <code>Loved, hidden</code>, сделанный</td><td>Labelled <code>Loved, found</code></td></tr>
+    <tr><td>Fewer than 2,000 reviews?</td><td>Labelled <code>Unproven</code>, done</td><td>Next question</td></tr>
+    <tr><td>Under 95% positive?</td><td>Labelled <code>Proven, not loved</code>, done</td><td>Next question</td></tr>
+    <tr><td>Flagged as a hidden gem?</td><td>Labelled <code>Loved, hidden</code>, done</td><td>Labelled <code>Loved, found</code></td></tr>
   </table>
-  <p>Скажите вслух, почему последняя группа не нуждается в собственном тесте. Стоявший у третьей двери рядовой уже ответил «нет» на два вопроса. Если на третий ответ он также ответит «нет», то у него останется только один ярлык. Конечным значением является сегмент «все остальное», и каждый вложенный IF заканчивается единицей.</p>
-  <p>Порядок вопросов имеет значение. Каждый тест видит только те строки, которые прошли предыдущие тесты, поэтому сначала поставьте самый дешевый дисквалифицирующий тест. Здесь «менее 2000 отзывов» очищает 78 064 строки у первой двери, и последующим тестам о них никогда не приходится думать. Если вы знаете SQL, это тот же ход, что и  <a href="../sql-case-expression/">выражение CASE</a>, где побеждает первое совпадение и порядок является логикой. Та же идея, но другое написание.</p>
+  <p>Say out loud why the last group needs no test of its own. A row standing at the third door has already answered two questions with no. If it answers the third with no as well, there's only one label left it could carry. The final value is the everything-else bucket, and every nested IF ends with one.</p>
+  <p>The order of the questions matters. Each test only sees the rows the earlier tests let through, so put the cheapest disqualifying test first. Here, "under 2,000 reviews" clears out 78,064 rows at door one, and the later tests never have to think about them. If you know SQL, this is the same move as <a href="../sql-case-expression/">a CASE expression</a>, where first match wins and order is logic. Same idea, different spelling.</p>
 
-  <h2>Убедитесь, что метки приземлились</h2>
-  <p>Это шаг 4 порядка построения, примененного к одному столбцу: определите, какими должны быть значения, а затем посмотрите. Две ячейки COUNTIF рядом с данными определяют его:</p>
+  <h2>Check that the labels landed</h2>
+  <p>This is step 4 of the build order applied to one column: work out what the counts should be, then look. Two COUNTIF cells next to the data settle it:</p>
   <pre><code>=COUNTIF(Games[Segment], "Loved, hidden")    → 175
 =COUNTIF(Games[Segment], "Loved, found")     → 590</code></pre>
-  <p>Функция СЧЕТЕСЛИ просматривает столбец и подсчитывает ячейки, соответствующие одному значению. Две ожидаемые цифры были получены в результате анализа источников: 765 любили игры, из которых 175 оставались скрытыми. Если в первой ячейке указано 174, формула неверна, и это незаметно. Ничто на экране не становится красным, если метка попадает не в те строки.</p>
-  <p>Затем проверка добавления. Четыре счетчика групп должны суммироваться с количеством строк в файле. 78 064 плюс 4 127 плюс 175 плюс 590 составит 82 956. Если это не так, некоторые строки не имеют меток или имеют две метки, и обычной причиной является опечатка в одной из строк меток.</p>
-  <p>Сохраните обе проверки в файле, на видном месте, с пометкой  <code>CHECK</code>. Они стоят две клетки и сообщают следующему человеку, что на них посмотрел человек.</p>
+  <p>COUNTIF looks down a column and counts the cells matching one value. The two expected numbers came from the source analysis: 765 loved games, of which 175 stayed hidden. If the first cell says 174, the formula is wrong, and it's wrong quietly. Nothing on screen turns red when a label lands on the wrong rows.</p>
+  <p>Then the addition check. The four group counts have to sum to the row count of the file. 78,064 plus 4,127 plus 175 plus 590 is 82,956. If it isn't, some rows got no label or two labels, and the usual cause is a typo in one of the label strings.</p>
+  <p>Keep both checks in the file, visibly, labelled <code>CHECK</code>. They cost two cells and tell the next person a human looked.</p>
 
-  <h2>До и после, тот же вопрос</h2>
-  <p>Тот же файл, тот же вопрос: цена скрытых игр отличается от найденных?</p>
+  <h2>Before and after, same question</h2>
+  <p>Same file, same question: do the hidden games price differently from the found ones?</p>
   <table>
-    <tr><th></th><th>Фильтрационный подход</th><th>Маркировочный подход</th></tr>
-    <tr><td>Что вы делаете</td><td>Отфильтруйте скрытые драгоценные камни, прочитайте столбец цен.</td><td>Add <code>Segment</code>, поверните его, поместите цену в «Значения»</td></tr>
-    <tr><td>Что ты видишь</td><td>175 строк и их цены. Не с чем их сравнивать</td><td>Обе группы рядом, одна сводная таблица, одна диаграмма</td></tr>
-    <tr><td>Диаграмма</td><td>Невозможно построить. Группа сравнения отфильтрована</td><td>Два бара. Вся находка в одном взгляде</td></tr>
-    <tr><td>Добавление группы позже</td><td>Начать заново с новым фильтром</td><td>Добавьте одну метку в формулу, обновите сводную таблицу.</td></tr>
+    <tr><th></th><th>Filter approach</th><th>Label approach</th></tr>
+    <tr><td>What you do</td><td>Filter to hidden gems, read the price column</td><td>Add <code>Segment</code>, pivot by it, put price in Values</td></tr>
+    <tr><td>What you see</td><td>175 rows and their prices. Nothing to compare them to</td><td>Both groups side by side, one pivot, one chart</td></tr>
+    <tr><td>The chart</td><td>Can't be built. The comparison group is filtered out</td><td>Two bars. The whole finding in one look</td></tr>
+    <tr><td>Adding a group later</td><td>Start over with a new filter</td><td>Add one label to the formula, refresh the pivot</td></tr>
   </table>
-  <p>Фильтрационный подход не медленнее. Это неспособно. Не требуется никакого количества дополнительных кликов, чтобы отфильтрованный лист отобразил удаленную группу. Вам нужно отменить фильтр, и в этот момент вы вернетесь к тому, с чего начали, за вычетом времени.</p>
-  <p>Представьте на мгновение свою наиболее часто используемую таблицу. Назовите две группы, которые вы чаще всего хотите видеть рядом. Столбец метки для него представляет собой одну формулу, точно такую ​​же, как та, которую вы только что прочитали.</p>
+  <p>The filter approach isn't slower. It's incapable. There is no number of extra clicks that gets a filtered sheet to show the group it removed. You have to undo the filter, at which point you're back where you started, minus the time.</p>
+  <p>Picture your own most-used spreadsheet for a moment. Name the two groups you most often want side by side. The label column for it is one formula shaped exactly like the one you just read.</p>
 
-  <h2>Когда фильтр — правильный инструмент</h2>
-  <p>Фильтры сохраняют реальную работу. Граница – это один вопрос: вы ищете или строите?</p>
-  <p>Ищем, фильтруем. Вы хотите просмотреть 175 скрытых игр, выборочно проверить ряд или ответить: «Это одна игра в группе?» Фильтр моментальный и одноразовый, и в этом все его достоинство.</p>
-  <p>Здание, этикетка. Все, что будет служить основой для сводной таблицы, диаграммы, СЧЕТЕСЛИ или другого человека, получает столбец метки, потому что всем этим необходимо, чтобы каждая строка присутствовала с написанной на ней группой.</p>
-  <p>Неправильная привычка — использовать инструмент поиска для строительных работ. Если вещь, которую вы делаете, переживет следующие десять минут, пометьте ее.</p>
+  <h2>When a filter is the right tool</h2>
+  <p>Filters keep a real job. The boundary is one question: are you looking, or are you building?</p>
+  <p>Looking, filter. You want to eyeball the 175 hidden games, spot-check a row, or answer "is this one game in the group?" A filter is instant and disposable, and that's its whole virtue.</p>
+  <p>Building, label. Anything that will feed a pivot, a chart, a COUNTIF or another person gets a label column, because all of those need every row present with its group written on it.</p>
+  <p>The habit that goes wrong is using the looking tool for the building job. If the thing you're making will outlive the next ten minutes, label.</p>
 
-  <h2>Почему это работает</h2>
-  <p>Две причины: одна о диаграммах, другая об арифметике.</p>
-  <p>Причина диаграммы: сравнение происходит только тогда, когда оба значения находятся на одной и той же картинке в одном масштабе. Эксперименты Кливленда и МакГилла по графическому восприятию показали, что оценка позиций по общей шкале — это то, что люди делают наиболее точно, а оценка значений, хранящихся отдельно, по памяти или по различным представлениям, — это то, где точность падает (Кливленд &amp; МакГилл, 1984,    <em>Журнал Американской статистической ассоциации</em>, 79(387), 531-554). Отфильтрованный лист вызывает именно такое более слабое суждение: одна группа на экране, другая в вашей памяти о другом фильтре.</p>
-  <p>Арифметическая причина: ошибки в таблицах — это нормально, а не редко. Обзор аудиторских исследований, проведенный Панко, обнаружил ошибки в нескольких процентах ячеек практически в каждой проверенной электронной таблице (Панко, 1998,  <em>Журнал организационных вычислений и вычислений для конечных пользователей</em>, 10(2), 15-21). Столбец метки можно проверить так, как не могут быть разрозненные фильтры, поскольку его группы должны суммироваться с количеством строк. Это одно дополнение улавливает в одной ячейке метки с ошибками, пропущенные строки и перекрывающиеся тесты.</p>
+  <h2>Why this works</h2>
+  <p>Two reasons, one about charts and one about arithmetic.</p>
+  <p>The chart reason: a comparison only lands when both values sit in the same picture on the same scale. Cleveland and McGill's experiments on graphical perception found that judging positions against a common scale is the thing people do most accurately, and judging values held apart, from memory or across views, is where accuracy falls off (Cleveland &amp; McGill, 1984, <em>Journal of the American Statistical Association</em>, 79(387), 531-554). A filtered sheet forces exactly that weaker judgment: one group on screen, the other in your memory of a different filter.</p>
+  <p>The arithmetic reason: spreadsheet errors are normal, not rare. Panko's review of audit studies found errors in a few percent of cells across nearly every spreadsheet examined (Panko, 1998, <em>Journal of Organizational and End User Computing</em>, 10(2), 15-21). A label column is checkable in a way scattered filters never are, because its groups have to sum to the row count. That one addition catches misspelled labels, dropped rows and overlapping tests in a single cell.</p>
 
-  <h2>Запустите его в своем файле</h2>
+  <h2>Run it on your own file</h2>
   <ol>
-    <li><strong>Напишите вопрос в виде сравнения.</strong>  «Чем строки X отличаются от строк Y?» Если вы не можете назвать одновременно X и Y, значит, вы еще не готовы что-либо составить.</li>
-    <li><strong>Прежде чем писать формулу, назовите группы.</strong>  От двух до пяти надписей, понятными незнакомому человеку. Метки окажутся на оси диаграммы, поэтому напишите их для читателя.</li>
-    <li><strong>Закажите тесты, сначала самый дешевый дисквалификатор.</strong>  Тест, который очищает наибольшее количество рядов, проводится в верхней части коридора.</li>
-    <li><strong>Напишите вложенное ЕСЛИ и позвольте таблице заполнить его.</strong>    Если ваши данные еще не являются именованной таблицей, сначала стоит это исправить. Для этого достаточно одного нажатия клавиши: Ctrl+Т.</li>
-    <li><strong>Предскажите два значения, затем проверьте с помощью COUNTIF.</strong>  Прежде чем смотреть, запишите ожидаемые цифры. Чек, который вы читаете постфактум, подтверждает все, что на экране.</li>
-    <li><strong>Добавьте проверку суммы.</strong>  Количество групп должно равняться количеству строк. Оставьте это в файле с пометкой.</li>
+    <li><strong>Write the question as a comparison.</strong> "How do X rows differ from Y rows?" If you can't name both X and Y, you're not ready to chart anything yet.</li>
+    <li><strong>Name the groups before writing any formula.</strong> Two to five labels, in words a stranger would understand. The labels will end up on a chart axis, so write them for the reader.</li>
+    <li><strong>Order the tests, cheapest disqualifier first.</strong> The test that clears out the most rows goes at the top of the corridor.</li>
+    <li><strong>Write the nested IF and let the table fill it down.</strong> If your data isn't a named table yet, that's worth fixing first and takes one keystroke: Ctrl+T.</li>
+    <li><strong>Predict two counts, then check with COUNTIF.</strong> Write your expected numbers down before you look. A check you read after the fact confirms whatever's on screen.</li>
+    <li><strong>Add the sum check.</strong> Group counts must equal the row count. Leave it in the file, labelled.</li>
   </ol>
-  <p>Установка ярлыков на рабочую книгу, полную старых фильтров, — это ужасно, так что не делайте этого. Используйте его для следующего вопроса и отпустите старую книгу.</p>
+  <p>Retrofitting labels onto a workbook full of old filters is miserable, so don't. Use it on the next question, and let the old workbook retire.</p>
 
   <div class="book">
-    <strong>На диаграмме появились номера 1, 2, 3, и исправление находится в данных, а не в диаграмме.</strong>
-    <p><em>Excel для аналитиков</em>  составляет 378 страниц, как должен быть разложен лист, прежде чем диаграмма сможет его правильно прочитать.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-label-rows-before-charting'})">Excel для аналитиков, 19 долларов США →</a>
+    <strong>The chart came out labelled 1, 2, 3, and the fix is in the data, not the chart.</strong>
+    <p><em>Excel for Analysts</em> is 378 pages, how a sheet has to be laid out before a chart can read it correctly.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-label-rows-before-charting'})">Excel for Analysts, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>Получите повторения для IF, COUNTIF и пивотов.</strong>
-    <p style="margin:6px 0 0">The <a href="../../excel/">Excel комплект</a>  отрабатывает формулы, на основе которых работает эта статья, с рабочими примерами и пробным экзаменом. В любом случае, выбор маркировки за вами. В комплекте все становится автоматическим.</p>
-    <a class="btn" href="../../excel/" onclick="if(window.gtag)gtag('event','prompt_pack_click',{kit:'guide-excel-label-rows'})">Откройте набор Excel →</a>
+    <strong>Get the reps on IF, COUNTIF and pivots.</strong>
+    <p style="margin:6px 0 0">The <a href="../../excel/">Excel Kit</a> drills the formulas this article runs on, with worked examples and a mock exam. The labelling move is yours either way. The kit is where it becomes automatic.</p>
+    <a class="btn" href="../../excel/" onclick="if(window.gtag)gtag('event','prompt_pack_click',{kit:'guide-excel-label-rows'})">Open the Excel Kit →</a>
   </div>
 
-  <h2>Шпаргалка</h2>
+  <h2>A cheat sheet</h2>
   <table>
-    <tr><th>Вы хотите</th><th>Do</th><th>Следите за</th></tr>
-    <tr><td>Поместите каждую строку в именованную группу</td><td>Новый столбец, вложенный ЕСЛИ, метки в виде текста.</td><td>Последнее значение — это сегмент «все остальное». Каждому вложенному IF нужен один</td></tr>
-    <tr><td>Сравните две группы на диаграмме</td><td>Поворот столбца меток</td><td>Если группа отсутствует, значит где-то включен фильтр</td></tr>
-    <tr><td>Проверьте приземление этикеток</td><td>COUNTIF на группу, прогнозируется первым</td><td>Строки меток должны точно соответствовать формуле, включая запятые и пробелы.</td></tr>
-    <tr><td>Докажите, что ни одна строка не была пропущена</td><td>Количество групп должно суммироваться с количеством строк.</td><td>Промах означает опечатку в метке или перекрывающийся тест.</td></tr>
-    <tr><td>Взгляните на группу на минуту.</td><td>Фильтровать, свободно</td><td>Отмените это, прежде чем что-то строить</td></tr>
-    <tr><td>Тот же ход в SQL</td><td><a href="../sql-case-expression/">CASE-выражение</a></td><td>То же правило: побеждает первый матч, порядок — это логика</td></tr>
+    <tr><th>You want to</th><th>Do</th><th>Watch for</th></tr>
+    <tr><td>Put every row in a named group</td><td>New column, nested IF, labels as text</td><td>The last value is the everything-else bucket. Every nested IF needs one</td></tr>
+    <tr><td>Compare two groups on a chart</td><td>Pivot on the label column</td><td>If a group is missing, a filter is still on somewhere</td></tr>
+    <tr><td>Check the labels landed</td><td>COUNTIF per group, predicted first</td><td>Label strings must match the formula exactly, including commas and spaces</td></tr>
+    <tr><td>Prove no row was missed</td><td>Group counts must sum to the row count</td><td>A miss means a typo in a label or an overlapping test</td></tr>
+    <tr><td>Eyeball a group for a minute</td><td>Filter, freely</td><td>Undo it before you build anything</td></tr>
+    <tr><td>Same move in SQL</td><td><a href="../sql-case-expression/">CASE expression</a></td><td>Same rule: first match wins, order is logic</td></tr>
   </table>
 
-  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Когда вопрос сравнивает группы, ваша первая формула — это столбец меток, а не фильтр. В диаграмме, которую вы хотите видеть в конце, должна присутствовать каждая строка с написанной на ней группой.</div>
+  <div class="note"><strong>The one habit to keep.</strong> When a question compares groups, your first formula is a label column, not a filter. The chart you want at the end needs every row present, with its group written on it.</div>
 
   <div class="series">
-    <strong>Серия: Excel для бизнес-аналитиков.</strong>
-    <p style="margin:6px 0 8px">Каждая статья создается за один этап  <a href="../excel-dashboard-build-order/">та же настоящая сборка</a>, в порядке сборки. Ссылки активируются по мере публикации каждой из них.</p>
+    <strong>The series: Excel for Business Analysts.</strong>
+    <p style="margin:6px 0 8px">Every article comes out of one step of <a href="../excel-dashboard-build-order/">the same real build</a>, in build order. Links go live as each one publishes.</p>
     <ol start="0">
-      <li value="0"><a href="../excel-dashboard-build-order/">Создайте информационную панель в следующем порядке: правильно, затем ясно, затем убедительно.</a></li>
-      <li>Пометьте свои строки, прежде чем составлять их диаграмму (эта статья)</li>
-      <li><a href="../excel-check-your-work/">Проверяйте свою работу, прежде чем это сделает кто-то другой</a></li>
-      <li><a href="../excel-name-your-data/">Назовите свои данные, чтобы ваши формулы перестали нарушаться</a></li>
-      <li><a href="../excel-csv-import-leading-zeros/">Диалог, который незаметно удаляет ваши почтовые индексы</a></li>
-      <li><a href="../excel-pivot-table-question/">Сводная таблица — это вопрос, а не отчет</a></li>
-      <li><a href="../excel-sum-of-id-trap/">Excel просто суммировал ваши идентификационные номера и ничего не сказал.</a></li>
-      <li><a href="../excel-pivot-percentages/">Проценты — это вся история, а Excel их скрывает</a></li>
-      <li><a href="../excel-custom-number-formats/">Покажите единицу, не нарушая цифру</a></li>
-      <li><a href="../excel-pick-the-chart/">Выберите диаграмму, ваш номер уже определен</a></li>
-      <li><a href="../excel-chart-design-basics/">Основы проектирования диаграмм: уберите что-то, а затем укажите</a></li>
-      <li><a href="../excel-if-family/">По одной строке за раз или все строки сразу</a></li>
-      <li><a href="../excel-kpi-row/">Четыре числа сверху обозначают более четырех графиков.</a></li>
-      <li><a href="../excel-sort-your-bars/">Отсортируйте гистограмму, иначе это ничего не значит</a></li>
-      <li><a href="../excel-circular-findings/">Открытие, которое было всего лишь вашим собственным определением</a></li>
-      <li><a href="../excel-character-encoding/">Имена появились как тарабарщина, а Excel ничего не сказал</a></li>
-      <li><a href="../excel-slicers/">Сделайте по одному управляющему диску для каждой диаграммы на странице.</a></li>
-      <li><a href="../excel-dashboard-claim/">Напишите предложение, о котором спорит ваша панель мониторинга</a></li>
+      <li value="0"><a href="../excel-dashboard-build-order/">Build a dashboard in this order: correct, then clear, then compelling</a></li>
+      <li>Label your rows before you chart them (this article)</li>
+      <li><a href="../excel-check-your-work/">Check your work before anyone else does</a></li>
+      <li><a href="../excel-name-your-data/">Name your data so your formulas stop breaking</a></li>
+      <li><a href="../excel-csv-import-leading-zeros/">The dialog that quietly deletes your zip codes</a></li>
+      <li><a href="../excel-pivot-table-question/">A pivot table is a question, not a report</a></li>
+      <li><a href="../excel-sum-of-id-trap/">Excel just summed your ID numbers and said nothing</a></li>
+      <li><a href="../excel-pivot-percentages/">Percentages are the whole story and Excel hides them</a></li>
+      <li><a href="../excel-custom-number-formats/">Show the unit without breaking the number</a></li>
+      <li><a href="../excel-pick-the-chart/">Pick the chart your number already decided</a></li>
+      <li><a href="../excel-chart-design-basics/">Chart design basics: take things away, then point</a></li>
+      <li><a href="../excel-if-family/">One row at a time, or all rows at once</a></li>
+      <li><a href="../excel-kpi-row/">Four numbers across the top do more than four charts</a></li>
+      <li><a href="../excel-sort-your-bars/">Sort your bar chart or it means nothing</a></li>
+      <li><a href="../excel-circular-findings/">The finding that was just your own definition</a></li>
+      <li><a href="../excel-character-encoding/">The names came in as gibberish and Excel said nothing</a></li>
+      <li><a href="../excel-slicers/">Make one control drive every chart on the page</a></li>
+      <li><a href="../excel-dashboard-claim/">Write the sentence your dashboard is arguing</a></li>
     </ol>
   </div>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Кливленд, У.С., и МакГилл, Р. (1984). Графическое восприятие: теория, эксперименты и применение к разработке графических методов.  <em>Журнал Американской статистической ассоциации</em>, 79(387), 531-554.</li>
-    <li>Панко, Р.Р. (1998). Что мы знаем об ошибках в электронных таблицах.  <em>Журнал организационных вычислений и вычислений для конечных пользователей</em>, 10(2), 15-21.</li>
+    <li>Cleveland, W. S., &amp; McGill, R. (1984). Graphical perception: Theory, experimentation, and application to the development of graphical methods. <em>Journal of the American Statistical Association</em>, 79(387), 531-554.</li>
+    <li>Panko, R. R. (1998). What we know about spreadsheet errors. <em>Journal of Organizational and End User Computing</em>, 10(2), 15-21.</li>
   </ul>
 
-  <p>Каков был ваш ответ вверху о 82 781 строке, удаленной фильтром? Вы заметили, что диаграмма теряет их еще до того, как диаграмма была упомянута?</p>
+  <p>What was your answer at the top, about the 82,781 rows the filter removed? Did you catch that the chart loses them before the chart was ever mentioned?</p>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../excel-dashboard-build-order/">Порядок строительства (статья 0)</a> · <a href="../sql-case-expression/">Выражение SQL CASE</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../data-driven-thresholds/">Пороги, управляемые данными</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../report-vs-analysis/">Отчет против анализа</a> · <a href="../what-is-data-analysis/">Что такое анализ данных?</a> · <a href="../../excel/">Excel комплект</a> · <a href="../../viz/">Виз Дрель</a> · <a href="../../projects/">Портфельные проекты</a>
-    <a class="coffee" href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a>
+    <a href="../../">← Analyst Prep Kit</a> · <a href="../excel-dashboard-build-order/">The Build Order (Article 0)</a> · <a href="../sql-case-expression/">The SQL CASE Expression</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../data-driven-thresholds/">Data-Driven Thresholds</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../report-vs-analysis/">Report vs Analysis</a> · <a href="../what-is-data-analysis/">What Is Data Analysis?</a> · <a href="../../excel/">Excel Kit</a> · <a href="../../viz/">Viz Drill</a> · <a href="../../projects/">Portfolio Projects</a>
+    <a class="coffee" href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

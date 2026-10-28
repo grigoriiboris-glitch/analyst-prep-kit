@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>РАСЧЕТ и фильтрация контекста в DAX, объяснение в шестнадцати строках — комплект для подготовки аналитика</title>
-<meta name="description" content="Одна и та же мера возвращает 5060 для каждой строки продукта и разное число для каждой строки региона. Почему CALCULATE заменяет один фильтр и добавляет другой, и как KEEPFILTERS меняет его.">
+<title>CALCULATE and Filter Context in DAX, Explained on Sixteen Rows — Analyst Prep Kit</title>
+<meta name="description" content="The same measure returns 5,060 on every product row and a different number on every region row. Why CALCULATE replaces one filter and adds the other, and how KEEPFILTERS changes it.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/powerbi-calculate/">
-<meta property="og:title" content="РАСЧЕТ и фильтрация контекста в DAX, объяснение в шестнадцати строках">
-<meta property="og:description" content="Одна и та же мера возвращает 5060 для каждой строки продукта и разное число для каждой строки региона. Почему CALCULATE заменяет один фильтр и добавляет другой, и как KEEPFILTERS меняет его.">
+<meta property="og:title" content="CALCULATE and Filter Context in DAX, Explained on Sixteen Rows">
+<meta property="og:description" content="The same measure returns 5,060 on every product row and a different number on every region row. Why CALCULATE replaces one filter and adds the other, and how KEEPFILTERS changes it.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/powerbi-calculate.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/powerbi-calculate/">
@@ -134,18 +134,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../powerbi/">Комплект Power BI</a> · <a href="../">Все руководства</a></p>
-  <h1>РАСЧЕТ и фильтрация контекста в DAX, объяснение в шестнадцати строках</h1>
-  <p class="meta">Одно правило решает все, что делает CALCULATE · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-09">9 августа 2026 г.</time></p>
+  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../powerbi/">Power BI Kit</a> · <a href="../">All guides</a></p>
+  <h1>CALCULATE and Filter Context in DAX, Explained on Sixteen Rows</h1>
+  <p class="meta">One rule decides everything CALCULATE does · Part of the <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-09">August 9, 2026</time></p>
 
-  <p>К концу этой страницы вы сможете предсказать, что вернет CALCULATE, прежде чем писать его, объяснить, почему одна и та же мера дает 5060 в каждой строке одной таблицы и разное число в каждой строке другой, а также использовать KEEPFILTERS намеренно, а не копируя кого-то. Оно основано на одном правиле, изложенном в собственной документации Майкрософт, и все остальное на этой странице вытекает из него.</p>
+  <p>By the end of this page you can predict what CALCULATE will return before you write it, explain why the same measure gives 5,060 on every row of one table and a different number on every row of another, and use KEEPFILTERS on purpose rather than by copying somebody. It rests on one rule, stated in Microsoft's own documentation, and everything else on this page follows from it.</p>
 
-  <p>Вот чем на самом деле заняться сегодня. Возьмите любой написанный вами CALCULATE и задайте один вопрос о каждом из его аргументов фильтра: фильтрует ли уже визуальный элемент тот же столбец? Если да, ваш фильтр заменяет визуальный элемент. Если нет, к нему добавляется ваш фильтр. В этом вопросе и состоит весь механизм, и его ответ занимает пять секунд.</p>
+  <p>Here is what to actually do today. Take any CALCULATE you have written and ask one question about each of its filter arguments: is the visual already filtering that same column? If yes, your filter replaces the visual's. If no, your filter is added to it. That question is the whole mechanism, and asking it takes five seconds.</p>
 
-  <p>Краткая версия: мера выполняется внутри набора фильтров, и CALCULATE изменяет этот набор перед его запуском. Фильтр для столбца, уже находящегося в наборе, перезаписывает то, что там было. К нему присоединяется фильтр по любому другому столбцу.</p>
+  <p>The short version: a measure runs inside a set of filters, and CALCULATE changes that set before running it. A filter on a column already in the set overwrites what was there. A filter on any other column joins it.</p>
 
-  <p>Разница между заменой и добавлением составляет всю страницу, поэтому она получает представление.</p>
+  <p>The replace-against-add difference is the entire page, so it gets the picture.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 320" role="img" aria-labelledby="pcTitle pcDesc" xmlns="http://www.w3.org/2000/svg">
@@ -194,30 +194,30 @@
         <text x="554" y="266" text-anchor="middle" font-size="13.5" font-weight="700" fill="#B45309">Desk</text>
       </g>
     </svg>
-    <figcaption>Один и тот же фильтр CALCULATE попадает в два разных визуальных элемента. Верхняя строка представляет собой таблицу, разбитую по продуктам, поэтому входящий фильтр Рабочий стол попадает в уже отфильтрованный столбец и заменяет его. Нижняя строка представляет собой таблицу, разделенную по регионам, поэтому фильтр «Стол» попадает в нетронутый столбец и объединяет все, что там есть. Одна мера, два поведения, полностью определяемые тем, что уже фильтрует визуальный элемент.</figcaption>
+    <figcaption>The same CALCULATE filter arriving into two different visuals. The upper row is a table sliced by product, so the incoming Desk filter lands on a column that is already filtered and replaces it. The lower row is a table sliced by region, so the Desk filter lands on an untouched column and joins what is there. One measure, two behaviours, decided entirely by what the visual was already filtering.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>Что вы узнаете</strong>
+    <strong>What you'll learn</strong>
     <ol>
-      <li>Что такое контекст фильтра, в одном предложении</li>
-      <li>Правило: добавлено или перезаписано</li>
-      <li>Один и тот же размер в двух визуальных элементах</li>
-      <li>KEEPFILTERS, если вам нужно и то, и другое</li>
-      <li>Удаление фильтров: процент от общего числа</li>
-      <li>Переход контекста, другое задание CALCULATE</li>
-      <li>Что не может содержать логический аргумент фильтра</li>
-      <li>Полное до и после</li>
-      <li>Крайние случаи, которые застают людей врасплох</li>
-      <li>Почему это работает</li>
-      <li>Использование этого на вашей собственной модели</li>
-      <li>Все на одном экране</li>
+      <li>What filter context is, in one sentence</li>
+      <li>The rule: added, or overwritten</li>
+      <li>The same measure in two visuals</li>
+      <li>KEEPFILTERS, for when you wanted both</li>
+      <li>Removing filters: percent of total</li>
+      <li>Context transition, the other job CALCULATE does</li>
+      <li>What a boolean filter argument may not contain</li>
+      <li>The full before and after</li>
+      <li>Edge cases that catch people out</li>
+      <li>Why this works</li>
+      <li>Using this on your own model</li>
+      <li>The whole thing on one screen</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Каждое число на этой странице является реальным.</strong>    Шестнадцать заказов и трехрядная таблица товаров — то же самое приспособление, которое используется в этих направляющих. Каждое описанное здесь поведение DAX указано в собственной справочной документации Майкрософт, указанной в разделе «почему это работает», а не предполагается. Если меры по вычисляемым столбцам все еще нечеткие,    <a href="../powerbi-measures-vs-columns/">Столбцы против мер</a>  на первом месте.</div>
+  <div class="note"><strong>Every number on this page is real.</strong> Sixteen orders and a three-row product table, the same fixture used across these guides. Every DAX behaviour described here is stated in Microsoft's own reference documentation, quoted in the "why this works" section, rather than inferred. If measures against calculated columns is still fuzzy, <a href="../powerbi-measures-vs-columns/">columns vs measures</a> comes first.</div>
 
-  <p><strong>Orders</strong>, таблица фактов. Шестнадцать рядов.</p>
+  <p><strong>Orders</strong>, the fact table. Sixteen rows.</p>
   <table>
     <tr><th>OrderID</th><th>Region</th><th>Product</th><th>Units</th><th>Revenue</th></tr>
     <tr><td>1001</td><td>North</td><td>Desk</td><td>4</td><td>880</td></tr>
@@ -238,7 +238,7 @@
     <tr><td>1016</td><td>West</td><td>Desk</td><td>2</td><td>440</td></tr>
   </table>
 
-  <p><strong>Products</strong>, таблица измерений, присоединенная «один ко многим» к заказам на продукт.</p>
+  <p><strong>Products</strong>, the dimension table, joined one-to-many to Orders on Product.</p>
   <table>
     <tr><th>Category</th><th>Product</th><th>ListPrice</th><th>Cost</th></tr>
     <tr><td>Furniture</td><td>Desk</td><td>220</td><td>140</td></tr>
@@ -246,32 +246,32 @@
     <tr><td>Lighting</td><td>Lamp</td><td>40</td><td>22</td></tr>
   </table>
 
-  <p>Общий доход составляет 9890 по 101 единице. Из них письменных столов 5060, стульев 3230 и ламп 1600.</p>
+  <p>Total revenue is 9,890 across 101 units. Desks are 5,060 of it, chairs 3,230 and lamps 1,600.</p>
 
   <div class="step">
-    <h2>1. Что такое контекст фильтра, в одном предложении</h2>
+    <h2>1. What filter context is, in one sentence</h2>
 
-    <p>Перед определением: ты ставишь меру  <code>Total Revenue = SUM(Orders[Revenue])</code>  в таблицу, разделенную по продуктам. Рядом с «Столом» отображается 5060, а рядом со «Стулом» — 3230. Скажите, чем отличаются эти два числа, учитывая, что в показателе никогда не упоминается Продукт.</p>
+    <p>Before the definition: you put a measure <code>Total Revenue = SUM(Orders[Revenue])</code> into a table sliced by product. It shows 5,060 next to Desk and 3,230 next to Chair. Say what made those two numbers different, given that the measure never mentions Product.</p>
 
-    <p>Визуал сделал это.  <strong>Контекст фильтра</strong>  — это набор фильтров, действующих при оценке меры, и он собирается из всего, что есть в отчете: строки, в которой находится мера, столбцов, срезов, фильтров страниц, перекрестного выделения из другого визуального элемента. Мера не знает и не заботится, откуда они взялись. Это просто противоречит всем выжившим строкам.</p>
+    <p>The visual did. <strong>Filter context</strong> is the set of filters in force when a measure is evaluated, and it is assembled from everything on the report: the row the measure is sitting in, the columns, the slicers, the page filters, the cross-highlighting from another visual. The measure does not know or care where they came from. It just runs against whatever rows survive.</p>
 
-    <p>Таким образом, мера не имеет фиксированного ответа.  <code>SUM(Orders[Revenue])</code>  составляет 9890 без каких-либо фильтров, 5060 в строке «Стол», 3040 в восточной строке и 1760 в ячейке, где пересекаются «Стол» и «Восток». Одна формула, один смысл и разное число в каждой ячейке, которая является всей точкой меры и покрыта с другой стороны в  <a href="../powerbi-measures-vs-columns/">Столбцы против мер</a>.</p>
+    <p>So a measure has no fixed answer. <code>SUM(Orders[Revenue])</code> is 9,890 with nothing filtered, 5,060 in the Desk row, 3,040 in the East row, and 1,760 in a cell where Desk and East cross. One formula, one meaning, and a different number in every cell, which is the entire point of a measure and is covered from the other side in <a href="../powerbi-measures-vs-columns/">columns vs measures</a>.</p>
 
-    <p>Полезная мысленная картина — это набор допустимых значений для каждого столбца. До какой-либо фильтрации каждый столбец допускает все. Таблица, разделенная по продуктам, помещает Продукт в этот набор ровно с одним допустимым значением в каждой строке. РАСЧЕТ — это функция, которая редактирует набор.</p>
+    <p>The useful mental picture is a set of allowed values per column. Before any filtering, every column allows everything. A table sliced by product puts Product into that set with exactly one allowed value in each row. CALCULATE is the function that edits the set.</p>
   </div>
 
   <div class="step">
-    <h2>2. Правило: добавлено или перезаписано</h2>
+    <h2>2. The rule: added, or overwritten</h2>
 
-    <p>Перед правилом: ты пишешь  <code>CALCULATE([Total Revenue], Products[Product] = "Desk")</code>  и поместите его в таблицу, нарезанную по продуктам. Прежде чем читать дальше, предскажите, что появится в строке «Стул».</p>
+    <p>Before the rule: you write <code>CALCULATE([Total Revenue], Products[Product] = "Desk")</code> and drop it into a table sliced by product. Predict what appears in the Chair row, before reading on.</p>
 
-    <p>5060, то же, что и строка «Стол», и это не ошибка. На справочной странице Майкрософт правило изложено в двух строках, и его стоит читать медленно:</p>
+    <p>5,060, the same as the Desk row, and it is not a bug. Microsoft's reference page states the rule in two lines, and it is worth reading slowly:</p>
 
-    <div class="note">Если столбцы или таблицы не находятся в контексте фильтра, в контекст фильтра добавляются новые фильтры для оценки выражения. Если столбцы или таблицы уже находятся в контексте фильтра, существующие фильтры заменяются новыми фильтрами.</div>
+    <div class="note">If the columns or tables aren't in the filter context, new filters are added to the filter context to evaluate the expression. If the columns or tables are already in the filter context, the existing filters are overwritten by the new filters.</div>
 
-    <p>В строке «Стул» «Продукт» уже находится в контексте фильтра, ограниченном «Стул». Ваш фильтр называет тот же столбец, поэтому он перезаписывает: «Продукт теперь доступен только для рабочего стола». Мера запускается и возвращает 5060 Рабочий стол, и это происходит в каждой строке таблицы, поскольку фильтр Продукт в каждой строке перезаписывается одним и тем же фильтром.</p>
+    <p>In the Chair row, Product is already in the filter context, restricted to Chair. Your filter names the same column, so it overwrites: Product is now restricted to Desk. The measure runs and returns Desk's 5,060, and it does that in every row of the table, because every row's Product filter is overwritten by the same one.</p>
 
-    <p>Скажите вслух, почему в итоговой строке также указано 5060, а не 9890. В итоговой строке нет собственного фильтра товаров, поэтому перезаписывать нечего. Вместо этого добавляется фильтр «Рабочий стол», и ответом является итоговое значение «Рабочий стол». То же правило, но на этот раз его «добавленная» ветвь.</p>
+    <p>Say out loud why the total row also shows 5,060 rather than 9,890. The total row has no Product filter of its own, so there is nothing to overwrite. The Desk filter is added instead, and the answer is Desk's total. Same rule, and this time the "added" branch of it.</p>
 
     <pre><code>Total Revenue = SUM ( Orders[Revenue] )
 
@@ -279,7 +279,7 @@ Desk Revenue =
 CALCULATE ( [Total Revenue], Products[Product] = "Desk" )</code></pre>
 
     <table>
-      <tr><th>Product</th><th>Общий доход</th><th>Доход от отдела</th></tr>
+      <tr><th>Product</th><th>Total Revenue</th><th>Desk Revenue</th></tr>
       <tr><td>Chair</td><td>3,230</td><td>5,060</td></tr>
       <tr><td>Desk</td><td>5,060</td><td>5,060</td></tr>
       <tr><td>Lamp</td><td>1,600</td><td>5,060</td></tr>
@@ -288,14 +288,14 @@ CALCULATE ( [Total Revenue], Products[Product] = "Desk" )</code></pre>
   </div>
 
   <div class="step">
-    <h2>3. Один и тот же размер в двух визуалах</h2>
+    <h2>3. The same measure in two visuals</h2>
 
-    <p>Перед столом: возьмите то же самое  <code>Desk Revenue</code>  измерьте и поместите в таблицу, нарезанную  <em>region</em>  вместо. Предскажите, будет ли каждая строка снова отображать 5060.</p>
+    <p>Before the table: take that identical <code>Desk Revenue</code> measure and put it in a table sliced by <em>region</em> instead. Predict whether every row shows 5,060 again.</p>
 
-    <p>Они этого не делают, и в этот момент правило перестает быть фактом и становится полезным.</p>
+    <p>They do not, and this is the moment the rule stops being a fact and becomes useful.</p>
 
     <table>
-      <tr><th>Region</th><th>Общий доход</th><th>Доход от отдела</th></tr>
+      <tr><th>Region</th><th>Total Revenue</th><th>Desk Revenue</th></tr>
       <tr><td>East</td><td>3,040</td><td>1,760</td></tr>
       <tr><td>North</td><td>2,495</td><td>1,320</td></tr>
       <tr><td>South</td><td>2,670</td><td>1,540</td></tr>
@@ -303,42 +303,42 @@ CALCULATE ( [Total Revenue], Products[Product] = "Desk" )</code></pre>
       <tr><td><strong>Total</strong></td><td><strong>9,890</strong></td><td><strong>5,060</strong></td></tr>
     </table>
 
-    <p>Здесь визуальные фильтры «Регион» и меры фильтров «Продукт». Разные столбцы, поэтому ничего не перезаписывается и применяются оба фильтра. 1760 Иста — это два кассовых заказа Иста, 660 плюс 1100. А четыре региональных показателя в сумме дают 5060, что является проверкой того, что оба фильтра действительно действуют.</p>
+    <p>Here the visual filters Region, and the measure filters Product. Different columns, so nothing is overwritten and both filters apply. East's 1,760 is East's two desk orders, 660 plus 1,100. And the four regional figures add to 5,060, which is the check that both filters are really in force.</p>
 
-    <p>Одна мера, написанная один раз, ведёт себя двояко. Ни одно из этих действий не является особым; оба выходят из одного и того же предложения в документации. Вот почему люди говорят: «CALCULATE перезаписывает фильтры» и «CALCULATE добавляет фильтры», и оба являются половиной правила.</p>
+    <p>One measure, written once, behaving two ways. Neither behaviour is special-cased; both come out of the same sentence in the documentation. This is why "CALCULATE overwrites filters" and "CALCULATE adds filters" are both things people say and both are half the rule.</p>
 
-    <p>Теперь представьте себе меру в вашей собственной модели, которая возвращает одно и то же число в каждой строке одних визуальных и осмысленных чисел в другой. Какой столбец он фильтрует, и по этому ли столбцу разбит разбитый визуальный элемент?</p>
+    <p>Now picture a measure in your own model that returns the same number in every row of one visual and sensible numbers in another. Which column is it filtering, and is that the column the broken visual is sliced by?</p>
   </div>
 
   <div class="step">
-    <h2>4. KEEPFILTERS, если вам нужно и то, и другое.</h2>
+    <h2>4. KEEPFILTERS, for when you wanted both</h2>
 
-    <p>До исправления: в таблице продуктов вы на самом деле хотели, чтобы в строке «Стулья» отображался доход от столов и стульев, что представляет собой ничто, а не все столы. Скажите, что вам нужно РАССЧИТАТЬ, чтобы сделать по-другому.</p>
+    <p>Before the fix: in the product table, you actually wanted the Chair row to show desk-and-chair revenue, which is nothing, rather than all desks. Say what you need CALCULATE to do differently.</p>
 
-    <p>Вам нужно, чтобы он пересекался, а не заменялся, и есть функция, вся работа которой заключается в этом. Майкрософт перечисляет KEEPFILTERS среди модификаторов фильтров с описанием «Добавить фильтр, не удаляя существующие фильтры в тех же столбцах».</p>
+    <p>You need it to intersect rather than replace, and there is a function whose entire job is that. Microsoft lists KEEPFILTERS among the filter modifiers with the description "Add filter without removing existing filters on the same columns."</p>
 
     <pre><code>Desk Revenue Kept =
 CALCULATE ( [Total Revenue], KEEPFILTERS ( Products[Product] = "Desk" ) )</code></pre>
 
     <table>
-      <tr><th>Product</th><th>Доход от отдела</th><th>Доход отдела сохранен</th></tr>
-      <tr><td>Chair</td><td>5,060</td><td>(пустой)</td></tr>
+      <tr><th>Product</th><th>Desk Revenue</th><th>Desk Revenue Kept</th></tr>
+      <tr><td>Chair</td><td>5,060</td><td>(blank)</td></tr>
       <tr><td>Desk</td><td>5,060</td><td>5,060</td></tr>
-      <tr><td>Lamp</td><td>5,060</td><td>(пустой)</td></tr>
+      <tr><td>Lamp</td><td>5,060</td><td>(blank)</td></tr>
       <tr><td><strong>Total</strong></td><td><strong>5,060</strong></td><td><strong>5,060</strong></td></tr>
     </table>
 
-    <p>В строке «Стул» теперь запрашиваются строки, являющиеся одновременно «Стул» и «Стол». Их нет, мере нечего суммировать, и DAX возвращает пустое значение, а не ноль. Пустые строки по умолчанию скрыты в большинстве визуальных элементов, что обычно и является тем, что вам нужно.</p>
+    <p>The Chair row now asks for rows that are both Chair and Desk. There are none, the measure has nothing to sum, and DAX returns blank rather than zero. Blank rows are hidden by default in most visuals, which is usually what you wanted.</p>
 
     <p>Which of the two is correct depends entirely on the question. "How much do desks bring in, regardless of what this row is about?" is the first measure, and it is genuinely what you want as the denominator of a share. "How much of this row is desks?" is the second. Deciding which sentence you meant is the work; the function is just the switch.</p>
   </div>
 
   <div class="step">
-    <h2>5. Удаление фильтров: процент от общего числа</h2>
+    <h2>5. Removing filters: percent of total</h2>
 
-    <p>Перед техникой: вам нужна доля каждого региона в общем доходе. Числитель простой. Прежде чем читать дальше, скажите, что делает знаменатель трудным.</p>
+    <p>Before the technique: you want each region's share of total revenue. The numerator is easy. Say what makes the denominator hard, before reading on.</p>
 
-    <p>Знаменатель должен игнорировать строку, в которой он находится. В восточной строке контекст фильтра ограничивает регион востоком, и вам нужно вычислить число, как если бы оно не было. Для этого и нужен REMOVEFILTERS.</p>
+    <p>The denominator has to ignore the row it is sitting in. In the East row, the filter context restricts Region to East, and you need a number computed as if it did not. That is what REMOVEFILTERS is for.</p>
 
     <pre><code>Revenue % of Total =
 DIVIDE (
@@ -347,7 +347,7 @@ DIVIDE (
 )</code></pre>
 
     <table>
-      <tr><th>Region</th><th>Общий доход</th><th>Denominator</th><th>Доход % от общей суммы</th></tr>
+      <tr><th>Region</th><th>Total Revenue</th><th>Denominator</th><th>Revenue % of Total</th></tr>
       <tr><td>East</td><td>3,040</td><td>9,890</td><td>30.7%</td></tr>
       <tr><td>South</td><td>2,670</td><td>9,890</td><td>27.0%</td></tr>
       <tr><td>North</td><td>2,495</td><td>9,890</td><td>25.2%</td></tr>
@@ -355,21 +355,21 @@ DIVIDE (
       <tr><td><strong>Total</strong></td><td><strong>9,890</strong></td><td><strong>9,890</strong></td><td><strong>100.0%</strong></td></tr>
     </table>
 
-    <p>Три заметки, которые сэкономят время позже. Использовать  <code>DIVIDE</code>  а не косую черту, потому что она возвращает пустое значение в нулевом знаменателе вместо ошибки. Удалите фильтры из конкретного столбца, по которому выполняется срез, а не из всей таблицы, иначе срез в другом столбце перестанет работать. И  <code>ALL</code> does the same job as REMOVEFILTERS in this position; Microsoft's own note says that if your tool supports REMOVEFILTERS, use it, because ALL doubles as a table-returning function and is easier to misread.</p>
+    <p>Three notes that save time later. Use <code>DIVIDE</code> rather than the slash, because it returns blank on a zero denominator instead of an error. Remove filters from the specific column you are slicing by, not from the whole table, or a slicer on another column will stop working. And <code>ALL</code> does the same job as REMOVEFILTERS in this position; Microsoft's own note says that if your tool supports REMOVEFILTERS, use it, because ALL doubles as a table-returning function and is easier to misread.</p>
 
-    <p>Вариант, который стоит знать,  <code>ALLSELECTED</code>, which removes the filters coming from inside the visual but respects slicers and page filters. Percentages built with REMOVEFILTERS always add to 100 percent of everything; percentages built with ALLSELECTED add to 100 percent of what the user has currently chosen. Both are defensible and they are different reports.</p>
+    <p>The variant worth knowing is <code>ALLSELECTED</code>, which removes the filters coming from inside the visual but respects slicers and page filters. Percentages built with REMOVEFILTERS always add to 100 percent of everything; percentages built with ALLSELECTED add to 100 percent of what the user has currently chosen. Both are defensible and they are different reports.</p>
   </div>
 
   <div class="step">
-    <h2>6. Переход контекста, другое задание CALCULATE</h2>
+    <h2>6. Context transition, the other job CALCULATE does</h2>
 
-    <p>Перед вторым заданием: CALCULATE без аргументов фильтра вообще выглядит бессмысленным. Прежде чем читать дальше, предскажите, для чего это может быть.</p>
+    <p>Before the second job: CALCULATE with no filter arguments at all looks pointless. Predict what it could possibly be for, before reading on.</p>
 
-    <p>Он преобразует  <strong>контекст строки</strong>    в контекст фильтра. На странице Майкрософт ясно сказано: «Использование функции CALCULATE без фильтров позволяет достичь определенного требования. Оно преобразует контекст строки в контекст фильтра».</p>
+    <p>It converts <strong>row context</strong> into filter context. Microsoft's page is explicit: "Using the CALCULATE function without filters achieves a specific requirement. It transitions row context to filter context."</p>
 
-    <p>Контекст строки — это то, что у вас есть, когда вы находитесь в одной строке: внутри вычисляемого столбца или внутри итератора, такого как SUMX. Это позволяет вам читать значения этой строки. Это делает  <em>not</em>  фильтровать что угодно, и этот факт удивляет людей, потому что кажется, что так и должно быть.</p>
+    <p>Row context is what you have when you are standing on one row: inside a calculated column, or inside an iterator like SUMX. It lets you read that row's values. It does <em>not</em> filter anything, which is the fact that surprises people, because it feels like it should.</p>
 
-    <p>Вот демонстрация. Добавьте вычисляемый столбец в таблицу «Продукты» из трех строк.</p>
+    <p>Here is the demonstration. Add a calculated column to the three-row Products table.</p>
 
     <pre><code>-- calculated column on Products, no CALCULATE
 Revenue Wrong = SUM ( Orders[Revenue] )
@@ -378,34 +378,34 @@ Revenue Wrong = SUM ( Orders[Revenue] )
 Revenue Right = CALCULATE ( SUM ( Orders[Revenue] ) )</code></pre>
 
     <table>
-      <tr><th>Product</th><th>Неправильный доход</th><th>Право на доход</th></tr>
+      <tr><th>Product</th><th>Revenue Wrong</th><th>Revenue Right</th></tr>
       <tr><td>Desk</td><td>9,890</td><td>5,060</td></tr>
       <tr><td>Chair</td><td>9,890</td><td>3,230</td></tr>
       <tr><td>Lamp</td><td>9,890</td><td>1,600</td></tr>
     </table>
 
-    <p>Без команды РАСЧЕТ вы находитесь в строке «Стол» и видите слово «Стол», и ничего не фильтруется, поэтому сумма равна всей таблице: 9890 в каждой строке. При использовании CALCULATE строка, в которой вы находитесь, становится фильтром «Продукты», этот фильтр перемещается вниз по отношению к «Заказам», и вы получаете 5060.</p>
+    <p>Without CALCULATE, you are standing on the Desk row and can see the word "Desk", and nothing is filtered, so the sum is the whole table: 9,890 on every row. With CALCULATE, the row you are standing on becomes a filter on Products, that filter travels down the relationship to Orders, and you get 5,060.</p>
 
-    <p>То же самое происходит внутри SUMX, и есть один ярлык, который стоит запомнить: когда вы ссылаетесь на меру модели внутри контекста строки, переход происходит автоматически. Майкрософт заявляет об этом прямо: «Когда вы используете показатель модели в контексте строки, переход контекста происходит автоматически». Поэтому    <code>SUMX(Products, [Total Revenue])</code>  дает 9890, а не 29670. Ссылка на меру выполняет невидимый ВЫЧИСЛЕНИЕ.</p>
+    <p>The same thing happens inside SUMX, and there is one shortcut worth memorizing: when you reference a model measure inside a row context, the transition is automatic. Microsoft states it plainly: "When you use a model measure in row context, context transition is automatic." That is why <code>SUMX(Products, [Total Revenue])</code> gives 9,890 and not 29,670. The measure reference is doing an invisible CALCULATE.</p>
 
-    <p>Скажите в одном предложении, почему это самый распространенный источник путаницы в DAX. Это связано с тем, что одна и та же функция выполняет две несвязанные на вид задачи, а вторая выполняется автоматически каждый раз, когда вы используете меру внутри итератора.</p>
+    <p>Say in one sentence why this is the single most common source of confusion in DAX. It is because the same function does two unrelated-looking jobs, and the second one happens silently every time you use a measure inside an iterator.</p>
   </div>
 
   <div class="step">
-    <h2>7. Чего не может содержать логический аргумент фильтра</h2>
+    <h2>7. What a boolean filter argument may not contain</h2>
 
-    <p>До правил:  <code>Products[Product] = "Desk"</code>  является логическим фильтром. Угадай, что произойдет, если ты напишешь  <code>Orders[Revenue] &gt; [Average Order]</code>  вместо этого, где правая часть является мерой.</p>
+    <p>Before the rules: <code>Products[Product] = "Desk"</code> is a boolean filter. Guess what happens if you write <code>Orders[Revenue] &gt; [Average Order]</code> instead, where the right side is a measure.</p>
 
-    <p>Это ошибки. На странице Майкрософт перечислены ограничения на логическое выражение фильтра, и они строгие:</p>
+    <p>It errors. Microsoft's page lists the constraints on a boolean filter expression and they are strict:</p>
 
     <ul>
-      <li>Он может ссылаться на столбцы из одной таблицы.</li>
-      <li>Он не может ссылаться на меры.</li>
-      <li>Он не может использовать вложенную функцию CALCULATE.</li>
-      <li>Он не может использовать функции, которые сканируют или возвращают таблицу, если вы не передаете их в качестве аргументов функциям агрегирования.</li>
+      <li>It can reference columns from a single table.</li>
+      <li>It can't reference measures.</li>
+      <li>It can't use a nested CALCULATE function.</li>
+      <li>It can't use functions that scan or return a table unless you pass them as arguments to aggregation functions.</li>
     </ul>
 
-    <p>Каждый из них фиксируется одинаково: используйте  <code>FILTER</code>, который принимает таблицу и условие и возвращает оставшиеся строки и не имеет ни одного из этих ограничений.</p>
+    <p>Every one of those is fixed the same way: use <code>FILTER</code>, which takes a table and a condition and returns the rows that survive, and which has none of those restrictions.</p>
 
     <pre><code>Above Average Revenue =
 VAR AvgOrder = AVERAGE ( Orders[Revenue] )       -- 618.125
@@ -416,14 +416,14 @@ RETURN
     )
 -- 6,475, across the 8 orders above the average</code></pre>
 
-    <p>Из этого стоит извлечь две вещи.  <code>VAR</code>  вычисляет среднее значение один раз во внешнем контексте фильтра, прежде чем FILTER начнет итерацию, что почти всегда именно то, что вы имели в виду. А FILTER — это табличный фильтр, а не логический, поэтому он заменяет фильтры всей таблицы в столбцах, которых он касается, поэтому  <code>FILTER(Orders, ...)</code>  обработка большой таблицы фактов медленнее, чем логический фильтр, и ее следует нацеливать на наименьшую подходящую таблицу.</p>
+    <p>Two things worth taking from that. The <code>VAR</code> computes the average once, in the outer filter context, before FILTER starts iterating, which is almost always what you meant. And FILTER is a table filter rather than a boolean one, so it replaces the whole table's filters on the columns it touches, which is why <code>FILTER(Orders, ...)</code> over a big fact table is slower than a boolean filter and should be aimed at the smallest table that will do.</p>
 
-    <p>Эмпирическое правило: сначала используйте логический фильтр, потому что он быстрее и понятнее, и переключайтесь на FILTER только тогда, когда условие требует измерения, двух таблиц или сравнения с чем-то вычисленным.</p>
+    <p>The rule of thumb: reach for a boolean filter first because it is faster and clearer, and switch to FILTER only when the condition needs a measure, two tables, or a comparison against something computed.</p>
   </div>
 
-  <h2>Полное до и после</h2>
+  <h2>The full before and after</h2>
 
-  <p>Оба раза одно и то же требование: таблица по регионам, показывающая доход, доход от отдела и долю каждого региона.</p>
+  <p>Same requirement both times: a table by region showing revenue, desk revenue, and each region's share.</p>
 
   <h3>Before</h3>
   <pre><code>Desk Share =
@@ -431,7 +431,7 @@ DIVIDE (
     CALCULATE ( SUM ( Orders[Revenue] ), Orders[Product] = "Desk" ),
     SUM ( Orders[Revenue] )
 )</code></pre>
-  <p>Он работает в таблице регионов и прерывается в тот момент, когда кто-то добавляет «Продукт» к визуальному элементу, потому что тогда фильтр «Продукт» числителя перезаписывает строку, и в каждой строке продукта отображаются столы, а не ее общая сумма. Есть еще скрытая зависимость: он фильтрует  <code>Orders[Product]</code>, поэтому он автоматически перестает соответствовать измерению «Продукты», если модель когда-либо будет приведена в порядок.</p>
+  <p>It works in a region table and breaks the moment somebody adds Product to the visual, because then the numerator's Product filter overwrites the row's and every product row shows desks over its own total. There is also a hidden dependency: it filters <code>Orders[Product]</code>, so it silently stops matching the Products dimension if the model is ever tidied.</p>
 
   <h3>After</h3>
   <pre><code>Total Revenue = SUM ( Orders[Revenue] )
@@ -444,107 +444,107 @@ DIVIDE (
     [Total Revenue],
     CALCULATE ( [Total Revenue], REMOVEFILTERS ( Orders[Region] ) )
 )</code></pre>
-  <p>Три меры вместо одного выражения. Базовый показатель определяется один раз и используется повторно, поэтому изменение способа суммирования доходов происходит в одном месте. KEEPFILTERS делает настольные измерения честными при любом визуальном изображении, включая нарезку по продуктам. А мера общего доступа называет именно тот столбец, который она игнорирует, поэтому срез для всего остального продолжает работать. Те же числа в исходном визуальном элементе, и ни одно из них не меняется при изменении визуального элемента.</p>
+  <p>Three measures instead of one expression. The base measure is defined once and reused, so a change to how revenue is summed happens in one place. KEEPFILTERS makes the desk measure honest in any visual, including one sliced by product. And the share measure names the exact column it ignores, so a slicer on anything else keeps working. Same numbers in the original visual, and none of them fall over when the visual changes.</p>
 
   <div class="step">
-    <h2>Крайние случаи, которые застают людей врасплох</h2>
+    <h2>Edge cases that catch people out</h2>
 
-    <p>Шесть, каждая из которых стоила кому-то дня.</p>
+    <p>Six that each cost somebody an afternoon.</p>
 
-    <p><strong>Два фильтра в одном столбце в одном РАСЧЕТ.</strong>  Они комбинируются с помощью AND, поэтому  <code>Products[Product] = "Desk", Products[Product] = "Chair"</code>  возвращает пустое значение, а не оба. Для «или-или» напишите один аргумент с  <code>||</code>или используйте  <code>IN { "Desk", "Chair" }</code>.</p>
+    <p><strong>Two filters on the same column in one CALCULATE.</strong> They are combined with AND, so <code>Products[Product] = "Desk", Products[Product] = "Chair"</code> returns blank rather than both. For either-or, write one argument with <code>||</code>, or use <code>IN { "Desk", "Chair" }</code>.</p>
 
-    <p><strong>Фильтрация таблицы фактов, когда вы имели в виду измерение.</strong> <code>Orders[Product] = "Desk"</code> and <code>Products[Product] = "Desk"</code>  дайте тот же ответ здесь и ведите себя по-другому, когда продукт существует в измерении без заказов. Фильтровать измерение по умолчанию; для этого и нужны размеры, т.к.  <a href="../powerbi-star-schema/">руководство по звездообразной схеме</a>  крышки.</p>
+    <p><strong>Filtering the fact table when you meant the dimension.</strong> <code>Orders[Product] = "Desk"</code> and <code>Products[Product] = "Desk"</code> give the same answer here and behave differently the moment a product exists in the dimension with no orders. Filter the dimension by default; that is what dimensions are for, as <a href="../powerbi-star-schema/">the star schema guide</a> covers.</p>
 
-    <p><strong>Ожидается, что пробел и ноль будут вести себя одинаково.</strong>  Мера без строк возвращает пустое значение, пустые строки скрыты большинством визуальных элементов, а  <code>0 + BLANK()</code>  равен 0, пока  <code>BLANK() + BLANK()</code>  пусто. Если вам нужен видимый ноль, оберните его:  <code>[Measure] + 0</code>.</p>
+    <p><strong>Expecting blank and zero to behave alike.</strong> A measure with no rows returns blank, blank rows are hidden by most visuals, and <code>0 + BLANK()</code> is 0 while <code>BLANK() + BLANK()</code> is blank. If you need a visible zero, wrap it: <code>[Measure] + 0</code>.</p>
 
-    <p><strong>ВСЕ на таблице, когда вы имели в виду один столбец.</strong> <code>ALL(Orders)</code>  удаляет все фильтры в каждом столбце таблицы фактов, поэтому срез, установленный пользователем, игнорируется. Назовите столбец.</p>
+    <p><strong>ALL on a table when you meant one column.</strong> <code>ALL(Orders)</code> removes every filter on every column of the fact table, so a slicer the user set is silently ignored. Name the column.</p>
 
-    <p><strong>Мера, которая работает до тех пор, пока кто-нибудь не добавит срез.</strong>  Если в показателе жестко запрограммирован фильтр для столбца, срез в этом столбце перестанет выполнять какие-либо действия, и ошибка не появится. Это основная причина того, что «отчет неправильный, но только для некоторых пользователей».</p>
+    <p><strong>A measure that works until somebody adds a slicer.</strong> If the measure hard-codes a filter on a column, the slicer on that column stops doing anything, and no error appears. This is the number one cause of "the report is wrong but only for some users".</p>
 
-    <p><strong>ФИЛЬТРАЦИЯ по таблице фактов на большой модели.</strong>  Правильно и медленно. Он повторяет каждую строку. Отфильтруйте измерение или используйте логический фильтр, если только условие действительно не требует строк фактов.</p>
+    <p><strong>FILTER over the fact table on a large model.</strong> Correct and slow. It iterates every row. Filter the dimension, or use a boolean filter, unless the condition genuinely needs the fact rows.</p>
   </div>
 
-  <h2>Почему это работает</h2>
+  <h2>Why this works</h2>
 
-  <p>Контекст фильтра — это заданная семантика, и его прочтение таким образом делает правило замены против добавления очевидным, а не произвольным. Контекст фильтра — это набор разрешенных значений для каждого столбца, а запрос возвращает строки, значения которых входят в каждый из этих наборов. CALCULATE заменяет набор для любого столбца, который он называет, и оставляет остальные в покое, поэтому второй фильтр для продукта не может сосуществовать с первым, а фильтр для продукта рядом с фильтром для региона просто пересекается. Это реляционная алгебра выбора продукта атрибутных доменов, которая является основой, которую наследуют оба SQL и DAX (Кодд, 1970,  <em>Коммуникации ACM</em>, 13(6), 377–387). KEEPFILTERS отказывается от замены и вместо этого запрашивает пересечение, поэтому он может дать пустой набор и пустой результат.</p>
+  <p>Filter context is set semantics, and reading it that way makes the replace-against-add rule obvious rather than arbitrary. A filter context is a set of allowed values for each column, and a query returns the rows whose values are in every one of those sets. CALCULATE replaces the set for any column it names and leaves the others alone, so a second filter on Product cannot coexist with the first, and a filter on Product alongside one on Region simply intersects. That is the relational algebra of selection over a product of attribute domains, which is the footing SQL and DAX both inherit (Codd, 1970, <em>Communications of the ACM</em>, 13(6), 377–387). KEEPFILTERS opts out of the replacement and asks for the intersection instead, which is why it can produce an empty set and a blank result.</p>
 
   <p>The specific behaviours on this page are product behaviour, not research findings, so the authority for them is the vendor's own reference documentation rather than a journal. Every rule quoted above comes from Microsoft's DAX reference for CALCULATE, which states the add-or-overwrite rule, the context transition behaviour, the automatic transition for model measures, and the constraints on boolean filter expressions. Those pages are listed in the references and are worth reading directly; they are short, precise, and more reliable than any summary of them, including this one.</p>
 
-  <p>Одно замечание о том, почему эта страница продолжает просить вас предсказать, прежде чем показать вам ответ. Попытка дать ответ до того, как вы увидите правильный, достоверно повышает, насколько хорошо сохраняется правильный ответ, даже если попытка неверна (Бисра, Лю, Несбит, Салими и Винн, 2018,  <em>Обзор педагогической психологии</em>, 30(3), 703–725). Число 5060 в строке «Стул» остается неизменным, потому что вас попросили угадать его первым, а большинство людей угадывают пусто.</p>
+  <p>One note on why this page kept asking you to predict before showing you the answer. Attempting an answer before seeing the correct one reliably improves how well the correct one is retained, even when the attempt is wrong (Bisra, Liu, Nesbit, Salimi, &amp; Winne, 2018, <em>Educational Psychology Review</em>, 30(3), 703–725). The 5,060 in the Chair row sticks because you were asked to guess it first, and most people guess blank.</p>
 
-  <h2>Использование этого на вашей собственной модели</h2>
+  <h2>Using this on your own model</h2>
 
-  <p>Проверять каждую меру в унаследованной модели — занятие утомительное, и вы остановитесь на шестом. Вместо этого сделайте это по порядку.</p>
+  <p>Auditing every measure in an inherited model is miserable and you will stop at the sixth. Do this instead, in order.</p>
 
   <ol>
-    <li><strong>Определите одну базовую меру для каждого числа</strong>  и построить из него все остальное.  <code>[Total Revenue]</code>  один раз, а затем укажите его. Ничто другое не обеспечивает удобство обслуживания модели.</li>
-    <li><strong>Для каждого ВЫЧИСЛЕНИЯ укажите столбец, который он фильтрует.</strong>  и проверьте, есть ли какие-либо визуальные фрагменты по этому столбцу. Эта одна проверка выявляет большинство сломанных мер.</li>
-    <li><strong>Добавить КИПФИЛЬТРЫ</strong>  где бы вы ни имели в виду «из этой строки», а не «независимо от этой строки».</li>
-    <li><strong>Используйте REMOVEFILTERS для именованных столбцов.</strong>, никогда для целых таблиц и для любого процента от общего числа.</li>
-    <li><strong>Проверьте каждую меру в двух визуальных элементах</strong>, один нарезан по столбцу, который он фильтрует, а другой нет. Если он ведет себя одинаково в обоих случаях, вы его не проверяли.</li>
+    <li><strong>Define one base measure per number</strong> and build everything else from it. <code>[Total Revenue]</code> once, then reference it. Nothing else keeps a model maintainable.</li>
+    <li><strong>For each CALCULATE, name the column it filters</strong> and check whether any visual slices by that column. That one check finds most broken measures.</li>
+    <li><strong>Add KEEPFILTERS</strong> wherever you meant "of this row" rather than "regardless of this row".</li>
+    <li><strong>Use REMOVEFILTERS on named columns</strong>, never on whole tables, for any percent-of-total.</li>
+    <li><strong>Test every measure in two visuals</strong>, one sliced by the column it filters and one not. If it behaves the same in both, you have not tested it.</li>
   </ol>
 
-  <p>Если у вас под рукой есть бумага, один дополнительный рисунок стоит пяти минут. Нарисуйте поле для контекста фильтра с чипом для каждого фильтруемого столбца, затем нарисуйте прибытие собственного фильтра CALCULATE. Вручную решить, приземлится ли он на занятую фишку или на пустое место, — это целый навык, а если сделать это ручкой один раз, это станет автоматическим.</p>
+  <p>If you have paper nearby, one optional drawing is worth five minutes. Draw a box for the filter context with a chip in it for each filtered column, then draw your own CALCULATE's filter arriving. Deciding by hand whether it lands on an occupied chip or an empty space is the whole skill, and doing it with a pen once makes it automatic.</p>
 
-  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: SQL, Python, Excel, Power BI и связанные с ними рабочие привычки.</div>
+  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: SQL, Python, Excel, Power BI and the working habits around them.</div>
 
-  <h2>Все на одном экране</h2>
+  <h2>The whole thing on one screen</h2>
 
-  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
+  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
 
   <table>
-    <tr><th>Idea</th><th>Что это значит</th></tr>
-    <tr><td>Контекст фильтра</td><td>Набор фильтров, внутри которых выполняется мера. Строки, столбцы, срезы, фильтры страниц, перекрестное выделение.</td></tr>
-    <tr><td>Правило</td><td>Фильтровать по уже отфильтрованному столбцу: перезаписано. Фильтр по любому другому столбцу: добавлен.</td></tr>
-    <tr><td>Та же мера, таблица продуктов</td><td>5060 в каждой строке, поскольку Продукт каждый раз перезаписывается.</td></tr>
-    <tr><td>Та же мера, таблица регионов</td><td>1760/1320/1540/440, потому что Регион выживает, а Продукт присоединяется.</td></tr>
-    <tr><td>Чек</td><td>Эти четыре в сумме дают 5060. Если они этого не сделали, один из фильтров был утерян.</td></tr>
-    <tr><td>KEEPFILTERS</td><td>Пересечение вместо замены. Строка стульев становится пустой, а не 5060.</td></tr>
-    <tr><td>Пустой против нуля</td><td>Ни одна строка не дает пустого места. Пустые строки скрыты большинством визуальных элементов. Добавьте 0, чтобы получить ноль.</td></tr>
-    <tr><td>REMOVEFILTERS</td><td>Удаление фильтров из именованного столбца. Знаменатель любого процента от суммы.</td></tr>
-    <tr><td>ВСЕ против УДАЛИТЬ ФИЛЬТРЫ</td><td>Same job here. Prefer REMOVEFILTERS; ALL is also a table function and reads ambiguously.</td></tr>
-    <tr><td>ALLSELECTED</td><td>Не обращайте внимания на собственные фильтры визуального элемента, но уважайте срезы. Другой действительный процент.</td></tr>
-    <tr><td>Переход контекста</td><td>CALCULATE без фильтров превращает текущую строку в фильтр. 9890 становится 5060.</td></tr>
-    <tr><td>Автоматический переход</td><td>Ссылка на меру модели внутри строки незаметно меняет контекст.</td></tr>
-    <tr><td>Логические пределы фильтра</td><td>Одна таблица, без мер, без вложенных вычислений CALCULATE, без табличных функций вне агрегатов.</td></tr>
-    <tr><td>FILTER</td><td>Аварийный люк для всего этого. Помедленнее. Направьте его на самый маленький стол, который подойдет.</td></tr>
-    <tr><td>Два фильтра, одна колонка</td><td>В сочетании с AND, поэтому они отменяются. Использовать  <code>||</code> or <code>IN</code>.</td></tr>
-    <tr><td>Тест</td><td>Попробуйте каждую меру в двух визуальных элементах: один разделен по столбцу, который он фильтрует, а другой нет.</td></tr>
+    <tr><th>Idea</th><th>What it means</th></tr>
+    <tr><td>Filter context</td><td>The set of filters a measure runs inside. Rows, columns, slicers, page filters, cross-highlighting.</td></tr>
+    <tr><td>The rule</td><td>Filter on a column already filtered: overwritten. Filter on any other column: added.</td></tr>
+    <tr><td>Same measure, product table</td><td>5,060 in every row, because Product is overwritten each time.</td></tr>
+    <tr><td>Same measure, region table</td><td>1,760 / 1,320 / 1,540 / 440, because Region survives and Product joins.</td></tr>
+    <tr><td>The check</td><td>Those four add to 5,060. If they did not, one of the filters was lost.</td></tr>
+    <tr><td>KEEPFILTERS</td><td>Intersect instead of replace. Chair row becomes blank, not 5,060.</td></tr>
+    <tr><td>Blank vs zero</td><td>No rows gives blank. Blank rows are hidden by most visuals. Add 0 to force a zero.</td></tr>
+    <tr><td>REMOVEFILTERS</td><td>Drop filters from a named column. The denominator of any percent of total.</td></tr>
+    <tr><td>ALL vs REMOVEFILTERS</td><td>Same job here. Prefer REMOVEFILTERS; ALL is also a table function and reads ambiguously.</td></tr>
+    <tr><td>ALLSELECTED</td><td>Ignore the visual's own filters but respect slicers. A different, valid percentage.</td></tr>
+    <tr><td>Context transition</td><td>CALCULATE with no filters turns the current row into a filter. 9,890 becomes 5,060.</td></tr>
+    <tr><td>Automatic transition</td><td>Referencing a model measure inside a row context transitions for you, invisibly.</td></tr>
+    <tr><td>Boolean filter limits</td><td>One table, no measures, no nested CALCULATE, no table functions outside aggregations.</td></tr>
+    <tr><td>FILTER</td><td>The escape hatch for all of those. Slower. Aim it at the smallest table that works.</td></tr>
+    <tr><td>Two filters, same column</td><td>Combined with AND, so they cancel. Use <code>||</code> or <code>IN</code>.</td></tr>
+    <tr><td>The test</td><td>Try every measure in two visuals, one sliced by the column it filters and one not.</td></tr>
   </table>
 
-  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Для каждого написанного вами значения CALCULATE проговаривайте вслух, какой столбец он фильтрует и фильтрует ли уже визуальный элемент этот столбец. Добавлен или перезаписан — единственный вопрос, и ответить на него до запуска отчета быстрее, чем потом его отлаживать. Если какая-либо мера нарушается таким образом, который не описан на этой странице, существует общая  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>.</div>
+  <div class="note"><strong>The one habit to keep.</strong> For every CALCULATE you write, say out loud which column it filters and whether the visual already filters that column. Added or overwritten is the only question, and answering it before you run the report is faster than debugging it afterwards. If a measure breaks in a way this page does not cover, there is a general <a href="../technical-tenacity/">diagnosis loop for being stuck</a>.</div>
 
-  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Первый CALCULATE, который я отправил, вернул одно и то же число в каждой строке таблицы, и я провел день, убежденный, что данные неверны. Какая мера в вашей модели ведет себя по-разному в двух визуальных элементах, и определили ли вы, какой столбец она фильтрует?</p>
+  <p>One last thought, and I would genuinely like other people's answers. The first CALCULATE I shipped returned the same number in every row of a table and I spent an afternoon convinced the data was broken. What is the measure in your model that behaves differently in two visuals, and have you worked out which column it is filtering?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Кодд, EF (1970). Реляционная модель данных для крупных общих банков данных.  <em>Коммуникации ACM</em>, 13(6), 377–387.</li>
-    <li>Бисра К., Лю К., Несбит Дж. К., Салими Ф. и Винн П. Х. (2018). Побуждение к самообъяснению: метаанализ.  <em>Обзор педагогической психологии</em>, 30(3), 703–725.</li>
-    <li>Майкрософт.  <em>Функция РАСЧЕТ (DAX)</em>, ссылка на DAX. Источник каждого цитируемого правила на этой странице: добавление или перезапись, переход контекста, автоматический переход для показателей модели и ограничения на логические выражения фильтра. Документация продукта, а не рецензируемые исследования, которые являются правильным источником информации о поведении продукта.</li>
-    <li>Майкрософт.  <em>Функция КИПФИЛЬТРЫ (DAX)</em> and <em>Функция УДАЛЕНИЕ ФИЛЬТРОВ (DAX)</em>, ссылка на DAX.</li>
+    <li>Codd, E. F. (1970). A relational model of data for large shared data banks. <em>Communications of the ACM</em>, 13(6), 377–387.</li>
+    <li>Bisra, K., Liu, Q., Nesbit, J. C., Salimi, F., &amp; Winne, P. H. (2018). Inducing self-explanation: A meta-analysis. <em>Educational Psychology Review</em>, 30(3), 703–725.</li>
+    <li>Microsoft. <em>CALCULATE function (DAX)</em>, DAX reference. The source of every quoted rule on this page: add-or-overwrite, context transition, automatic transition for model measures, and the constraints on boolean filter expressions. Product documentation rather than peer-reviewed research, which is the correct authority for how a product behaves.</li>
+    <li>Microsoft. <em>KEEPFILTERS function (DAX)</em> and <em>REMOVEFILTERS function (DAX)</em>, DAX reference.</li>
   </ul>
 
   <div class="book">
-    <strong>CALCULATE возвращает число, и вы не можете сказать, какие фильтры были задействованы в тот момент.</strong>
-    <p><em>Power BI для аналитиков</em>  занимает 187 страниц, контекст фильтра разбирается по одному модификатору за раз, поэтому CALCULATE перестает быть предположением.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/power-bi-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=power-bi-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-powerbi-calculate'})">Power BI для аналитиков, 19 долларов США →</a>
+    <strong>CALCULATE returns a number and you cannot say which filters were in play when it did.</strong>
+    <p><em>Power BI for Analysts</em> is 187 pages, filter context taken apart one modifier at a time, so CALCULATE stops being a guess.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/power-bi-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=power-bi-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-powerbi-calculate'})">Power BI for Analysts, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>Потренируйтесь в этом на модели перед собой.</strong>
-    <p style="margin:6px 0 0">The <a href="../../powerbi/">Комплект Power BI</a>  дает вам повторения: меры для прогнозирования перед запуском, карточки с правилом добавления или перезаписи и вопросы, которые задают вам, какой визуальный элемент нарушит данный РАСЧЕТ. Теперь вы владеете методом; комплект - это практика. Ничего устанавливать, учетная запись не требуется.</p>
-    <a class="btn" href="../../powerbi/">Откройте комплект Power BI →</a>
+    <strong>Practice this with a model in front of you.</strong>
+    <p style="margin:6px 0 0">The <a href="../../powerbi/">Power BI Kit</a> gives you the repetitions: measures to predict before running, flash cards on the add-or-overwrite rule, and questions that ask you which visual will break a given CALCULATE. You now own the method; the kit is the practice. Nothing to install, no account needed.</p>
+    <a class="btn" href="../../powerbi/">Open the Power BI Kit →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../powerbi-measures-vs-columns/">Столбцы и меры в Power BI</a> · <a href="../powerbi-sum-vs-sumx/">SUM против SUMX в DAX</a> · <a href="../powerbi-row-level-security/">Безопасность на уровне строк в Power BI</a> · <a href="../powerbi-star-schema/">Схема «Звезда» в Power BI</a> · <a href="../powerbi-time-intelligence/">DAX Временная аналитика</a> · <a href="../powerbi-switch-true/">ПЕРЕКЛЮЧИТЕ TRUE для сегментации</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-window-functions/">Оконные функции</a> · <a href="../excel-pivot-tables/">сводные таблицы Excel</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../choose-the-right-chart/">Выберите правильный график</a> · <a href="../how-charts-mislead/">Как графики вводят в заблуждение</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../powerbi/">Комплект Power BI</a> · <a href="../../projects/">Портфельные проекты</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
+    <a href="../../">← Analyst Prep Kit</a> · <a href="../powerbi-measures-vs-columns/">Columns vs Measures in Power BI</a> · <a href="../powerbi-sum-vs-sumx/">SUM vs SUMX in DAX</a> · <a href="../powerbi-row-level-security/">Row-Level Security in Power BI</a> · <a href="../powerbi-star-schema/">Star Schema in Power BI</a> · <a href="../powerbi-time-intelligence/">DAX Time Intelligence</a> · <a href="../powerbi-switch-true/">SWITCH TRUE for Segmentation</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../sql-window-functions/">Window Functions</a> · <a href="../excel-pivot-tables/">Excel Pivot Tables</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../choose-the-right-chart/">Choose the Right Chart</a> · <a href="../how-charts-mislead/">How Charts Mislead</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../powerbi/">Power BI Kit</a> · <a href="../../projects/">Portfolio Projects</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

@@ -1,9 +1,9 @@
 <!doctype html>
-<html data-course-theme="grain" lang="ru" data-theme="light" data-static-ru="true">
+<html data-course-theme="grain" lang="ru" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Основы аналитики данных — Подготовительный комплект для аналитика</title>
+<title>Основы аналитики данных — Analyst Prep Kit</title>
 <link rel="stylesheet" href="../assets/grain/grain.css">
 <link rel="stylesheet" href="../assets/grain/zinc-sky.css">
 <style>
@@ -19,7 +19,7 @@ a{color:var(--accent)}.wrap{max-width:1160px;margin:auto;padding:24px}.top{displ
 </head>
 <body>
 <div class="wrap">
-<header class="top"><div class="brand">Подготовительный комплект для аналитика <span class="pill">RU · 0 уровень</span></div><nav class="nav"><a href="../">Главная</a><a href="../sql/">SQL</a><a href="../excel/">Excel</a><a href="../powerbi/">Power BI</a><a href="../data-quality/">Качество данных</a><a href="../portfolio-projects/">Проекты</a></nav></header>
+<header class="top"><div class="brand">Analyst Prep Kit <span class="pill">RU · 0 уровень</span></div><nav class="nav"><a href="../">Главная</a><a href="../sql/">SQL</a><a href="../excel/">Excel</a><a href="../powerbi/">Power BI</a><a href="../data-quality/">Качество данных</a><a href="../portfolio-projects/">Проекты</a></nav></header>
 <section class="hero"><div class="eyebrow">Начни здесь · без опыта</div><h1>Основы аналитики данных</h1><p>Сначала пойми, как устроены данные и как рассуждает аналитик. Затем инструменты — SQL, Excel, Python и Power BI — станут гораздо понятнее.</p><div class="progressbar" aria-label="Прогресс курса"><span id="progress"></span></div><div class="meta" id="progressText">Пройдено 0 из 8 уроков</div></section>
 <div class="layout">
 <aside class="card"><h3>Программа</h3><p class="goal">Проходи уроки по порядку. Ответы и прогресс сохраняются в этом браузере.</p><div class="lesson-nav" id="lessonNav"></div><div class="actions"><button class="secondary" id="resetProgress">Сбросить прогресс</button></div></aside>
@@ -34,13 +34,13 @@ a{color:var(--accent)}.wrap{max-width:1160px;margin:auto;padding:24px}.top{displ
 <article class="lesson" data-title="Как устроена таблица" data-goal="Научиться читать строки, столбцы и уровень детализации.">
 <h2>2. Как устроена таблица</h2><p><strong>Строка</strong> — одна запись. <strong>Столбец</strong> — характеристика записи. Важно понять, что именно представляет одна строка: заказ, товарную позицию, клиента или событие.</p>
 <div class="example"><table><thead><tr><th>order_id</th><th>product</th><th>quantity</th><th>price</th></tr></thead><tbody><tr><td>501</td><td>Мышь</td><td>2</td><td>900</td></tr><tr><td>501</td><td>Клавиатура</td><td>1</td><td>2500</td></tr><tr><td>502</td><td>Кабель</td><td>3</td><td>300</td></tr></tbody></table></div>
-<p>Здесь две строки с заказом 501 — это не обязательно дубликаты: каждая строка описывает отдельную товарную позицию. Это называется <strong>уровнем детализации</strong>  (зерно).</p>
+<p>Здесь две строки с заказом 501 — это не обязательно дубликаты: каждая строка описывает отдельную товарную позицию. Это называется <strong>уровнем детализации</strong> (grain).</p>
 <div class="callout">До удаления повторяющихся строк ответь на вопрос: «Могут ли две строки законно иметь один и тот же идентификатор?»</div>
 <div class="quiz" data-question="В таблице по одной строке на товарную позицию. Заказ содержит три товара. Сколько строк у заказа?" data-options="Одну|Три|Число зависит от цены" data-correct="1" data-explain="При детализации на уровне товарной позиции одна строка соответствует одному товару в заказе."></div>
 </article>
 <article class="lesson" data-title="Типы данных и пропуски" data-goal="Различать числа, даты, текст и неизвестные значения.">
 <h2>3. Типы данных, пропуски и ключи</h2><p>На вид число может оказаться текстом, например «1 200 ₽». Дата в формате «03/04/26» может трактоваться по-разному. Пустое значение не всегда равно нулю.</p>
-<ul><li><strong>Число:</strong> можно складывать и сравнивать арифметически.</li><li><strong>Текст:</strong> название товара, код клиента, категория.</li><li><strong>Дата:</strong> нужна для правильной сортировки и сравнения периодов.</li><li><strong>НУЛЕВОЙ/пусто:</strong> значение неизвестно или не записано — не заменяй его на ноль без основания.</li><li><strong>Ключ:</strong> поле или комбинация полей, которая позволяет отличить запись от других.</li></ul>
+<ul><li><strong>Число:</strong> можно складывать и сравнивать арифметически.</li><li><strong>Текст:</strong> название товара, код клиента, категория.</li><li><strong>Дата:</strong> нужна для правильной сортировки и сравнения периодов.</li><li><strong>NULL / пусто:</strong> значение неизвестно или не записано — не заменяй его на ноль без основания.</li><li><strong>Ключ:</strong> поле или комбинация полей, которая позволяет отличить запись от других.</li></ul>
 <div class="quiz" data-question="В столбце количества встречается пустая ячейка. Что правильнее сделать?" data-options="Всегда заменить на 0|Проверить смысл пропуска и правила источника|Удалить всю таблицу" data-correct="1" data-explain="Пропуск может означать неизвестное значение, ошибку или неприменимость. Сначала выясни причину."></div>
 </article>
 <article class="lesson" data-title="Метрики и формулы" data-goal="Научиться считать основные бизнес-показатели.">
@@ -116,6 +116,6 @@ a{color:var(--accent)}.wrap{max-width:1160px;margin:auto;padding:24px}.top{displ
 })();
 </script>
 <script src="../assets/datacraft-economy.js"></script>
-<script src="../assets/progress-state.js"></script>\п<script src="../assets/supabase_auth_sync.js?v=3"></script>\п
+<script src="../assets/progress-state.js"></script>\n<script src="../assets/supabase_auth_sync.js?v=3"></script>\n
 <script src="../assets/lesson-visuals.js" defer></script>
 </body></html>

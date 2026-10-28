@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Как импортировать CSV-файл в Power BI (и три раскрывающихся списка, которые никто не читает) — комплект для подготовки аналитика</title>
-<meta name="description" content="Правильно импортируйте CSV в Рабочий стол Power BI: раскрывающиеся списки «Происхождение файла», «разделитель» и «Определение типа», почему 200 строк определяют типы столбцов, а также шаг «столбцы=х», который навсегда игнорирует новые столбцы.">
+<title>How to Import a CSV into Power BI (And the Three Dropdowns Nobody Reads) — Analyst Prep Kit</title>
+<meta name="description" content="Import a CSV into Power BI Desktop properly: the File Origin, delimiter and type-detection dropdowns, why 200 rows decide your column types, and the columns=x step that silently ignores new columns forever.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/import-a-csv-into-power-bi/">
-<meta property="og:title" content="Как импортировать CSV-файл в Power BI (и три раскрывающихся списка, которые никто не читает)">
-<meta property="og:description" content="Power BI определяет типы столбцов по первым 200 строкам, а затем применяет их к миллионам. Вот этот диалог, то, что делает каждый раскрывающийся список, и ловушка обновления, о которой вас никто не предупреждает.">
+<meta property="og:title" content="How to Import a CSV into Power BI (And the Three Dropdowns Nobody Reads)">
+<meta property="og:description" content="Power BI decides your column types from the first 200 rows and then applies them to millions. Here is that dialog, what each dropdown does, and the refresh trap nobody warns you about.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/import-a-csv-into-power-bi.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/import-a-csv-into-power-bi/">
@@ -134,18 +134,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../powerbi/">Комплект Power BI</a> · <a href="../">Все руководства</a></p>
-  <h1>Как импортировать CSV в Power BI</h1>
-  <p class="meta">Диалоговое окно, мимо которого все пролистывают, и три раскрывающихся списка в нем, которые определяют весь ваш отчет. · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-08">8 августа 2026 г.</time></p>
+  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../powerbi/">Power BI Kit</a> · <a href="../">All guides</a></p>
+  <h1>How to Import a CSV into Power BI</h1>
+  <p class="meta">The dialog everyone clicks past, and the three dropdowns in it that decide your whole report · Part of the <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-08">August 8, 2026</time></p>
 
-  <p>К концу этой страницы ваш CSV-файл будет в Power BI с правильными типами столбцов, правильными символами и без неожиданных сюрпризов, ожидающих первого обновления. Импорт осуществляется в четыре клика. Причина существования этой страницы заключается в том, что диалоговое окно посередине имеет три раскрывающихся списка, которые определяют, как читать каждое число, дату и символ с диакритическим знаком в вашем файле, а ответы по умолчанию — это предположения.</p>
+  <p>By the end of this page your CSV will be in Power BI with the right column types, the right characters, and no silent surprises waiting for the first refresh. Importing is four clicks. The reason this page exists is that the dialog in the middle has three dropdowns that decide how every number, date and accented character in your file is read, and the default answers are guesses.</p>
 
-  <p>Вот чем на самом деле заняться сегодня. В диалоговом окне импорта установите  <strong>Обнаружение типа данных</strong> to <em>На основе всего набора данных</em>  прежде чем нажать что-нибудь еще и выбрать  <strong>Преобразование данных</strong>  а не Загрузка. Эти два варианта предотвратят большую часть того, что пойдет не так, как описано ниже.</p>
+  <p>Here is what to actually do today. On the import dialog, set <strong>Data Type Detection</strong> to <em>Based on entire dataset</em> before you click anything else, and choose <strong>Transform Data</strong> rather than Load. Those two choices prevent most of what goes wrong below.</p>
 
-  <p>Краткая версия: «Домой», «Получить данные», «Текст/CSV», выберите файл, прочтите три раскрывающихся списка, «Преобразовать данные», «Типы исправлений», «Закрыть» и «Применить».</p>
+  <p>The short version: Home, Get data, Text/CSV, pick the file, read the three dropdowns, Transform Data, fix types, Close and Apply.</p>
 
-  <p>Почему раскрывающийся список типов имеет значение — это единственная идея, достойная страницы, поэтому она дает представление о картине.</p>
+  <p>Why the type dropdown matters is the one idea worth the page, so it gets the picture.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 280" role="img" aria-labelledby="pcTitle pcDesc" xmlns="http://www.w3.org/2000/svg">
@@ -193,107 +193,107 @@
         <path d="M540 60 h140" stroke="#E4E7EA" stroke-width="1.5"/>
       </g>
     </svg>
-    <figcaption>По умолчанию типы для каждого столбца определяются на основе образца в верхней части файла, а затем применяются ко всему столбцу. Еще одна строка ниже, которая не подходит, связана с ошибкой обновления.</figcaption>
+    <figcaption>By default the types for every column are decided from a sample at the top of the file, then applied to all of it. One row further down that does not fit is where your refresh error comes from.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>Что ты будешь делать</strong>
+    <strong>What you'll do</strong>
     <ol>
-      <li>Импортируйте это</li>
-      <li>Три раскрывающихся списка, по одному</li>
-      <li>Преобразуйте данные, а не загружайте</li>
-      <li>Исправьте типы один раз, правильно</li>
-      <li>Ловушка Столбцы=х</li>
-      <li>Когда файл на самом деле не CSV</li>
-      <li>Полное до и после</li>
-      <li>Что пошло не так и как это исправить</li>
-      <li>Почему он построен таким образом</li>
-      <li>Использование этого в ваших собственных отчетах</li>
-      <li>Все на одном экране</li>
+      <li>Import it</li>
+      <li>The three dropdowns, one at a time</li>
+      <li>Transform Data, not Load</li>
+      <li>Fix the types once, properly</li>
+      <li>The columns=x trap</li>
+      <li>When the file is not really a CSV</li>
+      <li>The full before and after</li>
+      <li>What goes wrong, and the fix</li>
+      <li>Why it is built this way</li>
+      <li>Using this on your own reports</li>
+      <li>The whole thing on one screen</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Все параметры и ограничения диалогового окна взяты из собственной документации Майкрософт по коннектору Текст/CSV.</strong>, проверено 8 августа 2026 г. Тот же соединитель и те же раскрывающиеся списки отображаются в Power Query Excel, поэтому большая часть этой страницы переносится напрямую. Если Power BI еще не установлен,  <a href="../install-power-bi-desktop/">как установить Рабочий стол Power BI</a>  это шаг перед этим.</div>
+  <div class="note"><strong>Every dialog option and limit here comes from Microsoft's own Text/CSV connector documentation</strong>, checked on 8 August 2026. The same connector and the same dropdowns appear in Excel's Power Query, so most of this page transfers straight across. If Power BI is not installed yet, <a href="../install-power-bi-desktop/">how to install Power BI Desktop</a> is the step before this one.</div>
 
   <div class="step">
-    <h2>1. Импортируйте его</h2>
+    <h2>1. Import it</h2>
 
-    <p>Перед пояснением: CSV — это обычный текстовый файл, в котором вообще нет информации о типе. Как вы думаете, откуда Power BI взяла идею о том, что один столбец — это дата, а другой — число?</p>
+    <p>Before the explanation: a CSV is a plain text file with no type information in it at all. So where do you think Power BI gets the idea that one column is a date and another is a number?</p>
 
-    <p>На ленте «Главная» выберите  <strong>Получить данные</strong>, затем  <strong>Text/CSV</strong>. Выберите файл и нажмите «Открыть». Появится окно предварительного просмотра, показывающее первые строки и три раскрывающихся списка вверху.</p>
+    <p>On the Home ribbon, choose <strong>Get data</strong>, then <strong>Text/CSV</strong>. Pick your file and press Open. A preview window appears showing the first rows and three dropdowns along the top.</p>
 
-    <p>Это окно предварительного просмотра является ответом на вопрос. Ничто в файле не говорит: «В этом столбце содержатся даты». Power BI считывает выборку строк и делает предположения, а затем записывает это предположение как постоянный шаг. Выпадающие списки — это то, как вы влияете на предположение, и их гораздо проще установить сейчас, чем отменить выбор позже.</p>
+    <p>That preview window is the answer to the question. Nothing in the file says "this column holds dates". Power BI reads a sample of the rows and guesses, then writes the guess down as a permanent step. The dropdowns are how you influence the guess, and they are much easier to set now than to unpick later.</p>
   </div>
 
   <div class="step">
-    <h2>2. Три раскрывающихся списка, по одному</h2>
+    <h2>2. The three dropdowns, one at a time</h2>
 
-    <p><strong>Происхождение файла</strong>  это набор символов. Здесь есть особая ловушка: набор символов не выводится, а UTF-8 обнаруживается автоматически только в том случае, если файл начинается со специального маркера, называемого меткой порядка байтов. Многие файлы не имеют этого маркера. Если ваш предварительный просмотр показывает  <code>Ã©</code>  где  <code>é</code>  должно быть, этот раскрывающийся список является исправлением, и установка параметра UTF-8 обычно исправляет весь файл сразу.  <a href="../excel-character-encoding/">Кодировка символов для людей, которые никогда не слышали эту фразу</a>  это более полное объяснение.</p>
+    <p><strong>File Origin</strong> is the character set. This one has a specific trap: the character set is not inferred, and UTF-8 is only detected automatically if the file starts with a special marker called a byte order mark. Plenty of files do not carry that marker. If your preview shows <code>Ã©</code> where an <code>é</code> should be, this dropdown is the fix, and setting it to a UTF-8 option will usually correct the whole file at once. <a href="../excel-character-encoding/">Character encoding for people who never heard the phrase</a> is the fuller explanation.</p>
 
-    <p><strong>Delimiter</strong>  это то, что разделяет ценности. Power BI предлагает двоеточие, запятую, знак равенства, точку с запятой, пробел, табуляцию, настраиваемый разделитель любого текста, который вам нравится, а также фиксированную ширину для файлов, которые используют заданное количество символов в каждом поле. Он угадывает, и угадывает хорошо, но проверьте предварительный просмотр: если вы видите один столбец, содержащий все, значит, разделитель неправильный.</p>
+    <p><strong>Delimiter</strong> is what separates the values. Power BI offers colon, comma, equals sign, semicolon, space, tab, a custom delimiter of any text you like, and fixed width for files that use a set number of characters per field. It guesses, and it guesses well, but check the preview: if you see one column containing everything, the delimiter is wrong.</p>
 
-    <p><strong>Обнаружение типа данных</strong>  это важно. Три варианта: на основе первых 200 строк, на основе всего набора данных или выключено, при котором каждый столбец загружается как текст. По умолчанию производится выборка верхней части файла, что происходит быстро и в точности соответствует изображенному на рисунке выше.</p>
+    <p><strong>Data Type Detection</strong> is the important one. Three choices: based on the first 200 rows, based on the entire dataset, or off, which loads every column as text. The default samples the top of the file, which is fast and is exactly the behaviour in the picture above.</p>
 
-    <p>Choose <em>На основе всего набора данных</em>    всякий раз, когда вы можете. Майкрософт предупреждает, что это замедляет первоначальную загрузку, что верно и является справедливой сделкой: более медленный импорт однажды побеждает неправильно набранный столбец навсегда. В их документации прямо сказано, что вывод может быть неверным, и вам следует дважды проверить его перед загрузкой.</p>
+    <p>Choose <em>Based on entire dataset</em> whenever you can. Microsoft's own warning is that this makes the initial load slower, which is true and is a fair trade: a slower import once beats a column typed wrongly forever. Their documentation says it plainly, that inference can be incorrect and you should double check before loading.</p>
 
-    <p>Choose <em>Не определять типы данных</em>  когда файл действительно беспорядочный, и вы предпочитаете установить каждый тип самостоятельно, чем распутать неправильное предположение. Все поступает в виде текста, и вы сознательно конвертируете.</p>
+    <p>Choose <em>Do not detect data types</em> when the file is genuinely messy and you would rather set every type yourself than untangle a wrong guess. Everything arrives as text, and you convert deliberately.</p>
   </div>
 
   <div class="step">
-    <h2>3. Преобразуйте данные, а не загружайте</h2>
+    <h2>3. Transform Data, not Load</h2>
 
-    <p>Окно предварительного просмотра предлагает  <strong>Load</strong> and <strong>Преобразование данных</strong>. Нагрузка опускает стол прямо в вашу модель. Преобразование данных сначала открывает редактор Мощность запроса.</p>
+    <p>The preview window offers <strong>Load</strong> and <strong>Transform Data</strong>. Load drops the table straight into your model. Transform Data opens the Power Query editor first.</p>
 
     <p>Choose Transform Data every time, even when the file looks perfect. The editor is where every action you take is recorded as a step in the Applied Steps list on the right, and that list replays on every future refresh. Work done there is permanent; work done later in the report is not.</p>
 
-    <p>Прежде чем читать дальше, скажите, что это значит для колонки, которую вы исправляете вручную после загрузки. Это означает, что вы снова исправите его вручную после следующего обновления, как и тот, кто унаследует файл. Редактор — это не расширенный вариант, здесь живет долговременная версия работы.</p>
+    <p>Say what that means for a column you fix by hand after loading, before reading on. It means you will fix it by hand again after the next refresh, and so will whoever inherits the file. The editor is not an advanced option, it is where the durable version of the work lives.</p>
   </div>
 
   <div class="step">
-    <h2>4. Исправьте типы один раз правильно</h2>
+    <h2>4. Fix the types once, properly</h2>
 
-    <p>В редакторе каждый заголовок столбца содержит небольшой символ, говорящий, что, по мнению Power BI, он содержит:  <code>ABC</code>  для текста,  <code>123</code>  для целых чисел,  <code>1.2</code>  для десятичных дробей, календарь для дат. Прежде всего прочитайте этот ряд символов. Это двухсекундная проверка, которая предотвращает большую часть путаницы в дальнейшем.</p>
+    <p>In the editor, each column header carries a small symbol saying what Power BI thinks it holds: <code>ABC</code> for text, <code>123</code> for whole numbers, <code>1.2</code> for decimals, a calendar for dates. Read that row of symbols before anything else. It is a two-second check that prevents most downstream confusion.</p>
 
-    <p>Три исправления, которые стоит внести сразу же после их применения.</p>
+    <p>Three fixes worth making immediately when they apply.</p>
 
-    <p><strong>Число, полученное в виде текста.</strong>  Обычно разделитель тысяч, символ валюты или случайное «Н/Д» в одной строке. Щелкните символ и установите правильный тип, и в случае ошибки теперь некорректное значение можно будет легко найти с помощью фильтрации.</p>
+    <p><strong>A number that arrived as text.</strong> Usually a thousands separator, a currency symbol, or a stray "N/A" in one row. Click the symbol and set the correct type, and if it errors, the offending value is now easy to find by filtering.</p>
 
-    <p><strong>Дата, полученная в виде текста, или ошибочная на месяц.</strong>  День и месяц поменялись местами. Используйте тип изменения, затем  <strong>Использование локали</strong>и выберите языковой стандарт, в котором был написан файл. В этом разница между сообщением Power BI о том, что представляет собой столбец, и указанием языка, на котором был написан этот столбец, а для дат вам нужен второй.</p>
+    <p><strong>A date that arrived as text, or is wrong by a month.</strong> Day and month have been swapped. Use Change Type, then <strong>Using Locale</strong>, and pick the locale the file was written in. That is the difference between telling Power BI what the column is and telling it what language the column was written in, and for dates you need the second one.</p>
 
-    <p><strong>Код, потерявший ведущие нули.</strong>    Почтовые индексы, номера счетов и коды продуктов, введенные в виде цифр, теряют нули в начале. Установите тип «Текст», и если нули уже исчезли, их необходимо восстановить в исходном файле, а не в Мощность БИ.    <a href="../excel-csv-import-leading-zeros/">исправление ведущих нулей</a>  охватывает версию на стороне исходного кода.</p>
+    <p><strong>A code that has lost its leading zeros.</strong> Postcodes, account numbers and product codes typed as numbers lose the zeros at the front. Set the type to Text, and if the zeros are already gone, they must be recovered in the source file rather than in Power BI. The <a href="../excel-csv-import-leading-zeros/">leading zeros fix</a> covers the source-side version.</p>
 
-    <p>Затем нажмите  <strong>Закрыть и применить</strong>. Шаги сохраняются, и с этого момента каждое обновление воспроизводит их по порядку.</p>
+    <p>Then press <strong>Close &amp; Apply</strong>. The steps are saved, and every refresh from now on replays them in order.</p>
   </div>
 
   <div class="step">
-    <h2>5. Ловушка Столбцы=х</h2>
+    <h2>5. The columns=x trap</h2>
 
-    <p>Этот документирован, тихий и дорогой, и почти никто о нем не знает, пока он не укусит.</p>
+    <p>This one is documented, quiet, and expensive, and almost nobody knows about it until it bites.</p>
 
-    <p>Когда вы импортируете CSV-файл, Power BI записывает шаг, записывающий количество столбцов, которые файл имел в тот момент, как  <code>columns=x</code>. Если позже кто-то добавит столбец в исходный файл и вы обновите его,  <strong>новый столбец не появляется.</strong>    Обновление завершается успешно, все числа обновляются, а дополнительное поле игнорируется, поскольку на шаге указано, что в файле есть х столбцов.</p>
+    <p>When you import a CSV, Power BI writes a step recording the number of columns the file had at that moment, as <code>columns=x</code>. If somebody later adds a column to the source file and you refresh, <strong>the new column does not appear.</strong> The refresh succeeds, the numbers all update, and the extra field is silently ignored because the step says the file has x columns.</p>
 
-    <p>Никаких ошибок и предупреждений нет. Ежемесячный отчет может работать в течение года без поля, добавленного кем-то в марте, и человек, который в конечном итоге это замечает, обычно тот, кто спрашивает, почему две системы расходятся во мнениях.</p>
+    <p>There is no error and no warning. A monthly report can run for a year without the field somebody added in March, and the person who eventually notices is usually the one asking why two systems disagree.</p>
 
-    <p>Если вы знаете, исправить это просто: откройте «Примененные шаги», отредактируйте исходный шаг и позвольте ему подсчитать новое количество столбцов. Привычка лучше, чем исправление. Всякий раз, когда исходный файл меняет форму, проверяйте шаг импорта, а не доверяйте успешному обновлению, поскольку успех здесь означает выполнение шагов, а не завершение данных.</p>
+    <p>The fix is simple once you know: open the Applied Steps, edit the Source step, and let it pick up the new column count. The habit is better than the fix. Whenever the source file changes shape, check the import step rather than trusting a successful refresh, because success here means the steps ran, not that the data is complete.</p>
 
-    <p>Теперь представьте себе отчет, который вы регулярно обновляете. Если завтра столбец будет добавлен в исходный код, как вы об этом узнаете? В большинстве случаев честным ответом будет: нет, и именно поэтому стоит запомнить эту ловушку.</p>
+    <p>Now picture a report you refresh regularly. If a column were added to its source tomorrow, how would you find out? For most reports the honest answer is that you would not, which is exactly why this trap is worth remembering.</p>
   </div>
 
   <div class="step">
-    <h2>6. Когда файл на самом деле не CSV</h2>
+    <h2>6. When the file is not really a CSV</h2>
 
-    <p>Power BI обрабатывает  <code>.csv</code>  как структурированный с разделителем-запятой, а для обычного текстового файла он пытается выяснить, есть ли вообще разделитель. Обычно это правильно. Два случая, когда это не так, оба задокументированы.</p>
+    <p>Power BI treats a <code>.csv</code> as structured with a comma delimiter, and for a plain text file it tries to work out whether there is a delimiter at all. Usually it is right. Two cases where it is not, both documented.</p>
 
-    <p><strong>Структурированный текст, отличный от CSV.</strong>  Файл, разделенный табуляцией, сохраненный как  <code>.txt</code>  работает нормально, поскольку Power BI обнаруживает вкладку и обрабатывает ее как файл с разделителями. Расширение не решает этого; контент делает.</p>
+    <p><strong>Structured text that is not a CSV.</strong> A tab-separated file saved as <code>.txt</code> works fine, because Power BI detects the tab and treats it as a delimited file. The extension does not decide this; the content does.</p>
 
-    <p><strong>Неструктурированный текст читается в виде таблицы.</strong>    Иногда документ с одинаковым количеством запятых в абзацах интерпретируется как CSV. Исправление находится в редакторе: отредактируйте шаг Источник и измените    <strong>Открыть файл как</strong>  из CSV в текст.</p>
+    <p><strong>Unstructured text read as a table.</strong> Occasionally a document with similar numbers of commas across its paragraphs gets interpreted as a CSV. The fix is in the editor: edit the Source step and change <strong>Open File As</strong> from CSV to Text.</p>
 
-    <p>Существует также  <strong>Разрывы строк</strong>  в том же отредактированном диалоговом окне «Исходный код», определяя, учитываются или игнорируются разрывы строк внутри значений в кавычках. Если одна запись разделилась на две строки или две записи объединились в одну, причина в этом.</p>
+    <p>There is also a <strong>Line breaks</strong> setting on that same edited Source dialog, deciding whether line breaks inside quoted values are honoured or ignored. If a single record has split itself across two rows, or two records have merged into one, that setting is why.</p>
   </div>
 
-  <h2>Полное до и после</h2>
+  <h2>The full before and after</h2>
 
-  <p>Тот же файл, тот же отчет.</p>
+  <p>Same file, same report.</p>
 
   <h3>Before</h3>
   <pre><code>Get data → Text/CSV → Open → Load
@@ -301,7 +301,7 @@ Chart looks wrong: revenue will not sum
 Fix the column in the report view
 Next month: refresh → same problem again
 Six months later: a column added in March is still missing</code></pre>
-  <p>Каждый шаг удался. Столбец дохода был напечатан как текстовый, поскольку в одной строке вверху было «Н/Д», а исправление было применено в отчете, а не в запросе, поэтому оно не сохраняется при обновлении. Недостающий столбец – это  <code>columns=x</code>  шаг, делающий именно то, что было сказано.</p>
+  <p>Every step succeeded. The revenue column was typed as text because one row near the top had "N/A" in it, and the fix was applied in the report rather than in the query, so it does not survive a refresh. The missing column is the <code>columns=x</code> step doing exactly what it was told.</p>
 
   <h3>After</h3>
   <pre><code>Get data → Text/CSV → Open
@@ -310,107 +310,107 @@ Transform Data
 Read the type symbols; set revenue to Decimal, order_date via Using Locale, postcode to Text
 Close &amp; Apply
 Whenever the source changes shape: check the Source step</code></pre>
-  <p>Те же исправления, сделанные в том месте, где они воспроизводятся. Настройка обнаружения для всего набора данных означает, что строка «Н/Д» видна во время импорта, а не обнаруживается по разорванной диаграмме, а шаг языкового стандарта означает, что даты считываются на том языке, на котором они были написаны, а не на том, который используется вашей машиной.</p>
+  <p>The same fixes, made in the place that replays them. Setting detection to the whole dataset means the "N/A" row is seen during import rather than discovered by a broken chart, and the locale step means dates are read in the language they were written in rather than the one your machine happens to use.</p>
 
   <div class="step">
-    <h2>Что пошло не так и как это исправить</h2>
+    <h2>What goes wrong, and the fix</h2>
 
-    <p>Шесть, на которые приходится большая часть этого.</p>
+    <p>Six that account for most of it.</p>
 
-    <p><strong>Символы с акцентом выглядят так  <code>Ã©</code>.</strong>  Происхождение файла. Набор символов не выводится, если файл не имеет метки порядка байтов. Установите UTF-8.</p>
+    <p><strong>Accented characters look like <code>Ã©</code>.</strong> File Origin. The character set is not inferred unless the file carries a byte order mark. Set it to UTF-8.</p>
 
-    <p><strong>Все собралось в одну колонку.</strong>  Неправильный разделитель. Измените его в раскрывающемся списке и посмотрите, как разделен предварительный просмотр.</p>
+    <p><strong>Everything landed in one column.</strong> Wrong delimiter. Change it in the dropdown and watch the preview split.</p>
 
-    <p><strong>Числовой столбец не суммируется.</strong>  Он вводится как текст, обычно из-за разделителя, символа или одного нечислового значения. Установите тип в редакторе, затем отфильтруйте, чтобы найти строку, вызывающую нарушение.</p>
+    <p><strong>A number column will not sum.</strong> It is typed as text, usually because of a separator, a symbol, or one non-numeric value. Set the type in the editor, then filter to find the offending row.</p>
 
-    <p><strong>Сроки сдвинуты на месяц.</strong>  День и месяц поменялись местами. Измените тип, «Использование языкового стандарта» и выберите языковой стандарт, в котором был записан файл.</p>
+    <p><strong>Dates are out by a month.</strong> Day and month swapped. Change Type, Using Locale, and choose the locale the file was written in.</p>
 
-    <p><strong>Новый исходный столбец никогда не появляется.</strong> The <code>columns=x</code>  шаг. Отредактируйте шаг «Исходный код».</p>
+    <p><strong>A new source column never appears.</strong> The <code>columns=x</code> step. Edit the Source step.</p>
 
-    <p><strong>Обновление перерывов в ряду всегда было хорошо.</strong>  Тип был определен на основе первых 200 строк, а более поздняя строка не подходит. Повторный импорт с обнаружением на основе всего набора данных.</p>
+    <p><strong>Refresh breaks on a row that was always fine.</strong> The type was inferred from the first 200 rows and a later row does not fit. Re-import with detection based on the entire dataset.</p>
   </div>
 
-  <h2>Почему он построен таким образом</h2>
+  <h2>Why it is built this way</h2>
 
-  <p>CSV не несет никакой информации о типе. Это текст, запятые и переносы строк, поэтому каждое представление о том, что содержит столбец, должно быть придумано читающей его программой. Выборка первых строк — это разумный компромисс между скоростью и точностью для большого файла, и причина неудачи — структурная, а не небрежность: строка, которая нарушает ваше предположение, обычно редка, а редкие строки — это именно те строки, которые выборка пропускает.</p>
+  <p>A CSV carries no type information whatsoever. It is text, commas and line breaks, so every idea about what a column contains has to be invented by the program reading it. Sampling the first rows is a reasonable compromise between speed and accuracy on a large file, and the reason it fails is structural rather than careless: the row that breaks your assumption is usually rare, and rare rows are exactly the ones a sample misses.</p>
 
-  <p>Это также объясняет, почему исправление — это настройка, а не более разумное предположение. Сканирование всего файла дает правильный ответ за счет времени, и документация Майкрософт прямо говорит об этом. Как только вы увидите раскрывающийся список как набор скорости и уверенности, а не непонятный параметр, выбрать его станет легко: уверенность, когда файл имеет значение, скорость во время исследования.</p>
+  <p>That also explains why the fix is a setting rather than a smarter guess. Scanning the whole file gives a correct answer at the cost of time, and Microsoft's documentation is direct about that trade. Once you see the dropdown as a speed-against-certainty dial rather than an obscure option, choosing it becomes easy: certainty when the file matters, speed while you are exploring.</p>
 
-  <p>The <code>columns=x</code>  шаг следует той же логике. Power Query записывает все, что он нашел, поэтому шаги можно воспроизвести одинаково, а идентичное воспроизведение — это вся ценность инструмента. Цена этой гарантии состоит в том, что изменение формы источника не приветствуется автоматически, что является разумным вариантом по умолчанию и реальной опасностью, если об этом никому не сообщили.</p>
+  <p>The <code>columns=x</code> step follows the same logic. Power Query records what it found so the steps can replay identically, and identical replay is the entire value of the tool. The cost of that guarantee is that a change in the source's shape is not automatically welcomed in, which is a reasonable default and a genuine hazard when nobody has been told.</p>
 
-  <p>Одно замечание по поводу написания этой страницы. Он постоянно просил вас дать ответ, откуда берутся типы, сколько будет стоить ручное исправление позже, прежде чем дать его. Попытка дать ответ до того, как вы увидите правильный, достоверно повышает, насколько хорошо сохраняется правильный ответ, даже если попытка неверна (Бисра, Лю, Несбит, Салими и Винн, 2018,  <em>Обзор педагогической психологии</em>, 30(3), 703–725).</p>
+  <p>One note on the way this page is written. It kept asking you to commit to an answer, where the types come from, what a hand fix costs you later, before giving one. Attempting an answer before seeing the correct one reliably improves how well the correct one is retained, even when the attempt is wrong (Bisra, Liu, Nesbit, Salimi, &amp; Winne, 2018, <em>Educational Psychology Review</em>, 30(3), 703–725).</p>
 
-  <h2>Использование этого в ваших собственных отчетах</h2>
+  <h2>Using this on your own reports</h2>
 
-  <p>Пять привычек по порядку.</p>
+  <p>Five habits, in order.</p>
 
   <ol>
-    <li><strong>Прежде чем нажимать что-либо, прочитайте все три раскрывающихся списка.</strong>  Десять секунд, и они решают остальное.</li>
-    <li><strong>Установить обнаружение для всего набора данных</strong>  ни за что не освежишь. Скорость имеет меньшее значение, чем правильный тип.</li>
-    <li><strong>Всегда преобразуйте данные, а не загружайте.</strong>  Исправления, внесенные в редактор реплеев; исправления, сделанные впоследствии, не делают.</li>
-    <li><strong>Использовать тип изменения, использовать локаль для дат</strong>, всегда, а не просто изменить тип.</li>
-    <li><strong>Проверяйте шаг «Источник» каждый раз, когда форма файла меняется.</strong>  Успешное обновление не является свидетельством прибытия нового столбца.</li>
+    <li><strong>Read all three dropdowns before clicking anything.</strong> Ten seconds, and they decide the rest.</li>
+    <li><strong>Set detection to the entire dataset</strong> for anything you will refresh. Speed matters less than a type that is right.</li>
+    <li><strong>Always Transform Data, never Load.</strong> Fixes made in the editor replay; fixes made afterwards do not.</li>
+    <li><strong>Use Change Type, Using Locale for dates</strong>, always, rather than plain Change Type.</li>
+    <li><strong>Check the Source step whenever the file's shape changes.</strong> A successful refresh is not evidence that a new column arrived.</li>
   </ol>
 
-  <p>Если у вас под рукой есть бумага, один дополнительный рисунок стоит двух минут. Прежде чем импортировать, запишите имена столбцов вашего файла на странице и поместите ожидаемый символ типа рядом с каждым из них. Любой столбец, в котором редактор не согласен с вашим списком, заслуживает внимательного рассмотрения, и такое сравнение занимает меньше времени, чем обнаружение его через ломаную диаграмму.</p>
+  <p>If you have paper nearby, one optional drawing is worth two minutes. Write your file's column names down the page and put the type symbol you expect beside each one, before you import. Any column where the editor disagrees with your list is a column worth looking at properly, and that comparison takes less time than discovering it through a broken chart.</p>
 
-  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: настройка, SQL, Excel, Python и навыки работы с ними.</div>
+  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: getting set up, SQL, Excel, Python, and the working habits around them.</div>
 
-  <h2>Все на одном экране</h2>
+  <h2>The whole thing on one screen</h2>
 
-  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
+  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
 
   <table>
-    <tr><th>Thing</th><th>Что это такое или что оно делает</th></tr>
-    <tr><td>Путь</td><td>Главная → Получить данные → Текст/CSV → выберите файл.</td></tr>
-    <tr><td>Почему угадываются типы</td><td>CSV не содержит информации о типе. Все предполагается.</td></tr>
-    <tr><td>Происхождение файла</td><td>Набор символов. Не выводится, если файл не имеет метки порядка байтов.</td></tr>
-    <tr><td><code>Ã©</code>  вместо  <code>é</code></td><td>Неверное происхождение файла. Установите UTF-8.</td></tr>
-    <tr><td>Параметры разделителя</td><td>Двоеточие, запятая, равенство, точка с запятой, пробел, табуляция, произвольный текст, фиксированная ширина.</td></tr>
-    <tr><td>Все в одной колонке</td><td>Неправильный разделитель.</td></tr>
-    <tr><td>Варианты обнаружения типа</td><td>Первые 200 строк, весь набор данных или выключено (весь текст).</td></tr>
-    <tr><td>Весь набор данных</td><td>Медленная первая загрузка, правильные типы. Предпочитайте его для всего, что вы обновляете.</td></tr>
-    <tr><td>Преобразование данных</td><td>Открывает редактор. Записанные там шаги воспроизводятся при каждом обновлении.</td></tr>
-    <tr><td>Load</td><td>Прямо в модель, без записи очистки. Редко правильный выбор.</td></tr>
-    <tr><td>Введите символы</td><td><code>ABC</code>  текст,  <code>123</code>  целое число,  <code>1.2</code>  десятичная, календарная дата.</td></tr>
-    <tr><td>Использование локали</td><td>Для свиданий. Сообщает Power BI, на каком языке был написан столбец.</td></tr>
-    <tr><td><code>columns=x</code></td><td>Записывает количество столбцов при импорте. Новые исходные столбцы игнорируются.</td></tr>
-    <tr><td>Открыть файл как</td><td>CSV или текст. Исправляет неструктурированный текст, который неправильно читается как таблица.</td></tr>
-    <tr><td>Разрывы строк</td><td>Применить все или игнорировать цитируемые. Исправляет разделенные или объединенные записи.</td></tr>
-    <tr><td>Закрыть и применить</td><td>Сохраняет шаги и загружает данные в модель.</td></tr>
+    <tr><th>Thing</th><th>What it is, or what it does</th></tr>
+    <tr><td>The path</td><td>Home → Get data → Text/CSV → pick the file.</td></tr>
+    <tr><td>Why types are guessed</td><td>A CSV holds no type information. Everything is inferred.</td></tr>
+    <tr><td>File Origin</td><td>The character set. Not inferred unless the file has a byte order mark.</td></tr>
+    <tr><td><code>Ã©</code> instead of <code>é</code></td><td>Wrong File Origin. Set UTF-8.</td></tr>
+    <tr><td>Delimiter options</td><td>Colon, comma, equals, semicolon, space, tab, custom text, fixed width.</td></tr>
+    <tr><td>Everything in one column</td><td>Wrong delimiter.</td></tr>
+    <tr><td>Type detection choices</td><td>First 200 rows, entire dataset, or off (all text).</td></tr>
+    <tr><td>Entire dataset</td><td>Slower first load, correct types. Prefer it for anything you refresh.</td></tr>
+    <tr><td>Transform Data</td><td>Opens the editor. Steps recorded there replay on every refresh.</td></tr>
+    <tr><td>Load</td><td>Straight into the model, no recorded cleaning. Rarely the right choice.</td></tr>
+    <tr><td>Type symbols</td><td><code>ABC</code> text, <code>123</code> whole number, <code>1.2</code> decimal, calendar date.</td></tr>
+    <tr><td>Using Locale</td><td>For dates. Tells Power BI which language the column was written in.</td></tr>
+    <tr><td><code>columns=x</code></td><td>Records the column count at import. New source columns are silently ignored.</td></tr>
+    <tr><td>Open File As</td><td>CSV or Text. Fixes unstructured text misread as a table.</td></tr>
+    <tr><td>Line breaks</td><td>Apply all, or ignore quoted ones. Fixes split or merged records.</td></tr>
+    <tr><td>Close &amp; Apply</td><td>Saves the steps and loads the data into the model.</td></tr>
   </table>
 
-  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Прочитайте символы текста в верхней части редактора, прежде чем что-либо создавать, каждый раз. Каждая тихая проблема CSV проявляется в этом одном ряду символов, и рассмотрение этого вопроса стоит двух секунд по сравнению с полуденным графиком, который не складывается. Если что-то сломалось так, как не описано на этой странице, существует общая  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>.</div>
+  <div class="note"><strong>The one habit to keep.</strong> Read the type symbols across the top of the editor before you build anything, every single time. Every silent CSV problem shows up in that one row of symbols, and looking at it costs two seconds against an afternoon of a chart that will not add up. If something breaks in a way this page does not cover, there is a general <a href="../technical-tenacity/">diagnosis loop for being stuck</a>.</div>
 
-  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Проблема импорта, которую я считаю наиболее тревожной, - это проблема, в которой вообще нет ошибок, когда столбец был добавлен в файл несколько месяцев назад, и с тех пор каждое обновление незаметно исключало его. Что скрывает от вас удачно выглядящее обновление?</p>
+  <p>One last thought, and I would genuinely like other people's answers. The import problem I find most unsettling is the one with no error at all, where a column was added to a file months ago and every refresh since has quietly left it out. What has a successful-looking refresh hidden from you?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Бисра К., Лю К., Несбит Дж. К., Салими Ф. и Винн П. Х. (2018). Побуждение к самообъяснению: метаанализ.  <em>Обзор педагогической психологии</em>, 30(3), 703–725.</li>
-    <li>Майкрософт. Соединитель Текст Power Query/CSV. Получено 8 августа 2026 г. с сайта Learn.microsoft.com/power-query/connectors/text-csv. Ссылается на параметры диалога, поведение при обнаружении типа и ограничение обновления Столбцы=х, которые представляют собой детали продукта, а не результаты исследований.</li>
+    <li>Bisra, K., Liu, Q., Nesbit, J. C., Salimi, F., &amp; Winne, P. H. (2018). Inducing self-explanation: A meta-analysis. <em>Educational Psychology Review</em>, 30(3), 703–725.</li>
+    <li>Microsoft. Power Query Text/CSV connector. Retrieved 8 August 2026 from learn.microsoft.com/power-query/connectors/text-csv. Cited for dialog options, type-detection behaviour and the columns=x refresh limitation, which are product details rather than research findings.</li>
   </ul>
 
   <div class="book">
-    <strong>Файл загрузился, и столбец появился в виде текста, который теперь наследуется всеми последующими мерами.</strong>
-    <p><em>Power BI для аналитиков</em>  составляет 187 страниц, этапы импорта и моделирования, которые определяют, что представляет собой столбец, прежде чем визуальный элемент его прочитает.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/power-bi-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=power-bi-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-import-a-csv-into-power-bi'})">Power BI для аналитиков, 19 долларов США →</a>
+    <strong>The file loaded and a column came in as text, which every measure downstream now inherits.</strong>
+    <p><em>Power BI for Analysts</em> is 187 pages, the import and modelling steps that decide what a column is before a visual ever reads it.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/power-bi-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=power-bi-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-import-a-csv-into-power-bi'})">Power BI for Analysts, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>Файл находится. Теперь создайте модель.</strong>
-    <p style="margin:6px 0 0">The <a href="../../powerbi/">Комплект Power BI</a>  описывает отношения, модель данных и DAX в том порядке, в котором их встречает аналитик, начиная с различия, которое всех сбивает с толку:  <a href="../powerbi-measures-vs-columns/">вычисляемые столбцы против мер</a>.</p>
-    <a class="btn" href="../../powerbi/">Откройте комплект Power BI →</a>
+    <strong>The file is in. Now build the model.</strong>
+    <p style="margin:6px 0 0">The <a href="../../powerbi/">Power BI Kit</a> covers relationships, the data model and DAX in the order an analyst meets them, starting with the distinction that trips up everyone: <a href="../powerbi-measures-vs-columns/">calculated columns against measures</a>.</p>
+    <a class="btn" href="../../powerbi/">Open the Power BI Kit →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../install-power-bi-desktop/">Установите Рабочий стол Power BI</a> · <a href="../powerbi-measures-vs-columns/">Столбцы против мер</a> · <a href="../connect-excel-to-a-database/">Подключите Excel к базе данных</a> · <a href="../excel-character-encoding/">Кодировка символов</a> · <a href="../excel-csv-import-leading-zeros/">CSV ведущие нули</a> · <a href="../free-datasets-to-practice-with/">Бесплатные наборы данных</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../excel-dashboard-build-order/">порядок сборки приборной панели</a> · <a href="../choose-the-right-chart/">Выберите правильный график</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../powerbi/">Комплект Power BI</a> · <a href="../../excel/">Excel комплект</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
+    <a href="../../">← Analyst Prep Kit</a> · <a href="../install-power-bi-desktop/">Install Power BI Desktop</a> · <a href="../powerbi-measures-vs-columns/">Columns vs Measures</a> · <a href="../connect-excel-to-a-database/">Connect Excel to a Database</a> · <a href="../excel-character-encoding/">Character Encoding</a> · <a href="../excel-csv-import-leading-zeros/">CSV Leading Zeros</a> · <a href="../free-datasets-to-practice-with/">Free Datasets</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../excel-dashboard-build-order/">Dashboard Build Order</a> · <a href="../choose-the-right-chart/">Choose the Right Chart</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../powerbi/">Power BI Kit</a> · <a href="../../excel/">Excel Kit</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

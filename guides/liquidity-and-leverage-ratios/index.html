@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Соотношение текущей ликвидности и коэффициент быстрой ликвидности, а также долг к собственному капиталу — комплект для подготовки аналитика</title>
-<meta name="description" content="Три балансовых коэффициента и определения, определяющие их ответы. Коэффициент текущей ликвидности 2,40, что не хватает на 200 000 долларов для оплаты счетов, коэффициент быстрой ликвидности 1,04 или 1,10 в тот же день и соотношение долга к собственному капиталу 0,70 или 1,04 для одной компании.">
+<title>Current Ratio vs Quick Ratio, and Debt to Equity — Analyst Prep Kit</title>
+<meta name="description" content="Three balance-sheet ratios and the definitions that decide their answers. A 2.40 current ratio that is $200,000 short of paying the bills, a quick ratio that is 1.04 or 1.10 on the same day, and debt to equity of 0.70 or 1.04 for one company.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/liquidity-and-leverage-ratios/">
-<meta property="og:title" content="Текущее соотношение против быстрого коэффициента и долга к собственному капиталу">
-<meta property="og:description" content="Компания с более здоровым коэффициентом текущей ликвидности – это та, которая не сможет оплатить счета в следующем квартале. Ликвидность и кредитное плечо работали над двумя реальными балансами, а также с определениями, которые меняют ответ.">
+<meta property="og:title" content="Current Ratio vs Quick Ratio, and Debt to Equity">
+<meta property="og:description" content="The company with the healthier current ratio is the one that cannot pay next quarter's bills. Liquidity and leverage worked on two real balance sheets, plus the definitions that change the answer.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/liquidity-and-leverage-ratios.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/liquidity-and-leverage-ratios/">
@@ -136,18 +136,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-кит</a> · <a href="../">Все руководства</a></p>
-  <h1>Текущее соотношение против быстрого коэффициента и долга к собственному капиталу</h1>
-  <p class="meta">Три балансовых коэффициента и определения, которые определяют, о чем говорит каждый из них · Около 20 минут · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-11">11 августа 2026 г.</time></p>
+  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../sql/">SQL Kit</a> · <a href="../">All guides</a></p>
+  <h1>Current Ratio vs Quick Ratio, and Debt to Equity</h1>
+  <p class="meta">Three balance-sheet ratios, and the definitions that decide what each one says · About 20 minutes · Part of the <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-11">August 11, 2026</time></p>
 
-  <p>В конце этой страницы вы можете просмотреть баланс и ответить на два вопроса, которые кредитор задает в первую очередь: может ли эта компания оплатить векселя, срок погашения которых приближается, и какая их часть была куплена на заемные деньги. Вы будете знать три соотношения, SQL для каждого из них и четыре места, где определение, а не арифметика, решает ответ.</p>
+  <p>By the end of this page you can look at a balance sheet and answer two questions a lender asks first: can this company pay the bills that are about to come due, and how much of it was bought with borrowed money. You will know the three ratios, the SQL for all of them, and the four places where the definition, not the arithmetic, decides the answer.</p>
 
-  <p>Сегодня нужно сделать одно дело, и оно займет пять минут. Найдите любой баланс, свой или публичной компании. Сложите денежные средства и дебиторскую задолженность, а затем сравните их со счетами, подлежащими оплате в течение года. Если первое число меньше, компания полагается на продажу запасов для осуществления своих платежей, и это другой бизнес, чем предполагают общие суммы.</p>
+  <p>One thing to do today, and it takes five minutes. Find any balance sheet, yours or a public company's. Add up cash and receivables, then compare that to the bills due within the year. If the first number is smaller, the company is relying on selling inventory to make its payments, and that is a different business than the totals suggest.</p>
 
-  <p>Оба вопроса в одной строке: коэффициенты ликвидности сравнивают то, что вы можете вскоре превратить в наличные, с тем, что вы вскоре должны. Коэффициенты кредитного плеча сравнивают то, что заимствовано, с тем, что находится в собственности.</p>
+  <p>Both questions in one line: liquidity ratios compare what you can turn into cash soon against what you owe soon. Leverage ratios compare what is borrowed against what is owned.</p>
 
-  <p>Разрыв между двумя компаниями, которые выглядят одинаково здоровыми, — это то, на что стоит обратить внимание в первую очередь.</p>
+  <p>The gap between two companies that look equally healthy is the thing worth seeing first.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 320" role="img" aria-labelledby="lqTitle lqDesc" xmlns="http://www.w3.org/2000/svg">
@@ -191,54 +191,54 @@
         <text x="530" y="308" font-size="20" font-weight="700" fill="#B45309" text-anchor="middle">✕</text>
       </g>
     </svg>
-    <figcaption>Текущие активы двух компаний, каждая из которых измеряется по своему сроку погашения счетов. Столбец Риджуэй выше, поэтому коэффициент текущей ликвидности выглядит лучше. Только твердая часть может оплатить счет, а твердая часть Риджуэя не дотягивает до линии на сумму, отмеченную скобкой.</figcaption>
+    <figcaption>Two companies' current assets, each measured against its own bills-due line. Ridgeway's column is taller, which is what makes its current ratio look better. Only the solid part can pay a bill, and Ridgeway's solid part stops short of the line by the amount the bracket marks.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>Что вы узнаете</strong>
+    <strong>What you'll learn</strong>
     <ol>
-      <li>Два вопроса, на которые отвечает баланс</li>
-      <li>Коэффициент текущей ликвидности и что означает «текущий»</li>
-      <li>Коэффициент быстрой ликвидности и почему он снижает запасы</li>
-      <li>Долг перед собственным капиталом и слово, имеющее два значения</li>
-      <li>Запрос и деление, возвращающее 1</li>
-      <li>Бенчмарки и почему высокий показатель может быть плохой новостью</li>
-      <li>Полное до и после</li>
-      <li>Крайние случаи: снимок легко переместить</li>
-      <li>Почему это работает</li>
-      <li>Использование этого на ваших собственных номерах</li>
-      <li>Все на одном экране</li>
+      <li>Two questions a balance sheet answers</li>
+      <li>The current ratio, and what "current" means</li>
+      <li>The quick ratio, and why it drops inventory</li>
+      <li>Debt to equity, and the word that has two meanings</li>
+      <li>The query, and the division that returns 1</li>
+      <li>Benchmarks, and why a high ratio can be bad news</li>
+      <li>The full before and after</li>
+      <li>Edge cases: a snapshot is easy to move</li>
+      <li>Why this works</li>
+      <li>Using this on your own numbers</li>
+      <li>The whole thing on one screen</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Каждый номер на этой странице проверен, и вы можете их проверить.</strong>  Два балансовых отчета показаны полностью ниже, построчно. Каждое соотношение, разрыв и квартальный показатель были рассчитаны в SQLite и проверены в pandas перед тем, как они появятся на странице, поэтому вы можете сложить любой столбец вручную, и все будет в порядке.</div>
+  <div class="note"><strong>Every number on this page is verified, and you can check them.</strong> Two balance sheets are shown in full below, line by line. Every ratio, gap and quarterly figure was computed in SQLite and cross-checked in pandas before it went on the page, so you can add up any column by hand and it will agree.</div>
 
   <div class="step">
-    <h2>1. Два вопроса, на которые отвечает балансовый отчет</h2>
+    <h2>1. Two questions a balance sheet answers</h2>
 
-    <p>В прошлом году компания заработала 560 000 долларов прибыли. Назовите что-нибудь, что могло бы вывести компанию из бизнеса в марте.</p>
+    <p>A company made $560,000 of profit last year. Name something that could still put it out of business in March.</p>
 
-    <p>Закончились наличные. Прибыль и денежные средства — это не одно и то же, и компания может быть прибыльной на бумаге, не имея ничего на счету в тот день, когда поставщик хочет заплатить. Отчет о прибылях и убытках сообщает вам, приносит ли бизнес прибыль; балансовый отчет сообщает вам, может ли он заплатить.</p>
+    <p>Running out of cash. Profit and cash are not the same thing, and a company can be profitable on paper while having nothing in the bank on the day a supplier wants paying. The income statement tells you whether the business earns; the balance sheet tells you whether it can pay.</p>
 
-    <p>Балансовый отчет — это снимок на одну конкретную дату. В нем перечислено то, чем владеет компания, называемое активами, то, что она должна, называемое обязательствами, и разница между ними, называемая собственным капиталом. Два вопроса о ней задают чаще, чем все остальные вместе взятые.</p>
+    <p>A balance sheet is a snapshot on one specific date. It lists what the company owns, called assets, what it owes, called liabilities, and the difference between them, called equity. Two questions are asked of it more often than all the others put together.</p>
 
-    <p><strong>Ликвидность: можем ли мы покрыть предстоящие платежи тем, что вскоре сможем превратить в наличные?</strong>  Это вопрос о ближайшей перспективе, обычно о следующих двенадцати месяцах, и ответом на него служат коэффициент текущей ликвидности и коэффициент быстрой ликвидности.</p>
+    <p><strong>Liquidity: can we cover what is due soon with what we can turn into cash soon?</strong> That is a question about the near term, usually the next twelve months, and it is answered by the current ratio and the quick ratio.</p>
 
-    <p><strong>Кредитное плечо: какая часть этой компании была оплачена заемными деньгами?</strong>  Это вопрос о риске в долгосрочной перспективе, и ответом на него является отношение долга к собственному капиталу. Заемные деньги должны быть погашены по графику независимо от того, будет ли у бизнеса хороший год, и именно поэтому кредитное плечо превращает плохой квартал в кризис.</p>
+    <p><strong>Leverage: how much of this company was paid for with borrowed money?</strong> That is a question about risk over the long term, and it is answered by debt to equity. Borrowed money has to be repaid on a schedule whether or not the business has a good year, which is what makes leverage the thing that turns a bad quarter into a crisis.</p>
 
-    <p>В обоих вопросах используется один и тот же прием: разделите одну часть баланса на другую, чтобы ответ не зависел от размера компании.</p>
+    <p>Both questions use the same trick: divide one part of the balance sheet by another so the answer does not depend on how big the company is.</p>
   </div>
 
   <div class="step">
-    <h2>2. Коэффициент текущей ликвидности и что означает «текущий»</h2>
+    <h2>2. The current ratio, and what "current" means</h2>
 
-    <p>Что, по вашему мнению, делает актив «текущим»?</p>
+    <p>What do you think makes an asset "current"?</p>
 
-    <p>Время. «Текущий» означает «в течение одного года», и это единственное, что здесь означает это слово. Текущий актив — это денежные средства или что-то, что, как ожидается, станет денежными в течение года: деньги, которые клиенты вам должны, запасы, которые вы планируете продать, расходы, которые вы предоплатили. Текущие обязательства — это счета, подлежащие оплате в течение года: деньги, которые вы должны поставщикам, начисленная, но еще не выплаченная заработная плата, часть кредита, подлежащая погашению в этом году.</p>
+    <p>Time. "Current" means within one year, and it is the only thing the word means here. A current asset is cash, or something expected to become cash within a year: money customers owe you, inventory you expect to sell, expenses you have prepaid. A current liability is a bill due within a year: money you owe suppliers, wages accrued but not yet paid, the slice of a loan repayable this year.</p>
 
-    <p>Коэффициент текущей ликвидности представляет собой текущие активы, разделенные на текущие обязательства. Значение выше 1,0 означает, что скоро прибудет больше, чем скоро уйдет. Значение ниже 1,0 означает, что компании нужно найти деньги где-то еще, чтобы прожить год.</p>
+    <p>The current ratio is current assets divided by current liabilities. Above 1.0 means there is more coming in soon than going out soon. Below 1.0 means the company needs to raise money from somewhere else to get through the year.</p>
 
-    <p>Вот первый из двух наших балансов по состоянию на 31 декабря 2024 года.</p>
+    <p>Here is the first of our two balance sheets, at 31 December 2024.</p>
 
     <div class="tw">
 
@@ -247,33 +247,33 @@
       <tr><td>Cash</td><td>260,000</td></tr>
       <tr><td>Receivables</td><td>470,000</td></tr>
       <tr><td>Inventory</td><td>490,000</td></tr>
-      <tr><td>Предоплаченные расходы</td><td>40,000</td></tr>
-      <tr><td><strong>Оборотные активы</strong></td><td><strong>1,260,000</strong></td></tr>
-      <tr><td>Кредиторская задолженность</td><td>430,000</td></tr>
-      <tr><td>Начисленные расходы</td><td>145,000</td></tr>
-      <tr><td>Краткосрочный долг</td><td>125,000</td></tr>
-      <tr><td><strong>Текущие обязательства</strong></td><td><strong>700,000</strong></td></tr>
-      <tr><td>Долгосрочный долг</td><td>1,065,000</td></tr>
+      <tr><td>Prepaid expenses</td><td>40,000</td></tr>
+      <tr><td><strong>Current assets</strong></td><td><strong>1,260,000</strong></td></tr>
+      <tr><td>Accounts payable</td><td>430,000</td></tr>
+      <tr><td>Accrued expenses</td><td>145,000</td></tr>
+      <tr><td>Short-term debt</td><td>125,000</td></tr>
+      <tr><td><strong>Current liabilities</strong></td><td><strong>700,000</strong></td></tr>
+      <tr><td>Long-term debt</td><td>1,065,000</td></tr>
       <tr><td>Equity</td><td>1,700,000</td></tr>
     </table>
 
     </div>
 
-    <p>Коэффициент текущей ликвидности: 1 260 000 разделить на 700 000 — 1,80. На каждый доллар, подлежащий погашению в течение года, ожидается поступление в течение года активов на сумму восемьдесят долларов. Это кажется удобным, и для этой компании это так.</p>
+    <p>Current ratio: 1,260,000 divided by 700,000 is 1.80. For every dollar due within the year, there is a dollar eighty of assets expected to arrive within the year. That reads as comfortable, and for this company it is.</p>
   </div>
 
   <div class="step">
-    <h2>3. Коэффициент быстрой ликвидности и почему он снижает запасы</h2>
+    <h2>3. The quick ratio, and why it drops inventory</h2>
 
-    <p>О денежных средствах, дебиторской задолженности и товарно-материальных запасах, которые могут превратиться в деньги за шесть месяцев, а могут никогда не превратиться во все это?</p>
+    <p>Of cash, receivables and inventory, which one might take six months to turn into money, and might never turn into all of it?</p>
 
-    <p>Инвентарь. Это текущий актив, потому что вы планируете продать его в течение года, и слово «ожидать» в этом предложении выполняет большую работу. Шток может сидеть. Он может выйти из моды, истечь, или для его перемещения потребуется скидка. За дебиторской задолженностью можно гоняться, и наличные уже есть наличные, но запасы — это план, а не платеж.</p>
+    <p>Inventory. It is a current asset because you expect to sell it inside a year, and "expect" is doing a lot of work in that sentence. Stock can sit. It can go out of fashion, expire, or need discounting to move. Receivables can be chased and cash is already cash, but inventory is a plan, not a payment.</p>
 
-    <p>Таким образом, коэффициент быстрой ликвидности проводит тот же тест с учетом запасов. Он спрашивает, сможет ли компания покрыть свои краткосрочные счета, если вообще ничего на полке не будет продано. Выше 1,0 означает да.</p>
+    <p>So the quick ratio runs the same test with inventory taken out. It asks whether the company could meet its near-term bills if nothing on the shelf sold at all. Above 1.0 means yes.</p>
 
-    <p>Коэффициент быстрой ликвидности Нортлайт: 1 260 000 минус 490 000 запасов составляет 770 000, деленное на 700 000, что составляет 1,10. Он очищает планку, ничего не продавая.</p>
+    <p>Northlight's quick ratio: 1,260,000 minus 490,000 of inventory is 770,000, divided by 700,000, which is 1.10. It clears the bar without selling a thing.</p>
 
-    <p>Теперь вторая компания, и здесь два соотношения расходятся.</p>
+    <p>Now the second company, and this is where the two ratios come apart.</p>
 
     <div class="tw">
 
@@ -282,83 +282,83 @@
       <tr><td>Cash</td><td>90,000</td></tr>
       <tr><td>Receivables</td><td>190,000</td></tr>
       <tr><td>Inventory</td><td>900,000</td></tr>
-      <tr><td>Предоплаченные расходы</td><td>20,000</td></tr>
-      <tr><td><strong>Оборотные активы</strong></td><td><strong>1,200,000</strong></td></tr>
-      <tr><td>Кредиторская задолженность</td><td>310,000</td></tr>
-      <tr><td>Начисленные расходы</td><td>105,000</td></tr>
-      <tr><td>Краткосрочный долг</td><td>85,000</td></tr>
-      <tr><td><strong>Текущие обязательства</strong></td><td><strong>500,000</strong></td></tr>
-      <tr><td>Долгосрочный долг</td><td>520,000</td></tr>
+      <tr><td>Prepaid expenses</td><td>20,000</td></tr>
+      <tr><td><strong>Current assets</strong></td><td><strong>1,200,000</strong></td></tr>
+      <tr><td>Accounts payable</td><td>310,000</td></tr>
+      <tr><td>Accrued expenses</td><td>105,000</td></tr>
+      <tr><td>Short-term debt</td><td>85,000</td></tr>
+      <tr><td><strong>Current liabilities</strong></td><td><strong>500,000</strong></td></tr>
+      <tr><td>Long-term debt</td><td>520,000</td></tr>
       <tr><td>Equity</td><td>1,250,000</td></tr>
     </table>
 
     </div>
 
-    <p>Коэффициент текущей ликвидности Риджуэй составляет 1 200 000, разделенный на 500 000, что составляет 2,40. Это на треть лучше, чем 1,80 у Нортлайт, и на странице, где указан только текущий коэффициент, Риджуэй выглядит более здоровой компанией.</p>
+    <p>Ridgeway's current ratio is 1,200,000 divided by 500,000, which is 2.40. That is a third better than Northlight's 1.80, and on a page that only carried the current ratio, Ridgeway is the healthier company.</p>
 
-    <p>Его коэффициент быстрой ликвидности равен 1 200 000 минус 900 000, что составляет 300 000, разделенное на 500 000, что составляет 0,60. На сумму $500 000 по счетам, подлежащим оплате в течение года, у Риджуэй есть $300 000, которые она действительно может потратить. Ему не хватает 200 000 долларов, и единственный способ закрыть этот разрыв — продавать запасы быстрее, чем они продавались.</p>
+    <p>Its quick ratio is 1,200,000 minus 900,000, which is 300,000, divided by 500,000, which is 0.60. Against $500,000 of bills due inside the year, Ridgeway has $300,000 it can actually spend. It is $200,000 short, and the only way to close that gap is to sell inventory faster than it has been selling it.</p>
 
-    <p>Две компании рядом.</p>
+    <p>The two companies side by side.</p>
 
     <div class="tw">
 
       <table>
-      <tr><th>Ratio</th><th>Northlight</th><th>Ridgeway</th><th>Что там написано</th></tr>
-      <tr><td>Коэффициент текущей ликвидности</td><td>1.80</td><td>2.40</td><td>Риджуэй выглядит сильнее</td></tr>
-      <tr><td>Быстрый коэффициент</td><td>1.10</td><td>0.60</td><td>Риджуэй не сможет заплатить, не продав акции</td></tr>
-      <tr><td>Запасы как доля оборотных активов</td><td>39%</td><td>75%</td><td>Вся причина разворота</td></tr>
+      <tr><th>Ratio</th><th>Northlight</th><th>Ridgeway</th><th>What it says</th></tr>
+      <tr><td>Current ratio</td><td>1.80</td><td>2.40</td><td>Ridgeway looks stronger</td></tr>
+      <tr><td>Quick ratio</td><td>1.10</td><td>0.60</td><td>Ridgeway cannot pay without selling stock</td></tr>
+      <tr><td>Inventory as a share of current assets</td><td>39%</td><td>75%</td><td>The whole reason for the reversal</td></tr>
     </table>
 
     </div>
 
-    <p>Претензия, которую заслуживает эта страница, в одном предложении:  <strong>Текущий коэффициент Риджуэй на 33% лучше, чем у Нортлайт, и ему не хватает 200 000 долларов для оплаты счетов в следующем году.</strong>  Вот почему существует коэффициент быстрой ликвидности и почему никто из тех, кто дает деньги в долг, не читает коэффициент текущей ликвидности сам по себе.</p>
+    <p>The claim this page earns, in one sentence: <strong>Ridgeway's current ratio is 33% better than Northlight's and it is $200,000 short of paying next year's bills.</strong> That is why the quick ratio exists, and why nobody who lends money reads the current ratio on its own.</p>
 
-    <p>Прежде чем читать дальше, скажите своими словами, почему большая куча оборотных активов может оказаться более слабой позицией.</p>
+    <p>Say why a bigger pile of current assets can be the weaker position, in your own words, before reading on.</p>
 
     <p>One more thing about the quick ratio, because it is the first place a definition changes the answer. Some texts define it as current assets minus inventory. Others define it as cash plus marketable securities plus receivables, added up from the top instead of subtracted from the total. Those are not the same. On Northlight's balance sheet the first gives 770,000 and a quick ratio of 1.10; the second gives 730,000 and a quick ratio of 1.04, because prepaid expenses are in current assets and are not something you can pay a supplier with. Same company, same day, two defensible answers 0.06 apart. Write down which one you used.</p>
   </div>
 
   <div class="step">
-    <h2>4. Долг перед собственным капиталом и слово, имеющее два значения</h2>
+    <h2>4. Debt to equity, and the word that has two meanings</h2>
 
-    <p>Общая задолженность компании составляет 1 765 000 долларов США, из которых 575 000 долларов США — это неоплаченные счета поставщиков. Это «долг» в 575 000 долларов?</p>
+    <p>A company owes $1,765,000 in total, of which $575,000 is unpaid supplier invoices. Is that $575,000 "debt"?</p>
 
-    <p>Это зависит от того, кто спрашивает, и это единственная наиболее распространенная причина, по которой два человека рассчитывают разные соотношения долга к собственному капиталу на основе одного и того же балансового отчета.</p>
+    <p>It depends who is asking, and this is the single most common reason two people compute different debt-to-equity ratios from the same balance sheet.</p>
 
-    <p>Соотношение долга к собственному капиталу делит то, что компания взяла взаймы, на то, что владельцы вложили и оставили. Собственный капитал — это совокупные активы за вычетом совокупных обязательств: часть компании, на которую никто больше не имеет претензий. Коэффициент 0,50 означает, что на каждый принадлежащий доллар приходится пятьдесят центов. Коэффициент 2,00 означает, что на каждый принадлежащий доллар приходится два доллара, взятых в долг, и плохой год теперь угрожает деньгам кредиторов, а также денег владельцев.</p>
+    <p>Debt to equity divides what the company borrowed by what the owners put in and left in. Equity is total assets minus total liabilities: the slice of the company nobody else has a claim on. A ratio of 0.50 means fifty cents borrowed for every dollar owned. A ratio of 2.00 means two dollars borrowed for every dollar owned, and a bad year now threatens the lenders' money as well as the owners'.</p>
 
-    <p>Разногласия возникли по поводу числителя.  <strong>Процентный долг</strong>  учитывает только деньги, которые были взяты в долг и на которые начисляются проценты: кредиты, облигации, линия краткосрочных заимствований.  <strong>Итого обязательства</strong>  подсчитывает все, что компания кому-либо должна, включая счета-фактуры поставщиков и начисленную заработную плату, по которой нет процентов и графика погашения.</p>
+    <p>The disagreement is over the numerator. <strong>Interest-bearing debt</strong> counts only money that was borrowed and carries interest: loans, bonds, the short-term borrowings line. <strong>Total liabilities</strong> counts everything the company owes anyone, including supplier invoices and accrued wages, which carry no interest and no repayment schedule.</p>
 
-    <p>На Нортлайт запустите оба.</p>
+    <p>On Northlight, run both.</p>
 
     <div class="tw">
 
       <table>
-      <tr><th>Definition</th><th>Numerator</th><th>Долг к собственному капиталу</th></tr>
-      <tr><td>Процентный долг</td><td>125,000 + 1,065,000 = 1,190,000</td><td>0.70</td></tr>
-      <tr><td>Итого обязательства</td><td>700,000 + 1,065,000 = 1,765,000</td><td>1.04</td></tr>
+      <tr><th>Definition</th><th>Numerator</th><th>Debt to equity</th></tr>
+      <tr><td>Interest-bearing debt</td><td>125,000 + 1,065,000 = 1,190,000</td><td>0.70</td></tr>
+      <tr><td>Total liabilities</td><td>700,000 + 1,065,000 = 1,765,000</td><td>1.04</td></tr>
     </table>
 
     </div>
 
-    <p>Оба делятся на одинаковые 1 700 000 долларов собственного капитала. Один говорит, что компания имеет скромные заимствования. Другой говорит, что он должен немного больше, чем имеет. Разрыв составляет $575 000 кредиторской задолженности и начислений, по которым не начисляются проценты, а в более широком определении эта компания на 48% выше.</p>
+    <p>Both divide by the same $1,700,000 of equity. One says the company is modestly borrowed. The other says it owes slightly more than it owns. The gap is the $575,000 of payables and accruals that carry no interest, and the wider definition is 48% higher on this company.</p>
 
-    <p>Ни то, ни другое не является неправильным. Кредитный аналитик обычно хочет иметь процентные долги, потому что именно они должны обслуживаться по графику. В учебнике по бухгалтерскому учету обычно имеется в виду общая сумма обязательств. Выберите один, назовите его в заголовке столбца и никогда не сравнивайте коэффициент, построенный одним способом, с коэффициентом, построенным другим способом. Для справки, у Риджуэя 0,48 в узком разрешении и 0,82 в широком.</p>
+    <p>Neither is wrong. A credit analyst usually wants interest-bearing debt, because that is what has to be serviced on a schedule. An accounting textbook usually means total liabilities. Pick one, name it in the column header, and never compare a ratio built one way against a ratio built the other. Ridgeway, for the record, is 0.48 on the narrow definition and 0.82 on the wide one.</p>
   </div>
 
   <div class="step">
-    <h2>5. Запрос и деление, возвращающее 1</h2>
+    <h2>5. The query, and the division that returns 1</h2>
 
-    <p>В SQL текущие активы в размере 1 260 000 делятся на текущие обязательства в размере 700 000, оба значения хранятся в виде целых чисел. Что возвращается?</p>
+    <p>In SQL, current assets of 1,260,000 divided by current liabilities of 700,000, both stored as whole numbers. What comes back?</p>
 
-    <p>1. Не 1,80. Целое число, разделенное на целое число, в большинстве баз данных дает целое число, поэтому 0,80 отбрасывается. Здесь это хуже, чем в процентах, потому что 1 — вполне правдоподобный коэффициент текущей ликвидности. Оно находится точно на грани между покрытым и непокрытым, поэтому у читателя нет причин в нем сомневаться.</p>
+    <p>1. Not 1.80. Whole number divided by whole number gives a whole number in most databases, so the 0.80 is discarded. This is nastier here than in a percentage, because 1 is a perfectly plausible current ratio. It sits exactly on the line between covered and not covered, so a reader has no reason to doubt it.</p>
 
-    <p>Посмотрите, что он делает со всеми тремя соотношениями на Нортлайт.</p>
+    <p>Watch what it does to all three ratios on Northlight.</p>
 
     <div class="tw">
 
       <table>
-      <tr><th>Что ты пишешь</th><th>Returns</th><th>Правда</th></tr>
+      <tr><th>What you write</th><th>Returns</th><th>The truth</th></tr>
       <tr><td><code>current_assets / current_liabilities</code></td><td>1</td><td>1.80</td></tr>
       <tr><td><code>(current_assets - inventory) / current_liabilities</code></td><td>1</td><td>1.10</td></tr>
       <tr><td><code>total_debt / equity</code></td><td>0</td><td>0.70</td></tr>
@@ -367,9 +367,9 @@
 
     </div>
 
-    <p>Последний ряд самый опасный.  <code>ROUND</code>    делает вывод похожим на десятичное вычисление, поэтому столбец читает 1,0, 1,0 и 0,0 вниз по странице, и ничто не указывает на то, что арифметика никогда не выполнялась. В Риджуэй та же самая ошибка возвращает текущий коэффициент 2 и коэффициент быстрой ликвидности 0, что превращает «0,60, и это коротко» в «0, и у него ничего нет», другая и столь же неправильная история.</p>
+    <p>The last row is the dangerous one. <code>ROUND</code> makes the output look like a decimal calculation, so the column reads 1.0 and 1.0 and 0.0 down the page and nothing suggests the arithmetic never happened. On Ridgeway the same bug returns a current ratio of 2 and a quick ratio of 0, which turns "0.60, and it is short" into "0, and it has nothing", a different and equally wrong story.</p>
 
-    <p>Исправление - один символ в трех местах. Умножить на  <code>1.0</code>  перед делением, и все выражение становится десятичным.</p>
+    <p>The fix is one character in three places. Multiply by <code>1.0</code> before dividing, and the whole expression goes decimal.</p>
 
     <pre><code>SELECT company,
        ROUND(1.0 * current_assets / current_liabilities, 2)               AS current_ratio,
@@ -379,38 +379,38 @@ FROM balance_sheet
 WHERE as_of = '2024-12-31'
 ORDER BY company;</code></pre>
 
-    <p>Это возвращает 1,80/1,10/0,70 для Нортлайта и 2,40/0,60/0,48 для Риджуэя. Это же правило фиксирует каждое соотношение, которое вы когда-либо писали в SQL, но в другом направлении оно действует.  <a href="../gross-vs-operating-vs-net-margin/">валовая, операционная и чистая прибыль</a>, где то же деление возвращает 0 вместо 1.</p>
+    <p>That returns 1.80 / 1.10 / 0.70 for Northlight and 2.40 / 0.60 / 0.48 for Ridgeway. The same rule catches every ratio you will ever write in SQL, and it is worked from the other direction in <a href="../gross-vs-operating-vs-net-margin/">gross vs operating vs net margin</a>, where the same division returns 0 instead of 1.</p>
 
-    <p>Теперь  <code>WHERE as_of</code>  линия, которая имеет большее значение, чем кажется. Таблица баланса обычно содержит несколько снимков, по одному за квартал или за месяц. Оставьте фильтр выключенным и  <code>SUM</code>    спокойно складывает четыре даты. Суммирование четырех снимков Нортлайт за 2024 год дает текущий коэффициент 1,92; на конец года показатель составляет 1,80. Оба варианта правдоподобны, только один — это коэффициент текущей ликвидности компании, и ничто в выходных данных не говорит вам, какой из них вы получили.</p>
+    <p>Now the <code>WHERE as_of</code> line, which matters more than it looks. A balance sheet table usually holds several snapshots, one per quarter or per month. Leave the filter off and <code>SUM</code> quietly adds four dates together. Northlight's four 2024 snapshots summed give a current ratio of 1.92; the year-end figure is 1.80. Both are plausible, only one is the company's current ratio, and nothing in the output tells you which you got.</p>
 
-    <p>Представьте себе балансовую таблицу вашей компании. Сколько дат в нем и фильтруется ли унаследованный вами запрос к одной из них? Эта проверка занимает десять секунд, и ее стоит сделать, прежде чем доверять любому соотношению, которое вы не написали сами.</p>
+    <p>Picture your own company's balance-sheet table. How many dates are in it, and does the query you inherited filter to one of them? That check takes ten seconds and it is worth doing before you trust any ratio you did not write yourself.</p>
   </div>
 
   <div class="step">
-    <h2>6. Контрольные показатели и почему высокий показатель может быть плохой новостью</h2>
+    <h2>6. Benchmarks, and why a high ratio can be bad news</h2>
 
-    <p>Коэффициент текущей ликвидности компании составляет 6,0. Назовите причину, которая может быть нехорошей.</p>
+    <p>A company's current ratio is 6.0. Name a reason that might not be good.</p>
 
-    <p>Пустые деньги. Активы, находящиеся в наличных деньгах или непроданных акциях, — это активы, которые не используются для чего-либо выращивания. Коэффициент текущей ликвидности, намного превышающий потребности бизнеса, обычно означает денежные средства, которым компания не нашла применения, или запасы, которые она не может переместить. Ни кризис, ни сила.</p>
+    <p>Idle money. Assets sitting in cash or unsold stock are assets not being used to grow anything. A current ratio far above what the business needs usually means cash the company has not found a use for, or inventory it cannot shift. Neither is a crisis, and neither is a strength.</p>
 
-    <p>Обычный комфортный диапазон составляет примерно от 1,5 до 3,0 для коэффициента текущей ликвидности и 1,0 или выше для коэффициента быстрой ликвидности, но рассматривайте их как отправную точку, а не как правила. Супермаркет получает наличные на кассе и через несколько недель расплачивается с поставщиками, поэтому показатель благополучно падает ниже 1,0 и так было всегда. Судостроитель годами хранит огромные товарно-материальные запасы и зарабатывает гораздо больше. Группа принадлежит отрасли, а не бухгалтерскому учету.</p>
+    <p>The usual comfortable band is roughly 1.5 to 3.0 for the current ratio and at or above 1.0 for the quick ratio, but treat those as starting points rather than rules. A supermarket collects cash at the till and pays its suppliers weeks later, so it runs happily below 1.0 and always has. A shipbuilder holds enormous inventory for years and runs far higher. The band belongs to the industry, not to accounting.</p>
 
-    <p>То же самое касается кредитного плеча. Отношение долга к собственному капиталу выше 2,0 является признаком для большинства компаний, а коммунальные предприятия, авиакомпании и фирмы, занимающиеся недвижимостью, естественно, превышают его, поскольку они владеют предсказуемыми активами, под которые кредиторы с радостью предоставляют кредиты. Сравнение рычагов авиакомпании с рычагами компании-разработчика программного обеспечения позволяет понять, в какой отрасли они работают, а не какой из них лучше управлять.</p>
+    <p>The same goes for leverage. Debt to equity above about 2.0 is a flag for most companies, and utilities, airlines and property firms run above it as a matter of course, because they own predictable assets that lenders are happy to lend against. Comparing an airline's leverage to a software company's tells you what industry they are in, not which is better run.</p>
 
-    <p>Три сравнения стоят больше, чем любая опубликованная группа.</p>
+    <p>Three comparisons are worth more than any published band.</p>
 
     <ol>
-      <li><strong>Одна и та же компания с течением времени.</strong>  Это тот, который всегда работает, потому что все остальное остается постоянным.</li>
-      <li><strong>Названный конкурент аналогичного размера,</strong>  в той же отрасли, в тот же день.</li>
-      <li><strong>Завет.</strong>  Если у компании есть кредит, в соглашении почти наверняка в письменной форме указывается минимальный текущий коэффициент или максимальное соотношение долга к собственному капиталу. Это число превосходит все показатели в Интернете, поскольку его нарушение будет иметь последствия в конкретную дату.</li>
+      <li><strong>The same company over time.</strong> This is the one that always works, because everything else is held constant.</li>
+      <li><strong>A named competitor of similar size,</strong> in the same industry, on the same date.</li>
+      <li><strong>The covenant.</strong> If the company has a loan, the agreement almost certainly names a minimum current ratio or a maximum debt-to-equity ratio in writing. That number beats every benchmark on the internet, because breaching it has consequences on a specific date.</li>
     </ol>
 
-    <p>Время — это то место, где обычно находится история. Вот четыре снимка Нортлайт за 2024 год с тремя исходными данными, из которых взят каждый коэффициент, поэтому тенденцию можно проверить так же, как и цифры на конец года.</p>
+    <p>Time is where the story usually is. Here are Northlight's four 2024 snapshots, with the three inputs each ratio comes from, so the trend can be checked the same way the year-end figures were.</p>
 
     <div class="tw">
 
       <table>
-      <tr><th>По состоянию на</th><th>Оборотные активы</th><th>Inventory</th><th>Receivables</th><th>Текущие обязательства</th><th>Коэффициент текущей ликвидности</th><th>Быстрый коэффициент</th></tr>
+      <tr><th>As of</th><th>Current assets</th><th>Inventory</th><th>Receivables</th><th>Current liabilities</th><th>Current ratio</th><th>Quick ratio</th></tr>
       <tr><td>2024-03-31</td><td>1,130,000</td><td>300,000</td><td>380,000</td><td>545,000</td><td>2.07</td><td>1.52</td></tr>
       <tr><td>2024-06-30</td><td>1,170,000</td><td>360,000</td><td>420,000</td><td>595,000</td><td>1.97</td><td>1.36</td></tr>
       <tr><td>2024-09-30</td><td>1,220,000</td><td>430,000</td><td>450,000</td><td>653,000</td><td>1.87</td><td>1.21</td></tr>
@@ -419,142 +419,142 @@ ORDER BY company;</code></pre>
 
     </div>
 
-    <p>Сравните мартовский ряд с декабрьским, с которым вы уже работали. 1 130 000 минус 300 000 инвентаря — это 830 000, свыше 545 000 купюр, что равно 1,52. Коэффициент быстрой ликвидности здесь представляет собой версию текущих активов минус запасы из третьего раздела, ту же самую, которая используется на этой странице.</p>
+    <p>Check the March row against the December one you already worked. 1,130,000 minus 300,000 of inventory is 830,000, over 545,000 of bills, which is 1.52. The quick ratio here is the current-assets-minus-inventory version from section three, the same one used throughout this page.</p>
 
-    <p>Читайте как одну дату, 1.80 и 1.10 подходят. Если читать как четыре, коэффициент быстрой ликвидности падает каждый квартал с 1,52 до 1,10 и приближается к отметке 1,0. Запасы выросли с $300 000 до $490 000 за год, увеличившись на 63%, а дебиторская задолженность выросла с $380 000 до $470 000, увеличившись на 24%. Нортлайт незаметно превращается в Риджуэй, и ни один снимок не мог бы вам этого сказать.</p>
+    <p>Read as one date, 1.80 and 1.10 are fine. Read as four, the quick ratio has fallen every quarter, from 1.52 to 1.10, and it is heading for the 1.0 line. Inventory grew from $300,000 to $490,000 across the year, up 63%, while receivables grew from $380,000 to $470,000, up 24%. Northlight is quietly turning into Ridgeway, and no single snapshot could have told you that.</p>
 
-    <p>Здесь также показывает свои зубы отсутствующий фильтр из пятого раздела. Суммируя все четыре даты, текущие активы составляют 4 780 000 долларов США против 2 493 000 долларов США текущих обязательств, что составляет 1,92 для запроса без  <code>WHERE as_of</code>  возвращается. Это не соотношение каких-либо кварталов, это не среднее из четырех, и это единственное число в этой таблице, которое не описывает ничего, что когда-либо происходило.</p>
+    <p>This is also where the missing filter from section five shows its teeth. Summed across all four dates, current assets are $4,780,000 against $2,493,000 of current liabilities, which is the 1.92 a query with no <code>WHERE as_of</code> returns. It is not any quarter's ratio, it is not the average of the four, and it is the one number in this table that describes nothing that ever happened.</p>
   </div>
 
   <div class="step">
-    <h2>7. Полное до и после</h2>
+    <h2>7. The full before and after</h2>
 
-    <p>Одни и те же два балансовых отчета, два способа их представления.</p>
+    <p>Same two balance sheets, two ways of reporting them.</p>
 
     <h3>Before</h3>
-    <p>«Коэффициент текущей ликвидности Риджуэй 2,40, Нортлайт 1,80. Оба выше порога 1,5. Никаких проблем с ликвидностью». Каждое число верное, порог реальный, а вывод обратный. Читатель не сможет увидеть, что одна из этих компаний имеет расходуемые активы на сумму 300 000 долларов против счетов на 500 000 долларов, поскольку в отчете никогда не отделялась расходуемая часть от остальных.</p>
+    <p>"Ridgeway current ratio 2.40, Northlight 1.80. Both above the 1.5 threshold. No liquidity concerns." Every number is right, the threshold is a real one, and the conclusion is backwards. A reader has no way to see that one of these companies has $300,000 of spendable assets against $500,000 of bills, because the report never separated the spendable part from the rest.</p>
 
     <h3>After</h3>
     <div class="tw">
       <table>
       <tr><th>Measure</th><th>Northlight</th><th>Ridgeway</th><th>Read</th></tr>
-      <tr><td>Коэффициент текущей ликвидности</td><td>1.80</td><td>2.40</td><td>Оба выше 1,5</td></tr>
-      <tr><td>Быстрый коэффициент</td><td>1.10</td><td>0.60</td><td>Только один очищает 1.0</td></tr>
-      <tr><td>Быстрые активы</td><td>770,000</td><td>300,000</td><td>Доллары за соотношением</td></tr>
-      <tr><td>Текущие обязательства</td><td>700,000</td><td>500,000</td><td>Что предстоит в течение года</td></tr>
-      <tr><td>Gap</td><td>+70,000</td><td>-200,000</td><td>Риджуэй должен продать акции, чтобы заплатить</td></tr>
-      <tr><td>Долг к собственному капиталу (процентный)</td><td>0.70</td><td>0.48</td><td>Риджуэй брал взаймы меньше</td></tr>
-      <tr><td>Долг к собственному капиталу (общая сумма обязательств)</td><td>1.04</td><td>0.82</td><td>Те же компании, более широкое определение</td></tr>
+      <tr><td>Current ratio</td><td>1.80</td><td>2.40</td><td>Both above 1.5</td></tr>
+      <tr><td>Quick ratio</td><td>1.10</td><td>0.60</td><td>Only one clears 1.0</td></tr>
+      <tr><td>Quick assets</td><td>770,000</td><td>300,000</td><td>The dollars behind the ratio</td></tr>
+      <tr><td>Current liabilities</td><td>700,000</td><td>500,000</td><td>What is due within the year</td></tr>
+      <tr><td>Gap</td><td>+70,000</td><td>-200,000</td><td>Ridgeway must sell stock to pay</td></tr>
+      <tr><td>Debt to equity (interest-bearing)</td><td>0.70</td><td>0.48</td><td>Ridgeway borrowed less</td></tr>
+      <tr><td>Debt to equity (total liabilities)</td><td>1.04</td><td>0.82</td><td>Same companies, wider definition</td></tr>
     </table>
     </div>
 
-    <p>Два дополнения делают всю работу. Коэффициент быстрой ликвидности разделяет стопку, а строка пробелов конвертирует коэффициент обратно в доллары, так что читателю не придется этого делать. Определение долга указано в метке строки, а не предполагается. И вывод теперь очевиден без какой-либо экспертизы: компания, которая взяла в долг меньше, может не выплатить свои платежи.</p>
+    <p>Two additions do all the work. The quick ratio splits the pile, and the gap row converts the ratio back into dollars so a reader does not have to. The definition of debt is named in the row label rather than assumed. And the finding is now visible without any expertise at all: the company that borrowed less is the one that might not make its payments.</p>
   </div>
 
   <div class="step">
-    <h2>8. Крайние случаи: снимок легко переместить</h2>
+    <h2>8. Edge cases: a snapshot is easy to move</h2>
 
-    <p>Сегодня 30 декабря. Назовите что-нибудь, что компания могла бы сделать в этот день, чтобы улучшить свой текущий коэффициент, ничего не меняя в бизнесе.</p>
+    <p>It is 30 December. Name one thing a company could do that day to improve its current ratio without changing anything about the business.</p>
 
-    <p><strong>Оплатите счет.</strong>    Возьмите 200 000 долларов наличными и погасите кредиторскую задолженность на 200 000 долларов в последний рабочий день года. Текущие активы падают до 1 060 000 долларов США, текущие обязательства падают до 500 000 долларов США, а коэффициент текущей ликвидности повышается с 1,80 до 2,12. Компания не стала здоровее. У него меньше денег, чем было утром. Поскольку обе стороны дроби уменьшаются на одинаковую величину, а вершина уже была больше, соотношение улучшается. Это имеет свое название в торговле, показухе, и именно поэтому кредитор смотрит на несколько дат, а не на одну. Денежные средства Нортлайт после этого платежа составят 60 000 долларов из начальных 260 000 долларов. с, и это та часть, которую соотношение никогда не показывает.</p>
+    <p><strong>Pay a bill.</strong> Take $200,000 of cash and settle $200,000 of accounts payable on the last working day of the year. Current assets fall to $1,060,000, current liabilities fall to $500,000, and the current ratio goes from 1.80 to 2.12. The company is no healthier. It has less cash than it did that morning. Because both sides of the fraction shrink by the same amount, and the top was already bigger, the ratio improves. This has a name in the trade, window dressing, and it is why a lender looks at several dates rather than one. Northlight's cash after that payment would be $60,000 of the $260,000 it started with, which is the part a ratio never shows you.</p>
 
-    <p><strong>Коэффициент — это снимок, а отчет о прибылях и убытках — это фильм.</strong>  Их смешивание требует осторожности. Коэффициенты, в которых число баланса ставится над числом отчета о прибылях и убытках, например, оборачиваемость запасов, обычно используют среднее значение начального и конечного баланса, а не конечного, именно потому, что одна дата не представляет собой год. Если вы создадите один из них, скажите, какое соглашение вы использовали.</p>
+    <p><strong>A ratio is a snapshot and an income statement is a film.</strong> Mixing them needs care. Ratios that put a balance-sheet number over an income-statement number, like inventory turnover, conventionally use the average of the opening and closing balance rather than the closing one, precisely because one date does not represent a year. If you build one of those, say which convention you used.</p>
 
-    <p><strong>Собственный капитал может быть отрицательным, и тогда соотношение не имеет смысла.</strong>  Компания, которая за свою жизнь потеряла больше, чем вложили владельцы, имеет отрицательный капитал, а отношение долга к собственному капиталу оказывается отрицательным. Отрицательный коэффициент левериджа – это не низкий левередж, это компания, обязательства которой превышают ее активы. Остерегайтесь этого в запросе и сообщайте слова вместо числа.</p>
+    <p><strong>Equity can be negative, and then the ratio is meaningless.</strong> A company that has lost more over its life than owners put in has negative equity, and debt to equity comes out negative. A negative leverage ratio is not low leverage, it is a company whose liabilities exceed its assets. Guard it in the query and report the words instead of the number.</p>
 
-    <p><strong>Не все текущие обязательства одинаково срочны.</strong>  Сумма платежа, причитающегося через одиннадцать месяцев, и платежа в следующий вторник составляет одинаковую сумму. Коэффициент учитывает их одинаково, а банковский счет компании — нет. Когда ликвидность действительно ограничена, коэффициент перестает быть подходящим инструментом, и им становится еженедельный прогноз денежных средств.</p>
+    <p><strong>Not every current liability is equally urgent.</strong> A payable due in eleven months and one due next Tuesday both sit in the same total. The ratio treats them identically, and the company's bank account does not. When liquidity is genuinely tight, the ratio stops being the right tool and a week-by-week cash forecast starts being one.</p>
 
-    <p><strong>Дебиторская задолженность хороша настолько, насколько хороши клиенты.</strong>  Коэффициент быстрой ликвидности доверяет каждому доллару дебиторской задолженности по номинальной стоимости. Если треть из них просрочена на девяносто дней, реальный коэффициент быстрой ликвидности будет ниже расчетного. Отчет о сроках хранения находится рядом с этим анализом, а не после него.</p>
+    <p><strong>Receivables are only as good as the customers.</strong> The quick ratio trusts every dollar of receivables at face value. If a third of them are ninety days overdue, the real quick ratio is lower than the computed one. An ageing report sits next to this analysis, not after it.</p>
   </div>
 
-  <h2>Почему это работает</h2>
+  <h2>Why this works</h2>
 
-  <p>Причина, по которой одного коэффициента недостаточно, заключается в проблеме измерения, а не в учете. Любой отдельный показатель, используемый для оценки эффективности, имеет тенденцию скорее управляться, чем улучшаться, и этот эффект Кэмпбелл установил на основе оценки социальных программ (Кэмпбелл, 1979,    <em>Оценка и планирование программ</em>, 2(1), 67–90) и Гудхарт в одной строке упомянули монетарные цели (Гудхарт, 1975, перепечатано в    <em>Денежная теория и практика</em>, Макмиллан, 1984, 91–121). Платеж 30 декабря в восьмом разделе влияет на баланс: число изменилось, а то, что оно измеряет, — нет. Два коэффициента, которые могут не совпадать по четырем датам, — это самая дешевая доступная защита.</p>
+  <p>The reason a single ratio is not enough is a measurement problem, not an accounting one. Any single indicator used to judge performance tends to be managed toward rather than improved on, an effect Campbell set out from social program evaluation (Campbell, 1979, <em>Evaluation and Program Planning</em>, 2(1), 67–90) and Goodhart put in one line about monetary targets (Goodhart, 1975, reprinted in <em>Monetary Theory and Practice</em>, Macmillan, 1984, 91–121). The 30 December payment in section eight is that effect on a balance sheet: the number moved, the thing it measures did not. Two ratios that can disagree, read across four dates, is the cheapest defence available.</p>
 
-  <p>Коэффициентный анализ такого типа также старше и лучше проверен, чем кажется. Проведенное Бивером исследование 79 обанкротившихся компаний и 79 выживших компаний показало, что балансовые коэффициенты разделяли две группы за пять лет до банкротства, при этом коэффициенты денежного потока и долга были одними из самых сильных индивидуальных предсказателей (Бивер, 1966,  <em>Журнал бухгалтерских исследований</em>, 4, 71–111). Многопропорциональная модель Альтмана, построенная на 66 производителях, через год правильно классифицировала 95% из них (Альтман, 1968,  <em>Журнал финансов</em>, 23(4), 589–609). Ни один из них не нашел ни одного достаточного соотношения, на чем и основана эта страница.</p>
+  <p>Ratio analysis of this kind is also older and better tested than it looks. Beaver's study of 79 failed companies against 79 matched survivors found that balance-sheet ratios separated the two groups up to five years before failure, with cash-flow and debt ratios among the strongest single predictors (Beaver, 1966, <em>Journal of Accounting Research</em>, 4, 71–111). Altman's multi-ratio model, built on 66 manufacturers, classified 95% of them correctly one year out (Altman, 1968, <em>The Journal of Finance</em>, 23(4), 589–609). Neither found any one ratio sufficient on its own, which is the finding this page is built on.</p>
 
-  <p>Вопрос в верхней части каждого раздела является преднамеренным. Попытка ответить до того, как он будет получен, улучшает усвоение этого конкретного материала в шестидесяти четырех исследованиях (Бисра, Лю, Несбит, Салими и Винн, 2018,  <em>Обзор педагогической психологии</em>, 30(3), 703–725). Угадав, какой актив медленнее всего превращается в наличные, до того, как в третьем разделе будет сказано об инвентаре, вы все равно узнаете об этом на собеседовании.</p>
+  <p>The question at the top of each section is deliberate. Attempting an answer before receiving one improves learning of that specific material across sixty-four studies (Bisra, Liu, Nesbit, Salimi, &amp; Winne, 2018, <em>Educational Psychology Review</em>, 30(3), 703–725). Guessing which asset is slowest to become cash, before section three said inventory, is why you will still know it in an interview.</p>
 
-  <h2>Использование этого на ваших собственных номерах</h2>
+  <h2>Using this on your own numbers</h2>
 
-  <p>Перестроение каждого отчета о показателях в компании — это утомительная работа, и никто вас за это не благодарит. Вместо этого сделайте это по порядку.</p>
+  <p>Rebuilding every ratio report in the company is a slog and nobody thanks you for it. Do this instead, in order.</p>
 
   <ol>
-    <li><strong>Добавьте коэффициент быстрой ликвидности везде, где уже имеется коэффициент текущей ликвидности.</strong>  Один столбец, одно вычитание, и именно этот столбец поймал бы Риджуэя.</li>
-    <li><strong>Проверьте, что деление десятичное.</strong>  Если какой-либо коэффициент в вашем отчете представляет собой целое число, например 1, 2 или 0, у вас есть целочисленное деление. В пятом разделе есть исправление.</li>
-    <li><strong>Подтвердите фильтры запроса на один  <code>as_of</code>  дата.</strong>  Затем поместите четыре даты рядом, потому что тенденция заключается в том, где история была на этой странице.</li>
-    <li><strong>Назовите определение долга в заголовке столбца.</strong>    «Д/Э (процентный)» стоит три слова и устраняет аргумент, который в противном случае возник бы у вас каждый квартал.</li>
-    <li><strong>Добавьте столбец доллара рядом с каждым соотношением.</strong>  Краткосрочные активы и текущие обязательства в долларах и разрыв между ними. Соотношение никого не убеждает; Короткая сделка на 200 000 долларов подойдет.</li>
-    <li><strong>Найдите договор займа и напишите его номер вверху отчета.</strong>  Если в кредитном договоре указан минимальный текущий коэффициент, это единственный порог на странице, имеющий последствия.</li>
+    <li><strong>Add the quick ratio wherever a current ratio already appears.</strong> One column, one subtraction, and it is the column that would have caught Ridgeway.</li>
+    <li><strong>Check the division is decimal.</strong> If any ratio in your report is a whole number like 1, 2 or 0, you have integer division. Section five has the fix.</li>
+    <li><strong>Confirm the query filters to one <code>as_of</code> date.</strong> Then put four dates side by side, because the trend is where the story was on this page.</li>
+    <li><strong>Name the debt definition in the column header.</strong> "D/E (interest-bearing)" costs three words and removes an argument you would otherwise have every quarter.</li>
+    <li><strong>Add a dollar column next to every ratio.</strong> Quick assets and current liabilities in dollars, and the gap between them. A ratio persuades nobody; $200,000 short does.</li>
+    <li><strong>Find the loan covenant and write its number at the top of the report.</strong> If there is a minimum current ratio in a credit agreement, that is the only threshold on the page that has consequences.</li>
   </ol>
 
-  <p>Один дополнительный рисунок, если под рукой есть бумага. Нарисуйте по памяти два столбца в верхней части этой страницы: стопку текущих активов для каждой компании, пунктирную линию для счетов к оплате и разделение между частью, которую вы можете потратить, и запасами над ней. Отметьте, какой сплошной блок достигает своей линии. Если оба из вас очистили его, вы нарисовали текущий коэффициент, а не коэффициент быстрой ликвидности, и страница все еще открыта.</p>
+  <p>One optional drawing, if there is paper within reach. Draw the two columns from the top of this page from memory: a stack of current assets for each company, a dashed line for the bills due, and the split between the part you can spend and the inventory above it. Mark which solid block reaches its line. If both of yours clear it, you have drawn the current ratio rather than the quick ratio, and the page is still open.</p>
 
-  <div class="note"><strong>Эта страница одна из пяти.</strong>  Финансовый анализ, установленный на  <a href="../">индекс направляющих</a>  эта страница плюс  <a href="../gross-vs-operating-vs-net-margin/">валовая, операционная и чистая прибыль</a>, <a href="../contribution-margin-break-even/">Маржа вклада и безубыточность</a>, <a href="../net-present-value-npv/">Чистая приведенная стоимость (NPV)</a> and <a href="../budget-vs-actual-variance/">Бюджет и фактическое отклонение</a>. У них одна работающая компания, поэтому цифры совпадают. В указателе также содержатся все остальные инструкции: SQL, Excel, Tableau и связанные с ними рабочие навыки.</div>
+  <div class="note"><strong>This page is one of five.</strong> The Financial analysis set on the <a href="../">guides index</a> is this page plus <a href="../gross-vs-operating-vs-net-margin/">Gross vs Operating vs Net Margin</a>, <a href="../contribution-margin-break-even/">Contribution Margin and Break-Even</a>, <a href="../net-present-value-npv/">Net Present Value (NPV)</a> and <a href="../budget-vs-actual-variance/">Budget vs Actual Variance</a>. They share a worked company, so the numbers carry across. The index also holds every other how-to: SQL, Excel, Tableau, and the working habits around them.</div>
 
-  <h2>Все на одном экране</h2>
+  <h2>The whole thing on one screen</h2>
 
-  <p>Закройте правый столбец. Двигайтесь вниз слева и произносите каждый ответ, прежде чем посмотреть.</p>
+  <p>Cover the right column. Work down the left and say each answer before you look.</p>
 
   <div class="tw">
 
     <table>
-    <tr><th>Concept</th><th>Что это такое</th></tr>
-    <tr><td>Liquidity</td><td>Можем ли мы оплатить то, что причитается в ближайшее время, тем, что скоро станет наличными?</td></tr>
-    <tr><td>Leverage</td><td>Какая часть компании была оплачена заемными деньгами.</td></tr>
-    <tr><td>Current</td><td>В течение одного года. Вот и весь смысл этого слова.</td></tr>
-    <tr><td>Коэффициент текущей ликвидности</td><td>Текущие активы ÷ текущие обязательства. Нортлайт 1.80.</td></tr>
-    <tr><td>Быстрый коэффициент</td><td>Тот же тест с вынесенным инвентарем. Нортлайт 1.10.</td></tr>
-    <tr><td>Зачем отказываться от инвентаря</td><td>Это самый медленный оборотный актив, который превращается в наличные, а может и нет.</td></tr>
-    <tr><td>Разворот</td><td>Риджуэй: текущие 2,40, быстрые 0,60 и 200 000 долларов не хватает по счетам.</td></tr>
-    <tr><td>Две формулы быстрого расчета</td><td>Оборотные активы минус запасы дают 1,10. Денежные средства плюс дебиторская задолженность дают 1,04.</td></tr>
-    <tr><td>Долг к собственному капиталу</td><td>Взаймы ÷ в собственности. 0,70 по процентному долгу Нортлайт.</td></tr>
-    <tr><td>Аргумент о долге</td><td>Вместо этого общая сумма обязательств дает 1,04 в том же балансе.</td></tr>
-    <tr><td>Целочисленная ловушка</td><td>1260000/700000 возвращается 1. Написать  <code>1.0 *</code>  перед разделением.</td></tr>
-    <tr><td>Недостающий фильтр</td><td>No <code>WHERE as_of</code>  суммировал четыре снимка и дал 1,92 вместо 1,80.</td></tr>
-    <tr><td>Удобные ремешки</td><td>Текущий от 1,5 до 3,0, быстрый на уровне 1,0 или выше, Д/Э ниже 2,0. Промышленность решает.</td></tr>
-    <tr><td>Слишком высокий</td><td>Свободные денежные средства или непроданные запасы. Не сила.</td></tr>
-    <tr><td>Оформление витрин</td><td>Выплата 200 000 долларов 30 декабря переместила 1,80 на 2,12 и ничего не изменила.</td></tr>
-    <tr><td>Отрицательный капитал</td><td>Д/Э становится отрицательным. Это не низкий уровень кредитного плеча, это неплатежеспособность.</td></tr>
-    <tr><td>Результат</td><td>Соотношение, стоящие за ним доллары и тенденция за четыре даты.</td></tr>
+    <tr><th>Concept</th><th>What it is</th></tr>
+    <tr><td>Liquidity</td><td>Can we pay what is due soon with what becomes cash soon.</td></tr>
+    <tr><td>Leverage</td><td>How much of the company was paid for with borrowed money.</td></tr>
+    <tr><td>Current</td><td>Within one year. That is the whole meaning of the word.</td></tr>
+    <tr><td>Current ratio</td><td>Current assets ÷ current liabilities. Northlight 1.80.</td></tr>
+    <tr><td>Quick ratio</td><td>The same test with inventory taken out. Northlight 1.10.</td></tr>
+    <tr><td>Why drop inventory</td><td>It is the slowest current asset to become cash, and it might not.</td></tr>
+    <tr><td>The reversal</td><td>Ridgeway: current 2.40, quick 0.60, and $200,000 short of its bills.</td></tr>
+    <tr><td>Two quick-ratio formulas</td><td>Current assets minus inventory gives 1.10. Cash plus receivables gives 1.04.</td></tr>
+    <tr><td>Debt to equity</td><td>Borrowed ÷ owned. 0.70 on interest-bearing debt for Northlight.</td></tr>
+    <tr><td>The debt argument</td><td>Total liabilities instead gives 1.04 on the same balance sheet.</td></tr>
+    <tr><td>The integer trap</td><td>1260000 / 700000 returns 1. Write <code>1.0 *</code> before the division.</td></tr>
+    <tr><td>The missing filter</td><td>No <code>WHERE as_of</code> summed four snapshots and gave 1.92 instead of 1.80.</td></tr>
+    <tr><td>Comfortable bands</td><td>Current 1.5 to 3.0, quick at or above 1.0, D/E under 2.0. Industry decides.</td></tr>
+    <tr><td>Too high</td><td>Idle cash or unsold stock. Not a strength.</td></tr>
+    <tr><td>Window dressing</td><td>Paying $200,000 on 30 December moved 1.80 to 2.12 and changed nothing.</td></tr>
+    <tr><td>Negative equity</td><td>D/E goes negative. That is not low leverage, it is insolvency.</td></tr>
+    <tr><td>The deliverable</td><td>The ratio, the dollars behind it, and the trend across four dates.</td></tr>
   </table>
 
   </div>
 
-  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Сохраните это, и вы можете оставить все остальное. Никогда не сообщайте о коэффициенте ликвидности без долларового разрыва рядом с ним. «Коэффициент быстрой ликвидности 0,60» — это цифра, на которую люди кивают. «300 000 долларов расходуемых активов против 500 000 долларов векселей» — это цифра, на основе которой действуют люди, и это один и тот же факт. Если цифры сопротивляются так, как не описано на этой странице, существует общее  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>.</div>
+  <div class="note"><strong>The one habit to keep.</strong> Keep this one and you can let the rest go. Never report a liquidity ratio without the dollar gap beside it. "Quick ratio 0.60" is a number people nod at. "$300,000 of spendable assets against $500,000 of bills" is a number people act on, and it is the same fact. If the numbers fight back in a way this page does not cover, there is a general <a href="../technical-tenacity/">diagnosis loop for being stuck</a>.</div>
 
-  <p>Вопрос к вам, и мне нужны ответы. В первой таблице соотношений, которую я построил, в заголовке столбца было написано «Д/Э», и два человека в комнате читали ее как два разных числа в течение десяти минут, прежде чем кто-либо заметил. Какой самый короткий заголовок столбца вы видели, вызывая самый длинный аргумент?</p>
+  <p>A question back to you, and I do want the answers. The first ratio table I built had a column header that just said "D/E", and two people in the room were reading it as two different numbers for ten minutes before anyone noticed. What is the shortest column header you have seen cause the longest argument?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Бивер, WH (1966). Финансовые коэффициенты как предсказатели неудач.  <em>Журнал бухгалтерских исследований</em>, 4, 71–111.</li>
-    <li>Альтман, Э.И. (1968). Финансовые коэффициенты, дискриминантный анализ и прогноз корпоративного банкротства.  <em>Журнал финансов</em>, 23(4), 589–609.</li>
-    <li>Кэмпбелл, DT (1979). Оценка воздействия запланированных социальных изменений.  <em>Оценка и планирование программ</em>, 2(1), 67–90.</li>
-    <li>Гудхарт, CAE (1975). Проблемы денежно-кредитного управления: опыт Великобритании. Перепечатано в  <em>Денежно-кредитная теория и практика: опыт Великобритании</em>  (стр. 91–121). Макмиллан, 1984.</li>
-    <li>Бисра К., Лю К., Несбит Дж. К., Салими Ф. и Винн П. Х. (2018). Побуждение к самообъяснению: метаанализ.  <em>Обзор педагогической психологии</em>, 30(3), 703–725.</li>
+    <li>Beaver, W. H. (1966). Financial ratios as predictors of failure. <em>Journal of Accounting Research</em>, 4, 71–111.</li>
+    <li>Altman, E. I. (1968). Financial ratios, discriminant analysis and the prediction of corporate bankruptcy. <em>The Journal of Finance</em>, 23(4), 589–609.</li>
+    <li>Campbell, D. T. (1979). Assessing the impact of planned social change. <em>Evaluation and Program Planning</em>, 2(1), 67–90.</li>
+    <li>Goodhart, C. A. E. (1975). Problems of monetary management: The U.K. experience. Reprinted in <em>Monetary Theory and Practice: The U.K. Experience</em> (pp. 91–121). Macmillan, 1984.</li>
+    <li>Bisra, K., Liu, Q., Nesbit, J. C., Salimi, F., &amp; Winne, P. H. (2018). Inducing self-explanation: A meta-analysis. <em>Educational Psychology Review</em>, 30(3), 703–725.</li>
   </ul>
 
   <div class="book">
-    <strong>Оба соотношения арифметически верны и указывают противоположные пути.</strong>
-    <p><em>Думать как аналитик</em>  - это 64 страницы, посвященные решению того, что может означать число, прежде чем вы представите его кому-либо.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/thinking-like-an-analyst?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=thinking-like-an-analyst" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-liquidity-and-leverage-ratios'})">Думать как аналитик, 19 $ →</a>
+    <strong>Both ratios are arithmetically correct and they point opposite ways.</strong>
+    <p><em>Thinking Like an Analyst</em> is 64 pages on deciding what a number is allowed to mean before you put it in front of anyone.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/thinking-like-an-analyst?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=thinking-like-an-analyst" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-liquidity-and-leverage-ratios'})">Thinking Like an Analyst, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>Потренируйтесь в этом, используя редактор запросов.</strong>
-    <p style="margin:6px 0 0">The <a href="../../sql/">SQL-кит</a>  имеет подразделение финансового анализа, которое учитывает эти три коэффициента в балансовом отчете, а также уроки прибылей и убытков, маржи и отклонений. Вместе с ними лежат проработанные примеры, карточки и пробный экзамен. Если вы предпочитаете печатать, а не читать,  <a href="../../drill/">SQL-детализация</a>  передает вам один выполняемый запрос за раз. Ничего устанавливать, учетная запись не требуется.</p>
-    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
+    <strong>Practice this with a query editor in front of you.</strong>
+    <p style="margin:6px 0 0">The <a href="../../sql/">SQL Kit</a> has a Financial Analysis unit that works these three ratios on a balance sheet, alongside the P&amp;L, margins and variance lessons. Worked examples, flash cards, and a mock exam sit with them. If you would rather type than read, <a href="../../drill/">SQL Drill</a> hands you one runnable query at a time. Nothing to install, no account needed.</p>
+    <a class="btn" href="../../sql/">Open the SQL Kit →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../gross-vs-operating-vs-net-margin/">валовая, операционная и чистая прибыль</a> · <a href="../contribution-margin-break-even/">Маржа вклада и безубыточность</a> · <a href="../net-present-value-npv/">Чистая приведенная стоимость (NPV)</a> · <a href="../budget-vs-actual-variance/">Бюджет и фактическое отклонение</a> · <a href="../sql-case-expression/">Выражение SQL CASE</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-null/">НУЛЬ в SQL</a> · <a href="../sql-dates/">Функции даты SQL</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../report-vs-analysis/">Отчет против анализа</a> · <a href="../data-driven-thresholds/">Пороги, управляемые данными</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../build-a-risk-index/">Создайте индекс риска</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../mean-vs-median/">Среднее против медианы</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../what-is-data-analysis/">Что такое анализ данных?</a> · <a href="../../sql/">SQL-кит</a> · <a href="../../excel/">Excel комплект</a> · <a href="../../projects/">Портфельные проекты</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
+    <a href="../../">← Analyst Prep Kit</a> · <a href="../gross-vs-operating-vs-net-margin/">Gross vs Operating vs Net Margin</a> · <a href="../contribution-margin-break-even/">Contribution Margin and Break-Even</a> · <a href="../net-present-value-npv/">Net Present Value (NPV)</a> · <a href="../budget-vs-actual-variance/">Budget vs Actual Variance</a> · <a href="../sql-case-expression/">The SQL CASE Expression</a> · <a href="../sql-joins/">SQL JOINs</a> · <a href="../sql-null/">NULL in SQL</a> · <a href="../sql-dates/">SQL Date Functions</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../report-vs-analysis/">Report vs Analysis</a> · <a href="../data-driven-thresholds/">Data-Driven Thresholds</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../build-a-risk-index/">Build a Risk Index</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../mean-vs-median/">Mean vs Median</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../what-is-data-analysis/">What Is Data Analysis?</a> · <a href="../../sql/">SQL Kit</a> · <a href="../../excel/">Excel Kit</a> · <a href="../../projects/">Portfolio Projects</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

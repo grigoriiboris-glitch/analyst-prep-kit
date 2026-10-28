@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="ru" data-theme="light" data-static-ru="true">
+<html lang="en" data-theme="light">
 <head>
-
+<script src="../assets/ru-localization-boot.js"></script>
   <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
   <script>
     (function () {
@@ -28,9 +28,9 @@
   </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Подготовка к сертификации Excel (MO-210) · Подготовительный комплект для аналитика</title>
+<title>Excel Certification Prep (MO-210) · Analyst Prep Kit</title>
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/excel-cert/">
-<meta name="description" content="Бесплатная подготовка к сертификации Специалист по Microsoft Office, специалист по Excel (MO-210). Учебное пособие по всем пяти предметным областям плюс практическое упражнение из 35 вопросов, соответствующее 50-минутному темпу экзамена.">
+<meta name="description" content="Free prep for the Microsoft Office Specialist Excel Associate certification (MO-210). A study guide for all five objective domains plus a 35-question practice drill matched to the exam's 50-minute pace.">
 <link rel="stylesheet" href="../assets/grain/grain.css">
 <link rel="stylesheet" href="../assets/grain/zinc-sky.css"><!-- Zinc & Sky palette rollout -->
 <style>
@@ -243,14 +243,14 @@ footer{margin-top:50px;padding-top:24px;border-top:1px solid var(--border);text-
 </head>
 <body>
 <nav>
-  <button class="nav-btn" onclick="window.location='../index.html'" title="Вернуться ко всем комплектам">← Все комплекты</button>
-  <span class="nav-title"><span class="logo-mark"><i data-lucide="badge-check"></i></span>Подготовка сертификата Excel</span>
+  <button class="nav-btn" onclick="window.location='../index.html'" title="Back to all kits">← All Kits</button>
+  <span class="nav-title"><span class="logo-mark"><i data-lucide="badge-check"></i></span>Excel Cert Prep</span>
   <button class="nav-btn" id="navHome" onclick="setView('home')">Home</button>
-  <button class="nav-btn" id="navStudy" onclick="setView('study')">Учебное руководство</button>
-  <button class="nav-btn" id="navExam" onclick="setView('exam')">Практика Упражнения</button>
+  <button class="nav-btn" id="navStudy" onclick="setView('study')">Study Guide</button>
+  <button class="nav-btn" id="navExam" onclick="setView('exam')">Practice Drill</button>
   <button class="nav-btn" id="navResults" onclick="setView('results')" style="display:none">Results</button>
   <div class="nav-spacer"></div>
-  <button class="nav-btn" onclick="resetAll()" title="Сбросить прогресс"><i data-lucide="rotate-ccw"></i>Reset</button>
+  <button class="nav-btn" onclick="resetAll()" title="Reset progress"><i data-lucide="rotate-ccw"></i>Reset</button>
   <button class="nav-btn" onclick="toggleTheme()"><span id="themeIcon"><i data-lucide="sun"></i></span></button>
 </nav>
 
@@ -275,20 +275,20 @@ function save(){ localStorage.setItem(STORE, JSON.stringify(state)); }
 
 /* ============== DOMAINS (official MO-210 objective domains) ============== */
 const DOMAIN_INFO = {
-  d1:{label:"Домен 1", name:"Управление рабочими листами и книгами", weight:'25–30%', mid:27.5, color:'var(--c-d1)',
-      hint:`Уроки по навигации и настройке Excel комплект охватывают основы работы с книгами; в учебном пособии добавлены проверки просмотров, печати и обмена.`,
+  d1:{label:'Domain 1', name:'Manage Worksheets & Workbooks', weight:'25–30%', mid:27.5, color:'var(--c-d1)',
+      hint:`Excel Kit navigation and setup lessons cover the workbook basics; the study guide here adds views, printing, and sharing checks.`,
       kitPath:'../excel/'},
-  d2:{label:"Домен 2", name:"Управление ячейками и диапазонами данных", weight:'25–30%', mid:27.5, color:'var(--c-d2)',
-      hint:`Уроки форматирования и очистки Excel комплект; в учебном пособии добавлены специальные вставки, серии заливок и спарклайны.`,
+  d2:{label:'Domain 2', name:'Manage Data Cells & Ranges', weight:'25–30%', mid:27.5, color:'var(--c-d2)',
+      hint:`Excel Kit formatting and cleanup lessons; the study guide here adds paste special, fill series, and sparklines.`,
       kitPath:'../excel/'},
-  d3:{label:"Домен 3", name:"Управление таблицами и данными таблиц", weight:'10–15%', mid:12.5, color:'var(--c-d3)',
-      hint:`Excel комплект сортирует/фильтрует уроки; В приведенном здесь учебном пособии рассматриваются настоящие таблицы Excel (Ctrl+Т) и их параметры стиля.`,
+  d3:{label:'Domain 3', name:'Manage Tables & Table Data', weight:'10–15%', mid:12.5, color:'var(--c-d3)',
+      hint:`Excel Kit sort/filter lessons; the study guide here covers real Excel Tables (Ctrl+T) and their style options.`,
       kitPath:'../excel/'},
-  d4:{label:"Домен 4", name:"Формулы и функции", weight:'15–20%', mid:17.5, color:'var(--c-d4)',
-      hint:`Ядро Excel комплект: ссылки, функции IF, COUNT и текстовые функции содержат полные уроки.`,
+  d4:{label:'Domain 4', name:'Formulas & Functions', weight:'15–20%', mid:17.5, color:'var(--c-d4)',
+      hint:`The Excel Kit's core: references, IF, COUNT-family, and text functions all have full lessons.`,
       kitPath:'../excel/'},
-  d5:{label:"Домен 5", name:"Управление диаграммами", weight:'15–20%', mid:17.5, color:'var(--c-d5)',
-      hint:`Уроки по диаграммам из набора Excel, а также набор грамотности в области диаграмм для выбора правильной диаграммы.`,
+  d5:{label:'Domain 5', name:'Manage Charts', weight:'15–20%', mid:17.5, color:'var(--c-d5)',
+      hint:`Excel Kit chart lessons plus the Chart Literacy Kit for choosing the right chart.`,
       kitPath:'../excel/'}
 };
 const DOMAIN_ORDER = ['d1','d2','d3','d4','d5'];
@@ -308,86 +308,86 @@ const LESSON_LINKS = {
 
 /* ============== STUDY GUIDE ============== */
 const STUDY = [
-  {key:'d1', title:"Управление рабочими листами и книгами — настройка, просмотр, печать, общий доступ",
+  {key:'d1', title:'Manage Worksheets & Workbooks — setup, views, print, share',
     must:[
-      `<strong>Импортировать данные</strong> из файлов .текст и .csv (Данные ▸ Получить данные / Из текста-CSV) — мастер выбирает разделители и типы столбцов перед загрузкой.`,
-      `<strong>Быстрая навигация</strong>: Поле имени или Перейти к (<code>Ctrl+G</code> /F5) переходит на ячейку или именованный диапазон; гиперссылки (<code>Ctrl+K</code>) может указывать на ячейки, листы, файлы или URL-адреса.`,
-      `<strong>Заморозить панели против разделения</strong>: заморозить строки/столбцы заголовков во время прокрутки (Вид ▸ Закрепить панели); Расколоть делит окно на независимо прокручиваемые панели. Заморозка верхней строки и заморозка на основе АКТИВНОЙ ЯЧЕЙКИ (всего вверху и слева) — это разные команды.`,
-      `<strong>Просмотры книги</strong>: Обычный, Макет страницы (см. верхние/нижние колонтитулы и поля), Предварительный просмотр разрыва страницы (перетаскивание границ синей страницы). Верхние и нижние колонтитулы, включая номера страниц, редактируются в режиме «Макет страницы» или «Параметры страницы».`,
-      `<strong>Настройка печати находится в разделе «Макет страницы» / «Параметры страницы».</strong>: установите ОБЛАСТЬ ПЕЧАТИ для печати только выбранного диапазона, печать заголовков для повторения строк заголовка на каждой странице, масштабирование по размеру, ориентацию, поля.`,
-      `<strong>Показать формулы</strong> (<code>Ctrl+\`</code> или «Формулы ▸ Показать формулы») вместо результатов отображаются формулы — экзаменационное задание и привычка отладки.`,
-      `<strong>Панель быстрого доступа и параметры</strong> настроить среду; масштабирование и расположение окон в реальном времени на вкладке «Вид».`,
-      `<strong>Прежде чем поделиться</strong>: проверьте свойства документа, затем «Проверить документ» (скрытые данные/личная информация), «Проверить доступность» (отсутствует замещающий текст, контрастность), «Проверить совместимость». Экспортировать в PDF с помощью «Файл» ▸ «Экспорт/Сохранить как».`,
-      `<strong>Комментарии против заметок</strong>: современные цепочные КОММЕНТАРИИ поддерживают ответы и @упоминания; ПРИМЕЧАНИЯ — это классические желтые стикеры. На экзамене вам будет предложено добавить, просмотреть, ответить, а также решить/удалить оба вопроса.`
+      `<strong>Import data</strong> from .txt and .csv files (Data ▸ Get Data / From Text-CSV) — the wizard picks delimiters and column types before loading.`,
+      `<strong>Navigate fast</strong>: Name Box or Go To (<code>Ctrl+G</code> / F5) jumps to a cell or named range; hyperlinks (<code>Ctrl+K</code>) can point to cells, sheets, files, or URLs.`,
+      `<strong>Freeze Panes vs. Split</strong>: freeze locks header rows/columns while you scroll (View ▸ Freeze Panes); split divides the window into independently scrolling panes. Freezing the top row and freezing based on the ACTIVE CELL (everything above and left) are different commands.`,
+      `<strong>Workbook views</strong>: Normal, Page Layout (see headers/footers and margins), Page Break Preview (drag the blue print-page boundaries). Headers and footers — including page numbers — are edited in Page Layout view or Page Setup.`,
+      `<strong>Print setup lives in Page Layout / Page Setup</strong>: set a PRINT AREA to print only a selected range, print titles to repeat header rows on every page, scale to fit, orientation, margins.`,
+      `<strong>Show formulas</strong> (<code>Ctrl+&#96;</code> or Formulas ▸ Show Formulas) displays formulas instead of results — an exam task and a debugging habit.`,
+      `<strong>Quick Access Toolbar and options</strong> customize the environment; zoom and window arrangement live on the View tab.`,
+      `<strong>Before sharing</strong>: check document properties, then Inspect Document (hidden data/personal info), Check Accessibility (missing alt text, contrast), Check Compatibility. Export as PDF via File ▸ Export/Save As.`,
+      `<strong>Comments vs. notes</strong>: modern threaded COMMENTS support replies and @mentions; NOTES are the classic yellow sticky annotations. The exam asks you to add, review, reply to, and resolve/delete both.`
     ],
-    miscon:`<strong>Заблуждение, которое следует разоблачить:</strong> «Если я скрою лист или несколько строк, эти данные не попадут в файл». Скрытые листы, строки и персональные метаданные перемещаются внутри книги — их может показать любой желающий. Шаг безопасности перед публикацией, который требуется на экзамене: <em>Проверить документ</em>, который по-настоящему находит и удаляет скрытый контент.`,
+    miscon:`<strong>Misconception to bust:</strong> "If I hide a sheet or some rows, that data won't go with the file." Hidden sheets, rows, and personal metadata all travel inside the workbook — anyone can unhide them. The pre-share safety step the exam wants is <em>Inspect Document</em>, which finds and removes hidden content for real.`,
     viz:`<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
       <span style="padding:4px 9px;border-radius:6px;background:var(--surf);border:1px solid var(--border);font-size:12px">📥 Import</span><span style="color:var(--dim)">→</span>
       <span style="padding:4px 9px;border-radius:6px;background:var(--surf);border:1px solid var(--border);font-size:12px">🧭 Navigate &amp; view</span><span style="color:var(--dim)">→</span>
       <span style="padding:4px 9px;border-radius:6px;background:var(--surf);border:1px solid var(--border);font-size:12px">🖨️ Print setup</span><span style="color:var(--dim)">→</span>
       <span style="padding:4px 9px;border-radius:6px;background:var(--surf);border:1px solid var(--border);font-size:12px;color:var(--accent)"><b>Inspect &amp; share</b></span>
     </div>`},
-  {key:'d2', title:"Управление ячейками и диапазонами данных — крупнейший практический домен",
+  {key:'d2', title:'Manage Data Cells & Ranges — the biggest hands-on domain',
     must:[
-      `<strong>Специальная вставка</strong> это меню «вставить только часть»: значения (удалить формулы), форматы, формулы, ширину столбцов, транспонировать (перевернуть строки/столбцы). Вставка «только ценности» — повседневный ход аналитиков.`,
-      `<strong>Автоматическое заполнение/заполнение серии</strong>: перетащите маркер заполнения, чтобы расширить шаблоны (январь, февраль, март… / 1, 2, 3…); кнопка «Параметры автозаполнения» выбирает копирование, серию или только форматирование. Дважды щелкните маркер, чтобы заполнить существующие данные.`,
-      `<strong>Вставка и удаление ячеек</strong> сдвигает соседей (сдвиг вправо/вниз при вставке) — отличается от очистки содержимого ячейки.`,
-      `<strong>Слияние и центрирование против центра по выделению</strong>: слияние уничтожает отдельные ячейки (нарушает сортировку, выделение, формулы); Центрирование выделения (Формат ячеек ▸ Выравнивание) выглядит идентично и сохраняет ячейки нетронутыми.`,
-      `<strong>Форматирование ячеек (<code>Ctrl+1</code>)</strong> это диалоговое окно всего: формат чисел, выравнивание, перенос текста, ориентация/поворот, отступ, границы, заливка.`,
-      `<strong>Числовые форматы меняют ОТОБРАЖЕНИЕ, а не значение</strong>: 0,5, указанное как 50%, по-прежнему равно 0,5 для каждой формулы.`,
-      `<strong>Формат по образцу</strong> копирует форматирование один раз (клик) или повторно (двойной клик); <strong>стили ячеек</strong> применять именованные пакеты форматов; <strong>Clear</strong> можно очистить только форматы, только содержимое или все.`,
-      `<strong>Именованные диапазоны</strong>: выберите диапазон → введите имя в поле «Имя» (или «Формулы ▸ Определить имя»). Тогда формулы могут сказать <code>=СУММ(Доход)</code> — читаемый и абсолютный по умолчанию.`,
-      `<strong>Sparklines</strong> представляют собой крошечные диаграммы в ячейках (линия, столбец, выигрыш/проигрыш), обобщающие тенденцию строки, вставленные из меню «Вставка ▸ Спарклайны», отформатированные на отдельной вкладке ленты.`,
-      `<strong>Условное форматирование</strong> на уровне Партнер: встроенные правила (выделение ячеек больше…, сверху/снизу, дубликаты), гистограммы данных, цветовые шкалы, наборы значков, а также удаление правил. (Правила, основанные на формулах, являются территорией экспертов.)`
+      `<strong>Paste Special</strong> is a menu of "paste only part of it": values (drop the formulas), formats, formulas, column widths, transpose (flip rows/columns). Values-only paste is the everyday analyst move.`,
+      `<strong>Auto Fill / fill series</strong>: drag the fill handle to extend patterns (Jan, Feb, Mar… / 1, 2, 3…); the Auto Fill Options button chooses copy vs. series vs. formatting-only. Double-click the handle to fill down beside existing data.`,
+      `<strong>Insert and delete cells</strong> shifts neighbors (shift right/down on insert) — different from clearing a cell's content.`,
+      `<strong>Merge &amp; Center vs. Center Across Selection</strong>: merging destroys the individual cells (breaks sorting, selecting, formulas); Center Across Selection (Format Cells ▸ Alignment) looks identical and keeps the cells intact.`,
+      `<strong>Format Cells (<code>Ctrl+1</code>)</strong> is the everything dialog: number formats, alignment, wrap text, orientation/rotation, indent, borders, fill.`,
+      `<strong>Number formats change DISPLAY, not the value</strong>: 0.5 shown as 50% is still 0.5 to every formula.`,
+      `<strong>Format Painter</strong> copies formatting once (click) or repeatedly (double-click); <strong>cell styles</strong> apply named format bundles; <strong>Clear</strong> can clear formats only, contents only, or all.`,
+      `<strong>Named ranges</strong>: select a range → type a name in the Name Box (or Formulas ▸ Define Name). Formulas can then say <code>=SUM(Revenue)</code> — readable and absolute by default.`,
+      `<strong>Sparklines</strong> are tiny in-cell charts (line, column, win/loss) summarizing a row's trend — inserted from Insert ▸ Sparklines, formatted via their own ribbon tab.`,
+      `<strong>Conditional formatting</strong> at Associate level: built-in rules (highlight cells greater than…, top/bottom, duplicates), data bars, color scales, icon sets — plus removing rules. (Formula-driven rules are Expert territory.)`
     ],
-    miscon:`<strong>Заблуждение, которое следует разоблачить:</strong> «Нажатие клавиши «Удалить» стирает ячейку». При удалении очищается только СОДЕРЖИМОЕ — желтая заливка, граница, формат валюты — все остается, и все, что появится там дальше, будет стилизовано. Очистка форматирования — это отдельная команда (Главная ▸ Очистить ▸ Очистить форматы). От этого зависят экзаменационные задания «Удалить форматирование из…».`,
+    miscon:`<strong>Misconception to bust:</strong> "Pressing Delete wipes the cell." Delete clears CONTENTS only — the yellow fill, the border, the currency format all stay and will style whatever lands there next. Clearing formatting is its own command (Home ▸ Clear ▸ Clear Formats). The exam's "remove the formatting from…" tasks hinge on this.`,
     viz:`<div style="display:flex;gap:10px;flex-wrap:wrap">
       <div style="border:1px solid var(--border);border-radius:6px;padding:8px 12px;background:var(--surf)"><span style="font-family:var(--mono);color:var(--accent)">Delete</span> <span style="color:var(--dim);font-size:13px">clears contents, formats stay</span></div>
       <div style="border:1px solid var(--border);border-radius:6px;padding:8px 12px;background:var(--surf)"><span style="font-family:var(--mono);color:var(--accent)">Clear ▸ Formats</span> <span style="color:var(--dim);font-size:13px">clears the look, value stays</span></div>
     </div>`},
-  {key:'d3', title:"Управление таблицами и табличными данными — настоящие таблицы, а не просто форматированные диапазоны",
+  {key:'d3', title:'Manage Tables & Table Data — real Tables, not just formatted ranges',
     must:[
-      `<strong>Сделать настоящую таблицу</strong>: выберите данные → <code>Ctrl+T</code> (или «Вставить ▸ Таблица/Главная ▸ Форматировать как таблицу»). Вы получаете кнопки фильтров, автоматически расширяемые диапазоны, структурированные ссылки, такие как <code>Таблица1[Доход]</code>и стили одним щелчком мыши.`,
-      `<strong>ОПЦИИ стиля стола</strong> (Вкладка «Дизайн таблицы»): переключение строки заголовка, ОБЩАЯ СТРОКА (с агрегированными средствами выбора для каждого столбца — сумма, среднее значение, количество), объединение строк/столбцов, выделение первого/последнего столбца.`,
-      `<strong>Расти и уменьшаться</strong>: ввод рядом с таблицей автоматически разворачивает ее; вы также можете вставлять/удалять строки и столбцы таблицы, не затрагивая соседей за пределами таблицы.`,
-      `<strong>Преобразовать обратно в диапазон</strong> (Дизайн таблицы ▸ Преобразовать в диапазон) сохраняет данные и форматирование, но удаляет поведение таблицы.`,
-      `<strong>Сортировать и фильтровать</strong>: одноуровневая и многоуровневая сортировка (сортировка по региону, затем по доходу), фильтрация по значениям, условиям текста/числа/даты или цвету. Фильтрация СКРЫВАЕТ строки; он никогда не удаляет их.`,
-      `<strong>Скажи это вслух</strong>: «Таблица — это поведение, а не внешний вид — фильтры, рост, структурированные имена. Одна краска не создает таблицу».`
+      `<strong>Make a real Table</strong>: select the data → <code>Ctrl+T</code> (or Insert ▸ Table / Home ▸ Format as Table). You get filter buttons, auto-expanding ranges, structured references like <code>Table1[Revenue]</code>, and one-click styles.`,
+      `<strong>Table style OPTIONS</strong> (Table Design tab): toggle the header row, TOTAL ROW (with per-column aggregate pickers — sum, average, count), banded rows/columns, first/last column emphasis.`,
+      `<strong>Grow and shrink</strong>: typing next to a table auto-expands it; you can also insert/delete table rows and columns without touching neighbors outside the table.`,
+      `<strong>Convert back to a range</strong> (Table Design ▸ Convert to Range) keeps the data and formatting but removes table behavior.`,
+      `<strong>Sort and filter</strong>: single and multi-level sorts (Sort by Region, then by Revenue), filter by values, text/number/date conditions, or color. Filtering HIDES rows; it never deletes them.`,
+      `<strong>Say it out loud</strong>: "A table is behavior, not looks — filters, growth, structured names. Paint alone doesn't make a table."`
     ],
-    miscon:`<strong>Заблуждение, которое следует разоблачить:</strong> «Я выделил цвета полос и жирные заголовки, так что теперь это таблица». Форматирование косметическое. Настоящая таблица Excel (Ctrl+Т) — это живой объект: она автоматически расширяется, содержит структурированные ссылки и имеет собственную вкладку «Дизайн». Экзаменационные задания, в которых говорится «создать таблицу» или «добавить итоговую строку», требуют реальных вещей.`,
+    miscon:`<strong>Misconception to bust:</strong> "I gave the range banded colors and bold headers, so it's a table now." Formatting is cosmetic. A real Excel Table (Ctrl+T) is a live object: it auto-expands, feeds structured references, and carries its own Design tab. Exam tasks that say "create a table" or "add a total row" require the real thing.`,
     viz:`<div style="display:flex;gap:8px;flex-wrap:wrap">
       <span style="padding:3px 9px;border-radius:4px;background:var(--surf);border:1px solid var(--border);font-size:12px">🎨 Formatted range <span style="color:var(--dim)">just looks nice</span></span>
       <span style="padding:3px 9px;border-radius:4px;background:var(--surf);border:1px solid var(--accent);font-size:12px">⚡ Table (Ctrl+T) <span style="color:var(--dim)">filters · auto-expand · Table1[Col]</span></span>
     </div>`},
-  {key:'d4', title:"Формулы и функции — ссылки, логика, подсчет, текст",
+  {key:'d4', title:'Formulas & Functions — references, logic, counting, text',
     must:[
-      `<strong>Относительные/абсолютные/смешанные ссылки</strong>: <code>A1</code> сдвигается при копировании; <code>$A$1</code> никогда не двигается; <code>$А1</code> блокирует колонку, <code>1 австралийский доллар</code> блокирует строку. <strong>F4</strong> циклически пропускает ссылку через все четыре формы.`,
-      `<strong>Скажи это вслух</strong>: «Знак доллара — это канцелярская кнопка: все, что перед ним, остается закрепленным».`,
-      `<strong>Основные агрегаты</strong>: <code>SUM</code>, <code>AVERAGE</code>, <code>MAX</code>, <code>MIN</code> — и знайте, что я сам угадывает диапазон, который вам следует проверить.`,
-      `<strong>Семья COUNT</strong>: <code>COUNT</code> считает только ЦИФРЫ · <code>COUNTA</code> считает все непустое · <code>COUNTBLANK</code> считает пустое. «Почему COUNT игнорирует мои имена?» — потому что они текстовые.`,
-      `<strong>IF</strong>: <code>=ЕСЛИ(тест, значение_если_истина, значение_если_ложь)</code> - например <code>=ЕСЛИ(B2>=100,"Высокий","Низкий")</code>. Следите за порядком аргументов.`,
-      `<strong>Динамические массивы (новинка МО-210)</strong>: <code>=СОРТИРОВАТЬ(диапазон)</code> and <code>=УНИКАЛЬНЫЙ(диапазон)</code> РАЗЛИВАТЬ результаты в соседние ячейки — одна формула, множество результатов и <code>#РАСЛИ!</code> ошибка, если что-то блокирует зону приземления.`,
-      `<strong>Текстовая хирургия</strong>: <code>LEFT</code>/<code>RIGHT</code>/<code>MID</code> нарезка символов; <code>LEN</code> считает их; <code>UPPER</code>/<code>LOWER</code> изменить случай.`,
-      `<strong>Текстовая сборка</strong>: <code>СЦЕП(A2," ",B2)</code> склеивает ценности; <code>ТЕКСТJOIN(", ",ИСТИНА,A2:A10)</code> склеивает весь диапазон с разделителем, при необходимости пропуская пустые места — обновление при наборе текста <code>&</code> десяток раз.`,
-      `<strong>Именованные диапазоны в формулах</strong>: <code>=СУММ(Продажи за 1 квартал)</code> — имена ведут себя как абсолютные ссылки и читаются как по-английски.`
+      `<strong>Relative / absolute / mixed references</strong>: <code>A1</code> shifts when copied; <code>$A$1</code> never moves; <code>$A1</code> locks the column, <code>A$1</code> locks the row. <strong>F4</strong> cycles a reference through all four forms.`,
+      `<strong>Say it out loud</strong>: "The dollar sign is a thumbtack — whatever it's in front of stays pinned."`,
+      `<strong>Core aggregates</strong>: <code>SUM</code>, <code>AVERAGE</code>, <code>MAX</code>, <code>MIN</code> — and know that AutoSum guesses a range you should verify.`,
+      `<strong>The COUNT family</strong>: <code>COUNT</code> counts NUMBERS only · <code>COUNTA</code> counts anything non-empty · <code>COUNTBLANK</code> counts empties. "Why does COUNT ignore my names?" — because they're text.`,
+      `<strong>IF</strong>: <code>=IF(test, value_if_true, value_if_false)</code> — e.g. <code>=IF(B2>=100,"High","Low")</code>. Watch the argument order.`,
+      `<strong>Dynamic arrays (new on MO-210)</strong>: <code>=SORT(range)</code> and <code>=UNIQUE(range)</code> SPILL their results into neighboring cells — one formula, many results, and a <code>#SPILL!</code> error if something blocks the landing zone.`,
+      `<strong>Text surgery</strong>: <code>LEFT</code>/<code>RIGHT</code>/<code>MID</code> slice characters; <code>LEN</code> counts them; <code>UPPER</code>/<code>LOWER</code> change case.`,
+      `<strong>Text assembly</strong>: <code>CONCAT(A2," ",B2)</code> glues values; <code>TEXTJOIN(", ",TRUE,A2:A10)</code> glues a whole range with a delimiter, optionally skipping empties — the upgrade over typing <code>&amp;</code> a dozen times.`,
+      `<strong>Named ranges in formulas</strong>: <code>=SUM(Q1_Sales)</code> — names behave as absolute references and read like English.`
     ],
-    miscon:`<strong>Заблуждение, которое следует разоблачить:</strong> «Доллар в $A$1 как-то связан с валютой». Это якорь, не более того. И хитрая версия: <code>$А1</code>против. <code>1 австралийский доллар</code> НЕ являются взаимозаменяемыми: один закрепляет столбец, другой закрепляет строку, а заполнение поперек или заполнение вниз выявляет разницу. F4 циклически переключает все четыре клавиши, поэтому вам не придется вводить доллары вручную.`,
+    miscon:`<strong>Misconception to bust:</strong> "The $ in $A$1 has something to do with currency." It's an anchor, nothing else. And the sneaky version: <code>$A1</code> vs. <code>A$1</code> are NOT interchangeable — one pins the column, the other pins the row, and fill-across vs. fill-down exposes the difference. F4 cycles through all four so you don't type dollars by hand.`,
     viz:`<div style="display:flex;gap:10px;flex-wrap:wrap">
       <div style="border:1px solid var(--border);border-radius:6px;padding:8px 12px;background:var(--surf)"><span style="font-family:var(--mono);color:var(--accent)">$A$1</span> <span style="color:var(--dim);font-size:13px">🔒 fully pinned</span></div>
       <div style="border:1px solid var(--border);border-radius:6px;padding:8px 12px;background:var(--surf)"><span style="font-family:var(--mono);color:var(--accent)">$A1</span> <span style="color:var(--dim);font-size:13px">column pinned</span></div>
       <div style="border:1px solid var(--border);border-radius:6px;padding:8px 12px;background:var(--surf)"><span style="font-family:var(--mono);color:var(--accent)">A$1</span> <span style="color:var(--dim);font-size:13px">row pinned</span></div>
       <div style="border:1px solid var(--border);border-radius:6px;padding:8px 12px;background:var(--surf)"><span style="font-family:var(--mono);color:var(--accent)">F4</span> <span style="color:var(--dim);font-size:13px">cycles all four</span></div>
     </div>`},
-  {key:'d5', title:"Управление диаграммами — создание, изменение, форматирование",
+  {key:'d5', title:'Manage Charts — create, modify, format',
     must:[
-      `<strong>Create</strong>: выберите данные → Вставить ▸ тип диаграммы или <code>Alt+F1</code> для мгновенной встроенной диаграммы. Рекомендуемые диаграммы предлагают подходящие варианты для вашего выбора.`,
-      `<strong>SHEETS и встроенные диаграммы</strong>: <code>F11</code> (или «Переместить диаграмму ▸ Новый лист») помещает диаграмму на отдельный полностраничный лист; встроенные диаграммы плавают на листе. Переместить диаграмму переключается между ними.`,
-      `<strong>Диаграммы остаются связанными со своими данными</strong> — отредактируйте исходную ячейку и диаграмма перерисуется. Чтобы добавить ряд данных, перетащите контур цветного диапазона или используйте «Выбрать данные» ▸ «Добавить».`,
-      `<strong>Переключить строку/столбец</strong> (Вкладка «Дизайн диаграммы») переворачивает то, что является серией, а что — категорией — исправление, когда диаграмма группируется по неправильным объектам.`,
-      `<strong>Элементы диаграммы</strong> (кнопка + или Дизайн диаграммы ▸ Добавить элемент диаграммы): заголовок, названия осей, метки данных, таблица данных, линии сетки, легенда, линия тренда — добавить, удалить, изменить положение.`,
-      `<strong>Быстрая компоновка и СТИЛИ диаграмм</strong> применять готовые аранжировки и внешний вид; форматирование отдельных частей с помощью панели «Формат» (дважды щелкните любой элемент).`,
-      `<strong>Альтернативный текст на диаграммах</strong> (щелкните правой кнопкой мыши ▸ Изменить замещающий текст) — это явная цель доступности — опишите, что показано на диаграмме.`,
-      `<strong>Выбор типа</strong>: тенденции → линия · сравнения → столбец/столбец · части целого с НЕСКОЛЬКИМИ фрагментами → круговая диаграмма (остальная полоса). Те же правила, что и <a href="../chart-literacy/">Диаграммный комплект грамотности</a>.`
+      `<strong>Create</strong>: select the data → Insert ▸ chart type, or <code>Alt+F1</code> for an instant embedded chart. Recommended Charts suggests fits for your selection.`,
+      `<strong>Chart SHEETS vs. embedded charts</strong>: <code>F11</code> (or Move Chart ▸ New sheet) puts the chart on its own full-page sheet; embedded charts float on a worksheet. Move Chart switches between the two.`,
+      `<strong>Charts stay linked to their data</strong> — edit a source cell and the chart redraws. To add a data series, drag the colored range outline or use Select Data ▸ Add.`,
+      `<strong>Switch Row/Column</strong> (Chart Design tab) flips what's a series vs. what's a category — the fix when the chart groups by the wrong thing.`,
+      `<strong>Chart elements</strong> (the + button or Chart Design ▸ Add Chart Element): title, axis titles, data labels, data table, gridlines, legend, trendline — add, remove, reposition.`,
+      `<strong>Quick Layout and chart STYLES</strong> apply prebuilt arrangements and looks; individual pieces format via the Format pane (double-click any element).`,
+      `<strong>Alt text on charts</strong> (right-click ▸ Edit Alt Text) is an explicit accessibility objective — describe what the chart shows.`,
+      `<strong>Choosing the type</strong>: trends → line · comparisons → column/bar · parts of a whole with FEW slices → pie (else bar). Same rules as the <a href="../chart-literacy/">Chart Literacy Kit</a>.`
     ],
     miscon:`<strong>Misconception to bust:</strong> "The chart is wrong, I'll rebuild it." Almost never necessary. Wrong grouping → Switch Row/Column. Missing series → Select Data ▸ Add. Stale numbers → the chart is LIVE-linked; fix the source cells. Wrong type → Change Chart Type. The exam grades the efficient edit, and rebuilding wastes your 50 minutes.`,
     viz:`<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
@@ -405,31 +405,31 @@ const STUDY = [
    sections, not against a topic name. Most of MO-210 is ribbon mechanics the
    guide library does not cover, so 11 of 35 is the honest ceiling right now. */
 const GUIDE_LINKS = {
-  q4: {slug:'excel-csv-import-leading-zeros', title:"Excel удаляет ведущие нули из почтовых индексов: исправление импорта CSV"},
+  q4: {slug:'excel-csv-import-leading-zeros', title:'Excel Removes Leading Zeros from Zip Codes: The CSV Import Fix'},
   /* Added 2026-08-10 with the absolute-references guide. q25 is the =B2*$C$1
      copied-down question, which had no guide behind it until now. */
-  q25:{slug:'excel-absolute-vs-relative-references', title:"Абсолютные и относительные ссылки в Excel: что блокирует знак доллара"},
-  q14:{slug:'excel-custom-number-formats', title:"Пользовательские числовые форматы в Excel: покажите единицу измерения, не разбивая число"},
-  q19:{slug:'excel-conditional-formatting', title:"Условное форматирование на основе другой ячейки"},
-  q13:{slug:'excel-tables', title:"Таблицы Excel против диапазонов: что на самом деле меняет сочетание клавиш Ctrl+Т"},
-  q21:{slug:'excel-tables', title:"Таблицы Excel против диапазонов: что на самом деле меняет сочетание клавиш Ctrl+Т"},
-  q22:{slug:'excel-tables', title:"Таблицы Excel против диапазонов: что на самом деле меняет сочетание клавиш Ctrl+Т"},
-  q23:{slug:'excel-tables', title:"Таблицы Excel против диапазонов: что на самом деле меняет сочетание клавиш Ctrl+Т"},
-  q24:{slug:'excel-tables', title:"Таблицы Excel против диапазонов: что на самом деле меняет сочетание клавиш Ctrl+Т"},
-  q27:{slug:'excel-if-family', title:"ЕСЛИ, СЧЕТЕСЛИ и СУММЕСЛИ: по одной строке за раз или все строки одновременно"},
-  q28:{slug:'excel-dynamic-arrays', title:"Динамические массивы Excel: ФИЛЬТР, УНИКАЛЬНОСТЬ и СОРТИРОВКА в одной формуле"},
-  q31:{slug:'excel-pick-the-chart', title:"Какую диаграмму мне следует использовать? Бар, линия или разброс"},
-  q26:{slug:'excel-count-counta-countblank', title:"COUNT, COUNTA и COUNTBLANK в Excel"},
-  q11:{slug:'excel-paste-special', title:"Специальная вставка в Excel: значения, форматы, транспонирование"},
-  q20:{slug:'excel-paste-special', title:"Специальная вставка в Excel: значения, форматы, транспонирование"},
-  q29:{slug:'excel-text-functions', title:"Текстовые функции Excel: LEFT, RIGHT, MID, LEN и TEXTJOIN."},
-  q30:{slug:'excel-text-functions', title:"Текстовые функции Excel: LEFT, RIGHT, MID, LEN и TEXTJOIN."}
+  q25:{slug:'excel-absolute-vs-relative-references', title:'Absolute vs Relative References in Excel: What the Dollar Sign Locks'},
+  q14:{slug:'excel-custom-number-formats', title:'Custom Number Formats in Excel: Show the Unit Without Breaking the Number'},
+  q19:{slug:'excel-conditional-formatting', title:'Conditional Formatting Based on Another Cell'},
+  q13:{slug:'excel-tables', title:'Excel Tables vs Ranges: What Ctrl+T Actually Changes'},
+  q21:{slug:'excel-tables', title:'Excel Tables vs Ranges: What Ctrl+T Actually Changes'},
+  q22:{slug:'excel-tables', title:'Excel Tables vs Ranges: What Ctrl+T Actually Changes'},
+  q23:{slug:'excel-tables', title:'Excel Tables vs Ranges: What Ctrl+T Actually Changes'},
+  q24:{slug:'excel-tables', title:'Excel Tables vs Ranges: What Ctrl+T Actually Changes'},
+  q27:{slug:'excel-if-family', title:'IF vs COUNTIF vs SUMIF: One Row at a Time, or All Rows at Once'},
+  q28:{slug:'excel-dynamic-arrays', title:'Excel Dynamic Arrays: FILTER, UNIQUE and SORT in One Formula'},
+  q31:{slug:'excel-pick-the-chart', title:'Which Chart Should I Use? Bar, Line or Scatter'},
+  q26:{slug:'excel-count-counta-countblank', title:'COUNT vs COUNTA vs COUNTBLANK in Excel'},
+  q11:{slug:'excel-paste-special', title:'Paste Special in Excel: Values, Formats, Transpose'},
+  q20:{slug:'excel-paste-special', title:'Paste Special in Excel: Values, Formats, Transpose'},
+  q29:{slug:'excel-text-functions', title:'Excel Text Functions: LEFT, RIGHT, MID, LEN and TEXTJOIN'},
+  q30:{slug:'excel-text-functions', title:'Excel Text Functions: LEFT, RIGHT, MID, LEN and TEXTJOIN'}
 };
 
 function guideLinkHtml(qid){
   const g = GUIDE_LINKS[qid];
   if(!g) return '';
-  return `<button class="guide-link" onclick="openGuide('${g.slug}',this.dataset.t)" data-t="${g.title.replace(/"/g,'&quot;')}">Читать далее: ${g.title}</button>`;
+  return `<button class="guide-link" onclick="openGuide('${g.slug}',this.dataset.t)" data-t="${g.title.replace(/"/g,'&quot;')}">Read more: ${g.title}</button>`;
 }
 
 function openGuide(slug, title){
@@ -456,254 +456,254 @@ document.addEventListener('keydown', e => {
 
 const QUESTIONS = [
   /* ---------- DOMAIN 1 · Manage Worksheets & Workbooks (10) ---------- */
-  {id:'q1', domain:'d1', type:'mc', q:`Вам нужно, чтобы строка 1 (заголовки) И столбец A (имена) оставались видимыми при прокрутке в любом месте большого листа. Единственный правильный ход:`,
+  {id:'q1', domain:'d1', type:'mc', q:`You need row 1 (headers) AND column A (names) to stay visible while scrolling anywhere in a big sheet. The single correct move:`,
     choices:[
-      `Выберите ячейку B2, затем выберите «Просмотр» ▸ «Закрепить панели» ▸ «Закрепить панели».`,
-      `Вид ▸ Закрепить верхнюю строку, готово.`,
-      `Вид ▸ Разделить.`,
-      `Объедините строку 1 в одну ячейку.`],
+      `Select cell B2, then View ▸ Freeze Panes ▸ Freeze Panes.`,
+      `View ▸ Freeze Top Row, done.`,
+      `View ▸ Split.`,
+      `Merge row 1 into one cell.`],
     correct:0,
     explain:`Freeze Panes locks everything ABOVE and LEFT of the active cell — from B2, that's row 1 and column A together. Freeze Top Row alone loses column A; Split scrolls independently rather than locking.`},
-  {id:'q2', domain:'d1', type:'mc', q:`На листе гораздо большего размера следует печатать только диапазон A1:F30. Ты:`,
+  {id:'q2', domain:'d1', type:'mc', q:`Only the range A1:F30 should print, out of a much larger sheet. You:`,
     choices:[
-      `Удалите все остальное.`,
-      `Выберите A1:F30 → Макет страницы ▸ Область печати ▸ Установить область печати.`,
-      `Скройте все остальные столбцы навсегда.`,
-      `Уменьшите масштаб, пока он не подойдет.`],
+      `Delete everything else.`,
+      `Select A1:F30 → Page Layout ▸ Print Area ▸ Set Print Area.`,
+      `Hide all other columns forever.`,
+      `Zoom out until it fits.`],
     correct:1,
-    explain:`Область печати ограничивает печать выбранным диапазоном и сохраняется в книге. Печатные заголовки (повторяющиеся строки заголовков на каждой странице) находятся в одном семействе параметров страницы.`},
-  {id:'q3', domain:'d1', type:'mc', q:`Чтобы увидеть и редактировать нижний колонтитул с номером страницы во время работы, переключитесь на:`,
-    choices:[`Обычный вид`, `Режим макета страницы`, `Предварительный просмотр разрыва страницы`, `Показать формулы`],
+    explain:`Print Area limits printing to the selected range and persists with the workbook. Print Titles (repeat header rows each page) lives in the same Page Setup family.`},
+  {id:'q3', domain:'d1', type:'mc', q:`To see and edit the footer with a page number while working, switch to:`,
+    choices:[`Normal view`, `Page Layout view`, `Page Break Preview`, `Show Formulas`],
     correct:1,
-    explain:`В представлении «Макет страницы» страница отображается в том виде, в каком она печатается, с интерактивными зонами верхнего и нижнего колонтитула (а также инструментами «Верхний и нижний колонтитулы» для полей номеров страниц). Предварительный просмотр разрыва страницы предназначен для перетаскивания границ печатаемой страницы.`},
-  {id:'q4', domain:'d1', type:'mc', q:`В вашу книгу должен поступать CSV-файл заказов с правильными типами столбцов. Способ МО-210:`,
+    explain:`Page Layout view shows the page as it prints, with clickable header/footer zones (and the Header & Footer tools for page-number fields). Page Break Preview is for dragging print-page boundaries.`},
+  {id:'q4', domain:'d1', type:'mc', q:`A .csv of orders must come into your workbook with correct column types. The MO-210 way:`,
     choices:[
-      `Данные ▸ В разделе «Текст/CSV» просмотрите предварительный просмотр, затем «Загрузить».`,
-      `Сделайте снимок экрана CSV и вставьте изображение.`,
-      `Введите его еще раз.`,
-      `Переименуйте файл .csv в .xlsx.`],
+      `Data ▸ From Text/CSV, review the preview, then Load.`,
+      `Screenshot the CSV and paste the image.`,
+      `Retype it.`,
+      `Rename the .csv to .xlsx.`],
     correct:0,
-    explain:`Получить данные ▸ Из текста/CSV анализирует разделители и типы с предварительным просмотром перед загрузкой — цель импорта 1.1 проверяет именно этот путь.`},
-  {id:'q5', domain:'d1', type:'mc', q:`Прежде чем отправить книгу по электронной почте на внешний сервер, используйте следующий инструмент:`,
-    choices:[`Проверить доступность`, `Проверить документ`, `Проверьте совместимость`, `Показать формулы`],
+    explain:`Get Data ▸ From Text/CSV parses delimiters and types with a preview before loading — the import objective 1.1 tests exactly this path.`},
+  {id:'q5', domain:'d1', type:'mc', q:`Before emailing a workbook externally, the tool that finds hidden sheets, hidden rows, and personal info is:`,
+    choices:[`Check Accessibility`, `Inspect Document`, `Check Compatibility`, `Show Formulas`],
     correct:1,
-    explain:`Файл ▸ Информация ▸ Проверить наличие проблем ▸ Проверить отсканированные документы на предмет скрытого содержимого и метаданных и предложить их удалить. Проверка доступности альтернативного текста/контрастности; Совместимость проверяет функции старого формата.`},
-  {id:'q6', domain:'d1', type:'mc', q:`Переход прямо к именованному диапазону под названием <code>Q1_Sales</code> в любом месте книги:`,
+    explain:`File ▸ Info ▸ Check for Issues ▸ Inspect Document scans for hidden content and metadata and offers to remove it. Accessibility checks alt text/contrast; Compatibility checks old-format features.`},
+  {id:'q6', domain:'d1', type:'mc', q:`Jumping straight to a named range called <code>Q1_Sales</code> anywhere in the workbook:`,
     choices:[
-      `Введите Q1_Продажи в поле имени (или F5 / Ctrl+Г → Перейти).`,
-      `Прокрутите и найдите его.`,
-      `Распечатайте рабочую тетрадь и найдите бумагу.`,
-      `По именам невозможно перейти.`],
+      `Type Q1_Sales in the Name Box (or F5 / Ctrl+G → Go To).`,
+      `Scroll and look for it.`,
+      `Print the workbook and search the paper.`,
+      `Names can't be navigated to.`],
     correct:0,
-    explain:`Поле имени выполняет функцию навигации — введите имя или ссылку и нажмите Входить. Перейти к перечисляет все имена. Навигация по именованным диапазонам является явной целью версии 1.2.`},
-  {id:'q7', domain:'d1', type:'mc', q:`Отображение формул в ячейках вместо их результатов (для ознакомления):`,
+    explain:`The Name Box doubles as navigation — type a name or reference and Enter. Go To lists all names. Navigation via named ranges is an explicit 1.2 objective.`},
+  {id:'q7', domain:'d1', type:'mc', q:`Displaying formulas in cells instead of their results (for review) is:`,
     choices:[
-      `Формулы ▸ Показать формулы (Ctrl+\`).`,
-      `Удаление значений.`,
-      `Защита листа.`,
-      `Установка моноширинного шрифта.`],
+      `Formulas ▸ Show Formulas (Ctrl+\`).`,
+      `Deleting the values.`,
+      `Protecting the sheet.`,
+      `Setting the font to monospace.`],
     correct:0,
-    explain:`«Показать формулы» переключает весь лист между результатами и текстом формулы — явная экзаменационная задача и самая быстрая проверка того, что вычислено, а что напечатано.`},
-  {id:'q8', domain:'d1', type:'mc', q:`Товарищ по команде должен получить вашу книгу в виде фиксированного, нередактируемого файла со стабильным макетом. Экспортируйте его как:`,
-    choices:[`Еще один .xlsx`, `PDF-файл (Файл ▸ Экспорт/Сохранить как PDF)`, `TXT-файл`, `Скриншот, вставленный в книгу`],
+    explain:`Show Formulas toggles the whole sheet between results and formula text — an explicit exam task and the fastest audit of what's calculated vs. typed.`},
+  {id:'q8', domain:'d1', type:'mc', q:`A teammate should get your workbook as a fixed, uneditable, layout-stable file. Export it as:`,
+    choices:[`Another .xlsx`, `A PDF (File ▸ Export / Save As PDF)`, `A .txt file`, `A screenshot pasted into the workbook`],
     correct:1,
-    explain:`PDF-файл замораживает макет для просмотра/печати без Эксель. (В формате .текст форматирование и формулы будут полностью удалены; другой файл .xlsx останется доступным для редактирования.)`},
-  {id:'q9', domain:'d1', type:'mc', q:`Современные вложенные КОММЕНТАРИИ отличаются от классических ПРИМЕЧАНИЙ тем, что комментарии:`,
+    explain:`PDF freezes layout for viewing/printing without Excel. (.txt would drop formatting and formulas entirely; another .xlsx stays editable.)`},
+  {id:'q9', domain:'d1', type:'mc', q:`Modern threaded COMMENTS differ from classic NOTES in that comments:`,
     choices:[
-      `Ответы поддержки (темы) и решение — созданы для обсуждения.`,
-      `Автоматическая печать на каждой странице.`,
-      `Может быть добавлен только владельцем файла.`,
-      `Это желтые липкие коробки.`],
+      `Support replies (threads) and resolving — built for discussion.`,
+      `Print automatically on every page.`,
+      `Can only be added by the file owner.`,
+      `Are the yellow sticky boxes.`],
     correct:0,
-    explain:`Комментарии = цепочки бесед, на которые вы можете отвечать и разрешать. Примечания = классические желтые аннотации. На экзамене вам предлагается добавить, ответить, решить и удалить оба типа.`},
-  {id:'q10', domain:'d1', type:'ms', q:`Какие проверки находятся в разделе «Файл ▸ Информация ▸ Проверить наличие проблем»? <em>Выберите все, что применимо.</em>`,
-    choices:[`Проверить документ`, `Проверить доступность`, `Проверьте совместимость`, `Проверка орфографии`],
+    explain:`Comments = threaded conversations you can reply to and resolve. Notes = the classic yellow annotations. The exam asks you to add, reply to, resolve, and delete both kinds.`},
+  {id:'q10', domain:'d1', type:'ms', q:`Which checks live under File ▸ Info ▸ Check for Issues? <em>Choose all that apply.</em>`,
+    choices:[`Inspect Document`, `Check Accessibility`, `Check Compatibility`, `Spell check`],
     correct:[0,1,2],
-    explain:`Трио «Проверка проблем»: скрытые данные (Проверка), проблемы доступности, такие как отсутствие замещающего текста (Доступность), и функции, которые не поддерживаются старыми форматами (Совместимость). Правописание живет на вкладке «Обзор».`},
+    explain:`The Check for Issues trio: hidden data (Inspect), accessibility problems like missing alt text (Accessibility), and features older formats can't hold (Compatibility). Spelling lives on the Review tab.`},
 
   /* ---------- DOMAIN 2 · Manage Data Cells & Ranges (10) ---------- */
-  {id:'q11', domain:'d2', type:'mc', q:`Столбец D содержит формулы. Вы должны заменить их текущими значениями, чтобы они прекратили перерасчет. Ход:`,
+  {id:'q11', domain:'d2', type:'mc', q:`Column D holds formulas. You must replace them with their current values so they stop recalculating. The move:`,
     choices:[
-      `Скопируйте столбец, затем «Вставить специальные ▸ значения» в себя.`,
-      `Измените цвет шрифта.`,
-      `Нажмите Удалить.`,
-      `Сохраните файл дважды.`],
+      `Copy the column, then Paste Special ▸ Values onto itself.`,
+      `Change the font color.`,
+      `Press Delete.`,
+      `Save the file twice.`],
     correct:0,
-    explain:`Специальная вставка ▸ Значения — это переход от формулы к значениям — повседневная аналитическая работа и стандартное экзаменационное задание. (Специальная вставка также предлагает форматы, транспонирование и ширину столбцов.)`},
-  {id:'q12', domain:'d2', type:'mc', q:`A2 содержит «январь». Перетащив дескриптор заполнения вниз на 11 ячеек, вы получите:`,
+    explain:`Paste Special ▸ Values is THE formulas-to-values move — everyday analyst work and a standard exam task. (Paste Special also offers formats, transpose, and column widths.)`},
+  {id:'q12', domain:'d2', type:'mc', q:`A2 contains "January". Dragging its fill handle down 11 cells gives you:`,
     choices:[
-      `Двенадцать ячеек «Января».`,
-      `С февраля по декабрь — функция Автозаполнение расширяет признанную серию.`,
-      `Ошибка.`,
-      `Пустые ячейки.`],
+      `Twelve cells of "January".`,
+      `February through December — Auto Fill extends the recognized series.`,
+      `An error.`,
+      `Empty cells.`],
     correct:1,
-    explain:`Автозаполнение распознает встроенные серии (месяцы, дни недели, номера по шаблону). Если вам действительно нужно 12 января, кнопка «Параметры автозаполнения» переключается на «Копировать ячейки».`},
-  {id:'q13', domain:'d2', type:'mc', q:`Заголовок должен располагаться по центру A1:F1, но сортировка и выбор ячеек под ним должны работать нормально. Предпочитать:`,
+    explain:`Auto Fill recognizes built-in series (months, weekdays, patterned numbers). If you actually wanted 12 Januaries, the Auto Fill Options button switches to Copy Cells.`},
+  {id:'q13', domain:'d2', type:'mc', q:`A title should appear centered across A1:F1, but sorting and cell selection must keep working normally underneath. Prefer:`,
     choices:[
-      `Объединить и центрировать.`,
-      `Центрировать выделение (Формат ячеек ▸ Выравнивание).`,
-      `Ввод пробелов перед заголовком.`,
-      `Текстовое поле, наклеенное на ячейки.`],
+      `Merge & Center.`,
+      `Center Across Selection (Format Cells ▸ Alignment).`,
+      `Typing spaces before the title.`,
+      `A text box taped over the cells.`],
     correct:1,
-    explain:`Выбор по центру ВЫГЛЯДИТ как объединение, но сохраняет все шесть ячеек по отдельности нетронутыми — объединенные ячейки являются классической причиной «невозможной сортировки» и разрыва выбора диапазона.`},
-  {id:'q14', domain:'d2', type:'mc', q:`Ячейка B2 показывает <code>50%</code>. Формула, ссылающаяся на B2, видит:`,
-    choices:[`Текст «50%»`, `50`, `0,5 — сохраненное значение; формат % меняет только отображение`, `5.0`],
+    explain:`Center Across Selection LOOKS like a merge but keeps all six cells individually intact — merged cells are the classic cause of "cannot sort" and broken range selections.`},
+  {id:'q14', domain:'d2', type:'mc', q:`Cell B2 shows <code>50%</code>. A formula referencing B2 sees:`,
+    choices:[`The text "50%"`, `50`, `0.5 — the stored value; the % format only changes display`, `5.0`],
     correct:2,
-    explain:`Числовые форматы — это обои: отображение меняется, сохраненное значение — нет. 50% ЕСТЬ 0,5. Именно поэтому задачи «сделать это валютой» никогда не меняют дальнейшую математику.`},
-  {id:'q15', domain:'d2', type:'mc', q:`Сочетание клавиш, которое открывает полное диалоговое окно «Формат ячеек»:`,
+    explain:`Number formats are wallpaper: display changes, the stored value doesn't. 50% IS 0.5. This is also why "make it currency" tasks never alter downstream math.`},
+  {id:'q15', domain:'d2', type:'mc', q:`The keyboard shortcut that opens the full Format Cells dialog:`,
     choices:[`Ctrl+1`, `Ctrl+F`, `Alt+F4`, `Ctrl+P`],
     correct:0,
-    explain:`Ctrl+1 открывает формат ячеек — числовые форматы, выравнивание, перенос, ориентацию, границы, заливку. Стоит взять с собой на экзамен по времени.`},
-  {id:'q16', domain:'d2', type:'mc', q:`Применить форматирование одной ячейки к пяти другим разбросанным диапазонам, один за другим, быстрее всего с помощью:`,
+    explain:`Ctrl+1 opens Format Cells — number formats, alignment, wrap, orientation, borders, fill. Worth having in your fingers for the timed exam.`},
+  {id:'q16', domain:'d2', type:'mc', q:`Applying one cell's formatting to five other scattered ranges, one after another, is fastest with:`,
     choices:[
-      `Дважды щелкните «Формат по образцу» (останется включенным до тех пор, пока не нажмет клавишу Esc), а затем щелкните каждый диапазон.`,
-      `Повторный ввод формата пять раз в поле «Формат ячеек».`,
-      `Объединение всего.`,
-      `Диаграмма.`],
+      `Double-clicking Format Painter (stays on until Esc), then clicking each range.`,
+      `Retyping the format five times in Format Cells.`,
+      `Merging everything.`,
+      `A chart.`],
     correct:0,
-    explain:`Формат по образцу одним щелчком мыши = одно приложение; двойной щелчок = заблокирован для повторного рисования, пока вы не нажмете Эск. Явная цель форматирования ячеек.`},
-  {id:'q17', domain:'d2', type:'mc', q:`Определение именованного диапазона, чтобы формулы могли сказать <code>=СУММ(Доход)</code>:`,
+    explain:`Single-click Format Painter = one application; double-click = locked on for repeated painting until you press Esc. An explicit objective under formatting cells.`},
+  {id:'q17', domain:'d2', type:'mc', q:`Defining a named range so formulas can say <code>=SUM(Revenue)</code>:`,
     choices:[
-      `Выберите диапазон и введите «Доход» в поле «Имя» (или «Формулы ▸ Определить имя»).`,
-      `Введите «Доход» в ячейке над данными.`,
-      `Выделите диапазон.`,
-      `Сохраните файл как Доход.xlsx.`],
+      `Select the range and type Revenue into the Name Box (or Formulas ▸ Define Name).`,
+      `Type "Revenue" in the cell above the data.`,
+      `Bold the range.`,
+      `Save the file as Revenue.xlsx.`],
     correct:0,
-    explain:`Имена определяются с помощью поля «Имя» или «Определить имя», а затем ведут себя как читаемые абсолютные ссылки в любом месте книги.`},
-  {id:'q18', domain:'d2', type:'mc', q:`Крошечные диаграммы трендов с одной ячейкой рядом с каждой строкой ежемесячных данных:`,
-    choices:[`Спарклайны (Вставка ▸ Спарклайны)`, `Наборы значков условного форматирования`, `Сводные диаграммы`, `Slicers`],
+    explain:`Names are defined via the Name Box or Define Name, then behave as readable, absolute references anywhere in the workbook.`},
+  {id:'q18', domain:'d2', type:'mc', q:`Tiny one-cell trend charts beside each row of monthly data are:`,
+    choices:[`Sparklines (Insert ▸ Sparklines)`, `Conditional formatting icon sets`, `Pivot charts`, `Slicers`],
     correct:0,
-    explain:`Спарклайны (строка, столбец, выигрыш/проигрыш) живут В ячейке и суммируют значения строки — цель 2.4.1. Наборы значков обозначают индивидуальные ценности, а не тенденции.`},
-  {id:'q19', domain:'d2', type:'mc', q:`При автоматическом выделении каждого значения выше 10 000 в диапазоне используется:`,
+    explain:`Sparklines (line, column, win/loss) live IN a cell and summarize a row's values — objective 2.4.1. Icon sets mark individual values, not trends.`},
+  {id:'q19', domain:'d2', type:'mc', q:`Highlighting every value above 10,000 in a range, automatically, uses:`,
     choices:[
-      `Условное форматирование ▸ Правила выделения ячеек ▸ Больше.`,
-      `Ручная раскраска каждой ячейки.`,
-      `Сортировка и просмотр.`,
-      `Именованный диапазон.`],
+      `Conditional Formatting ▸ Highlight Cells Rules ▸ Greater Than.`,
+      `Manually coloring each cell.`,
+      `Sorting and eyeballing.`,
+      `A named range.`],
     correct:0,
-    explain:`Встроенные правила условного форматирования (больше/меньше, сверху/снизу, дубликаты), а также гистограммы данных, цветовые шкалы и наборы значков — это инструментарий уровня Партнер, а удаление правил также тестируется.`},
-  {id:'q20', domain:'d2', type:'ms', q:`Каковы настоящие параметры специальной вставки? <em>Выберите все, что применимо.</em>`,
+    explain:`Built-in conditional formatting rules (greater/less than, top/bottom, duplicates), plus data bars, color scales, and icon sets, are the Associate-level toolkit — and removing rules is tested too.`},
+  {id:'q20', domain:'d2', type:'ms', q:`Which are real Paste Special options? <em>Choose all that apply.</em>`,
     choices:[`Values`, `Formats`, `Transpose`, `Alphabetize`],
     correct:[0,1,2],
-    explain:`Значения, форматы, формулы, ширина столбцов и транспонирование находятся в меню «Специальная вставка». Алфавитизация — это сортировка — другой инструмент.`},
+    explain:`Values, formats, formulas, column widths, and transpose are all on the Paste Special menu. Alphabetizing is sorting — a different tool.`},
 
   /* ---------- DOMAIN 3 · Manage Tables & Table Data (4) ---------- */
-  {id:'q21', domain:'d3', type:'mc', q:`Сочетание клавиш, которое превращает выбранный диапазон данных в настоящую таблицу Excel:`,
+  {id:'q21', domain:'d3', type:'mc', q:`The keyboard shortcut that turns the selected data range into a real Excel Table:`,
     choices:[`Ctrl+T`, `Ctrl+B`, `F11`, `Ctrl+Shift+V`],
     correct:0,
-    explain:`Ctrl+Т создает таблицу: кнопки фильтра, автоматическое раскрытие, структурированные ссылки и вкладка «Дизайн таблицы». F11 создает лист диаграммы; Ctrl+Б выделен жирным шрифтом.`},
-  {id:'q22', domain:'d3', type:'mc', q:`Отображение среднего значения столбца «Сумма» таблицы в нижней итоговой строке, стандартным для таблицы способом:`,
+    explain:`Ctrl+T creates a Table: filter buttons, auto-expansion, structured references, and the Table Design tab. F11 makes a chart sheet; Ctrl+B is bold.`},
+  {id:'q22', domain:'d3', type:'mc', q:`Showing the average of a table's Amount column in a bottom summary row, the table-native way:`,
     choices:[
-      `Дизайн таблицы ▸ отметьте «Строка итогов», затем выберите «Среднее» в раскрывающемся списке этой ячейки.`,
-      `Каждую неделю вводите число вручную.`,
-      `Сначала преобразуйте таблицу в диапазон.`,
-      `Добавьте диаграмму.`],
+      `Table Design ▸ check Total Row, then pick Average from that cell's dropdown.`,
+      `Type the number in by hand each week.`,
+      `Convert the table to a range first.`,
+      `Add a chart.`],
     correct:0,
-    explain:`Строка итогов — это ОПЦИЯ стиля с возможностью выбора агрегатов по каждому столбцу (сумма, среднее значение, количество…), которые продолжают работать по мере роста таблицы.`},
-  {id:'q23', domain:'d3', type:'mc', q:`Применение фильтра, который отображает только строки «Запад» в таблице, повлияет на другие строки?`,
+    explain:`The Total Row is a style OPTION with per-column aggregate pickers (sum, average, count…) that keep working as the table grows.`},
+  {id:'q23', domain:'d3', type:'mc', q:`Applying a filter that shows only "West" rows in a table does what to the other rows?`,
     choices:[
-      `Удаляет их.`,
-      `Скрывает их — они все еще находятся на листе и возвращаются, когда фильтр очищается.`,
-      `Перемещает их на другой лист.`,
-      `Преобразует их в текст.`],
+      `Deletes them.`,
+      `Hides them — they're still in the sheet and return when the filter clears.`,
+      `Moves them to another sheet.`,
+      `Converts them to text.`],
     correct:1,
-    explain:`Фильтрация скрывает, но не удаляет. (Именно поэтому такие формулы, как СУММ, по-прежнему включают скрытые строки, если вы не используете ПРОМЕЖУТОЧНЫЙ ИТОГ — вечная ловушка аналитика.)`},
-  {id:'q24', domain:'d3', type:'mc', q:`Вам нужны данные и внешний вид таблицы, но больше нет кнопок фильтра или автоматического расширения. Использовать:`,
+    explain:`Filtering hides, never deletes. (It's also why formulas like SUM still include hidden rows unless you use SUBTOTAL — an eternal analyst trap.)`},
+  {id:'q24', domain:'d3', type:'mc', q:`You want the table's data and look, but no more filter buttons or auto-expansion. Use:`,
     choices:[
-      `Конструктор таблицы ▸ Преобразовать в диапазон.`,
-      `Удалите таблицу и введите данные заново.`,
-      `Скройте строку заголовка.`,
-      `Ctrl+Z, пока он не перестанет быть таблицей.`],
+      `Table Design ▸ Convert to Range.`,
+      `Delete the table and retype the data.`,
+      `Hide the header row.`,
+      `Ctrl+Z until it stops being a table.`],
     correct:0,
-    explain:`Преобразование в диапазон устраняет поведение таблицы, сохраняя при этом значения и форматирование — официальная противоположность Ctrl+Т и явная цель экзамена.`},
+    explain:`Convert to Range strips table behavior while keeping values and formatting — the official reverse of Ctrl+T, and an explicit exam objective.`},
 
   /* ---------- DOMAIN 4 · Formulas & Functions (6) ---------- */
-  {id:'q25', domain:'d4', type:'mc', q:`<code>=B2*$C$1</code> копируется из D2 в D10. Что происходит с каждой частью?`,
+  {id:'q25', domain:'d4', type:'mc', q:`<code>=B2*$C$1</code> is copied from D2 down to D10. What happens to each part?`,
     choices:[
-      `B2 становится B3…B10 (относительным); $C$1 остается фиксированным (абсолютным).`,
-      `Оба меняются.`,
-      `Оба остаются фиксированными.`,
-      `Ошибка формулы после 5-й строки.`],
+      `B2 becomes B3…B10 (relative); $C$1 stays fixed (absolute).`,
+      `Both change.`,
+      `Both stay fixed.`,
+      `The formula errors after row 5.`],
     correct:0,
-    explain:`Относительные ссылки смещаются вместе с копией; $-привязанный - нет. Классическое использование: одна налоговая ставка или валютная ставка в C1 применяется ко всему столбцу. F4 циклически переключает стили привязки.`},
-  {id:'q26', domain:'d4', type:'mc', q:`A2:A50 содержит сочетание цифр, имен и пробелов. <code>=СЧЁТ(A2:A50)</code> возвращает:`,
+    explain:`Relative references shift with the copy; the $-anchored one doesn't. The classic use: one tax rate or FX rate in C1 applied to a whole column. F4 cycles the anchor styles.`},
+  {id:'q26', domain:'d4', type:'mc', q:`A2:A50 holds a mix of numbers, names, and blanks. <code>=COUNT(A2:A50)</code> returns:`,
     choices:[
-      `Каждая непустая ячейка.`,
-      `Только ЧИСЛОВЫЕ ячейки — СЧЕТЗУ будут учитываться все непустые ячейки, СЧИТАТЬ пустые.`,
-      `Только текстовые ячейки.`,
-      `49, всегда.`],
+      `Every non-blank cell.`,
+      `Only the NUMERIC cells — COUNTA would count all non-blanks, COUNTBLANK the empties.`,
+      `Only the text cells.`,
+      `49, always.`],
     correct:1,
-    explain:`Разделение семейства COUNT: COUNT = числа, COUNTA = все непустое значение, COUNTBLANK = пустое значение. «COUNT игнорирует мое сообщение» — это намеренно.`},
-  {id:'q27', domain:'d4', type:'mc', q:`Обозначьте каждый заказ как «Высокий», если B2 ≥ 500, в противном случае — как «Стандартный». Формула:`,
+    explain:`The COUNT family split: COUNT = numbers, COUNTA = anything non-empty, COUNTBLANK = empties. "COUNT is ignoring my text" is by design.`},
+  {id:'q27', domain:'d4', type:'mc', q:`Label each order "High" when B2 ≥ 500, otherwise "Standard". The formula:`,
     choices:[
-      `=ЕСЛИ(B2>=500, «Высокий», «Стандартный»)`,
-      `=ЕСЛИ("Высокий",B2>=500,"Стандартный")`,
-      `=ЕСЛИ(B2>=500,Стандартный,Высокий)`,
-      `=СЧЁТЕСЛИ(B2,"Высокое")`],
+      `=IF(B2>=500,"High","Standard")`,
+      `=IF("High",B2>=500,"Standard")`,
+      `=IF(B2>=500,Standard,High)`,
+      `=COUNTIF(B2,"High")`],
     correct:0,
-    explain:`IF(тест, если_истина, если_ложь) — сначала условие, затем два результата по порядку, текст в кавычках. Вариант C не работает, поскольку слова без кавычек не являются текстом.`},
-  {id:'q28', domain:'d4', type:'mc', q:`<code>=УНИКАЛЬНЫЙ(A2:A100)</code> возвращает список различных значений:`,
+    explain:`IF(test, if_true, if_false) — condition first, then the two outcomes in order, text in quotes. Option C fails because unquoted words aren't text.`},
+  {id:'q28', domain:'d4', type:'mc', q:`<code>=UNIQUE(A2:A100)</code> returns its list of distinct values by:`,
     choices:[
-      `ПРОЛИВАНИЕ в ячейки ниже — одна формула, много результатов (и #РАСЛИТЬ!, если заблокировано).`,
-      `Перезапись A2:A100.`,
-      `Отображается только первое значение.`,
-      `Требуется одна копия формулы для каждой строки.`],
+      `SPILLING into the cells below — one formula, many results (and #SPILL! if blocked).`,
+      `Overwriting A2:A100.`,
+      `Showing only the first value.`,
+      `Requiring one copy of the formula per row.`],
     correct:0,
-    explain:`SORT и UNIQUE — это функции динамических массивов, новые в MO-210. Они разливают результаты по округе; блокирующая ячейка вызывает #РАЗЛИВ!.`},
-  {id:'q29', domain:'d4', type:'mc', q:`Извлечение трехзначного кода региона из СРЕДНЕГО «US-WES-2024» (позиции 4–6):`,
-    choices:[`= СРЕДНИЙ (A2,4,3)`, `=ЛЕВО(A2,3)`, `=ВПРАВО(A2,4)`, `=ДЛСТР(A2,3)`],
+    explain:`SORT and UNIQUE are dynamic-array functions — new on MO-210. They spill results into the neighborhood; a blocking cell causes #SPILL!.`},
+  {id:'q29', domain:'d4', type:'mc', q:`Extracting the 3-character region code from the MIDDLE of "US-WES-2024" (positions 4–6):`,
+    choices:[`=MID(A2,4,3)`, `=LEFT(A2,3)`, `=RIGHT(A2,4)`, `=LEN(A2,3)`],
     correct:0,
     explain:`MID(text, start, count) slices from inside. LEFT/RIGHT take from the ends; LEN just counts characters (and takes one argument).`},
-  {id:'q30', domain:'d4', type:'mc', q:`Объединение всех имен в A2:A20 в одну ячейку, через запятую, с пропуском пробелов:`,
+  {id:'q30', domain:'d4', type:'mc', q:`Joining all names in A2:A20 into one cell, separated by commas, skipping blanks:`,
     choices:[
-      `=ТЕКСТССОЕДИНЕНИЕ(", ",ИСТИНА,A2:A20)`,
-      `=СЦЕП(A2,A20)`,
-      `=СУММ(A2:A20)`,
+      `=TEXTJOIN(", ",TRUE,A2:A20)`,
+      `=CONCAT(A2,A20)`,
+      `=SUM(A2:A20)`,
       `=A2&A20`],
     correct:0,
-    explain:`TEXTJOIN(разделитель, ignore_empty, диапазон) создан именно для этого. CONCAT объединяет значения, но не имеет аргументов-разделителей/пропуска пробелов.`},
+    explain:`TEXTJOIN(delimiter, ignore_empty, range) is built for exactly this. CONCAT glues values but has no delimiter/skip-blanks arguments.`},
 
   /* ---------- DOMAIN 5 · Manage Charts (5) ---------- */
-  {id:'q31', domain:'d5', type:'mc', q:`Ежемесячная выручка за 24 месяца — какой график и почему?`,
+  {id:'q31', domain:'d5', type:'mc', q:`Monthly revenue for 24 months — which chart, and why?`,
     choices:[
-      `Линейный график: время на оси, наклон — это история.`,
-      `Круговая диаграмма с 24 кусочками.`,
-      `График рассеяния со случайными цветами.`,
-      `Трехмерный взорванный пончик.`],
+      `Line chart: time on the axis, the slope IS the story.`,
+      `Pie chart with 24 slices.`,
+      `Scatter plot with random colors.`,
+      `A 3-D exploded donut.`],
     correct:0,
-    explain:`Тенденция во времени → линия. Одно и то же правило во всех инструментах (и в Диаграммный комплект грамотности). Книга «24 куска пирога» изначально нечитабельна.`},
-  {id:'q32', domain:'d5', type:'mc', q:`Перемещение встроенной диаграммы на отдельный полностраничный лист:`,
+    explain:`Trend over time → line. Same rule in every tool (and in the Chart Literacy Kit). 24 pie slices is unreadable by design.`},
+  {id:'q32', domain:'d5', type:'mc', q:`Moving an embedded chart onto its own full-page sheet:`,
     choices:[
-      `Дизайн диаграммы ▸ Переместить диаграмму ▸ Новый лист (или F11 при создании).`,
-      `Перетащите его на вкладку листа.`,
-      `Распечатываем отдельно.`,
-      `Диаграммы не могут покинуть свой рабочий лист.`],
+      `Chart Design ▸ Move Chart ▸ New sheet (or F11 when creating).`,
+      `Dragging it to the sheet tab.`,
+      `Printing it separately.`,
+      `Charts can't leave their worksheet.`],
     correct:0,
     explain:`Move Chart switches between embedded and chart-sheet placement; F11 creates a chart sheet directly from selected data. Creating BOTH kinds is objective 5.1.`},
-  {id:'q33', domain:'d5', type:'mc', q:`На вашей диаграмме месяцы показаны в виде рядов, а регионы — в виде оси (в обратном порядке). Исправление в один клик:`,
+  {id:'q33', domain:'d5', type:'mc', q:`Your chart shows months as the series and regions as the axis — backwards. The one-click fix:`,
     choices:[
-      `Дизайн диаграммы ▸ Переключить строку/столбец.`,
-      `Восстановите диаграмму с нуля.`,
-      `Отсортируйте исходные данные.`,
-      `Измените цвета диаграммы.`],
+      `Chart Design ▸ Switch Row/Column.`,
+      `Rebuild the chart from scratch.`,
+      `Sort the source data.`,
+      `Change the chart colors.`],
     correct:0,
-    explain:`Переключение строк/столбцов меняет местами серии и категории. Перестройка — это потеря времени, за которую наказывает структура экзаменационного задания.`},
-  {id:'q34', domain:'d5', type:'mc', q:`Добавление заголовков осей и меток данных в существующую диаграмму:`,
+    explain:`Switch Row/Column swaps series and categories in place. Rebuilding is the time-waster the exam's task design punishes.`},
+  {id:'q34', domain:'d5', type:'mc', q:`Adding axis titles and data labels to an existing chart:`,
     choices:[
-      `Кнопка + (Элементы диаграммы) или Дизайн диаграммы ▸ Добавить элемент диаграммы.`,
-      `Вставьте ▸ Текстовое поле над каждой полосой.`,
-      `Повторный ввод значений в область графика.`,
-      `Возможно только во время создания.`],
+      `The + (Chart Elements) button or Chart Design ▸ Add Chart Element.`,
+      `Insert ▸ Text Box over every bar.`,
+      `Retyping values into the plot area.`,
+      `Only possible at creation time.`],
     correct:0,
-    explain:`Элементы диаграммы (заголовки, метки, таблица данных, линии сетки, легенда, линия тренда) включаются и выключаются с помощью кнопки + — добавляйте, удаляйте и перемещайте по желанию.`},
-  {id:'q35', domain:'d5', type:'mc', q:`Для доступности готовая диаграмма должна получить:`,
+    explain:`Chart elements (titles, labels, data table, gridlines, legend, trendline) toggle on/off from the + button — add, remove, reposition at will.`},
+  {id:'q35', domain:'d5', type:'mc', q:`For accessibility, a finished chart should get:`,
     choices:[
-      `Замещающий текст, описывающий, что он показывает (щелкните правой кнопкой мыши ▸ Изменить замещающий текст).`,
-      `Больше линий сетки.`,
-      `Пароль.`,
-      `3-D вращение.`],
+      `Alt text describing what it shows (right-click ▸ Edit Alt Text).`,
+      `More gridlines.`,
+      `A password.`,
+      `3-D rotation.`],
     correct:0,
-    explain:`Замещающий текст на диаграммах является явной целью MO-210 (5.3.3) — программы чтения с экрана считывают его, а проверка доступности помечает диаграммы без него.`}
+    explain:`Alt text on charts is an explicit MO-210 objective (5.3.3) — screen readers read it, and Check Accessibility flags charts without it.`}
 ];
 
 /* ============== RENDER ============== */
@@ -724,7 +724,7 @@ function render(){
 }
 
 function setView(v, opts){
-  if(v === 'results' && !state.submitted){ toast("Завершите и отправьте упражнение, чтобы увидеть результаты."); return; }
+  if(v === 'results' && !state.submitted){ toast('Finish and submit the drill to see results.'); return; }
   state.view = v;
   save();
   render();
@@ -761,17 +761,17 @@ function renderHome(){
   const inProgress = state.examStart !== null && !state.submitted;
   return `
     <div class="hero">
-      <div class="hero-eyebrow">Подготовка к сертификации · МОС Excel Сотрудник (MO-210)</div>
+      <div class="hero-eyebrow">Certification prep · MOS Excel Associate (MO-210)</div>
       <h1>Excel <span>Certification</span> Prep</h1>
-      <p>Подготовка к специалисту Майкрософт Офис: экзамен Excel-сотрудник — учебное пособие по всем пяти предметным областям, а также практическое упражнение, соответствующее 50-минутному темпу экзамена. Сертификаты MOS никогда не истекают.</p>
+      <p>Prep for the Microsoft Office Specialist: Excel Associate exam — a study guide for all five objective domains, plus a practice drill matched to the exam's 50-minute pace. MOS certifications never expire.</p>
     </div>
 
     <div class="facts-grid">
-      <div class="fact-chip"><span class="chip-num">~35</span><span class="chip-label">Задачи Жить-приложения</span></div>
-      <div class="fact-chip"><span class="chip-num">50 мин.</span><span class="chip-label">Ограничение по времени</span></div>
-      <div class="fact-chip"><span class="chip-num">700</span><span class="chip-label">Проходной балл по шкале</span></div>
-      <div class="fact-chip"><span class="chip-num">~$100</span><span class="chip-label">Плата за экзамен</span></div>
-      <div class="fact-chip"><span class="chip-num">∞</span><span class="chip-label">Никогда не истекает</span></div>
+      <div class="fact-chip"><span class="chip-num">~35</span><span class="chip-label">Live-app tasks</span></div>
+      <div class="fact-chip"><span class="chip-num">50 min</span><span class="chip-label">Time limit</span></div>
+      <div class="fact-chip"><span class="chip-num">700</span><span class="chip-label">Passing scaled score</span></div>
+      <div class="fact-chip"><span class="chip-num">~$100</span><span class="chip-label">Exam fee</span></div>
+      <div class="fact-chip"><span class="chip-num">∞</span><span class="chip-label">Never expires</span></div>
       <div class="fact-chip"><span class="chip-num">0</span><span class="chip-label">Prerequisites</span></div>
     </div>
 
@@ -780,7 +780,7 @@ function renderHome(){
         const d = DOMAIN_INFO[k];
         return `<div class="dw-row">
           <span class="dw-label" style="color:${d.color}">${d.label} · ${d.name}</span>
-          <span class="dw-bar"><span class="dw-fill" style="width:${d.mid}%;background:${d.color};дисплей:блокировать"></span></span>
+          <span class="dw-bar"><span class="dw-fill" style="width:${d.mid}%;background:${d.color};display:block"></span></span>
           <span class="dw-pct" style="color:${d.color}">${d.weight}</span>
         </div>`;
       }).join('')}
@@ -799,22 +799,22 @@ function renderHome(){
       </a>
       <a class="cta-card primary" onclick="setView('exam')">
         <div class="cta-icon"><i data-lucide="clipboard-list"></i></div>
-        <div class="cta-title">${state.submitted ? "Пересмотрите свое упражнение" : (inProgress ? "Возобновить практическое упражнение" : "Пройдите практическое упражнение")}</div>
-        <div class="cta-desc">${state.submitted ? `Вы забили ${calcScore().total}/${total}. Откройте повторно, чтобы просмотреть ответы, или повторите попытку.` : `35 вопросов в реальном 50-минутном темпе экзамена, взвешенные по официальным объективным областям. ${answered ? `Вы ответили ${answered}/${total}.` : ''}`}</div>
-        <div class="cta-link">${state.submitted ? "Посмотреть результаты →" : (inProgress ? "Продолжить →" : 'Start →')}</div>
+        <div class="cta-title">${state.submitted ? 'Review your drill' : (inProgress ? 'Resume the practice drill' : 'Take the practice drill')}</div>
+        <div class="cta-desc">${state.submitted ? `You scored ${calcScore().total}/${total}. Reopen to review the answers, or retake it.` : `35 questions at the real exam's 50-minute pace, weighted to the official objective domains. ${answered ? `You've answered ${answered}/${total}.` : ''}`}</div>
+        <div class="cta-link">${state.submitted ? 'Review results →' : (inProgress ? 'Continue →' : 'Start →')}</div>
       </a>
     </div>
 
     <div class="method-callout">
-      <strong>🗣️ Скажите это вслух.</strong> Каждая задача MO-210 — это «сделать X» — и выполнение X начинается с названия инструмента: «центрировать выделение, а не объединять», «вставить специальные значения», «Ctrl+Т делает из него настоящую таблицу». Если вы можете произнести ход, вы сможете найти его на ленте в условиях нехватки времени. Тот же метод, что и в Эксель-комплект.
+      <strong>🗣️ Say it out loud.</strong> Every MO-210 task is "do X" — and doing X starts with naming the tool: "center across selection, not merge," "paste special values," "Ctrl+T makes it a real table." If you can say the move, you can find it in the ribbon under time pressure. Same method as the Excel Kit.
     </div>
 
     ${needsReviewCount()>0?`<div class="method-callout" style="border-left-color:var(--warn)">
-      <strong>🔁 ${needsReviewCount()} concept${needsReviewCount()===1?'':'s'} отмечено для проверки.</strong> Вы оценили ${needsReviewCount()===1?'it':'them'} "Not yet" or "Almost" in the study guide — <a href="#" onclick="openReview();return false;">filter to just those →</a>
+      <strong>🔁 ${needsReviewCount()} concept${needsReviewCount()===1?'':'s'} flagged for review.</strong> You rated ${needsReviewCount()===1?'it':'them'} "Not yet" or "Almost" in the study guide — <a href="#" onclick="openReview();return false;">filter to just those →</a>
     </div>`:''}
 
     <div class="method-callout" style="border-left-color:var(--c-d2)">
-      <strong>Впервые в этих темах?</strong> The <a href="../excel/">Excel комплект</a> преподает формулы, очистку и диаграммы в виде интерактивных уроков — сначала сделайте это, затем углубитесь здесь, а затем попрактикуйтесь в тех же действиях в реальном Эксель.
+      <strong>New to these topics?</strong> The <a href="../excel/">Excel Kit</a> teaches formulas, cleanup, and charts as interactive lessons — do those first, then drill here, then practice the same moves in real Excel.
     </div>
   `;
 }
@@ -822,11 +822,11 @@ function renderHome(){
 function renderStudy(){
   return `
     <div class="study-intro">
-      <p><strong>Цели, по одной области за раз.</strong> Нажмите на домен, чтобы развернуть его. Каждая пуля соответствует официальному набору целей МО-210; желтые выноски — это заблуждения, за которые можно получить очки.</p>
-      <p>Процентные диапазоны представляют собой опубликованные веса доменов — тратьте время на обучение пропорционально.</p>
+      <p><strong>The objectives, one domain at a time.</strong> Click a domain to expand. Every bullet maps to the official MO-210 objective set; the yellow callouts are the misconceptions that cost points.</p>
+      <p>Percentage ranges are the published domain weights — spend your study time proportionally.</p>
     </div>
-    <button class="expand-all" onclick="toggleAllStudy()">${allStudyOpen() ? "Свернуть все" : "Развернуть все"}</button>
-    <класс кнопки="развернуть-все ${state.reviewFilter?'rf-on':''}" onclick="toggleReviewFilter()">${state.reviewFilter ? `Показан только обзор потребностей (${needsReviewCount()}) — показать все` : `Фильтр: требует проверки (${needsReviewCount()})`}</button>
+    <button class="expand-all" onclick="toggleAllStudy()">${allStudyOpen() ? 'Collapse all' : 'Expand all'}</button>
+    <button class="expand-all ${state.reviewFilter?'rf-on':''}" onclick="toggleReviewFilter()">${state.reviewFilter ? `Showing needs-review only (${needsReviewCount()}) — show all` : `Filter: needs review (${needsReviewCount()})`}</button>
     ${STUDY.map(s=>{
       const d = DOMAIN_INFO[s.key];
       const vis = s.must.map((m,i)=>({m,i})).filter(x=>{
@@ -837,17 +837,17 @@ function renderStudy(){
       if(state.reviewFilter && vis.length===0) return '';
       const open = state.reviewFilter ? true : !!state.openSections[s.key];
       return `
-        <div class="раздел-исследования" ${open?'open':''}" id="исследование-${s.key}">
+        <div class="study-section ${open?'open':''}" id="study-${s.key}">
           <div class="study-head" onclick="toggleStudy('${s.key}')">
             <span class="study-pill" style="color:${d.color}">${d.label} · ${d.weight}</span>
             <span class="study-title">${s.title}</span>
             <span class="study-toggle">▸</span>
           </div>
           <div class="study-body">
-            ${state.reviewFilter?'':`<div class="study-viz"><div class="sv-cap"><i data-lucide="monitor"></i> Посмотри это</div>${s.viz}</div>`}
+            ${state.reviewFilter?'':`<div class="study-viz"><div class="sv-cap"><i data-lucide="monitor"></i> See it</div>${s.viz}</div>`}
             <ul>${vis.map(x=>studyItemHTML(s.key,x.i,x.m)).join('')}</ul>
             ${state.reviewFilter?'':`<div class="miscon">${s.miscon}</div>`}
-            <a class="study-link" href="${d.kitPath}">${d.hint}Откройте набор Excel →</a>
+            <a class="study-link" href="${d.kitPath}">${d.hint} Open the Excel Kit →</a>
           </div>
         </div>
       `;
@@ -859,10 +859,10 @@ function renderStudy(){
 function studyItemHTML(key,i,m){
   const id = key+'-'+i;
   const lvl = state.conf[id];
-  const chip = (l,txt)=>`<класс кнопки="конф-чип ${lvl===l?('on '+l):''}" onclick="rateConf('${id}','${l}')">${txt}</button>`;
+  const chip = (l,txt)=>`<button class="conf-chip ${lvl===l?('on '+l):''}" onclick="rateConf('${id}','${l}')">${txt}</button>`;
   const href = LESSON_LINKS[id];
-  const link = href ? `<класс="ссылка-урока" href="${href}">Открыть урок →</a>` : '';
-  return `<li>${m}<div class="li-foot"><span class="conf-chips">${chip('low',"✗ Пока нет")}${chip('mid','~ Almost')}${chip('high',"✓ Иметь это")}</span>${link}</div></li>`;
+  const link = href ? `<a class="lesson-link" href="${href}">Open the lesson →</a>` : '';
+  return `<li>${m}<div class="li-foot"><span class="conf-chips">${chip('low','✗ Not yet')}${chip('mid','~ Almost')}${chip('high','✓ Have it')}</span>${link}</div></li>`;
 }
 function rateConf(id,lvl){
   if(state.conf[id]===lvl) delete state.conf[id];
@@ -871,7 +871,7 @@ function rateConf(id,lvl){
 }
 function needsReviewCount(){ return Object.values(state.conf).filter(v=>v==='low'||v==='mid').length; }
 function toggleReviewFilter(){
-  if(!state.reviewFilter && needsReviewCount()===0){ toast("Сначала оцените концепцию «Еще нет» или «Почти», а затем отфильтруйте только их."); return; }
+  if(!state.reviewFilter && needsReviewCount()===0){ toast('Rate a concept "Not yet" or "Almost" first — then filter to just those.'); return; }
   state.reviewFilter = !state.reviewFilter;
   save(); render();
 }
@@ -910,7 +910,7 @@ function syncTimerLoop(){
     }
     if(left <= 0){
       clearInterval(timerInterval);
-      toast("Время вышло — упражнение сдано.");
+      toast("Time's up — drill submitted.");
       submitExam(true);
     }
   }, 500);
@@ -947,17 +947,17 @@ function renderExam(){
   const left = timeLeftMs();
 
   let topBtn;
-  if(state.submitted) topBtn = `<button class="exam-submit-btn" onclick="setView('results')">Посмотреть результаты →</button>`;
-  else topBtn = `<button class="exam-submit-btn" onclick="submitExam()" ${answered===0?'disabled':''}>${answered===total?"Отправить упражнение":'Submit ('+answered+'/'+total+' answered)'}</button>`;
+  if(state.submitted) topBtn = `<button class="exam-submit-btn" onclick="setView('results')">View results →</button>`;
+  else topBtn = `<button class="exam-submit-btn" onclick="submitExam()" ${answered===0?'disabled':''}>${answered===total?'Submit drill':'Submit ('+answered+'/'+total+' answered)'}</button>`;
 
   let html = `
     <div class="exam-header">
       <div class="exam-header-row">
         <div class="exam-title-block">
-          <div class="exam-mini-title">Учебная дрель МО-210${state.timed===false?" · безвременный":''}</div>
+          <div class="exam-mini-title">MO-210 practice drill${state.timed===false?' · untimed':''}</div>
           <div class="exam-q-progress"><span>${answered}</span> of ${total} answered</div>
         </div>
-        ${(!state.submitted && state.timed && left!==null) ? `<класс диапазона="экзамен-таймер${left<5*60000?' low':''}" id="examTimer">${fmtTime(left)}</span>` : ''}
+        ${(!state.submitted && state.timed && left!==null) ? `<span class="exam-timer${left<5*60000?' low':''}" id="examTimer">${fmtTime(left)}</span>` : ''}
         ${topBtn}
       </div>
       <div class="exam-progress-bar"><div class="exam-progress-fill" style="width:${pct}%"></div></div>
@@ -979,7 +979,7 @@ function renderExam(){
   }
 
   if(!state.submitted){
-    html += `<div style="text-align:center;margin-top:24px"><button class="exam-submit-btn" onclick="submitExam()" ${answered===0?'disabled':''}>${answered===total?"Отправьте упражнение и посмотрите результаты":'Submit ('+answered+' of '+total+' answered)'}</button></div>`;
+    html += `<div style="text-align:center;margin-top:24px"><button class="exam-submit-btn" onclick="submitExam()" ${answered===0?'disabled':''}>${answered===total?'Submit drill & see results':'Submit ('+answered+' of '+total+' answered)'}</button></div>`;
   }
   return html;
 }
@@ -1005,19 +1005,19 @@ function renderQuestion(q){
     }
     const letter = String.fromCharCode(65+i);
     const mark = isMs ? (picked ? '☑' : '☐') : letter;
-    return `<класс кнопки="${cls}" onclick="${isMs?`answerMs('${q.id}',${i})`:`answerMc('${q.id}',${i})`}" ${state.submitted?'disabled':''}>
+    return `<button class="${cls}" onclick="${isMs?`answerMs('${q.id}',${i})`:`answerMc('${q.id}',${i})`}" ${state.submitted?'disabled':''}>
       <span class="choice-letter">${mark}</span>
       <span class="choice-text">${c}</span>
     </button>`;
   }).join('')}</div>`;
 
   const explanation = state.submitted
-    ? `<div class="explanation show"><strong>${isCorrect(q) ? 'Correct.' : "Берегись: "}</strong> ${q.explain}${guideLinkHtml(q.id)}</div>`
+    ? `<div class="explanation show"><strong>${isCorrect(q) ? 'Correct.' : 'Heads up: '}</strong> ${q.explain}${guideLinkHtml(q.id)}</div>`
     : '';
 
   return `
-    <класс div="q-карта${stateCls}" id="q-${q.id}">
-      <div class="q-num">Question ${idx} of ${QUESTIONS.length}${isMs?"<span class=\"ms-tag\">· множественный ответ</span>":''}</div>
+    <div class="q-card${stateCls}" id="q-${q.id}">
+      <div class="q-num">Question ${idx} of ${QUESTIONS.length}${isMs?'<span class="ms-tag">· multiple response</span>':''}</div>
       <div class="q-text">${q.q}</div>
       ${body}
       ${explanation}
@@ -1057,7 +1057,7 @@ function submitExam(auto){
   if(state.submitted) return;
   const answered = Object.keys(state.answers).length;
   if(!auto && answered < QUESTIONS.length){
-    if(!confirm(`Вы ответили ${answered} of ${QUESTIONS.length}. Вопросы без ответа считаются неправильными. Все равно отправить?`)) return;
+    if(!confirm(`You've answered ${answered} of ${QUESTIONS.length}. Unanswered questions count as wrong. Submit anyway?`)) return;
   }
   state.submitted = true;
   save();
@@ -1084,11 +1084,11 @@ function scaledEstimate(correct, outOf){
 }
 
 function verdictFor(scaled){
-  if(scaled >= 800) return {label:"Удобно над линией паса — теперь воспроизведите ходы в реальном Excel и забронируйте его.", tone:'good'};
-  if(scaled >= 700) return {label:"На отметке 700 пасов или выше — закройте слабый домен, повторите его на практике, а затем забронируйте.", tone:'good'};
-  if(scaled >= 600) return {label:"Закрывать. Одна целенаправленная неделя на самых слабых доменах поможет вам.", tone:'warn'};
-  if(scaled >= 450) return {label:"Реальные пробелы. Сначала проработайте учебное пособие и уроки Эксель-комплект.", tone:'warn'};
-  return {label:"Холодный старт. Выполните уроки Excel комплект до конца, а затем повторите их.", tone:'bad'};
+  if(scaled >= 800) return {label:'Comfortably above the passing line — now rep the moves in real Excel and book it.', tone:'good'};
+  if(scaled >= 700) return {label:'At or above the 700 passing line — close the weak domain, rep it hands-on, then book it.', tone:'good'};
+  if(scaled >= 600) return {label:'Close. One focused week on the weakest domains gets you over.', tone:'warn'};
+  if(scaled >= 450) return {label:'Real gaps. Work the study guide and the Excel Kit lessons first.', tone:'warn'};
+  return {label:'Cold start. Do the Excel Kit lessons end to end, then retake this.', tone:'bad'};
 }
 
 function renderResults(){
@@ -1099,11 +1099,11 @@ function renderResults(){
   const pass = scaled >= 700;
   return `
     <div class="results-hero">
-      <div class="results-eyebrow">Практические упражнения · Результаты</div>
+      <div class="results-eyebrow">Practice drill · Results</div>
       <div class="score-big">${score.total}<small>/${score.outOf}</small></div>
       <div class="score-verdict">${pct}% — ${v.label}</div>
-      <div class="scaled-box">Предполагаемая оценка по шкале: <сильный стиль="цвет:${pass?'var(--good)':'var(--bad)'}">${scaled}</strong> <span style="color:var(--dim)">/ 1000 · проход = 700</span></div>
-      <p class="score-sub" style="margin-top:14px">Настоящий MO-210 оценивает живые задания в Excel, поэтому относитесь к этому как к проверке знаний, а не к прогнозированию оценки: необходимо знать правильный ход, но вам также нужны практические повторы. 750+ здесь плюс удобная практика в приложении = готово.</p>
+      <div class="scaled-box">Estimated scaled score: <strong style="color:${pass?'var(--good)':'var(--bad)'}">${scaled}</strong> <span style="color:var(--dim)">/ 1000 · passing = 700</span></div>
+      <p class="score-sub" style="margin-top:14px">The real MO-210 grades live tasks in Excel, so treat this as a knowledge check, not a score prediction: knowing the right move is necessary but you also need the hands-on reps. 750+ here plus comfortable in-app practice = ready.</p>
     </div>
 
     <div class="results-grid">
@@ -1111,10 +1111,10 @@ function renderResults(){
         const d = DOMAIN_INFO[k];
         const s = score.byDomain[k];
         const p = Math.round(100*s.correct/s.total);
-        const hint = p === 100 ? "Чистая развертка. Повторите это в реальном Excel и двигайтесь дальше."
-          : p >= 75 ? `В основном там — перечитайте <href="#изучать-${k}" onclick="setView('study',{scrollToSection:'${k}'}); вернуть ложь;">${d.label} раздел исследования</a> один раз.`
-          : p >= 50 ? `Shaky at ${d.weight} экзамена. <href="#изучать-${k}" onclick="setView('study',{scrollToSection:'${k}'});return false;">Study section</a> + <a href="${d.kitPath}">Уроки Excel комплект</a>, а затем потренируйтесь в приложении.`
-          : `Сначала сосредоточьтесь здесь — ${d.weight} экзамена. ${d.hint}<a href="${d.kitPath}«>Открыть Excel комплект</a>.`;
+        const hint = p === 100 ? 'Clean sweep. Rep it in real Excel and move on.'
+          : p >= 75 ? `Mostly there — reread the <a href="#study-${k}" onclick="setView('study',{scrollToSection:'${k}'});return false;">${d.label} study section</a> once.`
+          : p >= 50 ? `Shaky at ${d.weight} of the exam. <a href="#study-${k}" onclick="setView('study',{scrollToSection:'${k}'});return false;">Study section</a> + <a href="${d.kitPath}">Excel Kit lessons</a>, then practice in-app.`
+          : `Focus here first — ${d.weight} of the exam. ${d.hint} <a href="${d.kitPath}">Open the Excel Kit</a>.`;
         return `
           <div class="results-row">
             <div class="results-row-top">
@@ -1130,15 +1130,15 @@ function renderResults(){
     </div>
 
     <div class="results-actions">
-      <button class="btn btn-ghost" onclick="setView('exam')">Просмотрите ответы и пояснения</button>
-      <button class="btn btn-ghost" onclick="setView('study')">Открыть учебное пособие</button>
-      <button class="btn btn-primary" onclick="retake()">Пересдать упражнение <i data-lucide="rotate-ccw" style="width:14px;height:14px;vertical-align:-2px"></i></button>
+      <button class="btn btn-ghost" onclick="setView('exam')">Review answers &amp; explanations</button>
+      <button class="btn btn-ghost" onclick="setView('study')">Open study guide</button>
+      <button class="btn btn-primary" onclick="retake()">Retake drill <i data-lucide="rotate-ccw" style="width:14px;height:14px;vertical-align:-2px"></i></button>
     </div>
   `;
 }
 
 function retake(){
-  if(!confirm("Очистить свои ответы и повторить практическое упражнение?")) return;
+  if(!confirm('Clear your answers and retake the practice drill?')) return;
   state.answers = {};
   state.submitted = false;
   state.examStart = null;
@@ -1154,14 +1154,14 @@ function attachFooter(app){
   const f = document.createElement('footer');
   f.innerHTML = `
     <div class="footer-links">
-      <a href="../excel/">Excel комплект</a>
-      <a href="../chart-literacy/">Работа с диаграммами</a>
-      <a href="../tableau-cert/">Подготовка к сертификату Tableau</a>
-      <a href="../powerbi-cert/">Подготовка сертификата Power BI</a>
-      <a href="../final/">Заключительный экзамен</a>
-      <a href="../">← Все комплекты</a>
+      <a href="../excel/">Excel Kit</a>
+      <a href="../chart-literacy/">Chart Literacy</a>
+      <a href="../tableau-cert/">Tableau Cert Prep</a>
+      <a href="../powerbi-cert/">Power BI Cert Prep</a>
+      <a href="../final/">Final Exam</a>
+      <a href="../">← All Kits</a>
     </div>
-    Часть <a href="../">Подготовительный комплект для аналитика</a> · Прогресс сохраняется локально · Не связан с Майкрософт — всегда проверяйте официальные цели MO-210 на предмет текущей политики.
+    Part of the <a href="../">Analyst Prep Kit</a> · Progress saved locally · Not affiliated with Microsoft — always check the official MO-210 objectives for current policies
   `;
   app.appendChild(f);
 }
@@ -1172,17 +1172,17 @@ function toggleTheme(){
   const next = cur === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('apk-theme', next);
-  document.getElementById('themeIcon').innerHTML = "<я данные-ясный=\"" + (next === 'dark' ? 'sun' : 'moon') + '"></i>';
+  document.getElementById('themeIcon').innerHTML = '<i data-lucide="' + (next === 'dark' ? 'sun' : 'moon') + '"></i>';
   if(window.grainRefreshIcons)grainRefreshIcons();else if(window.lucide)lucide.createIcons();
 }
 (function initTheme(){
   const saved = localStorage.getItem('apk-theme');
   if(saved) document.documentElement.setAttribute('data-theme', saved);
-  document.getElementById('themeIcon').innerHTML = "<я данные-ясный=\"" + (document.documentElement.getAttribute('data-theme')==='dark'?'sun':'moon') + '"></i>';
+  document.getElementById('themeIcon').innerHTML = '<i data-lucide="' + (document.documentElement.getAttribute('data-theme')==='dark'?'sun':'moon') + '"></i>';
 })();
 
 function resetAll(){
-  if(!confirm("Удалить все ответы и сбросить упражнение + учебное пособие?")) return;
+  if(!confirm('Clear all answers and reset the drill + study guide?')) return;
   localStorage.removeItem(STORE);
   location.reload();
 }
@@ -1226,11 +1226,11 @@ function grainRefreshIcons(){
   <div class="guide-panel">
     <div class="guide-bar">
       <span class="guide-bar-title" id="guideTitle">Guide</span>
-      <a class="guide-open-tab" id="guideTab" href="../guides/" target="_blank" rel="noopener">Открыть во вкладке</a>
-      <button class="guide-close" onclick="closeGuide()" aria-label="Закрыть руководство" title="Закрыть (Esc)">&times;</button>
+      <a class="guide-open-tab" id="guideTab" href="../guides/" target="_blank" rel="noopener">Open in a tab</a>
+      <button class="guide-close" onclick="closeGuide()" aria-label="Close guide" title="Close (Esc)">&times;</button>
     </div>
     <iframe class="guide-frame" id="guideFrame" src="about:blank" title="Guide"></iframe>
-    <div class="guide-hint">Нажмите Esc, щелкните снаружи или используйте X, чтобы закрыть. Ваши ответы сохраняются.</div>
+    <div class="guide-hint">Press Esc, click outside, or use the X to close. Your answers are kept.</div>
   </div>
 </div>
 <!-- APK:KIT-SEO:START (generated by tools/build-kit-seo.py, do not hand-edit) -->
@@ -1247,21 +1247,21 @@ function grainRefreshIcons(){
 .apk-about h3:first-child{margin-top:0}
 </style>
 <section class="apk-about">
-  <h3>Полезные руководства</h3>
+  <h3>Related guides</h3>
   <ul>
-    <li><a href="../guides/excel-tables/">Таблицы Excel</a></li>
-    <li><a href="../guides/excel-pivot-tables/">Сводные таблицы</a></li>
-    <li><a href="../guides/excel-if-family/">Семья ИФ</a></li>
-    <li><a href="../guides/excel-index-match/">ИНДЕКС и СООТВЕТСТВИЕ</a></li>
-    <li><a href="../guides/excel-conditional-formatting/">Условное форматирование</a></li>
-    <li><a href="../guides/excel-custom-number-formats/">Пользовательские форматы чисел</a></li>
+    <li><a href="../guides/excel-tables/">Excel tables</a></li>
+    <li><a href="../guides/excel-pivot-tables/">Pivot tables</a></li>
+    <li><a href="../guides/excel-if-family/">The IF family</a></li>
+    <li><a href="../guides/excel-index-match/">INDEX and MATCH</a></li>
+    <li><a href="../guides/excel-conditional-formatting/">Conditional formatting</a></li>
+    <li><a href="../guides/excel-custom-number-formats/">Custom number formats</a></li>
   </ul>
-  <p><a href="../guides/">Просмотреть все руководства</a> · <a href="../">Все комплекты</a></p>
+  <p><a href="../guides/">Browse all guides</a> · <a href="../">All kits</a></p>
 </section>
 <!-- APK:KIT-SEO:END -->
 <script src="../assets/datacraft-economy.js"></script>
 <script src="../assets/progress-state.js"></script>
 <script src="../assets/supabase_auth_sync.js?v=3"></script>
-
+<script src="../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

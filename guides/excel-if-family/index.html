@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ЕСЛИ, СЧЕТЕСЛИ и СУММЕСЛИ: по одной строке за раз или все строки одновременно — комплект для подготовки аналитика</title>
-<meta name="description" content="Отличие, которое отличает семейство ЕСЛИ в Excel: ЕСЛИ помечает одну строку и заполняет столбец, СЧЕТЕСЛИ, СУММЕСЛИ и СРЗНАЧЕСЛИ просматривают каждую строку и возвращают одно число. Я маркирую или измеряю? С реальной формулой СРЕДНЕГО ЕСЛИ, дающей результат в 21,2 раза.">
+<title>IF vs COUNTIF vs SUMIF: One Row at a Time, or All Rows at Once — Analyst Prep Kit</title>
+<meta name="description" content="The distinction that sorts out Excel's IF family: IF labels one row and fills a column, COUNTIF, SUMIF and AVERAGEIF sweep every row and return one number. Am I labelling or measuring? With the real AVERAGEIFS formula behind a 21.2x finding.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-if-family/">
-<meta property="og:title" content="По одной строке за раз или все строки сразу">
-<meta property="og:description" content="IF обозначает строки. СЧЁТЕСЛИ, СУММЕСЛИ и СРЗНАЧЕСЛИ измеряют их. Из-за этого ваш ЕСЛИ не даст итоговой суммы.">
+<meta property="og:title" content="One Row at a Time, or All Rows at Once">
+<meta property="og:description" content="IF labels rows. COUNTIF, SUMIF and AVERAGEIF measure them. Confusing the two is why your IF will not make a total.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-if-family/">
 <meta name="twitter:card" content="summary_large_image">
@@ -106,62 +106,62 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../excel/">Excel комплект</a> · <a href="../excel-dashboard-build-order/">Статья 0: порядок сборки</a></p>
-  <h1>По одной строке за раз или все строки сразу</h1>
-  <p class="meta">Статья 11 Excel для бизнес-аналитиков · Семейство IF, отсортированное по одному признаку · Часть семейства  <a href="../../">Подготовительный комплект для аналитика</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-07">7 августа 2026 г.</time></p>
+  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../excel/">Excel Kit</a> · <a href="../excel-dashboard-build-order/">Article 0: the build order</a></p>
+  <h1>One Row at a Time, or All Rows at Once</h1>
+  <p class="meta">Article 11 of Excel for Business Analysts · The IF family, sorted by one distinction · Part of the <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-07">August 7, 2026</time></p>
 
-  <p>В этой статье вы найдете единственное различие, которое упорядочит все семейство ЕСЛИ в Excel и положит конец специфической путанице, когда вы пытаетесь заставить ЕСЛИ выдать итоговую сумму и не можете понять, почему этого не происходит.</p>
+  <p>This article gives you the one distinction that sorts out Excel's whole IF family, and ends the specific confusion where you try to make IF produce a total and cannot work out why it will not.</p>
 
-  <p><strong>ЕСЛИ работает с одной строкой и записывает ответ в эту строку.</strong>  Дайте ему 82 956 строк, и вы получите 82 956 ответов, по одному на каждый. Это инструмент маркировки: он строит столбец.  <strong>СЧЁТЕСЛИ, СУММЕСЛИ и СРЗНАЧЕСЛИ просматривают каждую строку и возвращают одно число.</strong>  Они ничего не строят. Они отвечают на вопрос. Это измерительные инструменты.</p>
+  <p><strong>IF works on one row and writes an answer into that row.</strong> Give it 82,956 rows and you get 82,956 answers, one each. It is a labelling tool: it builds a column. <strong>COUNTIF, SUMIF and AVERAGEIF look across every row and hand back one number.</strong> They build nothing. They answer a question. They are measuring tools.</p>
 
-  <div class="note"><strong>Краткая версия.</strong>  Прежде чем печатать, задайте один вопрос: пишу ли я что-то в каждую строку или получаю одно число? Для маркировки используйте IF. Для измерения используйте семейство IF. Имена двоюродные. Профессии противоположны.</div>
+  <div class="note"><strong>The short version.</strong> Ask one question before typing: am I writing something into every row, or producing one number? Labelling, use IF. Measuring, use the IF family. The names are cousins. The jobs are opposites.</div>
 
-  <p>Оба примера реальные из  <a href="../excel-dashboard-build-order/">сборка этой серии</a>: столбец «Сегмент», в котором отмечено 82 956 игр, и строка KPI, в которой они измерены. Перед публикацией каждое число повторно сравнивалось с файлом.</p>
+  <p>Both examples are the real ones from <a href="../excel-dashboard-build-order/">the build behind this series</a>: the Segment column that labelled 82,956 games, and the KPI row that measured them. Every number was re-run against the file before publishing.</p>
 
   <div class="toc">
-    <strong>Что здесь</strong>
+    <strong>What's here</strong>
     <ol>
-      <li>Путаница, названная</li>
-      <li>Маркировка: ЕСЛИ, по одной строке за раз.</li>
-      <li>Измерение: семейство IF, на одну цифру назад</li>
-      <li>S на конце: больше условий</li>
-      <li>Самая полезная формула в этой серии, пройдена</li>
-      <li>Почему маркировка в первую очередь облегчает измерение</li>
-      <li>Запустите его в своем файле</li>
-      <li>Шпаргалка</li>
+      <li>The confusion, named</li>
+      <li>Labelling: IF, one row at a time</li>
+      <li>Measuring: the IF family, one number back</li>
+      <li>The S on the end: more conditions</li>
+      <li>The most useful formula in this series, walked through</li>
+      <li>Why labelling first makes measuring easy</li>
+      <li>Run it on your own file</li>
+      <li>A cheat sheet</li>
     </ol>
   </div>
 
-  <h2>Путаница, названная</h2>
-  <p>Попробуйте сломанную версию сами, в своей голове. Вы хотите посчитать, сколько игр имеют 2000 и более обзоров, поэтому пишите  <code>=IF([@TotalReviews]&gt;=2000, 1, 0)</code>    и нажмите Входить. Предскажите, что вы получите.</p>
-  <p>Вы получаете столбец из 82 956 единиц и нулей, и нигде нет подсчета. Формула не является ошибочной. Это ответ на вопрос другого типа, отличный от того, который вы задали. IF был создан для ответа на каждую строку, и он делал это по каждой строке. Требуемый вам подсчет — это вопрос обо всех строках одновременно, и это задание принадлежит другому инструменту.</p>
-  <p>Названия вызывают путаницу. СЧЁТЕСЛИ звучит как «СЧЁТ плюс мой друг ЕСЛИ», поэтому кажется, что это один и тот же инструмент в шляпе. Это не. IF в COUNTIF — это фильтр, по которому подсчитываются строки, а не решение для каждой строки. Как только вы перестанете ожидать семейного сходства, оба инструмента станут очевидными.</p>
+  <h2>The confusion, named</h2>
+  <p>Try the broken version yourself, in your head. You want to count how many games have 2,000 or more reviews, so you write <code>=IF([@TotalReviews]&gt;=2000, 1, 0)</code> and press Enter. Predict what you get.</p>
+  <p>You get a column of 82,956 ones and zeros, and no count anywhere. The formula is not wrong. It is answering a different kind of question than the one you asked. IF was built to answer per row, and per row is what it did. The count you wanted is a question about all rows at once, and that job belongs to a different tool.</p>
+  <p>The names cause the confusion. COUNTIF sounds like "COUNT plus my friend IF," so it feels like the same tool with a hat on. It is not. The IF in COUNTIF is a filter on which rows get counted, not a per-row decision. Once you stop expecting family resemblance, both tools become obvious.</p>
 
-  <h2>Маркировка: ЕСЛИ, по одной строке за раз.</h2>
-  <p>IF задает один вопрос с ответом «да» или «нет» о строке, в которой он находится, и записывает в эту ячейку один из двух ответов:</p>
+  <h2>Labelling: IF, one row at a time</h2>
+  <p>IF asks one yes-or-no question of the row it sits in and writes one of two answers into that cell:</p>
   <pre><code>=IF([@TotalReviews]&gt;=2000, "Proven", "Unproven")</code></pre>
-  <p>In <a href="../excel-name-your-data/">именованная таблица</a>    это заполняет весь столбец одним нажатием клавиши: 82 956 строк, каждая из которых помечена своими значениями. Присоедините IF к Еще, и вы получите несколько групп вместо двух, что и есть лестницей сегментов.    <a href="../excel-label-rows-before-charting/">статья 1</a>  построен.</p>
-  <p>Обратите внимание на то, что IF не может видеть: любую строку, кроме своей собственной. Нигде в его мире нет тотальности, никакого сравнения с соседями, никакой совокупности. Эта слепота не является ограничением. Это описание вакансии. Маркировщик, просматривающий другие строки, не будет маркировать.</p>
+  <p>In <a href="../excel-name-your-data/">a named Table</a> this fills the whole column in one keystroke: 82,956 rows, each labelled by its own values. Chain IFs into the else seat and you get several groups instead of two, which is exactly the Segment ladder <a href="../excel-label-rows-before-charting/">article 1</a> built.</p>
+  <p>Notice what IF cannot see: any row except its own. There is no total, no comparison to neighbors, no aggregate anywhere in its world. That blindness is not a limitation. It is the job description. A labeller that peeked at other rows would not be labelling.</p>
 
-  <h2>Измерение: семейство IF, на одну цифру назад</h2>
-  <p>Инструменты измерения принимают диапазон, условие и возвращают одно число о прошедших строках:</p>
+  <h2>Measuring: the IF family, one number back</h2>
+  <p>The measuring tools take a range, a condition, and hand back a single number about the rows that pass:</p>
   <table>
-    <tr><th>Formula</th><th>Answers</th><th>Из сборки</th></tr>
-    <tr><td><code>COUNTIF(range, condition)</code></td><td>Сколько рядов пройдет?</td><td><code>=COUNTIF(Games[Segment],"Loved, hidden")</code> → 175</td></tr>
-    <tr><td><code>SUMIF(range, condition, sum_range)</code></td><td>Что складывают прохожие?</td><td>Общее количество отзывов о скрытых жемчужинах</td></tr>
-    <tr><td><code>AVERAGEIF(range, condition, avg_range)</code></td><td>Каков средний показатель прохожих?</td><td>Средние владельцы группы</td></tr>
+    <tr><th>Formula</th><th>Answers</th><th>From the build</th></tr>
+    <tr><td><code>COUNTIF(range, condition)</code></td><td>How many rows pass?</td><td><code>=COUNTIF(Games[Segment],"Loved, hidden")</code> → 175</td></tr>
+    <tr><td><code>SUMIF(range, condition, sum_range)</code></td><td>What do the passers add up to?</td><td>Total reviews across hidden gems</td></tr>
+    <tr><td><code>AVERAGEIF(range, condition, avg_range)</code></td><td>What is the passers' average?</td><td>Average owners of a group</td></tr>
   </table>
-  <p>Одна формула, одна ячейка, одно число. Ничего не заполняется, потому что заполнять нечего: ответ — это факт о таблице, а не о строке.</p>
-  <p>Прежде чем продолжить, скажите разницу своими словами. Одна версия: IF записывает в строку, в которой он находится; семья читает каждую строку и живет вне стола. Если в вашей версии где-то есть слова «внутри» и «через», то они у вас есть.</p>
+  <p>One formula, one cell, one number. Nothing filled down, because there is nothing to fill: the answer is a fact about the table, not about a row.</p>
+  <p>Say the distinction back in your own words before going on. One version: IF writes into the row it lives in; the family reads every row and lives outside the table. If your version has the words "into" and "across" in it somewhere, you have it.</p>
 
-  <h2>S на конце: больше условий</h2>
-  <p>COUNTIFS, SUMIFS и AVERAGEIFS — это одни и те же инструменты, принимающие несколько условий, объединенных в пару «диапазон-затем-условие», все из которых должны пройти. S — это «больше условий», ничего больше:</p>
+  <h2>The S on the end: more conditions</h2>
+  <p>COUNTIFS, SUMIFS and AVERAGEIFS are the same tools accepting several conditions, paired as range-then-condition, all of which must pass. The S is "more conditions," nothing else:</p>
   <pre><code>=COUNTIFS(Games[PctPositive],"&gt;=95", Games[TotalReviews],"&gt;=2000")   → 765</code></pre>
-  <p>Это ячейка проверки любимых игр сборки из  <a href="../excel-check-your-work/">статья 2</a>: два условия, один счет. Одна привычка, которую стоит перенять: использовать версии S по умолчанию, поскольку в конечном итоге всегда приходит второе условие, а COUNTIFS с одним условием работает нормально.</p>
+  <p>That is the build's loved-games check cell from <a href="../excel-check-your-work/">article 2</a>: two conditions, one count. One habit worth stealing: reach for the S versions by default, since a second condition always arrives eventually, and COUNTIFS with one condition works fine.</p>
 
-  <h2>Самая полезная формула в этой серии, пройдена</h2>
-  <p>Вывод в заголовке сборки: игры в 21,2 раза превышают аудиторию скрытых игр. Это одна формула: среднее значение, разделенное на среднее, каждое по трем условиям. Вот оно, далее каждый фрагмент в порядке чтения:</p>
+  <h2>The most useful formula in this series, walked through</h2>
+  <p>The build's headline finding, found games reach 21.2x the audience of hidden ones, is one formula: an average divided by an average, each over three conditions. Here it is, then each piece in reading order:</p>
   <pre><code>=AVERAGEIFS(Games[EstOwnersMid],
      Games[PctPositive],"&gt;=95",
      Games[TotalReviews],"&gt;=2000",
@@ -172,92 +172,92 @@
      Games[TotalReviews],"&gt;=2000",
      Games[IsHiddenGem],1)</code></pre>
   <table>
-    <tr><th>Piece</th><th>Что там написано</th></tr>
-    <tr><td><code>Games[EstOwnersMid]</code></td><td>Усредняемое число: предполагаемые владельцы каждой игры.</td></tr>
-    <tr><td><code>Games[PctPositive],"&gt;=95"</code></td><td>Учитываются только любимые игры</td></tr>
-    <tr><td><code>Games[TotalReviews],"&gt;=2000"</code></td><td>Только проверенные игры имеют значение, пол с маленькой базой от  <a href="../excel-pivot-percentages/">статья 7</a></td></tr>
-    <tr><td><code>Games[IsHiddenGem],0</code> then <code>,1</code></td><td>Верхний средний: найденные игры. Нижнее среднее: скрытые</td></tr>
-    <tr><td>Дивизия</td><td>2 458 263 больше 116 000, что составляет 21,1919 г.</td></tr>
+    <tr><th>Piece</th><th>What it says</th></tr>
+    <tr><td><code>Games[EstOwnersMid]</code></td><td>The number being averaged: each game's estimated owners</td></tr>
+    <tr><td><code>Games[PctPositive],"&gt;=95"</code></td><td>Only loved games count</td></tr>
+    <tr><td><code>Games[TotalReviews],"&gt;=2000"</code></td><td>Only proven games count, the small-base floor from <a href="../excel-pivot-percentages/">article 7</a></td></tr>
+    <tr><td><code>Games[IsHiddenGem],0</code> then <code>,1</code></td><td>Top average: the found games. Bottom average: the hidden ones</td></tr>
+    <tr><td>The division</td><td>2,458,263 over 116,000, which is 21.1919</td></tr>
   </table>
-  <p>Отформатировано с помощью  <code>0.0"x"</code> per <a href="../excel-custom-number-formats/">статья 8</a>, ячейка читает 21,2х. Одна ячейка, никаких вспомогательных таблиц, никакой сводной таблицы, и она пересчитывает момент изменения данных. Для этого и нужны измерительные инструменты.</p>
+  <p>Formatted with <code>0.0"x"</code> per <a href="../excel-custom-number-formats/">article 8</a>, the cell reads 21.2x. One cell, no helper tables, no pivot, and it recalculates the moment data changes. That is what measuring tools are for.</p>
 
-  <h2>Почему маркировка в первую очередь облегчает измерение</h2>
-  <p>Вот  <a href="../excel-label-rows-before-charting/">статья 1</a>  Расплата придет десятью статьями позже. Сравните наборы условий:</p>
+  <h2>Why labelling first makes measuring easy</h2>
+  <p>Here is <a href="../excel-label-rows-before-charting/">article 1's</a> payoff arriving ten articles later. Compare the condition sets:</p>
   <pre><code>Without the label:  three conditions, repeated in every measuring formula
 With the label:     =COUNTIF(Games[Segment], "Loved, hidden")</code></pre>
-  <p>Столбец «Сегмент» выполнял работу с тремя условиями один раз для каждой строки в проходе маркировки. Каждая измерительная формула после нее задает один короткий вопрос одной чистой колонки. Сначала пометьте, и формулы измерения станут простыми, короткими и последовательными, потому что все они читают одно и то же определение, а не повторяют его. Когда определение меняется, оно меняется в одном месте, и  <a href="../excel-check-your-work/">чеки</a>  поймать все, что несогласно.</p>
+  <p>The Segment column did the three-condition work once, per row, in the labelling pass. Every measuring formula after it asks one short question of one clean column. Label first and the measuring formulas get simple, short, and consistent, because they all read the same definition instead of each restating it. When a definition changes, it changes in one place, and <a href="../excel-check-your-work/">the checks</a> catch anything that disagrees.</p>
 
-  <h2>Запустите его в своем файле</h2>
+  <h2>Run it on your own file</h2>
   <ol>
-    <li><strong>Произнесите вслух форму вашей задачи.</strong>  В каждую строку или на одну цифру назад?</li>
-    <li><strong>Разметка: напишите ЕСЛИ, пусть таблица заполнит его.</strong>  Проверьте приземление этикеток, как в статье 1.</li>
-    <li><strong>Измерение: выберите члена семьи по тому, что вы хотите вернуть.</strong>  Число, сумма или среднее значение.</li>
-    <li><strong>Используйте версии S.</strong>  Условия в виде пар диапазон-запятая-условие.</li>
-    <li><strong>Поместите формулы измерения за пределы таблицы.</strong>, в помеченных ячейках, где они служат проверками.</li>
-    <li><strong>Когда условия повторяются в формулах, это сигнал.</strong>  чтобы создать столбец меток, который вы пропустили.</li>
+    <li><strong>Say your task's shape out loud.</strong> Into every row, or one number back?</li>
+    <li><strong>Labelling: write the IF, let the Table fill it.</strong> Check the labels landed, article 1's way.</li>
+    <li><strong>Measuring: pick the family member by what you want back.</strong> A count, a total, or an average.</li>
+    <li><strong>Use the S versions.</strong> Conditions as range-comma-condition pairs.</li>
+    <li><strong>Put the measuring formulas outside the table</strong>, in labelled cells, where they double as checks.</li>
+    <li><strong>When conditions repeat across formulas, that is the signal</strong> to go build the label column you skipped.</li>
   </ol>
 
   <div class="book">
-    <strong>ПЧ работает. Затем он работает не с теми строками и все равно что-то возвращает.</strong>
-    <p><em>Excel для аналитиков</em>  состоит из 378 страниц, семейство IF читает аргумент за аргументом простыми словами, включая то, что каждый из них делает с пробелом.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-if-family'})">Excel для аналитиков, 19 долларов США →</a>
+    <strong>The IF works. Then it works on the wrong rows and still returns something.</strong>
+    <p><em>Excel for Analysts</em> is 378 pages, the IF family read argument by argument in plain words, including what each one does with a blank.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-if-family'})">Excel for Analysts, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>Получите информацию от всей семьи.</strong>
-    <p style="margin:6px 0 0">The <a href="../../excel/">Excel комплект</a>  тренирует ЕСЛИ, СЧЁТЕСЛИ, СУММЕСЛИ и СРЗНАЧЕСЛИ с проработанными примерами и пробным экзаменом. Отличие принадлежит вам с этой страницы. Беглость — это повторения.</p>
-    <a class="btn" href="../../excel/" onclick="if(window.gtag)gtag('event','prompt_pack_click',{kit:'guide-excel-if-family'})">Откройте набор Excel →</a>
+    <strong>Get the reps on the whole family.</strong>
+    <p style="margin:6px 0 0">The <a href="../../excel/">Excel Kit</a> drills IF, COUNTIF, SUMIFS and AVERAGEIFS with worked examples and a mock exam. The distinction is yours from this page. Fluency is the reps.</p>
+    <a class="btn" href="../../excel/" onclick="if(window.gtag)gtag('event','prompt_pack_click',{kit:'guide-excel-if-family'})">Open the Excel Kit →</a>
   </div>
 
-  <h2>Шпаргалка</h2>
+  <h2>A cheat sheet</h2>
   <table>
-    <tr><th>Ты хочешь</th><th>Use</th><th>Возвращается как</th></tr>
-    <tr><td>Метка в каждой строке</td><td><code>IF</code>, вложенный для большего количества групп</td><td>Столбец</td></tr>
-    <tr><td>Сколько строк проходит</td><td><code>COUNTIF</code> / <code>COUNTIFS</code></td><td>Один номер</td></tr>
-    <tr><td>Что набрали прохожие</td><td><code>SUMIF</code> / <code>SUMIFS</code></td><td>Один номер</td></tr>
-    <tr><td>Средний балл прохожих</td><td><code>AVERAGEIF</code> / <code>AVERAGEIFS</code></td><td>Один номер</td></tr>
-    <tr><td>Соотношение между группами</td><td>Два СРЗНИХ ЕСЛИ разделены</td><td>Одно число, форматируйте единицу измерения по статье 8.</td></tr>
-    <tr><td>Простые формулы измерения</td><td>Сначала создайте столбец меток</td><td>Условия живут один раз, в проходе маркировки</td></tr>
+    <tr><th>You want</th><th>Use</th><th>Comes back as</th></tr>
+    <tr><td>A label on every row</td><td><code>IF</code>, nested for more groups</td><td>A column</td></tr>
+    <tr><td>How many rows pass</td><td><code>COUNTIF</code> / <code>COUNTIFS</code></td><td>One number</td></tr>
+    <tr><td>What the passers total</td><td><code>SUMIF</code> / <code>SUMIFS</code></td><td>One number</td></tr>
+    <tr><td>The passers' average</td><td><code>AVERAGEIF</code> / <code>AVERAGEIFS</code></td><td>One number</td></tr>
+    <tr><td>A ratio between groups</td><td>Two AVERAGEIFS divided</td><td>One number, format the unit per article 8</td></tr>
+    <tr><td>Simple measuring formulas</td><td>Build the label column first</td><td>Conditions live once, in the labelling pass</td></tr>
   </table>
 
-  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Прежде чем вводить формулу с ЕСЛИ в названии, скажите, какую форму имеет ответ: столбец или число. Форма каждый раз выбирает инструмент.</div>
+  <div class="note"><strong>The one habit to keep.</strong> Before typing any formula with IF in its name, say which shape the answer has: a column, or a number. The shape picks the tool, every time.</div>
 
   <div class="series">
-    <strong>Серия: Excel для бизнес-аналитиков.</strong>
-    <p style="margin:6px 0 8px">Каждая статья создается за один этап  <a href="../excel-dashboard-build-order/">та же настоящая сборка</a>, в порядке сборки. Ссылки активируются по мере публикации каждой из них.</p>
+    <strong>The series: Excel for Business Analysts.</strong>
+    <p style="margin:6px 0 8px">Every article comes out of one step of <a href="../excel-dashboard-build-order/">the same real build</a>, in build order. Links go live as each one publishes.</p>
     <ol start="0">
-      <li value="0"><a href="../excel-dashboard-build-order/">Создайте информационную панель в следующем порядке: правильно, затем ясно, затем убедительно.</a></li>
-      <li><a href="../excel-label-rows-before-charting/">Пометьте свои строки, прежде чем составлять их диаграмму.</a></li>
-      <li><a href="../excel-check-your-work/">Проверяйте свою работу, прежде чем это сделает кто-то другой</a></li>
-      <li><a href="../excel-name-your-data/">Назовите свои данные, чтобы ваши формулы перестали нарушаться</a></li>
-      <li><a href="../excel-csv-import-leading-zeros/">Диалог, который незаметно удаляет ваши почтовые индексы</a></li>
-      <li><a href="../excel-pivot-table-question/">Сводная таблица — это вопрос, а не отчет</a></li>
-      <li><a href="../excel-sum-of-id-trap/">Excel просто суммировал ваши идентификационные номера и ничего не сказал.</a></li>
-      <li><a href="../excel-pivot-percentages/">Проценты — это вся история, а Excel их скрывает</a></li>
-      <li><a href="../excel-custom-number-formats/">Покажите единицу, не нарушая цифру</a></li>
-      <li><a href="../excel-pick-the-chart/">Выберите диаграмму, ваш номер уже определен</a></li>
-      <li><a href="../excel-chart-design-basics/">Основы проектирования диаграмм: уберите что-то, а затем укажите</a></li>
-      <li>По одной строке за раз или все строки сразу (эта статья)</li>
-      <li><a href="../excel-kpi-row/">Четыре числа сверху обозначают более четырех графиков.</a></li>
-      <li><a href="../excel-sort-your-bars/">Отсортируйте гистограмму, иначе это ничего не значит</a></li>
-      <li><a href="../excel-circular-findings/">Открытие, которое было всего лишь вашим собственным определением</a></li>
-      <li><a href="../excel-character-encoding/">Имена появились как тарабарщина, а Excel ничего не сказал</a></li>
-      <li><a href="../excel-slicers/">Сделайте по одному управляющему диску для каждой диаграммы на странице.</a></li>
-      <li><a href="../excel-dashboard-claim/">Напишите предложение, о котором спорит ваша панель мониторинга</a></li>
+      <li value="0"><a href="../excel-dashboard-build-order/">Build a dashboard in this order: correct, then clear, then compelling</a></li>
+      <li><a href="../excel-label-rows-before-charting/">Label your rows before you chart them</a></li>
+      <li><a href="../excel-check-your-work/">Check your work before anyone else does</a></li>
+      <li><a href="../excel-name-your-data/">Name your data so your formulas stop breaking</a></li>
+      <li><a href="../excel-csv-import-leading-zeros/">The dialog that quietly deletes your zip codes</a></li>
+      <li><a href="../excel-pivot-table-question/">A pivot table is a question, not a report</a></li>
+      <li><a href="../excel-sum-of-id-trap/">Excel just summed your ID numbers and said nothing</a></li>
+      <li><a href="../excel-pivot-percentages/">Percentages are the whole story and Excel hides them</a></li>
+      <li><a href="../excel-custom-number-formats/">Show the unit without breaking the number</a></li>
+      <li><a href="../excel-pick-the-chart/">Pick the chart your number already decided</a></li>
+      <li><a href="../excel-chart-design-basics/">Chart design basics: take things away, then point</a></li>
+      <li>One row at a time, or all rows at once (this article)</li>
+      <li><a href="../excel-kpi-row/">Four numbers across the top do more than four charts</a></li>
+      <li><a href="../excel-sort-your-bars/">Sort your bar chart or it means nothing</a></li>
+      <li><a href="../excel-circular-findings/">The finding that was just your own definition</a></li>
+      <li><a href="../excel-character-encoding/">The names came in as gibberish and Excel said nothing</a></li>
+      <li><a href="../excel-slicers/">Make one control drive every chart on the page</a></li>
+      <li><a href="../excel-dashboard-claim/">Write the sentence your dashboard is arguing</a></li>
     </ol>
   </div>
 
-  <p>Ваш прогноз вверху, столбец единиц и нулей: вы уже писали эту формулу, ожидая подсчета? Теперь скажите, какой инструмент вам действительно нужен, и какой у него номер.</p>
+  <p>Your prediction at the top, the column of ones and zeros: have you written that formula before, expecting a count? Now say which tool you actually wanted, and what its one number would have been.</p>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../excel-dashboard-build-order/">Порядок строительства (статья 0)</a> · <a href="../excel-absolute-vs-relative-references/">Абсолютные и относительные ссылки</a> · <a href="../excel-label-rows-before-charting/">Пометьте свои строки (статья 1)</a> · <a href="../excel-check-your-work/">Проверьте свою работу (статья 2)</a> · <a href="../excel-name-your-data/">Назовите свои данные (статья 3)</a> · <a href="../excel-custom-number-formats/">Пользовательские форматы чисел (статья 8)</a> · <a href="../sql-case-expression/">Выражение SQL CASE</a> · <a href="../sql-count-function/">СЧЕТ в SQL</a> · <a href="../what-is-data-analysis/">Что такое анализ данных?</a> · <a href="../../excel/">Excel комплект</a> · <a href="../../viz/">Виз Дрель</a> · <a href="../../projects/">Портфельные проекты</a>
-    <a class="coffee" href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a>
+    <a href="../../">← Analyst Prep Kit</a> · <a href="../excel-dashboard-build-order/">The Build Order (Article 0)</a> · <a href="../excel-absolute-vs-relative-references/">Absolute vs Relative References</a> · <a href="../excel-label-rows-before-charting/">Label Your Rows (Article 1)</a> · <a href="../excel-check-your-work/">Check Your Work (Article 2)</a> · <a href="../excel-name-your-data/">Name Your Data (Article 3)</a> · <a href="../excel-custom-number-formats/">Custom Number Formats (Article 8)</a> · <a href="../sql-case-expression/">The SQL CASE Expression</a> · <a href="../sql-count-function/">COUNT in SQL</a> · <a href="../what-is-data-analysis/">What Is Data Analysis?</a> · <a href="../../excel/">Excel Kit</a> · <a href="../../viz/">Viz Drill</a> · <a href="../../projects/">Portfolio Projects</a>
+    <a class="coffee" href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

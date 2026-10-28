@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Расчеты в виде таблиц: вычисления с использованием, объяснение — комплект для подготовки аналитика</title>
-<meta name="description" content="Текущая сумма, которая сбрасывается не в том месте, процент от суммы, который в сумме превышает 100, ранг, который перезапускается. Все та же установка. Что делает вычислять, используя, разница между Стол поперек и Панель вниз и как увидеть раздел.">
+<title>Tableau Table Calculations: Compute Using, Explained &mdash; Analyst Prep Kit</title>
+<meta name="description" content="A running total that resets in the wrong place, a percent of total that adds to more than 100, a rank that restarts. All the same setting. What Compute Using does, the difference between Table Across and Pane Down, and how to see the partition.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/tableau-table-calculations/">
-<meta property="og:title" content="Табличные вычисления в Tableau: использование вычислений — это вся настройка">
-<meta property="og:description" content="Одна настройка решает все, что делает табличный расчет. Как это увидеть и как сознательно настроить.">
+<meta property="og:title" content="Table Calculations in Tableau: Compute Using Is the Whole Setting">
+<meta property="og:description" content="One setting decides everything a table calculation does. How to see it and how to set it deliberately.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/tableau-table-calculations/">
 <meta name="twitter:card" content="summary_large_image">
@@ -164,54 +164,54 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../../tableau/">Табличный комплект</a></p>
-  <h1>Табличные вычисления в Tableau: использование вычислений — это вся настройка</h1>
-  <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Все числа на этой странице были обработаны до их публикации.</p>
+  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../../tableau/">Tableau Kit</a></p>
+  <h1>Table Calculations in Tableau: Compute Using Is the Whole Setting</h1>
+  <p class="meta">Michael Nocito &middot; Updated August 2026 &middot; Every number on this page was worked before it was published</p>
 
-  <p>Промежуточная сумма, процент от суммы, отличие от предыдущей, ранг, скользящее среднее. Все пять вычислений — табличные, все пять рассчитываются по таблице результатов, а не по данным, и все пять управляются одной настройкой, которую легко не заметить.</p>
+  <p>Running total, percent of total, difference from previous, rank, moving average. All five are table calculations, all five are computed on the result table rather than on the data, and all five are controlled by one setting that is easy not to notice.</p>
 
-  <p>Что вы делаете: каждый раз устанавливайте «Вычисление с использованием определенных размеров» вместо принятия значений по умолчанию. Это займет десять секунд, и расчет скажет то, что вы имели в виду.</p>
+  <p>What you do: set Compute Using with Specific Dimensions, every time, rather than accepting the default. It takes ten seconds and it makes the calculation say what you meant.</p>
 
-  <p><strong>Краткая версия.</strong>  Отмеченные размеры — это направление. Неотмеченные измерения — это раздел, на котором он перезапускается.</p>
+  <p><strong>The short version.</strong> Ticked dimensions are the direction. Unticked dimensions are the partition it restarts on.</p>
 
-  <h2>Что видит табличный расчет</h2>
-  <p>Все остальное в Tableau работает с данными. Табличный расчет работает по готовой таблице оценок: цифры, которые вы видите на экране, расположены так, как их расположили на полках. Это имеет два последствия, о которых стоит сказать прямо.</p>
+  <h2>What a table calculation sees</h2>
+  <p>Everything else in Tableau works on the data. A table calculation works on the finished table of marks: the numbers you can see on screen, arranged the way the shelves arranged them. That has two consequences worth stating plainly.</p>
   <ul>
-    <li>Измените представление, и значение расчета изменится без необходимости его редактирования. Перетащите измерение из строк в столбцы, и промежуточный итог начнет работать в другую сторону.</li>
-    <li>Фильтр измерений удаляет строки перед вычислением, поэтому фильтрация января фактически удаляет его из промежуточного итога. Фильтр расчета таблицы или «Скрыть» этого не делает.</li>
+    <li>Change the view and the calculation changes meaning, without you editing it. Drag a dimension from Rows to Columns and a running total can start running the other way.</li>
+    <li>A dimension filter removes rows before the calculation, so filtering out January genuinely removes it from a running total. A table calculation filter, or Hide, does not.</li>
   </ul>
 
-  <h2>Направления</h2>
+  <h2>The directions</h2>
   <table>
-    <tr><th>Setting</th><th>Бежит вдоль</th><th>Перезапускается в</th></tr>
-    <tr><td>Стол (поперек)</td><td>Каждая отметка слева направо</td><td>Каждая строка таблицы</td></tr>
-    <tr><td>Стол (вниз)</td><td>Каждая отметка сверху вниз</td><td>Каждый столбец</td></tr>
-    <tr><td>Панель (поперек)</td><td>Слева направо на панели</td><td>Каждая панель, поэтому при каждом внешнем разрыве</td></tr>
-    <tr><td>Панель (вниз)</td><td>Сверху вниз на панели</td><td>Каждая панель</td></tr>
-    <tr><td>Cell</td><td>Ничего. Одна отметка.</td><td>Каждая отметка</td></tr>
-    <tr><td>Конкретные размеры</td><td>Что бы ты ни отметил</td><td>Все, что вы оставите не отмеченным</td></tr>
+    <tr><th>Setting</th><th>Runs along</th><th>Restarts at</th></tr>
+    <tr><td>Table (Across)</td><td>Every mark left to right</td><td>Each row of the table</td></tr>
+    <tr><td>Table (Down)</td><td>Every mark top to bottom</td><td>Each column</td></tr>
+    <tr><td>Pane (Across)</td><td>Left to right within a pane</td><td>Each pane, so at every outer break</td></tr>
+    <tr><td>Pane (Down)</td><td>Top to bottom within a pane</td><td>Each pane</td></tr>
+    <tr><td>Cell</td><td>Nothing. One mark.</td><td>Every mark</td></tr>
+    <tr><td>Specific Dimensions</td><td>Whatever you tick</td><td>Whatever you leave unticked</td></tr>
   </table>
-  <p>Панель против таблицы — это различие, которое приводит к наибольшему количеству неправильных чисел. При использовании «Регион в строках» и «Месяц в столбцах» промежуточный итог, установленный в «Таблица (поперек), проходит прямо через границу региона и продолжает накапливаться. Если установлено значение «Панель (поперек),» он перезапускается для каждого региона, что почти всегда является тем, что и хотелось.</p>
+  <p>Pane against Table is the distinction that produces most wrong numbers. With Region on Rows and Month on Columns, a running total set to Table (Across) runs straight through the region boundary and keeps accumulating. Set to Pane (Across) it restarts for each region, which is nearly always what was wanted.</p>
 
-  <div class="note"><strong>Включите подсветку.</strong>  «Изменить расчет таблицы», а «Таблица» затеняет метки, включенные в текущую настройку. Это затенение — самый быстрый способ увидеть раздел, и оно превращает абстрактную обстановку во что-то, на что вы можете смотреть.</div>
+  <div class="note"><strong>Turn on the highlight.</strong> Edit Table Calculation, and Tableau shades the marks the current setting includes. That shading is the fastest way to see the partition, and it turns an abstract setting into something you can look at.</div>
 
-  <h2>Конкретные размеры и почему именно их следует использовать</h2>
-  <p>Таблица и Панель определяются формой представления, поэтому перемещение таблетки меняет их значение. Вместо этого в «Специальных измерениях» указаны размеры, поэтому расчет сохраняет свое значение при изменении макета.</p>
-  <p>В представлении «Регион» и «Месяц» и промежуточной сумме, которая должна учитываться по месяцам в каждом регионе: отметьте «Месяц», оставьте флажок «Регион» снятым. Отмечено направление, снято — раздел. В этом одном предложении и заключается вся особенность.</p>
-  <p>Параметры «На уровне» и «Перезапустить все» ниже имеют значение для вложенных вычислений, где ранг находится внутри промежуточного итога. Сначала установите внешний, затем снова посмотрите на блик.</p>
+  <h2>Specific Dimensions, and why it is the one to use</h2>
+  <p>Table and Pane are defined by the shape of the view, so moving a pill changes what they mean. Specific Dimensions names the dimensions instead, so the calculation keeps its meaning when the layout changes.</p>
+  <p>With Region and Month on the view and a running total that should run along months within each region: tick Month, leave Region unticked. Ticked is the direction, unticked is the partition. That one sentence is the whole feature.</p>
+  <p>The At the level and Restarting every options underneath matter for nested calculations, where a rank runs inside a running total. Set the outer one first, then look at the highlight again.</p>
 
-  <h2>Пять распространенных вычислений</h2>
+  <h2>The five common calculations</h2>
   <table>
-    <tr><th>Calculation</th><th>Имя быстрого табличного расчета</th><th>Следите за</th></tr>
-    <tr><td>Промежуточная сумма</td><td>Промежуточная сумма</td><td>Прохождение границы раздела</td></tr>
-    <tr><td>Процент от общего числа</td><td>Процент от общего числа</td><td>Добавление к более чем 100 на разных панелях</td></tr>
-    <tr><td>Изменение по сравнению с предыдущим</td><td>Difference</td><td>Первая отметка равна нулю, а не нулю</td></tr>
-    <tr><td>Rank</td><td>Rank</td><td>Ничьи и какая функция ранга используется</td></tr>
-    <tr><td>Скользящее среднее</td><td>Скользящее среднее</td><td>Окно, включающее текущую отметку или нет</td></tr>
+    <tr><th>Calculation</th><th>Quick Table Calc name</th><th>Watch for</th></tr>
+    <tr><td>Running total</td><td>Running Total</td><td>Running through a partition boundary</td></tr>
+    <tr><td>Percent of total</td><td>Percent of Total</td><td>Adding to more than 100 across panes</td></tr>
+    <tr><td>Change from previous</td><td>Difference</td><td>The first mark being null, not zero</td></tr>
+    <tr><td>Rank</td><td>Rank</td><td>Ties, and which rank function is used</td></tr>
+    <tr><td>Moving average</td><td>Moving Average</td><td>The window including the current mark or not</td></tr>
   </table>
-  <p>Быстрые табличные вычисления из меню, вызываемого правой кнопкой мыши, являются хорошей отправной точкой и плохой конечной точкой: они применяют вычисления с использованием по умолчанию. Добавьте один, затем сразу же откройте «Редактировать расчет таблицы» и сознательно задайте направление.</p>
+  <p>Quick Table Calculations from the right click menu are a good starting point and a poor finishing point: they apply a default Compute Using. Add one, then immediately open Edit Table Calculation and set the direction deliberately.</p>
 
-  <h2>Пишем их от руки</h2>
+  <h2>Writing them by hand</h2>
   <pre><code>RUNNING_SUM(SUM([Sales]))
 
 // difference from the previous mark, with the first one as zero
@@ -222,55 +222,55 @@ SUM([Sales]) / TOTAL(SUM([Sales]))
 
 // position in the partition, useful for filtering to the first n
 INDEX()</code></pre>
-  <p><code>ZN</code>  имеет значение второе. Без него первая отметка равна нулю, а нуль, попадающий в последующие арифметические операции, опустошает цепочку.  <code>INDEX()</code>  стоит знать по другой причине: фильтрация по нему представляет собой фильтр табличных вычислений, поэтому он скрывает отметки без изменения промежуточной суммы, а это поведение, которое люди обычно хотят, но редко обнаруживают.</p>
+  <p><code>ZN</code> matters on the second one. Without it the first mark is null, and a null flowing into later arithmetic empties the chain. <code>INDEX()</code> is worth knowing for a different reason: filtering on it is a table calculation filter, so it hides marks without changing the running total, which is the behaviour people usually want and rarely find.</p>
 
-  <h2>Табличный расчет или уровень детализации?</h2>
+  <h2>Table calculation or level of detail?</h2>
   <table>
     <tr><th>Question</th><th>Use</th></tr>
-    <tr><td>Кое-что о соседних метках на виде</td><td>Табличный расчет</td></tr>
-    <tr><td>Что-то в зернах, чего нет в поле зрения</td><td>Уровень детализации выражения</td></tr>
-    <tr><td>Рейтинг того, что отображается</td><td>Табличный расчет</td></tr>
-    <tr><td>Дата первого заказа каждого клиента</td><td><code>{FIXED}</code></td></tr>
-    <tr><td>Знаменатель, который должен игнорировать фильтр</td><td><code>{FIXED}</code>, при необходимости отфильтруйте по контексту</td></tr>
-    <tr><td>Знаменатель, который должен соответствовать представлению</td><td><code>TOTAL()</code> Табличный расчет</td></tr>
+    <tr><td>Something about neighbouring marks in the view</td><td>Table calculation</td></tr>
+    <tr><td>Something at a grain that is not on the view</td><td>Level of detail expression</td></tr>
+    <tr><td>Rank of what is displayed</td><td>Table calculation</td></tr>
+    <tr><td>Each customer's first order date</td><td><code>{FIXED}</code></td></tr>
+    <tr><td>A denominator that must ignore a filter</td><td><code>{FIXED}</code>, filter in context if needed</td></tr>
+    <tr><td>A denominator that must follow the view</td><td><code>TOTAL()</code> table calculation</td></tr>
   </table>
 
-  <h2>Как применить это в своей работе</h2>
+  <h2>How to apply this to your own work</h2>
   <ol>
-    <li>Откройте каждое вычисление таблицы в основной книге и проверьте ее использование вычислений. Преобразуйте их все в определенные размеры.</li>
-    <li>Используйте выделение для подтверждения раздела, вместо того, чтобы читать цифры и надеяться.</li>
-    <li>Проверьте каждый из них, добавив измерение в представление. Если значение меняется, значит, настройка зависит от макета.</li>
-    <li>Оберните все, что может быть нулевым, в  <code>ZN</code>  прежде чем он подаст арифметику.</li>
-    <li>Там, где нужно скрыть отметки без изменения итогов, включите фильтр.  <code>INDEX()</code>  а не по размерности.</li>
+    <li>Open every table calculation in your main workbook and check its Compute Using. Convert them all to Specific Dimensions.</li>
+    <li>Use the highlight to confirm the partition, rather than reading the numbers and hoping.</li>
+    <li>Test each one by adding a dimension to the view. If the meaning changes, the setting was layout-dependent.</li>
+    <li>Wrap anything that can be null in <code>ZN</code> before it feeds arithmetic.</li>
+    <li>Where you need to hide marks without changing totals, filter on <code>INDEX()</code> rather than on the dimension.</li>
   </ol>
 
-  <h2>Единственная привычка, которую нужно сохранить</h2>
-  <p>Прежде чем что-либо устанавливать, скажите в одном предложении, как выполняются вычисления и где они возобновляются. Если вы не можете этого сказать, настройка будет догадкой и будет действовать до тех пор, пока кто-нибудь не переместит таблетку.</p>
+  <h2>The one habit to keep</h2>
+  <p>Say what the calculation runs along and where it restarts, in one sentence, before setting anything. If you cannot say it, the setting will be a guess, and it will hold until somebody moves a pill.</p>
 
-  <p>Выживет ли ваша промежуточная сумма, если кто-то поменяет местами строки и столбцы?</p>
+  <p>Would your running total survive somebody swapping Rows and Columns?</p>
 
-  <div class="note"><strong>Написано с помощью инструмента в момент его поставки.</strong>    Вычисление с использованием, конкретные размеры, редактирование расчета таблицы и выделение метки — все это текущие функции Табло рабочего стола.</div>
+  <div class="note"><strong>Written from the tool as it ships.</strong> Compute Using, Specific Dimensions, Edit Table Calculation and the mark highlight are all current Tableau Desktop features.</div>
 
   <div class="book">
-    <strong>Табличный расчет производится по картинке, а не по данным.</strong>
-    <p><em>Таблица для аналитиков</em>  это 110 страниц о том, как на самом деле думает Tableau: измерения против мер, отношения против объединений, наборы и уровень детализации. Достаточно того, что вы перестанете перетаскивать поля, пока все не станет выглядеть правильно.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/tableau-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=tableau-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-tableau-table-calculations'})">Таблица для аналитиков, $19 →</a>
+    <strong>A table calculation is computed on the picture, not on the data.</strong>
+    <p><em>Tableau for Analysts</em> is 110 pages on how Tableau actually thinks: dimensions against measures, relationships against joins, sets, and level of detail. Enough that you stop dragging fields until it looks right.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/tableau-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=tableau-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-tableau-table-calculations'})">Tableau for Analysts, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>Каждый раз задавайте направление намеренно.</strong>
-    <p style="margin:6px 0 0"><a href="../tableau-calculated-fields/">Вычисляемые поля</a>  охватывает четыре вида и место среди них настольных вычислений, и  <a href="../tableau-filter-order-of-operations/">Порядок операций</a>  показывает, почему они бегут последними.</p>
-    <a class="btn" href="../tableau-calculated-fields/">Читать вычисляемые поля →</a>
+    <strong>Set the direction on purpose, every time.</strong>
+    <p style="margin:6px 0 0"><a href="../tableau-calculated-fields/">Calculated fields</a> covers the four kinds and where table calcs sit among them, and <a href="../tableau-filter-order-of-operations/">the order of operations</a> shows why they run last.</p>
+    <a class="btn" href="../tableau-calculated-fields/">Read Calculated Fields &rarr;</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../tableau-calculated-fields/">Вычисляемые поля</a> &middot; <a href="../tableau-filter-order-of-operations/">Порядок фильтра</a> &middot; <a href="../tableau-sorts/">Sorting</a> &middot; <a href="../sql-window-functions/">Оконные функции SQL</a> &middot; <a href="../moving-averages/">Скользящие средние</a> &middot; <a href="../../tableau/">Табличный комплект</a>
-    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
+    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../tableau-calculated-fields/">Calculated Fields</a> &middot; <a href="../tableau-filter-order-of-operations/">Filter Order</a> &middot; <a href="../tableau-sorts/">Sorting</a> &middot; <a href="../sql-window-functions/">SQL Window Functions</a> &middot; <a href="../moving-averages/">Moving Averages</a> &middot; <a href="../../tableau/">Tableau Kit</a>
+    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

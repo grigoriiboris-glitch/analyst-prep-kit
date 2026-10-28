@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>СЛУЧАЙ, КОГДА с перекрывающимися условиями в SQL — комплект подготовки аналитика</title>
-<meta name="description" content="Если оба условия WHEN могут быть истинными, CASE берет первое и ничего не сообщает. Перемещение одной строки увеличило количество VIP вдвое с 2 до 4 для тех же десяти клиентов. Как обнаружить перекрытие, как его проверить и когда вместо этого использовать столбцы флагов.">
+<title>CASE WHEN With Overlapping Conditions in SQL &mdash; Analyst Prep Kit</title>
+<meta name="description" content="When two WHEN conditions can both be true, CASE takes the first one and says nothing. Moving one line doubled the VIP count from 2 to 4 on the same ten customers. How to spot an overlap, how to test for it, and when to use flag columns instead.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-case-overlapping-conditions/">
-<meta property="og:title" content="СЛУЧАЙ, КОГДА с перекрывающимися условиями в SQL">
-<meta property="og:description" content="Два условия WHEN, оба из которых могут быть истинными, означают, что ответом является порядок. Те же десять клиентов, одна очередь перемещена, а количество VIP увеличено с 2 до 4.">
+<meta property="og:title" content="CASE WHEN With Overlapping Conditions in SQL">
+<meta property="og:description" content="Two WHEN conditions that can both be true means the order is the answer. The same ten customers, one line moved, and the VIP count goes from 2 to 4.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-case-overlapping-conditions/">
 <meta name="twitter:card" content="summary_large_image">
@@ -130,15 +130,15 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-кит</a></p>
-  <h1>СЛУЧАЙ, КОГДА с перекрывающимися условиями в SQL</h1>
-  <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Каждый запрос на этой странице был выполнен до его публикации.</p>
+  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../sql/">SQL Kit</a></p>
+  <h1>CASE WHEN With Overlapping Conditions in SQL</h1>
+  <p class="meta">Michael Nocito · Updated August 2026 · Every query on this page was run before it was published</p>
 
-  <p>На этой странице представлен двухстрочный тест, который показывает,  <code>CASE</code>  Выражение означает тихое решение чего-то от вашего имени. Это важно, поскольку перекрывающиеся условия не приводят к ошибкам и двойному учету. Они выбирают один ответ, и ответом будет та строка, которую вы написали первой. У десяти клиентов ниже перемещение одной строки изменило количество VIP с 2 до 4.</p>
+  <p>This page gives you a two line test that tells you whether a <code>CASE</code> expression is quietly deciding something on your behalf. It matters because overlapping conditions do not error and do not double count. They pick one answer, and the answer is whichever line you happened to write first. On the ten customers below, moving a single line changed the VIP count from 2 to 4.</p>
 
-  <p>Что вы делаете: записываете по одному столбцу флагов для каждого правила, затем подсчитываете строки, в которых два флага равны 1. Это те строки, для которых ваша помеченная версия должна была выбрать. Если это число не равно нулю, порядок вашего  <code>WHEN</code>  линии — это бизнес-решение, и кто-то должен был принять его намеренно.</p>
+  <p>What you do: write one flag column per rule, then count the rows where two flags are 1. Those are the rows your labelled version had to choose for. If that number is not zero, the order of your <code>WHEN</code> lines is a business decision, and somebody should have made it on purpose.</p>
 
-  <p><strong>Краткая версия.</strong> <code>CASE</code>  останавливается при первом истинном условии. Поэтому, когда два условия могут быть истинными, порядок является логикой.</p>
+  <p><strong>The short version.</strong> <code>CASE</code> stops at the first true condition. So when two conditions can both be true, the order is the logic.</p>
 
   <figure>
     <svg viewBox="0 0 640 200" role="img" aria-labelledby="ovdesc" xmlns="http://www.w3.org/2000/svg">
@@ -156,11 +156,11 @@
       <rect x="436" y="122" width="150" height="40" rx="10" fill="#FFFFFF" stroke="#E4E7EA"/>
       <text x="511" y="147" text-anchor="middle" font-size="15" fill="#A1A1AA">VIP</text>
     </svg>
-    <figcaption>Хейл соответствует обоим правилам. Сплошная стрелка указывает на то, КОГДА появилось раньше.</figcaption>
+    <figcaption>Hale meets both rules. The solid arrow is whichever WHEN came first.</figcaption>
   </figure>
 
-  <h2>Таблица, на которой выполняются примеры</h2>
-  <p>Десять клиентов, три столбца, которые имеют значение: сколько они потратили, когда зарегистрировались и когда последний раз заказывали. Для каждого расчета на этой странице сегодня 23 августа 2026 года.</p>
+  <h2>The table the examples run on</h2>
+  <p>Ten customers, three columns that matter: what they have spent, when they signed up, and when they last ordered. Today is 23 August 2026 for every calculation on this page.</p>
   <pre><code>CREATE TABLE customers(name TEXT, spend INT, signed_on TEXT, last_order TEXT);
 
 INSERT INTO customers VALUES
@@ -174,11 +174,11 @@ INSERT INTO customers VALUES
 ('Hale',   1050,'2026-08-20','2026-08-21'),
 ('Iyer',    460,'2025-05-05','2026-08-12'),
 ('Jansen',  NULL,'2025-07-07','2026-01-15');</code></pre>
-  <p>Правила трех сегментов, о которых просит любая маркетинговая команда. Новые средства, зарегистрированные за последние 30 дней. VIP означает расходы в размере 1000 или более. Под риском подразумевается отсутствие заказов в течение более чем 90 дней. Каждый из них разумен сам по себе.</p>
+  <p>Three segment rules, the kind any marketing team asks for. New means signed up in the last 30 days. VIP means spend of 1000 or more. At risk means no order in over 90 days. Every one of them is reasonable on its own.</p>
 
-  <h2>Два правила, один клиент и никакой ошибки</h2>
-  <p>Перед вопросом: Хейл зарегистрировался 20 августа и потратил 1050. Какому из трёх правил соответствует Хейл?</p>
-  <p>Двое из них. Хейл новенький и Хейл VIP. Ничто в SQL не возражает против этого, потому что  <code>CASE</code>  не сверяет ваши правила друг с другом. Он ходит по  <code>WHEN</code>  строки сверху, берет первую истинную и останавливается.</p>
+  <h2>Two rules, one customer, and no error</h2>
+  <p>Before the query: Hale signed up on 20 August and has spent 1050. Which of the three rules does Hale meet?</p>
+  <p>Two of them. Hale is new and Hale is a VIP. Nothing in SQL objects to that, because <code>CASE</code> is not checking your rules against each other. It walks the <code>WHEN</code> lines from the top, takes the first one that is true, and stops.</p>
   <pre><code>SELECT name, spend,
        CASE WHEN julianday('2026-08-23') - julianday(signed_on) &lt;= 30 THEN 'new'
             WHEN spend &gt;= 1000                                       THEN 'vip'
@@ -186,27 +186,27 @@ INSERT INTO customers VALUES
             ELSE 'active'
        END AS segment
 FROM customers;</code></pre>
-  <p>Хейл возвращается как  <strong>new</strong>. Не потому, что Хейл более новый, чем VIP, а потому, что новая линия находится выше VIP-линии. Вот и весь механизм, и все остальное на этой странице вытекает из него.</p>
-  <p>Два условия, оба из которых могут быть истинными для одной строки, называются перекрытием. Два условия, которые не могут быть названы взаимоисключающими. Группы, построенные из одного столбца, например, менее 500, 500 или более, являются взаимоисключающими, и их порядок на самом деле не имеет значения. Правила, построенные на основе разных столбцов, почти всегда перекрываются.</p>
+  <p>Hale comes back as <strong>new</strong>. Not because Hale is more new than VIP, but because the new line is above the VIP line. That is the whole mechanism, and everything else on this page follows from it.</p>
+  <p>Two conditions that can both be true for one row are called overlapping. Two conditions that cannot are called mutually exclusive. Bands built off one column, such as under 500 and 500 or more, are mutually exclusive, and their order genuinely does not matter. Rules built off different columns almost always overlap.</p>
 
-  <h2>Переместите одну строку, и количество VIP увеличится вдвое.</h2>
-  <p>Во-первых: если VIP-правило переместится наверх, сколько из десяти клиентов поменяют сегмент?</p>
-  <p>Двое из них, Альварес и Хейл, и этого достаточно, чтобы изменить каждое число, которое читает заинтересованная сторона. Здесь учтены оба заказа, одни и те же данные, те же три правила.</p>
+  <h2>Move one line, and the VIP count doubles</h2>
+  <p>First: if the VIP rule moves to the top, how many of the ten customers change segment?</p>
+  <p>Two of them, Alvarez and Hale, and that is enough to change every number a stakeholder reads. Here are both orderings counted, same data, same three rules.</p>
   <table>
-    <tr><th>Segment</th><th>Сначала новое правило</th><th>VIP-правило прежде всего</th></tr>
+    <tr><th>Segment</th><th>New rule first</th><th>VIP rule first</th></tr>
     <tr><td>new</td><td>4</td><td>2</td></tr>
     <tr><td>vip</td><td>2</td><td>4</td></tr>
-    <tr><td>в опасности</td><td>3</td><td>3</td></tr>
+    <tr><td>at risk</td><td>3</td><td>3</td></tr>
     <tr><td>active</td><td>1</td><td>1</td></tr>
     <tr><td><strong>Total</strong></td><td><strong>10</strong></td><td><strong>10</strong></td></tr>
   </table>
-  <p>Оба раза общая сумма равна 10, и именно поэтому это выдерживает проверку. Ничего не пропало, ничего не дублируется, и сумма согласуется. Проверка сверки вообще не может выявить эту проблему, поскольку оба ответа внутренне непротиворечивы. Только раскол сдвинулся.</p>
-  <p>Прежде чем читать дальше, произнесите это вслух: если количество VIP удвоилось, а общее количество не изменилось, откуда взялись два дополнительных VIP? Они пришли из нового сегмента и всегда были и тем, и другим.</p>
+  <p>The total is 10 both times, which is exactly why this survives review. Nothing is missing, nothing is duplicated, and the sum reconciles. A reconciliation check cannot see this problem at all, because both answers are internally consistent. Only the split moved.</p>
+  <p>Say this one out loud before reading on: if the VIP count doubled and the total did not change, where did the two extra VIPs come from? They came from the new segment, and they were always both things.</p>
 
-  <h2>Заказчик обе версии скрывают</h2>
-  <p>Прежде чем ответить: Эллис потратил 2100 и последний раз заказывал 11 февраля, более шести месяцев назад. Как зовут Эллиса?</p>
-  <p>VIP, в обоих заказах. Эллис также находится в зоне риска, и ни одна версия этого помеченного запроса никогда об этом не скажет, поскольку в обоих случаях строка VIP идет перед строкой риска. Клиент с высокими расходами, который прекратил делать заказы, — это единственная наиболее полезная строка в этой таблице, и сегментация исключает этот факт.</p>
-  <p>Это стоимость этикетки. В одном столбце может содержаться один ответ, поэтому в тот момент, когда ваши правила пересекаются, метка будет принимать решение о том, какой факт останется в силе. Напишите правила в отдельных столбцах, и ничего не придется выбрасывать.</p>
+  <h2>The customer both versions hide</h2>
+  <p>Before the answer: Ellis has spent 2100 and last ordered on 11 February, over six months ago. What does Ellis get called?</p>
+  <p>VIP, in both orderings. Ellis is also at risk, and no version of this labelled query will ever say so, because the VIP line comes before the at risk line in both. A high spending customer who has stopped ordering is the single most useful row in this table, and the segmentation deletes that fact.</p>
+  <p>This is what a label costs. One column can hold one answer, so the moment your rules overlap, a label is a decision about which fact survives. Write the rules as separate columns and nothing has to be thrown away.</p>
   <pre><code>SELECT name,
        CASE WHEN julianday('2026-08-23') - julianday(signed_on) &lt;= 30 THEN 1 ELSE 0 END AS is_new,
        CASE WHEN spend &gt;= 1000                                        THEN 1 ELSE 0 END AS is_vip,
@@ -225,99 +225,99 @@ FROM customers;</code></pre>
     <tr><td>Iyer</td><td>0</td><td>0</td><td>0</td></tr>
     <tr><td>Jansen</td><td>0</td><td>0</td><td>1</td></tr>
   </table>
-  <p>В трёх рядах по две единицы: Альварес, Эллис и Хейл. Это те три строки, которые должен был выбрать помеченный запрос, и теперь вы можете видеть их, а не гадать. Эллис, заядлый транжира, находится на расстоянии одной строки SQL:  <code>WHERE is_vip = 1 AND is_at_risk = 1</code>.</p>
-  <p>Флаги тоже честно складываются. Четыре клиента по правилу являются VIP-персонами, какой бы порядок вы ни использовали. На этикетке было указано 2 в одной версии и 4 в другой, потому что метка — это рейтинг ваших правил, а не показатель количества ваших клиентов.</p>
+  <p>Three rows carry two 1s: Alvarez, Ellis and Hale. Those are the three rows the labelled query had to choose for, and now you can see them instead of guessing. Ellis, the churning big spender, is one line of SQL away: <code>WHERE is_vip = 1 AND is_at_risk = 1</code>.</p>
+  <p>The flags also add up honestly. Four customers are VIPs by the rule, whichever ordering you use. The label said 2 in one version and 4 in the other because a label is a ranking of your rules, not a measurement of your customers.</p>
 
-  <h2>Ветка, которая никогда не сможет работать</h2>
-  <p>Во-первых: какая из этих двух меток никогда не появится в выводе?</p>
+  <h2>The branch that can never run</h2>
+  <p>First: which of these two labels will never appear in the output?</p>
   <pre><code>SELECT name, spend,
        CASE WHEN spend &gt;= 100 THEN 'over 100'
             WHEN spend &gt;= 500 THEN 'over 500'
             ELSE 'small'
        END AS band
 FROM customers;</code></pre>
-  <p><code>over 500</code>, и запрос выполняется чисто. Каждый клиент старше 500 человек также старше 100, поэтому первая линия занимает их всех. Восемь строк возвращаются как  <code>over 100</code>, два как  <code>small</code>, и  <code>over 500</code>  это ноль строк. Метка существует в SQL и ни разу не попадает на экран.</p>
-  <p>Это то же самое перекрытие в его наиболее очевидной форме, и его легко обнаружить: подсчитать количество строк на метку. Метка с нулевым количеством строк — это либо правило, которому никто в ваших данных не соответствует, и о котором стоит знать, либо правило, которое более ранняя строка сделала недоступной, что является дефектом. И то, и другое вам следует найти, прежде чем кто-нибудь спросит, почему в отчете нет премиум-уровня.</p>
+  <p><code>over 500</code>, and the query runs clean. Every customer over 500 is also over 100, so the first line takes all of them. Eight rows come back as <code>over 100</code>, two as <code>small</code>, and <code>over 500</code> is zero rows. The label exists in the SQL and never once reaches the screen.</p>
+  <p>This is the same overlap in its most obvious form, and it has an easy detection: count the rows per label. A label with zero rows is either a rule nobody in your data meets, which is worth knowing, or a rule an earlier line made unreachable, which is a defect. Both are things you want to find before somebody asks why the report has no premium tier.</p>
   <pre><code>SELECT segment, COUNT(*) AS rows_labelled
 FROM (SELECT ..., CASE ... END AS segment FROM customers)
 GROUP BY segment
 ORDER BY rows_labelled;</code></pre>
 
-  <h2>Как протестировать любой КЕЙС за две минуты</h2>
-  <p>Три проверки, и ни одна из них не требует инструмента, которого у вас еще нет.</p>
+  <h2>How to test any CASE in two minutes</h2>
+  <p>Three checks, and none of them needs a tool you do not already have.</p>
   <ol>
-    <li><strong>Подсчитайте количество строк на этикетке.</strong>  Ноль означает недоступную ветвь или правило, которому никто не соответствует. Этикетка, содержащая почти все, обычно означает, что состояние более слабое, чем предполагалось.</li>
-    <li><strong>Перепишите правила в виде флагов и посчитайте перекрытия.</strong> <code>SELECT COUNT(*) FROM (...) WHERE is_new + is_vip + is_at_risk &gt; 1</code>  возвращает 3 в этой таблице. Все, что выше нуля, означает порядок вашего  <code>WHEN</code>  линии решают результаты.</li>
-    <li><strong>Переместите строки и повторите попытку.</strong>  Если показания изменятся, у вас есть доказательства. Если это не так, ваши условия являются взаимоисключающими, и вы можете не беспокоиться о порядке в этом запросе.</li>
+    <li><strong>Count the rows per label.</strong> A zero means an unreachable branch or a rule nobody meets. A label holding almost everything usually means a condition that is looser than intended.</li>
+    <li><strong>Rewrite the rules as flags and count the overlaps.</strong> <code>SELECT COUNT(*) FROM (...) WHERE is_new + is_vip + is_at_risk &gt; 1</code> returns 3 on this table. Anything above zero means the order of your <code>WHEN</code> lines is deciding outcomes.</li>
+    <li><strong>Move the lines and rerun.</strong> If the counts change, you have the proof. If they do not, your conditions are mutually exclusive and you can stop worrying about the order in this query.</li>
   </ol>
-  <p>Затем запишите приоритет в самом запросе, потому что это та часть, которую ни один будущий читатель не сможет восстановить из кода. Комментарий с указанием заказа и причины занимает одну строку и сохраняет аргумент. Формат находится в  <a href="../sql-teaching-comments/">Как комментировать SQL, чтобы он обучал</a>.</p>
+  <p>Then write the priority down in the query itself, because it is the part no future reader can recover from the code. A comment naming the order and the reason costs one line and saves the argument. The format is in <a href="../sql-teaching-comments/">how to comment SQL so it teaches</a>.</p>
   <pre><code>/* WHY: Priority order is deliberate. A customer who is both new and a VIP is
    counted as new, because the onboarding campaign owns them for 30 days.
    3 of 10 customers meet more than one rule, so this order is the decision. */</code></pre>
-  <p>Представьте себе последнюю сегментацию, которую вы отправили. Два ее правила рядом: может ли один клиент соответствовать обоим? Если вы не можете ответить на этот вопрос по памяти, это запрос, который нужно запустить завтра для проверки флага.</p>
+  <p>Picture the last segmentation you shipped. Two of its rules, side by side: can one customer meet both? If you cannot answer that from memory, that is the query to run the flag check on tomorrow.</p>
 
-  <h2>Пограничные случаи, которые стоит знать</h2>
-  <p><strong><code>NULL</code>  никогда ничему не соответствует, поэтому он попадает в  <code>ELSE</code>.</strong>  У Янсена не зарегистрировано никаких расходов. В примере с группой  <code>NULL &gt;= 100</code>  не является ни истинным, ни ложным, поэтому Янсен проваливается до  <code>small</code>, что читается как «тратит очень мало» и на самом деле означает «мы не знаем». Дайте неизвестным свою ветку:  <code>WHEN spend IS NULL THEN 'unknown'</code>, во-первых, перед чем-либо, что проверяет столбец. Подробнее об этом поведении см.  <a href="../sql-null/">НУЛЬ в SQL</a>.</p>
-  <p><strong>No <code>ELSE</code> means <code>NULL</code>, молча.</strong> A <code>CASE</code>  условия, для которых закончились условия, возвращаются  <code>NULL</code>  для этого ряда, а не поднимать что-либо. Затем  <code>GROUP BY</code>  дает вам пустой сегмент в отчете. Всегда пишите  <code>ELSE</code>, даже если вы считаете, что он недоступен, и поместите в него что-нибудь читабельное, например  <code>'unclassified'</code>.</p>
-  <p><strong><code>BETWEEN</code>  полосы перекрываются по шву.</strong> <code>BETWEEN 0 AND 10</code> and <code>BETWEEN 10 AND 20</code>  оба содержат 10. В  <code>CASE</code>  это не двойной счет, а просто спокойно передает 10 первой группе. Напишите группы с одним инклюзивным концом, например  <code>&lt; 10</code> then <code>&lt; 20</code>, и шов перестает быть решением.</p>
-  <p><strong>Обрезки, существующие в SQL, должны быть изменены в SQL.</strong>  Если в следующем квартале порог VIP достигнет 1200, каждый запрос, содержащий это число, необходимо будет найти. Если более двух или трех запросов используют один и тот же набор правил, поместите полосы в небольшую таблицу и вместо этого присоединитесь к ней.</p>
-  <p><strong>Правило первого совпадения является стандартным, а не особенностью движка.</strong>        Конфигурации PostgreSQL, MySQL, SQL-сервер, SQLite и Оракул        <code>WHEN</code>  предложения по порядку и остановитесь на первом верном. Переписываю то же самое  <code>CASE</code>  на другом двигателе то, что он делает, не изменится.</p>
+  <h2>Edge cases worth knowing</h2>
+  <p><strong><code>NULL</code> never matches anything, so it lands in the <code>ELSE</code>.</strong> Jansen has no spend recorded. In the band example, <code>NULL &gt;= 100</code> is neither true nor false, so Jansen falls through to <code>small</code>, which reads as "spends very little" and actually means "we do not know". Give unknown its own branch: <code>WHEN spend IS NULL THEN 'unknown'</code>, first, before anything that tests the column. There is more on this behaviour in <a href="../sql-null/">NULL in SQL</a>.</p>
+  <p><strong>No <code>ELSE</code> means <code>NULL</code>, silently.</strong> A <code>CASE</code> that runs out of conditions returns <code>NULL</code> for that row rather than raising anything. Then <code>GROUP BY</code> gives you a blank segment in the report. Always write the <code>ELSE</code>, even when you believe it is unreachable, and put something readable in it like <code>'unclassified'</code>.</p>
+  <p><strong><code>BETWEEN</code> bands overlap at the seam.</strong> <code>BETWEEN 0 AND 10</code> and <code>BETWEEN 10 AND 20</code> both contain 10. In a <code>CASE</code> that does not double count, it just quietly hands 10 to the first band. Write bands with one inclusive end, such as <code>&lt; 10</code> then <code>&lt; 20</code>, and the seam stops being a decision.</p>
+  <p><strong>Cut-offs that live in the SQL have to be changed in the SQL.</strong> If the VIP threshold moves to 1200 next quarter, every query carrying that number needs finding. Once more than two or three queries share a rule set, put the bands in a small table and join to it instead.</p>
+  <p><strong>The first-match rule is standard, not an engine quirk.</strong> PostgreSQL, MySQL, SQL Server, SQLite and Oracle all evaluate <code>WHEN</code> clauses in order and stop at the first true one. Rewriting the same <code>CASE</code> on a different engine will not change what it does.</p>
 
-  <h2>Почему это работает таким образом</h2>
-  <p><code>CASE</code>    это не набор взвешиваемых правил. Это цепочка операторов если, и возвращается первый истинный оператор.</p>
-  <p>Этот дизайн продуман, и именно это делает  <code>CASE</code>  безопасно использовать для защиты от ошибок. Поскольку оценка останавливается на первой истинной ветви, вы можете написать  <code>WHEN denominator = 0 THEN NULL WHEN ... THEN total / denominator</code>  и деление никогда не заканчивается на нуле. Если SQL оценит каждую ветвь, а затем выберет ее, этот шаблон потерпит неудачу.</p>
-  <p>Стоимость аналогичной конструкции – тема этой страницы. Структура, которая останавливается раньше времени, не может сказать вам, что она пропустила. Ничто в языке не знает, что ваши три правила предназначены для описания трех разных типов клиентов, поэтому ничто не может предупредить вас, когда один клиент — это два из них. Эта проверка ваша, а столбцы флагов определяют, как вы ее запускаете.</p>
+  <h2>Why it works this way</h2>
+  <p><code>CASE</code> is not a set of rules being weighed. It is a chain of if statements, and the first true one returns.</p>
+  <p>That design is deliberate, and it is what makes <code>CASE</code> safe to use for guarding against errors. Because evaluation stops at the first true branch, you can write <code>WHEN denominator = 0 THEN NULL WHEN ... THEN total / denominator</code> and the division never runs on the zero. If SQL evaluated every branch and then picked, that pattern would fail.</p>
+  <p>The cost of the same design is the subject of this page. A structure that stops early cannot tell you what it skipped. Nothing in the language knows that your three rules were meant to describe three different kinds of customer, so nothing can warn you when one customer is two of them. That check is yours, and the flag columns are how you run it.</p>
 
-  <h2>Как применить это в своей работе</h2>
+  <h2>How to apply this to your own work</h2>
   <ol>
-    <li> Откройте  <code>CASE</code>  вы используете больше всего. Для каждой пары условий спросите, может ли одна строка удовлетворять обоим.</li>
-    <li>Если какая-либо пара может это сделать, перепишите правила в виде столбцов флагов один раз и подсчитайте строки с более чем одним установленным флагом.</li>
-    <li>Решайте, какой факт победит, вместе с человеком, которому принадлежит эта метрика, а не один за вашим столом.</li>
-    <li>Напишите это решение в комментарии над  <code>CASE</code>, называя приоритет и причину.</li>
-    <li>Сохраните версию с флагом. Метки предназначены для отчетов, флаги — для вопросов, а запрос с флагами — там, где находятся интересные строки.</li>
-    <li>Не проводите модернизацию каждый  <code>CASE</code>  в кодовой базе на этой неделе. Начните с тех, чьи номера публикуются.</li>
+    <li>Open the <code>CASE</code> you use most. For each pair of conditions, ask whether one row can satisfy both.</li>
+    <li>If any pair can, rewrite the rules as flag columns once and count the rows with more than one flag set.</li>
+    <li>Decide which fact wins, with the person who owns the metric, not alone at your desk.</li>
+    <li>Write that decision as a comment above the <code>CASE</code>, naming the priority and the reason.</li>
+    <li>Keep the flag version. Labels are for reports, flags are for questions, and the flag query is where the interesting rows live.</li>
+    <li>Do not retrofit every <code>CASE</code> in the codebase this week. Start with the ones whose numbers get published.</li>
   </ol>
-  <p>Если у вас есть рядом бумага, нарисуйте два пересекающихся круга для любых двух правил из вашей собственной работы и в середине напишите, что за клиент там сидит. Если у этого пространства есть имя, оно, вероятно, заслуживает собственного ярлыка.</p>
+  <p>If you have paper nearby, draw two overlapping circles for any two rules from your own work and write in the middle what kind of customer sits there. If that space has a name, it probably deserves its own label.</p>
 
-  <h2>Шпаргалка</h2>
+  <h2>Cheat sheet</h2>
   <table>
-    <tr><th>Situation</th><th>Что делает SQL</th><th>Что вы делаете</th></tr>
-    <tr><td>Два условия оба верны</td><td>Берет первое, молча</td><td>Заказать  <code>WHEN</code>  линии специально и прокомментируйте, почему</td></tr>
-    <tr><td>Ветка возвращает ноль строк</td><td>Работает чисто, этикетка никогда не появляется</td><td>Подсчитайте строки на этикетку; проверьте более раннее более рыхлое состояние</td></tr>
-    <tr><td>Столбец  <code>NULL</code></td><td>Ни одно условие не соответствует, попадает в  <code>ELSE</code></td><td>Put <code>WHEN col IS NULL</code>  во-первых, со своим собственным лейблом</td></tr>
-    <tr><td>No <code>ELSE</code> written</td><td>Returns <code>NULL</code>  для несовпадающих строк</td><td>Всегда пишите  <code>ELSE 'unclassified'</code></td></tr>
-    <tr><td>Вам нужны оба факта</td><td>Метка может содержать только один</td><td>Один столбец флагов для каждого правила, 1 или 0.</td></tr>
-    <tr><td>Полосы из одной колонки</td><td>Действительно взаимоисключающие</td><td>Порядок не имеет значения; все равно пиши их в одном направлении</td></tr>
+    <tr><th>Situation</th><th>What SQL does</th><th>What you do</th></tr>
+    <tr><td>Two conditions both true</td><td>Takes the first, silently</td><td>Order the <code>WHEN</code> lines on purpose and comment why</td></tr>
+    <tr><td>A branch returns zero rows</td><td>Runs clean, label never appears</td><td>Count rows per label; check for an earlier looser condition</td></tr>
+    <tr><td>The column is <code>NULL</code></td><td>No condition matches, falls to <code>ELSE</code></td><td>Put <code>WHEN col IS NULL</code> first, with its own label</td></tr>
+    <tr><td>No <code>ELSE</code> written</td><td>Returns <code>NULL</code> for unmatched rows</td><td>Always write <code>ELSE 'unclassified'</code></td></tr>
+    <tr><td>You need both facts</td><td>A label can only hold one</td><td>One flag column per rule, 1 or 0</td></tr>
+    <tr><td>Bands from one column</td><td>Genuinely mutually exclusive</td><td>Order does not matter; still write them in one direction</td></tr>
   </table>
 
-  <h2>Единственная привычка, которую нужно сохранить</h2>
-  <p>Прежде чем написать  <code>CASE</code>, возьмите любые два его условия и спросите, может ли одна строка удовлетворять обоим. Если ответ положительный, вы не пишете классификацию. Вы пишете список приоритетов, а списки приоритетов принадлежат бизнесу, а не тому, кто напечатал запрос.</p>
+  <h2>The one habit to keep</h2>
+  <p>Before you write a <code>CASE</code>, take any two of its conditions and ask whether one row can meet both. If the answer is yes, you are not writing a classification. You are writing a priority list, and priority lists belong to the business, not to whoever typed the query.</p>
 
-  <p>Какой сегмент в вашей отчетности определяется правилом, которое кто-то в компании определяет иначе, и знает ли кто-нибудь, в каком порядке они применяются в вашем запросе?</p>
+  <p>Which segment in your reporting is defined by a rule that somebody else in the company defines differently, and does anyone know which order your query applies them in?</p>
 
-  <div class="note"><strong>Каждый номер здесь был проведён до того, как был опубликован.</strong>  Десять строк выше — это весь набор данных. Вставьте  <code>CREATE TABLE</code>  в SQLite, и вы получите те же 4 и 2, те же 2 и 4 и тех же трех клиентов с двойной пометкой.</div>
+  <div class="note"><strong>Every number here was run before it was published.</strong> The ten rows above are the whole dataset. Paste the <code>CREATE TABLE</code> into SQLite and you will get the same 4 and 2, the same 2 and 4, and the same three double flagged customers.</div>
 
   <div class="book">
-    <strong>Правила — это самое сложное. SQL никогда не был самой сложной частью.</strong>
-    <p><em>Думать как аналитик</em>  это 64 страницы, посвященные превращению запроса типа «покажи мне наших VIP-персон» в определение, которое выдерживает сомнения, и это работа, над которой продолжает работать эта страница.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/thinking-like-an-analyst?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=sql-case-overlapping-conditions" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-case-overlapping-conditions'})">Думать как аналитик, 19 $ →</a>
+    <strong>The rules are the hard part. The SQL was never the hard part.</strong>
+    <p><em>Thinking Like an Analyst</em> is 64 pages on turning a request like "show me our VIPs" into a definition that survives being questioned, which is the work this page keeps running into.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/thinking-like-an-analyst?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=sql-case-overlapping-conditions" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-case-overlapping-conditions'})">Thinking Like an Analyst, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>Напишите ДЕЛО, а не просто читайте об этом.</strong>
-    <p style="margin:6px 0 0">Начните с синтаксиса в  <a href="../sql-case-expression/">Объяснение SQL CASE WHEN</a>, а затем построить полную сегментацию в  <a href="../sql-segment-with-case/">Сегментация клиентов с помощью CASE</a>.  <a href="../../sql/">SQL-кит</a>  охватывает SELECT, WHERE, JOIN и GROUP BY с практикой и пробным экзаменом, и все это в браузере.</p>
-    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
-    <p style="margin:10px 0 0;font-size:15px">Или получите повторения:  <a href="../../drill/">открыть SQL-детализация</a>  и вводите по одному исполняемому запросу за раз.</p>
+    <strong>Write the CASE, do not just read about it.</strong>
+    <p style="margin:6px 0 0">Start with the syntax in <a href="../sql-case-expression/">SQL CASE WHEN explained</a>, then build a full segmentation in <a href="../sql-segment-with-case/">customer segmentation with CASE</a>. The <a href="../../sql/">SQL Kit</a> covers SELECT, WHERE, JOIN and GROUP BY with practice and a mock exam, all in the browser.</p>
+    <a class="btn" href="../../sql/">Open the SQL Kit →</a>
+    <p style="margin:10px 0 0;font-size:15px">Or get the reps in: <a href="../../drill/">open SQL Drill</a> and type one runnable query at a time.</p>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql-case-expression/">SQL СЛУЧАЙ, КОГДА</a> · <a href="../sql-segment-with-case/">Сегмент с CASE</a> · <a href="../sql-null/">НУЛЬ в SQL</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-rank-vs-dense-rank-vs-row-number/">РАНГ, DENSE_RANK и ROW_NUMBER</a> · <a href="../sql-teaching-comments/">Комментирование SQL для обучения</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../../drill/">SQL-детализация</a> · <a href="../../sql/">SQL-кит</a>
-    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <a href="../../">← Analyst Prep Kit</a> &middot; <a href="../sql-case-expression/">SQL CASE WHEN</a> · <a href="../sql-segment-with-case/">Segment With CASE</a> · <a href="../sql-null/">NULL in SQL</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../sql-rank-vs-dense-rank-vs-row-number/">RANK vs DENSE_RANK vs ROW_NUMBER</a> · <a href="../sql-teaching-comments/">Commenting SQL So It Teaches</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../set-up-a-sql-database/">Set Up a SQL Database</a> · <a href="../../drill/">SQL Drill</a> · <a href="../../sql/">SQL Kit</a>
+    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

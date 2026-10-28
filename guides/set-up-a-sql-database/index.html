@@ -1,6 +1,6 @@
 ﻿<!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Как настроить базу данных SQL для начинающих (без сервера, 15 минут) — комплект подготовки аналитика</title>
-<meta name="description" content="Пошаговое руководство для начинающих: настройте свою первую базу данных SQL с помощью SQLite и браузера БД, импортируйте CSV-файл и выполните первый запрос. Два настольных инструмента, никакого сервера, никакой головной боли при установке.">
+<title>How to Set Up a SQL Database for Beginners (No Server, 15 Minutes) — Analyst Prep Kit</title>
+<meta name="description" content="Step-by-step beginner guide: set up your first SQL database with SQLite and DB Browser, import a CSV file, and run your first query. Two desktop tools, no server, no install headaches.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/set-up-a-sql-database/">
-<meta property="og:title" content="Как настроить базу данных SQL для начинающих (без сервера, 15 минут)">
-<meta property="og:description" content="Превратите файл CSV в настоящую базу данных SQL примерно за 15 минут с помощью двух настольных инструментов. Написано для полных новичков.">
+<meta property="og:title" content="How to Set Up a SQL Database for Beginners (No Server, 15 Minutes)">
+<meta property="og:description" content="Turn a CSV file into a real SQL database in about 15 minutes with two desktop tools. Written for complete beginners.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/set-up-a-sql-database.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/set-up-a-sql-database/">
@@ -129,141 +129,140 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-кит</a></p>
-  <h1>Как настроить базу данных SQL для начинающих</h1>
-  <p class="meta">Два настольных инструмента, без сервера, около 15 минут · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Обновлено  <time datetime="2026-08-07">7 августа 2026 г.</time></p>
+  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../sql/">SQL Kit</a></p>
+  <h1>How to Set Up a SQL Database for Beginners</h1>
+  <p class="meta">Two desktop tools, no server, about 15 minutes · Part of the <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Updated <time datetime="2026-08-07">August 7, 2026</time></p>
 
-  <p>В каждом учебнике по SQL предполагается, что ваши данные уже находятся «в базе данных». Никто не объясняет шаг между ними. Это руководство и есть этот шаг. Вы получите файл данных, создадите свою первую настоящую базу данных на своем компьютере, загрузите в нее файл и выполните свой первый запрос. Для этого требуются два настольных инструмента и нулевая настройка сервера.</p>
+  <p>Every SQL tutorial assumes your data is already "in a database." Nobody explains the step in between. This guide is that step. You'll get a data file, create your first real database on your own computer, load the file into it, and run your first query. It takes two desktop tools and zero server setup.</p>
 
-  <p>Вам не нужно приносить свои собственные данные. На шаге 1 вам предоставляется файл для загрузки, и каждый запрос в этом руководстве выполняется с его помощью.</p>
+  <p>You do not need to bring your own data. Step 1 gives you a file to download, and every query in this guide runs against it.</p>
 
-  <p>Если вы все еще раздумываете, какой двигатель установить на свою машину, вариант этого решения, состоящий из одного вопроса, находится в  <a href="../which-sql-database-to-install/">какую базу данных SQL следует установить</a>. Все остальные могут начать с шага 1.</p>
+  <p>If you are still weighing up which engine to put on your machine, the one-question version of that decision is in <a href="../which-sql-database-to-install/">which SQL database should you install</a>. Everyone else can start at step 1.</p>
 
   <div class="toc">
-    <strong>Что ты будешь делать</strong>
+    <strong>What you'll do</strong>
     <ol>
-      <li>Поймите, что вы на самом деле создаете (60 секунд)</li>
-      <li>Получите CSV-файл для работы.</li>
-      <li>Установите браузер БД для SQLite</li>
-      <li>Создать файл базы данных</li>
-      <li>Импортируйте CSV в виде таблицы.</li>
-      <li>Проверьте импорт одним запросом</li>
-      <li>Устраните две наиболее распространенные проблемы импорта.</li>
+      <li>Understand what you're actually building (60 seconds)</li>
+      <li>Get a CSV file to work with</li>
+      <li>Install DB Browser for SQLite</li>
+      <li>Create a database file</li>
+      <li>Import your CSV as a table</li>
+      <li>Verify the import with one query</li>
+      <li>Fix the two most common import problems</li>
     </ol>
   </div>
 
-  <h2>Во-первых: что вы на самом деле строите?</h2>
-  <p>Скажите, что, по вашему мнению, представляет собой база данных, в одном предложении, прежде чем читать следующее. Что бы вы ни представляли, реальный ответ в этом руководстве меньше и менее устрашающий.</p>
-  <p>База данных звучит как большой и пугающий сервер в центре обработки данных. Для учебных и портфолио проектов это не так. С  <strong>SQLite</strong>, база данных - это просто  <strong>один файл на вашем компьютере</strong>  - нравиться  <code>mygames.db</code>  сидит в папке «Документы». Внутри этого файла живут один или несколько  <strong>tables</strong>, а таблица — это просто сетка строк и столбцов, как в электронной таблице.</p>
-  <p>Итак, вся работа такова: создать файл, поместить в него CSV в виде таблицы, убедиться, что ничего не потерялось. Вот и все.</p>
-  <div class="note"><strong>Почему SQLite, а не MySQL или Постгрес?</strong> Those need a server installed and running before you can do anything. SQLite needs nothing — and the SQL you write on it (SELECT, WHERE, JOIN, GROUP BY) is the same SQL you'll use on the job. Start here; switch later if a job requires it.</div>
+  <h2>First: what are you actually building?</h2>
+  <p>Say what you think a database is, in one sentence, before you read the next one. Whatever you pictured, the real answer for this guide is smaller and less intimidating than that.</p>
+  <p>A database sounds like a big scary server in a data center. For learning and portfolio projects, it isn't. With <strong>SQLite</strong>, a database is just <strong>one file on your computer</strong> — like <code>mygames.db</code> sitting in your Documents folder. Inside that file live one or more <strong>tables</strong>, and a table is just a grid of rows and columns, like a spreadsheet sheet.</p>
+  <p>So the whole job is: make the file, put your CSV inside it as a table, confirm nothing got lost. That's it.</p>
+  <div class="note"><strong>Why SQLite and not MySQL or Postgres?</strong> Those need a server installed and running before you can do anything. SQLite needs nothing — and the SQL you write on it (SELECT, WHERE, JOIN, GROUP BY) is the same SQL you'll use on the job. Start here; switch later if a job requires it.</div>
 
   <div class="step">
-    <h2>Шаг 1. Получите CSV-файл для работы.</h2>
-    <p>CSV — это обычный текстовый файл, содержащий таблицу, по одной строке в строке, значения которой разделены запятыми. Это то, что дает вам почти каждая кнопка «загрузить эти данные».</p>
-    <p>Если он у вас уже есть, используйте его и пропускайте дальше. Если нет, вот файл, который используется в остальной части этого руководства. Щелкните ссылку правой кнопкой мыши, выберите  <strong>Сохранить ссылку как</strong>и поместите его где-нибудь, где сможете найти снова.</p>
+    <h2>Step 1 — Get a CSV file to work with</h2>
+    <p>A CSV is a plain text file holding a table, one row per line, values separated by commas. It is what almost every "download this data" button gives you.</p>
+    <p>If you already have one, use it and skip ahead. If not, here is the file the rest of this guide uses. Right-click the link, choose <strong>Save link as</strong>, and put it somewhere you can find again.</p>
     <ol>
-      <li><a href="https://raw.githubusercontent.com/vega/vega-datasets/main/data/seattle-weather.csv" target="_blank" rel="noopener">Сиэтл-погода.csv</a>  — четыре года ежедневной погоды в Сиэтле. 1461 строка, около 60 КБ, без регистрации.</li>
-      <li>Откройте его один раз в Excel или текстовом редакторе, прежде чем идти дальше. Шесть столбцов: дата, осадки, temp_max, темп_мин, ветер, погода. Зная, что находится в файле, вы сможете позже определить, правильно ли он загрузился.</li>
+      <li><a href="https://raw.githubusercontent.com/vega/vega-datasets/main/data/seattle-weather.csv" target="_blank" rel="noopener">seattle-weather.csv</a> — four years of daily Seattle weather. 1,461 rows, about 60 KB, no sign-up.</li>
+      <li>Open it once in Excel or a text editor before you go further. Six columns: date, precipitation, temp_max, temp_min, wind, weather. Knowing what is in the file is what lets you tell later whether it loaded correctly.</li>
     </ol>
-    <p>Прежде чем двигаться дальше, скажите вслух, сколько строк вы ожидаете разместить в базе данных. Вы просто читаете номер. Удержание этого делает шаг 5 значимым.</p>
-    <div class="note"><strong>Хотите другие данные?</strong>  Любой CSV работает, а шаги не меняются. Два места, где вы можете получить одно без учетной записи:  <a href="https://github.com/vega/vega-datasets/tree/main/data" target="_blank" rel="noopener">vega-datasets</a>  имеет около двадцати маленьких чистых файлов и  <a href="https://data.cityofnewyork.us/" target="_blank" rel="noopener">Открытые данные Нью-Йорка</a>  имеет тысячи больших настоящих. Если вы выберете свое собственное имя, используйте свое собственное имя таблицы везде, где указано в этом руководстве.  <code>weather_raw</code>.</div>
+    <p>Before you move on, say out loud how many rows you expect to end up in the database. You just read the number. Holding on to it is what makes step 5 mean something.</p>
+    <div class="note"><strong>Want different data?</strong> Any CSV works, and the steps do not change. Two places that hand you one without an account: <a href="https://github.com/vega/vega-datasets/tree/main/data" target="_blank" rel="noopener">vega-datasets</a> has around twenty small, clean files, and <a href="https://data.cityofnewyork.us/" target="_blank" rel="noopener">NYC Open Data</a> has thousands of large real ones. If you pick your own, use your own table name everywhere this guide says <code>weather_raw</code>.</div>
   </div>
 
   <div class="step">
-    <h2>Шаг 2. Установите браузер БД для SQLite.</h2>
-    <p><strong>Все, что вы будете вводить в этом руководстве, — это бесплатное настольное приложение под названием Браузер БД для SQLite.</strong>  Он предоставляет SQLite удобное окно «укажи и щелкни», а также вкладку, на которой можно ввести SQL.</p>
+    <h2>Step 2 — Install DB Browser for SQLite</h2>
+    <p><strong>Where you'll type everything in this guide is a free desktop app called DB Browser for SQLite.</strong> It gives SQLite a friendly point-and-click window plus a tab where you can type SQL.</p>
     <ol>
-      <li>Перейти к  <a href="https://sqlitebrowser.org/dl/" target="_blank" rel="noopener">sqlitebrowser.org/dl</a></li>
-      <li>Загрузите установщик для Окна или Мак и запустите его (все значения по умолчанию подходят)</li>
-      <li>Откройте приложение — вы увидите практически пустое окно с кнопками типа  <em>Новая база данных</em> and <em>Открытая база данных</em></li>
+      <li>Go to <a href="https://sqlitebrowser.org/dl/" target="_blank" rel="noopener">sqlitebrowser.org/dl</a></li>
+      <li>Download the installer for Windows or Mac and run it (all defaults are fine)</li>
+      <li>Open the app — you'll see a mostly empty window with buttons like <em>New Database</em> and <em>Open Database</em></li>
     </ol>
   </div>
 
   <div class="step">
-    <h2>Шаг 3 — Создайте файл базы данных</h2>
+    <h2>Step 3 — Create your database file</h2>
     <ol>
-      <li>Click <strong>Новая база данных</strong>  (вверху слева)</li>
-      <li>Выберите папку, которую сможете найти еще раз, назовите файл примерно так:  <code>portfolio.db</code>, нажмите Сохранить</li>
-      <li>Появится диалоговое окно «Создать таблицу» — нажмите  <strong>Cancel</strong>. Вам это не нужно; импорт CSV на следующем этапе создаст таблицу для вас.</li>
+      <li>Click <strong>New Database</strong> (top-left)</li>
+      <li>Pick a folder you can find again, name the file something like <code>portfolio.db</code>, click Save</li>
+      <li>A "Create Table" dialog pops up — click <strong>Cancel</strong>. You don't need it; the CSV import in the next step builds the table for you.</li>
     </ol>
-    <p>Это настоящая база данных. Он пуст, но он существует — один файл, нет сервера.</p>
+    <p>That's a real database. It's empty, but it exists — one file, no server.</p>
   </div>
 
   <div class="step">
-    <h2>Шаг 4. Импортируйте CSV в виде таблицы.</h2>
+    <h2>Step 4 — Import your CSV as a table</h2>
     <ol>
-      <li>В меню:  <strong>Файл → Импорт → Таблица из файла CSV…</strong></li>
-      <li>Выберите CSV-файл, который вы скачали на шаге 1.</li>
-      <li>В диалоге импорта:
-        
+      <li>In the menu: <strong>File → Import → Table from CSV file…</strong></li>
+      <li>Pick the CSV you downloaded in step 1</li>
+      <li>In the import dialog:
         <ul>
-          <li><strong>Имя таблицы:</strong> type <code>weather_raw</code>.  <code>_raw</code>  суффикс — это привычка аналитиков: он помечает эту таблицу как нетронутый оригинал. Любая очистка происходит позже, в копии — никогда в оригинале. Правило именования:  <strong>подчеркивание, никогда не дефисы и пробелы</strong>. Браузер БД автоматически заполняет имя из имени файла, поэтому  <code>seattle-weather.csv</code> Прибывает как  <code>seattle-weather</code>  — законно, но SQL считывает дефисы как вычитание, заставляя вас вечно заключать имя в кавычки в каждом запросе. Переименуйте его, прежде чем нажать «ОК».</li>
-          <li><strong>Отметьте «Имена столбцов в первой строке»</strong>  — в противном случае ваша строка заголовка будет импортирована как строка данных.</li>
+          <li><strong>Table name:</strong> type <code>weather_raw</code>. The <code>_raw</code> suffix is an analyst habit: it marks this table as the untouched original. Any cleaning happens later, in a copy — never in the original. Naming rule: <strong>underscores, never hyphens or spaces</strong>. DB Browser auto-fills the name from the filename, so <code>seattle-weather.csv</code> arrives as <code>seattle-weather</code> — legal, but SQL reads the hyphens as subtraction, forcing you to quote the name in every query forever. Rename it before clicking OK.</li>
+          <li><strong>Tick "Column names in first line"</strong> — otherwise your header row gets imported as a data row.</li>
         </ul>
       </li>
-      <li>Нажмите ОК, затем нажмите  <strong>Ctrl+S</strong>    (Cmd+S на Мак), чтобы сохранить базу данных. Браузер БД не записывает изменения в файл, пока вы его не сохраните.</li>
+      <li>Click OK, then press <strong>Ctrl+S</strong> (Cmd+S on Mac) to save the database. DB Browser doesn't write changes to the file until you save.</li>
     </ol>
-    <div class="note"><strong>Работаете с большим набором данных?</strong>  Если размер вашего файла составляет сотни МБ, миллионы строк или он не открывается в Excel, импорт занимает больше времени и требует нескольких дополнительных приемов (разархивирование, индексирование, выборка). Видеть  <a href="../handle-large-datasets/">Как обрабатывать большие наборы данных</a>.</div>
+    <div class="note"><strong>Working with a large dataset?</strong> If your file is hundreds of MB, has millions of rows, or won't open in Excel, the import takes longer and needs a couple of extra tricks (unzipping, indexing, sampling). See <a href="../handle-large-datasets/">How to Handle Large Datasets</a>.</div>
   </div>
 
   <div class="step">
-    <h2>Шаг 5. Проверьте это с помощью первого запроса.</h2>
-    <p>Прежде чем запустить его, скажите, какой номер вы ожидаете получить. В этом ожидании и заключается весь смысл этого шага, поскольку запрос, которому не с чем сравнивать, не может ничего проверить.</p>
-    <p>Нажмите кнопку  <strong>Выполнить SQL</strong>  вкладка. С этого момента вы вводите SQL. Введите это и нажмите кнопку ▶ (воспроизведение):</p>
+    <h2>Step 5 — Verify it with your first query</h2>
+    <p>Before you run it, say what number you expect back. That expectation is the whole point of this step, because a query with nothing to compare it to cannot verify anything.</p>
+    <p>Click the <strong>Execute SQL</strong> tab. This is where you type SQL from now on. Type this and press the ▶ (play) button:</p>
     <pre><code>SELECT COUNT(*) FROM weather_raw;</code></pre>
-    <p>Он возвращает одно число: сколько строк в вашей таблице. С файлом погоды в Сиэтле это должно быть  <strong>1461</strong>. Если вы принесли свой собственный CSV-файл, поменяйте его местами.  <code>weather_raw</code>  для имени таблицы, которое вы ввели на шаге 4, и  <strong>сравните число с количеством строк исходного файла</strong>  (откройте его в Excel и проверьте номер последней строки, минус 1 для заголовка).</p>
-    <p>Если они совпадают, значит, доставлена ​​каждая строка. Затем обратите внимание на несколько строк:</p>
+    <p>It returns one number: how many rows are in your table. With the Seattle weather file it should be <strong>1461</strong>. If you brought your own CSV, swap <code>weather_raw</code> for the table name you typed in step 4, and <strong>compare the number to the row count of the source file</strong> (open it in Excel and check the last row number, minus 1 for the header).</p>
+    <p>If they match, every row arrived. Then eyeball a few rows:</p>
     <pre><code>SELECT * FROM weather_raw LIMIT 10;</code></pre>
-    <p>Вы должны увидеть даты в первом столбце и числа в следующих четырех, а такие слова, как моросящий дождь и дождь, в последнем. Если столбцы выглядят правильно и счетчик совпадает — все готово. У вас есть работающая база данных SQL, и каждый урок SQL, который вы извлечете отсюда, применим к вашим собственным данным.</p>
+    <p>You should see dates in the first column and numbers in the next four, with words like drizzle and rain in the last. If the columns look right and the count matches — you're done. You have a working SQL database, and every SQL lesson you take from here on applies to your own data.</p>
   </div>
 
-  <h2>Две проблемы, которые однажды коснутся каждого</h2>
-  <p>Оба из них отображаются как неправильный ответ, а не как сообщение об ошибке, что делает их дорогими. Угадайте, как бы выглядела общая сумма, если бы база данных считала ваши цены словами, а не числами.</p>
-  <h3>1. Числа, импортированные в виде текста</h3>
-  <p>Если столбец цен содержит такие значения, как  <code>$4.99</code> or <code>1,299</code>, знак доллара и запятая заставляют импортировать его как ТЕКСТ — и  <code>SUM(price)</code>  возвращает мусор. Исправление состоит в том, чтобы очистить эти значения в новом числовом столбце (в новой таблице — никогда не редактируйте  <code>_raw</code>    один). Уроки очистки SQL-комплект посвящены именно этому.</p>
-  <h3>2. Количество строк не совпадает.</h3>
-  <p>Отклонение ровно на один? Вы, вероятно, забыли «имена столбцов в первой строке». Еще больше? CSV, скорее всего, имеет проблемы с кавычками или разделителями (классическими являются запятые внутри текстовых полей без кавычек). Еще раз проверьте настройки разделителя и кавычек в диалоге импорта.</p>
+  <h2>The two problems that bite everyone once</h2>
+  <p>Both of these show up as a wrong answer rather than an error message, which is what makes them expensive. Guess what a total would look like if the database thought your prices were words instead of numbers.</p>
+  <h3>1. Numbers imported as text</h3>
+  <p>If a price column contains values like <code>$4.99</code> or <code>1,299</code>, the dollar sign and comma force it to import as TEXT — and <code>SUM(price)</code> returns garbage. The fix is to clean those values into a new numeric column (in a new table — never edit the <code>_raw</code> one). The SQL Kit's cleaning lessons cover exactly this.</p>
+  <h3>2. Row count doesn't match</h3>
+  <p>Off by exactly one? You probably forgot "column names in first line." Off by more? The CSV likely has quoting or delimiter problems (commas inside un-quoted text fields are the classic). Re-check the separator and quote settings in the import dialog.</p>
 
-  <h2>Шпаргалка</h2>
+  <h2>Cheat sheet</h2>
   <table>
     <tr><th>Step</th><th>Where</th><th>Action</th></tr>
-    <tr><td>Получить данные</td><td>Browser</td><td>Сохраните CSV на диск.  <code>seattle-weather.csv</code>  из вега-наборов данных, если их у вас нет</td></tr>
-    <tr><td>Создать базу данных</td><td>Браузер БД</td><td>Новая база данных → сохранить файл .БД → Отменить диалоговое окно таблицы.</td></tr>
-    <tr><td>Импортировать CSV-файл</td><td>Меню «Файл»</td><td>Import → Table from CSV → name it <code>something_raw</code>  → отметьте «имена столбцов в первой строке»</td></tr>
-    <tr><td>Save</td><td>Браузер БД</td><td>Ctrl+S — изменений нет в файле, пока вы их не сохраните.</td></tr>
-    <tr><td>Verify</td><td>Вкладка «Выполнение SQL»</td><td><code>SELECT COUNT(*)</code>  против количества строк CSV, затем  <code>LIMIT 10</code>  в глаза</td></tr>
+    <tr><td>Get data</td><td>Browser</td><td>Save a CSV to disk. <code>seattle-weather.csv</code> from vega-datasets if you have none</td></tr>
+    <tr><td>Create database</td><td>DB Browser</td><td>New Database → save a .db file → Cancel the table dialog</td></tr>
+    <tr><td>Import CSV</td><td>File menu</td><td>Import → Table from CSV → name it <code>something_raw</code> → tick "column names in first line"</td></tr>
+    <tr><td>Save</td><td>DB Browser</td><td>Ctrl+S — changes aren't in the file until you save</td></tr>
+    <tr><td>Verify</td><td>Execute SQL tab</td><td><code>SELECT COUNT(*)</code> vs the CSV's row count, then <code>LIMIT 10</code> to eyeball</td></tr>
   </table>
 
-  <h2>Та же идея, большие базы данных</h2>
-  <p>На работе вы встретите MySQL (<code>LOAD DATA INFILE</code>) и Постгрес (<code>COPY</code>). Инструменты меняются; рабочий процесс, который вы только что изучили, не:  <strong>создать → импортировать → проверить</strong>и сохраняйте нетронутым  <code>_raw</code>  копия.</p>
-  <p>А если сам файл огромен (миллионы строк, гигабайты на диске), та же база данных все равно работает, достаточно добавить несколько привычек: см.  <a href="../handle-large-datasets/">Как обрабатывать большие наборы данных</a>.</p>
+  <h2>Same idea, bigger databases</h2>
+  <p>On the job you'll meet MySQL (<code>LOAD DATA INFILE</code>) and Postgres (<code>COPY</code>). The tools change; the workflow you just learned doesn't: <strong>create → import → verify</strong>, and keep an untouched <code>_raw</code> copy.</p>
+  <p>And if the file itself is huge (millions of rows, gigabytes on disk), the same database still works, you just add a few habits: see <a href="../handle-large-datasets/">How to Handle Large Datasets</a>.</p>
 
-  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: SQL, Tableau, миграция данных и связанные с ними рабочие привычки.</div>
+  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: SQL, Tableau, data migration, and the working habits around them.</div>
 
   <div class="book">
-    <strong>База данных установлена ​​и пуста, что само по себе является зависанием.</strong>
-    <p><em>SQL для аналитиков</em>  состоит из 458 страниц, каждый запрос читается построчно простыми словами, поэтому пустую базу данных есть куда девать.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-set-up-a-sql-database'})">SQL для аналитиков, 19 $ →</a>
+    <strong>The database is installed and empty, which is its own kind of stuck.</strong>
+    <p><em>SQL for Analysts</em> is 458 pages, every query read line by line in plain words, so the empty database has somewhere to go.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-set-up-a-sql-database'})">SQL for Analysts, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>Теперь сделайте сам SQL своей второй натурой.</strong>
-    <p style="margin:6px 0 0">The <a href="../../sql/">SQL-кит</a>  учит SELECT, WHERE, JOIN и GROUP BY с отработанными примерами, практикой, флэш-карточками и пробным экзаменом - все в вашем браузере, ничего не нужно устанавливать.</p>
-    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
-      <p style="margin:10px 0 0;font-size:15px">Или приступайте к делу и учитесь, написав запросы:  <a href="../../drill/">открыть SQL-детализация</a>, тринадцать запросов, каждый из которых добавляет что-то одно к последнему.</p>
+    <strong>Now make the SQL itself second nature.</strong>
+    <p style="margin:6px 0 0">The <a href="../../sql/">SQL Kit</a> teaches SELECT, WHERE, JOIN, and GROUP BY with worked examples, practice, flash cards, and a mock exam — all in your browser, nothing to install.</p>
+    <a class="btn" href="../../sql/">Open the SQL Kit →</a>
+      <p style="margin:10px 0 0;font-size:15px">Or get right into it and learn by writing queries: <a href="../../drill/">open SQL Drill</a>, thirteen queries that each add one thing to the last.</p>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../which-sql-database-to-install/">какую базу данных установить</a> &middot; <a href="../sql-comments/">Как комментировать в SQL</a> &middot; <a href="../sql-foundations/">Основы SQL</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-ctes/">SQL CTE</a> · <a href="../sql-window-functions/">Оконные функции</a> · <a href="../tableau-relationships/">Табличные отношения</a> · <a href="../tableau-sets/">Наборы таблиц</a> · <a href="../../drill/">SQL-детализация</a> · <a href="../what-is-data-analysis/">Что такое анализ данных?</a> · <a href="../sql-teaching-comments/">Комментирование SQL</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../git-for-analysts/">Git для аналитиков</a> · <a href="../sql-case-expression/">SQL-выражение CASE</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../data-driven-thresholds/">Пороги, управляемые данными</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> &middot; <a href="../sql-count-function/">СЧЕТ в SQL</a> · <a href="../sql-aliasing/">SQL-псевдонимы</a> &middot; <a href="../../sql/">SQL-кит</a> · <a href="../../projects/">Портфельные проекты</a>
+    <a href="../../">← Analyst Prep Kit</a> &middot; <a href="../which-sql-database-to-install/">Which Database to Install</a> &middot; <a href="../sql-comments/">How to Comment in SQL</a> &middot; <a href="../sql-foundations/">SQL Foundations</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../sql-ctes/">SQL CTEs</a> · <a href="../sql-window-functions/">Window Functions</a> · <a href="../tableau-relationships/">Tableau Relationships</a> · <a href="../tableau-sets/">Tableau Sets</a> · <a href="../../drill/">SQL Drill</a> · <a href="../what-is-data-analysis/">What Is Data Analysis?</a> · <a href="../sql-teaching-comments/">Commenting SQL</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../git-for-analysts/">Git for Analysts</a> · <a href="../sql-case-expression/">SQL CASE Expression</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../data-driven-thresholds/">Data-Driven Thresholds</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../entity-resolution/">Entity Resolution</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../sql-joins/">SQL JOINs</a> &middot; <a href="../sql-count-function/">COUNT in SQL</a> · <a href="../sql-aliasing/">SQL Aliases</a> &middot; <a href="../../sql/">SQL Kit</a> · <a href="../../projects/">Portfolio Projects</a>
     
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

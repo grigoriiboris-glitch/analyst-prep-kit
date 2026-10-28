@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Как открыть большой файл CSV: пять подходящих инструментов — комплект для подготовки аналитика</title>
-<meta name="description" content="Пять способов прочитать CSV-файл, слишком большой для Excel: от просмотра первой тысячи строк в одну строку до SQL-запроса по всему файлу. К чему обращаться, и проверка, сообщающая вам, что файл — это то, что вы думаете.">
+<title>How to Open a Large CSV File: Five Tools That Cope &mdash; Analyst Prep Kit</title>
+<meta name="description" content="Five ways to read a CSV too big for Excel, from a one-line peek at the first thousand rows to a SQL query over the whole file. Which to reach for, and the check that tells you the file is what you think it is.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/open-a-large-csv/">
-<meta property="og:title" content="Как открыть большой CSV-файл без падения Excel">
-<meta property="og:description" content="Просмотр, подсчет, выборка, агрегирование, запрос. Пять инструментов для CSV Excel не могут открыться.">
+<meta property="og:title" content="How to Open a Large CSV Without Excel Falling Over">
+<meta property="og:description" content="Peek, count, sample, aggregate, query. Five tools for a CSV Excel cannot open.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/open-a-large-csv/">
 <meta name="twitter:card" content="summary_large_image">
@@ -164,41 +164,41 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../../excel/">Excel комплект</a></p>
-  <h1>Как открыть большой CSV-файл без падения Excel</h1>
-  <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Все числа на этой странице были обработаны до их публикации.</p>
+  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../../excel/">Excel Kit</a></p>
+  <h1>How to Open a Large CSV Without Excel Falling Over</h1>
+  <p class="meta">Michael Nocito &middot; Updated August 2026 &middot; Every number on this page was worked before it was published</p>
 
-  <p>Приходит CSV, его размер составляет 1,8 ГБ, а Excel либо отказывается от него, либо занимает девять минут и обрезает его. Инстинкт заключается в том, чтобы найти таблицу побольше. Лучше всего перестать пытаться просмотреть все сразу, потому что почти на каждый ваш вопрос можно ответить из первой тысячи строк плюс один агрегат.</p>
+  <p>A CSV arrives, it is 1.8GB, and Excel either refuses it or takes nine minutes and truncates it. The instinct is to find a bigger spreadsheet. The better move is to stop trying to look at all of it at once, because almost every question you have can be answered from the first thousand rows plus one aggregate.</p>
 
-  <p>Что вы делаете по порядку: просмотр, подсчет, выборка, агрегирование. Загружайте все целиком только в том случае, если для реального вопроса требуется каждая строка.</p>
+  <p>What you do, in order: peek, count, sample, aggregate. Only load the whole thing if a real question needs every row.</p>
 
-  <p><strong>Краткая версия.</strong>  Вам нужны столбцы и размер, прежде чем вам понадобятся данные.</p>
+  <p><strong>The short version.</strong> You need the columns and the size before you need the data.</p>
 
-  <h2>Шаг 1: посмотрите вверху</h2>
+  <h2>Step 1: peek at the top</h2>
   <pre><code># Windows PowerShell
 Get-Content big.csv -TotalCount 1000 | Set-Content sample.csv
 
 # Git Bash, macOS, Linux
 head -n 1000 big.csv &gt; sample.csv</code></pre>
-  <p>Оба читают только начало, поэтому файл размером 50 ГБ ведет себя так же, как файл размером 5 МБ. Открыть  <code>sample.csv</code>  в Excel, и у вас есть имена столбцов, формат даты, разделитель, указан ли файл в кавычках и есть ли в идентификаторах ведущие нули. Это большая часть того, что вам нужно.</p>
+  <p>Both read only the beginning, so a 50GB file behaves the same as a 5MB one. Open <code>sample.csv</code> in Excel and you have the column names, the date format, the delimiter, whether the file is quoted, and whether IDs have leading zeros. That is most of what you needed.</p>
 
-  <h2>Шаг 2: посчитайте линии</h2>
+  <h2>Step 2: count the lines</h2>
   <pre><code># PowerShell. ReadCount batches the reads, which matters on big files.
 (Get-Content big.csv -ReadCount 10000 | Measure-Object -Line).Lines
 
 # Git Bash
 wc -l big.csv</code></pre>
-  <p>Запишите номер. Это единственный способ впоследствии доказать, что импорт загрузил все. Обратите внимание, что количество строк не всегда соответствует количеству записей: поле, содержащее перевод строки в кавычках, делает их разными, что является еще одной причиной проверять итоги, а не доверять глазу.</p>
+  <p>Write the number down. It is the only way to prove later that an import loaded everything. Note that a count of lines is not always a count of records: a field containing a newline inside quotes makes them differ, which is one more reason to check totals rather than trusting the eye.</p>
 
-  <h2>Шаг 3: возьмите настоящий образец, а не верхний</h2>
-  <p>Первая тысяча строк не является выборкой. Это самая старая тысяча, или по какому-либо экспортному сорту, и любой образец, который вы заметите в них, может быть артефактом этого порядка. Для настоящего взгляда:</p>
+  <h2>Step 3: take a real sample, not the top</h2>
+  <p>The first thousand rows are not a sample. They are the oldest thousand, or whatever the export sorted by, and any pattern you spot in them may be an artefact of that order. For a genuine look:</p>
   <pre><code>-- DuckDB
 SELECT * FROM 'big.csv' USING SAMPLE 1000 ROWS;</code></pre>
   <pre><code># pandas, when the file fits in memory
 df.sample(1000, random_state=0)</code></pre>
 
-  <h2>Шаг 4: агрегируйте и возвращайте только сводку</h2>
-  <p>DuckDB — самый короткий путь, поскольку здесь нет этапа импорта:</p>
+  <h2>Step 4: aggregate, and bring back only the summary</h2>
+  <p>DuckDB is the shortest route because there is no import step:</p>
   <pre><code>SELECT strftime(order_date, '%Y-%m') AS month,
        region,
        COUNT(*)   AS orders,
@@ -206,8 +206,8 @@ df.sample(1000, random_state=0)</code></pre>
 FROM 'big.csv'
 GROUP BY 1, 2
 ORDER BY 1, 2;</code></pre>
-  <p>Это превращает миллионы строк в несколько десятков, которые вставляются в Excel и работают. Настройка находится в  <a href="../set-up-duckdb/">Настройка DuckDB</a>.</p>
-  <p>Эквивалент pandas для файла, который не помещается в памяти, читает его по частям:</p>
+  <p>That turns millions of rows into a few dozen, which paste into Excel and behave. The setup is in <a href="../set-up-duckdb/">setting up DuckDB</a>.</p>
+  <p>The pandas equivalent, for a file that does not fit in memory, reads it in pieces:</p>
   <pre><code>import pandas as pd
 totals = None
 for chunk in pd.read_csv('big.csv', chunksize=500_000,
@@ -215,65 +215,65 @@ for chunk in pd.read_csv('big.csv', chunksize=500_000,
     g = chunk.groupby('region')['amount'].sum()
     totals = g if totals is None else totals.add(g, fill_value=0)
 print(totals)</code></pre>
-  <p><code>usecols</code>  делает большую часть работы там. Чтение трех столбцов вместо сорока часто является решающим фактором в том, уместится ли информация в памяти или нет.</p>
+  <p><code>usecols</code> is doing most of the work there. Reading three columns instead of forty is often the difference between fitting in memory and not.</p>
 
-  <h2>Пять инструментов, ранжированных по тому, когда к ним обращаться</h2>
+  <h2>The five tools, ranked by when to reach for them</h2>
   <table>
-    <tr><th>Tool</th><th>Лучшее в</th><th>Cost</th></tr>
-    <tr><td>глава / Получить контент</td><td>Увидеть форму за две секунды</td><td>Нет, уже установлено</td></tr>
-    <tr><td>DuckDB</td><td>SQL над файлом, пока он находится</td><td>Одна установка, без импорта</td></tr>
-    <tr><td>SQLite</td><td>Вопросы, которые вы будете задавать неоднократно</td><td>Импорт, тогда это быстро навсегда</td></tr>
-    <tr><td>pandas</td><td>Очистка как часть трубопровода</td><td>Память, если не кусать</td></tr>
-    <tr><td>Текстовый редактор, созданный для размера</td><td>На глаз сломанный ряд</td><td>Только чтение. Никакой агрегации.</td></tr>
+    <tr><th>Tool</th><th>Best at</th><th>Cost</th></tr>
+    <tr><td>head / Get-Content</td><td>Seeing the shape in two seconds</td><td>None, already installed</td></tr>
+    <tr><td>DuckDB</td><td>SQL over the file as it sits</td><td>One install, no import</td></tr>
+    <tr><td>SQLite</td><td>Questions you will ask repeatedly</td><td>An import, then it is fast forever</td></tr>
+    <tr><td>pandas</td><td>Cleaning as part of a pipeline</td><td>Memory, unless you chunk</td></tr>
+    <tr><td>A text editor built for size</td><td>Eyeballing a broken row</td><td>Reading only. No aggregation.</td></tr>
   </table>
-  <p>В последней строке: большинство редакторов загружают в память весь файл и перестают быть полезными при размерах в сотни мегабайт. Редакторы этого потока, такие как Эмредактор или глинтвейн, откроют файл размером в несколько гигабайт, и они являются подходящим инструментом ровно для одной задачи — просмотра строки, в которой произошел сбой импорта.</p>
+  <p>On that last row: most editors load the whole file into memory and stop being useful in the hundreds of megabytes. Editors that stream, such as EmEditor or glogg, will open a multi-gigabyte file, and they are the right tool for exactly one job, which is looking at the row where an import failed.</p>
 
-  <div class="note"><strong>Проверьте кодировку, прежде чем обвинять данные.</strong>  Если при просмотре имена отображаются как Ã© или Â£, файл имеет кодировку UTF-8 и читается как ANSI. Это проблема чтения, а не поврежденного файла, и она исправляется при импорте: см.  <a href="../excel-character-encoding/">Кодировка символов</a>.</div>
+  <div class="note"><strong>Check the encoding before you blame the data.</strong> If the peek shows names as Ã© or Â£, the file is UTF-8 being read as ANSI. That is a reading problem, not a corrupt file, and it is fixed at import: see <a href="../excel-character-encoding/">character encoding</a>.</div>
 
-  <h2>Проверка разделителей и кавычек</h2>
+  <h2>The delimiter and quoting checks</h2>
   <ol>
-    <li>Откройте образец в текстовом редакторе, а не в Excel, и посмотрите на необработанную первую строку.</li>
-    <li>Посчитайте разделители в первой строке и в нескольких случайных строках. Они должны совпадать. Строка с надписью более представляет собой запятую без кавычек внутри поля.</li>
-    <li>Найдите знак порядка байтов: заголовок первого столбца выглядит как  <code>ï»¿id</code>  означает спецификацию UTF-8, которую некоторые инструменты будут рассматривать как часть имени.</li>
-    <li>Проверьте окончания строк. Файл, написанный в Линукс и открытый в Блокноте, раньше отображался как одна длинная строка. Все современное с этим справляется, а старые импортеры еще нет.</li>
+    <li>Open the sample in a plain text editor, not in Excel, and look at the raw first line.</li>
+    <li>Count the delimiters in line 1 and in a few random lines. They should match. A line with more is an unquoted comma inside a field.</li>
+    <li>Look for a byte order mark: the first column header appearing as <code>ï»¿id</code> means a UTF-8 BOM that some tools will treat as part of the name.</li>
+    <li>Check the line endings. A file written on Linux and opened in Notepad used to show as one long line. Anything modern handles it, but old importers still do not.</li>
   </ol>
 
-  <h2>Как применить это в своей работе</h2>
+  <h2>How to apply this to your own work</h2>
   <ol>
-    <li>Поместите команду просмотра в заметку где-нибудь, где вы ее найдете. Это единственная наиболее часто используемая команда на этой странице.</li>
-    <li>Подсчитайте строки до и после каждого импорта и сохраните оба числа в книге.</li>
-    <li>Установите DuckDB в следующий раз, когда файл превзойдет Excel, а не в третий раз.</li>
-    <li>Запросите исходную систему для агрегированного или отфильтрованного экспорта. Половина всей работы с большими файлами не нужна.</li>
-    <li>Никогда не делайте выборку сверху, когда ищете проблемы с качеством данных. Группа плохих строк, обычно в конце.</li>
+    <li>Put the peek command in a note somewhere you will find it. It is the single most used command on this page.</li>
+    <li>Count rows before and after every import, and keep both numbers in the workbook.</li>
+    <li>Install DuckDB the next time a file beats Excel, rather than the third time.</li>
+    <li>Ask the source system for an aggregated or filtered export. Half of all large-file work is unnecessary.</li>
+    <li>Never sample from the top when you are looking for data quality problems. Bad rows cluster, usually at the end.</li>
   </ol>
 
-  <h2>Единственная привычка, которую нужно сохранить</h2>
-  <p>Посмотрите на файл, прежде чем загружать его. Две команды, десять секунд, и они предотвращают почти все важные сюрпризы, которые стоят целого дня.</p>
+  <h2>The one habit to keep</h2>
+  <p>Look at the file before you load the file. Two commands, ten seconds, and they prevent nearly every import surprise that costs an afternoon.</p>
 
-  <p>Знаете ли вы количество строк в последнем фрагменте, на котором вы построили отчет?</p>
+  <p>Do you know the row count of the last extract you built a report on?</p>
 
-  <div class="note"><strong>Каждая команда здесь была запущена до ее публикации.</strong>    Формы PowerShell и Баш используются на этом компьютере в Окна 11.</div>
+  <div class="note"><strong>Every command here was run before it was published.</strong> The PowerShell and Bash forms are the ones used on this machine, on Windows 11.</div>
 
   <div class="book">
-    <strong>На большинство вопросов, связанных с большими файлами, отвечают первая тысяча строк и счет.</strong>
-    <p><em>Python для аналитиков</em>  — это рабочая книга по аналитике панд: прочитайте файл, исправьте его типы, сгруппируйте его, присоединитесь к нему и проверьте ответ, прежде чем его увидит кто-либо еще.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/python-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=python-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-open-a-large-csv'})">Python для аналитиков, 19 $ →</a>
+    <strong>Most large-file questions are answered by the first thousand rows and a count.</strong>
+    <p><em>Python for Analysts</em> is a working analyst pandas book: read a file, fix its types, group it, join it, and check the answer before anyone else sees it.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/python-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=python-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-open-a-large-csv'})">Python for Analysts, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>Следующий шаг после открытия — запрос.</strong>
-    <p style="margin:6px 0 0"><a href="../set-up-duckdb/">DuckDB</a>  запрашивает CSV на месте,  <a href="../set-up-a-sql-database/">SQLite</a>  сохраняет его на случай повторных вопросов и  <a href="../handle-large-datasets/">Обработка больших наборов данных</a>  работает реальный двухгигабайтный файл.</p>
-    <a class="btn" href="../set-up-duckdb/">Настроить DuckDB →</a>
+    <strong>The next step after opening it is querying it.</strong>
+    <p style="margin:6px 0 0"><a href="../set-up-duckdb/">DuckDB</a> queries a CSV in place, <a href="../set-up-a-sql-database/">SQLite</a> keeps it for repeated questions, and <a href="../handle-large-datasets/">handling large datasets</a> works a real two gigabyte file.</p>
+    <a class="btn" href="../set-up-duckdb/">Set Up DuckDB &rarr;</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../excel-row-limit/">Ограничение строк Excel</a> &middot; <a href="../handle-large-datasets/">Обработка больших наборов данных</a> &middot; <a href="../set-up-duckdb/">Настройте DuckDB</a> &middot; <a href="../pandas-read-csv/">панорамирование read_csv</a> &middot; <a href="../excel-character-encoding/">Кодировка символов</a> &middot; <a href="../../python/">Комплект Python</a>
-    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
+    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../excel-row-limit/">The Excel Row Limit</a> &middot; <a href="../handle-large-datasets/">Handle Large Datasets</a> &middot; <a href="../set-up-duckdb/">Set Up DuckDB</a> &middot; <a href="../pandas-read-csv/">pandas read_csv</a> &middot; <a href="../excel-character-encoding/">Character Encoding</a> &middot; <a href="../../python/">Python Kit</a>
+    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

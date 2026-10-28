@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Синтаксис SQL-комментариев по базам данных: --, /* */ и # Сравнение — Подготовительный комплект для аналитика</title>
-<meta name="description" content="Символ комментария для каждой основной базы данных в одной таблице. Почему # предназначен только для MySQL, почему MySQL отклоняет --примечание без пробела и какая база данных является единственной, где вложены блочные комментарии.">
+<title>SQL Comment Syntax by Database: --, /* */ and # Compared &mdash; Analyst Prep Kit</title>
+<meta name="description" content="The comment character for every major database in one table. Why # is MySQL only, why MySQL rejects --note with no space, and which database is the only one where block comments nest.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-comment-syntax-by-database/">
-<meta property="og:title" content="Синтаксис комментариев SQL по базам данных">
-<meta property="og:description" content="Символ комментария для каждой крупной базы данных в одной таблице с четырьмя различиями, которые фактически нарушают запрос при его перемещении.">
+<meta property="og:title" content="SQL Comment Syntax by Database">
+<meta property="og:description" content="The comment character for every major database, in one table, with the four differences that actually break a query when it moves.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-comment-syntax-by-database/">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/sql-comment-syntax-by-database.png">
@@ -168,126 +168,126 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-кит</a> · <a href="../">Все руководства</a></p>
-  <h1>Синтаксис комментариев SQL по базам данных</h1>
-  <p class="meta">Символ комментария в MySQL, PostgreSQL, SQL-сервер, SQLite и Оракул и четыре различия, которые нарушают запрос при его перемещении · Часть    <a href="../../">Подготовительный комплект для аналитика</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-11">11 августа 2026 г.</time></p>
+  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../sql/">SQL Kit</a> · <a href="../">All Guides</a></p>
+  <h1>SQL Comment Syntax by Database</h1>
+  <p class="meta">The comment character in MySQL, PostgreSQL, SQL Server, SQLite and Oracle, and the four differences that break a query when it moves · Part of the <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-11">August 11, 2026</time></p>
 
-  <p>Две формы комментариев являются частью самого языка SQL и работают в каждой базе данных, которую вы, вероятно, откроете. Все остальное — местный диалект. На этой странице представлена ​​таблица того, что и где работает, а также несколько различий, о которых стоит знать.</p>
+  <p>Two comment forms are part of the SQL language itself and work in every database you are likely to open. Everything else is a local dialect. This page is the table of what works where, and then the handful of differences that are worth actually knowing.</p>
 
-  <div class="note"><strong>Ответ в одну строку.</strong> <code>--</code>  скрывает остальную часть строки и  <code>/* */</code>  скрывает блок в каждой крупной базе данных.  <code>#</code>    также скрывает остальную часть строки, но только в MySQL и МарияДБ.</div>
+  <div class="note"><strong>The one-line answer.</strong> <code>--</code> hides the rest of a line and <code>/* */</code> hides a block, in every major database. <code>#</code> also hides the rest of a line, but only in MySQL and MariaDB.</div>
 
-  <h2>Стол</h2>
+  <h2>The table</h2>
   <table>
-    <tr><th>Database</th><th><code>--</code>  до конца строки</th><th><code>/* */</code> block</th><th><code>#</code>  до конца строки</th></tr>
-    <tr><td>MySQL и МарияДБ</td><td>Да, но должен следовать пробел</td><td>Yes</td><td>Yes</td></tr>
-    <tr><td>PostgreSQL</td><td>Yes</td><td>Да, и гнездо блоков</td><td>No</td></tr>
-    <tr><td>SQL-сервер и T-SQL</td><td>Yes</td><td>Yes</td><td>No</td></tr>
+    <tr><th>Database</th><th><code>--</code> to end of line</th><th><code>/* */</code> block</th><th><code>#</code> to end of line</th></tr>
+    <tr><td>MySQL and MariaDB</td><td>Yes, but a space must follow</td><td>Yes</td><td>Yes</td></tr>
+    <tr><td>PostgreSQL</td><td>Yes</td><td>Yes, and blocks nest</td><td>No</td></tr>
+    <tr><td>SQL Server and T-SQL</td><td>Yes</td><td>Yes</td><td>No</td></tr>
     <tr><td>SQLite</td><td>Yes</td><td>Yes</td><td>No</td></tr>
     <tr><td>Oracle</td><td>Yes</td><td>Yes</td><td>No</td></tr>
   </table>
-  <p>Если вы напишете только  <code>--</code>  с пробелом после него и  <code>/* */</code>  что вы всегда закрываете, ваши комментарии сохранятся при каждом перемещении между этими пятью. Вот и все правило переносимости.</p>
+  <p>If you write only <code>--</code> with a space after it and <code>/* */</code> that you always close, your comments will survive every move between these five. That is the whole portability rule.</p>
 
   <div class="toc">
-    <strong>Что здесь</strong>
+    <strong>What's here</strong>
     <ol>
-      <li>Стол</li>
-      <li>Почему кто-то спрашивает об одном персонаже</li>
-      <li>MySQL более строг в отношении  <code>--</code>  чем все остальные</li>
-      <li>PostgreSQL — единственный, где блоки вложены друг в друга.</li>
-      <li>SQLite не сообщит вам, что блок открыт</li>
-      <li>SQL-сервер, и люди, использующие ярлыки, отказываются от</li>
-      <li>Комментарий, который не является комментарием</li>
-      <li>Шпаргалка</li>
+      <li>The table</li>
+      <li>Why anyone asks about a single character</li>
+      <li>MySQL is stricter about <code>--</code> than everyone else</li>
+      <li>PostgreSQL is the only one where blocks nest</li>
+      <li>SQLite will not tell you the block is open</li>
+      <li>SQL Server, and the shortcut people give up on</li>
+      <li>A comment that is not a comment</li>
+      <li>Cheat sheet</li>
     </ol>
   </div>
 
-  <h2>Почему кто-то спрашивает об одном персонаже</h2>
-  <p>В викторинах и практических экзаменах по MySQL возникает вопрос, сформулированный примерно так:  <em>какой одиночный символ можно использовать для закомментирования остальной части строки в MySQL?</em></p>
-  <p>Ответ:  <code>#</code>.</p>
+  <h2>Why anyone asks about a single character</h2>
+  <p>There is a question that turns up in MySQL quizzes and practice exams, worded almost exactly like this: <em>what single character can be used to comment out the rest of a line in MySQL?</em></p>
+  <p>The answer is <code>#</code>.</p>
   <pre><code>SELECT 1+1;   # this runs to the end of the line
 SELECT 1+1;   -- so does this, but that is two characters</code></pre>
-  <p>Вопрос в тестировании одного. MySQL имеет три формы комментариев, и только одна из них представляет собой один символ.  <code>--</code>  это два.  <code>/*</code>  равен двум и нуждается в закрывающей паре.  <code>#</code>  один, поэтому  <code>#</code>  это ответ.</p>
-  <p>Стоит знать для викторины и стоит игнорировать впоследствии.  <code>#</code>    является маркером комментария в MySQL и МарияДБ и нигде больше, поэтому полный их запрос перестает быть комментарием в тот момент, когда он попадает в ПостгреSQL. Использовать    <code>--</code>  во всем, что вы можете использовать повторно.</p>
+  <p>The question is testing one thing. MySQL has three comment forms, and only one of them is a single character. <code>--</code> is two. <code>/*</code> is two and needs a closing pair. <code>#</code> is one, so <code>#</code> is the answer.</p>
+  <p>Worth knowing for the quiz and worth ignoring afterwards. <code>#</code> is a comment marker in MySQL and MariaDB and nowhere else, so a query full of them stops being a comment the moment it lands in PostgreSQL. Use <code>--</code> in anything you might reuse.</p>
 
-  <h2>MySQL более строг в отношении  <code>--</code>  чем все остальные</h2>
-  <p>Это стоит людям реального времени, потому что ошибка не имеет смысла, пока вы не знаете правило.</p>
-  <p>MySQL требует пробелов после второго тире. В его документации четко указано, что стиль двойного тире требует второго тире, за которым следует хотя бы один пробел или управляющий символ, например пробел или табуляция. Так:</p>
+  <h2>MySQL is stricter about <code>--</code> than everyone else</h2>
+  <p>This one costs people real time, because the error makes no sense until you know the rule.</p>
+  <p>MySQL requires whitespace after the second dash. Its documentation is explicit that the double-dash style needs the second dash followed by at least one whitespace or control character, such as a space or tab. So:</p>
   <pre><code>-- this is a comment in MySQL
 --this is a syntax error in MySQL</code></pre>
-  <p>Почти каждая другая база данных принимает оба варианта. Вот почему сценарий, написанный на SQL-сервер или SQLite, может завершиться неудачей при первом запуске в MySQL в строке, которая явно выглядит как комментарий.</p>
-  <p>Исправление — это привычка, а не поиск. Всегда ставьте пробел после двух тире. В любом случае это читается лучше, и этот вопрос больше никогда не возникает.</p>
-  <div class="note"><strong>Почему существует правило.</strong>  MySQL необходимо отличить комментарий от вычитания отрицательного числа.  <code>SELECT 5--3</code>  будет пять минус минус три. Требование пространства позволяет этой арифметике работать.</div>
+  <p>Almost every other database accepts both. That is why a script written in SQL Server or SQLite can fail on its first run in MySQL, on a line that looks obviously like a comment.</p>
+  <p>The fix is a habit, not a lookup. Always put a space after the two dashes. It reads better anyway, and the question never comes up again.</p>
+  <div class="note"><strong>Why the rule exists.</strong> MySQL needs to tell a comment apart from the subtraction of a negative number. <code>SELECT 5--3</code> is five minus negative three. Requiring the space keeps that arithmetic working.</div>
 
-  <h2>PostgreSQL — единственный, где блоки вложены друг в друга.</h2>
-  <p>Почти в каждом руководстве вам будет сказано, что блочные комментарии не являются вложенными, и почти для каждой базы данных это верно. Первый  <code>*/</code>  закрывает блок, что бы ни было до него, поэтому остается ненужный код:</p>
+  <h2>PostgreSQL is the only one where blocks nest</h2>
+  <p>Nearly every guide will tell you block comments do not nest, and for nearly every database that is correct. The first <code>*/</code> closes the block, whatever came before it, so this leaves stray code behind:</p>
   <pre><code>/* outer /* inner */ this part is now code */</code></pre>
-  <p>PostgreSQL ведет себя иначе. В его документации указано, что блочные комментарии вложены, как указано в стандарте SQL, но в отличие от C, так что вы можете комментировать большие блоки кода, которые могут уже содержать блочные комментарии. В Постгрес строка выше полностью скрыта, поскольку внешняя    <code>/*</code>  ждет своего соответствия  <code>*/</code>.</p>
-  <p>Это действительно полезно, когда вы хотите отключить часть запроса, в которой уже есть блочные комментарии. Это также ловушка, потому что SQL, зависящий от него, ломается в тот день, когда кто-то запускает его где-нибудь еще. Если запрос может переместиться, прокомментируйте это растяжение с помощью  <code>--</code>  вместо этого в каждой строке, что составляет одно нажатие клавиши в каждом редакторе.</p>
+  <p>PostgreSQL does not behave that way. Its documentation states that block comments nest, as specified in the SQL standard but unlike C, so that you can comment out larger blocks of code that might already contain block comments. In Postgres the line above is hidden completely, because the outer <code>/*</code> waits for its own matching <code>*/</code>.</p>
+  <p>This is genuinely useful when you want to switch off a chunk of a query that already has block comments in it. It is also a trap, because SQL that depends on it breaks the day someone runs it anywhere else. If the query might move, comment the stretch out with <code>--</code> on every line instead, which is one keystroke in every editor.</p>
 
-  <h2>SQLite не сообщит вам, что блок открыт</h2>
-  <p>Забудьте  <code>*/</code>  в большинстве баз данных, и вы получаете ошибку. SQLite ничего вам не дает.</p>
-  <p>В его документации говорится, что комментарий в стиле C распространяется на следующий  <code>*/</code>  пары или до конца ввода, в зависимости от того, что наступит раньше. Незавершенный блок является законным. Комментарий просто перемещается в конец файла.</p>
-  <p>Симптомом является сценарий, который работает чисто и делает примерно треть того, что вы ожидали, без ошибок, объясняющих все остальное. Если сценарий SQLite незаметно перестает выполнять какие-либо действия на полпути, найдите в нем  <code>/*</code>  без партнера.</p>
+  <h2>SQLite will not tell you the block is open</h2>
+  <p>Forget a <code>*/</code> in most databases and you get an error. SQLite gives you nothing.</p>
+  <p>Its documentation says a C-style comment extends to the next <code>*/</code> pair or until the end of input, whichever comes first. An unterminated block is legal. The comment simply runs to the bottom of the file.</p>
+  <p>The symptom is a script that runs clean and does about a third of what you expected, with no error to explain the rest. If a SQLite script quietly stops doing things partway down, search it for a <code>/*</code> with no partner.</p>
 
-  <h2>SQL-сервер, и люди, использующие ярлыки, отказываются от</h2>
-  <p>Транзакт-SQL делает это простым. Два дефиса на строку,    <code>/* */</code>  за блок, нет  <code>#</code>.</p>
-  <p>Стоит иметь ярлык, который Майкрософт документирует на самой справочной странице комментариев. Выделите строки, затем:</p>
+  <h2>SQL Server, and the shortcut people give up on</h2>
+  <p>Transact-SQL keeps it simple. Two hyphens for a line, <code>/* */</code> for a block, no <code>#</code>.</p>
+  <p>The part worth having is the shortcut, which Microsoft documents on the comment reference page itself. Select the lines, then:</p>
   <table>
-    <tr><th>Что вы хотите</th><th>Keys</th></tr>
-    <tr><td>Прокомментируйте выделенный текст</td><td><code>Ctrl</code>+<code>K</code>, затем  <code>Ctrl</code>+<code>C</code></td></tr>
-    <tr><td>Раскомментируйте выделенный текст</td><td><code>Ctrl</code>+<code>K</code>, затем  <code>Ctrl</code>+<code>U</code></td></tr>
+    <tr><th>What you want</th><th>Keys</th></tr>
+    <tr><td>Comment the selected text</td><td><code>Ctrl</code>+<code>K</code>, then <code>Ctrl</code>+<code>C</code></td></tr>
+    <tr><td>Uncomment the selected text</td><td><code>Ctrl</code>+<code>K</code>, then <code>Ctrl</code>+<code>U</code></td></tr>
   </table>
-  <p>Это два нажатия подряд, а не один аккорд. Держать  <code>Ctrl</code>, кран  <code>K</code>, кран  <code>C</code>. Ничего заметного не происходит после  <code>K</code>, и именно здесь большинство людей приходят к выводу, что ярлык не работает, и возвращаются к вводу тире вручную.</p>
-  <p>Каждый второй редактор в этом списке использует  <code>Ctrl</code>+<code>/</code>  вместо. Полный список ярлыков редактора находится в  <a href="../sql-comments/">Как комментировать в SQL</a>.</p>
+  <p>It is two presses in a row, not one chord. Hold <code>Ctrl</code>, tap <code>K</code>, tap <code>C</code>. Nothing visibly happens after the <code>K</code>, which is exactly where most people conclude the shortcut is broken and go back to typing dashes by hand.</p>
+  <p>Every other editor on this list uses <code>Ctrl</code>+<code>/</code> instead. The full list of editor shortcuts is in <a href="../sql-comments/">how to comment in SQL</a>.</p>
 
-  <h2>Комментарий, который не является комментарием</h2>
-  <p>Есть второе значение слова, которое цепляет людей, ищущих это, и это совершенно другая особенность.</p>
-  <p><code>COMMENT ON TABLE</code>  не скрывает код. Он хранит описание внутри базы данных, прикрепленное к таблице, где любой, кто запрашивает эту базу данных, может его прочитать. Он сохраняется после того, как ваш файл запроса исчезнет. Это описано отдельно в  <a href="../sql-comment-on-table/">как комментировать таблицу в SQL</a>.</p>
-  <p>Короткий способ определить, какой из них вам нужен: если вы пытаетесь остановить работу строки, вам нужно  <code>--</code>. Если вы пытаетесь объяснить коллеге, что означает столбец, вам нужно  <code>COMMENT ON</code>.</p>
+  <h2>A comment that is not a comment</h2>
+  <p>There is a second meaning of the word that catches people searching for this, and it is a completely different feature.</p>
+  <p><code>COMMENT ON TABLE</code> does not hide code. It stores a description inside the database, attached to the table, where anyone querying that database can read it. It survives after your query file is gone. That is covered separately in <a href="../sql-comment-on-table/">how to comment a table in SQL</a>.</p>
+  <p>The short way to tell which one you want: if you are trying to stop a line from running, you want <code>--</code>. If you are trying to explain to a colleague what a column means, you want <code>COMMENT ON</code>.</p>
 
-  <h2>Шпаргалка</h2>
+  <h2>Cheat sheet</h2>
   <table>
-    <tr><th>Situation</th><th>Что написать</th><th>Следите за</th></tr>
-    <tr><td>Комментарий, который работает где угодно</td><td><code>-- note</code></td><td>Оставляйте пробел после тире</td></tr>
-    <tr><td>Комментарий в несколько строк</td><td><code>/* note */</code></td><td>Закройте его и не вложите в него</td></tr>
-    <tr><td>Односимвольный комментарий в MySQL</td><td><code>#</code></td><td>Только MySQL и МарияДБ</td></tr>
-    <tr><td>Закомментируйте много строк</td><td>Выберите их,  <code>Ctrl</code>+<code>/</code></td><td>SSMS использует  <code>Ctrl</code>+<code>K</code>, <code>Ctrl</code>+<code>C</code></td></tr>
-    <tr><td>Скрыть растяжку, которая уже есть  <code>/* */</code>  в этом</td><td><code>--</code>  на каждой строке</td><td>Только PostgreSQL позволяет вкладывать блоки</td></tr>
-    <tr><td>Опишите стол для других людей</td><td><code>COMMENT ON TABLE</code></td><td>Совсем другая функция</td></tr>
+    <tr><th>Situation</th><th>What to write</th><th>Watch for</th></tr>
+    <tr><td>A comment that works anywhere</td><td><code>-- note</code></td><td>Keep the space after the dashes</td></tr>
+    <tr><td>A comment over several lines</td><td><code>/* note */</code></td><td>Close it, and do not nest it</td></tr>
+    <tr><td>A single-character comment in MySQL</td><td><code>#</code></td><td>MySQL and MariaDB only</td></tr>
+    <tr><td>Comment out many lines</td><td>Select them, <code>Ctrl</code>+<code>/</code></td><td>SSMS uses <code>Ctrl</code>+<code>K</code>, <code>Ctrl</code>+<code>C</code></td></tr>
+    <tr><td>Hide a stretch that already has <code>/* */</code> in it</td><td><code>--</code> on every line</td><td>Only PostgreSQL lets blocks nest</td></tr>
+    <tr><td>Describe a table for other people</td><td><code>COMMENT ON TABLE</code></td><td>A different feature entirely</td></tr>
   </table>
 
-  <h2>Правило, которое охватывает все это</h2>
-  <p>Write <code>--</code>  через пробел напишите  <code>/* */</code>  и закрой его, и не гнездись. Эти три привычки действуют сразу во всех пяти базах данных, поэтому вам никогда не придется запоминать, в какой из них вы находитесь.</p>
+  <h2>The rule that covers all of it</h2>
+  <p>Write <code>--</code> with a space, write <code>/* */</code> and close it, and do not nest. Those three habits are correct in all five databases at once, so you never have to remember which one you are in.</p>
 
-  <p>В какой базе данных вы на самом деле пишете сегодня, и нужно ли запускать написанный вами SQL где-нибудь еще?</p>
+  <p>Which database are you actually writing in today, and does the SQL you are writing need to run anywhere else?</p>
 
-  <div class="note"><strong>Откуда эти претензии.</strong>  Каждое поведение здесь было проверено по собственной документации поставщика, а не по другим руководствам: руководству по MySQL 8.4 для  <code>#</code>    и правило пробелов, руководство PostgreSQL по вложению, страница комментариев SQLite для незавершенного блока и Microsoft Обучение для ярлыка T-SQL.</div>
+  <div class="note"><strong>Where these claims come from.</strong> Each behaviour here was checked against the vendor's own documentation, not against other tutorials: the MySQL 8.4 manual for <code>#</code> and the whitespace rule, the PostgreSQL manual for nesting, the SQLite comment page for the unterminated block, and Microsoft Learn for the T-SQL shortcut.</div>
 
   <div class="book">
-    <strong>Синтаксис — это та часть, которую охватывает каждое руководство. То, что находится внутри комментария, — это та часть, которую вы можете просмотреть.</strong>
-    <p><em>Система комментариев SQL</em>    — это двухрежимный стандарт, 12-балльная критерий оценки и агент для Клод или ЧатGPT, который применяет оба режима к запросам, которые вы фактически пишете.</p>
-    <a class="booklink" href="https://gumroad.com/u/m3zxbqx0" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','comment_system_click',{kit:'guide-sql-comment-syntax-by-database'})">Система комментариев SQL, 29 долларов США →</a>
+    <strong>Syntax is the part every tutorial covers. What goes inside the comment is the part that gets you reviewed.</strong>
+    <p><em>The SQL Comment System</em> is the two-mode standard, a 12-point scoring rubric, and an agent for Claude or ChatGPT that applies both to the queries you actually write.</p>
+    <a class="booklink" href="https://gumroad.com/u/m3zxbqx0" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','comment_system_click',{kit:'guide-sql-comment-syntax-by-database'})">The SQL Comment System, $29 &rarr;</a>
   </div>
 
-  <p style="font-size:13px;color:var(--muted);margin:14px 0 0;line-height:1.6">Хотите более широкий навык, а не одну привычку?  <em>SQL для аналитиков</em>  читает запросы построчно простыми словами, и это та же привычка, по которой написаны эти комментарии.  <a href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-comment-syntax-by-database'})">SQL для аналитиков, 19 $ →</a></p>
+  <p style="font-size:13px;color:var(--muted);margin:14px 0 0;line-height:1.6">Want the wider skill rather than the one habit? <em>SQL for Analysts</em> reads queries line by line in plain words, which is the same habit these comments are written in. <a href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-comment-syntax-by-database'})">SQL for Analysts, $19 &rarr;</a></p>
 
   <div class="cta">
-    <strong>Пишите запросы, а не просто читайте их.</strong>
-    <p style="margin:6px 0 0">The <a href="../../sql/">SQL-кит</a>  охватывает SELECT, WHERE, JOIN и GROUP BY с отработанными примерами, практикой и пробным экзаменом, и все это в браузере. Если у вас еще нет базы данных для практики, начните с  <a href="../set-up-a-sql-database/">установка за пятнадцать минут</a>.</p>
-    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
-    <p style="margin:10px 0 0;font-size:15px">Или введите их самостоятельно по одному:  <a href="../../drill/">открыть SQL-детализация</a>, тринадцать запросов, каждый из которых добавляет что-то одно к последнему.</p>
+    <strong>Write the queries, do not just read them.</strong>
+    <p style="margin:6px 0 0">The <a href="../../sql/">SQL Kit</a> covers SELECT, WHERE, JOIN and GROUP BY with worked examples, practice and a mock exam, all in the browser. If you have no database to practice on yet, start by <a href="../set-up-a-sql-database/">setting one up in fifteen minutes</a>.</p>
+    <a class="btn" href="../../sql/">Open the SQL Kit →</a>
+    <p style="margin:10px 0 0;font-size:15px">Or type them yourself one at a time: <a href="../../drill/">open SQL Drill</a>, thirteen queries that each add one thing to the last.</p>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql-comments/">Как комментировать в SQL</a> · <a href="../sql-comment-on-table/">КОММЕНТАРИЙ К ТАБЛИЦЕ</a> · <a href="../sql-teaching-comments/">Комментирование SQL для обучения</a> · <a href="../sql-foundations/">Основы SQL</a> · <a href="../sql-case-expression/">СЛУЧАЙ SQL</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-null/">НУЛЬ в SQL</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../which-sql-database-to-install/">какую базу данных установить</a> · <a href="../../drill/">SQL-детализация</a> · <a href="../../sql/">SQL-кит</a>
-    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
+    <a href="../../">← Analyst Prep Kit</a> &middot; <a href="../sql-comments/">How to Comment in SQL</a> · <a href="../sql-comment-on-table/">COMMENT ON TABLE</a> · <a href="../sql-teaching-comments/">Commenting SQL So It Teaches</a> · <a href="../sql-foundations/">SQL Foundations</a> · <a href="../sql-case-expression/">SQL CASE</a> · <a href="../sql-joins/">SQL JOINs</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../sql-null/">NULL in SQL</a> · <a href="../set-up-a-sql-database/">Set Up a SQL Database</a> · <a href="../which-sql-database-to-install/">Which Database to Install</a> · <a href="../../drill/">SQL Drill</a> · <a href="../../sql/">SQL Kit</a>
+    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

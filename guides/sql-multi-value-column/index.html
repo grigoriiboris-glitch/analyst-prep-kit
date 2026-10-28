@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Одна ячейка, много значений: когда столбец SQL содержит список — комплект подготовки аналитика</title>
-<meta name="description" content="Столбец, хранящий Действие, Инди, RPG в одной ячейке, молча разбивает DISTINCT, COUNT и GROUP BY. Как определить это за минуту, почему ваше индивидуальное число снова исчисляется тысячами, и три способа работы с этим, самый простой из первых.">
+<title>One Cell, Many Values: When a SQL Column Holds a List &mdash; Analyst Prep Kit</title>
+<meta name="description" content="A column storing Action,Indie,RPG in one cell silently breaks DISTINCT, COUNT and GROUP BY. How to spot it in a minute, why your distinct count came back in the thousands, and three ways to work with it, easiest first.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-multi-value-column/">
-<meta property="og:title" content="Одна ячейка, много значений: когда столбец содержит список">
-<meta property="og:description" content="Почему отчетливое число вернулось к 2923, когда есть только 33 жанра, значения, которые никогда не появляются по отдельности, и три способа обработки столбца, содержащего список.">
+<meta property="og:title" content="One Cell, Many Values: When a Column Holds a List">
+<meta property="og:description" content="Why a distinct count came back 2,923 when there are only 33 genres, the values that never appear alone, and three ways to handle a column that holds a list.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/sql-multi-value-column.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-multi-value-column/">
@@ -129,41 +129,41 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../../sql/">SQL-кит</a></p>
-  <h1>Одна ячейка, много значений: когда столбец содержит список</h1>
-  <p class="meta">Форма столбца, которая заставляет DISTINCT лгать · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Обновлено  <time datetime="2026-08-19">19 августа 2026 г.</time></p>
+  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../../sql/">SQL Kit</a></p>
+  <h1>One Cell, Many Values: When a Column Holds a List</h1>
+  <p class="meta">The column shape that makes DISTINCT lie to you &middot; Part of the <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst &middot; Updated <time datetime="2026-08-19">August 19, 2026</time></p>
 
-  <p>Вы запрашиваете у таблицы список категорий, и ответ — 2923. Вы ожидали около тридцати. Ничто не допустило ошибок, вас ничего не предупредило, и номер не является ошибкой. Это правильный ответ на вопрос, который вы не хотели задавать. Это происходит, когда в столбце хранится  <em>list</em>  внутри единственной клетки, и она тихонько ломается  <code>DISTINCT</code>, <code>COUNT</code>, и  <code>GROUP BY</code>  все сразу. Вот как определить это менее чем за минуту, почему число вернулось неправильно, а также три способа работы со столбцом, самый простой из них.</p>
+  <p>You ask a table for its list of categories, and the answer is 2,923. You were expecting about thirty. Nothing errored, nothing warned you, and the number is not a bug. It is the correct answer to a question you did not mean to ask. This happens when a column stores a <em>list</em> inside a single cell, and it quietly breaks <code>DISTINCT</code>, <code>COUNT</code>, and <code>GROUP BY</code> all at once. Here is how to spot it in under a minute, why the number came back wrong, and three ways to work with the column, easiest first.</p>
 
-  <div class="note"><strong>Версия из одного предложения.</strong>  Если ячейка содержит  <code>Action,Indie,RPG</code>  вместо одного значения, то  <code>DISTINCT</code>  считается уникальным  <em>combinations</em>, а не уникальные значения, и каждый счетчик, построенный на его основе, наследует ошибку.</div>
+  <div class="note"><strong>The one-sentence version.</strong> If a cell holds <code>Action,Indie,RPG</code> instead of one value, then <code>DISTINCT</code> counts unique <em>combinations</em>, not unique values, and every count built on top of it inherits the error.</div>
 
   <div class="toc">
-    <strong>Что здесь</strong>
+    <strong>What's here</strong>
     <ol>
-      <li>Признак: отчетливое число, которое слишком велико.</li>
-      <li>Посмотрите на значения, прежде чем считать их</li>
-      <li>Оцените, насколько это распространено</li>
-      <li>Почему DISTINCT дал вам неправильный ответ</li>
-      <li>Ценности, которые никогда не появляются в одиночку</li>
-      <li>Три способа работы с ним: первый самый простой</li>
-      <li>Какой из них выбрать</li>
-      <li>Запишите это как ограничение</li>
-      <li>Почему данные выглядят так</li>
+      <li>The symptom: a distinct count that is far too big</li>
+      <li>Look at the values before you count them</li>
+      <li>Measure how widespread it is</li>
+      <li>Why DISTINCT gave you the wrong answer</li>
+      <li>The values that never appear alone</li>
+      <li>Three ways to work with it, easiest first</li>
+      <li>Which one to pick</li>
+      <li>Write it down as a limitation</li>
+      <li>Why the data looks like this</li>
     </ol>
   </div>
 
-  <p>Проработанный пример — общедоступный набор данных игр Пар, состоящий из 125 855 строк с    <code>Genres</code>  столбец. Каждое число ниже — это реальный результат, в том числе и неправильное.</p>
+  <p>The worked example throughout is a public Steam games dataset of 125,855 rows with a <code>Genres</code> column. Every number below is a real result from it, including the wrong one.</p>
 
-  <h2>Признак: отчетливое число, которое слишком велико.</h2>
-  <p>Первый шаг к любому новому столбцу — спросить, какие значения он содержит:</p>
+  <h2>The symptom: a distinct count that is far too big</h2>
+  <p>The opening move on any new column is to ask what values it holds:</p>
   <pre><code>SELECT COUNT(DISTINCT Genres) AS genre_count
 FROM games_raw;</code></pre>
-  <p>Ответ вернулся  <strong>2,923</strong>. На цифровой витрине нет 2923 жанров. В нем есть меню из нескольких десятков, из которых выбирает разработчик.</p>
-  <p>Этот разрыв между числом, которое вы получили, и числом, которое вы ожидали, является самым ценным сигналом во всем этом руководстве. Это не неудобство для маршрута, это находка. Всякий раз, когда определенное число в категориальном столбце возвращается к тысячам, остановитесь, потому что столбец почти наверняка не содержит того, что вы думаете.</p>
+  <p>The answer came back <strong>2,923</strong>. A digital storefront does not have 2,923 genres. It has a menu of a few dozen that a developer picks from.</p>
+  <p>That gap between the number you got and the number you expected is the single most valuable signal in this whole guide. It is not an inconvenience to route around, it is the finding. Whenever a distinct count on a categorical column comes back in the thousands, stop, because the column is almost certainly not holding what you think it is.</p>
 
-  <h2>Посмотрите на значения, прежде чем считать их</h2>
-  <p>Прежде чем теоретизировать, посмотрите. Счет говорит вам, сколько, а не что:</p>
+  <h2>Look at the values before you count them</h2>
+  <p>Before theorising, look. A count tells you how many, never what:</p>
   <pre><code>SELECT DISTINCT Genres
 FROM games_raw
 LIMIT 20;</code></pre>
@@ -171,78 +171,78 @@ LIMIT 20;</code></pre>
     <tr><th>Genres</th></tr>
     <tr><td>Adventure</td></tr>
     <tr><td>Casual</td></tr>
-    <tr><td>Казуальная игра, Инди, Симулятор</td></tr>
-    <tr><td>Экшен,Ранний доступ</td></tr>
-    <tr><td>Боевики, Приключения</td></tr>
-    <tr><td>Симуляторы,Стратегии</td></tr>
+    <tr><td>Casual,Indie,Simulation</td></tr>
+    <tr><td>Action,Early Access</td></tr>
+    <tr><td>Action,Adventure</td></tr>
+    <tr><td>Simulation,Strategy</td></tr>
   </table>
-  <p>Вот оно. Некоторые ячейки содержат один жанр, а некоторые — три, разделенные запятыми. В столбце не хранится жанр, в нем хранится список жанров в виде фрагмента текста.</p>
-  <div class="note"><strong>Привычка, которую стоит украсть.</strong>  Сначала посмотрите, потом измерьте. Если вы сначала измерите, вы сможете подтвердить или опровергнуть только то, что вы уже подозревали, а то, о чем вы не подозревали, останется невидимым. Двадцать строк наблюдения — самый дешевый шаг в анализе, и он выявляет проблемы, о которых не сообщает сводная статистика.  <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a>  руководство строит остальную часть вступительной процедуры.</div>
+  <p>There it is. Some cells hold one genre and some hold three, separated by commas. The column is not storing a genre, it is storing a list of genres as a piece of text.</p>
+  <div class="note"><strong>The habit worth stealing.</strong> Look first, measure second. If you measure first, you can only ever confirm or deny the thing you already suspected, and the thing you did not suspect stays invisible. Twenty rows of eyeballing is the cheapest step in analysis and it catches problems no summary statistic will report. The <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> guide builds the rest of that opening routine.</div>
 
-  <h2>Оцените, насколько это распространено</h2>
-  <p>Двадцать рядов — это впечатление. Превратите это в доказательство, потому что от ответа зависит, сколько работы вам предстоит. Если несколько строк содержат списки, это небольшая очистка. Если почти все из них так делают, то проблема заключается в форме колонны:</p>
+  <h2>Measure how widespread it is</h2>
+  <p>Twenty rows is an impression. Turn it into evidence, because the answer decides how much work you are in for. If a handful of rows hold lists, that is a small cleanup. If nearly all of them do, the shape of the column is the problem:</p>
   <pre><code>SELECT COUNT(DISTINCT Genres) AS values_with_a_comma
 FROM games_raw
 WHERE Genres LIKE '%,%';</code></pre>
-  <p><strong>2,898</strong>  из 2923 различных значений содержат запятую. Это 99 процентов. Это не крайний случай в данных, это сами данные.</p>
-  <p>(<code>LIKE '%,%'</code>  читается как «что угодно, потом запятая, потом что угодно». Если этот синтаксис новый,  <a href="../sql-like-pattern-matching/">НРАВИТСЯ и подстановочные знаки</a>  прикрывает это.)</p>
+  <p><strong>2,898</strong> of the 2,923 distinct values contain a comma. That is 99 percent. This is not an edge case in the data, it is the data.</p>
+  <p>(<code>LIKE '%,%'</code> reads as "anything, then a comma, then anything." If that syntax is new, <a href="../sql-like-pattern-matching/">LIKE and Wildcards</a> covers it.)</p>
 
-  <h2>Почему DISTINCT дал вам неправильный ответ</h2>
-  <p><code>DISTINCT</code>  сделал именно то, что обещает. Он возвращал каждое отдельное значение в столбце один раз. Проблема в том, что «значение» здесь представляет собой целую строку, разделенную запятыми, и он понятия не имеет, что запятые что-то означают:</p>
+  <h2>Why DISTINCT gave you the wrong answer</h2>
+  <p><code>DISTINCT</code> did exactly what it promises. It returned each different value in the column once. The problem is that a "value" here is a whole comma separated string, and it has no idea the commas mean anything:</p>
   <table>
-    <tr><th>Содержимое ячейки</th><th>Что видит DISTINCT</th></tr>
-    <tr><td><code>Indie</code></td><td>одно значение</td></tr>
-    <tr><td><code>Casual,Indie</code></td><td>Другая ценность</td></tr>
-    <tr><td><code>Casual,Indie,Simulation</code></td><td>Третье, другое значение</td></tr>
+    <tr><th>Cell contents</th><th>What DISTINCT sees</th></tr>
+    <tr><td><code>Indie</code></td><td>One value</td></tr>
+    <tr><td><code>Casual,Indie</code></td><td>A different value</td></tr>
+    <tr><td><code>Casual,Indie,Simulation</code></td><td>A third, different value</td></tr>
   </table>
-  <p>Три строки в результате и слово  <code>Indie</code>  есть во всех трёх. Так что 2923 – это не количество жанров. Это количество уникальных  <em>combinations</em>  жанров, которые использует хотя бы одна игра. Это реальный факт, просто это не тот факт, о котором кто-то просил.</p>
-  <p>То же самое искажение присутствует в каждом агрегате, который вы строите на столбце.  <code>GROUP BY Genres</code>  составляет 2923 группы, в большинстве из которых есть несколько игр. Гистограмму невозможно прочитать. Вычисленная на основе этого процентная доля неверна, поскольку игра, помеченная тремя жанрами, учитывается один раз в отдельной группе, а не один раз для каждого жанра.</p>
+  <p>Three rows in your result, and the word <code>Indie</code> is in all three. So 2,923 is not the number of genres. It is the number of unique <em>combinations</em> of genres that at least one game uses. That is a real fact about the data, it just is not the fact anybody asked for.</p>
+  <p>The same distortion runs through every aggregate you build on the column. <code>GROUP BY Genres</code> makes 2,923 groups, most with a handful of games in them. A bar chart of it is unreadable. A percentage share computed from it is wrong, because a game tagged with three genres is counted once, in a bucket of its own, rather than once per genre.</p>
 
-  <h2>Ценности, которые никогда не появляются в одиночку</h2>
-  <p>Вот ловушка, в которую попадают люди, которые думают, что разгадали ее. Переверните фильтр с запятыми, и вы получите ячейки, содержащие ровно один жанр, то есть названия жанров, стоящие сами по себе:</p>
+  <h2>The values that never appear alone</h2>
+  <p>Here is the trap that catches people who think they have solved it. Flip the comma filter around and you get the cells holding exactly one genre, which are genre names standing on their own:</p>
   <pre><code>SELECT DISTINCT Genres
 FROM games_raw
 WHERE Genres NOT LIKE '%,%'
 ORDER BY Genres;</code></pre>
-  <p>Это возвращает  <strong>24</strong>  ряды, и они выглядят правильно. Экшены, Приключения, Казуальные игры, Инди, Ролевые игры, Гонки, Симуляторы, Спортивные игры, Стратегии и так далее. Соблазнительно назвать это списком жанров и двигаться дальше.</p>
-  <p>Оно неполное, и ничто в результате об этом не говорит. Значение, которое применяется только когда-либо  <em>alongside</em>  еще один будет находиться в 2898 списках и ни разу не появится сам по себе. Зонд для одного:</p>
+  <p>That returns <strong>24</strong> rows, and they look right. Action, Adventure, Casual, Indie, RPG, Racing, Simulation, Sports, Strategy, and so on. It is tempting to call that the genre list and move on.</p>
+  <p>It is incomplete, and nothing in the result says so. A value that is only ever applied <em>alongside</em> another one will sit inside the 2,898 lists and never once appear on its own. Probe for one:</p>
   <pre><code>SELECT DISTINCT Genres
 FROM games_raw
 WHERE Genres LIKE '%Gore%';</code></pre>
-  <p><strong>132</strong>  комбинации возвращаются, и ни одна из них не  <code>Gore</code>  само собой.  <code>Gore</code>  реален, он используется, и в списке из 24 строк он полностью отсутствует. Правильное разделение столбца оказывается  <strong>33</strong>  различные ценности, поэтому девять из них никогда не остаются одинокими.</p>
-  <div class="note"><strong>Общее правило.</strong>  Фильтрация столбца списка по строкам с одним элементом дает значения, которые  <em>can</em>  появляются сами по себе, а не ценности, которые  <em>exist</em>. Это разные наборы, и разница молчалива. Относитесь к числу 24 как к первому варианту для проверки, а не как к ответу.</div>
+  <p><strong>132</strong> combinations come back, and not one of them is <code>Gore</code> by itself. <code>Gore</code> is real, it is used, and the 24 row list missed it completely. Splitting the column properly turns up <strong>33</strong> distinct values, so nine of them never stand alone.</p>
+  <div class="note"><strong>The general rule.</strong> Filtering a list column to the rows with one item gives you the values that <em>can</em> appear alone, not the values that <em>exist</em>. Those are different sets, and the difference is silent. Treat that 24 as a first draft to check, never as the answer.</div>
 
-  <h2>Три способа работы с ним: первый самый простой</h2>
+  <h2>Three ways to work with it, easiest first</h2>
 
   <div class="step">
-    <h2>1. Не разделяйте, отфильтруйте с помощью LIKE</h2>
-    <p>Если ваш настоящий вопрос — «покажите мне ролевые игры», вам никогда не понадобится полный список жанров. Спросите, содержит ли ячейка тег:</p>
+    <h2>1. Do not split it, filter it with LIKE</h2>
+    <p>If your real question is "show me the RPGs," you never needed the full genre list. Ask whether the cell contains the tag:</p>
     <pre><code>SELECT Name, Price
 FROM games_raw
 WHERE Genres LIKE '%RPG%';</code></pre>
-    <p>Это работает независимо от того, находится ли тег первым, последним или посередине. Ему не требуется никакого нового синтаксиса, кроме подстановочных знаков, и для большинства повседневной фильтрации это правильный ответ. Чтобы не допустить совпадения части более длинного слова, сначала заключите значение в запятую:</p>
+    <p>This works whether the tag sits first, last, or in the middle. It needs no new syntax beyond the wildcards, and for most day to day filtering it is the right answer. Guard against matching part of a longer word by wrapping the value in commas first:</p>
     <pre><code>SELECT Name, Price
 FROM games_raw
 WHERE ',' || Genres || ',' LIKE '%,RPG,%';</code></pre>
-    <p><strong>Подходит для:</strong>  фильтрация по одной или двум известным категориям.  <strong>Не подходит для:</strong>  подсчет игр по жанрам для всех из них, что означало бы написание одного запроса на каждый жанр.</p>
+    <p><strong>Good for:</strong> filtering to one or two known categories. <strong>Not good for:</strong> counting games per genre across all of them, which would mean writing one query per genre.</p>
   </div>
 
   <div class="step">
-    <h2>2. Сопоставьте список со списком, который у вас уже есть.</h2>
-    <p>Если категории взяты из фиксированного меню, часто это меню у вас где-то есть или вы можете записать его один раз. Разложите его в небольшую таблицу и соедините узором:</p>
+    <h2>2. Match against a list you already have</h2>
+    <p>If the categories come from a fixed menu, you often have that menu somewhere, or can write it down once. Put it in a small table and join with a pattern:</p>
     <pre><code>SELECT g.genre, COUNT(*) AS games
 FROM genre_list AS g
 JOIN games_raw AS r
   ON ',' || r.Genres || ',' LIKE '%,' || g.genre || ',%'
 GROUP BY g.genre
 ORDER BY games DESC;</code></pre>
-    <p>Это дает правильный подсчет по жанрам без каких-либо операций со строками, и у этого есть тихое преимущество: поскольку список принадлежит вам, жанр с нулевым количеством игр все равно отображается, когда вы переключаетесь на  <code>LEFT JOIN</code>, о чем раскол никогда не сможет вам сказать.</p>
-    <p><strong>Подходит для:</strong>  известный, устойчивый набор категорий.  <strong>Не подходит для:</strong>  обнаружение категорий, о существовании которых вы не знали, и это та же проблема, что и в списке из 24 строк.</p>
+    <p>This gives a proper count per genre without any string surgery, and it has a quiet advantage: because the list is yours, a genre with zero games still shows up when you switch to a <code>LEFT JOIN</code>, which a split can never tell you.</p>
+    <p><strong>Good for:</strong> a known, stable set of categories. <strong>Not good for:</strong> discovering categories you did not know were in there, which is the exact problem the 24 row list had.</p>
   </div>
 
   <div class="step">
-    <h2>3. Разделите список на одну строку для каждого значения.</h2>
-    <p>Полный ответ. Разбейте каждый список на части, чтобы одна игра с тремя жанрами превратилась в три ряда, а затем сгруппируйте их обычным образом. В стандартном SQL нет функции разделения, поэтому текст обрабатывается по одной запятой:</p>
+    <h2>3. Split the list into one row per value</h2>
+    <p>The complete answer. Break each list apart so one game with three genres becomes three rows, then group normally. Standard SQL has no split function, so this walks the text one comma at a time:</p>
     <pre><code>WITH RECURSIVE split(genre, rest) AS (
   SELECT '', Genres || ','
   FROM games_raw
@@ -259,34 +259,34 @@ FROM split
 WHERE trim(genre) &lt;&gt; ''
 GROUP BY lower(trim(genre))
 ORDER BY games DESC;</code></pre>
-    <p>Читая словами: каждую игру начинайте с пустого жанра и его полного списка с приклеенной в конце запятой, чтобы последний элемент тоже имел разделитель. Затем несколько раз вырезайте первую запятую, сохраняя кусок перед ней и перенося остальную часть вперед, пока ничего не останется.  <code>instr</code>  находит положение запятой и  <code>substr</code>  обрезает текст.  <a href="../sql-ctes/">SQL CTE</a>  объясняет  <code>WITH</code>  заблокировать себя.</p>
-    <p>Это возвращает 33 жанра с количеством игр в каждом, и именно эту версию вы должны указать в отчете.</p>
-    <p><strong>Подходит для:</strong>  количество по категориям, диаграммы и все, что требует полного набора.  <strong>Не подходит для:</strong>  первый взгляд, поскольку это самый синтаксис с наименьшим немедленным выигрышем.</p>
-    <div class="note"><strong>Большинство баз данных имеют ярлык.</strong>  Рекурсивная версия, приведенная выше, работает везде, поэтому ее стоит увидеть один раз, но она вам понадобится редко: в PostgreSQL есть  <code>unnest(string_to_array(genres, ','))</code>, SQL-сервер имеет    <code>STRING_SPLIT(genres, ',')</code>, MySQL 8 имеет  <code>JSON_TABLE</code>, у Большой запрос есть    <code>UNNEST(SPLIT(genres, ','))</code>и у DuckDB есть  <code>unnest(str_split(genres, ','))</code>. Проверьте свой, прежде чем писать длинную форму.</div>
+    <p>Reading it in words: start each game off with an empty genre and its full list with a comma glued on the end, so the last item has a delimiter too. Then repeatedly cut at the first comma, keeping the piece before it and carrying the rest forward, until nothing is left. <code>instr</code> finds the position of the comma and <code>substr</code> cuts the text. <a href="../sql-ctes/">SQL CTEs</a> explains the <code>WITH</code> block itself.</p>
+    <p>That returns 33 genres with a game count each, and it is the version you would put in a report.</p>
+    <p><strong>Good for:</strong> counts per category, charts, anything needing the complete set. <strong>Not good for:</strong> a first look, since it is the most syntax for the least immediate payoff.</p>
+    <div class="note"><strong>Most databases have a shortcut.</strong> The recursive version above works everywhere, which is why it is worth seeing once, but you rarely need it: PostgreSQL has <code>unnest(string_to_array(genres, ','))</code>, SQL Server has <code>STRING_SPLIT(genres, ',')</code>, MySQL 8 has <code>JSON_TABLE</code>, BigQuery has <code>UNNEST(SPLIT(genres, ','))</code>, and DuckDB has <code>unnest(str_split(genres, ','))</code>. Check yours before writing the long form.</div>
   </div>
 
-  <h2>Какой из них выбрать</h2>
+  <h2>Which one to pick</h2>
   <table>
-    <tr><th>Ваш вопрос</th><th>Use</th></tr>
-    <tr><td>Покажите мне строки в одной категории</td><td>НРАВИТСЯ фильтр</td></tr>
-    <tr><td>Сколько строк в каждой из нескольких известных категорий</td><td>НРАВИТСЯ фильтр или объединение списка</td></tr>
-    <tr><td>Сколько строк в каждой категории</td><td>Разделить или объединить список</td></tr>
-    <tr><td>Какие категории здесь вообще существуют</td><td>Сплит, он единственный, кто обнаруживает</td></tr>
-    <tr><td>График доли категорий</td><td>Разделите и укажите в заголовке, что строки учитываются один раз для каждой категории.</td></tr>
+    <tr><th>Your question</th><th>Use</th></tr>
+    <tr><td>Show me the rows in one category</td><td>LIKE filter</td></tr>
+    <tr><td>How many rows in each of a few known categories</td><td>LIKE filter, or the list join</td></tr>
+    <tr><td>How many rows in every category</td><td>Split, or the list join</td></tr>
+    <tr><td>What categories even exist in here</td><td>Split, it is the only one that discovers</td></tr>
+    <tr><td>A chart of category share</td><td>Split, and say in the caption that rows count once per category</td></tr>
   </table>
-  <p>Эта последняя строка имеет значение и ее пропускают. После разделения игра, помеченная тремя жанрами, отображается в трех строках, поэтому количество жанров в сумме превышает количество игр. В этом нет ничего плохого, но читатель будет считать, что части составляют целое, если вы не скажете им обратное.</p>
+  <p>That last row matters and gets skipped. Once you split, a game tagged with three genres appears in three rows, so the genre counts add up to more than the number of games. Nothing is wrong, but a reader will assume the parts sum to the whole unless you tell them otherwise.</p>
 
-  <h2>Запишите это как ограничение</h2>
-  <p>Столбец с несколькими значениями — это именно тот элемент, который должен быть включен в вашу запись, а не скрыт в запросе. Это меняет то, что означают ваши цифры. Его охватывают три строки:</p>
+  <h2>Write it down as a limitation</h2>
+  <p>A multi value column is exactly the kind of thing that belongs in your write up rather than buried in a query. It changes what your numbers mean. Three lines cover it:</p>
   <ul>
-    <li><strong>Что на самом деле содержит столбец.</strong>  «Поле «Жанры» хранит список, разделенный запятыми, поэтому игра может содержать несколько жанров».</li>
-    <li><strong>Как ты с этим справился.</strong>  «Перед подсчетом жанры были разделены на одну строку для каждой игры».</li>
-    <li><strong>Что это делает с итоговыми показателями.</strong>  «Игры нескольких жанров учитываются один раз в каждой, поэтому сумма жанров превышает 125 855 игр».</li>
+    <li><strong>What the column actually holds.</strong> "The Genres field stores a comma separated list, so a game can carry several genres."</li>
+    <li><strong>How you handled it.</strong> "Genres were split to one row per game per genre before counting."</li>
+    <li><strong>What that does to the totals.</strong> "Games with several genres are counted once in each, so genre counts sum to more than the 125,855 games."</li>
   </ul>
-  <p>В этом конкретном наборе данных есть еще одна вещь, на которую стоит обратить внимание, и это та деталь, которая отличает настоящий анализ от учебного пособия. Эти 33 ценности относятся не ко всем жанрам.  <code>Gore</code>, <code>Violent</code>, <code>Nudity</code> and <code>Sexual Content</code>  являются предупреждениями о содержании.  <code>Accounting</code>, <code>Photo Editing</code> and <code>Video Production</code>  это категории программного обеспечения, а вовсе не игры. В этом поле в одном столбце смешаны несколько типов ярлыков, поэтому заголовок «Основной жанр» является вводящим в заблуждение, если вы не решите, какой из 33 учитывается, и не скажете, какой вы удалили.  <a href="../documenting-data-limitations/">Документирование ограничений данных</a>  охватывает написание этого раздела, не подрывая при этом вашу собственную работу.</p>
+  <p>There is a second thing worth flagging in this particular dataset, and it is the kind of detail that separates a real analysis from a tutorial. Those 33 values are not all genres. <code>Gore</code>, <code>Violent</code>, <code>Nudity</code> and <code>Sexual Content</code> are content warnings. <code>Accounting</code>, <code>Photo Editing</code> and <code>Video Production</code> are software categories, not games at all. The field mixes several kinds of label into one column, so "top genre" is a misleading headline unless you decide which of the 33 count and say which you dropped. <a href="../documenting-data-limitations/">Documenting Data Limitations</a> covers writing that section without undermining your own work.</p>
 
-  <h2>Почему данные выглядят так</h2>
-  <p>Полезно знать, что это известная форма с известным именем, а не беспорядок, который кто-то случайно устроил. База данных описывается как находящаяся в  <em>первая нормальная форма</em>  когда каждая ячейка содержит одно значение. Столбец, упаковывающий список в одну ячейку, нарушает это правило, и исправление в учебнике представляет собой отдельную небольшую таблицу с одной строкой на пару:</p>
+  <h2>Why the data looks like this</h2>
+  <p>It helps to know this is a known shape with a known name, not a mess somebody made by accident. A database is described as being in <em>first normal form</em> when every cell holds a single value. A column packing a list into one cell breaks that rule, and the textbook fix is a separate small table with one row per pairing:</p>
   <table>
     <tr><th>game_id</th><th>genre</th></tr>
     <tr><td>101</td><td>Action</td></tr>
@@ -294,32 +294,32 @@ ORDER BY games DESC;</code></pre>
     <tr><td>101</td><td>RPG</td></tr>
     <tr><td>102</td><td>Casual</td></tr>
   </table>
-  <p>С этой таблицей подсчет по жанрам является обычным делом.  <code>GROUP BY</code>  и ничего из этого руководства не нужно. Так почему же плоская версия продолжает появляться? Потому что аналитики получают данные, а не проектируют их. Экспорт стабилизируется. Таблицы печатаются вручную. API возвращают массив, и тот, кто написал CSV, соединил его запятыми. Инструменты для проведения опросов, естественно, записывают ответы «выберите все подходящие» в одно поле.</p>
-  <p>Эту форму столбца вы встретите в тегах, навыках, категориях, списках регионов, опциях продукта и вопросах опроса с множественным выбором. Если вы узнали его один раз, вы узнаете его повсюду, и первое, что вы сделаете с любым новым категориальным столбцом, — это просмотрите двадцать строк, прежде чем пересчитать их.</p>
+  <p>With that table, counting per genre is an ordinary <code>GROUP BY</code> and none of this guide is needed. So why does the flat version keep turning up? Because analysts receive data rather than design it. Exports flatten. Spreadsheets get typed by hand. APIs return an array and whoever wrote the CSV joined it with commas. Survey tools write "select all that apply" answers into one field as a matter of course.</p>
+  <p>You will meet this column shape in tags, skills, categories, region lists, product options, and multi select survey questions. Once you have recognised it once, you recognise it everywhere, and the first thing you will do on any new categorical column is look at twenty rows before you count them.</p>
 
-  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: SQL, Tableau, миграция данных и связанные с ними рабочие привычки.</div>
+  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: SQL, Tableau, data migration, and the working habits around them.</div>
 
   <div class="book">
-    <strong>DISTINCT вернул 2923 категории, реальный ответ — 33, и ничто не указывало на разницу.</strong>
-    <p><em>SQL для аналитиков</em>  составляет 458 страниц рабочих ответов, при этом нечетные случаи прописаны, а не пропущены.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-multi-value-column'})">SQL для аналитиков, 19 $ →</a>
+    <strong>DISTINCT returned 2,923 categories, the real answer was 33, and nothing flagged the difference.</strong>
+    <p><em>SQL for Analysts</em> is 458 pages of the working answers, with the odd cases spelled out instead of skipped.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-multi-value-column'})">SQL for Analysts, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>Сделайте WHERE, GROUP BY, JOIN и все остальное привычным.</strong>
-    <p style="margin:6px 0 0">The <a href="../../sql/">SQL-кит</a>    обучает основам аналитического SQL на рабочих примерах, интерактивной лаборатории JOIN и Агрегация, которую вы запускаете в браузере, флэш-карточках и пробном экзамене. Нечего устанавливать.</p>
-    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
-      <p style="margin:10px 0 0;font-size:15px">Или приступайте к делу и учитесь, написав запросы:  <a href="../../drill/">открыть SQL-детализация</a>, тринадцать запросов, каждый из которых добавляет что-то одно к последнему.</p>
+    <strong>Make WHERE, GROUP BY, JOIN, and the rest second nature.</strong>
+    <p style="margin:6px 0 0">The <a href="../../sql/">SQL Kit</a> teaches the core of analyst SQL with worked examples, a live JOIN and Aggregation lab you run in the browser, flash cards, and a mock exam. Nothing to install.</p>
+    <a class="btn" href="../../sql/">Open the SQL Kit &rarr;</a>
+      <p style="margin:10px 0 0;font-size:15px">Or get right into it and learn by writing queries: <a href="../../drill/">open SQL Drill</a>, thirteen queries that each add one thing to the last.</p>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql-foundations/">Основы SQL</a> &middot; <a href="../sql-like-pattern-matching/">НРАВИТСЯ и подстановочные знаки</a> &middot; <a href="../sql-multi-value-column/">Одна ячейка, много значений</a> &middot; <a href="../sql-count-function/">СЧЕТ в SQL</a> &middot; <a href="../sql-null/">НУЛЬ в SQL</a> &middot; <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> &middot; <a href="../sql-ctes/">SQL CTE</a> &middot; <a href="../sql-window-functions/">Оконные функции</a> &middot; <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> &middot; <a href="../sql-case-expression/">выражение CASE</a> &middot; <a href="../sql-find-duplicates/">Найти дубликаты</a> &middot; <a href="../sql-indexing-for-analysts/">Индексирование для аналитиков</a> &middot; <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> &middot; <a href="../documenting-data-limitations/">Документирование ограничений</a> &middot; <a href="../entity-resolution/">Разрешение объекта</a> &middot; <a href="../sql-teaching-comments/">Комментирование SQL</a> &middot; <a href="../../drill/">SQL-детализация</a> &middot; <a href="../../sql/">SQL-кит</a> &middot; <a href="../../projects/">Портфельные проекты</a>
+    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../sql-foundations/">SQL Foundations</a> &middot; <a href="../sql-like-pattern-matching/">LIKE and Wildcards</a> &middot; <a href="../sql-multi-value-column/">One Cell, Many Values</a> &middot; <a href="../sql-count-function/">COUNT in SQL</a> &middot; <a href="../sql-null/">NULL in SQL</a> &middot; <a href="../sql-group-by-having/">GROUP BY and HAVING</a> &middot; <a href="../sql-ctes/">SQL CTEs</a> &middot; <a href="../sql-window-functions/">Window Functions</a> &middot; <a href="../sql-joins/">SQL JOINs</a> &middot; <a href="../sql-case-expression/">The CASE Expression</a> &middot; <a href="../sql-find-duplicates/">Find Duplicates</a> &middot; <a href="../sql-indexing-for-analysts/">Indexing for Analysts</a> &middot; <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> &middot; <a href="../documenting-data-limitations/">Documenting Limitations</a> &middot; <a href="../entity-resolution/">Entity Resolution</a> &middot; <a href="../sql-teaching-comments/">Commenting SQL</a> &middot; <a href="../../drill/">SQL Drill</a> &middot; <a href="../../sql/">SQL Kit</a> &middot; <a href="../../projects/">Portfolio Projects</a>
 
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

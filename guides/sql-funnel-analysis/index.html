@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Преобразование воронки в SQL и шаг, который показывает 100% — комплект для подготовки аналитика</title>
-<meta name="description" content="Условное агрегирование дает воронку в одну строку. Дальше проверки: считать сессии, а не события, и выяснять, почему один шаг конвертирует 100%, а общая конверсия 30% или 20%.">
+<title>Funnel Conversion in SQL, and the Step That Shows 100% — Analyst Prep Kit</title>
+<meta name="description" content="Conditional aggregation gives a funnel in one row. Then the checks: count sessions not events, and find out why one step converts at 100% while overall conversion is 30% or 20%.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-funnel-analysis/">
-<meta property="og:title" content="Преобразование воронки в SQL и шаг, который показывает 100%">
-<meta property="og:description" content="Шаг оформления заказа, конвертируемый на 100%, не является идеальным оформлением заказа, это пропущенный этап оформления заказа. Условная агрегация, строгая воронка и 30% против 20% на тех же сессиях.">
+<meta property="og:title" content="Funnel Conversion in SQL, and the Step That Shows 100%">
+<meta property="og:description" content="A checkout step converting at 100% is not a perfect checkout, it is a checkout being skipped. Conditional aggregation, the strict funnel, and 30% against 20% on the same sessions.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/sql-funnel-analysis.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-funnel-analysis/">
@@ -134,18 +134,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-кит</a> · <a href="../">Все руководства</a></p>
-  <h1>Преобразование воронки в SQL и шаг, который показывает 100%</h1>
-  <p class="meta">Один запрос на количество, три проверки на смысл · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-08">8 августа 2026 г.</time></p>
+  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../sql/">SQL Kit</a> · <a href="../">All guides</a></p>
+  <h1>Funnel Conversion in SQL, and the Step That Shows 100%</h1>
+  <p class="meta">One query for the counts, three checks for the meaning · Part of the <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-08">August 8, 2026</time></p>
 
-  <p>К концу этой страницы вы сможете одним запросом превратить таблицу событий в воронку, определить, какая часть людей переходит от каждого шага к следующему, определить разницу между шагом, который люди проходят, и шагом, который люди пропускают, и составить единственное резюме, для которого на самом деле предназначена воронка: где все останавливаются. Это около двадцати пяти минут, и все приведенные ниже результаты были просчитаны.</p>
+  <p>By the end of this page you can turn a table of events into a funnel in one query, work out what fraction of people get from each step to the next, tell the difference between a step people pass and a step people skip, and produce the one summary a funnel is actually for: where everybody stops. It is about twenty-five minutes, and every result below was run.</p>
 
-  <p>Вот что делать сегодня, о воронке, о которой вы уже сообщаете. Ищите любой шаг преобразования на уровне 100 % или около него. Этот шаг почти никогда не работает идеально; это шаг, который можно пропустить или который регистрируется как побочный эффект следующего. Найдите сеансы, которые достигли более позднего шага без предыдущего, и вы найдете их в одном запросе.</p>
+  <p>Here is what to do today, on the funnel you already report. Look for any step converting at or near 100%. That is almost never a step working perfectly; it is a step that can be bypassed, or one that is logged as a side effect of the next one. Find the sessions that reached the later step without the earlier one, and you will have found it in a single query.</p>
 
-  <p>Краткая версия: подсчитывайте отдельные сеансы на каждом шаге с условной агрегацией, а затем проверяйте, действительно ли для достижения шага требуется предыдущий.</p>
+  <p>The short version: count distinct sessions per step with conditional aggregation, then check whether reaching a step actually required the one before it.</p>
 
-  <p>Шаг, который можно обойти, — это идея, чтобы она получила картину.</p>
+  <p>A step that can be bypassed is the idea, so it gets the picture.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 296" role="img" aria-labelledby="fnTitle fnDesc" xmlns="http://www.w3.org/2000/svg">
@@ -170,31 +170,31 @@
         <path d="M406 209 L418 202 M406 209 L418 216" stroke="#B45309" stroke-width="3" fill="none"/>
       </g>
     </svg>
-    <figcaption>Десять сеансов просмотра, семь — добавления в корзину, три — оформления заказа и три — покупки. Последние два столбца имеют одинаковую ширину, потому что во время одной сессии труба перешла от корзины прямо к покупке и ни разу не коснулась оформления заказа.</figcaption>
+    <figcaption>Ten sessions view, seven add to the cart, three reach checkout and three purchase. The last two bars are the same width because one session took the pipe: it went from cart straight to purchase and never touched checkout.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>Что вы узнаете</strong>
+    <strong>What you'll learn</strong>
     <ol>
-      <li>Что должен выдать запрос воронки</li>
-      <li>Считайте сеансы, а не события</li>
-      <li>Условная агрегация: вся воронка в одну строку</li>
-      <li>Шаг за шагом и в целом</li>
-      <li>100 % означает, что шаг пропущен.</li>
-      <li>Строгая воронка</li>
-      <li>Где на самом деле прекращаются сеансы</li>
-      <li>Порядок и временные окна</li>
-      <li>Полное до и после</li>
-      <li>Краевые случаи, разрушающие воронку</li>
-      <li>Почему это работает</li>
-      <li>Использование этого в вашем собственном проекте</li>
-      <li>Все на одном экране</li>
+      <li>What a funnel query has to produce</li>
+      <li>Count sessions, not events</li>
+      <li>Conditional aggregation: the whole funnel in one row</li>
+      <li>Step to step, and overall</li>
+      <li>The 100% that means a step is being skipped</li>
+      <li>The strict funnel</li>
+      <li>Where sessions actually stop</li>
+      <li>Order and time windows</li>
+      <li>The full before and after</li>
+      <li>Edge cases that break a funnel</li>
+      <li>Why this works</li>
+      <li>Using this on your own project</li>
+      <li>The whole thing on one screen</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Каждый результат на этой странице реален.</strong>  Двадцать четыре события в десяти сеансах, четырех шагах, загруженных в DuckDB и запрошенных. Десять сеансов намеренно достаточно малы, чтобы вы могли держать все это в голове и проверять каждую цифру. Именно так следует строить запросы воронки, прежде чем они достигнут реальных объемов.</div>
+  <div class="note"><strong>Every result on this page is real.</strong> Twenty-four events across ten sessions, four steps, loaded into DuckDB and queried. Ten sessions is deliberately small enough that you can hold the whole thing in your head and check every number, which is how funnel queries should be built before they meet real volumes.</div>
 
-  <p>Вот все, что было сделано за десять сессий, так что никаких сюрпризов в дальнейшем не будет.</p>
+  <p>Here is everything the ten sessions did, so nothing later is a surprise.</p>
 
   <table>
     <tr><th>Session</th><th>Path</th><th>Events</th></tr>
@@ -211,23 +211,23 @@
   </table>
 
   <div class="step">
-    <h2>1. Что должен выдавать запрос воронки</h2>
+    <h2>1. What a funnel query has to produce</h2>
 
-    <p>Воронка – это количество  <em>things</em>  который достиг каждого из упорядоченного списка шагов. Три решения предшествуют любому SQL, и все три меняют числа.</p>
+    <p>A funnel is a count of <em>things</em> that reached each of an ordered list of steps. Three decisions come before any SQL, and all three change the numbers.</p>
 
-    <p><strong>Что именно считается?</strong>  Сессии, пользователи, заказы, заявки. Пользователь, который посещает сайт пять раз, — это один пользователь и пять сеансов, и эти воронки совершенно не похожи друг на друга.</p>
+    <p><strong>What is the thing being counted?</strong> Sessions, users, orders, applications. A user who visits five times is one user and five sessions, and those funnels look nothing alike.</p>
 
-    <p><strong>Какие действия и в каком порядке?</strong>  Порядок — это ваше утверждение о процессе, а пятый раздел — это то, что происходит, когда данные с ним не совпадают.</p>
+    <p><strong>What are the steps, in what order?</strong> The order is your claim about the process, and section five is what happens when the data disagrees with it.</p>
 
-    <p><strong>Над каким окном?</strong>  Постоянно, в день, в течение тридцати минут после первого шага. Воронка без окна спокойно считает конверсией тех, кто посмотрел в январе и совершил покупку в мае.</p>
+    <p><strong>Over what window?</strong> All time, a day, within thirty minutes of the first step. A funnel with no window quietly counts somebody who viewed in January and purchased in May as a conversion.</p>
 
-    <p>Запишите эти три, прежде чем писать запрос. Это такая же дисциплина, как и любые другие показатели, и  <a href="../defining-metrics/">определение метрики</a>  это более длинная версия причины.</p>
+    <p>Write those three down before writing the query. They are the same discipline as any other metric, and <a href="../defining-metrics/">defining a metric</a> is the longer version of why.</p>
   </div>
 
   <div class="step">
-    <h2>2. Считайте сеансы, а не события</h2>
+    <h2>2. Count sessions, not events</h2>
 
-    <p>До пояснения: десять сессий произвели двадцать четыре события. Скажите, сколько из этих событий являются просмотрами.</p>
+    <p>Before the explanation: ten sessions produced twenty-four events. Say how many of those events are views.</p>
 
     <pre><code>SELECT step, COUNT(*) AS events, COUNT(DISTINCT session_id) AS sessions
 FROM events GROUP BY 1;
@@ -237,17 +237,17 @@ cart     |  7 |  7
 checkout |  3 |  3
 purchase |  3 |  3</code></pre>
 
-    <p>Одиннадцать просмотров событий, десять сеансов. Сеанс S10 просмотрен дважды, что является совершенно нормальным поведением и совершенно неправильно считать дважды: вершиной воронки является количество сеансов, которые зашли так далеко, а не количество раз, когда они это сделали.</p>
+    <p>Eleven view events, ten sessions. Session S10 viewed twice, which is entirely normal behaviour and completely wrong to count twice: the top of a funnel is the number of sessions that got that far, not the number of times they did it.</p>
 
-    <p>Разрыв здесь невелик, и он никогда не бывает мал в реальных данных, потому что первый шаг воронки — это именно тот шаг, который люди повторяют. Просмотр домашней страницы, регистрируемый при каждой навигации, может привести к тому, что число посетителей в верхней части воронки в несколько раз превысит число посетителей, из-за чего каждый коэффициент конверсии ниже него будет выглядеть ужасным без всякой причины.</p>
+    <p>The gap is small here and it is never small in real data, because the first step of a funnel is exactly the step people repeat. A homepage view logged on every navigation can produce a top-of-funnel figure several times the number of visitors, which makes every conversion rate below it look terrible for no reason.</p>
 
-    <p>Таким образом, каждый счетчик в воронке  <code>COUNT(DISTINCT thing_id)</code>. Если верхнее число вашей воронки больше, чем количество посетителей, вот почему.</p>
+    <p>So every count in a funnel is <code>COUNT(DISTINCT thing_id)</code>. If your funnel's top number is bigger than your visitor count, this is why.</p>
   </div>
 
   <div class="step">
-    <h2>3. Условная агрегация: вся воронка в одну строку</h2>
+    <h2>3. Conditional aggregation: the whole funnel in one row</h2>
 
-    <p>Приведенная выше сгруппированная версия дает одну строку на шаг, что хорошо для диаграммы и неудобно для расчета ставок, поскольку для каждой скорости требуется две строки. Вместо этого при условном агрегировании вся воронка помещается в одну строку.</p>
+    <p>The grouped version above gives one row per step, which is fine for a chart and awkward for computing rates, because each rate needs two rows. Conditional aggregation puts the whole funnel on one row instead.</p>
 
     <pre><code>SELECT COUNT(DISTINCT CASE WHEN step='view'     THEN session_id END) AS viewed,
        COUNT(DISTINCT CASE WHEN step='cart'     THEN session_id END) AS carted,
@@ -257,15 +257,15 @@ FROM events;
 
 10 | 7 | 3 | 3</code></pre>
 
-    <p>Этот механизм стоит понять, а не копировать.  <code>CASE</code>  возвращает идентификатор сеанса, когда шаг соответствует и  <code>NULL</code>  когда это не так, и  <code>COUNT</code>  игнорирует нули, поэтому в каждом столбце учитываются только сеансы, достигшие этого шага. Это тот же трюк, что и поворот вручную, и  <a href="../sql-case-expression/">руководство по ДЕЛУ</a>  охватывает само выражение.</p>
+    <p>The mechanism is worth understanding rather than copying. <code>CASE</code> returns the session id when the step matches and <code>NULL</code> when it does not, and <code>COUNT</code> ignores nulls, so each column counts only the sessions that reached that step. It is the same trick as a pivot done by hand, and <a href="../sql-case-expression/">the CASE guide</a> covers the expression itself.</p>
 
-    <p>Вам нужна одна строка из четырех чисел, потому что теперь каждая ставка представляет собой арифметику между столбцами, а не соединение между строками.</p>
+    <p>One row of four numbers is what you want, because now every rate is arithmetic between columns rather than a join between rows.</p>
   </div>
 
   <div class="step">
-    <h2>4. Шаг за шагом и в целом</h2>
+    <h2>4. Step to step, and overall</h2>
 
-    <p>Два разных вопроса, и в отчетах обычно один отображается, а другой помечается как другой.</p>
+    <p>Two different questions, and reports routinely show one while labelling it the other.</p>
 
     <pre><code>viewed | carted | checked_out | purchased
     10 |      7 |           3 |         3
@@ -275,19 +275,19 @@ cart to checkout      42.9%
 checkout to purchase 100.0%
 overall (view to purchase) 30.0%</code></pre>
 
-    <p><strong>Шаг за шагом</strong>  делит каждый счет на тот, который находится над ним, и отвечает: «сколько людей сюда попали, сколько осталось».  <strong>Overall</strong>  делится по верху и отвечает "всех, кто начал, сколько закончило". Умножение скоростей шагов дает общую скорость, что является полезной проверкой: 0,700 × 0,429 × 1,000 равно 0,300.</p>
+    <p><strong>Step to step</strong> divides each count by the one above it, and it answers "of the people who got here, how many went on". <strong>Overall</strong> divides by the top, and it answers "of everybody who started, how many finished". Multiplying the step rates together gives the overall rate, which is a useful check: 0.700 × 0.429 × 1.000 is 0.300.</p>
 
     <p>Both belong on the report. Step to step tells you where to spend your effort; overall tells you what the process is worth. Publishing only the step rates lets a page with a 90% rate look like a success when only forty people a month reach it.</p>
   </div>
 
   <div class="step">
-    <h2>5. 100% означает, что шаг пропущен.</h2>
+    <h2>5. The 100% that means a step is being skipped</h2>
 
-    <p>Перед пояснением: оформление покупки вышло ровно на 100,0%. Скажите, что бы это значило, если бы это было правдой.</p>
+    <p>Before the explanation: checkout to purchase came out at exactly 100.0%. Say what that would mean if it were true.</p>
 
-    <p>Чтобы ни один человек, дошедший до страницы оформления заказа, не совершил покупку: ни брошенных корзин, ни неудавшихся карточек, ни раздумий. В любой реальной проверке, которая не является результатом, это симптом, и вопрос, который следует задавать, заключается не в том, «почему проверка такая хорошая», а в том, «действительно ли проверка на пути».</p>
+    <p>That not one person who reached the checkout page failed to buy: no abandoned baskets, no failed cards, no second thoughts. On any real checkout that is not a result, it is a symptom, and the question to ask is not "why is checkout so good" but "is checkout actually on the path".</p>
 
-    <p>На него отвечает один запрос. Сократите каждый сеанс до флагов, а затем найдите те, которые достигли более позднего шага без предыдущего.</p>
+    <p>One query answers it. Reduce each session to flags, then look for the ones that reached the later step without the earlier one.</p>
 
     <pre><code>WITH s AS (
   SELECT session_id,
@@ -298,17 +298,17 @@ SELECT session_id FROM s WHERE did_purchase = 1 AND did_checkout = 0;
 
 S9</code></pre>
 
-    <p>С9 пошёл просмотр, тележка, покупка. Три сессии проверены и три куплены, но это не одни и те же три, и соотношение между двумя разными наборами по три вовсе не является коэффициентом конверсии.</p>
+    <p>S9 went view, cart, purchase. Three sessions checked out and three purchased, but they are not the same three, and the ratio between two different sets of three is not a conversion rate at all.</p>
 
-    <p>В реальных системах это имеет обычные причины. Путь в один клик или сохраненная карта пропускает страницу оформления заказа. Мобильное приложение запускает различные события с веб-сайта. Событие оформления заказа регистрируется только при отправке, поэтому тот, кто платит другим способом, никогда его не генерирует. Каждый из них стоит знать, и ни один из них не виден на воронкообразной диаграмме.</p>
+    <p>In real systems this has ordinary causes. A one-click or saved-card path skips the checkout page. A mobile app fires different events from the website. A checkout event is logged only on submission, so anyone who pays another way never generates one. Every one of those is worth knowing, and none of them is visible in a funnel chart.</p>
 
-    <p>Произнесите вслух, как называется соотношение между двумя перекрывающимися, но разными множествами. Это не коэффициент конверсии, и, дав ему такое название, проблема с данными становится целью, которую кого-то просят улучшить.</p>
+    <p>Say out loud what the ratio between two overlapping-but-different sets is called. It is not a conversion rate, and giving it that name is how a data problem becomes a target somebody is asked to improve.</p>
   </div>
 
   <div class="step">
-    <h2>6. Строгая воронка</h2>
+    <h2>6. The strict funnel</h2>
 
-    <p>Если вы утверждаете, что шаги выполняются по порядку, заставьте запрос обеспечить его соблюдение. Помечайте каждый сеанс на каждом этапе, а затем требуйте также все предыдущие флаги.</p>
+    <p>If your claim is that the steps happen in order, make the query enforce it. Flag each session per step, then require every earlier flag as well.</p>
 
     <pre><code>WITH s AS (
   SELECT session_id,
@@ -325,20 +325,20 @@ FROM s;
 
 10 | 7 | 3 | 2</code></pre>
 
-    <p>Умножение флагов - это  <code>AND</code>: сеанс считается шагом, только если у него есть этот флаг и все флаги перед ним. Первые три числа не изменились, а последнее уменьшилось с 3 до 2, поскольку S9 больше не соответствует критериям.</p>
+    <p>Multiplying the flags is an <code>AND</code>: a session counts at a step only if it has that flag and every flag before it. The first three numbers are unchanged and the last one drops from 3 to 2, because S9 no longer qualifies.</p>
 
-    <p>Теперь две основные ставки рядом:</p>
+    <p>Now the two headline rates, side by side:</p>
 
     <pre><code>any purchase at all        30.0%
 completed the full path    20.0%</code></pre>
 
-    <p>Разница в десять процентных пунктов в десяти сеансах, когда один клиент использует другой маршрут. Ни одно из чисел не является неверным. Первый отвечает «сколько купило», второй отвечает «сколько прошли процесс, который мы разработали», и в отчете должно быть указано, какой из них он показывает, а не оставлять читателю право предполагать.</p>
+    <p>Ten percentage points apart on ten sessions, from one customer using a different route. Neither number is wrong. The first answers "how many bought", the second answers "how many went through the process we designed", and a report should say which one it is showing rather than leaving the reader to assume.</p>
   </div>
 
   <div class="step">
-    <h2>7. Где фактически прекращаются сеансы</h2>
+    <h2>7. Where sessions actually stop</h2>
 
-    <p>Воронкообразная диаграмма показывает, сколько пользователей достигли каждого шага. Что люди на самом деле хотят знать, так это то, где все сдались, и это другой запрос с гораздо более полезным ответом, потому что каждый сеанс появляется ровно один раз.</p>
+    <p>The funnel chart shows how many reached each step. What people actually want to know is where everybody gave up, and that is a different query with a much more useful answer, because every session appears exactly once.</p>
 
     <pre><code>SELECT CASE WHEN p=1 THEN 'purchased'
             WHEN k=1 THEN 'stopped at checkout'
@@ -352,30 +352,30 @@ stopped at view     | 3
 stopped at cart     | 3
 stopped at checkout | 1</code></pre>
 
-    <p>Три, три, три и один, в сумме получается десять, что соответствует количеству сеансов. Это согласование является причиной построить его таким образом: счетчики воронки перекрываются, поэтому их нельзя сверить с общей суммой, в то время как таблица самого дальнего шага разделяет сеансы и должна суммироваться.</p>
+    <p>Three, three, three and one, adding to ten, which is the session count. That reconciliation is the reason to build it this way: a funnel's counts overlap, so they cannot be checked against a total, while a furthest-step table partitions the sessions and must add up.</p>
 
-    <p>The <code>CASE</code>  Порядок имеет значение и выполняет всю работу: сначала проверяется самый дальний шаг, поэтому каждый сеанс попадает ровно в одну корзину, что является тем же правилом упорядочивания «первый истинный выигрыш», что и любая другая цепочка условий.</p>
+    <p>The <code>CASE</code> order matters and does the work: it tests the furthest step first, so each session lands in exactly one bucket, which is the same first-true-wins ordering rule as any other condition chain.</p>
 
-    <p>Представьте на мгновение свою собственную воронку. Если вы перестроите ее как таблицу дальних шагов, добавятся ли ведра к числу вошедших людей? Если нет, то что-то в воронке учитывается в двух местах.</p>
+    <p>Picture your own funnel for a moment. If you rebuilt it as a furthest-step table, would the buckets add up to the number of people who entered? If not, something in the funnel is being counted in two places.</p>
   </div>
 
   <div class="step">
-    <h2>8. Порядок и временные окна</h2>
+    <h2>8. Order and time windows</h2>
 
-    <p>Два уточнения, которые будут иметь значение, как только данные станут реальными.</p>
+    <p>Two refinements that matter as soon as the data is real.</p>
 
-    <p><strong>Заказ внутри сеанса.</strong>  Приведенный выше подход с использованием флагов спрашивает, произошел ли шаг, а не произошел ли он после предыдущего. Сеанс покупки, а затем просмотра страницы продукта считается полным путем. Если последовательность имеет значение, сравнивайте временные метки, а не флаги: требуйте, чтобы время оформления заказа наступало после времени корзины, обычно с  <code>MIN(...)</code>  времени каждого шага за сеанс.</p>
+    <p><strong>Order within a session.</strong> The flag approach above asks whether a step happened, not whether it happened after the previous one. A session that purchases and then views a product page counts as a full path. If sequence matters, compare timestamps rather than flags: require the checkout time to be after the cart time, usually with <code>MIN(...)</code> of each step's time per session.</p>
 
     <pre><code>MIN(CASE WHEN step='cart'     THEN event_time END) AS cart_at,
 MIN(CASE WHEN step='checkout' THEN event_time END) AS checkout_at
 -- then: WHERE checkout_at &gt; cart_at</code></pre>
 
-    <p><strong>Окно.</strong>  Решите, сколько времени потребуется сеансу для завершения воронки. Без ограничений, повторное посещение через несколько недель засчитывается в исходный просмотр, что увеличивает конверсию и делает невозможным измерить любые изменения в процессе. При слишком узком лимите вы недооцениваете медленные, но настоящие конверсии. Правильного ответа нет, есть только заявленный, и он находится в заголовке отчета, а не в запросе.</p>
+    <p><strong>The window.</strong> Decide how long a session has to complete the funnel. Without a limit, a return visit weeks later is credited to the original view, which inflates conversion and makes any change to the process impossible to measure. With a limit that is too tight, you undercount slow but genuine conversions. There is no correct answer, only a stated one, and it belongs in the report heading rather than in the query.</p>
   </div>
 
-  <h2>Полное до и после</h2>
+  <h2>The full before and after</h2>
 
-  <p>Те же события, тот же вопрос: насколько хорошо происходит преобразование?</p>
+  <p>Same events, same question: how well does the process convert?</p>
 
   <h3>Before</h3>
   <pre><code>SELECT step, COUNT(*) AS n FROM events GROUP BY 1;
@@ -386,7 +386,7 @@ checkout |  3
 purchase |  3
 
 view to cart 63.6%, cart to checkout 42.9%, checkout to purchase 100%</code></pre>
-  <p>Три проблемы. Верхнее число учитывает события, поэтому оно равно одиннадцати, а не десяти, и первая оценка неверна. Последний шаг дает идеальные 100% результатов, в которых никто не сомневается, потому что это хорошие новости. И нигде нет какой-либо общей суммы, поэтому ничто из этого не может быть согласовано с десятью существующими сеансами.</p>
+  <p>Three problems. The top number counts events, so it is eleven rather than ten and the first rate is wrong. The final step reports a perfect 100% that nobody questions because it is good news. And there is no total anywhere, so none of it can be reconciled against the ten sessions that exist.</p>
 
   <h3>After</h3>
   <pre><code>-- one row per session, one flag per step
@@ -407,110 +407,110 @@ FROM s;
 -- and the table that has to add up
 purchased 3, stopped at view 3, stopped at cart 3, stopped at checkout 1   = 10</code></pre>
 
-  <p>Одна строка за сеанс перед подсчетом, поэтому события не могут быть подсчитаны дважды. Обе цифры конверсии с маркировкой. И таблица дальних шагов, которая согласовывается с количеством сеансов.</p>
+  <p>One row per session before any counting, so events cannot be double counted. Both conversion figures, labelled. And a furthest-step table that reconciles to the session count.</p>
 
-  <p>Заявление, и это повод смотреть на совершенный шаг, а не праздновать его:  <strong>проверка на покупку читалась 100%, и причина заключалась в том, что одна сессия из десяти вообще не проходила проверку, что также увеличило честный коэффициент конверсии с 30% до 20%.</strong></p>
+  <p>The claim, and it is the reason to look at a perfect step rather than celebrate it: <strong>checkout to purchase read 100%, and the reason was that one session in ten never went through checkout at all, which also moved the honest conversion rate from 30% to 20%.</strong></p>
 
   <div class="step">
-    <h2>Краевые случаи, разрушающие воронку</h2>
+    <h2>Edge cases that break a funnel</h2>
 
-    <p>Шесть, которые стоит знать.</p>
+    <p>Six worth knowing.</p>
 
-    <p><strong>Названия шагов изменены.</strong>  Релиз переименовывается  <code>add_to_cart</code> to <code>cart_add</code>  и середина воронки рушится в одночасье. Проверьте отдельные значения шага, прежде чем поверить в внезапное падение.</p>
+    <p><strong>The step names changed.</strong> A release renames <code>add_to_cart</code> to <code>cart_add</code> and the middle of the funnel collapses overnight. Check the distinct step values before believing a sudden drop.</p>
 
-    <p><strong>Шаг, который не везде логируется.</strong>  Веб запускает его, приложение - нет. Затем воронка измеряет сочетание платформ, а не поведение, и она перемещается всякий раз, когда маркетинг меняет канал.</p>
+    <p><strong>A step that is not logged everywhere.</strong> Web fires it, the app does not. The funnel then measures platform mix rather than behaviour, and it moves whenever marketing changes channel.</p>
 
-    <p><strong>Сеансы, которые начинаются в середине воронки.</strong>  Кто-то попадает на страницу продукта по электронной почте и никогда не видит домашнюю страницу. Они представляют собой настоящую конверсию и не проходят строгую воронку. Решите, действительно ли ваш верхний шаг необходим.</p>
+    <p><strong>Sessions that start mid-funnel.</strong> Somebody arrives on a product page from an email and never sees the homepage. They are a real conversion and they fail the strict funnel. Decide whether your top step is genuinely required.</p>
 
-    <p><strong>Боты.</strong>  Они просматривают и никогда не покупают, поэтому раздувают верхнюю часть воронки и снижают все показатели ниже нее. Фильтруйте их перед подсчетом, а не после того, как подвергните сомнению цифры.</p>
+    <p><strong>Bots.</strong> They view and never buy, so they inflate the top of the funnel and depress every rate below it. Filter them before counting, not after questioning the numbers.</p>
 
-    <p><strong>Сеансы, охватывающие полночь или тайм-аут.</strong>  У одного человека получается две сессии, одна из которых просмотрена, а другая куплена, поэтому реальная конверсия выглядит как две неудачи. Это та же проблема идентификации, что и  <a href="../entity-resolution/">Разрешение объекта</a>, применяется к сеансам, а не к клиентам.</p>
+    <p><strong>Sessions spanning midnight or a timeout.</strong> One person becomes two sessions, one of which viewed and one of which purchased, so a real conversion appears as two failures. This is the same identity problem as <a href="../entity-resolution/">entity resolution</a>, applied to sessions rather than customers.</p>
 
-    <p><strong>Сравнение воронок разных групп населения.</strong>  Воронка, которая улучшилась после кампании, возможно, просто началась с разных людей. Решение такое же, как и везде в аналитике: сравнивайте когорты, а не периоды, что и есть  <a href="../sql-cohort-retention/">когортный анализ</a>  это для.</p>
+    <p><strong>Comparing funnels of different populations.</strong> A funnel that improved after a campaign may just have started with different people. The fix is the same as everywhere else in analytics: compare cohorts rather than periods, which is what <a href="../sql-cohort-retention/">cohort analysis</a> is for.</p>
   </div>
 
-  <h2>Почему это работает</h2>
+  <h2>Why this works</h2>
 
-  <p>A funnel is a claim about sequence, and sequence is not something a table of events contains by itself; it has to be imposed. Work on mining patterns from event data treats the ordering as the object of study rather than as background, precisely because the interesting questions are about which things happen after which, and answering them requires a definition of what counts as a sequence and over what span (Agrawal &amp; Srikant, 1995, <em>Материалы 11-й Международной конференции по инженерии данных</em>, 3–14). Два усовершенствования восьмого раздела (сравнение временных меток и выбор окна) представляют собой уменьшенную версию этого. Воронка без них не измеряет процесс, она подсчитывает, произошли ли когда-либо четыре события в одном сеансе.</p>
+  <p>A funnel is a claim about sequence, and sequence is not something a table of events contains by itself; it has to be imposed. Work on mining patterns from event data treats the ordering as the object of study rather than as background, precisely because the interesting questions are about which things happen after which, and answering them requires a definition of what counts as a sequence and over what span (Agrawal &amp; Srikant, 1995, <em>Proceedings of the 11th International Conference on Data Engineering</em>, 3–14). Section eight's two refinements, comparing timestamps and choosing a window, are the small version of that. A funnel without them is not measuring a process, it is counting whether four things ever happened to the same session.</p>
 
-  <p>Более глубокая проблема на этой странице заключается в том, что происходит, когда число, которое не означает того, что оно говорит, все равно публикуется. Как только показатель становится показателем эффективности, люди действуют в соответствии с ним, и показатель, отражающий только часть того, что он утверждает, надежно производит усилия, направленные на показатель, а не на то, что он обозначает (Риджвей, 1956,  <em>Ежеквартальный журнал административной науки</em>, 1(2), 240–247). Шаг оформления заказа, показывающий 100%, потому что его можно обойти, имеет именно такую ​​форму: он не просто неверен, он неверен в том направлении, в котором команду можно поздравить, а затем вместо этого попросить улучшить другой шаг.</p>
+  <p>The deeper problem on this page is what happens when a number that does not mean what it says gets published anyway. Once a figure becomes a performance measure, people act on it, and a measure that captures only part of what it claims to reliably produces effort aimed at the measure rather than at the thing it stands for (Ridgway, 1956, <em>Administrative Science Quarterly</em>, 1(2), 240–247). A checkout step reading 100% because it can be bypassed is exactly that shape: it is not merely wrong, it is wrong in the direction that invites a team to be congratulated and then asked to improve a different step instead.</p>
 
-  <p>Одно замечание в шпаргалке ниже. Он создан для того, чтобы его просматривали и вспоминали, а не перечитывали, потому что преимущества самотестирования распространяются на проблемы, которые отличаются от тех, на которых вы тестировали, и это имеет значение, когда следующая воронка имеет другие шаги (Кастрюля &amp; Рикард, 2018,    <em>Психологический вестник</em>, 144(7), 710–756).</p>
+  <p>One note on the cheat sheet below. It is built to be covered and recalled rather than reread, because the benefit of self-testing carries over to problems that differ from the ones you tested on, which is what matters when the next funnel has different steps (Pan &amp; Rickard, 2018, <em>Psychological Bulletin</em>, 144(7), 710–756).</p>
 
-  <h2>Использование этого в вашем собственном проекте</h2>
+  <h2>Using this on your own project</h2>
 
-  <p>Перестраивать каждую воронку сразу нет необходимости. Вместо этого сделайте это по порядку.</p>
+  <p>Rebuilding every funnel at once is unnecessary. Do this instead, in order.</p>
 
   <ol>
-    <li><strong>Сравните верхнее число с количеством посетителей или сеансов.</strong>  Если оно больше, вы подсчитываете события.</li>
-    <li><strong>Сначала сократите до одной строки для каждой вещи</strong>, с флагом на каждый шаг, прежде чем произойдет какой-либо подсчет. Все остальное становится арифметикой.</li>
-    <li><strong>Посмотрите на каждый шаг: конверсия выше примерно 95 %.</strong>  и запустите на нем обходной запрос.</li>
-    <li><strong>Опубликовать оба тарифа</strong>, любое завершение и полный путь с метками на них.</li>
-    <li><strong>Постройте таблицу самого дальнего шага</strong>  и проверьте, что это добавляет к вашему количеству входов. Это единственное согласование, которое есть в воронке.</li>
-    <li><strong>Укажите окно в заголовке</strong>, а не в запросе, чтобы читатель знал, что означает «преобразованный».</li>
+    <li><strong>Check the top number against your visitor or session count.</strong> If it is larger, you are counting events.</li>
+    <li><strong>Reduce to one row per thing first</strong>, with a flag per step, before any counting happens. Everything else becomes arithmetic on that.</li>
+    <li><strong>Look at every step converting above about 95%</strong> and run the bypass query on it.</li>
+    <li><strong>Publish both rates</strong>, any-completion and full-path, with the labels on them.</li>
+    <li><strong>Build the furthest-step table</strong> and check it adds to your entry count. It is the only reconciliation a funnel has.</li>
+    <li><strong>State the window in the heading</strong>, not in the query, so the reader knows what "converted" means.</li>
   </ol>
 
-  <p>Если у вас под рукой есть бумага, один дополнительный эскиз стоит пяти минут. Нарисуйте воронку в виде прямоугольников, а затем нарисуйте каждую известную вам стрелку, которая пропускает поле: путь к сохраненной карте, заказ по телефону, продавец, вводящий ее вручную. У большинства воронок есть хотя бы одна, а у тех, у которых ее нет, обычно есть еще одна, которую еще никто не нарисовал.</p>
+  <p>If you have paper nearby, one optional sketch is worth five minutes. Draw your funnel as boxes, then draw every arrow you know about that skips a box: the saved-card path, the phone order, the salesperson entering it manually. Most funnels have at least one, and the ones with none usually have one nobody has drawn yet.</p>
 
-  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>. Если вы предпочитаете вводить запросы, а не читать о них,  <a href="../../drill/">SQL-детализация</a>  дает вам по одному выполняемому запросу к реальной базе данных.</div>
+  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>. If you would rather type queries than read about them, the <a href="../../drill/">SQL Drill</a> gives you one runnable query at a time against a real database.</div>
 
-  <h2>Все на одном экране</h2>
+  <h2>The whole thing on one screen</h2>
 
-  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
+  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
 
   <table>
-    <tr><th>Thing</th><th>Что он делает</th></tr>
-    <tr><td>Сначала три решения</td><td>Что считается, какие шаги, над каким окном.</td></tr>
-    <tr><td>Считайте вещь, а не событие</td><td><code>COUNT(DISTINCT session_id)</code>. Просмотры повторяются.</td></tr>
-    <tr><td>Условная агрегация</td><td><code>COUNT(DISTINCT CASE WHEN step='x' THEN id END)</code>, один столбец на шаг.</td></tr>
-    <tr><td>Почему это работает</td><td>CASE возвращает NULL, если шаг не соответствует, а COUNT пропускает нули.</td></tr>
-    <tr><td>Шаг за шагом</td><td>Каждый счет превышает тот, который над ним.</td></tr>
-    <tr><td>Overall</td><td>Каждый пересчитывается сверху. Скорость шага умножается на него.</td></tr>
-    <tr><td>Шаг на 100%</td><td>Не идеальный шаг. Шаг пропускается или регистрируется как побочный эффект.</td></tr>
-    <tr><td>В поисках обходного пути</td><td>Флаг для каждого сеанса, затем более поздний шаг равен 1, а более ранний шаг — 0.</td></tr>
-    <tr><td>Строгая воронка</td><td>Умножьте флаги:  <code>SUM(v*c*k*p)</code>. Требуется каждый предыдущий шаг.</td></tr>
-    <tr><td>Две основные ставки</td><td>Любое завершение и полный путь. Здесь 30,0% и 20,0%.</td></tr>
-    <tr><td>Стол для дальних шагов</td><td>Каждый сеанс один раз. Необходимо добавить к количеству входов.</td></tr>
-    <tr><td>КЕЙС заказывайте там</td><td>Сначала самый дальний шаг, поэтому каждый сеанс попадает в одну корзину.</td></tr>
-    <tr><td>Заказ внутри сеанса</td><td>Флаги не проверяют это. Сравнивать  <code>MIN(time)</code>  за шаг.</td></tr>
-    <tr><td>Окно</td><td>Без ограничений покупка, сделанная несколько месяцев спустя, будет сохранена в исходном виде.</td></tr>
-    <tr><td>Переименованные шаги</td><td>Обвал посередине. Сначала проверьте отдельные значения шагов.</td></tr>
-    <tr><td>Bots</td><td>Надуйте верх, опустите каждую ставку. Фильтруйте перед подсчетом.</td></tr>
+    <tr><th>Thing</th><th>What it does</th></tr>
+    <tr><td>Three decisions first</td><td>What is counted, what the steps are, over what window.</td></tr>
+    <tr><td>Count the thing, not the event</td><td><code>COUNT(DISTINCT session_id)</code>. Views get repeated.</td></tr>
+    <tr><td>Conditional aggregation</td><td><code>COUNT(DISTINCT CASE WHEN step='x' THEN id END)</code>, one column per step.</td></tr>
+    <tr><td>Why it works</td><td>CASE returns NULL when the step does not match, and COUNT skips nulls.</td></tr>
+    <tr><td>Step to step</td><td>Each count over the one above it.</td></tr>
+    <tr><td>Overall</td><td>Each count over the top. Step rates multiply to it.</td></tr>
+    <tr><td>A step at 100%</td><td>Not a perfect step. A step being skipped or logged as a side effect.</td></tr>
+    <tr><td>Finding the bypass</td><td>Flag per session, then later step is 1 and earlier step is 0.</td></tr>
+    <tr><td>Strict funnel</td><td>Multiply the flags: <code>SUM(v*c*k*p)</code>. Requires every earlier step.</td></tr>
+    <tr><td>Two headline rates</td><td>Any completion, and full path. Here 30.0% and 20.0%.</td></tr>
+    <tr><td>Furthest step table</td><td>Every session once. Must add to the entry count.</td></tr>
+    <tr><td>CASE order there</td><td>Furthest step first, so each session lands in one bucket.</td></tr>
+    <tr><td>Order within a session</td><td>Flags do not check it. Compare <code>MIN(time)</code> per step.</td></tr>
+    <tr><td>The window</td><td>No limit credits a purchase months later to the original view.</td></tr>
+    <tr><td>Renamed steps</td><td>A collapse in the middle. Check the distinct step values first.</td></tr>
+    <tr><td>Bots</td><td>Inflate the top, depress every rate. Filter before counting.</td></tr>
   </table>
 
-  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Постройте таблицу дальних шагов рядом с воронкой и проверьте, соответствует ли она количеству введенных сеансов. Количество воронок пересекается, поэтому они никогда не могут явно расходиться друг с другом; таблица самого дальнего шага разделяет одни и те же сеансы, поэтому это возможно, и это единственное согласование, которое имеет эта форма анализа. Если воронка ведет себя не так, как описано на этой странице, существует общая причина.  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>.</div>
+  <div class="note"><strong>The one habit to keep.</strong> Build the furthest-step table alongside the funnel and check it adds up to the number of sessions that entered. Funnel counts overlap, so they can never disagree with each other visibly; the furthest-step table partitions the same sessions, so it can, and it is the only reconciliation this shape of analysis has. If a funnel misbehaves in a way this page does not cover, there is a general <a href="../technical-tenacity/">diagnosis loop for being stuck</a>.</div>
 
-  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Тот, который я помню, был воронкой регистрации, где этап проверки электронной почты конвертировался в 99,6%, и все воспринимали это как хорошо продуманное электронное письмо, пока не выяснилось, что проверка автоматически завершалась для всех, кто приходил по партнерской ссылке, а реальное число для всех остальных составляло около шестидесяти. Какой подозрительно удачный шаг оказался в вашей собственности?</p>
+  <p>One last thought, and I would genuinely like other people's answers. The one I remember was a signup funnel where the email-verification step converted at 99.6%, which everyone read as a well-designed email, until it turned out verification was auto-completed for anyone arriving through a partner link and the real number for everybody else was around sixty. What has a suspiciously good step turned out to be in something you own?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Агравал Р. и Шрикант Р. (1995). Последовательный анализ шаблонов.  <em>Материалы 11-й Международной конференции по инженерии данных</em>, 3–14.</li>
-    <li>Риджуэй, В.Ф. (1956). Дисфункциональные последствия измерений производительности.  <em>Ежеквартальный журнал административной науки</em>, 1(2), 240–247.</li>
-    <li>Пан, SC, и Рикард, TC (2018). Передача обучения с расширенным тестированием: метааналитический обзор и синтез.  <em>Психологический вестник</em>, 144(7), 710–756.</li>
+    <li>Agrawal, R., &amp; Srikant, R. (1995). Mining sequential patterns. <em>Proceedings of the 11th International Conference on Data Engineering</em>, 3–14.</li>
+    <li>Ridgway, V. F. (1956). Dysfunctional consequences of performance measurements. <em>Administrative Science Quarterly</em>, 1(2), 240–247.</li>
+    <li>Pan, S. C., &amp; Rickard, T. C. (2018). Transfer of test-enhanced learning: Meta-analytic review and synthesis. <em>Psychological Bulletin</em>, 144(7), 710–756.</li>
   </ul>
 
   <div class="book">
-    <strong>Воронка состоит из пяти шагов, и на третьем этапе задействовано больше людей, чем на втором.</strong>
-    <p><em>SQL для аналитиков</em>  состоит из 458 страниц, запросы воронки построены таким образом, что на каждом этапе учитывается одно и то же население в одном и том же порядке.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-funnel-analysis'})">SQL для аналитиков, 19 $ →</a>
+    <strong>The funnel has five steps and step three has more people than step two.</strong>
+    <p><em>SQL for Analysts</em> is 458 pages, funnel queries built so each step counts the same population in the same order.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-funnel-analysis'})">SQL for Analysts, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>Практикуйте воронки на сеансах, которые вы можете посчитать вручную.</strong>
-    <p style="margin:6px 0 0">The <a href="../../sql/">SQL-кит</a>  дает вам повторения: условную агрегацию для записи, обход сеансов для поиска, строгие воронки для построения и флеш-карточки, на которых количество и какая скорость принадлежат. Теперь вы владеете методом; комплект - это практика. Ничего устанавливать, учетная запись не требуется.</p>
-    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
+    <strong>Practice funnels on sessions you can count by hand.</strong>
+    <p style="margin:6px 0 0">The <a href="../../sql/">SQL Kit</a> gives you the repetitions: conditional aggregation to write, bypass sessions to find, strict funnels to build, and flash cards on which count belongs in which rate. You now own the method; the kit is the practice. Nothing to install, no account needed.</p>
+    <a class="btn" href="../../sql/">Open the SQL Kit →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../sql-case-expression/">Выражение SQL CASE</a> · <a href="../sql-cohort-retention/">Удержание когорты в SQL</a> · <a href="../sql-subqueries/">Подзапрос против CTE</a> · <a href="../sql-running-total/">Проведение итогов в SQL</a> · <a href="../sql-dates/">Функции даты SQL</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-count-function/">СЧЕТ в SQL</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../../sql/">SQL-кит</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../report-vs-analysis/">Отчет против анализа</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../projects/">Портфельные проекты</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
+    <a href="../../">← Analyst Prep Kit</a> · <a href="../sql-case-expression/">The SQL CASE Expression</a> · <a href="../sql-cohort-retention/">Cohort Retention in SQL</a> · <a href="../sql-subqueries/">Subquery vs CTE</a> · <a href="../sql-running-total/">Running Total in SQL</a> · <a href="../sql-dates/">SQL Date Functions</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../sql-count-function/">COUNT in SQL</a> · <a href="../sql-joins/">SQL JOINs</a> · <a href="../../sql/">SQL Kit</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../entity-resolution/">Entity Resolution</a> · <a href="../report-vs-analysis/">Report vs Analysis</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../projects/">Portfolio Projects</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
   <script src="../../assets/plan-return.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

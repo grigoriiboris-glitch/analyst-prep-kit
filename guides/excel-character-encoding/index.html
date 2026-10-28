@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Excel CSV показывает Ã© вместо é: кодировка символов для людей, которые никогда не слышали эту фразу — комплект для подготовки аналитика</title>
-<meta name="description" content="Почему имена импортируются как тарабарщина: файл был написан в UTF-8, и Excel прочитал его как западноевропейский. Подпись Ã, Â и â, исправление Происхождение файла 65001 при импорте и почему это потеря данных, а не проблема со шрифтом. 4685 испорченных имен в одной реальной сборке.">
+<title>Excel CSV Shows Ã© Instead of é: Character Encoding for People Who Never Heard the Phrase — Analyst Prep Kit</title>
+<meta name="description" content="Why names import as gibberish: the file was written in UTF-8 and Excel read it as Western European. The Ã, Â and â€ signature, the File Origin 65001 fix at import, and why it is data loss rather than a font problem. 4,685 corrupted names in one real build.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-character-encoding/">
-<meta property="og:title" content="Имена появились как тарабарщина, а Excel ничего не сказал">
-<meta property="og:description" content="4685 из 82956 имен повреждены, ошибок нет. Текстовый файл должен указать, в каком алфавите он написан, но Excel ошибся.">
+<meta property="og:title" content="The Names Came In as Gibberish and Excel Said Nothing">
+<meta property="og:description" content="4,685 of 82,956 names corrupted, nothing errored. A text file has to say which alphabet it is written in, and Excel guessed wrong.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-character-encoding/">
 <meta name="twitter:card" content="summary_large_image">
@@ -106,147 +106,147 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../excel/">Excel комплект</a> · <a href="../excel-dashboard-build-order/">Статья 0: порядок сборки</a></p>
-  <h1>Имена появились как тарабарщина, а Excel ничего не сказал</h1>
-  <p class="meta">Статья 15 Excel для бизнес-аналитиков · Кодировка символов для людей, которые никогда не слышали эту фразу · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-07">7 августа 2026 г.</time></p>
+  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../excel/">Excel Kit</a> · <a href="../excel-dashboard-build-order/">Article 0: the build order</a></p>
+  <h1>The Names Came In as Gibberish and Excel Said Nothing</h1>
+  <p class="meta">Article 15 of Excel for Business Analysts · Character encoding, for people who never heard the phrase · Part of the <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-07">August 7, 2026</time></p>
 
-  <p>В этой статье вы найдете решение одной неприятной проблемы: импорта имен в качестве  <code>Ã©</code>, <code>Ã¼</code>  и ряды символов там, где должны быть буквы. Исправление при импорте — это один раскрывающийся список:  <strong>Данные &gt; Из текста/CSV установите для параметра «Происхождение файла» значение 65001: Юникод (UTF-8).</strong>. Остальная часть страницы посвящена тому, что произошло, как это обнаружить и почему все хуже, чем кажется.</p>
+  <p>This article gives you the fix for a specific ugly sight: names importing as <code>Ã©</code>, <code>Ã¼</code> and rows of symbols where letters should be. The fix at import is one dropdown: <strong>Data &gt; From Text/CSV, set File Origin to 65001: Unicode (UTF-8)</strong>. The rest of the page is what happened, how to spot it, and why it is worse than it looks.</p>
 
-  <p>Это хуже, чем кажется, потому что это не проблема со шрифтом. Эти имена теперь неправильные  <em>в данных</em>. Поищите настоящее название и не найдете. Присоединяйтесь по имени, и присоединение завершается неудачно. Это потеря данных, которая маскируется под сбой дисплея, поэтому и поставляется.</p>
+  <p>It is worse than it looks because it is not a font problem. Those names are now wrong <em>in the data</em>. Search for the real title and you will not find it. Join on the name and the join fails. It is data loss that dresses up as a display glitch, which is why it ships.</p>
 
-  <div class="note"><strong>Краткая версия.</strong>    В текстовом файле должно быть указано, в каком алфавите он написан. Файл написан в современном универсальном формате UTF-8. Эксель открыл его, приняв старый западноевропейский. Каждый символ за пределами простого английского языка воспринимался как неправильный символ.</div>
+  <div class="note"><strong>The short version.</strong> A text file has to say which alphabet it is written in. The file was written in the modern universal one, UTF-8. Excel opened it assuming the old Western European one. Every character outside plain English got read as the wrong symbols.</div>
 
-  <p>Это третья дверь семьи из  <a href="../excel-csv-import-leading-zeros/">статья 4</a> and <a href="../excel-sum-of-id-trap/">статья 6</a>: Excel решает, какие у вас данные, и никогда не упоминает об этом. В  <a href="../excel-dashboard-build-order/">сборка этой серии</a>  оно было обнаружено поздно, на готовой информационной панели: две из пятнадцати лучших игр отображались как мусор, а по данным файла, ущерб составил 4685 из 82956 названий. Никогда ничего не ошибалось.</p>
+  <p>This is the third door of the family from <a href="../excel-csv-import-leading-zeros/">article 4</a> and <a href="../excel-sum-of-id-trap/">article 6</a>: Excel deciding what your data is and never mentioning it. In <a href="../excel-dashboard-build-order/">the build behind this series</a> it was found late, in a finished dashboard: two of the top fifteen games displayed as garbage, and a count against the file put the damage at 4,685 of 82,956 names. Nothing had errored at any point.</p>
 
   <div class="toc">
-    <strong>Что здесь</strong>
+    <strong>What's here</strong>
     <ol>
-      <li>Что произошло, простыми словами</li>
-      <li>Как это определить: трехзначная подпись</li>
-      <li>Почему это потеря данных, а не глюк дисплея</li>
-      <li>Исправление при импорте</li>
-      <li>Исправление постфактум</li>
-      <li>Почему это сильнее всего бьет по именам</li>
-      <li>Запустите его в своем файле</li>
-      <li>Шпаргалка</li>
+      <li>What happened, in plain terms</li>
+      <li>How to spot it: the three-character signature</li>
+      <li>Why it is data loss, not a display glitch</li>
+      <li>The fix at import</li>
+      <li>The fix after the fact</li>
+      <li>Why it hits names hardest</li>
+      <li>Run it on your own file</li>
+      <li>A cheat sheet</li>
     </ol>
   </div>
 
-  <h2>Что произошло, простыми словами</h2>
-  <p>Текстовый файл на диске представляет собой просто пронумерованные коды, по одному на символ. Алфавит, кодировка профессионального слова, представляет собой кодовую книгу, в которой указано, какое число означает какую букву. Файл не содержит видимой кодовой книги. Программа, открывающая файл, должна знать или догадываться.</p>
-  <p>CSV сборки был написан в UTF-8, современном стандарте, который охватывает все языки, затрачивая два или более кода на любую букву, выходящую за рамки простого английского. Вместо этого устаревший открытый путь Excel угадал старую западноевропейскую кодовую книгу, которая всегда считывает один код на символ. Таким образом, каждая двухкодовая буква читалась как два отдельных неправильных символа. é, сохраненный в виде двух кодов, получился как  <code>Ã©</code>.</p>
-  <p>Предскажите, что это сделает с названием игры на румынском языке с четырьмя буквами с диакритическими знаками. Четыре двухкодовых буквы, восемь неправильных символов, а заголовок читается как тарабарщина. Именно строка «Приключение синего ребенка» указала на проблему в пятнадцати лучших сборках.</p>
+  <h2>What happened, in plain terms</h2>
+  <p>A text file on disk is just numbered codes, one per character. An alphabet, an encoding in the trade's word, is the codebook that says which number means which letter. The file does not carry its codebook visibly. The program opening the file has to know, or guess.</p>
+  <p>The build's CSV was written in UTF-8, today's standard, which covers every language by spending two or more codes on any letter beyond plain English. Excel's legacy open path guessed the old Western European codebook instead, which reads one code per character, always. So every two-code letter was read as two separate wrong characters. An é, stored as two codes, came out as <code>Ã©</code>.</p>
+  <p>Predict what that does to a Romanian game title with four accented letters. Four two-code letters, eight wrong characters, and the title reads as gibberish. That is exactly the "Aventura Copilului Albastru" row that flagged the problem in the build's top fifteen.</p>
 
-  <h2>Как это определить: трехзначная подпись</h2>
-  <p>У повреждения есть отпечаток пальца, поскольку неправильная кодовая книга сопоставляет ведущие коды UTF-8 с небольшим набором символов. Чаще всего появляются три последовательности:</p>
+  <h2>How to spot it: the three-character signature</h2>
+  <p>The corruption has a fingerprint, because the wrong codebook maps UTF-8's lead codes to a small set of characters. Three sequences do most of the appearing:</p>
   <table>
-    <tr><th>Понимаете</th><th>Вероятно, это было</th></tr>
-    <tr><td><code>Ã</code>  за которым следует символ:  <code>Ã©</code>, <code>Ã¼</code>, <code>Ã±</code>, <code>Ã€</code></td><td>Латинская буква с ударением: é, ü, ñ, À.</td></tr>
-    <tr><td><code>Â</code>  перед знаками препинания или пробелами</td><td>Неразрывный пробел или символ</td></tr>
-    <tr><td><code>â€</code>  плюс еще один:  <code>â€™</code>, <code>â€œ</code>, <code>â€"</code></td><td>Фигурные кавычки и тире из любого текстового процессора</td></tr>
-    <tr><td>Строки  <code>È</code>, <code>Ä</code>, <code>Å</code> pairs</td><td>Восточноевропейские, турецкие, нордические письма</td></tr>
+    <tr><th>You see</th><th>It was probably</th></tr>
+    <tr><td><code>Ã</code> followed by a symbol: <code>Ã©</code>, <code>Ã¼</code>, <code>Ã±</code>, <code>Ã€</code></td><td>An accented Latin letter: é, ü, ñ, À</td></tr>
+    <tr><td><code>Â</code> before punctuation or spaces</td><td>A non-breaking space or symbol</td></tr>
+    <tr><td><code>â€</code> plus one more: <code>â€™</code>, <code>â€œ</code>, <code>â€"</code></td><td>Curly quotes and dashes from any word processor</td></tr>
+    <tr><td>Strings of <code>È</code>, <code>Ä</code>, <code>Å</code> pairs</td><td>Eastern European, Turkish, Nordic letters</td></tr>
   </table>
-  <p>Каждое сопоставление в этой таблице было повторно выполнено путем фактического преобразования перед публикацией: é, прочитанное под неправильной кодовой книгой, действительно выходит  <code>Ã©</code>. Скажем, поиск, который вы бы провели, чтобы очистить файл для этого. Ctrl+Ф для    <code>Ã</code>  это весь аудит, и он занимает десять секунд.</p>
+  <p>Every mapping in that table was re-run through the actual conversion before publishing: é read under the wrong codebook really does come out <code>Ã©</code>. Say the search you would run to sweep a file for this. Ctrl+F for <code>Ã</code> is the whole audit, and it takes ten seconds.</p>
 
-  <h2>Почему это потеря данных, а не глюк дисплея</h2>
-  <p>Проблема со шрифтом будет означать, что сохраненное значение правильное, а пиксели неправильные. Это наоборот: пиксели точно показывают сохраненное значение, которое теперь неверно. Последствия в том порядке, в котором они обычно проявляются:</p>
-  <p><strong>Поиск не удался.</strong>  Пользователь ищет настоящее название. В камере находится искалеченный. Никакого совпадения и никаких намеков, почему.</p>
-  <p><strong>Объединения терпят неудачу.</strong>  Поиск по чистому списку источников соответствует имени. 4685 строк больше ничему не соответствуют, и за  <a href="../excel-check-your-work/">статья 2</a>  теме, неудавшееся совпадение не является ошибкой. Строки просто опускаются или пустуют.</p>
-  <p><strong>Группировка разбиений.</strong>  Один и тот же издатель, четко написанный в одном файле и искаженный в другом, становится двумя издателями, что  <a href="../entity-resolution/">проблема разрешения сущностей</a>  изготовлено из ничего.</p>
-  <p>Единственное милосердие: повреждение механическое, поэтому оно обратимо, если у вас все еще есть исходный файл, и часто даже из искаженного текста, потому что неправильное чтение было последовательным. Это приводит к двум исправлениям.</p>
+  <h2>Why it is data loss, not a display glitch</h2>
+  <p>A font problem would mean the stored value is right and the pixels are wrong. This is the reverse: the pixels faithfully show a stored value that is now wrong. Consequences, in the order they usually bite:</p>
+  <p><strong>Search fails.</strong> The user searches the real title. The cell holds the mangled one. No match, and no hint why.</p>
+  <p><strong>Joins fail.</strong> A lookup against a clean source list matches on the name. 4,685 rows no longer match anything, and per <a href="../excel-check-your-work/">article 2's</a> theme, a failed match does not error. The rows just drop or blank.</p>
+  <p><strong>Grouping splits.</strong> The same publisher spelled cleanly in one file and mangled in another becomes two publishers, which is <a href="../entity-resolution/">the entity-resolution problem</a> manufactured out of nothing.</p>
+  <p>The one mercy: the corruption is mechanical, so it is reversible if you still have the original file, and often even from the mangled text, because the wrong reading was consistent. Which leads to the two fixes.</p>
 
-  <h2>Исправление при импорте</h2>
+  <h2>The fix at import</h2>
   <ol>
-    <li><strong>Данные &gt; Из текста/CSV</strong>, та же дверь, что и  <a href="../excel-csv-import-leading-zeros/">статья 4</a>, и ни в коем случае не двойной щелчок.</li>
-    <li><strong>В предварительном просмотре вверху слева: «Происхождение файла».</strong>  Установите его на  <strong>65001: Юникод (UTF-8).</strong>.</li>
-    <li><strong>Посмотрите на строку, в которой, как вы знаете, есть акценты.</strong>  перед загрузкой. Предварительный просмотр — это тест: имена читаются как имена, готово.</li>
+    <li><strong>Data &gt; From Text/CSV</strong>, the same door as <a href="../excel-csv-import-leading-zeros/">article 4</a>, and never a double-click.</li>
+    <li><strong>In the preview, top-left: File Origin.</strong> Set it to <strong>65001: Unicode (UTF-8)</strong>.</li>
+    <li><strong>Look at a row you know has accents</strong> before loading. The preview is the test: names read as names, done.</li>
   </ol>
-  <p>Один импорт, два раскрывающихся списка, обе ловушки из этого семейства закрыты: Происхождение файла для алфавита, тип столбца Текст для идентификаторов. Эта пара и есть весь оборонительный смысл, и она стоит меньше минуты.</p>
+  <p>One import, two dropdowns, both traps from this family closed: File Origin for the alphabet, column type Text for the identifiers. That pairing is the whole defensive import, and it costs under a minute.</p>
 
-  <h2>Исправление постфактум</h2>
-  <p>Приборная панель сборки уже была собрана, когда обнаружилось повреждение, поэтому повторный импорт всего был дорогостоящим решением. Что он сделал вместо этого и что вообще работает:</p>
+  <h2>The fix after the fact</h2>
+  <p>The build's dashboard was already assembled when the damage surfaced, so re-importing everything was the expensive path. What it did instead, and what works in general:</p>
   <ol>
-    <li><strong>Вернитесь к необработанному CSV-файлу.</strong>, который существовал, потому что необработанные файлы никогда не перезаписываются. Перечитайте только поврежденный столбец под нужной кодировкой.</li>
-    <li><strong>Экспортируйте этот чистый столбец с отметкой порядка байтов.</strong>, короткий невидимый маркер в начале файла, который сообщает Excel, какой алфавит следует за ним, поэтому источник вставки правильно открывается на любом компьютере.</li>
-    <li><strong>Вставьте его поверх искажённого столбца, обновите опорные точки.</strong>  Имена восстанавливаются, соединения возвращаются, и проверки подтверждают, что количество строк не изменилось.</li>
+    <li><strong>Go back to the raw CSV</strong>, which existed because raw files never get overwritten. Re-read just the damaged column under the right encoding.</li>
+    <li><strong>Export that clean column with a byte order mark</strong>, a short invisible marker at the front of a file that tells Excel which alphabet follows, so the paste-source opens correctly on any machine.</li>
+    <li><strong>Paste it over the mangled column, refresh the pivots.</strong> Names heal, joins come back, and the checks confirm the row count never moved.</li>
   </ol>
-  <p>Если необработанный файл исчез, восстановление часто возможно путем отмены неправильного чтения, но это работа по спасению, а не рабочий процесс. Рабочий процесс представляет собой раскрывающийся список при импорте.</p>
+  <p>If the raw file is gone, recovery is still often possible by reversing the wrong reading, but that is a rescue job, not a workflow. The workflow is the dropdown at import.</p>
 
-  <h2>Почему это сильнее всего бьет по именам</h2>
-  <p>Обратите внимание, на какие столбцы попадает это семейство неудач. Числа выдерживают проблемы с кодировкой, потому что цифры находятся в простом английском диапазоне, с которым согласны все кодовые книги. Повреждения концентрируются в  <strong>names</strong>: люди, места, продукты, титулы. Колонки, к которым вы присоединяетесь, выполняете поиск и размещаете их перед читателями.</p>
-  <p>6% столбца кажутся жизнеспособными, пока в ключе соединения не будет 6% имен ваших клиентов. И затронутые строки не случайны: они систематически неанглоязычные, поэтому любой анализ, затрагивающий международные данные, незаметно теряет именно этот фрагмент. Построенная на его основе информационная панель будет недооценивать конкретную группу населения и выглядеть совершенно нормально, и к настоящему времени вы узнаете в этом повторяющегося злодея этого сериала: ошибку, которая возвращает достоверные цифры.</p>
+  <h2>Why it hits names hardest</h2>
+  <p>Notice which columns this family of failure lands on. Numbers survive encoding trouble, because digits sit in the plain-English range every codebook agrees on. The damage concentrates in <strong>names</strong>: people, places, products, titles. The columns you join on, search by, and put in front of readers.</p>
+  <p>6% of a column sounds survivable until it is 6% of your customer names in a join key. And the affected rows are not random: they are systematically the non-English ones, so any analysis touching international data quietly loses exactly that slice. A dashboard built on it would undercount a specific population and look completely fine, which by now you will recognize as this series' recurring villain: the error that returns confident numbers.</p>
 
-  <h2>Запустите его в своем файле</h2>
+  <h2>Run it on your own file</h2>
   <ol>
-    <li><strong>Ctrl+Ф для    <code>Ã</code></strong>  в любом импортированном наборе данных с именами. Десять секунд.</li>
-    <li><strong>Обращения: найдите необработанный файл и правильно импортируйте его.</strong>  Происхождение файла 65001, набор типов столбцов, согласно этой странице и статье 4.</li>
-    <li><strong>Нет необработанного файла: оцените перед спасением.</strong>  Сколько строк, которые анализируются, касаются столбца, затрагиваются ли ключи соединения.</li>
-    <li><strong>Добавьте канареечную проверку.</strong>  Сохраните одно значение с известным акцентом в контрольной ячейке:  <code>=COUNTIF(Games[Name],"*é*")</code>  или просто обратите внимание на закрепленную строку, в которой, как вы знаете, есть акценты. Если канарейка читается правильно, то и колонка, вероятно, так и делает.</li>
-    <li><strong>Исправьте конвейер, а не только файл.</strong>  Если экспортируемый файл попадает к вам на стол еженедельно, настройка «Происхождение файла» теперь является частью процедуры импорта, или эта статья также будет повторяться еженедельно.</li>
+    <li><strong>Ctrl+F for <code>Ã</code></strong> in any imported dataset with names in it. Ten seconds.</li>
+    <li><strong>Hits: find the raw file and re-import it properly.</strong> File Origin 65001, column types set, per this page and article 4.</li>
+    <li><strong>No raw file: assess before rescuing.</strong> How many rows, which analyses touch the column, whether the join keys are affected.</li>
+    <li><strong>Add the canary check.</strong> Keep one known-accented value in a check cell: <code>=COUNTIF(Games[Name],"*é*")</code> or simply eyeball a pinned row you know has accents. If the canary reads clean, the column probably does.</li>
+    <li><strong>Fix the pipeline, not just the file.</strong> If an export lands on your desk weekly, the File Origin setting is part of the import routine now, or this article reruns weekly too.</li>
   </ol>
 
   <div class="book">
-    <strong>Файл открылся. Каждое имя с акцентом возвращалось как мусор, и ничто не предупредило вас, что это произошло.</strong>
-    <p><em>Excel для аналитиков</em>  состоит из 378 страниц, кодирования, импорта и других мест, где Excel изменяет ваши данные по мере их поступления, с практическими вопросами, которые печатают ответ и причину, по которой он правильный.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-character-encoding'})">Excel для аналитиков, 19 долларов США →</a>
+    <strong>The file opened. Every accented name came back as garbage, and nothing warned you it had happened.</strong>
+    <p><em>Excel for Analysts</em> is 378 pages, encoding, imports and the other places Excel changes your data on the way in, with practice questions that print the answer and the reason it is right.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-character-encoding'})">Excel for Analysts, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>Сделайте оборонительный импорт рутинным.</strong>
-    <p style="margin:6px 0 0">The <a href="../../excel/">Excel комплект</a>    подробно описывает рабочий процесс импорта в сводку на рабочих примерах и пробном экзамене. Десятисекундный аудит Ctrl+Ф доступен вам прямо с этой страницы.</p>
-    <a class="btn" href="../../excel/" onclick="if(window.gtag)gtag('event','prompt_pack_click',{kit:'guide-excel-encoding'})">Откройте набор Excel →</a>
+    <strong>Make the defensive import routine.</strong>
+    <p style="margin:6px 0 0">The <a href="../../excel/">Excel Kit</a> drills the import-to-pivot workflow with worked examples and a mock exam. The ten-second Ctrl+F audit is yours from this page.</p>
+    <a class="btn" href="../../excel/" onclick="if(window.gtag)gtag('event','prompt_pack_click',{kit:'guide-excel-encoding'})">Open the Excel Kit →</a>
   </div>
 
-  <h2>Шпаргалка</h2>
+  <h2>A cheat sheet</h2>
   <table>
-    <tr><th>Situation</th><th>Do</th><th>Следите за</th></tr>
-    <tr><td>Любой CSV-файл с именами.</td><td>Данные &gt; Из текста/CSV, источник файла 65001</td><td>Перед загрузкой проверьте выделенную строку в предварительном просмотре.</td></tr>
-    <tr><td>Проверка файла на наличие повреждений</td><td>Ctrl+Ф для    <code>Ã</code>, затем  <code>â€</code></td><td>Попадания означают, что сохраненные значения неверны, а не шрифт.</td></tr>
-    <tr><td>Обнаружено повреждение, существует необработанный файл</td><td>Правильно импортируйте столбец, вставьте его, обновите.</td><td>Экспортируйте чистый столбец с отметкой порядка байтов.</td></tr>
-    <tr><td>Обнаружены повреждения, нет необработанного файла</td><td>Измените неправильное прочтение, как спасение</td><td>Проверьте любой внешний источник, который вы можете найти.</td></tr>
-    <tr><td>Объединяет загадочно выпадающие строки</td><td>Проверьте ключ соединения на наличие подписи</td><td>Выпавшие строки систематически неанглоязычные.</td></tr>
-    <tr><td>Регулярный экспорт</td><td>Включите Происхождение файла в рутину</td><td>Исправленный файл с поврежденным конвейером — исправление за одну неделю.</td></tr>
+    <tr><th>Situation</th><th>Do</th><th>Watch for</th></tr>
+    <tr><td>Any CSV with names in it</td><td>Data &gt; From Text/CSV, File Origin 65001</td><td>Check an accented row in the preview before loading</td></tr>
+    <tr><td>Sweeping a file for damage</td><td>Ctrl+F for <code>Ã</code>, then <code>â€</code></td><td>Hits mean the stored values are wrong, not the font</td></tr>
+    <tr><td>Damage found, raw file exists</td><td>Re-import the column correctly, paste over, refresh</td><td>Export the clean column with a byte order mark</td></tr>
+    <tr><td>Damage found, no raw file</td><td>Reverse the misreading, as a rescue</td><td>Verify against any external source you can find</td></tr>
+    <tr><td>Joins mysteriously dropping rows</td><td>Check the join key for the signature</td><td>The dropped rows are systematically the non-English ones</td></tr>
+    <tr><td>Recurring exports</td><td>Put File Origin in the routine</td><td>A fixed file with a broken pipeline is a one-week fix</td></tr>
   </table>
 
-  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Каждый импорт текстовых данных получает две настройки: происхождение файла 65001 для алфавита, тип текста для идентификаторов. Семейство бесшумных преобразователей имеет три двери, при этом закрывается последняя.</div>
+  <div class="note"><strong>The one habit to keep.</strong> Every import of text data gets two settings at the door: File Origin 65001 for the alphabet, Text type for the identifiers. The family of silent converters has three doors, and this closes the last one.</div>
 
   <div class="series">
-    <strong>Серия: Excel для бизнес-аналитиков.</strong>
-    <p style="margin:6px 0 8px">Каждая статья создается за один этап  <a href="../excel-dashboard-build-order/">та же настоящая сборка</a>, в порядке сборки. Ссылки активируются по мере публикации каждой из них.</p>
+    <strong>The series: Excel for Business Analysts.</strong>
+    <p style="margin:6px 0 8px">Every article comes out of one step of <a href="../excel-dashboard-build-order/">the same real build</a>, in build order. Links go live as each one publishes.</p>
     <ol start="0">
-      <li value="0"><a href="../excel-dashboard-build-order/">Создайте информационную панель в следующем порядке: правильно, затем ясно, затем убедительно.</a></li>
-      <li><a href="../excel-label-rows-before-charting/">Пометьте свои строки, прежде чем составлять их диаграмму.</a></li>
-      <li><a href="../excel-check-your-work/">Проверяйте свою работу, прежде чем это сделает кто-то другой</a></li>
-      <li><a href="../excel-name-your-data/">Назовите свои данные, чтобы ваши формулы перестали нарушаться</a></li>
-      <li><a href="../excel-csv-import-leading-zeros/">Диалог, который незаметно удаляет ваши почтовые индексы</a></li>
-      <li><a href="../excel-pivot-table-question/">Сводная таблица — это вопрос, а не отчет</a></li>
-      <li><a href="../excel-sum-of-id-trap/">Excel просто суммировал ваши идентификационные номера и ничего не сказал.</a></li>
-      <li><a href="../excel-pivot-percentages/">Проценты — это вся история, а Excel их скрывает</a></li>
-      <li><a href="../excel-custom-number-formats/">Покажите единицу, не нарушая цифру</a></li>
-      <li><a href="../excel-pick-the-chart/">Выберите диаграмму, ваш номер уже определен</a></li>
-      <li><a href="../excel-chart-design-basics/">Основы проектирования диаграмм: уберите что-то, а затем укажите</a></li>
-      <li><a href="../excel-if-family/">По одной строке за раз или все строки сразу</a></li>
-      <li><a href="../excel-kpi-row/">Четыре числа сверху обозначают более четырех графиков.</a></li>
-      <li><a href="../excel-sort-your-bars/">Отсортируйте гистограмму, иначе это ничего не значит</a></li>
-      <li><a href="../excel-circular-findings/">Открытие, которое было всего лишь вашим собственным определением</a></li>
-      <li>Имена были бредом, а Excel ничего не сказал (эта статья).</li>
-      <li><a href="../excel-slicers/">Сделайте по одному управляющему диску для каждой диаграммы на странице.</a></li>
-      <li><a href="../excel-dashboard-claim/">Напишите предложение, о котором спорит ваша панель мониторинга</a></li>
+      <li value="0"><a href="../excel-dashboard-build-order/">Build a dashboard in this order: correct, then clear, then compelling</a></li>
+      <li><a href="../excel-label-rows-before-charting/">Label your rows before you chart them</a></li>
+      <li><a href="../excel-check-your-work/">Check your work before anyone else does</a></li>
+      <li><a href="../excel-name-your-data/">Name your data so your formulas stop breaking</a></li>
+      <li><a href="../excel-csv-import-leading-zeros/">The dialog that quietly deletes your zip codes</a></li>
+      <li><a href="../excel-pivot-table-question/">A pivot table is a question, not a report</a></li>
+      <li><a href="../excel-sum-of-id-trap/">Excel just summed your ID numbers and said nothing</a></li>
+      <li><a href="../excel-pivot-percentages/">Percentages are the whole story and Excel hides them</a></li>
+      <li><a href="../excel-custom-number-formats/">Show the unit without breaking the number</a></li>
+      <li><a href="../excel-pick-the-chart/">Pick the chart your number already decided</a></li>
+      <li><a href="../excel-chart-design-basics/">Chart design basics: take things away, then point</a></li>
+      <li><a href="../excel-if-family/">One row at a time, or all rows at once</a></li>
+      <li><a href="../excel-kpi-row/">Four numbers across the top do more than four charts</a></li>
+      <li><a href="../excel-sort-your-bars/">Sort your bar chart or it means nothing</a></li>
+      <li><a href="../excel-circular-findings/">The finding that was just your own definition</a></li>
+      <li>The names came in as gibberish and Excel said nothing (this article)</li>
+      <li><a href="../excel-slicers/">Make one control drive every chart on the page</a></li>
+      <li><a href="../excel-dashboard-claim/">Write the sentence your dashboard is arguing</a></li>
     </ol>
   </div>
 
-  <p>Прямо сейчас запустите десятисекундный аудит самого большого импортированного файла, который вы открывали на этой неделе. Что сделало Ctrl+Ф    <code>Ã</code>  вернуться с?</p>
+  <p>Run the ten-second audit right now on the biggest imported file you have open this week. What did Ctrl+F <code>Ã</code> come back with?</p>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../excel-dashboard-build-order/">Порядок строительства (статья 0)</a> · <a href="../excel-absolute-vs-relative-references/">Абсолютные и относительные ссылки</a> · <a href="../excel-csv-import-leading-zeros/">Диалоговое окно импорта CSV (статья 4)</a> · <a href="../excel-sum-of-id-trap/">Ловушка суммы идентификаторов (статья 6)</a> · <a href="../excel-check-your-work/">Проверьте свою работу (статья 2)</a> · <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../migration-cleaning/">Очистка миграции</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../what-is-data-analysis/">Что такое анализ данных?</a> · <a href="../../excel/">Excel комплект</a> · <a href="../../viz/">Виз Дрель</a> · <a href="../../projects/">Портфельные проекты</a>
-    <a class="coffee" href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a>
+    <a href="../../">← Analyst Prep Kit</a> · <a href="../excel-dashboard-build-order/">The Build Order (Article 0)</a> · <a href="../excel-absolute-vs-relative-references/">Absolute vs Relative References</a> · <a href="../excel-csv-import-leading-zeros/">The CSV Import Dialog (Article 4)</a> · <a href="../excel-sum-of-id-trap/">The Sum-of-ID Trap (Article 6)</a> · <a href="../excel-check-your-work/">Check Your Work (Article 2)</a> · <a href="../entity-resolution/">Entity Resolution</a> · <a href="../migration-cleaning/">Migration Cleaning</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../what-is-data-analysis/">What Is Data Analysis?</a> · <a href="../../excel/">Excel Kit</a> · <a href="../../viz/">Viz Drill</a> · <a href="../../projects/">Portfolio Projects</a>
+    <a class="coffee" href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

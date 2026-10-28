@@ -1,6 +1,6 @@
 ﻿<!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>COUNT в SQL: COUNT(*) против COUNT(столбец) против COUNT(DISTINCT), для начинающих — комплект подготовки аналитика</title>
-<meta name="description" content="Руководство для начинающих по SQL COUNT: чем отличаются COUNT(*), COUNT(столбец) и COUNT(DISTINCT столбец), почему значения NULL приводят к их разногласиям, как COUNT сочетается с GROUP BY и как аналитики используют COUNT для проверки миграции данных и проверки реального набора данных.">
+<title>COUNT in SQL: COUNT(*) vs COUNT(column) vs COUNT(DISTINCT), for Beginners — Analyst Prep Kit</title>
+<meta name="description" content="Beginner guide to SQL COUNT: how COUNT(*), COUNT(column), and COUNT(DISTINCT column) differ, why NULLs make them disagree, how COUNT pairs with GROUP BY, and how analysts use COUNT to verify a data migration and check a real dataset.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-count-function/">
-<meta property="og:title" content="COUNT в SQL, объяснение для начинающих">
-<meta property="og:description" content="COUNT(*) против COUNT(столбец) против COUNT(DISTINCT) — что на самом деле имеет значение каждый из них, почему значения NULL имеют значение и как аналитики используют COUNT для проверки миграции и данных аудита.">
+<meta property="og:title" content="COUNT in SQL, Explained for Beginners">
+<meta property="og:description" content="COUNT(*) vs COUNT(column) vs COUNT(DISTINCT) — what each one really counts, why NULLs matter, and how analysts use COUNT to verify migrations and audit data.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/sql-count-function.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/sql-count-function/">
@@ -129,30 +129,30 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../sql/">SQL-кит</a></p>
-  <h1>COUNT в SQL, объяснение для начинающих</h1>
-  <p class="meta">Аналитики одной функции выполняют больше, чем любую другую · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Обновлено  <time datetime="2026-07-29">29 июля 2026 г.</time></p>
+  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../sql/">SQL Kit</a></p>
+  <h1>COUNT in SQL, Explained for Beginners</h1>
+  <p class="meta">The one function analysts run more than any other · Part of the <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Updated <time datetime="2026-07-29">July 29, 2026</time></p>
 
-  <p><code>COUNT</code>  выглядит как самая простая функция в SQL, и именно она незаметно сбивает с толку большинство людей на собеседованиях и на работе. Путаница почти всегда одна и та же:  <code>COUNT(*)</code>, <code>COUNT(column)</code>, и  <code>COUNT(DISTINCT column)</code>  выглядят почти одинаково, но считают три разные вещи. Как только вы сможете сказать вслух, что каждый из них имеет значение, многое откроется. Вы можете проверить миграцию данных, найти дубликаты и измерить степень полноты столбца — и все это с помощью одной и той же маленькой функции. Это руководство и представляет собой объяснение с множеством небольших примеров, которые вы можете скопировать.</p>
+  <p><code>COUNT</code> looks like the simplest function in SQL, and it is the one that quietly trips up the most people in interviews and on the job. The confusion is almost always the same: <code>COUNT(*)</code>, <code>COUNT(column)</code>, and <code>COUNT(DISTINCT column)</code> look nearly identical but count three different things. Once you can say out loud what each one counts, a lot opens up. You can verify a data migration, find duplicates, and measure how complete a column is, all with the same little function. This guide is that explanation, with lots of small examples you can copy.</p>
 
-  <div class="note"><strong>Версия из одного предложения.</strong> <code>COUNT(*)</code> counts <em>rows</em>. <code>COUNT(column)</code> counts <em>строки, в которых этот столбец не равен NULL</em>. <code>COUNT(DISTINCT column)</code> counts <em>сколько разных значений, отличных от NULL</em>  в этом столбце есть. Все, что ниже, — это всего лишь предложение, замедленное.</div>
+  <div class="note"><strong>The one-sentence version.</strong> <code>COUNT(*)</code> counts <em>rows</em>. <code>COUNT(column)</code> counts <em>rows where that column is not NULL</em>. <code>COUNT(DISTINCT column)</code> counts <em>how many different non-NULL values</em> that column has. Everything below is just that sentence, slowed down.</div>
 
   <div class="toc">
-    <strong>Что здесь</strong>
+    <strong>What's here</strong>
     <ol>
-      <li>Три формы COUNT и что каждая из них учитывает</li>
-      <li>Правило NULL, которое заставляет их не соглашаться</li>
-      <li>COUNT(*) против COUNT(DISTINCT): разница, о которой спрашивают интервьюеры</li>
-      <li>COUNT с GROUP BY: подсчет по группе</li>
-      <li>Как аналитики используют COUNT при миграции данных</li>
-      <li>Использование COUNT в вашем собственном проекте портфолио</li>
-      <li>Шпаргалка COUNT</li>
+      <li>The three forms of COUNT and what each one counts</li>
+      <li>The NULL rule that makes them disagree</li>
+      <li>COUNT(*) vs COUNT(DISTINCT): the difference interviewers ask about</li>
+      <li>COUNT with GROUP BY: counting per group</li>
+      <li>How analysts use COUNT in a data migration</li>
+      <li>Using COUNT on your own portfolio project</li>
+      <li>A COUNT cheat sheet</li>
     </ol>
   </div>
 
-  <h2>Три формы COUNT и что каждая из них учитывает</h2>
-  <p>Представьте себе один маленький столик,  <code>customers</code>, с  <code>region</code>  столбец, в котором две строки никогда не заполнялись:</p>
+  <h2>The three forms of COUNT and what each one counts</h2>
+  <p>Picture one small table, <code>customers</code>, with a <code>region</code> column where two rows were never filled in:</p>
   <table>
     <tr><th>id</th><th>name</th><th>region</th></tr>
     <tr><td>1</td><td>Maya</td><td>North</td></tr>
@@ -161,7 +161,7 @@
     <tr><td>4</td><td>Sam</td><td><em>NULL</em></td></tr>
     <tr><td>5</td><td>Taylor</td><td><em>NULL</em></td></tr>
   </table>
-  <p>Теперь запустите на нем три формы:</p>
+  <p>Now run the three forms on it:</p>
   <pre><code>SELECT
   COUNT(*)                 AS all_rows,
   COUNT(region)            AS rows_with_region,
@@ -172,40 +172,39 @@ FROM customers;</code></pre>
     <tr><td>5</td><td>3</td><td>2</td></tr>
   </table>
   <ul>
-    <li><strong><code>COUNT(*)</code> = 5.</strong>  В каждой строке, без исключений.  <code>*</code>  означает «саму строку», поэтому значения NULL не имеют значения.</li>
-    <li><strong><code>COUNT(region)</code> = 3.</strong>  Только те строки, где  <code>region</code>  имеет ценность. Сэм и Тейлор пропущены, поскольку их регион равен NULL.</li>
-    <li><strong><code>COUNT(DISTINCT region)</code> = 2.</strong>  Просто разные значения  <code>North</code> and <code>South</code>. Два севера сворачиваются в один, а NULL не учитывается.</li>
+    <li><strong><code>COUNT(*)</code> = 5.</strong> Every row, no exceptions. The <code>*</code> means "the row itself," so NULLs never matter.</li>
+    <li><strong><code>COUNT(region)</code> = 3.</strong> Only the rows where <code>region</code> has a value. Sam and Taylor are skipped because their region is NULL.</li>
+    <li><strong><code>COUNT(DISTINCT region)</code> = 2.</strong> The different values are just <code>North</code> and <code>South</code>. The two Norths collapse to one, and NULL is not counted.</li>
   </ul>
 
-  <h2>Правило NULL, которое заставляет их не соглашаться</h2>
-  <p>Сначала спрогнозируйте это. В таблице 100 строк. У двадцати из них нет адреса электронной почты. Что вам дает подсчет столбца электронной почты? Назовите число, прежде чем читать дальше.</p>
-  <p>Вот весь трюк в одной строке:</p>
-  <p><strong><code>COUNT(*)</code>  считает строки.  <code>COUNT(something)</code>  подсчитывает значения, отличные от NULL, этого чего-то.</strong></p>
-  <p>Таким образом, в тот момент, когда в столбце есть NULL,  <code>COUNT(column)</code>  возвращается  <em>smaller</em> than <code>COUNT(*)</code>. Этот пробел не является ошибкой, это информация: именно в скольких строках отсутствует значение в этом столбце.</p>
-  <div class="note"><strong>Превратите этот пробел в проверку недостающих данных.</strong>  Количество пробелов в столбце — это просто разница между двумя значениями:
-  
+  <h2>The NULL rule that makes them disagree</h2>
+  <p>Predict it first. A table has 100 rows. Twenty of them have no email address. What does counting the email column give you? Say the number before you read on.</p>
+  <p>Here is the whole trick in one line:</p>
+  <p><strong><code>COUNT(*)</code> counts rows. <code>COUNT(something)</code> counts non-NULL values of that something.</strong></p>
+  <p>So the moment a column has any NULLs, <code>COUNT(column)</code> comes back <em>smaller</em> than <code>COUNT(*)</code>. That gap is not a bug, it is information: it is exactly how many rows are missing a value in that column.</p>
+  <div class="note"><strong>Turn the gap into a missing-data check.</strong> The number of blanks in a column is just the difference between the two counts:
   <pre style="margin:10px 0 0"><code>SELECT COUNT(*) - COUNT(region) AS missing_regions
 FROM customers;   -- returns 2</code></pre></div>
-  <p>Еще одно последствие, о котором люди забывают: потому что  <code>COUNT(column)</code>  игнорирует NULL,  <code>COUNT(1)</code> and <code>COUNT(*)</code>  это одно и то же (константа  <code>1</code>  никогда не является NULL), но  <code>COUNT(a_column_full_of_nulls)</code>  может быть  <code>0</code>. Если вам просто нужно узнать, сколько строк, нажмите  <code>COUNT(*)</code>  и никогда больше не думать об этом.</p>
+  <p>One more consequence people forget: because <code>COUNT(column)</code> ignores NULLs, <code>COUNT(1)</code> and <code>COUNT(*)</code> are the same thing (the constant <code>1</code> is never NULL), but <code>COUNT(a_column_full_of_nulls)</code> can be <code>0</code>. When you just want "how many rows," reach for <code>COUNT(*)</code> and never think about it again.</p>
 
-  <h2>COUNT(*) против COUNT(DISTINCT): разница, о которой спрашивают интервьюеры</h2>
-  <p>Это классический вопрос о воспоминании, и на него стоит ответить без колебаний. Произнесите свой ответ вслух сейчас, одним предложением, прежде чем смотреть на таблицу. Читать таблицу и кивать — это не то же самое, что уметь произнести это в комнате.</p>
+  <h2>COUNT(*) vs COUNT(DISTINCT): the difference interviewers ask about</h2>
+  <p>This is the classic recall question, and it is worth being able to answer without hesitating. Say your answer out loud now, in one sentence, before you look at the table. Reading the table and nodding is not the same as being able to say it in a room.</p>
   <table>
-    <tr><th>Ты пишешь</th><th>Ты вернешься</th></tr>
-    <tr><td><code>COUNT(*)</code></td><td>Сколько там рядов.</td></tr>
-    <tr><td><code>COUNT(order_id)</code></td><td>Сколько строк имеют идентификатор заказа (отличный от NULL).</td></tr>
-    <tr><td><code>COUNT(DISTINCT order_id)</code></td><td>Сколько  <em>different</em>  order_ids есть.</td></tr>
+    <tr><th>You write</th><th>You get back</th></tr>
+    <tr><td><code>COUNT(*)</code></td><td>How many rows there are.</td></tr>
+    <tr><td><code>COUNT(order_id)</code></td><td>How many rows have an order_id (non-NULL).</td></tr>
+    <tr><td><code>COUNT(DISTINCT order_id)</code></td><td>How many <em>different</em> order_ids there are.</td></tr>
   </table>
-  <p>Когда эти цифры различаются, вы чему-то научились. Если  <code>COUNT(*)</code>  больше, чем  <code>COUNT(DISTINCT order_id)</code>, некоторый идентификатор заказа появляется более одного раза, что означает, что у вас есть    <strong>повторяющиеся строки</strong>. Это единственное сравнение — самая быстрая проверка дубликатов в SQL:</p>
+  <p>When those numbers differ, you have learned something. If <code>COUNT(*)</code> is bigger than <code>COUNT(DISTINCT order_id)</code>, some order_id appears more than once, meaning you have <strong>duplicate rows</strong>. That single comparison is the fastest duplicate check in SQL:</p>
   <pre><code>SELECT
   COUNT(*)                  AS total_rows,
   COUNT(DISTINCT order_id)  AS unique_orders,
   COUNT(*) - COUNT(DISTINCT order_id) AS duplicate_rows
 FROM orders;</code></pre>
-  <p>If <code>duplicate_rows</code> is <code>0</code>, каждый заказ указывается один раз. Если оно больше нуля, именно столько дополнительных копий скрывается в таблице.</p>
+  <p>If <code>duplicate_rows</code> is <code>0</code>, every order is listed once. If it is anything above zero, that is how many extra copies are hiding in the table.</p>
 
-  <h2>COUNT с GROUP BY: подсчет по группе</h2>
-  <p>Само по себе,  <code>COUNT</code>  дает одно число для всей таблицы. Добавлять  <code>GROUP BY</code>  и это дает одно число  <em>За группу</em>  вместо.  <code>GROUP BY</code>  сортирует строки по ячейкам по столбцу, который вы называете, и  <code>COUNT</code>  работает внутри каждого контейнера:</p>
+  <h2>COUNT with GROUP BY: counting per group</h2>
+  <p>On its own, <code>COUNT</code> gives one number for the whole table. Add <code>GROUP BY</code> and it gives one number <em>per group</em> instead. <code>GROUP BY</code> sorts the rows into bins by the column you name, and <code>COUNT</code> runs inside each bin:</p>
   <pre><code>SELECT region, COUNT(*) AS customers
 FROM customers
 GROUP BY region
@@ -216,43 +215,43 @@ ORDER BY customers DESC;</code></pre>
     <tr><td>South</td><td>1</td></tr>
     <tr><td><em>NULL</em></td><td>2</td></tr>
   </table>
-  <div class="note"><strong>Посмотрите группу NULL.</strong> <code>GROUP BY</code>  сохраняет NULL в качестве своего собственного контейнера, поэтому два клиента с пустой областью отображаются как группа NULL из 2. Это отличается от  <code>COUNT(region)</code>, что полностью отбрасывает их. Те же данные, два честных ответа, потому что вы задали два разных вопроса.</div>
-  <p>Тонкое, но важное сочетание:  <code>COUNT(*)</code>  считает каждую строку в группе, в то время как  <code>COUNT(column)</code>  учитываются только те строки в группе, где заполнен этот столбец. Группировка клиентов по регионам и чтение  <code>COUNT(*)</code>  рядом с  <code>COUNT(email)</code>  сообщает вам в каждом регионе, сколько у вас клиентов и скольким из них вы действительно можете отправить электронное письмо.</p>
+  <div class="note"><strong>Watch the NULL group.</strong> <code>GROUP BY</code> keeps NULL as its own bin, so the two blank-region customers show up as a NULL group of 2. That is different from <code>COUNT(region)</code>, which drops them entirely. Same data, two honest answers, because you asked two different questions.</div>
+  <p>A subtle but important pairing: <code>COUNT(*)</code> counts every row in the group, while <code>COUNT(column)</code> counts only the rows in the group where that column is filled in. Grouping customers by region and reading <code>COUNT(*)</code> next to <code>COUNT(email)</code> tells you, per region, how many customers you have and how many of them you can actually email.</p>
 
-  <h2>Как аналитики используют COUNT при миграции данных</h2>
-  <p>Данные часто перемещаются из одного места в другое: CSV в базу данных, старая система в новую, необработанная таблица в очищенную.  <code>COUNT</code>  это первое, что вы запускаете с обеих сторон. Это самый дешевый способ ответить на вопрос: «Все ли пришло и что-нибудь прокралось дважды?» Большую часть суммы покрывают три проверки.</p>
+  <h2>How analysts use COUNT in a data migration</h2>
+  <p>Data often moves from one place to another: a CSV into a database, an old system into a new one, a raw table into a cleaned one. <code>COUNT</code> is the first thing you run on both sides. It is the cheapest way to answer "did everything arrive, and did anything sneak in twice?" Three checks cover most of it.</p>
 
   <div class="step">
-    <h2>1. Все ли строки пришли? (сверка количества строк)</h2>
-    <p>Посчитайте источник, посчитайте пункт назначения и сравните. Они должны точно совпадать.</p>
+    <h2>1. Did every row arrive? (row-count reconciliation)</h2>
+    <p>Count the source, count the destination, and compare. They should match exactly.</p>
     <pre><code>SELECT COUNT(*) FROM customers_raw;   -- the imported original
 SELECT COUNT(*) FROM customers;       -- the cleaned copy</code></pre>
-    <p>Если в очищенной таблице меньше строк, значит, на этапе очистки были удалены записи (возможно, фильтр был слишком агрессивным). Если их больше, соединение разветвляется и умножает строки. В любом случае, два несовпадающих значения — это ваш сигнал остановиться и посмотреть, прежде чем строить что-то сверху.</p>
+    <p>If the cleaned table has fewer rows, a cleaning step dropped records (maybe a filter was too aggressive). If it has more, a join fanned out and multiplied rows. Either way, the two counts not matching is your signal to stop and look before you build anything on top.</p>
   </div>
 
   <div class="step">
-    <h2>2. Создала ли миграция дубликаты? (COUNT против COUNT DISTINCT)</h2>
-    <p>Выберите столбец, который должен быть уникальным (ключ, например  <code>customer_id</code>) и сравните два значения:</p>
+    <h2>2. Did the migration create duplicates? (COUNT vs COUNT DISTINCT)</h2>
+    <p>Pick the column that is supposed to be unique (the key, like <code>customer_id</code>) and compare the two counts:</p>
     <pre><code>SELECT
   COUNT(*)                     AS rows,
   COUNT(DISTINCT customer_id)  AS unique_ids
 FROM customers;</code></pre>
-    <p>If <code>rows</code>  больше, чем  <code>unique_ids</code>, один и тот же клиент попадает в таблицу более одного раза, и каждая сумма, которую вы вычислите позже, будет завышена. Это одно сравнение выявляет целый класс ошибок миграции.</p>
+    <p>If <code>rows</code> is larger than <code>unique_ids</code>, the same customer landed in the table more than once and every total you compute later will be inflated. This one comparison catches a whole class of migration bugs.</p>
   </div>
 
   <div class="step">
-    <h2>3. Насколько заполнен каждый столбец? (COUNT(*) против COUNT(столбец))</h2>
-    <p>Для любого столбца, который вас интересует, скорость заполнения — это всего лишь два значения, расположенных рядом:</p>
+    <h2>3. How complete is each column? (COUNT(*) vs COUNT(column))</h2>
+    <p>For any column you care about, the fill rate is just the two counts side by side:</p>
     <pre><code>SELECT
   COUNT(*)                                       AS rows,
   COUNT(email)                                   AS has_email,
   ROUND(100.0 * COUNT(email) / COUNT(*), 1)      AS email_pct
 FROM customers;</code></pre>
-    <p>Теперь вместо того, чтобы гадать, вы можете сказать: «У 94% перенесенных клиентов есть адрес электронной почты». Сделайте это для важных столбцов, и вы получите отчет о полноте, прежде чем кто-либо его попросит.</p>
+    <p>Now you can say "94% of migrated customers have an email" instead of guessing. Do this for the columns that matter and you have a completeness report before anyone asks for one.</p>
   </div>
 
-  <h2>Использование COUNT в вашем собственном проекте портфолио</h2>
-  <p>Представьте себе уже имеющийся у вас набор данных и три числа, которые это вам даст: сколько строк, сколько различных значений в вашем основном столбце и сколько строк не содержат этого значения. Если эти три цифры вас удивят, значит, вы еще не знаете своих данных. Каждый набор данных заслуживает одного и того же первого шага. Прежде чем написать одно сообщение, запустите COUNT, чтобы понять, что вы имеете в виду. Например, в наборе данных игр:</p>
+  <h2>Using COUNT on your own portfolio project</h2>
+  <p>Picture a dataset you already have, and picture the three numbers this would give you: how many rows, how many distinct values in your main column, and how many rows are missing that value. If those three numbers would surprise you, you do not yet know your data. Every dataset deserves the same opening move. Before you write a single insight, run COUNT to understand what you are holding. On a games dataset, for example:</p>
   <pre><code>-- How big is it, and how many distinct studios and genres?
 SELECT
   COUNT(*)                  AS games,
@@ -266,45 +265,45 @@ SELECT
   COUNT(price)         AS has_price,
   COUNT(release_date)  AS has_date
 FROM games;</code></pre>
-  <p>Руководить описанием проекта со словами «в наборе данных 83 201 игра в 41 жанре, а у 6% не указана дата выпуска» — это похоже на аналитика, а не на новичка. Это также защищает вас: знание того, где находятся NULL, не позволяет вам впоследствии незаметно недосчитаться. Привычка «сначала посчитать, потом проанализировать» — именно то, что  <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a>  гид опирается на что  <a href="../documenting-data-limitations/">Документирование ограничений данных</a>  руководство превращается в письменную запись.</p>
+  <p>Leading a project write-up with "the dataset has 83,201 games across 41 genres, and 6% are missing a release date" reads like an analyst, not a beginner. It also protects you: knowing where the NULLs are stops you from quietly under-counting later. This "count first, then analyze" habit is exactly what the <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> guide leans on, and what the <a href="../documenting-data-limitations/">Documenting Data Limitations</a> guide turns into a written record.</p>
 
-  <h2>Шпаргалка COUNT</h2>
+  <h2>A COUNT cheat sheet</h2>
   <table>
-    <tr><th>Вы хотите знать…</th><th>Write</th></tr>
-    <tr><td>Сколько строк в этой таблице</td><td><code>COUNT(*)</code></td></tr>
-    <tr><td>Сколько строк имеют значение в этом столбце</td><td><code>COUNT(column)</code></td></tr>
-    <tr><td>В скольких строках отсутствует это значение?</td><td><code>COUNT(*) - COUNT(column)</code></td></tr>
-    <tr><td>Сколько разных значений имеет столбец</td><td><code>COUNT(DISTINCT column)</code></td></tr>
-    <tr><td>Есть ли в ключевом столбце дубликаты</td><td><code>COUNT(*)</code> vs <code>COUNT(DISTINCT key)</code></td></tr>
-    <tr><td>Количество для каждой категории</td><td><code>COUNT(*) … GROUP BY category</code></td></tr>
-    <tr><td>Какая часть столбца заполнена</td><td><code>COUNT(column) * 100.0 / COUNT(*)</code></td></tr>
+    <tr><th>You want to know…</th><th>Write</th></tr>
+    <tr><td>How many rows are in this table</td><td><code>COUNT(*)</code></td></tr>
+    <tr><td>How many rows have a value in this column</td><td><code>COUNT(column)</code></td></tr>
+    <tr><td>How many rows are missing that value</td><td><code>COUNT(*) - COUNT(column)</code></td></tr>
+    <tr><td>How many different values a column has</td><td><code>COUNT(DISTINCT column)</code></td></tr>
+    <tr><td>Whether a key column has duplicates</td><td><code>COUNT(*)</code> vs <code>COUNT(DISTINCT key)</code></td></tr>
+    <tr><td>A count for each category</td><td><code>COUNT(*) … GROUP BY category</code></td></tr>
+    <tr><td>What fraction of a column is filled in</td><td><code>COUNT(column) * 100.0 / COUNT(*)</code></td></tr>
   </table>
-  <div class="note"><strong>Скажите это вслух.</strong>  Прежде чем выполнить COUNT, закончите предложение: «Это подсчитает число ___». Если вы можете заполнить пробел  <em>rows</em>, <em>ненулевые значения X</em>, или  <em>разные значения X</em>, вы выбрали правильную форму. В этом предложении и заключается весь навык.</div>
+  <div class="note"><strong>Say it out loud.</strong> Before you run a COUNT, finish this sentence: "This will count the number of ___." If you can fill the blank with <em>rows</em>, <em>non-NULL values of X</em>, or <em>different values of X</em>, you have picked the right form. That sentence is the whole skill.</div>
 
-  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: SQL, Tableau, миграция данных и связанные с ними рабочие привычки.</div>
+  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: SQL, Tableau, data migration, and the working habits around them.</div>
 
   <div class="book">
-    <strong>COUNT(*) и COUNT(столбец) вернулись разными, и ничего не сказало, какой из них вы хотите.</strong>
-    <p><em>SQL для аналитиков</em>  составляет 458 страниц, если считать по отдельности, включая то, что каждая версия делает с NULL.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-count-function'})">SQL для аналитиков, 19 $ →</a>
+    <strong>COUNT(*) and COUNT(column) came back different and nothing said which one you wanted.</strong>
+    <p><em>SQL for Analysts</em> is 458 pages, counting taken apart case by case, including what every version does with a NULL.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-sql-count-function'})">SQL for Analysts, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>Сделайте COUNT, GROUP BY, JOIN и все остальное естественным.</strong>
-    <p style="margin:6px 0 0">The <a href="../../sql/">SQL-кит</a>    обучает основам аналитического SQL на рабочих примерах, интерактивной лаборатории JOIN и Агрегация, которую вы запускаете в браузере, флэш-карточках и пробном экзамене. Нечего устанавливать.</p>
-    <a class="btn" href="../../sql/">Откройте набор SQL →</a>
-      <p style="margin:10px 0 0;font-size:15px">Или приступайте к делу и учитесь, написав запросы:  <a href="../../drill/">открыть SQL-детализация</a>, тринадцать запросов, каждый из которых добавляет что-то одно к последнему.</p>
+    <strong>Make COUNT, GROUP BY, JOIN, and the rest second nature.</strong>
+    <p style="margin:6px 0 0">The <a href="../../sql/">SQL Kit</a> teaches the core of analyst SQL with worked examples, a live JOIN and Aggregation lab you run in the browser, flash cards, and a mock exam. Nothing to install.</p>
+    <a class="btn" href="../../sql/">Open the SQL Kit →</a>
+      <p style="margin:10px 0 0;font-size:15px">Or get right into it and learn by writing queries: <a href="../../drill/">open SQL Drill</a>, thirteen queries that each add one thing to the last.</p>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../sql-foundations/">Основы SQL</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-ctes/">SQL CTE</a> · <a href="../sql-window-functions/">Оконные функции</a> · <a href="../tableau-relationships/">Табличные отношения</a> · <a href="../tableau-sets/">Наборы таблиц</a> · <a href="../../drill/">SQL-детализация</a> · <a href="../what-is-data-analysis/">Что такое анализ данных?</a> · <a href="../sql-teaching-comments/">Комментирование SQL</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> &middot; <a href="../sql-case-expression/">выражение CASE</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../git-for-analysts/">Git для аналитиков</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../data-driven-thresholds/">Пороги, управляемые данными</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../entity-resolution/">Разрешение объекта</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../sql-aliasing/">SQL-псевдонимы</a> &middot; <a href="../../sql/">SQL-кит</a> · <a href="../../projects/">Портфельные проекты</a>
+    <a href="../../">← Analyst Prep Kit</a> &middot; <a href="../sql-foundations/">SQL Foundations</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../sql-ctes/">SQL CTEs</a> · <a href="../sql-window-functions/">Window Functions</a> · <a href="../tableau-relationships/">Tableau Relationships</a> · <a href="../tableau-sets/">Tableau Sets</a> · <a href="../../drill/">SQL Drill</a> · <a href="../what-is-data-analysis/">What Is Data Analysis?</a> · <a href="../sql-teaching-comments/">Commenting SQL</a> · <a href="../sql-joins/">SQL JOINs</a> &middot; <a href="../sql-case-expression/">The CASE Expression</a> · <a href="../set-up-a-sql-database/">Set Up a SQL Database</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../git-for-analysts/">Git for Analysts</a> · <a href="../sql-and-python/">SQL + Python</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../data-driven-thresholds/">Data-Driven Thresholds</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../entity-resolution/">Entity Resolution</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../sql-aliasing/">SQL Aliases</a> &middot; <a href="../../sql/">SQL Kit</a> · <a href="../../projects/">Portfolio Projects</a>
     
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Как подключить Excel к базе данных SQL (и прекратить вставку) — комплект для подготовки аналитика</title>
-<meta name="description" content="Подключите Excel к SQL-сервер, Постгрес, MySQL или SQLite с помощью Power Query, чтобы ежемесячный отчет обновлялся с помощью одной кнопки, а не вставки. Путь по меню, пробел в ODBC и что делать, если ИТ-специалист говорит «нет».">
+<title>How to Connect Excel to a SQL Database (And Stop Pasting) — Analyst Prep Kit</title>
+<meta name="description" content="Connect Excel to SQL Server, Postgres, MySQL or SQLite with Power Query, so the monthly report refreshes with one button instead of a paste. The menu path, the ODBC gap, and what to do when IT says no.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/connect-excel-to-a-database/">
-<meta property="og:title" content="Как подключить Excel к базе данных SQL (и прекратить вставку)">
-<meta property="og:description" content="Наклеенная таблица – это фотография. Соединение — это окно. Сегодня те же цифры, и только один из них в следующем месяце окажется верным.">
+<meta property="og:title" content="How to Connect Excel to a SQL Database (And Stop Pasting)">
+<meta property="og:description" content="A pasted table is a photograph. A connection is a window. Same numbers today, and only one of them is still right next month.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/connect-excel-to-a-database.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/connect-excel-to-a-database/">
@@ -134,18 +134,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../excel/">Excel комплект</a> · <a href="../">Все руководства</a></p>
-  <h1>Как подключить Excel к базе данных SQL</h1>
-  <p class="meta">Четыре клика — и таблица, которая обновляется сама собой, и честная версия того, что делать, если коннектор отсутствует · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-08">8 августа 2026 г.</time></p>
+  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../excel/">Excel Kit</a> · <a href="../">All guides</a></p>
+  <h1>How to Connect Excel to a SQL Database</h1>
+  <p class="meta">Four clicks to a table that refreshes itself, and the honest version of what to do when the connector is missing · Part of the <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-08">August 8, 2026</time></p>
 
-  <p>К концу этой страницы ваша таблица будет получать свои цифры прямо из базы данных, поэтому отчет в следующем месяце будет состоять из одного «Обновить все» вместо экспорта, вставки и молчаливой молитвы, которую вы вставили в нужные столбцы. Путь  <strong>Данные, затем Получить данные, затем Из базы данных</strong>, а остальная часть страницы — это те части, которые после этого пошли не так.</p>
+  <p>By the end of this page your spreadsheet will pull its numbers straight from a database, so next month's report is one Refresh All instead of an export, a paste, and a silent prayer that you pasted into the right columns. The path is <strong>Data, then Get Data, then From Database</strong>, and the rest of this page is the parts that go wrong after that.</p>
 
-  <p>Вот чем на самом деле заняться сегодня. Подключитесь к одной таблице, которую вы сейчас копируете вручную, загрузите ее на лист и нажмите «Обновить» один раз, чтобы увидеть ее обновление. Пока не перестраивайте весь отчет. Одна подключенная таблица научит вас всему механизму.</p>
+  <p>Here is what to actually do today. Connect to one table you currently copy by hand, load it to a worksheet, and press Refresh once to watch it update. Do not rebuild your whole report yet. One connected table teaches you the whole mechanism.</p>
 
-  <p>Краткая версия: в Excel есть встроенный инструмент Power Query, который фиксирует подключение и этапы очистки, поэтому оба они воспроизводятся по требованию. В меню SQL-сервер, Постгрес, MySQL и другие. SQLite — нет, и что с этим делать, описано в разделе 5.</p>
+  <p>The short version: Excel has a built-in tool called Power Query that holds the connection and the cleaning steps, so both replay on demand. SQL Server, Postgres, MySQL and others are in the menu. SQLite is not, and section 5 is what to do about that.</p>
 
-  <p>Разница между пастой и соединением — это единственная идея, достойная статьи, поэтому она дает представление о картине.</p>
+  <p>The difference between a paste and a connection is the one idea worth the page, so it gets the picture.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 250" role="img" aria-labelledby="ceTitle ceDesc" xmlns="http://www.w3.org/2000/svg">
@@ -186,101 +186,101 @@
         <path d="M712 216 v10 l7 5" stroke="#B45309" stroke-width="2.5" fill="none" stroke-linecap="round"/>
       </g>
     </svg>
-    <figcaption>Обе таблицы содержат одни и те же цифры на день их создания. Только подключенный в следующем месяце еще исправен, потому что труба еще есть и через нее тянется одна кнопка.</figcaption>
+    <figcaption>Both spreadsheets hold the same numbers on the day they are made. Only the connected one is still correct next month, because the pipe is still there and one button pulls through it.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>Что ты будешь делать</strong>
+    <strong>What you'll do</strong>
     <ol>
-      <li>Почему соединение лучше вставки</li>
-      <li>Найдите Power Query, как бы ни выглядел ваш Excel</li>
-      <li>Подключитесь к SQL-сервер, Постгрес или MySQL.</li>
-      <li>Загрузите его и выберите в этом диалоговом окне</li>
-      <li>SQLite и пробел в ODBC</li>
-      <li>Пусть база данных сделает всю тяжелую работу</li>
-      <li>Обновите, и что ломается на чужих машинах</li>
-      <li>Полное до и после</li>
-      <li>Что пошло не так и как это исправить</li>
-      <li>Почему это работает</li>
-      <li>Использование этого в ваших собственных отчетах</li>
-      <li>Все на одном экране</li>
+      <li>Why connecting beats pasting</li>
+      <li>Find Power Query, whatever your Excel looks like</li>
+      <li>Connect to SQL Server, Postgres or MySQL</li>
+      <li>Load it, and the choice in that dialog</li>
+      <li>SQLite, and the ODBC gap</li>
+      <li>Let the database do the heavy lifting</li>
+      <li>Refresh, and what breaks on other people's machines</li>
+      <li>The full before and after</li>
+      <li>What goes wrong, and the fix</li>
+      <li>Why this works</li>
+      <li>Using this on your own reports</li>
+      <li>The whole thing on one screen</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Пути меню здесь соответствуют текущему Excel для Окна.</strong>    и были проверены на соответствие собственной документации Microsoft Power Query 8 августа 2026 года. Excel для Мак имеет меньший набор соединителей, а меню «Получить данные» устроено по-другому, поэтому воспринимайте пути Окна как справочные и рассчитывайте на небольшую охоту на Мак.</div>
+  <div class="note"><strong>The menu paths here match current Excel for Windows</strong> and were checked against Microsoft's own Power Query documentation on 8 August 2026. Excel for Mac has a smaller set of connectors and the Get Data menu is arranged differently, so treat the Windows paths as the reference and expect to hunt slightly on a Mac.</div>
 
   <div class="step">
-    <h2>1. Почему соединение лучше склеивания</h2>
+    <h2>1. Why connecting beats pasting</h2>
 
-    <p>Перед объяснением: подумайте о последнем отчете, который вы восстановили из экспорта. Сколько из этих минут было потрачено на принятие решений и сколько на перемещение данных из одного окна в другое?</p>
+    <p>Before the explanation: think about the last report you rebuilt from an export. How many of those minutes were spent on judgement, and how many on moving data from one window to another?</p>
 
-    <p>Оклейка не медленная из-за пасты. Это медленно, потому что вставка — это только четвертый шаг из семи, а остальные шесть повторяются каждый раз: запустить запрос, экспортировать его, открыть файл, исправить столбцы, которые вошли в виде текста, вставить в нужное место, проверить, что формулы все еще указывают в правильном диапазоне, повторно применить форматирование.</p>
+    <p>Pasting is not slow because of the paste. It is slow because the paste is only step four of seven, and the other six get repeated every single time: run the query, export it, open the file, fix the columns that came in as text, paste into the right place, check the formulas still point at the right range, re-apply the formatting.</p>
 
-    <p>Соединение заменяет все семь одной кнопкой, поскольку Power Query записывает всю последовательность в виде шагов и воспроизводит их. И это устраняет целый класс ошибок, а не просто экономит время. Вставка, которая перемещает один столбец влево, создает неправильный отчет, который выглядит совершенно нормально, что является худшим видом ошибки.</p>
+    <p>A connection replaces all seven with one button, because Power Query records the whole sequence as steps and replays them. And it removes an entire class of error rather than just saving time. A paste that lands one column to the left produces a report that is wrong and looks completely normal, which is the worst kind of wrong there is.</p>
   </div>
 
   <div class="step">
-    <h2>2. Найдите Power Query, как бы ни выглядел ваш Эксель.</h2>
+    <h2>2. Find Power Query, whatever your Excel looks like</h2>
 
-    <p>Power Query встроен в Excel уже много лет, но он скрывается под разными именами в зависимости от того, насколько стара ваша версия. На  <strong>Data</strong>  найдите один из них в следующем порядке:</p>
+    <p>Power Query is built into Excel and has been for years, but it hides under different names depending on how old your version is. On the <strong>Data</strong> tab, look for one of these, in this order:</p>
 
     <ul>
-      <li><strong>Получить данные</strong>, слева от вкладки «Данные». Это текущее имя и то, что используется в остальной части этой страницы.</li>
-      <li><strong>Новый запрос</strong>, в старых версиях. Тот же инструмент, то же меню внизу.</li>
-      <li>A <strong>Получить и трансформировать</strong>  группа с кнопками, а не одно меню. Тоже тот же инструмент.</li>
+      <li><strong>Get Data</strong>, on the left of the Data tab. This is the current name and what the rest of this page uses.</li>
+      <li><strong>New Query</strong>, in older versions. Same tool, same menu underneath.</li>
+      <li>A <strong>Get &amp; Transform</strong> group with buttons rather than one menu. Also the same tool.</li>
     </ul>
 
-    <p>Если вы ничего из этого не нашли, возможно, вы используете Excel для Мак или очень старую версию. Мак Эксель имеет меньше разъемов и другое расположение; для более старых версий может потребоваться отдельная установка надстройки Мощность запроса. Советы по экспорту файла, приведенные в разделе 5, — это путь, который работает везде.</p>
+    <p>If you find none of these, you are probably on Excel for Mac or a very old version. Mac Excel has fewer connectors and a different arrangement; older versions may need the Power Query add-in installed separately. Section 5's advice about exporting a file is the route that works everywhere.</p>
   </div>
 
   <div class="step">
-    <h2>3. Подключитесь к SQL-сервер, Постгрес или MySQL.</h2>
+    <h2>3. Connect to SQL Server, Postgres or MySQL</h2>
 
-    <p>Путь  <strong>Данные, Получить данные, Из базы данных</strong>, затем ваш двигатель. В качестве рабочего примера возьмем SQL-сервер, потому что он есть на большинстве рабочих мест.</p>
+    <p>The path is <strong>Data, Get Data, From Database</strong>, then your engine. Take SQL Server as the worked example, because it is the one most workplaces have.</p>
 
-    <p>Диалог запрашивает  <strong>Server</strong>  и, по желанию,  <strong>Database</strong>. Сервер — это имя машины, которое ваши коллеги используют в своих подключениях. Это самый быстрый способ сделать все правильно: вместо того, чтобы гадать, попросите снимок экрана чьего-то рабочего соединения. Если оставить базу данных пустой, вы увидите все на этом сервере, что вам разрешено видеть, что является полезным способом осмотра в первый раз.</p>
+    <p>A dialog asks for a <strong>Server</strong> and, optionally, a <strong>Database</strong>. Server is the machine name your colleagues use in their own connections, which is the fastest way to get it right: ask for a screenshot of someone's working connection rather than guessing. Leaving Database blank shows you everything on that server you are allowed to see, which is a useful way to look around the first time.</p>
 
-    <p>Затем спрашивает, как войти.  <strong>Windows</strong>  означает вашу существующую сетевую учетную запись и не требует ввода пароля где-либо, что проще и безопаснее.  <strong>Database</strong>    означает отдельное имя пользователя и пароль, выданные для этого сервера. Используйте Окна, если вам специально не были предоставлены учетные данные.</p>
+    <p>Then it asks how to sign in. <strong>Windows</strong> means your existing network account and needs no password typed anywhere, which is both easier and safer. <strong>Database</strong> means a separate username and password issued for that server. Use Windows unless you were specifically given credentials.</p>
 
-    <p>Затем Excel отображает навигатор со списком таблиц и представлений. Нажмите один из них, чтобы просмотреть его, отметьте его, и вы находитесь в одном диалоге от завершения. Предпочитаю  <strong>view</strong>  по необработанной таблице, если она существует с разумным именем, потому что представление обычно представляет собой чью-то упорядоченную, согласованную версию этих данных, и ее использование означает, что ваши числа совпадают с их числами.</p>
+    <p>Excel then shows a Navigator listing the tables and views. Click one to preview it, tick it, and you are one dialog from finished. Prefer a <strong>view</strong> over a raw table when one exists with a sensible name, because a view is usually somebody's tidied, agreed version of that data, and using it means your numbers match theirs.</p>
   </div>
 
   <div class="step">
-    <h2>4. Загрузите его и выберите в этом диалоговом окне</h2>
+    <h2>4. Load it, and the choice in that dialog</h2>
 
-    <p>«Навигатор» предлагает  <strong>Load</strong> and <strong>Преобразование данных</strong>, и разница имеет большее значение, чем кажется.</p>
+    <p>The Navigator offers <strong>Load</strong> and <strong>Transform Data</strong>, and the difference matters more than it looks.</p>
 
-    <p><strong>Load</strong>  помещает таблицу на лист как есть.  <strong>Преобразование данных</strong>  сначала открывает редактор Power Query, где вы можете удалять столбцы, фильтровать строки, переименовывать заголовки, исправлять типы данных и разделять поля. Каждое ваше действие записывается как шаг в списке справа, и этот список воспроизводится при каждом последующем обновлении.</p>
+    <p><strong>Load</strong> drops the table onto a worksheet as it is. <strong>Transform Data</strong> opens the Power Query editor first, where you can remove columns, filter rows, rename headers, fix data types and split fields. Every action you take is recorded as a step in a list on the right, and that list replays on every future refresh.</p>
 
-    <p>Этот список — настоящая награда. Очистка, выполненная в редакторе, произойдет автоматически в следующем месяце; та же самая очистка, сделанная вручную в камерах, должна быть повторена вручную в следующем месяце тем, кто держит файл. Выберите «Преобразовать данные» по умолчанию, даже если единственное, что вы делаете, — это удаляете три ненужных столбца.</p>
+    <p>That list is the real prize. Cleaning done in the editor happens again next month automatically; the same cleaning done by hand in cells has to be redone by hand next month, by whoever is holding the file. Choose Transform Data by default, even if the only thing you do is remove three columns you do not need.</p>
 
-    <p>Когда вы нажимаете «Закрыть и загрузить», вы также можете выбрать, где он появится. А  <strong>Table</strong>  на листе подходит для всего, на что вы хотите посмотреть.  <strong>Только создать соединение</strong>  это правильно, когда данные подаются только в сводную таблицу, и они удерживают миллион строк на вашем листе, оставаясь при этом полностью пригодными для использования, и в этом заключается хитрость электронных таблиц, которые остаются небольшими и быстрыми.</p>
+    <p>When you press Close &amp; Load, you also get a choice of where it lands. A <strong>Table</strong> on a worksheet is right for anything you want to look at. <strong>Only Create Connection</strong> is right when the data is only feeding a PivotTable, and it keeps a million rows out of your worksheet while still being fully usable, which is the trick behind spreadsheets that stay small and quick.</p>
   </div>
 
   <div class="step">
-    <h2>5. SQLite и пробел в ODBC</h2>
+    <h2>5. SQLite, and the ODBC gap</h2>
 
-    <p>Прежде чем читать дальше, скажите, почему база данных может отсутствовать в меню, в котором перечислено дюжину других.</p>
+    <p>Say why a database might be missing from a menu that lists a dozen others, before reading on.</p>
 
-    <p>В меню перечислены соединители, которые Майкрософт решила создать и поддерживать. SQLite не входит в их число, что удивляет людей, которые только что изучили SQL на SQLite, поскольку там разумно началось руководство. Ничего не сломано, и вы не пропустили настройку.</p>
+    <p>The menu lists the connectors Microsoft chose to build and maintain. SQLite is not one of them, which surprises people who have just learned SQL on SQLite because a tutorial sensibly started there. Nothing is broken and you have not missed a setting.</p>
 
-    <p>Есть два честных маршрута, и для большинства новичков лучше второй.</p>
+    <p>There are two honest routes, and for most beginners the second is better.</p>
 
-    <p><strong>Установите драйвер ODBC.</strong>  ODBC — это уровень трансляции: установите небольшой драйвер для вашей базы данных, зарегистрируйте его один раз, и он появится в Excel в разделе «Получить данные», «Из других источников», «Из ODBC». Он работает хорошо, и для установки программного обеспечения требуется разрешение, что на рабочей машине часто означает билет.</p>
+    <p><strong>Install an ODBC driver.</strong> ODBC is a translation layer: install a small driver for your database, register it once, and it then appears in Excel under Get Data, From Other Sources, From ODBC. It works well and it needs permission to install software, which on a work machine often means a ticket.</p>
 
-    <p><strong>Экспортируйте ответ и подключитесь к файлу.</strong>    Запустите запрос в инструменте базы данных, сохраните результат в формате CSV и используйте «Получить данные», «Из файла», «Из текста/CSV». Вы сохраняете механизм обновления, поскольку повторный запуск запроса и перезапись того же файла заставляет Обновить работать точно так же, как и раньше. То, от чего вы отказываетесь, — это автоматическая часть.</p>
+    <p><strong>Export the answer and connect to the file.</strong> Run your query in your database tool, save the result as CSV, and use Get Data, From File, From Text/CSV. You keep the refresh mechanism, because re-running the query and overwriting the same file makes Refresh work exactly as before. What you give up is the automatic part.</p>
 
-    <p>Второй путь звучит как поражение, но обычно таковым не является, потому что вам все равно придется суммировать в SQL. Какой следующий раздел.</p>
+    <p>The second route sounds like a defeat and usually is not, because you should be summarising in SQL anyway. Which is the next section.</p>
   </div>
 
   <div class="step">
-    <h2>6. Пусть база данных сделает всю тяжелую работу</h2>
+    <h2>6. Let the database do the heavy lifting</h2>
 
-    <p>Самая распространенная ошибка здесь — подключение к необработанной таблице транзакций с миллионами строк и последующая группировка ее в Эксель. Он работает до тех пор, пока не перестает работать, а сбой заключается в электронной таблице, которая открывается за две минуты и в конечном итоге отказывается открываться.</p>
+    <p>The most common mistake here is connecting to a raw transaction table with millions of rows and then grouping it in Excel. It works until it does not, and the failure is a spreadsheet that takes two minutes to open and eventually refuses to.</p>
 
-    <p>Базы данных созданы именно для этого, а Excel — нет. Сначала подведите итоги, затем соедините. Одна строка в день для каждого продукта вместо одной строки для каждой продажи обычно превращает миллионы строк в тысячи, и каждая диаграмма, которую вы собирались построить, работает одинаково в меньшей таблице.</p>
+    <p>Databases are built for exactly this and Excel is not. Summarise first, then connect. One row per day per product instead of one row per sale usually turns millions of rows into thousands, and every chart you were going to build works identically on the smaller table.</p>
 
-    <p>Вы можете записать эту сводку непосредственно в соединение: в диалоговом окне SQL-сервер есть    <strong>SQL-оператор</strong>    Коробка именно для этой цели, и все, что вы туда поместите, запускается на сервере, прежде чем что-либо попадет на вашу машину.</p>
+    <p>You can write that summary directly into the connection: the SQL Server dialog has a <strong>SQL statement</strong> box for exactly this purpose, and whatever you put there runs on the server before anything travels to your machine.</p>
 
     <pre><code>SELECT order_date,
        product_category,
@@ -290,24 +290,24 @@ FROM sales
 WHERE order_date &gt;= '2026-01-01'
 GROUP BY order_date, product_category;</code></pre>
 
-    <p>Если этот запрос незнаком,  <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a>  является руководством для этого. Стоит принять во внимание одно предостережение: запрос, введенный в это поле, представляет собой фиксированный текст, поэтому Excel не сможет сложить обратно в него ваши последующие фильтры. Это честная сделка, когда запрос уже выполняет суммирование, и плохая, если вы вставляете  <code>SELECT *</code>.</p>
+    <p>If that query is unfamiliar, <a href="../sql-group-by-having/">GROUP BY and HAVING</a> is the guide for it. One caution worth knowing: a query typed into that box is fixed text, so Excel cannot be clever about folding your later filters back into it. That is a fair trade when the query is already doing the summarising, and a poor one if you paste in <code>SELECT *</code>.</p>
 
-    <p>Теперь представьте себе отчет, который вы перестраиваете чаще всего. Какова степень детализации одной строки исходных данных и действительно ли что-либо в готовом отчете нуждается в этой детализации? Если ответ отрицательный, сводка принадлежит запросу.</p>
+    <p>Now picture the report you rebuild most often. At what grain is one row of its source data, and does anything in the finished report actually need that grain? If the answer is no, the summary belongs in the query.</p>
   </div>
 
   <div class="step">
-    <h2>7. Обновляемся, и что ломается на чужих машинах</h2>
+    <h2>7. Refresh, and what breaks on other people's machines</h2>
 
-    <p>Обновление  <strong>Данные, затем обновить все</strong>или щелкните таблицу правой кнопкой мыши и выберите «Обновить». Чтобы сделать это автоматически, щелкните правой кнопкой мыши таблицу, выберите «Свойства таблицы» или «Свойства соединения» и установите флажок «Обновлять данные при открытии файла».</p>
+    <p>Refreshing is <strong>Data, then Refresh All</strong>, or right-click the table and choose Refresh. To make it automatic, right-click the table, choose Table Properties or Connection Properties, and tick Refresh data when opening the file.</p>
 
-    <p>Затем отправьте этот файл коллеге и наблюдайте, как он терпит неудачу, что и произойдет по причине, которую стоит понять. В книге хранится адрес базы данных и форма запроса. Он не сохраняет ваше разрешение на его чтение. Вашему коллеге нужен собственный доступ к тому же серверу, а если он находится за пределами офиса, ему также может понадобиться сеть компании.</p>
+    <p>Then send that file to a colleague and watch it fail, which it will, for a reason worth understanding. The workbook stores the address of the database and the shape of the query. It does not store your permission to read it. Your colleague needs their own access to the same server, and if they are outside the office they may need the company network as well.</p>
 
-    <p>Таким образом, подключенная книга — это инструмент для людей, которые могут добраться до источника. Всем остальным вместо этого отправьте им цифры: вставьте готовое резюме в виде значений на новый лист или экспортируйте PDF-файл. Это не обходной путь, это правильный ответ на другой вопрос.</p>
+    <p>So a connected workbook is a tool for people who can reach the source. For everyone else, send them the numbers instead: paste the finished summary as values into a fresh sheet, or export a PDF. That is not a workaround, it is the correct answer to a different question.</p>
   </div>
 
-  <h2>Полное до и после</h2>
+  <h2>The full before and after</h2>
 
-  <p>Тот же ежемесячный отчет, те же цифры.</p>
+  <p>Same monthly report, same numbers.</p>
 
   <h3>Before</h3>
   <pre><code>1. Run the query in the database tool
@@ -317,7 +317,7 @@ GROUP BY order_date, product_category;</code></pre>
 5. Check the formulas still cover the new range
 6. Re-apply the formatting
 7. Repeat next month</code></pre>
-  <p>Сорок минут, если все пойдет не так, и один молчаливый риск, который никогда не исчезнет: если экспорт когда-либо будет содержать другое количество строк, шаг 4 либо перезапишет текущие формулы, либо оставит строки прошлого месяца ниже новых. Ничего не ошибается. Сумма просто неверная.</p>
+  <p>Forty minutes if nothing goes wrong, and one silent risk that never goes away: if the export ever contains a different number of rows, step 4 either overwrites live formulas or leaves last month's rows below the new ones. Nothing errors. The total is simply wrong.</p>
 
   <h3>After</h3>
   <pre><code>1. Data → Get Data → From Database → From SQL Server Database
@@ -325,104 +325,104 @@ GROUP BY order_date, product_category;</code></pre>
 3. Transform Data: remove three columns, set the date type, filter to this year
 4. Close &amp; Load → Table
 5. Next month: Refresh All</code></pre>
-  <p>Шаги с 1 по 4 выполняются один раз. Шаг 5 — это ежемесячная работа, которая занимает секунды. Фиксация даты и удаление столбцов сохраняются как шаги, а не как привычки, поэтому они сохраняются, когда вы находитесь в отпуске, а риск подсчета строк исчезает, поскольку таблица изменяет размер сама, и любые формулы, написанные для нее, следуют.</p>
+  <p>Steps 1 to 4 happen once. Step 5 is the monthly job and it takes seconds. The date fix and the column removals are stored as steps rather than as habits, so they survive you being on holiday, and the row-count risk disappears because the table resizes itself and any formulas written against it follow.</p>
 
   <div class="step">
-    <h2>Что пошло не так и как это исправить</h2>
+    <h2>What goes wrong, and the fix</h2>
 
-    <p>Шесть, на долю которых приходится большая часть боли.</p>
+    <p>Six that account for most of the pain.</p>
 
-    <p><strong>«Невозможно подключиться» или ошибка входа.</strong>  Спросите у коллеги точное имя сервера его рабочего соединения. Угадывание имен серверов — это то, как исчезают дни, и имя часто включает в себя экземпляр или порт, о которых никто не упоминает вслух.</p>
+    <p><strong>"Cannot connect" or a login failure.</strong> Ask a colleague for the exact server name from their working connection. Guessing at server names is how afternoons disappear, and the name often includes an instance or a port that nobody mentions out loud.</p>
 
-    <p><strong>Вашей базы данных нет в меню.</strong>  Появляются только встроенные разъемы. Используйте ODBC с драйвером или экспортируйте в CSV и подключитесь к нему. Раздел 5.</p>
+    <p><strong>Your database is not in the menu.</strong> Only built-in connectors appear. Use ODBC with a driver, or export to CSV and connect to that. Section 5.</p>
 
-    <p><strong>Обновление происходит очень медленно.</strong>  Вы тянете больше строк, чем вам нужно. Фильтруйте и группируйте внутри запроса, а не после него, поэтому работа происходит на сервере.</p>
+    <p><strong>Refresh is very slow.</strong> You are pulling more rows than you need. Filter and group inside the query rather than after it, so the work happens on the server.</p>
 
-    <p><strong>Из кодов исчезли ведущие нули.</strong>  Столбец почтовых индексов или номеров счетов прибыл в виде цифр. Установите тип столбца «Текст» в редакторе Power Query, а не в ячейках впоследствии.  <a href="../excel-csv-import-leading-zeros/">Исправление импорта CSV</a>  охватывает ту же проблему, связанную с файлами.</p>
+    <p><strong>Leading zeros disappeared from codes.</strong> A column of postcodes or account numbers arrived as numbers. Set the column type to Text in the Power Query editor, not afterwards in cells. The <a href="../excel-csv-import-leading-zeros/">CSV import fix</a> covers the same problem coming from files.</p>
 
-    <p><strong>Даты неверны на месяц или отказываются сортировать.</strong>  День и месяц поменялись местами, или столбец представляет собой текст, похожий на дату. Явно задайте тип в редакторе и выберите правильную локаль, когда она спросит.</p>
+    <p><strong>Dates are wrong by a month, or refuse to sort.</strong> Day and month have been swapped, or the column is text that looks like a date. Set the type explicitly in the editor and pick the right locale when it asks.</p>
 
-    <p><strong>Это работает для вас, а не для кого-либо еще.</strong>  Разрешения, а не файл. Раздел 7.</p>
+    <p><strong>It works for you and not for anyone else.</strong> Permissions, not the file. Section 7.</p>
   </div>
 
-  <h2>Почему это работает</h2>
+  <h2>Why this works</h2>
 
-  <p>В Power Query стоит понимать одну идею: он хранит вашу работу как рецепт, а не как результат. Каждый щелчок в редакторе записывается как шаг, а обновление означает повторный запуск всего рецепта с учетом того, что сейчас содержится в источнике. Вот почему очистка, выполняемая в редакторе, является постоянной, а очистка ячеек — нет, и в этом вся разница между отчетом, который вы ведете, и отчетом, который вы перестраиваете.</p>
+  <p>Power Query is worth understanding as one idea: it stores your work as a recipe rather than as a result. Every click in the editor is written down as a step, and refreshing means re-running the whole recipe against whatever the source holds now. That is why cleaning done in the editor is permanent and cleaning done in cells is not, and it is the entire difference between a report you maintain and a report you rebuild.</p>
 
-  <p>Второй механизм объясняет рекомендации по производительности. Когда это возможно, Power Query отправляет ваши фильтры и группировки обратно в исходную базу данных и позволяет серверу выполнять их, поэтому перемещаются только суммированные строки. Это называется свертыванием запроса, и именно поэтому фильтрация в редакторе может быть значительно быстрее, чем фильтрация на листе. Это также объясняет, почему набранный вручную оператор SQL может блокировать эту оптимизацию: фиксированный текст нельзя переписать, поэтому в него ничего нельзя вставить.</p>
+  <p>The second mechanism explains the performance advice. When it can, Power Query pushes your filters and groupings back into the source database and lets the server do them, so only the summarised rows travel. This is called query folding, and it is why filtering in the editor can be dramatically faster than filtering in the worksheet. It also explains why a hand-typed SQL statement can block that optimisation: fixed text cannot be rewritten, so nothing can be folded into it.</p>
 
-  <p>Одно замечание по поводу написания этой страницы. Прежде чем дать ответ, вас постоянно просили дать ответ, на что на самом деле уходит время восстановления, почему база данных может отсутствовать в меню. Попытка дать ответ до того, как вы увидите правильный, достоверно повышает, насколько хорошо сохраняется правильный ответ, даже если попытка неверна (Бисра, Лю, Несбит, Салими и Винн, 2018,  <em>Обзор педагогической психологии</em>, 30(3), 703–725).</p>
+  <p>One note on the way this page is written. It kept asking you to commit to an answer, where your rebuild time actually goes, why a database might be missing from the menu, before giving one. Attempting an answer before seeing the correct one reliably improves how well the correct one is retained, even when the attempt is wrong (Bisra, Liu, Nesbit, Salimi, &amp; Winne, 2018, <em>Educational Psychology Review</em>, 30(3), 703–725).</p>
 
-  <h2>Использование этого в ваших собственных отчетах</h2>
+  <h2>Using this on your own reports</h2>
 
-  <p>Пять шагов по порядку. Первый сохраняет проект достаточно маленьким, чтобы его можно было завершить.</p>
+  <p>Five steps, in order. The first one keeps the project small enough to finish.</p>
 
   <ol>
-    <li><strong>Подключите одну таблицу, которую вы сейчас вставляете.</strong>  Не весь отчет. Один стол на этой неделе, так что механизм будет известен до того, как ставки повысятся.</li>
-    <li><strong>Делайте всю очистку в редакторе</strong>, никогда в клетках. Если вы обнаружите, что ремонтируете что-то вручную дважды, это относится к этапу.</li>
-    <li><strong>Обобщить в запросе</strong>  когда источник содержит более нескольких сотен тысяч строк. База данных создана для этого.</li>
-    <li><strong>Используйте только создание соединения и сводную таблицу.</strong>  для чего-либо большого, поэтому строки никогда не помещаются на лист.</li>
-    <li><strong>Запишите имена серверов и просмотрите</strong>  на вкладке заметок в рабочей книге. Через шесть месяцев вы не вспомните, и человек, который его унаследует, тоже.</li>
+    <li><strong>Connect one table you currently paste.</strong> Not the whole report. One table, this week, so the mechanism is familiar before the stakes rise.</li>
+    <li><strong>Do all cleaning in the editor</strong>, never in cells. If you find yourself fixing something by hand twice, it belongs in a step.</li>
+    <li><strong>Summarise in the query</strong> when the source has more than a few hundred thousand rows. The database is built for it.</li>
+    <li><strong>Use Only Create Connection plus a PivotTable</strong> for anything large, so the rows never sit in a worksheet.</li>
+    <li><strong>Write down the server and view names</strong> in a notes tab in the workbook. In six months you will not remember, and neither will the person who inherits it.</li>
   </ol>
 
-  <p>Если у вас под рукой есть бумага, один дополнительный рисунок стоит пяти минут. Нарисуйте свой отчет в виде цепочки блоков от исходного до конечного числа и отметьте каждое поле либо как шаг, который Excel может воспроизвести, либо как что-то, что вы делаете вручную. Каждая помеченная вручную коробка — это место, куда отчет может незаметно сломаться, пока вас нет.</p>
+  <p>If you have paper nearby, one optional drawing is worth five minutes. Draw your report as a chain of boxes from source to finished number, and mark each box as either a step Excel can replay or something you do by hand. Every hand-marked box is a place the report can silently break while you are away.</p>
 
-  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: настройка, SQL, Excel, Python и навыки работы с ними.</div>
+  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: getting set up, SQL, Excel, Python, and the working habits around them.</div>
 
-  <h2>Все на одном экране</h2>
+  <h2>The whole thing on one screen</h2>
 
-  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
+  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
 
   <table>
-    <tr><th>Thing</th><th>Что это такое или что оно делает</th></tr>
-    <tr><td>Power Query</td><td>Встроенный в Эксель. Сохраняет ваше соединение и очистку в виде воспроизводимых шагов.</td></tr>
-    <tr><td>Путь</td><td>Данные → Получить данные → Из базы данных → ваш движок.</td></tr>
-    <tr><td>Старые имена</td><td>Новый запрос или группа «Получить и преобразовать». Тот же инструмент.</td></tr>
-    <tr><td>Коробки сервера и базы данных</td><td>Получите точное имя сервера из рабочего соединения коллеги.</td></tr>
-    <tr><td>Проверка подлинности Окна</td><td>Ваша сетевая учетная запись. Пароль не введен. Используйте его, если не указаны учетные данные.</td></tr>
-    <tr><td>Navigator</td><td>Перечисляет таблицы и представления. Предпочитайте именованное представление: кто-то уже согласился с ним.</td></tr>
-    <tr><td>Загрузка и преобразование данных</td><td>Прямо на лист, или через редактор. Выберите редактор по умолчанию.</td></tr>
-    <tr><td>Список шагов</td><td>Записанный рецепт. Повторы при каждом обновлении. Вся суть.</td></tr>
-    <tr><td>Только создать соединение</td><td>Нет строк на листе, подается сводная таблица. Сохраняет большие файлы быстро.</td></tr>
-    <tr><td>SQLite</td><td>Не встроенный разъем. Используйте ODBC или экспортируйте CSV и подключитесь к нему.</td></tr>
-    <tr><td>Поле операторов SQL</td><td>Запускается на сервере до того, как что-либо будет отправлено. Лучшее место для подведения итогов.</td></tr>
-    <tr><td>Свертывание запроса</td><td>Фильтры возвращаются в базу данных. Почему фильтры редактора могут работать намного быстрее.</td></tr>
-    <tr><td>Обновить все</td><td>Вкладка «Данные». Или обновите при открытии через свойства подключения.</td></tr>
-    <tr><td>Неудачно для коллег</td><td>В файле хранится адрес, а не ваше разрешение. Им нужен собственный доступ.</td></tr>
-    <tr><td>Исправления типов</td><td>Установите их в редакторе, чтобы они воспроизводились. В клетках их нет.</td></tr>
+    <tr><th>Thing</th><th>What it is, or what it does</th></tr>
+    <tr><td>Power Query</td><td>Built into Excel. Stores your connection and cleaning as replayable steps.</td></tr>
+    <tr><td>The path</td><td>Data → Get Data → From Database → your engine.</td></tr>
+    <tr><td>Older names</td><td>New Query, or a Get &amp; Transform group. Same tool.</td></tr>
+    <tr><td>Server and Database boxes</td><td>Get the exact server name from a colleague's working connection.</td></tr>
+    <tr><td>Windows authentication</td><td>Your network account. No password typed. Use it unless given credentials.</td></tr>
+    <tr><td>Navigator</td><td>Lists tables and views. Prefer a named view: somebody already agreed it.</td></tr>
+    <tr><td>Load vs Transform Data</td><td>Straight to the sheet, or via the editor. Choose the editor by default.</td></tr>
+    <tr><td>Steps list</td><td>The recorded recipe. Replays on every refresh. The whole point.</td></tr>
+    <tr><td>Only Create Connection</td><td>No worksheet rows, feeds a PivotTable. Keeps big files quick.</td></tr>
+    <tr><td>SQLite</td><td>Not a built-in connector. Use ODBC, or export CSV and connect to that.</td></tr>
+    <tr><td>SQL statement box</td><td>Runs on the server before anything travels. Best place to summarise.</td></tr>
+    <tr><td>Query folding</td><td>Filters pushed back to the database. Why editor filters can be much faster.</td></tr>
+    <tr><td>Refresh All</td><td>Data tab. Or refresh on open, via Connection Properties.</td></tr>
+    <tr><td>Fails for colleagues</td><td>The file stores the address, not your permission. They need their own access.</td></tr>
+    <tr><td>Type fixes</td><td>Set them in the editor, so they replay. In cells they do not.</td></tr>
   </table>
 
-  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Каждое исправление вносится в редактор, а не в ячейку. Это единственное правило — то, что превращает электронную таблицу, которую вы перестраиваете, в электронную таблицу, которую вы обновляете, и в этом разница между владением отчетом и владением им. Если что-то сломалось так, как не описано на этой странице, существует общая  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>.</div>
+  <div class="note"><strong>The one habit to keep.</strong> Every fix goes in the editor, never in a cell. That single rule is what turns a spreadsheet you rebuild into a spreadsheet you refresh, and it is the difference between owning a report and being owned by one. If something breaks in a way this page does not cover, there is a general <a href="../technical-tenacity/">diagnosis loop for being stuck</a>.</div>
 
-  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Вставка, которая, наконец, убедила меня подключиться, заключалась в том, что при экспорте было две дополнительные строки, поэтому вставка вывела диапазон формулы из выравнивания, и общая сумма была неправильной на величину округления в течение месяца, прежде чем кто-либо это заметил. Сколько стоил вам ручной шаг до того, как вы его автоматизировали?</p>
+  <p>One last thought, and I would genuinely like other people's answers. The paste that finally convinced me to connect was one where the export had two extra rows, so the paste pushed a formula range out of alignment and the total was wrong by a rounding-sized amount for a month before anyone noticed. What did a manual step cost you before you automated it?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Бисра К., Лю К., Несбит Дж. К., Салими Ф. и Винн П. Х. (2018). Побуждение к самообъяснению: метаанализ.  <em>Обзор педагогической психологии</em>, 30(3), 703–725.</li>
-    <li>Майкрософт. Импортируйте данные из внешних источников данных (Power Query) и импортируйте данные из базы данных с помощью Собственный запрос к базе данных. Получено 8 августа 2026 г. с сайта support.microsoft.com. Указывается для путей меню и параметров диалога, которые представляют собой сведения о продукте, а не результаты исследований.</li>
+    <li>Bisra, K., Liu, Q., Nesbit, J. C., Salimi, F., &amp; Winne, P. H. (2018). Inducing self-explanation: A meta-analysis. <em>Educational Psychology Review</em>, 30(3), 703–725.</li>
+    <li>Microsoft. Import data from external data sources (Power Query), and Import data from a database using Native Database Query. Retrieved 8 August 2026 from support.microsoft.com. Cited for menu paths and dialog options, which are product details rather than research findings.</li>
   </ul>
 
   <div class="book">
-    <strong>Копирование и вставка сработали один раз. Теперь это ежемесячная рутинная работа, и цифры меняются.</strong>
-    <p><em>Excel для аналитиков</em>  составляет 378 страниц, подключений и обновлений, поэтому лист извлекает собственные данные, а не вводит их вручную.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-connect-excel-to-a-database'})">Excel для аналитиков, 19 долларов США →</a>
+    <strong>The copy and paste worked once. Now it is a monthly chore and the numbers drift.</strong>
+    <p><em>Excel for Analysts</em> is 378 pages, connections and refreshes, so the sheet pulls its own data instead of being fed by hand.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-connect-excel-to-a-database'})">Excel for Analysts, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>Соединение – это легкая половина. Другая половина — это запрос.</strong>
-    <p style="margin:6px 0 0">The <a href="../../excel/">Excel комплект</a>    охватывает Power Query, сводные таблицы и работу с формулами, которые располагаются поверх подключенной таблицы в том порядке, в котором аналитик их встречает, а также Практикум сводных таблиц с возможностью перетаскивания для практики.    <a href="../../sql/">SQL-кит</a>  это другой конец той же трубы.</p>
-    <a class="btn" href="../../excel/">Откройте набор Excel →</a>
+    <strong>The connection is the easy half. The other half is the query.</strong>
+    <p style="margin:6px 0 0">The <a href="../../excel/">Excel Kit</a> covers Power Query, PivotTables and the formula work that sits on top of a connected table, in the order an analyst meets them, with a drag-and-drop Pivot Lab to practise in. The <a href="../../sql/">SQL Kit</a> is the other end of the same pipe.</p>
+    <a class="btn" href="../../excel/">Open the Excel Kit →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../set-up-a-sql-database/">Настройте базу данных SQL</a> · <a href="../sample-database-for-sql-practice/">Получить образец базы данных</a> · <a href="../which-sql-database-to-install/">Какую базу данных SQL установить</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../excel-name-your-data/">Таблицы Excel и структурированные ссылки</a> · <a href="../excel-pivot-table-question/">Как думать о сводных таблицах</a> · <a href="../excel-csv-import-leading-zeros/">CSV ведущие нули</a> · <a href="../excel-character-encoding/">Кодировка символов</a> · <a href="../handle-large-datasets/">Обработка больших наборов данных</a> · <a href="../excel-check-your-work/">Проверьте свою работу в Excel</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../excel/">Excel комплект</a> · <a href="../../sql/">SQL-кит</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
+    <a href="../../">← Analyst Prep Kit</a> · <a href="../set-up-a-sql-database/">Set Up a SQL Database</a> · <a href="../sample-database-for-sql-practice/">Get a Sample Database</a> · <a href="../which-sql-database-to-install/">Which SQL Database to Install</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../sql-joins/">SQL JOINs</a> · <a href="../excel-name-your-data/">Excel Tables and Structured References</a> · <a href="../excel-pivot-table-question/">How to Think About Pivot Tables</a> · <a href="../excel-csv-import-leading-zeros/">CSV Leading Zeros</a> · <a href="../excel-character-encoding/">Character Encoding</a> · <a href="../handle-large-datasets/">Handle Large Datasets</a> · <a href="../excel-check-your-work/">Check Your Work in Excel</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../excel/">Excel Kit</a> · <a href="../../sql/">SQL Kit</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

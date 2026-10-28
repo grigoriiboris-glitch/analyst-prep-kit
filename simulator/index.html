@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="ru" data-theme="light" data-static-ru="true">
+<html lang="en" data-theme="light">
 <head>
-
+<script src="../assets/ru-localization-boot.js"></script>
   <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
   <script>
     (function () {
@@ -28,9 +28,9 @@
   </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Симулятор работы младшего аналитика данных</title>
+<title>Associate Data Analyst Simulator</title>
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/simulator/">
-<meta name="description" content="Моделирование первой недели работы младшим аналитиком данных в Аналитика DataBridge. 5 дней, 10 реальных заданий, обзор ИИ-менеджера по каждому.">
+<meta name="description" content="A simulated first week as an associate data analyst at DataBridge Analytics. 5 days, 10 real assignments, AI manager review on each.">
 <link rel="stylesheet" href="../assets/grain/grain.css">
 <link rel="stylesheet" href="../assets/grain/zinc-sky.css"><!-- Zinc & Sky palette rollout -->
 <style>
@@ -254,13 +254,13 @@ footer{text-align:center;padding:32px 20px;color:var(--dim);font-size:12px;borde
 <script src="../assets/progress-state.js"></script>
 <script src="../assets/supabase_auth_sync.js?v=3"></script>
 <nav>
-  <a class="back-link" href="../">← Все комплекты</a>
-  <span class="nav-title"><span class="logo-mark"><i data-lucide="briefcase"></i></span>Симулятор работы младшего аналитика данных</span>
+  <a class="back-link" href="../">← All Kits</a>
+  <span class="nav-title"><span class="logo-mark"><i data-lucide="briefcase"></i></span>Associate Data Analyst Simulator</span>
   <span class="user-email" id="userEmail" style="display:none"></span>
-  <button class="signin-btn" id="loginBtn" onclick="openAuthModal()" style="display:none">Войти</button>
-  <button class="signin-btn ghost" id="logoutBtn" onclick="handleLogout()" style="display:none">Выйти</button>
+  <button class="signin-btn" id="loginBtn" onclick="openAuthModal()" style="display:none">Sign in</button>
+  <button class="signin-btn ghost" id="logoutBtn" onclick="handleLogout()" style="display:none">Log out</button>
   <div class="nav-spacer"></div>
-  <button class="nav-btn" onclick="openApiModal()"><i data-lucide="settings"></i>API-ключ</button>
+  <button class="nav-btn" onclick="openApiModal()"><i data-lucide="settings"></i>API Key</button>
   <button class="nav-btn" onclick="resetSim()"><i data-lucide="rotate-ccw"></i>Reset</button>
   <button class="nav-btn" onclick="toggleTheme()"><span id="themeIcon"><i data-lucide="sun"></i></span></button>
 </nav>
@@ -270,8 +270,8 @@ footer{text-align:center;padding:32px 20px;color:var(--dim);font-size:12px;borde
 
 <div class="modal" id="apiModal">
   <div class="modal-card">
-    <h3>Ключ АПИ Клод</h3>
-    <p>Отзывы Сары написаны Клодом в прямом эфире. Вставьте ключ API — он хранится только в вашем браузере (<code>localStorage</code>) и отправляются только  <code>api.anthropic.com</code>. Без ключа симулятор возвращается к самопроверке рубрик и выборочному убедительному ответу.</p>
+    <h3>Claude API key</h3>
+    <p>Sarah's reviews are generated live by Claude. Paste an API key — it's stored only in your browser (<code>localStorage</code>) and sent only to <code>api.anthropic.com</code>. Without a key, the simulator falls back to a rubric self-check and a sample strong answer.</p>
     <input id="apiKeyInput" type="password" placeholder="sk-ant-…" autocomplete="off">
     <div class="modal-actions">
       <button class="btn-ghost" onclick="clearApiKey()">Clear</button>
@@ -290,28 +290,24 @@ footer{text-align:center;padding:32px 20px;color:var(--dim);font-size:12px;borde
     <a href="../python/">Python</a>
     <a href="../tableau/">Tableau</a>
     <a href="../stats/">Stats</a>
-    <a href="../chart-literacy/">Работа с диаграммами</a>
+    <a href="../chart-literacy/">Chart Literacy</a>
     <a href="../forecasting/">Forecasting</a>
     <a href="../interview/">Interview</a>
     <a href="../powerbi/">Power BI</a>
-    <a href="../final/">Заключительный экзамен</a>
-    <a href="../">← Все комплекты</a>
+    <a href="../final/">Final Exam</a>
+    <a href="../">← All Kits</a>
   </div>
-  
-    Часть  <a href="../">Подготовительный комплект для аналитика</a>    · Аналитика DataBridge является вымышленным
-
-
-
+  Part of the <a href="../">Analyst Prep Kit</a> · DataBridge Analytics is fictional
 </footer>
 
 <script>
 /* ============ COMPANY ============ */
 const COMPANY = {
-  name: "Аналитика DataBridge",
-  desc: "SaaS-компания среднего размера, предоставляющая аналитические панели розничным клиентам",
-  team: "Команда данных и аналитики",
-  manager: "Сара Чен",
-  managerTitle: "Старший аналитик данных",
+  name: "DataBridge Analytics",
+  desc: "a mid-size SaaS company providing analytics dashboards to retail clients",
+  team: "Data & Insights Team",
+  manager: "Sarah Chen",
+  managerTitle: "Senior Data Analyst",
   initials: "SC"
 };
 
@@ -325,34 +321,34 @@ const TYPE_COLOR = {
 /* ============ TASKS ============ */
 const DAYS = [
   {
-    label: "Понедельник — Ориентация",
+    label: "Monday — Orientation",
     tasks: [
       {
         id:"d1t1", type:"SQL", duration:"45 min", difficulty:"Intro",
-        title:"Изучите схему базы данных",
-        skills:["SQL","Критическое мышление","Деловая хватка"],
-        context:"В первый день, прежде чем писать один запрос, каждый специалист по данным должен понять, какие данные существуют и как они организованы. Исследование схемы — это то, как вы строите свою мысленную карту бизнеса.",
-        realWorld:"На реальной работе вы потратите много времени на понимание существующих структур данных. Знание схемы предотвращает ошибки, экономит время и позволяет быстрее отвечать на бизнес-вопросы. Старшие аналитики говорят, что грамотность в схемах — это то, что отличает аналитиков первой недели от аналитиков четвертой недели.",
-        objective:"Поймите, как данные структурированы в реляционной базе данных и какие бизнес-объекты они представляют.",
-        assignment:`У вас есть доступ к базе данных продаж DataBridge со следующими таблицами:
+        title:"Explore the Database Schema",
+        skills:["SQL","Critical Thinking","Business Acumen"],
+        context:"On your first day, before writing a single query, every data professional needs to understand what data exists and how it's organized. Schema exploration is how you build your mental map of the business.",
+        realWorld:"In real jobs, you'll spend significant time understanding existing data structures. Knowing the schema prevents errors, saves time, and lets you answer business questions faster — senior analysts say schema literacy is what separates week-1 analysts from week-4 ones.",
+        objective:"Understand how data is structured in a relational database and what business entities they represent.",
+        assignment:`You have access to the DataBridge sales database with these tables:
 
-клиенты → customer_id, имя, адрес электронной почты, дата_подписки, тип_плана, регион
-заказы → идентификатор заказа, customer_id, Product_id, дата_заказа, сумма, статус
-продукты → Product_id, название, категория, цена, дата создания
-билеты → Ticket_id, customer_id, созданная_дата, решенная_дата, категория, приоритет
+customers   → customer_id, name, email, signup_date, plan_type, region
+orders      → order_id, customer_id, product_id, order_date, amount, status
+products    → product_id, name, category, price, created_date
+tickets     → ticket_id, customer_id, created_date, resolved_date, category, priority
 
-ВАШИ ЗАДАЧИ:
-1. Напишите SQL для подсчета строк в каждой таблице (4 отдельных запроса).
-2. Напишите SQL, чтобы отображать разные значения в столбце план_тип.
-3. Напишите СОЕДИНЕНИЕ, которое вам понадобится, чтобы найти «общий доход по категориям продуктов».
-4. В 2–3 предложениях описать, что отслеживает эта база данных с точки зрения бизнеса`,
+YOUR TASKS:
+1. Write SQL to count rows in each table (4 separate queries)
+2. Write SQL to show distinct values in the plan_type column
+3. Write the JOIN you'd need to find "total revenue by product category"
+4. In 2–3 sentences, describe what this database tracks from a business perspective`,
         hints:[
           "SELECT COUNT(*) FROM table_name — one query per table",
           "SELECT DISTINCT plan_type FROM customers for unique values",
-          "Столбец, который отображается в двух таблицах, является вашим ключом JOIN — найдите customer_id и Product_id.",
-          "Подумайте: какие решения принял бы бизнес, используя эти данные?"
+          "The column that appears in two tables is your JOIN key — look for customer_id and product_id",
+          "Think: what decisions would a business make using this data?"
         ],
-        rubric:["Правильный синтаксис SQL для всех 4 запросов.","Логика JOIN точна","Описание бизнеса демонстрирует понимание, выходящее за рамки названий столбцов."],
+        rubric:["Correct SQL syntax on all 4 queries","JOIN logic is accurate","Business description shows understanding beyond just column names"],
         exemplar:`-- 1. Row counts
 SELECT COUNT(*) FROM customers;
 SELECT COUNT(*) FROM orders;
@@ -379,86 +375,86 @@ support load is concentrated in certain customer segments.`
       },
       {
         id:"d1t2", type:"Excel", duration:"30 min", difficulty:"Intro",
-        title:"Аудит данных: экспорт клиентов",
-        skills:["Excel","Качество данных","Внимание к деталям"],
-        context:"Ваш менеджер переслал экспортированный в формате CSV список клиентов за прошлый квартал и попросил вас «взглянуть на него, прежде чем мы его воспользуемся». Так говорят аналитики: находите проблемы до того, как они станут моими проблемами.",
-        realWorld:"Проблемы с качеством данных, обнаруженные до анализа, экономят часы или дни последующей отладки. Привычка проводить одитинг перед анализом — один из самых ценных инстинктов, которые вы можете развить на раннем этапе.",
-        objective:"Практикуйте систематический подход к аудиту данных с использованием функций Эксель.",
-        assignment:`Вы получаете экспорт клиента из 500 строк:
-Client_ID | Название_компании | Контакт_электронная почта | Годовой_доход | Регион | Дата последнего_контакта
+        title:"Data Audit: Client Export",
+        skills:["Excel","Data Quality","Attention to Detail"],
+        context:"Your manager forwarded a CSV export of last quarter's client list and asked you to 'take a look at it before we use it.' That's analyst-speak for: find the problems before they become my problems.",
+        realWorld:"Data quality issues caught before analysis save hours — or days — of downstream debugging. The habit of auditing before analyzing is one of the most valuable instincts you can build early.",
+        objective:"Practice a systematic data audit approach using Excel functions.",
+        assignment:`You receive a 500-row client export:
+Client_ID | Company_Name | Contact_Email | Annual_Revenue | Region | Last_Contact_Date
 
-Опишите свой процесс аудита и конкретные функции Excel, которые вы будете использовать, чтобы:
+Describe your audit process and the exact Excel functions you'd use to:
 
-1. Проверьте наличие дубликатов Client_ID.
-2. Найдите пустые/нулевые значения в любом столбце.
-3. Убедитесь, что Годовой_доход содержит только цифры (а не текст типа «50 000 долларов США»).
-4. Убедитесь, что значения Дата последнего_контакта являются реальными датами, а не текстовыми строками.
-5. Напишите своему менеджеру «записку о качестве данных» из трех пунктов, в которой кратко изложите все, что вы обнаружили.
+1. Check for duplicate Client_IDs
+2. Find blank/null values in any column
+3. Confirm Annual_Revenue contains only numbers (not text like "$50,000")
+4. Check Last_Contact_Date values are real dates, not text strings
+5. Write a 3-bullet "data quality note" to your manager summarizing what you found
 
-Запишите обе функции И свою интерпретацию того, что будут означать результаты.`,
+Write out both the functions AND your interpretation of what the results would mean.`,
         hints:[
-          "=COUNTIF(A:A, A2)>1 отмечает дубликаты — затем фильтрует по TRUE",
-          "=ISBLANK(B2) или =COUNTA(B:B) против ожидаемого количества строк",
-          "=ISNUMBER(D2) возвращает FALSE для текста типа «50 000 долларов США».",
-          "=ISNUMBER(DATEVALUE(F2)) улавливает даты в текстовом формате — реальные даты возвращают TRUE",
-          "Замечания менеджера: ведите фразу «Обнаружено Х проблем», а не «Я проверил и...»"
+          "=COUNTIF(A:A, A2)>1 flags duplicates — then filter for TRUE",
+          "=ISBLANK(B2) or =COUNTA(B:B) vs expected row count",
+          "=ISNUMBER(D2) returns FALSE on text like '$50,000'",
+          "=ISNUMBER(DATEVALUE(F2)) catches text-formatted dates — real dates return TRUE",
+          "Manager notes: lead with 'Found X issues' not 'I checked and...'"
         ],
-        rubric:["Правильный синтаксис функции","Объясняет, что делать с каждым обнаружением","Примечание менеджера профессиональное и лаконичное"],
-        exemplar:`Подход: добавьте вспомогательный столбец для каждой проверки, а затем отфильтруйте проблемы.
+        rubric:["Correct function syntax","Explains what to DO with each finding","Manager note is professional and concise"],
+        exemplar:`Approach: add a helper column for each check, then filter for problems.
 
-1. Дублирующиеся идентификаторы Client_ID
-   =COUNTIF($A:$A, A2) > 1 → фильтровать TRUE во вспомогательном столбце.
-   Интерпретация результата: любая помеченная строка требует принятия решения «истинно» или «объединено».
+1. Duplicate Client_IDs
+   =COUNTIF($A:$A, A2) > 1  → filter TRUE in helper column.
+   Result interpretation: any row flagged needs a true-vs-merged decision.
 
-2. Пустые значения в любом столбце.
-   Во вспомогательном столбце: =COUNTBLANK(A2:F2) → фильтр >0.
-   Перекрестная проверка с помощью =COUNTA(B:B) против количества строк на наличие пробелов на уровне столбца.
+2. Blank values in any column
+   In a helper col: =COUNTBLANK(A2:F2)  → filter >0.
+   Cross-check with =COUNTA(B:B) vs row count for column-level gaps.
 
-3. Годовой_доход имеет числовое значение.
-   =ISNUMBER(D2) → ЛОЖНЫЕ флаги «50 000 долларов США» / «TBD» / пробелы в текстовом формате.
-   Исправьте кандидатов: =VALUE(SUBSTITUTE(SUBSTITUTE(D2,"$",""),",","")).
+3. Annual_Revenue is numeric
+   =ISNUMBER(D2)  → FALSE flags "$50,000" / "TBD" / blanks formatted as text.
+   Fix candidates: =VALUE(SUBSTITUTE(SUBSTITUTE(D2,"$",""),",","")).
 
-4. Дата последнего_контакта реальна.
-   =ISNUMBER(DATEVALUE(F2)) → улавливает даты в текстовом формате.
-   Если много значений FALSE, конвейер экспорта прекращает ввод даты.
+4. Last_Contact_Date is real
+   =ISNUMBER(DATEVALUE(F2))  → catches text-formatted dates.
+   If many FALSEs, the export pipeline is dropping date typing.
 
-Примечание по качеству данных для менеджера:
-• Обнаружено 14 проблем в 500 строках (2,8%) — необходимо принять меры, прежде чем мы воспользуемся этим списком.
-• Высший приоритет: 6 строк с текстовым значением Годовой_доход и 4 повторяющихся идентификатора Client_ID, которые выглядят как настоящие разделения записей, а не копии.
-• Рекомендуйте 15-минутную проверку с инженером по обработке данных, который отвечает за экспорт, чтобы мы исправляли проблему в источнике, а не каждый квартал.`
+Data quality note to manager:
+• Found 14 issues across 500 rows (2.8%) — actionable before we use this list.
+• Highest priority: 6 rows with text-formatted Annual_Revenue and 4 duplicate Client_IDs that look like genuine record splits, not copies.
+• Recommend a 15-min review with the data engineer who owns the export so we fix this at source rather than every quarter.`
       }
     ]
   },
   {
-    label: "Вторник — первые реальные результаты",
+    label: "Tuesday — First Real Deliverables",
     tasks: [
       {
         id:"d2t1", type:"SQL", duration:"60 min", difficulty:"Beginner",
-        title:"Ежемесячная сводка продаж",
-        skills:["SQL","Aggregation","Бизнес-отчетность"],
-        context:"Вашему менеджеру нужен ежемесячный отчет о продажах для встречи с заинтересованными сторонами завтра утром. Это ваш первый реальный результат с реальным сроком выполнения. Данные в написанных вами запросах появятся в виде слайдов.",
-        realWorld:"Ежемесячные бизнес-обзоры почти всегда требуют агрегирующих запросов. GROUP BY, HAVING и фильтрация по дате — это рабочие лошадки бизнес-SQL. За свою карьеру вам придется писать те или иные версии этих запросов сотни раз.",
-        objective:"Напишите запросы агрегирования, используя GROUP BY, HAVING и фильтрацию на основе даты.",
-        assignment:`Используя схему DataBridge, напишите три полных запроса SQL:
+        title:"Monthly Sales Summary",
+        skills:["SQL","Aggregation","Business Reporting"],
+        context:"Your manager needs the monthly sales summary for a stakeholder meeting tomorrow morning. This is your first real deliverable with a real deadline. The data in the queries you write will appear in a slide deck.",
+        realWorld:"Monthly business reviews almost always require aggregation queries. GROUP BY, HAVING, and date filtering are the workhorse of business SQL — you'll write some version of these queries hundreds of times in your career.",
+        objective:"Write aggregation queries using GROUP BY, HAVING, and date-based filtering.",
+        assignment:`Using the DataBridge schema, write three complete SQL queries:
 
-ЗАПРОС 1. Доход по регионам за последние 30 дней.
-Вывод: регион | всего_заказов | общий_доход | avg_order_value
+QUERY 1 — Revenue by region, last 30 days
+Output: region | total_orders | total_revenue | avg_order_value
 
-ЗАПРОС 2 – 5 лучших продуктов по выручке за все время
-Вывод: имя_продукта | категория | общий_доход | order_count
+QUERY 2 — Top 5 products by all-time revenue
+Output: product_name | category | total_revenue | order_count
 
-ЗАПРОС 3 — количество клиентов по план_тип, показывать только типы планов с более чем 10 клиентами.
-Вывод: тип_плана | customer_count
+QUERY 3 — Customer count by plan_type, only show plan types with 10+ customers
+Output: plan_type | customer_count
 
-Написав все три, ответьте в 2–3 предложениях:
-Какой запрос было труднее всего написать и почему?`,
+After writing all three, answer in 2–3 sentences:
+Which query was hardest to write and why?`,
         hints:[
-          "Фильтр даты: ГДЕ дата_заказа >= CURRENT_DATE – ИНТЕРВАЛ '30 дней'",
-          "ПРИСОЕДИНЯЙТЕ заказы к продуктам по Product_id для запроса 2",
-          "HAVING фильтрует после группировки (в отличие от WHERE, которая фильтрует строки перед группировкой)",
-          "ROUND(SUM(Количество)::числовой / COUNT(*), 2) для чистого avg_order_value"
+          "Date filter: WHERE order_date >= CURRENT_DATE - INTERVAL '30 days'",
+          "JOIN orders to products on product_id for query 2",
+          "HAVING filters after grouping (unlike WHERE which filters rows before grouping)",
+          "ROUND(SUM(amount)::numeric / COUNT(*), 2) for clean avg_order_value"
         ],
-        rubric:["Все три запроса синтаксически корректны.","ХЕВИНГ против ГДЕ используется правильно","Объединяет ссылки на правильные столбцы","Рефлексия Ответ конкретный"],
+        rubric:["All three queries are syntactically correct","HAVING vs WHERE used correctly","Joins reference correct columns","Reflection answer is specific"],
         exemplar:`-- Q1: Revenue by region, last 30 days
 SELECT
   c.region,
@@ -497,172 +493,172 @@ think about.`
       },
       {
         id:"d2t2", type:"Python", duration:"45 min", difficulty:"Beginner",
-        title:"Автоматизируйте проверку достоверности файла",
+        title:"Automate a File Validation Check",
         skills:["Python","pandas","Automation"],
-        context:"Каждое утро продавец отправляет CSV-файл на ваш общий диск. Старший аналитик вручную проверял данные: пропущенные значения, странные суммы, неправильные столбцы. Они хотят, чтобы вы автоматизировали эту проверку, чтобы никто на нее не смотрел.",
-        realWorld:"Автоматизация повторяющихся задач проверки — одна из самых прибыльных задач, которую может сделать специалист по данным. 30-минутный сценарий, выполняемый ежедневно, экономит 5 часов в месяц и исключает человеческие ошибки. Это одна из первых вещей, которые вас попросят построить.",
-        objective:"Используйте pandas для загрузки и проверки CSV-файла с помощью автоматических проверок и чистого вывода.",
-        assignment:`Напишите скрипт Python, который:
+        context:"Every morning, a vendor drops a CSV into your shared drive. A senior analyst has been manually checking it — missing values, weird amounts, wrong columns. They want you to automate this check so it runs without anyone looking at it.",
+        realWorld:"Automation of repetitive validation tasks is one of the highest-ROI things a data professional can do. A 30-minute script that runs daily saves 5 hours per month and eliminates human error. This is one of the first things you'll be asked to build.",
+        objective:"Use pandas to load and validate a CSV with automated checks and clean output.",
+        assignment:`Write a Python script that:
 
-1. Загружает daily_orders.csv с помощью Панды.
-2. Подтверждает существование этих столбцов: идентификатор заказа, customer_id, сумма, дата_заказа.
-3. Подсчитывает строки с любым нулевым значением.
-4. Проверяет наличие отрицательных значений в столбце суммы.
-5. Печатает следующий выходной формат:
+1. Loads daily_orders.csv using pandas
+2. Confirms these columns exist: order_id, customer_id, amount, order_date
+3. Counts rows with any null value
+4. Checks for negative values in the amount column
+5. Prints this output format:
 
-=== Ежедневная проверка заказов ===
-Файл: daily_orders.csv
-Загружено строк: 1204.
-Отсутствующие значения: затронуты 3 строки.
-Отрицательные суммы: найдено 0
-Статус: ПРОЙДЕН ✓
+=== Daily Orders Validation ===
+File: daily_orders.csv
+Rows loaded:       1,204
+Missing values:    3 rows affected
+Negative amounts:  0 found
+Status: PASS ✓
 
-Если проблемы существуют, Статус должен быть FAIL ✗ и перечислить, что не удалось.
+If issues exist, Status should be FAIL ✗ and list what failed.
 
-Добавьте вверху блок комментариев: что делает скрипт, чего он ожидает, кто его написал.`,
+Add a comment block at the top: what the script does, what it expects, who wrote it.`,
         hints:[
-          "pd.read_csv('daily_orders.csv') для загрузки",
-          "набор(требуемые_столбцы).issubset(df.columns) для проверки имен столбцов",
-          "df.isnull().любой(ось=1).сумма() подсчитывает строки с любым нулевым значением",
-          "(дф['Количество'] < 0).сумма() подсчитывает отрицательные числа",
-          "Создайте список неудач и объедините их — чище, чем вложенные если."
+          "pd.read_csv('daily_orders.csv') to load",
+          "set(required_cols).issubset(df.columns) to check column names",
+          "df.isnull().any(axis=1).sum() counts rows with any null",
+          "(df['amount'] < 0).sum() counts negatives",
+          "Build a list of failures and join them — cleaner than nested ifs"
         ],
-        rubric:["Скрипт работает без ошибок","Все 5 проверок реализованы","Вывод четко отформатирован","Блок комментариев присутствует и информативен."],
+        rubric:["Script runs without errors","All 5 checks implemented","Output is cleanly formatted","Comment block is present and informative"],
         exemplar:`"""
 daily_orders_validation.py
-Цель: проверить сброс поставщика daily_orders.csv перед последующей загрузкой.
-Ожидается: столбцы идентификатор заказа, customer_id, сумма, дата_заказа. Числовая сумма.
-Автор: [вы]
+Purpose: Validate the daily_orders.csv vendor drop before downstream load.
+Expects: order_id, customer_id, amount, order_date columns. Numeric amount.
+Author : [you]
 """
-импортировать панд как ПД
+import pandas as pd
 
-ФАЙЛ = "daily_orders.csv"
-ОБЯЗАТЕЛЬНО = {"идентификатор заказа", "customer_id", "сумма", "дата_заказа"}
+FILE = "daily_orders.csv"
+REQUIRED = {"order_id","customer_id","amount","order_date"}
 
-дф = pd.read_csv(ФАЙЛ)
-неудачи = []
+df = pd.read_csv(FILE)
+failures = []
 
-Missing_cols = ОБЯЗАТЕЛЬНО - набор(df.columns)
-если отсутствуют_столбцы:
-    ошибки.добавить(ж"отсутствующие столбцы: {отсортированный(Missing_cols)}")
+missing_cols = REQUIRED - set(df.columns)
+if missing_cols:
+    failures.append(f"missing columns: {sorted(missing_cols)}")
 
-null_rows = интервал(df.isnull().любой(ось=1).сумма())
-neg_amounts = интервал((дф["Количество"] < 0).сумма()), если "сумма" в df.columns еще 0
+null_rows = int(df.isnull().any(axis=1).sum())
+neg_amounts = int((df["amount"] < 0).sum()) if "amount" in df.columns else 0
 
-если null_rows: отказы.Добавить(ж"{null_rows} строки с нулевыми значениями")
-если отрицательные_суммы: ошибки.добавить(ж"{neg_amounts} строки с отрицательной суммой")
+if null_rows: failures.append(f"{null_rows} rows with null values")
+if neg_amounts: failures.append(f"{neg_amounts} negative amount rows")
 
-статус = «PASS ✓», если нет ошибок, иначе «FAIL ✗»
-распечатать("=== Проверка ежедневных заказов ===")
-распечатать(ж"Файл: {ФАЙЛ}")
-распечатать(ж"Загружено строк: {Лен(дф):,}")
-распечатать(ж"Отсутствующие значения: затронуто {null_rows} строк")
-распечатать(ж"Обнаружено отрицательные суммы: {neg_amounts}")
-распечатать(ж"Статус: {статус}")
-для ж в отказах:
-    печать(ж" - {ж}")`
+status = "PASS ✓" if not failures else "FAIL ✗"
+print("=== Daily Orders Validation ===")
+print(f"File: {FILE}")
+print(f"Rows loaded:       {len(df):,}")
+print(f"Missing values:    {null_rows} rows affected")
+print(f"Negative amounts:  {neg_amounts} found")
+print(f"Status: {status}")
+for f in failures:
+    print(f"  - {f}")`
       }
     ]
   },
   {
-    label: "Среда — Анализ и визуализация",
+    label: "Wednesday — Analysis & Viz",
     tasks: [
       {
         id:"d3t1", type:"Tableau", duration:"75 min", difficulty:"Beginner",
-        title:"Создайте информационную панель состояния клиента",
-        skills:["Tableau","Визуализация данных","Дизайнерское мышление","Коммуникация с заинтересованными сторонами"],
-        context:"Менеджерам по работе с клиентами нужна информационная панель, чтобы выявлять клиентов, находящихся в группе риска, прежде чем они уйдут. Ваш менеджер хочет, чтобы вы спроектировали его, прежде чем строить — он на собственном горьком опыте усвоил, что сначала построить — значит дважды перестроить.",
-        realWorld:"Великие аналитики проектируют, прежде чем строить. Заинтересованные стороны, которые говорят «просто сделай что-нибудь», обычно имеют в виду «сделай что-то, что мне понравится с первой попытки», а для этого сначала нужно задать вопросы. Умение воплощать расплывчатые запросы в спецификацию дизайна — навык, определяющий карьеру.",
-        objective:"Потренируйтесь переводить бизнес-потребности в спецификацию дизайна информационной панели с обоснованиями типов диаграмм.",
-        assignment:`Разработайте информационную панель «Состояние клиента» для менеджеров по работе с клиентами. Необходимые метрики:
-— Какие клиенты не заказывали более 90 дней (риск оттока)
-— Ежемесячная динамика выручки (последние 6 месяцев)
-— Распределение клиентов по типам планов
-— Среднее время разрешения заявки в службу поддержки по приоритету
+        title:"Design a Client Health Dashboard",
+        skills:["Tableau","Data Visualization","Design Thinking","Stakeholder Communication"],
+        context:"Account managers need a dashboard to spot at-risk clients before they churn. Your manager wants you to design it before you build it — she's learned the hard way that building first means rebuilding twice.",
+        realWorld:"Great analysts design before they build. Stakeholders who say 'just make something' usually mean 'make something I'll love on the first try' — which requires asking questions first. The ability to translate vague requests into a design spec is a career-defining skill.",
+        objective:"Practice translating a business need into a dashboard design spec with chart type justifications.",
+        assignment:`Design a "Client Health" dashboard for account managers. Metrics needed:
+— Which clients haven't ordered in 90+ days (churn risk)
+— Monthly revenue trend (last 6 months)
+— Distribution of clients by plan type
+— Avg support ticket resolution time by priority
 
-Для каждой метрики:
-1. Выберите тип диаграммы и объясните, почему
-2. Опишите, какой временной диапазон или фильтр должны быть доступны.
+For each metric:
+1. Choose a chart type and explain why
+2. Describe what time range or filter should be available
 
-Тогда:
-3. Нарисуйте макет в виде текста — опишите, что, где и почему.
-4. Напишите 3 уточняющих вопроса, которые вы бы задали своему менеджеру перед созданием
-5. Предложите один недостающий показатель, который также нужен менеджерам по работе с клиентами
+Then:
+3. Sketch the layout in text — describe what goes where and why
+4. Write 3 clarifying questions you'd ask your manager before building
+5. Suggest one missing metric account managers would also want
 
-Это планирование док, а не сборка Таблица.`,
+This is a planning doc, not a Tableau build.`,
         hints:[
-          "Временные тенденции → линейные графики. Распределения с несколькими категориями → гистограмма (не круговая). Сравнения → бар.",
-          "Глаза сначала движутся вверху слева — поместите туда самый срочный показатель.",
-          "Спросите о: частоте обновления, кто еще будет использовать это, мобильный или настольный компьютер.",
-          "Подумайте, какие действия предпринимает менеджер по работе с клиентами после просмотра каждого показателя."
+          "Time trends → line charts. Distributions with few categories → bar chart (not pie). Comparisons → bar.",
+          "Eyes go top-left first — put the most urgent metric there",
+          "Ask about: refresh frequency, who else will use this, mobile vs desktop",
+          "Think about what action the account manager takes after seeing each metric"
         ],
-        rubric:["Обоснования диаграммы логичны","Макет демонстрирует понимание визуальной иерархии","Вопросы раскрывают деловое любопытство, а не только технические вопросы.","Отсутствие метрики имеет смысл для бизнеса"],
-        exemplar:`МЕТРИКИ
+        rubric:["Chart justifications are logical","Layout shows awareness of visual hierarchy","Questions reveal business curiosity, not just technical questions","Missing metric makes business sense"],
+        exemplar:`METRICS
 
-1. Клиенты, у которых нет заказов более 90 дней.
-   Диаграмма: сортируемая таблица с именем клиента, планом, датой последнего заказа, владельцем AM.
-   Почему таблица: это список, по которому нужно действовать, а не форма, на которую нужно смотреть.
-   Фильтр: тип плана, владелец AM.
+1. Clients with no order in 90+ days
+   Chart: sortable table with client name, plan, last-order-date, AM owner.
+   Why table: this is a list to act on, not a shape to look at.
+   Filter: plan type, AM owner.
 
-2. Ежемесячная динамика выручки за последние 6 месяцев.
-   Диаграмма: линейная диаграмма, отдельные серии, с точкой на каждом месяце.
-   Почему линия: тенденция во времени, зритель видит наклон, а не величину.
-   Фильтр: клиентский сегмент.
+2. Monthly revenue trend, last 6 months
+   Chart: line chart, single series, with a dot at each month.
+   Why line: trend over time, viewer reads slope before magnitude.
+   Filter: client segment.
 
-3. Клиенты по типу плана
-   Диаграмма: горизонтальная полоса, отсортированная по убыванию.
-   Почему батончик (а не пирог): четыре категории одинаковых размеров — батончик позволяет
-   сравнить точные величины; пирог скрывает сравнение.
-   Фильтр: регион.
+3. Clients by plan type
+   Chart: horizontal bar, sorted descending.
+   Why bar (not pie): four categories with similar sizes — bar lets you
+   compare exact magnitudes; pie hides the comparison.
+   Filter: region.
 
-4. Среднее время разрешения заявки по приоритету
-   Диаграмма: гистограмма с цветовой кодировкой в зависимости от выполнения/невыполнения SLA.
-   Почему эта диаграмма: приоритет порядковый, зритель спрашивает: «Соблюдаем ли мы соглашение об уровне обслуживания?»
-   о срочных делах» — цвет сразу говорит об этом.
-   Фильтр: диапазон дат.
+4. Avg ticket resolution time by priority
+   Chart: bar chart, color-coded by SLA met / missed.
+   Why this chart: priority is ordinal, viewer wants "are we hitting SLA
+   on the urgent stuff" — color says it immediately.
+   Filter: date range.
 
-РАСПОЛОЖЕНИЕ (4 квадранта)
-Вверху слева: таблица рисков оттока (наиболее срочные меры)
-Вверху справа: линия тренда выручки (контекст).
-Внизу слева: панель типа плана.
-Внизу справа: панель разрешения заявки.
+LAYOUT (4-quadrant)
+Top-left: churn-risk table (most urgent action item)
+Top-right: revenue trend line (context)
+Bottom-left: plan-type bar
+Bottom-right: ticket resolution bar
 
-ВОПРОСЫ МЕНЕДЖЕРУ
-1. Как часто это нужно обновлять — в реальном времени, ежедневно, еженедельно?
-2. Будут ли AM просматривать это на компьютере или на телефонах в встречи?
-3. Что здесь означает «90+ дней» — последний заказ, последний вход в систему или последний оплаченный счет?
+QUESTIONS FOR MANAGER
+1. How often does this need to refresh — live, daily, weekly?
+2. Will AMs view this on desktop or also on phones in meetings?
+3. What "90+ days" means here — last order, last login, or last paid invoice?
 
-ОТСУТСТВУЕТ ПРЕДЛОЖЕНИЕ ПО ПОКАЗАТЕЛЮ
-Оценка здоровья или стрелка тренда для каждого клиента. Менеджеры не просто хотят знать, кто ушел.
-тихо»; они хотят, «кому становится хуже, а кому стабильно». Простой
-дельта-стрелка на каждого клиента превосходит необработанную дату последнего заказа для определения приоритета.`
+MISSING METRIC SUGGESTION
+Health score or trend arrow per client — AMs don't just want "who's gone
+quiet"; they want "who's getting worse vs. who's stable." A simple
+delta-arrow per client beats raw last-order-date for prioritization.`
       },
       {
         id:"d3t2", type:"SQL", duration:"60 min", difficulty:"Intermediate",
-        title:"Расследование падения доходов",
-        skills:["SQL","Критическое мышление","Анализ первопричин","Communication"],
-        context:"Ваш менеджер звонит вам в 14:00: «Выручка в прошлый вторник упала на 23% по сравнению с предыдущим вторником. Можете ли вы разобраться в этом до EOD?» Это ваши первые настоящие пожарные учения.",
-        realWorld:"Расследование аномалий — это основной навык аналитика. Руководители замечают снижение показателей и ожидают быстрых и конкретных ответов. Способность систематически сегментировать данные для выявления коренных причин — это то, что привлекает аналитиков к важным обсуждениям.",
-        objective:"Практикуйте систематический анализ первопричин, создавая запросы, которые изолируют и сравнивают сегменты.",
-        assignment:`Выручка упала на 23% 15 октября по сравнению с 8 октября (оба вторника).
+        title:"Investigate a Revenue Drop",
+        skills:["SQL","Critical Thinking","Root Cause Analysis","Communication"],
+        context:"Your manager pings you at 2pm: 'Revenue dropped 23% last Tuesday vs the prior Tuesday — can you dig into it before EOD?' This is your first real fire drill.",
+        realWorld:"Anomaly investigation is a core analyst skill. Executives notice metric drops and expect fast, specific answers. The ability to systematically segment data to find root causes is what gets analysts included in important conversations.",
+        objective:"Practice systematic root-cause analysis by writing queries that isolate and compare segments.",
+        assignment:`Revenue dropped 23% on Oct 15 vs Oct 8 (both Tuesdays).
 
-Напишите 5 SQL-запросов для исследования:
+Write 5 SQL queries to investigate:
 
-Q1 – Сравните общее количество заказов И общий доход за обе даты.
-Q2. Доход по регионам на каждую дату. Какие регионы снизились?
-Q3. Доход по категориям продуктов на каждую дату. Какие категории сократились?
-Вопрос 4. Средняя стоимость заказа и количество заказов на каждую дату — меньше клиентов или меньшие расходы на одного клиента?
-Q5 — Количество заказов со статусом = «отменено» или «возвращено» на обе даты.
+Q1 — Compare total orders AND total revenue side by side for both dates
+Q2 — Revenue by region on each date — which region(s) dropped?
+Q3 — Revenue by product category on each date — which categories dropped?
+Q4 — Avg order value and order count on each date — fewer customers, or lower spend per customer?
+Q5 — Count of orders with status = 'cancelled' or 'refunded' on both dates
 
-Написав все 5, напишите в Слабый ответ из 3–5 предложений своему менеджеру со своими выводами.
-Составьте правдоподобные цифры для ваши «результаты» — практика в структуре и коммуникации.`,
+After writing all 5, write a 3–5 sentence Slack reply to your manager with your findings.
+Make up plausible numbers for your "results" — the practice is in the structure and communication.`,
         hints:[
-          "ГДЕ order_date IN ('2024-10-08', '2024-10-15'), затем ГРУППИРОВАТЬ ПО дате заказа",
-          "GROUP BY регион, дата_заказа для региональной разбивки",
-          "COUNT(идентификатор заказа) против СУММ(количество) сообщает вам, является ли это объемом или стоимостью.",
-          "Слабый ответ: начните с ответа, затем с доказательствами. Не хороните находку."
+          "WHERE order_date IN ('2024-10-08', '2024-10-15') then GROUP BY order_date",
+          "GROUP BY region, order_date for the regional breakdown",
+          "COUNT(order_id) vs SUM(amount) tells you if it's volume or value",
+          "Slack reply: lead with the answer, then the evidence. Don't bury the finding."
         ],
-        rubric:["Все 5 запросов логичны и синтаксически корректны.","Запросы создают систематическую линию расследования.","Сообщение Слабый лаконично и приводит к выводу"],
+        rubric:["All 5 queries are logical and syntactically correct","Queries build a systematic investigation arc","Slack message is concise and leads with the finding"],
         exemplar:`-- Q1 Headline
 SELECT order_date, COUNT(*) AS orders, SUM(amount) AS revenue
 FROM orders
@@ -708,37 +704,37 @@ worth confirming with the West AM before we put it in any narrative.`
     ]
   },
   {
-    label: "Четверг — Качество и очистка",
+    label: "Thursday — Quality & Cleanup",
     tasks: [
       {
         id:"d4t1", type:"Communication", duration:"45 min", difficulty:"Beginner",
-        title:"Напишите отчет о качестве данных",
-        skills:["Деловое письмо","Качество данных","Коммуникация с заинтересованными сторонами"],
-        context:"При проведении аудита первого дня вы обнаружили три проблемы в таблице клиентов: 8% пропущенных электронных писем, 3% повторяющихся идентификаторов и несогласованные значения региона («США», «США», «США»). Ваш менеджер попросил вас официально это описать.",
-        realWorld:"Документация по качеству данных обеспечивает подотчетность и защищает вас. Когда в отчете приводятся неправильные цифры из-за плохих данных, фраза «Я задокументировал это две недели назад» — это разница между плохим днем ​​и событием, ограничивающим карьеру.",
-        objective:"Напишите профессиональный отчет о качестве данных, который сможет прочитать и принять меры нетехнический менеджер.",
-        assignment:`Напишите отчет о качестве данных для таблицы клиентов.
+        title:"Write a Data Quality Report",
+        skills:["Business Writing","Data Quality","Stakeholder Communication"],
+        context:"While running your Day 1 audit, you found three issues in the customers table: 8% missing emails, 3% duplicate IDs, and inconsistent region values ('US', 'United States', 'usa'). Your manager asked you to write it up formally.",
+        realWorld:"Data quality documentation creates accountability and protects you. When a report shows wrong numbers because of bad data, 'I documented this two weeks ago' is the difference between a bad day and a career-limiting event.",
+        objective:"Write a professional data quality report that a non-technical manager can read and act on.",
+        assignment:`Write a Data Quality Report for the customers table.
 
-ПРОБЛЕМЫ:
-— Отсутствующие электронные письма: 8% строк (~400 записей)
-— Дублирующиеся идентификаторы клиентов: 3% (~150 записей)
-— Несовместимые значения региона: «США», «Соединенные Штаты», «США» используются для одного и того же региона.
+ISSUES:
+— Missing emails: 8% of rows (~400 records)
+— Duplicate customer IDs: 3% (~150 records)
+— Inconsistent region values: 'US', 'United States', 'usa' all used for same region
 
-Ваш отчет должен включать:
+Your report should include:
 
-1. Резюме (2–3 предложения) — общая ситуация и ваши рекомендации.
-2. Таблица проблем — Проблема | Затронутые строки | Влияние на бизнес | Предлагаемое исправление
-3. Раздел «Влияние на бизнес» — по каждой проблеме указано, что пойдет не так в дальнейшем, если его не устранить.
-4. Рекомендуемые дальнейшие действия — кто что исправляет и в каком приоритетном порядке
+1. Executive Summary (2–3 sentences) — overall situation and your recommendation
+2. Issues Table — Issue | Rows Affected | Business Impact | Suggested Fix
+3. Business Impact section — for each issue, what goes wrong downstream if unfixed
+4. Recommended Next Steps — who fixes what, in what priority order
 
-Напишите это как настоящий документ, не отмечает. Он должен быть достаточно профессиональным, чтобы пересылать напрямую.`,
+Write it as a real document, not notes. It should be professional enough to forward directly.`,
         hints:[
-          "Краткое содержание: напишите его в последнюю очередь, после того, как вы знаете все, что хотите сказать.",
-          "Влияние на бизнес: «дубликаты идентификаторов могут привести к двойному выставлению счетов или подавлению кампаний по электронной почте»",
-          "Отдавайте приоритет бизнес-рискам, а не простоте исправления",
-          "Назначайте исправления людям/командам — не оставляйте фразу «кто-то должен это исправить»"
+          "Executive summary: write it last, after you know everything you want to say",
+          "Business impact: 'duplicate IDs could cause double-billing or suppressed email campaigns'",
+          "Prioritize by business risk, not ease of fix",
+          "Assign fixes to people/teams — don't leave 'someone should fix this'"
         ],
-        rubric:["Резюме нетехническое и практическое.","Воздействие на бизнес является конкретным и реалистичным","Следующие шаги расставлены по приоритетам и назначены","Профессиональный тон во всем"],
+        rubric:["Executive summary is non-technical and actionable","Business impacts are specific and realistic","Next steps are prioritized and assigned","Professional tone throughout"],
         exemplar:`DATA QUALITY REPORT — customers table
 Author: [you] · Reviewed by: Sarah Chen
 
@@ -775,196 +771,196 @@ Recommended Next Steps
       },
       {
         id:"d4t2", type:"Python", duration:"60 min", difficulty:"Intermediate",
-        title:"Скрипт очистки данных: стандартизация регионов",
-        skills:["Python","pandas","Очистка данных","Кодовая документация"],
-        context:"В вашем отчете о качестве отмечено несоответствие региона. Теперь исправьте это. Сценарий лучше, чем исправление вручную, потому что он повторяем, проверяем и автоматически запускается со следующим беспорядочным файлом.",
-        realWorld:"Скрипты очистки данных — это секретное оружие профессионала в области данных. В отличие от ручного редактирования Excel, сценарии документируют каждое преобразование, а это означает, что через несколько месяцев вы можете точно объяснить аудиторам или заинтересованным сторонам, что изменилось и почему.",
-        objective:"Используйте pandas для стандартизации противоречивых значений и создания прозрачного контрольного журнала.",
-        assignment:`Напишите скрипт Python, который:
+        title:"Data Cleaning Script: Standardize Regions",
+        skills:["Python","pandas","Data Cleaning","Code Documentation"],
+        context:"Your quality report flagged the region inconsistency. Now fix it. A script is better than a manual fix because it's repeatable, auditable, and runs on the next messy file automatically.",
+        realWorld:"Data cleaning scripts are a data professional's secret weapon. Unlike manual Excel edits, scripts document every transformation — which means you can explain exactly what changed and why, months later, to auditors or stakeholders.",
+        objective:"Use pandas to standardize inconsistent values and produce a transparent audit trail.",
+        assignment:`Write a Python script that:
 
-1. Создает этот DataFrame:
-данные = {
+1. Creates this DataFrame:
+data = {
     'customer_id': [1,2,3,4,5,6,7,8,9,10],
-    'регион': ['США','Соединенные Штаты','США','Великобритания','Великобритания','Великобритания','CA','Канада','CA','CAN']
+    'region': ['US','United States','usa','UK','United Kingdom','uk','CA','Canada','ca','CAN']
 }
 
-2. Создает словарь сопоставления стандартизации.
-   (все варианты для США → «США», варианты для Великобритании → «Великобритания», варианты для Калифорнии → «Канада»)
+2. Builds a standardization mapping dict
+   (all US variants → 'United States', UK variants → 'United Kingdom', CA variants → 'Canada')
 
-3. Применяет сопоставление для создания нового столбца Регион_чистый.
+3. Applies the mapping to create a new region_clean column
 
-4. Распечатывает сводку до/после:
-   Исходные уникальные значения: ['США', 'Соединенные Штаты', 'США',...]
-   Очищены уникальные значения: ['США', 'Великобритания', 'Канада']
-   Изменено строк: 7 из 10
+4. Prints a before/after summary:
+   Original unique values: ['US', 'United States', 'usa', ...]
+   Cleaned unique values:  ['United States', 'United Kingdom', 'Canada']
+   Rows changed: 7 of 10
 
-5. Сохраняет результат в файл customer_cleaned.csv.
+5. Saves result to customers_cleaned.csv
 
-Начало файла: строка документации с именем сценария, назначением, автором, датой и ожидаемыми входными столбцами.`,
+Top of file: docstring with script name, purpose, author, date, expected input columns`,
         hints:[
-          "дф['Регион'].карта(маппинг_дикт) или .заменять() оба работают",
-          "дф['Регион'].уникальный() показывает разные значения до и после",
-          "(дф['Регион'] != дф['регион_чистый']).сумма() подсчитывает измененные строки",
-          "Формат строки документации: строка в тройных кавычках вверху файла."
+          "df['region'].map(mapping_dict) or .replace() both work",
+          "df['region'].unique() shows distinct values before and after",
+          "(df['region'] != df['region_clean']).sum() counts changed rows",
+          "Docstring format: triple-quoted string at top of file"
         ],
-        rubric:["Сопоставление охватывает все варианты выборочных данных.","Четкая печать до/после с правильным количеством изменений.","Вывод сохранен правильно","Строка документации присутствует и информативна."],
+        rubric:["Mapping covers all variants in sample data","Before/after printed clearly with correct change count","Output saved correctly","Docstring is present and informative"],
         exemplar:`"""
-стандартизировать_регионы.пи
-Цель: нормализовать значения области произвольного текста в экспорте клиентов, чтобы
-         последующие отчеты группируют их правильно.
-Автор: [вы]
-Дата: 26 мая 2026 г.
-Ввод: DataFrame со столбцами [customer_id, регион]
-Вывод: customer_cleaned.csv с добавленным столбцом Регион_чистый.
+standardize_regions.py
+Purpose: Normalize free-text region values in the customers export so
+         downstream reporting groups them correctly.
+Author : [you]
+Date   : 2026-05-26
+Input  : DataFrame with columns [customer_id, region]
+Output : customers_cleaned.csv with added region_clean column
 """
-импортировать панд как ПД
+import pandas as pd
 
-данные = {
+data = {
     'customer_id': [1,2,3,4,5,6,7,8,9,10],
-    'регион': ['США','Соединенные Штаты','США','Великобритания','Великобритания','Великобритания','CA','Канада','CA','CAN']
+    'region':      ['US','United States','usa','UK','United Kingdom','uk','CA','Canada','ca','CAN']
 }
-дф = pd.DataFrame(данные)
+df = pd.DataFrame(data)
 
-КАРТОГРАФИЯ = {
-    'США':'Соединенные Штаты','Соединенные Штаты':'Соединенные Штаты','США':'Соединенные Штаты Штаты», «США»: «Соединенные Штаты»,
-    'UK':'Великобритания','Великобритания':'Великобритания','Великобритания':'Великобритания','GB':'Великобритания',
-    'CA':'Канада','Канада':'Канада','Калифорния':'Канада','CAN':'Канада'
+MAPPING = {
+    'US':'United States','United States':'United States','usa':'United States','USA':'United States',
+    'UK':'United Kingdom','United Kingdom':'United Kingdom','uk':'United Kingdom','GB':'United Kingdom',
+    'CA':'Canada','Canada':'Canada','ca':'Canada','CAN':'Canada'
 }
 
-дф['регион_чистый'] = дф['Регион'].карта(MAPPING)
-изменено = интервал((дф['Регион'] != дф['регион_чистый']).сумма())
+df['region_clean'] = df['region'].map(MAPPING)
+changed = int((df['region'] != df['region_clean']).sum())
 
-распечатать("Исходные уникальные значения:", отсортированный(дф['Регион'].уникальный().внести в список()))
-распечатать("Уникальные значения очищены: ", отсортированный(дф['регион_чистый'].водянка().уникальный().внести в список()))
-распечатать(ж"Строки изменены: {изменено} из {Лен(дф)}")
+print("Original unique values:", sorted(df['region'].unique().tolist()))
+print("Cleaned unique values: ", sorted(df['region_clean'].dropna().unique().tolist()))
+print(f"Rows changed: {changed} of {len(df)}")
 
-df.to_csv("customer_cleaned.csv", индекс=Неверно)`
+df.to_csv("customers_cleaned.csv", index=False)`
       }
     ]
   },
   {
-    label: "Пятница — Синтез",
+    label: "Friday — Synthesis",
     tasks: [
       {
         id:"d5t1", type:"Tableau", duration:"90 min", difficulty:"Intermediate",
-        title:"Спецификация информационной панели: обзор продаж",
-        skills:["Tableau","Рассказ о данных","Design","Визуальная иерархия"],
-        context:"Это ваше последнее задание на первой неделе. Ваш менеджер хочет, чтобы вы подготовили информационную панель «Обзор продаж на первой неделе» для общего собрания в понедельник. Вы представите спецификацию, а не встроенную версию, в течение 10 минут.",
-        realWorld:"Спецификации информационной панели — это то, как команды обработки данных сообщают о намерениях, прежде чем тратить часы на создание. Четкая спецификация предотвращает доработку, заранее объединяет заинтересованных сторон и ускоряет фактическую сборку. Умение написать спецификацию, на основе которой смогут построить другие, — это навык старшего аналитика, который вы сейчас практикуете.",
-        objective:"Напишите полную спецификацию информационной панели, которая определит цель, метрики, типы диаграмм, макет и ключевую информацию.",
-        assignment:`Напишите полную спецификацию информационной панели для информационной панели «Обзор продаж».
+        title:"Dashboard Specification: Sales Overview",
+        skills:["Tableau","Data Storytelling","Design","Visual Hierarchy"],
+        context:"It's your last task of week 1. Your manager wants you to spec out a 'Week 1 Sales Overview' dashboard for the Monday all-hands. You'll present the spec — not the built version — in a 10-minute slot.",
+        realWorld:"Dashboard specs are how data teams communicate intent before spending hours building. A clear spec prevents rework, aligns stakeholders early, and makes the actual build go faster. Being able to write a spec that others can build from is a senior-analyst skill you're practicing now.",
+        objective:"Write a complete dashboard specification that defines purpose, metrics, chart types, layout, and the key insight.",
+        assignment:`Write a full Dashboard Specification doc for a Sales Overview dashboard.
 
-1. Заявление о цели — одно предложение: для кого это и какое решение это поможет им принять?
+1. Purpose Statement — one sentence: who is this for and what decision will it help them make?
 
-2. Метрики (выберите ровно 4 из этого списка):
-   общий доход | количество заказов | средняя стоимость заказа | лучшие продукты | выручка по регионам | новые и постоянные клиенты | заказы по статусу
+2. Metrics (pick exactly 4 from this list):
+   total revenue | order count | avg order value | top products | revenue by region | new vs returning customers | orders by status
 
-   Для каждой метрики: тип диаграммы, отображаемый временной диапазон, доступные фильтры, почему этот тип диаграммы
+   For each metric: chart type, time range shown, available filters, why this chart type
 
-3. Описание макета — опишите, где находится каждая метрика и почему (используйте положение часов или язык сетки: «верхний левый», «нижний правый» и т. д.).
+3. Layout Description — describe where each metric lives and why (use clock positions or grid language: "top-left," "bottom-right," etc.)
 
-4. Выбор дизайна — основной цвет, где идет номер героя, о чем говорит заголовок/подзаголовок
+4. Design Choices — primary color, where the hero number goes, what the title/subtitle say
 
-5. 10-секундное понимание — что именно зритель должен понять в течение 10 секунд после открытия этой панели? Сформулируйте это как предложение.
+5. The 10-Second Insight — what single thing should a viewer understand within 10 seconds of opening this dashboard? State it as a sentence.
 
-6. Если бы у вас была открыта Tableau прямо сейчас: опишите шаг за шагом, как бы вы построили первую диаграмму.`,
+6. If you had Tableau open right now: describe step-by-step how you'd build the first chart.`,
         hints:[
-          "Показатели героя располагаются вверху слева или по центру вверху — взгляд сначала попадает туда.",
-          "Меньше показателей = более понятная панель мониторинга. 4 — подходящее число для 10-минутного слота на все руки",
-          "Ваша 10-секундная информация должна представлять собой конкретное утверждение: «Западный регион приносит 60% доходов», а не «обзор доходов».",
-          "Постройте шаг за шагом: соедините данные → перетащите измерение в столбцы → перетащите показатель в строки → выберите тип диаграммы."
+          "Hero metric goes top-left or center-top — eyes land there first",
+          "Fewer metrics = clearer dashboard. 4 is the right number for a 10-minute all-hands slot",
+          "Your 10-second insight should be a specific claim: 'The West region drives 60% of revenue' not 'revenue overview'",
+          "Build step-by-step: connect data → drag dimension to columns → drag measure to rows → choose chart type"
         ],
-        rubric:["Заявление о цели является конкретным и ориентированным на аудиторию.","Обоснования типа диаграммы обоснованы","Выбор макета отражает принципы визуальной иерархии.","10-секундное понимание — это конкретное, проверяемое утверждение"],
-        exemplar:`DASHBOARD SPEC — Обзор продаж (неделя 1)
+        rubric:["Purpose statement is specific and audience-focused","Chart type justifications are sound","Layout choices reflect visual hierarchy principles","10-second insight is a specific, testable claim"],
+        exemplar:`DASHBOARD SPEC — Sales Overview (Week 1)
 
-1. Цель
-Чтобы широкая аудитория ответила: «Двигаемся ли мы по правильному пути в этом квартале и
-где импульс?» менее чем за 60 секунд и с достаточной специфичностью, чтобы
-принять следующее решение (какой регион или продукт привлекает внимание).
+1. Purpose
+For the all-hands audience to answer "are we on track this quarter and
+where is the momentum?" in under 60 seconds, with enough specificity to
+make the next decision (which region or product gets attention).
 
-2. Метрики (4)
-а. Общий доход — плитка главного ключевого показателя эффективности в сравнении с планом и предыдущим периодом
-   Диаграмма: одно большое число + дельта-стрелка + крошечная спарклайн.
-   Время: QTD с небольшой меткой предыдущего QTD.
-   Фильтры: на этой плитке нет — это якорь.
-   Почему: одно число — это то, что люди помнят из общего числа.
+2. Metrics (4)
+a. Total revenue — hero KPI tile, vs plan and prior period
+   Chart: single big number + delta arrow + tiny sparkline
+   Time: QTD with a small label for prior QTD
+   Filters: none on this tile — it's the anchor
+   Why: one number is what people remember from an all-hands.
 
-б. Выручка по регионам
-   Диаграмма: горизонтальная полоса, отсортировано по выручке текущего периода
-   Время: текущий квартал
-   Фильтры: тип плана
-   Почему запрет: регионы ранжированы, зрители хотят порядка, а не частей целого.
+b. Revenue by region
+   Chart: horizontal bar, sorted by current-period revenue
+   Time: current quarter
+   Filters: plan type
+   Why bar: regions are ranked, viewers want order, not parts-of-whole.
 
-в. Ежемесячная динамика дохода (последние 6 месяцев)
-   Диаграмма: линейный график
-   Время: через 6 месяцев
-   Фильтры: нет — одна строка для всей компании
-   Почему линия: вопрос в форме тренда.
+c. Monthly revenue trend (last 6 months)
+   Chart: line chart
+   Time: trailing 6 months
+   Filters: none — single line for the whole company
+   Why line: shape of the trend is the question.
 
-д. Доход от новых и вернувшихся клиентов
-   Диаграмма: сложенная полоса по месяцам, два сегмента
-   Время: через 6 месяцев
-   Фильтры: регион
-   Почему сложено: показывает одновременно и микс, и общую сумму.
+d. New vs returning customer revenue
+   Chart: stacked bar by month, two segments
+   Time: trailing 6 months
+   Filters: region
+   Why stacked: shows both the mix and the total at once.
 
-3. Планировка
-Вверху слева: плитка KPI героя (самая большая, здесь находится глаз). первый)
-Вверху справа: линия тренда (контекст для KPI).
-Внизу слева: региональная панель (где находится доход)
-Внизу справа: новый и возвращающийся стек (откуда происходит рост)
+3. Layout
+Top-left: hero KPI tile (largest, eye lands here first)
+Top-right: trend line (context for the KPI)
+Bottom-left: regional bar (where the revenue lives)
+Bottom-right: new vs returning stack (where the growth is coming from)
 
-4. Выбор дизайна
-Основной цвет: бирюзовый DataBridge для фактических значений, нейтральный серый для предыдущих.
-период/опорные линии.
-Номер героя: вверху слева, 64 пт, с разницей в 14 пт по сравнению с предыдущим кварталом.
-внизу.
-Заголовок: «Продажи — неделя [дата]»
-Подзаголовок: «Доход и динамика за квартал по регионам и группам клиентов».
+4. Design choices
+Primary color: DataBridge teal for actual values, neutral grey for prior
+period / reference lines.
+Hero number: top-left, 64pt, with a 14pt delta vs prior quarter directly
+underneath.
+Title: "Sales — Week of [date]"
+Subtitle: "QTD revenue and momentum by region and customer cohort"
 
-5. 10-секундное понимание
-«Мы отслеживаем превышение плана на 6%, причем две трети роста приходится на долю
-возвращающихся клиентов в регионе EMEA».
+5. 10-second insight
+"We're tracking 6% above plan, with two-thirds of growth coming from
+returning customers in EMEA."
 
-6. Построение первой диаграммы (KPI героя), шаг за шагом
-1. Подключитесь к источнику данных «Заказы + клиенты».
-2. Новый рабочий лист → перетащите СУММУ (сумму) на карточку оценок.
-3. Отфильтруйте дата_заказа по текущему кварталу.
-4. Измените тип метки на «Большое число»/используйте однострочный текстовый формат.
-5. Добавьте вычисляемое поле: (Доход за квартал – за предыдущий квартал) / предыдущий квартал → перетащите
-   под большим числом в виде дельты с условным цветом.
-6. Добавьте 12-недельную спарклайн ниже дельты того же показателя.
-7. Перейдите на панель мониторинга и поместите ее вверху слева на 50 % ширины.`
+6. Building the first chart (hero KPI), step-by-step
+1. Connect to the orders + customers data source.
+2. New worksheet → drag SUM(amount) onto the marks card.
+3. Filter order_date to current quarter.
+4. Change mark type to "Big number" / use a single-row text format.
+5. Add a calculated field: (QTD revenue – prior QTD) / prior QTD → drag
+   below the big number as the delta with conditional color.
+6. Add a 12-week sparkline below the delta from the same measure.
+7. Move to dashboard, place top-left at 50% width.`
       },
       {
         id:"d5t2", type:"Reflection", duration:"30 min", difficulty:"Intro",
-        title:"Ретроспектива первой недели",
-        skills:["Self-Awareness","Мышление роста","Профессиональное общение"],
-        context:"Пятница, полдень. Большинство людей пропускают размышления, потому что они кажутся непродуктивными. Аналитики, которые делают это постоянно, растут быстрее всего, и менеджеры замечают, кто приходит в понедельник с дополнительными вопросами, основанными на их собственном мнении.",
-        realWorld:"Структурированная саморефлексия ускоряет развитие навыков — это хорошо документировано в науке об обучении. Способность точно оценивать собственные пробелы в знаниях (метапознание) — это то, что отличает аналитиков, у которых наблюдается плато, от тех, кто становится старшими через 2 года вместо 5.",
-        objective:"Практикуйте структурированную профессиональную саморефлексию, чтобы выявить закономерности в своем обучении и назвать реальные пробелы в знаниях.",
-        assignment:`Напишите ретроспективу первой недели. Ваш менеджер это прочтет.
+        title:"Week 1 Retrospective",
+        skills:["Self-Awareness","Growth Mindset","Professional Communication"],
+        context:"Friday afternoon. Most people skip reflection because it feels unproductive. The analysts who do it consistently are the ones who grow fastest — and managers notice who comes in Monday with follow-up questions from their own thinking.",
+        realWorld:"Structured self-reflection accelerates skill development — this is well-documented in learning science. The ability to accurately assess your own knowledge gaps (metacognition) is what separates analysts who plateau from those who become seniors in 2 years instead of 5.",
+        objective:"Practice structured professional self-reflection to identify patterns in your learning and name your real knowledge gaps.",
+        assignment:`Write your Week 1 retrospective. Your manager will read this.
 
-1. ГЛАВНОЕ — В какой момент вы подумали: «Я действительно это понял»? Что конкретно щелкнуло?
+1. HIGHLIGHT — What was the moment you thought "I actually got this"? What specifically clicked?
 
-2. САМЫЙ ТЯЖЕЛЫЙ МОМЕНТ. Что было самым трудным? Это было техническое, концептуальное или связанное с управлением самой работой? Что ты сделал?
+2. HARDEST MOMENT — What was most difficult? Was it technical, conceptual, or about managing the work itself? What did you do?
 
-3. ТРИ ВЕЩИ, КОТОРЫМ ВЫ ИЗУЧИЛИ — Не навыкам. Идеи. Вещи, которые вы сейчас понимаете иначе, чем в понедельник.
+3. THREE THINGS YOU LEARNED — Not skills. Insights. Things you understand differently now than Monday.
 
-4. ВАШ ОДИН ОТКРЫТЫЙ ВОПРОС. Что-то конкретное, чего вы до сих пор не понимаете. Не «SQL» — что-то вроде «как вы решаете, когда использовать подзапрос, а когда CTE?»
+4. YOUR ONE OPEN QUESTION — Something specific you still don't understand. Not "SQL" — something like "how do you decide when to use a subquery vs a CTE?"
 
-5. УВЕРЕННОСТЬ В НАВЫКАХ (оценка 1–5 с одним предложением). каждый):
-   SQL | Питон | Эксель | Таблица | Общение с нетехническими заинтересованными сторонами
+5. SKILL CONFIDENCE (rate 1–5 with one sentence each):
+   SQL | Python | Excel | Tableau | Communicating with non-technical stakeholders
 
-6. НАМЕРЕНИЕ ВТОРОЙ НЕДЕЛИ. Одна конкретная вещь, к которой вы бы подошли по-другому или углубились бы.
+6. WEEK 2 INTENTION — One specific thing you'd approach differently or go deeper on.
 
-Будьте честны. Точная самооценка более ценна, чем уверенный отзыв.`,
+Be honest. Accurate self-assessment is more valuable than a confident-sounding review.`,
         hints:[
-          "Конкретно > расплывчато: «Я боролся с ХЕВИНГ против ГДЕ» лучше «SQL был трудным»",
-          "Ваш открытый вопрос должен быть тем, на что вы искренне хотите получить ответ, а не тем, что, по вашему мнению, звучит впечатляюще.",
-          "Если все ваши рейтинги уверенности равны 4–5, ваш руководитель задастся вопросом, хорошо ли вы себя осознаете.",
-          "Намерение второй недели должно быть осуществимым: «Я посмотрю CTE до вторника», а не «научусь лучше в SQL»."
+          "Specific > vague: 'I struggled with HAVING vs WHERE' beats 'SQL was hard'",
+          "Your open question should be something you genuinely want answered — not something you think sounds impressive",
+          "If all your confidence ratings are 4–5, your manager will wonder if you're self-aware",
+          "Week 2 intention should be actionable: 'I'll look up CTEs before Tuesday' not 'get better at SQL'"
         ],
-        rubric:["Выделение конкретное, а не общее","Самый трудный момент показывает честное самосознание","Три идеи — это настоящие идеи, а не просто названия навыков","Открытый вопрос достаточно конкретен, чтобы на него можно было ответить","Рейтинги уверенности кажутся выверенными и честными"],
+        rubric:["Highlight is specific, not generic","Hardest moment shows honest self-awareness","Three insights are real insights, not just skill names","Open question is specific enough that it could be answered","Confidence ratings feel calibrated and honest"],
         exemplar:`Week 1 Retrospective — [you]
 
 1. HIGHLIGHT
@@ -1072,34 +1068,34 @@ function escapeHtml(s){
 
 function renderIntro(){
   return `
-    <h2 class="sr-only">Симулятор младшего аналитика данных — ввод в эксплуатацию, неделя 1</h2>
-    <div class="intro-eyebrow">${COMPANY.name} · Новая программа найма</div>
+    <h2 class="sr-only">Associate Data Analyst Simulator — Week 1 Onboarding</h2>
+    <div class="intro-eyebrow">${COMPANY.name} · New Hire Program</div>
     <div class="intro-emoji"><i data-lucide="bar-chart-3"></i></div>
-    <h1 class="intro-h1">Ваша первая неделя в качестве <span>Младший аналитик данных</span></h1>
-    <p class="intro-sub">Сегодня утро понедельника. Ваш бейдж еще не работает, ваш ноутбук настраивают, но ваш менеджер только что замедлил выполнение первых задач.</p>
+    <h1 class="intro-h1">Your first week as an <span>Associate Data Analyst</span></h1>
+    <p class="intro-sub">It's Monday morning. Your badge doesn't work yet, your laptop's being set up — but your manager just Slacked you your first tasks.</p>
 
     <div class="role-card">
-      <div class="kicker">Ваша роль</div>
+      <div class="kicker">Your role</div>
       <div class="role-line">
-        <strong>Младший аналитик данных</strong> at <strong>${COMPANY.name}</strong>
+        <strong>Associate Data Analyst</strong> at <strong>${COMPANY.name}</strong>
         <span class="meta">${COMPANY.desc}</span>
-        <span class="meta">Менеджер: ${COMPANY.manager}, ${COMPANY.managerTitle}</span>
+        <span class="meta">Manager: ${COMPANY.manager}, ${COMPANY.managerTitle}</span>
       </div>
     </div>
 
     <div class="stat-row">
-      <div class="stat-card"><div class="stat-icon"><i data-lucide="calendar-days"></i></div><div class="stat-label">5 дней</div><div class="stat-sub">Пн – Пт</div></div>
-      <div class="stat-card"><div class="stat-icon"><i data-lucide="list-checks"></i></div><div class="stat-label">10 задач</div><div class="stat-sub">Реальные сценарии</div></div>
-      <div class="stat-card"><div class="stat-icon"><i data-lucide="message-square"></i></div><div class="stat-label">Обзор ИИ</div><div class="stat-sub">Обратная связь менеджера</div></div>
+      <div class="stat-card"><div class="stat-icon"><i data-lucide="calendar-days"></i></div><div class="stat-label">5 Days</div><div class="stat-sub">Mon – Fri</div></div>
+      <div class="stat-card"><div class="stat-icon"><i data-lucide="list-checks"></i></div><div class="stat-label">10 Tasks</div><div class="stat-sub">Real scenarios</div></div>
+      <div class="stat-card"><div class="stat-icon"><i data-lucide="message-square"></i></div><div class="stat-label">AI Review</div><div class="stat-sub">Manager feedback</div></div>
     </div>
 
     <div class="how-box">
-      <div class="kicker" style="margin-bottom:10px">Как это работает</div>
+      <div class="kicker" style="margin-bottom:10px">How it works</div>
       ${[
-        "Прочтите краткое описание, в том числе о том, почему эта задача существует на реальных должностях.",
-        "Напишите свой ответ в поле для отправки",
-        "Отправьте на рассмотрение менеджеру с помощью искусственного интеллекта",
-        "Проживайте неделю в своем темпе"
+        'Read the brief — including why this task exists in real jobs',
+        'Write your answer in the submission box',
+        'Submit for AI-powered manager review',
+        'Move through the week at your own pace'
       ].map((s,i)=>`<div class="how-step"><div class="how-num">${i+1}</div><div class="how-text">${s}</div></div>`).join('')}
     </div>
 
@@ -1107,7 +1103,7 @@ function renderIntro(){
       ${Object.entries(TYPE_COLOR).map(([s,c])=>`<span class="skill-pill" style="color:${c}">${s}</span>`).join('')}
     </div>
 
-    <button class="btn-primary" onclick="setScreen('board')">Начало первой недели →</button>
+    <button class="btn-primary" onclick="setScreen('board')">Start Week 1 →</button>
   `;
 }
 
@@ -1121,7 +1117,7 @@ function renderBoard(){
     <div class="board-head">
       <div>
         <div class="board-eyebrow">${COMPANY.name}</div>
-        <div class="board-title">Доска задач первой недели</div>
+        <div class="board-title">Week 1 Task Board</div>
       </div>
       <div>
         <div class="board-progress-num">${done}<span>/${total}</span></div>
@@ -1144,11 +1140,11 @@ function renderBoard(){
       const iconClass = st;
       const icon = st==='reviewed' ? '✓' : st==='submitted' ? '◴' : '○';
       return `
-        <класс div="карточка-задача" ${st==='reviewed'?'reviewed':''}" onclick="openTask('${t.id}')">
+        <div class="task-card ${st==='reviewed'?'reviewed':''}" onclick="openTask('${t.id}')">
           <div class="task-row">
             <div class="task-body">
               <div class="task-meta">
-      <span class="type-pill" style="color:${TYPE_COLOR[t.type]}">${t.type}</span>
+                <span class="type-pill" style="color:${TYPE_COLOR[t.type]}">${t.type}</span>
                 <span class="task-dur">${t.duration}</span>
                 <span class="task-diff">${t.difficulty}</span>
               </div>
@@ -1199,32 +1195,32 @@ function renderTaskScreen(){
   if(state.tab === 'brief'){
     panel = `
       <div class="brief-situation">
-        <div class="brief-h">Ситуация</div>
+        <div class="brief-h">The situation</div>
         <p>${escapeHtml(t.context)}</p>
       </div>
       <div class="brief-realworld">
-        <div class="brief-h">В реальном мире</div>
+        <div class="brief-h">In the real world</div>
         <p>${escapeHtml(t.realWorld)}</p>
       </div>
       <div class="brief-objective">
-        <div class="brief-h">Цель обучения</div>
+        <div class="brief-h">Learning objective</div>
         <p>${escapeHtml(t.objective)}</p>
       </div>
       <div class="brief-skills">
-        <div class="brief-h">Навыки, которые вы будете использовать</div>
+        <div class="brief-h">Skills you'll use</div>
         <div class="brief-skills-list">${t.skills.map(s=>`<span class="brief-skill-chip">${escapeHtml(s)}</span>`).join('')}</div>
       </div>
-      <button class="btn-view-feedback" onclick="setTab('task')">Посмотреть задание →</button>
+      <button class="btn-view-feedback" onclick="setTab('task')">View Assignment →</button>
     `;
   } else if(state.tab === 'task'){
     const disabled = st === 'reviewed';
     panel = `
       <div class="assignment-box">${renderAssignmentBody(t.assignment)}</div>
-      <label class="sub-label">Ваше представление</label>
-      <класс текстовой области="подчинение" id="черновикBox" Заполнитель="Напишите здесь свой ответ. Для кода запишите его. Для письменных заданий используйте полные предложения..." ${disabled?'disabled':''} oninput="onDraft(this.value)">${escapeHtml(state.draft)}</textarea>
+      <label class="sub-label">Your submission</label>
+      <textarea class="submission" id="draftBox" placeholder="Write your answer here. For code, write it out. For written tasks, use complete sentences..." ${disabled?'disabled':''} oninput="onDraft(this.value)">${escapeHtml(state.draft)}</textarea>
       ${st === 'reviewed'
-        ? `<button class="btn-view-feedback" onclick="setScreen('review')">Посмотреть отзыв менеджера →</button>`
-        : `<button class="btn-submit" id="submitBtn" onclick="submitForReview()" ${!state.draft.trim()?'disabled':''}>Отправить на рассмотрение ↗</button>`
+        ? `<button class="btn-view-feedback" onclick="setScreen('review')">View Manager Feedback →</button>`
+        : `<button class="btn-submit" id="submitBtn" onclick="submitForReview()" ${!state.draft.trim()?'disabled':''}>Submit for Review ↗</button>`
       }
     `;
   } else {
@@ -1235,7 +1231,7 @@ function renderTaskScreen(){
       </div>
       ${t.hints.map(h=>`<div class="hint-row"><span class="hint-bulb">💡</span><div class="hint-text">${escapeHtml(h)}</div></div>`).join('')}
       <div class="rubric-box">
-        <div class="brief-h" style="margin-bottom:8px">Что ищет ваш менеджер</div>
+        <div class="brief-h" style="margin-bottom:8px">What your manager is looking for</div>
         ${t.rubric.map(r=>`<div class="rubric-item">${escapeHtml(r)}</div>`).join('')}
       </div>
     `;
@@ -1243,7 +1239,7 @@ function renderTaskScreen(){
 
   return `
     <div class="task-nav">
-      <button class="btn-back" onclick="setScreen('board')">← Доска</button>
+      <button class="btn-back" onclick="setScreen('board')">← Board</button>
       <div style="flex:1"></div>
       <span class="type-pill" style="color:${TYPE_COLOR[t.type]}">${t.type}</span>
       <span class="task-dur">${t.duration}</span>
@@ -1252,9 +1248,9 @@ function renderTaskScreen(){
     <p class="task-from">👤 ${COMPANY.manager}, ${COMPANY.managerTitle}</p>
 
     <div class="tabs">
-      <button class="tab ${state.tab==='brief'?'active':''}" по клику="setTab('краткий')">Почему это важно</button>
-      <button class="tab ${state.tab==='task'?'active':''}" по клику="setTab('Задача')">Назначение</button>
-      <button class="tab ${state.tab==='hints'?'active':''}" по клику="setTab('намеки')">Подсказки</button>
+      <button class="tab ${state.tab==='brief'?'active':''}" onclick="setTab('brief')">Why This Matters</button>
+      <button class="tab ${state.tab==='task'?'active':''}" onclick="setTab('task')">Assignment</button>
+      <button class="tab ${state.tab==='hints'?'active':''}" onclick="setTab('hints')">Hints</button>
     </div>
     <div class="tab-panel active">${panel}</div>
   `;
@@ -1267,13 +1263,13 @@ function renderReview(){
   const next = findNext(t.id);
 
   return `
-    <button class="btn-back" onclick="setScreen('board')" style="margin-bottom:18px">← Вернуться на доску</button>
+    <button class="btn-back" onclick="setScreen('board')" style="margin-bottom:18px">← Back to board</button>
 
     <div class="reviewer">
       <div class="avatar">${COMPANY.initials}</div>
       <div>
         <div class="reviewer-name">${COMPANY.manager}</div>
-        <div class="reviewer-sub">Ре: ${escapeHtml(t.title)}</div>
+        <div class="reviewer-sub">Re: ${escapeHtml(t.title)}</div>
       </div>
       <span class="check-icon">✓</span>
     </div>
@@ -1281,14 +1277,14 @@ function renderReview(){
     <div class="review-box">${review ? renderReviewText(review) : ''}</div>
 
     <details class="your-sub">
-      <summary>Ваше представление</summary>
+      <summary>Your submission</summary>
       <div class="sub-display">${escapeHtml(state.submissions[t.id] || '')}</div>
     </details>
 
     <div class="review-actions">
       ${next
         ? `<button class="btn-next" onclick="goToNext('${next.id}')">Next: ${escapeHtml(next.title)} →</button>`
-        : `<div class="complete-banner">🎉 Первая неделя завершена!</div>`
+        : `<div class="complete-banner">🎉 Week 1 Complete!</div>`
       }
       <button class="btn-board" onclick="setScreen('board')">Board</button>
     </div>
@@ -1340,7 +1336,7 @@ async function submitForReview(){
   state.screen = 'review';
   state.reviews[id] = ''; // empty triggers loading-ish; but renderReview just shows empty box
   render();
-  document.querySelector('.review-box').innerHTML = `<div class="review-loading"><div class="spinner"></div>${COMPANY.manager} рассматривает вашу заявку…</div>`;
+  document.querySelector('.review-box').innerHTML = `<div class="review-loading"><div class="spinner"></div>${COMPANY.manager} is reviewing your submission…</div>`;
 
   const apiKey = localStorage.getItem('sim2-apikey');
   let review;
@@ -1348,7 +1344,7 @@ async function submitForReview(){
     try{ review = await fetchLiveReview(apiKey, t, state.draft); }
     catch(e){
       console.warn(e);
-      review = fallbackReview(t, state.draft, "Живой обзор не удался ("+(e.message||'unknown')+"). Возвращаемся к рубрике самопроверки.");
+      review = fallbackReview(t, state.draft, 'Live review failed ('+(e.message||'unknown')+'). Falling back to rubric self-check.');
     }
   } else {
     review = fallbackReview(t, state.draft);
@@ -1360,9 +1356,9 @@ async function submitForReview(){
 }
 
 async function fetchLiveReview(apiKey, task, submission){
-  const userMsg = `You are ${COMPANY.manager}, ${COMPANY.managerTitle} at ${COMPANY.name}. Вы просматриваете работу младшего аналитика данных за первую неделю.
+  const userMsg = `You are ${COMPANY.manager}, ${COMPANY.managerTitle} at ${COMPANY.name}. You're reviewing work from an associate data analyst in their first week.
 
-ЗАДАЧА: ${task.title}
+TASK: ${task.title}
 TYPE: ${task.type}
 
 ASSIGNMENT:
@@ -1374,19 +1370,19 @@ ${task.rubric.map((r,i)=>`${i+1}. ${r}`).join('\n')}
 SUBMISSION:
 ${submission}
 
-Дайте обратную связь, как у настоящего менеджера — теплую, прямую, конкретную. Структура как:
+Give feedback as this manager — warm, direct, specific. Structure as:
 
-**В целом:** (одно вердикт)
+**Overall:** (one verdict sentence)
 
-**Что удалось получить:** (2 конкретные вещи, которые сработали)
+**What landed:** (2 specific things that worked)
 
-**Улучшите это:** (2 конкретных практических предложения, касающихся фактического отправления)
+**Improve this:** (2 specific, actionable suggestions referencing their actual submission)
 
-**Совет от профессионала на следующий раз:** (одна конкретная привычка или техника)
+**Pro tip for next time:** (one concrete habit or technique)
 
-**Оценка:** Превосходит ожидания/соответствует ожиданиям/разрабатывается/требует доработки
+**Assessment:** Exceeds Expectations / Meets Expectations / Developing / Needs Revision
 
-Макс 280 слов. Ссылайтесь на конкретные вещи из их подачи, а не на общие похвалы.`;
+Max 280 words. Reference specific things from their submission, not generic praise.`;
 
   const res = await fetch('https://api.anthropic.com/v1/messages',{
     method:'POST',
@@ -1407,7 +1403,7 @@ ${submission}
     throw new Error(`API ${res.status}: ${txt.slice(0,200)}`);
   }
   const data = await res.json();
-  return data.content?.map(b=>b.text||'').join('') || "Никакого ответа.";
+  return data.content?.map(b=>b.text||'').join('') || 'No response.';
 }
 
 function fallbackReview(task, submission, prefix=''){
@@ -1422,26 +1418,14 @@ function fallbackReview(task, submission, prefix=''){
 
   let out = '';
   if(prefix) out += `*${prefix}*\n\n`;
-  out += `**Общие сведения:** Самостоятельная проверка рубрики (ключ API не настроен). Проверьте свою заявку на соответствие приведенным ниже критериям.
-
-`;
-  out += `**Что, скорее всего, попало:**
-`;
-  out += landed.length ? landed.map(h=>`- ${h.r}`).join('\n') : `- Трудно обнаружить авто — проверьте рубрику самостоятельно.`;
-  out += `
-
-**Улучшите это:**
-`;
-  out += missing.length ? missing.map(h=>`- ${h.r}`).join('\n') : `- Все элементы рубрики отображаются адресованными.`;
-  out += `
-
-**Совет для профессионалов в следующий раз:** Добавьте ключ АПИ Клод в верхнюю часть навигации (кнопка «Ключ API»), чтобы получить обратную связь в стиле менеджера, которая ссылается на вашу точную отправку.
-
-`;
-  out += `**Оценка:** Длина — ${words} слова. Рубрикаторный охват — ${landed.length}/${task.rubric.length}.\n\n`;
-  out += `**Пример убедительного ответа** (ваш не обязательно должен совпадать — форма должна совпадать):
-
-`;
+  out += `**Overall:** Rubric self-check (no API key configured) — review your own submission against the criteria below.\n\n`;
+  out += `**What likely landed:**\n`;
+  out += landed.length ? landed.map(h=>`- ${h.r}`).join('\n') : `- Hard to auto-detect — check the rubric yourself.`;
+  out += `\n\n**Improve this:**\n`;
+  out += missing.length ? missing.map(h=>`- ${h.r}`).join('\n') : `- All rubric items appear addressed.`;
+  out += `\n\n**Pro tip for next time:** Add a Claude API key in the top nav (the "API Key" button) for real manager-style feedback that references your exact submission.\n\n`;
+  out += `**Assessment:** Length — ${words} words. Rubric coverage — ${landed.length}/${task.rubric.length}.\n\n`;
+  out += `**Strong-answer exemplar** (yours doesn't need to match — the shape should):\n\n`;
   out += task.exemplar;
   return out;
 }
@@ -1456,12 +1440,12 @@ function saveApiKey(){
   const v = document.getElementById('apiKeyInput').value.trim();
   if(v) localStorage.setItem('sim2-apikey', v); else localStorage.removeItem('sim2-apikey');
   closeApiModal();
-  toast(v ? "Ключ API сохранен локально." : "Ключ API очищен.");
+  toast(v ? 'API key saved locally.' : 'API key cleared.');
 }
 function clearApiKey(){
   localStorage.removeItem('sim2-apikey');
   document.getElementById('apiKeyInput').value = '';
-  toast("Ключ API очищен.");
+  toast('API key cleared.');
 }
 
 /* ============ THEME / RESET / TOAST ============ */
@@ -1470,17 +1454,17 @@ function toggleTheme(){
   const next = cur === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('apk-theme', next);
-  document.getElementById('themeIcon').innerHTML = "<я данные-ясный=\"" + (next === 'dark' ? 'sun' : 'moon') + '"></i>';
+  document.getElementById('themeIcon').innerHTML = '<i data-lucide="' + (next === 'dark' ? 'sun' : 'moon') + '"></i>';
   if(window.grainRefreshIcons)grainRefreshIcons();else if(window.lucide)lucide.createIcons();
 }
 (function initTheme(){
   const saved = localStorage.getItem('apk-theme');
   if(saved) document.documentElement.setAttribute('data-theme', saved);
-  document.getElementById('themeIcon').innerHTML = "<я данные-ясный=\"" + (document.documentElement.getAttribute('data-theme')==='dark'?'sun':'moon') + '"></i>';
+  document.getElementById('themeIcon').innerHTML = '<i data-lucide="' + (document.documentElement.getAttribute('data-theme')==='dark'?'sun':'moon') + '"></i>';
 })();
 
 function resetSim(){
-  if(!confirm("Очистить все отправленные материалы и прогресс?")) return;
+  if(!confirm('Clear all your submissions and progress?')) return;
   localStorage.removeItem(STORE);
   location.reload();
 }
@@ -1569,19 +1553,19 @@ setTimeout(initAuthUI,600);
 .apk-about h3:first-child{margin-top:0}
 </style>
 <section class="apk-about">
-  <h3>Полезные руководства</h3>
+  <h3>Related guides</h3>
   <ul>
-    <li><a href="../guides/report-vs-analysis/">Отчет против анализа</a></li>
-    <li><a href="../guides/defining-metrics/">определение метрики</a></li>
-    <li><a href="../guides/documenting-data-limitations/">Документирование ограничений данных</a></li>
-    <li><a href="../guides/technical-tenacity/">Техническая стойкость</a></li>
-    <li><a href="../guides/verify-ai-agent-work/">Проверка работы AI-агента</a></li>
+    <li><a href="../guides/report-vs-analysis/">Report vs analysis</a></li>
+    <li><a href="../guides/defining-metrics/">Defining a metric</a></li>
+    <li><a href="../guides/documenting-data-limitations/">Documenting data limitations</a></li>
+    <li><a href="../guides/technical-tenacity/">Technical tenacity</a></li>
+    <li><a href="../guides/verify-ai-agent-work/">Verifying AI agent work</a></li>
   </ul>
-  <p><a href="../guides/">Просмотреть все руководства</a> · <a href="../">Все комплекты</a></p>
+  <p><a href="../guides/">Browse all guides</a> · <a href="../">All kits</a></p>
 </section>
 <!-- APK:KIT-SEO:END -->
 
-
+<script src="../assets/ru-localization.js?v=20261027-1"></script>
 <script src="../assets/datacraft-economy.js"></script>
 </body>
 </html>

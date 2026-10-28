@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Вложенные IF и IFS в Excel: порядок, который незаметно меняет метки ваших данных — комплект для подготовки аналитика</title>
-<meta name="description" content="IFS останавливается при первом условии, которое является истинным, поэтому запись полос в неправильном порядке без ошибок перевела 3710 доходов на неправильную метку. Плюс SWITCH и масштабируемая таблица диапазонов.">
+<title>Nested IF vs IFS in Excel: The Order That Silently Relabels Your Data — Analyst Prep Kit</title>
+<meta name="description" content="IFS stops at the first condition that is true, so writing bands in the wrong order moved 3,710 of revenue into the wrong label with no error. Plus SWITCH and the band table that scales.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-ifs-vs-nested-if/">
-<meta property="og:title" content="Вложенные IF и IFS в Excel: порядок, который незаметно меняет метки ваших данных">
-<meta property="og:description" content="IFS принимает первое условие, которое является истинным, а не лучшим. Запись полос в неправильном порядке превратила четыре крупных ордера в средние и без ошибок переместила 3710.">
+<meta property="og:title" content="Nested IF vs IFS in Excel: The Order That Silently Relabels Your Data">
+<meta property="og:description" content="IFS takes the first condition that is true, not the best one. Writing the bands in the wrong order turned four large orders into medium ones and moved 3,710 with no error.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/excel-ifs-vs-nested-if.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-ifs-vs-nested-if/">
@@ -134,18 +134,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../excel/">Excel комплект</a> · <a href="../">Все руководства</a></p>
-  <h1>Вложенные IF и IFS в Excel: порядок, который незаметно меняет метки ваших данных</h1>
-  <p class="meta">Первые настоящие победы, а не лучший матч · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-08">8 августа 2026 г.</time></p>
+  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../excel/">Excel Kit</a> · <a href="../">All guides</a></p>
+  <h1>Nested IF vs IFS in Excel: The Order That Silently Relabels Your Data</h1>
+  <p class="meta">First true wins, not best match · Part of the <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-08">August 8, 2026</time></p>
 
-  <p>К концу этой страницы вы сможете написать многоходовую метку без стены скобок, расположить условия в таком порядке, чтобы ничего не было неправильно помечено, охватить случай, когда ничего не соответствует, намеренно правильно установить границы и знать, когда прекратить писать условия и вместо этого использовать небольшую таблицу. Это около двадцати пяти минут, и каждый приведенный ниже результат был получен в Эксель.</p>
+  <p>By the end of this page you can write a multi-way label without a wall of brackets, put the conditions in an order that cannot mislabel anything, cover the case where nothing matches, get the boundaries right on purpose, and know when to stop writing conditions and use a small table instead. It is about twenty-five minutes, and every result below was run in Excel.</p>
 
-  <p>Вот что нужно сделать сегодня по формуле бандажа, которая у вас уже есть. Проверьте порядок его условий. Если он сначала проверяет наименьший порог, каждое значение выше наибольшего порога в настоящее время получает наименьшую метку, и вам ничего об этом не скажет.</p>
+  <p>Here is what to do today, on the banding formula you already have. Check the order of its conditions. If it tests the smallest threshold first, every value above the largest threshold is currently getting the smallest label, and nothing anywhere will tell you.</p>
 
-  <p>Краткая версия:  <code>IFS</code>  читает его условия слева направо и останавливается на первом истинном. Он не ищет лучшее совпадение и не смотрит на все остальное.</p>
+  <p>The short version: <code>IFS</code> reads its conditions from left to right and stops at the first one that is true. It does not look for the best match, and it does not look at the rest.</p>
 
-  <p>Это правило остановки касается всей страницы, поэтому оно дает представление о картине.</p>
+  <p>That stopping rule is the whole page, so it gets the picture.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 296" role="img" aria-labelledby="ifTitle ifDesc" xmlns="http://www.w3.org/2000/svg">
@@ -189,137 +189,137 @@
         <text x="702" y="114" font-size="16" fill="#09090B" text-anchor="middle">Medium</text>
       </g>
     </svg>
-    <figcaption>Один и тот же 880 входит в обе сети и выходит под двумя разными этикетками. Ни в одной из формул нет ничего плохого; бледные поля просто никогда не достигаются, потому что значение уже было поймано над ними.</figcaption>
+    <figcaption>The same 880 goes into both chains and comes out with two different labels. Nothing is wrong with either formula; the pale boxes are simply never reached, because the value was already caught above them.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>Что вы узнаете</strong>
+    <strong>What you'll learn</strong>
     <ol>
-      <li>ЕСЛИ и сколько на самом деле стоит вложение</li>
-      <li>IFS: та же логика, плоская</li>
-      <li>Ловушка приказов с числом ее перемещения</li>
-      <li>У IFS нет ЕЩЕ</li>
-      <li>Границы намеренно</li>
-      <li>ПЕРЕКЛЮЧАТЕЛЬ, для точного совпадения</li>
-      <li>Масштабируемая версия: таблица диапазонов</li>
-      <li>Тестирование каждой ветки</li>
-      <li>Полное до и после</li>
-      <li>Краевые случаи, нарушающие формулу группирования</li>
-      <li>Почему это работает</li>
-      <li>Использование этого в вашем собственном проекте</li>
-      <li>Все на одном экране</li>
+      <li>IF, and what nesting actually costs</li>
+      <li>IFS: the same logic, flat</li>
+      <li>The order trap, with the number it moves</li>
+      <li>IFS has no ELSE</li>
+      <li>Boundaries, on purpose</li>
+      <li>SWITCH, for exact matches</li>
+      <li>The version that scales: a band table</li>
+      <li>Testing every branch</li>
+      <li>The full before and after</li>
+      <li>Edge cases that break a banding formula</li>
+      <li>Why this works</li>
+      <li>Using this on your own project</li>
+      <li>The whole thing on one screen</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Каждый результат на этой странице реален.</strong>  Запустите в Excel таблицу заказов из шестнадцати строк, используемую в этом наборе руководств, разделенную по доходам на три группы.</div>
+  <div class="note"><strong>Every result on this page is real.</strong> Run in Excel on the sixteen-row orders table used across this set of guides, banded by revenue into three groups.</div>
 
-  <p>Полосы и то, что в них, проверил в первую очередь, чтобы потом было что-то не так.</p>
+  <p>The bands, and what is in them, checked first so there is something to be wrong about later.</p>
 
   <table>
     <tr><th>Band</th><th>Rule</th><th>Orders</th><th>Revenue</th></tr>
-    <tr><td>Small</td><td>до 500</td><td>6</td><td>2,305</td></tr>
-    <tr><td>Medium</td><td>от 500 до 799</td><td>6</td><td>3,875</td></tr>
-    <tr><td>Large</td><td>800 и более</td><td>4</td><td>3,710</td></tr>
+    <tr><td>Small</td><td>under 500</td><td>6</td><td>2,305</td></tr>
+    <tr><td>Medium</td><td>500 to 799</td><td>6</td><td>3,875</td></tr>
+    <tr><td>Large</td><td>800 and over</td><td>4</td><td>3,710</td></tr>
     <tr><td><strong>Total</strong></td><td></td><td><strong>16</strong></td><td><strong>9,890</strong></td></tr>
   </table>
 
   <div class="step">
-    <h2>1. ЕСЛИ и сколько на самом деле стоит вложенность</h2>
+    <h2>1. IF, and what nesting actually costs</h2>
 
-    <p><code>IF(test, value_if_true, value_if_false)</code>. Одно испытание, два результата. Для трех исходов требуется второй ЕСЛИ, помещенный в ложный слот первого.</p>
+    <p><code>IF(test, value_if_true, value_if_false)</code>. One test, two outcomes. Three outcomes need a second IF, placed inside the false slot of the first.</p>
 
     <pre><code>=IF(A2&gt;=800, "Large", IF(A2&gt;=500, "Medium", "Small"))</code></pre>
 
-    <p>Запустите 880, который вернется  <code>Large</code>, что верно. Читается плохо и работает хорошо, а для трёх полос вполне нормально.</p>
+    <p>Run on 880 that returns <code>Large</code>, which is right. It reads badly and works well, and for three bands it is perfectly fine.</p>
 
-    <p>Чего это стоит, так это читаемости каждой полосы. Каждый дополнительный результат добавляет целое ЕСЛИ, а закрывающие скобки накапливаются в конце, где их невозможно ни с чем сопоставить на глаз. Пять полос — это формула, которую никто не будет проверять. Excel допускает до 64 вложенных IF, и это ограничение, которое следует игнорировать: практический предел составляет около трех, и он устанавливается читателем, а не программным обеспечением.</p>
+    <p>What it costs is legibility per band. Each extra outcome adds a whole IF, and the closing brackets pile up at the end where they cannot be matched to anything by eye. Five bands is a formula nobody will check. Excel allows up to 64 nested IFs, which is a limit that exists to be ignored: the practical limit is about three, and it is set by the reader rather than by the software.</p>
 
-    <p>Здесь скрывается настоящее различие, о котором люди спотыкаются по отдельности:  <code>IF</code>  помечает одну строку за раз и строит столбец, в то время как  <code>COUNTIF</code>  и его семейство прочесывает каждую строку и возвращает одно число.  <a href="../excel-if-family/">Семейный путеводитель IF</a>  это страница этой разницы; речь идет о том, что делать, когда для одной строки требуется более двух возможных меток.</p>
+    <p>There is a real distinction hiding here that people trip over separately: <code>IF</code> labels one row at a time and builds a column, while <code>COUNTIF</code> and its family sweep every row and return one number. <a href="../excel-if-family/">The IF family guide</a> is the page for that difference; this one is about what to do when one row needs more than two possible labels.</p>
   </div>
 
   <div class="step">
-    <h2>2. IFS: та же логика, плоская</h2>
+    <h2>2. IFS: the same logic, flat</h2>
 
-    <p><code>IFS</code>  принимает пары: условие, затем значение, которое будет использоваться, если оно истинно, повторяемое столько раз, сколько вам нужно.</p>
+    <p><code>IFS</code> takes pairs: a condition, then the value to use if it is true, repeated as many times as you like.</p>
 
     <pre><code>=IFS(A2&gt;=800, "Large",
      A2&gt;=500, "Medium",
      TRUE,     "Small")</code></pre>
 
-    <p>Запустите 880, который вернется  <code>Large</code>, тот же ответ, что и во вложенной версии. Каждая пара находится на одном уровне, поэтому четвертая полоса — это еще одна пара, а не еще один слой, и скобки не накапливаются.</p>
+    <p>Run on 880 that returns <code>Large</code>, the same answer as the nested version. Every pair sits at the same level, so a fourth band is one more pair rather than one more layer, and the brackets do not accumulate.</p>
 
-    <p>Прочтите его сверху вниз как набор правил, и там написано, что он делает: если оно меньше 800, то это Большой, в противном случае, если оно меньше 500, это Средний, в противном случае — Малый. Эта читабельность — единственная причина, по которой я предпочитаю его. Логика идентична.</p>
+    <p>Read it top to bottom as a set of rules and it says what it does: if it is at least 800 it is Large, otherwise if it is at least 500 it is Medium, otherwise it is Small. That readability is the entire reason to prefer it. The logic is identical.</p>
   </div>
 
   <div class="step">
-    <h2>3. Ловушка ордера с числом ее перемещения</h2>
+    <h2>3. The order trap, with the number it moves</h2>
 
-    <p>Перед пояснением: вот те же два условия с поменянными местами парами. Значение равно 880, что удовлетворяет обоим требованиям. Скажите, что получится.</p>
+    <p>Before the explanation: here are the same two conditions with the pairs swapped. The value is 880, which satisfies both. Say what comes out.</p>
 
     <pre><code>=IFS(880&gt;=500, "Medium", 880&gt;=800, "Large")
 
 Medium</code></pre>
 
-    <p><code>Medium</code>. IFS остановился на первом условии, которое было истинным, и никогда не рассматривал второе. Это не выбор ближайшего диапазона или самого конкретного правила; он идет вниз по списку и принимает первый удар.</p>
+    <p><code>Medium</code>. IFS stopped at the first condition that was true and never looked at the second. It is not choosing the closest band or the most specific rule; it is going down the list and taking the first hit.</p>
 
-    <p>В таблице из шестнадцати строк эта замена делает следующее:</p>
+    <p>On the sixteen-row table, that one swap does this:</p>
 
     <pre><code>                        correct order        swapped
 Small                   6 orders   2,305     6 orders   2,305
 Medium                  6 orders   3,875    10 orders   7,585
 Large                   4 orders   3,710     0 orders       0</code></pre>
 
-    <p>Каждый крупный заказ становился средним. Четыре заказа и 3710 доходов изменили категорию, общая сумма по-прежнему составляет 9890, ни в одной ячейке не отображается ошибка, а строка «Большая» просто не отображается ни в одной сводке, потому что в ней ничего нет. Пустую полосу гораздо легче не заметить, чем неправильный номер.</p>
+    <p>Every large order became a medium one. Four orders and 3,710 of revenue changed category, the total still comes to 9,890, no cell shows an error, and the Large row simply does not appear in any summary because nothing is in it. An empty band is much easier to overlook than a wrong number.</p>
 
-    <p>Правило, которое предотвращает это, состоит из одного предложения:  <strong>напишите условия в том порядке, в котором вы бы их проверяли вручную, начиная с наиболее ограничительных.</strong>  Для числовых диапазонов это означает, что нужно начинать с верхнего порога и двигаться вниз, или начинать с нижнего порога и использовать противоположное сравнение, но никогда не смешивать их.</p>
+    <p>The rule that prevents it is one sentence: <strong>write the conditions in the order you would check them by hand, most restrictive first.</strong> For numeric bands that means starting from the top threshold and working down, or starting from the bottom and using the opposite comparison, but never mixing the two.</p>
 
-    <p>Прежде чем писать какую-либо цепочку условий, произнесите вслух, может ли значение удовлетворять двум из них. Если да, то приказ выполняет реальную работу и рядом с ним требуется комментарий. Если ни одно значение не может удовлетворять двум, порядок не имеет значения, и у вас есть более безопасная формула по своей конструкции.</p>
+    <p>Say out loud, before writing any chain of conditions, whether a value could satisfy two of them. If it can, the order is doing real work and it needs a comment beside it. If no value can ever satisfy two, order does not matter and you have a safer formula by construction.</p>
   </div>
 
   <div class="step">
-    <h2>4. У IFS нет ЕЩЕ</h2>
+    <h2>4. IFS has no ELSE</h2>
 
-    <p>До пояснения: значение 240 не соответствует ни тому, ни другому.  <code>&gt;=800</code> nor <code>&gt;=500</code>. Скажите, что показывает ячейка.</p>
+    <p>Before the explanation: a value of 240 meets neither <code>&gt;=800</code> nor <code>&gt;=500</code>. Say what the cell shows.</p>
 
     <pre><code>=IFS(240&gt;=800, "Large", 240&gt;=500, "Medium")
 
 #N/A</code></pre>
 
-    <p><code>#N/A</code>, потому что у IFS закончились условия, а истинное не найдено, и ему нечего возвращать. Это честное поведение, и это не то, что вы хотите видеть в отчете.</p>
+    <p><code>#N/A</code>, because IFS ran out of conditions without finding a true one and has nothing to return. That is honest behaviour and it is not what you want in a report.</p>
 
-    <p>Все дело в последней паре, состояние которой буквально  <code>TRUE</code>:</p>
+    <p>The catch-all is a final pair whose condition is literally <code>TRUE</code>:</p>
 
     <pre><code>=IFS(240&gt;=800, "Large", 240&gt;=500, "Medium", TRUE, "Small")
 
 Small</code></pre>
 
-    <p><code>TRUE</code>  всегда истинно, поэтому последняя пара срабатывает всякий раз, когда ничего выше нее не произошло. Это версия финала от IFS.  <code>else</code>, и его отсутствие — вторая по распространенности ошибка с этой функцией после упорядочивания.</p>
+    <p><code>TRUE</code> is always true, so the last pair fires whenever nothing above it did. It is IFS's version of the final <code>else</code>, and leaving it off is the second most common mistake with this function after the ordering.</p>
 
-    <p>Одно суждение, которое стоит вынести сознательно: что следует сказать в целом.  <code>"Small"</code>  утверждает, что каждое несовпадающее значение принадлежит нижней полосе, что подходит для дохода и неправильно для кода состояния, где неожиданным значением является новость.  <code>"check this"</code>  поскольку универсальное решение превращает формулу в собственный сигнал тревоги, и часто это лучший вариант по умолчанию, пока вы еще изучаете, что содержится в данных.</p>
+    <p>One judgement worth making deliberately: what the catch-all should say. <code>"Small"</code> claims every unmatched value belongs in the bottom band, which is right for revenue and wrong for a status code, where an unexpected value is news. <code>"check this"</code> as the catch-all turns the formula into its own alarm, and it is often the better default while you are still learning what is in the data.</p>
   </div>
 
   <div class="step">
-    <h2>5. Границы намеренно</h2>
+    <h2>5. Boundaries, on purpose</h2>
 
-    <p>У каждой полосы есть два ребра, и кто-то должен решить, к какой стороне принадлежит каждое ребро. Формула принимает это решение независимо от того, думали вы об этом или нет, поэтому сверьте ее с фактическими значениями.</p>
+    <p>Every band has two edges and someone has to decide which side each edge belongs to. The formula makes that decision whether or not you thought about it, so check it with actual values.</p>
 
     <pre><code>=IF(499&gt;=800,"Large",IF(499&gt;=500,"Medium","Small"))     Small
 =IF(500&gt;=800,"Large",IF(500&gt;=500,"Medium","Small"))     Medium
 =IF(800&gt;=800,"Large",IF(800&gt;=500,"Medium","Small"))     Large</code></pre>
 
-    <p>499 — маленький, 500 — средний, 800 — большой. Вот что  <code>&gt;=</code>  означает, и это соответствует тому, как люди описывают группы вслух: «500 и больше — это средний уровень». С использованием  <code>&gt;</code>  вместо этого я бы поместил 500 в Малую полосу и в формуле это выглядело бы идентично.</p>
+    <p>499 is Small, 500 is Medium, 800 is Large. That is what <code>&gt;=</code> means, and it matches how people describe bands out loud: "500 and over is medium". Using <code>&gt;</code> instead would put 500 in the Small band and would look identical in the formula.</p>
 
-    <p>На этих краях живут два провала. А  <strong>gap</strong>, где полоса заканчивается на 499, а следующая начинается на 501, поэтому ровно 500 ничего не соответствует и попадает в общий список. Ан  <strong>overlap</strong>, где обе группы заявляют по 500, что невидимо, поскольку порядок автоматически разрешает эту проблему, точно так же, как в третьем разделе.</p>
+    <p>Two failures live at these edges. A <strong>gap</strong>, where a band ends at 499 and the next begins at 501, so exactly 500 matches nothing and falls to the catch-all. An <strong>overlap</strong>, where two bands both claim 500, which is invisible because the order silently resolves it, exactly as in section three.</p>
 
-    <p>Проверка трех значений на каждой границе позволяет обнаружить оба: одно ниже, одно точно на ней, одно выше. Это шесть значений для трех полос, это занимает две минуты, и это единственная часть этой страницы, которую большинство людей пропускают.</p>
+    <p>Testing three values per boundary catches both: one below, one exactly on it, one above. That is six values for three bands, it takes two minutes, and it is the only part of this page most people skip.</p>
 
-    <p>Где должна проходить граница — это отдельный и более сложный вопрос, чем то, как ее прописать. Порог, выбранный потому, что он круглый, — это решение, облаченное в костюм наблюдения, и  <a href="../data-driven-thresholds/">выбор порогового значения из данных</a>  это страница для этого.</p>
+    <p>Where the boundary should sit is a separate and harder question than how to write it. A threshold chosen because it is round is a decision wearing the costume of an observation, and <a href="../data-driven-thresholds/">picking a cut-off from the data</a> is the page for that.</p>
   </div>
 
   <div class="step">
-    <h2>6. ПЕРЕКЛЮЧАТЕЛЬ для точного совпадения.</h2>
+    <h2>6. SWITCH, for exact matches</h2>
 
-    <p>Когда каждая ветка "равна ли это тому",  <code>SWITCH</code>  говорит это более прямо. Вы указываете выражение один раз, затем пары значений и результатов и, при необходимости, значение по умолчанию в конце.</p>
+    <p>When every branch is "does this equal that", <code>SWITCH</code> says it more directly. You give the expression once, then value and result pairs, and optionally a default at the end.</p>
 
     <pre><code>=SWITCH("Desk", "Desk","Furniture", "Chair","Furniture", "Lamp","Lighting", "other")
 Furniture
@@ -330,45 +330,45 @@ other
 =SWITCH("Sofa", "Desk","Furniture", "Chair","Furniture")
 #N/A</code></pre>
 
-    <p>Последний аргумент является значением по умолчанию, и он распознается как значение по умолчанию, поскольку он автономен и не имеет партнера. Оставьте это значение, и вы получите непревзойденное значение.  <code>#N/A</code>, то же самое, что и IFS, без универсального подхода.</p>
+    <p>The last argument is the default, and it is recognised as a default because it stands alone with no partner. Leave it off and an unmatched value gives <code>#N/A</code>, the same as IFS with no catch-all.</p>
 
-    <p>SWITCH не может выполнять диапазоны, только равенство, и именно поэтому он безопаснее там, где он применяется: ничто не может соответствовать двум ветвям, поэтому ничего не зависит от порядка. Используйте SWITCH для кодов и категорий и IFS для всего, что связано с числом «больше».</p>
+    <p>SWITCH cannot do ranges, only equality, which is precisely why it is safer where it applies: nothing can match two branches, so nothing depends on the order. Use SWITCH for codes and categories, and IFS for anything involving greater-than.</p>
   </div>
 
   <div class="step">
-    <h2>7. Масштабируемая версия: таблица диапазонов</h2>
+    <h2>7. The version that scales: a band table</h2>
 
-    <p>После примерно трех полос правильный ответ — перестать писать условия и поместить полосы в ячейки. Два столбца, отсортированные по возрастанию по нижней границе:</p>
+    <p>Past about three bands, the right answer is to stop writing conditions and put the bands in cells. Two columns, sorted ascending by the lower bound:</p>
 
     <pre><code>Floor    Label
     0    Small
   500    Medium
   800    Large</code></pre>
 
-    <p>Затем выполняется один поиск с использованием приблизительного соответствия, который находит самый большой этаж, значение которого не превышает вашего значения.</p>
+    <p>Then one lookup, using approximate match, which finds the largest floor that is not above your value.</p>
 
     <pre><code>=XLOOKUP(A2, Floors, Labels, "none", -1)</code></pre>
 
-    <p>При использовании тех же значений он дает те же ответы:</p>
+    <p>Run against the same values it gives the same answers:</p>
 
     <pre><code>499   Small
 500   Medium
 880   Large
 1100  Large</code></pre>
 
-    <p>Более старый эквивалент книги, которую нужно открыть где угодно, — это  <code>VLOOKUP</code>  с последним аргументом, оставленным как TRUE для той же отсортированной таблицы, которая вернула  <code>Medium</code>  для 680. Оба полагаются на сортировку таблицы по возрастанию, и это единственное, что нужно защищать.</p>
+    <p>The older equivalent, for a workbook that has to open anywhere, is <code>VLOOKUP</code> with its last argument left as TRUE against the same sorted table, which returned <code>Medium</code> for 680. Both rely on the table being sorted ascending, which is the one thing to protect.</p>
 
-    <p>Когда группы живут в клетках, меняются три вещи. Пороги становятся видимыми, поэтому любой может увидеть, что означает «большой», не открывая формулу. Их может редактировать кто-то кроме вас. А добавление четвертой полосы — это новая строка, а не редактирование формулы, а это означает, что изменение не может привести к ошибке упорядочения, поскольку порядок обрабатывается поиском.</p>
+    <p>Three things change when the bands live in cells. The thresholds become visible, so anyone can see what "large" means without opening a formula. They become editable by somebody who is not you. And adding a fourth band is a new row rather than a formula edit, which means the change cannot introduce an ordering bug, because the lookup handles the ordering.</p>
 
-    <p>Представьте себе формулу объединения в своей наиболее часто используемой рабочей тетради. Может ли человек, который просил эти группы, изменить одно из чисел, не спрашивая вас? Если нет, то пороги не в том месте.</p>
+    <p>Picture the banding formula in your own most-used workbook. Could the person who asked for those bands change one of the numbers without asking you? If not, the thresholds are in the wrong place.</p>
   </div>
 
   <div class="step">
-    <h2>8. Тестирование каждой ветки</h2>
+    <h2>8. Testing every branch</h2>
 
-    <p>Формула трех полос имеет четыре пути: три полосы и всеобъемлющий. Пятиполосная формула имеет шесть. Каждый из этих путей — это отдельная вещь, которая может быть неправильной, и ни один из них не используется до тех пор, пока по нему не упадет значение.</p>
+    <p>A three-band formula has four ways through it: three bands and the catch-all. A five-band formula has six. Every one of those paths is a separate thing that can be wrong, and none of them is exercised until a value goes down it.</p>
 
-    <p>Поэтому протестируйте их намеренно, отложив небольшой блок значений сбоку:</p>
+    <p>So test them on purpose, with a small block of values off to the side:</p>
 
     <pre><code>value      expected     formula
   0        Small        =the formula on this value
@@ -379,19 +379,19 @@ other
 9999       Large
 ""         catch-all</code></pre>
 
-    <p>Семь строк, тридцать секунд, и он обнаруживает ошибку упорядочивания, как ошибку границ, так и недостающую универсальную информацию за один раз. Сохраните блок в книге, а не удаляйте его, поскольку формула будет отредактирована снова, а проверка сделает следующее редактирование безопасным.</p>
+    <p>Seven rows, thirty seconds, and it catches the ordering bug, both boundary bugs and the missing catch-all in one go. Keep the block in the workbook rather than deleting it, because the formula will be edited again and the test is what makes the next edit safe.</p>
 
-    <p>Затем проверьте итоговые суммы и этикетки. Подсчитайте по группам и суммируйте по группам и убедитесь, что значения добавляются к количеству строк, а суммы добавляются к общему количеству столбцов:</p>
+    <p>Then check the totals as well as the labels. Count by band and sum by band, and confirm that the counts add to your row count and the sums add to your column total:</p>
 
     <pre><code>6 + 6 + 4 = 16 rows
 2,305 + 3,875 + 3,710 = 9,890</code></pre>
 
-    <p>Именно эта сверка и зафиксировала бы измененный порядок в третьем разделе, потому что Большая полоса вернулась бы с нулевыми строками против общей суммы, которая все еще сбалансирована.</p>
+    <p>That reconciliation is what would have caught the swapped order in section three, because the Large band would have come back with zero rows against a total that still balanced.</p>
   </div>
 
-  <h2>Полное до и после</h2>
+  <h2>The full before and after</h2>
 
-  <p>Та же работа: маркируйте каждый заказ «Маленький», «Средний» или «Большой».</p>
+  <p>Same job: label every order Small, Medium or Large.</p>
 
   <h3>Before</h3>
   <pre><code>=IF(A2&gt;=500,"Medium",IF(A2&gt;=800,"Large","Small"))
@@ -399,7 +399,7 @@ other
 Small    6 orders   2,305
 Medium  10 orders   7,585
 Large    0 orders       0</code></pre>
-  <p>Никаких ошибок, никаких предупреждений, общая сумма по-прежнему согласовывается с 9890, а полоса пуста, потому что условие выше нее улавливает все первым. Пороги живут внутри формулы, где их никто не видит, и нигде не существует теста, который бы не прошел.</p>
+  <p>No error, no warning, a total that still reconciles to 9,890, and a band that is empty because the condition above it caught everything first. The thresholds live inside a formula where nobody can see them, and there is no test anywhere that would have failed.</p>
 
   <h3>After</h3>
   <pre><code># the bands live in cells
@@ -416,108 +416,108 @@ counts by band   6 + 6 + 4 = 16      equals the row count
 sums by band     2,305 + 3,875 + 3,710 = 9,890    equals the column total
 boundary tests   499 Small, 500 Medium, 800 Large</code></pre>
 
-  <p>Претензия, и именно поэтому сверка должна быть на листе:  <strong>замена двух условий переместила четыре заказа и 3710 доходов в неправильный диапазон, не вызвала ошибок и оставила все правильные значения.</strong></p>
+  <p>The claim, and it is why the reconciliation belongs on the sheet: <strong>swapping two conditions moved four orders and 3,710 of revenue into the wrong band, produced no error, and left every total correct.</strong></p>
 
   <div class="step">
-    <h2>Краевые случаи, нарушающие формулу группирования</h2>
+    <h2>Edge cases that break a banding formula</h2>
 
-    <p>Шесть, которые пройдут.</p>
+    <p>Six that get through.</p>
 
-    <p><strong>Пустые ячейки.</strong>  Пробел рассматривается как 0, поэтому он попадает в нижнюю полосу, а не помечается. Сначала проверьте это:  <code>IFS(A2="", "missing", ...)</code>.</p>
+    <p><strong>Blank cells.</strong> A blank is treated as 0, so it lands in the bottom band rather than being flagged. Test for it first: <code>IFS(A2="", "missing", ...)</code>.</p>
 
-    <p><strong>Текст, где должна быть цифра.</strong>  Сравнение текста и числа не приводит к ошибке, оно просто оказывается ложным, поэтому эти строки незаметно достигают универсального результата. Прежде чем доверять полосам, проверьте тип столбца.</p>
+    <p><strong>Text where a number should be.</strong> A comparison between text and a number does not error, it just comes out false, so those rows quietly reach the catch-all. Check the column type before trusting the bands.</p>
 
-    <p><strong>Отрицательные значения.</strong>  Возврат в размере −200 не удовлетворяет ни одному из условий «больше чем» и попадает в категорию «маленький», что, возможно, неверно. Решите, что означает отрицание, прежде чем формула решит за вас.</p>
+    <p><strong>Negative values.</strong> A refund of −200 satisfies none of the greater-than conditions and lands in the catch-all labelled Small, which is arguably wrong. Decide what a negative means before the formula decides for you.</p>
 
-    <p><strong>Несортированная таблица групп.</strong>  Поиски с приблизительным совпадением предполагают возрастающий порядок и возвращают уверенный неправильный ответ, если вместо этого строки сортируются по меткам. Защитите сорт или запишите его рядом со столом.</p>
+    <p><strong>An unsorted band table.</strong> Approximate-match lookups assume ascending order and return a confident wrong answer if the rows get sorted by label instead. Protect the sort, or note it beside the table.</p>
 
-    <p><strong>Пороги скопированы в три разные формулы.</strong>  Кто-то обновляет один из них. Теперь отчет и диаграмма не совпадают, и оба выглядят нормально. Одна таблица, на которую везде ссылаются, исключает такую ​​возможность.</p>
+    <p><strong>Thresholds copied into three different formulas.</strong> Somebody updates one of them. Now the report and the chart disagree and both look fine. One table, referenced everywhere, removes the possibility.</p>
 
-    <p><strong>Группы, которые изменились в прошлом квартале.</strong>  Старые строки сохраняют свои старые метки, если метка была вставлена ​​как значение, а не оставлена ​​как формула, поэтому одинаковый доход составляет Средний в марте и Большой в июне. Сохраняйте метки в виде формул или записывайте, какая версия полос использовалась в моментальном снимке.</p>
+    <p><strong>Bands that changed last quarter.</strong> Old rows keep their old labels if the label was pasted as a value rather than left as a formula, so the same revenue is Medium in March and Large in June. Keep labels as formulas, or record which version of the bands a snapshot used.</p>
   </div>
 
-  <h2>Почему это работает</h2>
+  <h2>Why this works</h2>
 
-  <p>Цепочка условий — это программа с ветвями, а ветки — это то, что затрудняет проверку кода. Классическая мера подсчитывает независимые пути через часть логики и утверждает, что это число, а не его длина, предсказывает, насколько сложно тестировать и поддерживать правильность, потому что каждая ветвь — это маршрут, который нужно пройти отдельно, прежде чем кто-либо сможет заявить, что вещь работает (Маккейб, 1976,    <em>Транзакции IEEE по разработке программного обеспечения</em>, СЭ-2(4), 308–320). Трехполосная формула имеет четыре маршрута; у шестидиапазонного их семь. Это истинная причина использования тестового блока в восьмом разделе, а также аргумент в пользу таблицы диапазонов, которая заменяет ветви данными и оставляет ровно один маршрут через формулу.</p>
+  <p>A chain of conditions is a program with branches, and branches are what makes code hard to verify. The classic measure counts the independent paths through a piece of logic and argues that this number, rather than its length, predicts how hard it is to test and to keep correct, because every branch is a route that has to be exercised separately before anyone can claim the thing works (McCabe, 1976, <em>IEEE Transactions on Software Engineering</em>, SE-2(4), 308–320). A three-band formula has four routes; a six-band one has seven. That is the honest reason for the test block in section eight, and it is also the argument for the band table, which replaces the branches with data and leaves exactly one route through the formula.</p>
 
-  <p>Половина читаемости имеет отдельную основу. Вложенный ЕСЛИ просит вас держать в уме каждое неразрешенное условие, пока вы читаете следующее, а количество отдельных элементов, которые человек может удерживать одновременно, как известно, невелико (Миллер, 1956,    <em>Психологический обзор</em>, 63(2), 81–97). Три вложенных IF находятся на краю этого; пять прошло, поэтому никто не проверяет должным образом формулу с пятью уровнями, как бы тщательно она ни была написана. IFS не упрощает логику, а делает ее плоской, поэтому каждое правило можно прочитать и отклонить, а не сохранить.</p>
+  <p>The readability half has a separate footing. A nested IF asks you to hold each unresolved condition in mind while you read the next one, and the number of separate items a person can hold at once is famously small (Miller, 1956, <em>Psychological Review</em>, 63(2), 81–97). Three nested IFs is at the edge of that; five is past it, which is why nobody checks a five-deep formula properly, however carefully it is written. IFS does not make the logic simpler, it makes it flat, so each rule can be read and dismissed rather than held.</p>
 
-  <p>Одно замечание в шпаргалке ниже. Оно создано для того, чтобы его просматривали и вспоминали, а не перечитывали, потому что извлечение чего-либо из памяти — один из наиболее надежных способов сохранить это, и это работает, хотя в данный момент это кажется труднее, чем чтение (выбирать карпа &amp; Краснее, 2008,    <em>Science</em>, 319(5865), 966–968).</p>
+  <p>One note on the cheat sheet below. It is built to be covered and recalled rather than reread, because retrieving something from memory is one of the most reliable ways to keep it, and it works even though it feels harder at the time than reading (Karpicke &amp; Roediger, 2008, <em>Science</em>, 319(5865), 966–968).</p>
 
-  <h2>Использование этого в вашем собственном проекте</h2>
+  <h2>Using this on your own project</h2>
 
-  <p>Переписывать каждую условную формулу в унаследованной книге — занятие удручающее, и вы остановитесь на третьей. Вместо этого сделайте это по порядку.</p>
+  <p>Rewriting every conditional formula in an inherited workbook is miserable and you will stop at the third one. Do this instead, in order.</p>
 
   <ol>
-    <li><strong>Найдите формулы полосатости</strong>  и читаем только порядок их условий. Сначала самые ограничительные, иначе это неправильно.</li>
-    <li><strong>Посчитайте по группам и сравните с количеством строк.</strong>  Полоса с нулевым количеством строк является признаком ошибки упорядочивания, и чтобы ее увидеть, требуется один СЧЁТЕСЛИ.</li>
-    <li><strong>Добавьте универсальное</strong>  если таковой нет, и подумайте о том, чтобы написать «проверьте это», а не называть настоящую группу.</li>
-    <li><strong>Проверьте границы с тремя значениями каждое</strong>, ниже, дальше и выше и оставьте тестовый блок в книге.</li>
-    <li><strong>Переместите пороговые значения в таблицу из двух столбцов.</strong>  как только появятся четыре полосы, или как только кому-то кроме вас понадобится их сменить.</li>
-    <li><strong>Используйте SWITCH, где ветви равны.</strong>, потому что ничто не может совпадать дважды, и порядок перестает иметь значение.</li>
+    <li><strong>Find the banding formulas</strong> and read only the order of their conditions. Most restrictive first, or it is wrong.</li>
+    <li><strong>Count by band and compare with the row count.</strong> A band with zero rows is the symptom of an ordering bug, and it takes one COUNTIF to see.</li>
+    <li><strong>Add the catch-all</strong> if there is not one, and consider making it say "check this" rather than naming a real band.</li>
+    <li><strong>Test the boundaries with three values each</strong>, below, on and above, and leave the test block in the workbook.</li>
+    <li><strong>Move the thresholds into a two-column table</strong> as soon as there are four bands, or as soon as anyone other than you needs to change them.</li>
+    <li><strong>Use SWITCH where the branches are equality</strong>, because nothing can match twice and the order stops mattering.</li>
   </ol>
 
-  <p>Если у вас под рукой есть бумага, один дополнительный эскиз стоит пяти минут. Нарисуйте числовую линию, отметьте на ней пороговые значения и заштрихуйте каждую полосу по-разному. Затем поставьте точку ровно на каждом пороге и напишите, к какой полосе принадлежит эта точка. При этом большинство людей обнаруживают, что на самом деле они так и не решили, а это вся проблема границ одним росчерком пера.</p>
+  <p>If you have paper nearby, one optional sketch is worth five minutes. Draw a number line, mark your thresholds on it, and shade each band a different way. Then put a dot exactly on each threshold and write which band the dot belongs to. Most people discover while doing this that they have never actually decided, which is the entire boundary problem in one pen stroke.</p>
 
-  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: Excel, SQL, Python и связанные с ними методы работы.</div>
+  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: Excel, SQL, Python, and the working habits around them.</div>
 
-  <h2>Все на одном экране</h2>
+  <h2>The whole thing on one screen</h2>
 
-  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
+  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
 
   <table>
-    <tr><th>Thing</th><th>Что он делает</th></tr>
-    <tr><td><code>IF(test, yes, no)</code></td><td>Одно испытание, два результата. Гнездо в третьем слоте для большего.</td></tr>
-    <tr><td>Предел вложенности</td><td>64 разрешено. Читабельно около трёх.</td></tr>
-    <tr><td><code>IFS(c1,v1, c2,v2, ...)</code></td><td>Пары состояние и стоимость, все на одном уровне.</td></tr>
-    <tr><td>Как IFS выбирает</td><td>Первое условие верно. Не лучший матч.</td></tr>
-    <tr><td>Правило заказа</td><td>Сначала самые строгие. Сначала самый высокий порог для числовых диапазонов.</td></tr>
-    <tr><td>Неправильный порядок</td><td>Никакой ошибки. Группа оказывается пустой, а суммы по-прежнему балансируются.</td></tr>
-    <tr><td>Нет совпадений</td><td><code>#N/A</code>. IFS не имеет встроенного еще.</td></tr>
-    <tr><td>Всеобъемлющее</td><td>Последняя пара, состояние которой  <code>TRUE</code>.</td></tr>
-    <tr><td>Общая формулировка</td><td>«Проверь это» лучше, чем назвать группу, пока вы еще изучаете данные.</td></tr>
-    <tr><td>Boundaries</td><td><code>&gt;=500</code>  помещает 500 в верхнюю полосу. Тест 499, 500 и 501.</td></tr>
-    <tr><td>Gap</td><td>Значение между двумя полосами относится к универсальному.</td></tr>
-    <tr><td>Overlap</td><td>Об этом заявляют две группы. Порядок решает молча.</td></tr>
-    <tr><td><code>SWITCH(expr, v1,r1, ..., default)</code></td><td>Только равенство. Порядок не может иметь значения. Единственный последний аргумент является значением по умолчанию.</td></tr>
-    <tr><td>Таблица групп</td><td>Пол и метка, отсортированы по возрастанию, по одной строке на полосу.</td></tr>
-    <tr><td>Поиск</td><td><code>=XLOOKUP(value, Floors, Labels, "none", -1)</code></td></tr>
-    <tr><td>Примирение</td><td>Подсчеты по группам добавляются к количеству строк; суммы добавляются к общей сумме.</td></tr>
-    <tr><td>Бланки и негативы</td><td>Рассматривается как 0 и как очень маленькое. Решите, прежде чем это сделает формула.</td></tr>
+    <tr><th>Thing</th><th>What it does</th></tr>
+    <tr><td><code>IF(test, yes, no)</code></td><td>One test, two outcomes. Nest in the third slot for more.</td></tr>
+    <tr><td>Nesting limit</td><td>64 allowed. About three readable.</td></tr>
+    <tr><td><code>IFS(c1,v1, c2,v2, ...)</code></td><td>Pairs of condition and value, all at one level.</td></tr>
+    <tr><td>How IFS chooses</td><td>First condition that is true. Not the best match.</td></tr>
+    <tr><td>Order rule</td><td>Most restrictive first. Highest threshold first for numeric bands.</td></tr>
+    <tr><td>Wrong order</td><td>No error. A band ends up empty and the totals still balance.</td></tr>
+    <tr><td>No match</td><td><code>#N/A</code>. IFS has no built-in else.</td></tr>
+    <tr><td>The catch-all</td><td>A final pair whose condition is <code>TRUE</code>.</td></tr>
+    <tr><td>Catch-all wording</td><td>"check this" beats naming a band, while you are still learning the data.</td></tr>
+    <tr><td>Boundaries</td><td><code>&gt;=500</code> puts 500 in the upper band. Test 499, 500 and 501.</td></tr>
+    <tr><td>Gap</td><td>A value between two bands falls to the catch-all.</td></tr>
+    <tr><td>Overlap</td><td>Two bands claim it. Order decides, silently.</td></tr>
+    <tr><td><code>SWITCH(expr, v1,r1, ..., default)</code></td><td>Equality only. Order cannot matter. The lone last argument is the default.</td></tr>
+    <tr><td>Band table</td><td>Floor and Label, sorted ascending, one row per band.</td></tr>
+    <tr><td>The lookup</td><td><code>=XLOOKUP(value, Floors, Labels, "none", -1)</code></td></tr>
+    <tr><td>The reconciliation</td><td>Counts by band add to the row count; sums add to the total.</td></tr>
+    <tr><td>Blanks and negatives</td><td>Treated as 0 and as very small. Decide before the formula does.</td></tr>
   </table>
 
-  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Подсчитайте ряды в каждой полосе и проверьте, соответствуют ли они сумме строк, с которых вы начали. Ошибка группирования почти никогда не приводит к ошибке; он производит одну группу, в которой ничего нет, а другую - слишком много, и единственное место, которое это показывает, - это счетчик. Если условная формула ведет себя не так, как описано на этой странице, существует общая ошибка.  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>.</div>
+  <div class="note"><strong>The one habit to keep.</strong> Count the rows in each band and check they add up to the rows you started with. A banding bug almost never produces an error; it produces one band with nothing in it and another with too much, and the count is the only place that shows. If a conditional formula misbehaves in a way this page does not cover, there is a general <a href="../technical-tenacity/">diagnosis loop for being stuck</a>.</div>
 
-  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Позднее я обнаружил формулу уровня клиента, которая проверяла порог лояльности перед порогом предприятия, поэтому крупнейшие клиенты находились на среднем уровне в течение двух кварталов, и в отчете уровня просто не было верхней строки. Что незаметно сделала цепочка первых истинных побед с чем-то, что у вас есть?</p>
+  <p>One last thought, and I would genuinely like other people's answers. The one I found late was a customer-tier formula that tested the loyalty threshold before the enterprise threshold, so the biggest accounts had been sitting in the middle tier for two quarters and the tier report simply had no top row. What has a first-true-wins chain quietly done in something you own?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Маккейб, TJ (1976). Мера сложности.  <em>Транзакции IEEE по разработке программного обеспечения</em>, СЭ-2(4), 308–320.</li>
-    <li>Миллер, Джорджия (1956). Магическое число семь плюс-минус два: некоторые ограничения нашей способности обрабатывать информацию.  <em>Психологический обзор</em>, 63(2), 81–97.</li>
-    <li>Карпике, Дж. Д., и Родигер, Х. Л. (2008). Критическая важность извлечения информации для обучения.  <em>Science</em>, 319(5865), 966–968.</li>
+    <li>McCabe, T. J. (1976). A complexity measure. <em>IEEE Transactions on Software Engineering</em>, SE-2(4), 308–320.</li>
+    <li>Miller, G. A. (1956). The magical number seven, plus or minus two: Some limits on our capacity for processing information. <em>Psychological Review</em>, 63(2), 81–97.</li>
+    <li>Karpicke, J. D., &amp; Roediger, H. L. (2008). The critical importance of retrieval for learning. <em>Science</em>, 319(5865), 966–968.</li>
   </ul>
 
   <div class="book">
-    <strong>Пять вложенных IF, одна неправильная скобка и невозможно увидеть, какая ветвь сработала.</strong>
-    <p><em>Excel для аналитиков</em>  состоит из 378 страниц, IFS, вложенных IF и порядка условий, а также таблицы ветвей, показывающей, с чем сталкивается каждая строка.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-ifs-vs-nested-if'})">Excel для аналитиков, 19 долларов США →</a>
+    <strong>Five nested IFs, one wrong bracket, and no way to see which branch fired.</strong>
+    <p><em>Excel for Analysts</em> is 378 pages, IFS, nested IF and the order of conditions, with the branch table that shows what each row hits.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-ifs-vs-nested-if'})">Excel for Analysts, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>Попрактикуйтесь в объединении значений, находящихся на границе.</strong>
-    <p style="margin:6px 0 0">The <a href="../../excel/">Excel комплект</a>  дает вам повторения: цепочки, написанные в неправильном порядке для диагностики, граничные значения для маркировки, таблицы диапазонов для построения и карточки с тем, что делает IFS, когда ничего не совпадает. Теперь вы владеете методом; комплект - это практика. Ничего устанавливать, учетная запись не требуется.</p>
-    <a class="btn" href="../../excel/">Откройте набор Excel →</a>
+    <strong>Practice banding on values that sit on the boundary.</strong>
+    <p style="margin:6px 0 0">The <a href="../../excel/">Excel Kit</a> gives you the repetitions: chains written in the wrong order to diagnose, boundary values to label, band tables to build, and flash cards on what IFS does when nothing matches. You now own the method; the kit is the practice. Nothing to install, no account needed.</p>
+    <a class="btn" href="../../excel/">Open the Excel Kit →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../excel-if-family/">Семья ИФ</a> · <a href="../excel-absolute-vs-relative-references/">Абсолютные и относительные ссылки</a> · <a href="../data-driven-thresholds/">Пороги, управляемые данными</a> · <a href="../excel-index-match/">ИНДЕКСНОЕ СООТВЕТСТВИЕ против ВПР</a> · <a href="../excel-conditional-formatting/">Условное форматирование</a> · <a href="../excel-dynamic-arrays/">Динамические массивы</a> · <a href="../excel-iferror/">Как использовать ЕСЛИОШИБКА</a> · <a href="../excel-sumifs/">СУММИФЫ и СЧЁТЕЛИ</a> · <a href="../excel-tables/">Таблицы Excel против диапазонов</a> · <a href="../excel-pivot-tables/">Создайте сводную таблицу</a> · <a href="../../excel/">Excel комплект</a> · <a href="../sql-case-expression/">Выражение SQL CASE</a> · <a href="../excel-label-rows-before-charting/">Пометьте строки перед построением диаграммы</a> · <a href="../build-a-risk-index/">Создайте индекс риска</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../projects/">Портфельные проекты</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
+    <a href="../../">← Analyst Prep Kit</a> · <a href="../excel-if-family/">The IF Family</a> · <a href="../excel-absolute-vs-relative-references/">Absolute vs Relative References</a> · <a href="../data-driven-thresholds/">Data-Driven Thresholds</a> · <a href="../excel-index-match/">INDEX MATCH vs VLOOKUP</a> · <a href="../excel-conditional-formatting/">Conditional Formatting</a> · <a href="../excel-dynamic-arrays/">Dynamic Arrays</a> · <a href="../excel-iferror/">How to Use IFERROR</a> · <a href="../excel-sumifs/">SUMIFS and COUNTIFS</a> · <a href="../excel-tables/">Excel Tables vs Ranges</a> · <a href="../excel-pivot-tables/">Make a Pivot Table</a> · <a href="../../excel/">Excel Kit</a> · <a href="../sql-case-expression/">The SQL CASE Expression</a> · <a href="../excel-label-rows-before-charting/">Label Rows Before Charting</a> · <a href="../build-a-risk-index/">Build a Risk Index</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../projects/">Portfolio Projects</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

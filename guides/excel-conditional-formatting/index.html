@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Условное форматирование на основе другой ячейки — комплект подготовки аналитика</title>
-<meta name="description" content="Одно правило формулы, один знак доллара и целая строка загорается от значения в одном столбце. Откуда пишется формула, как поставить порог в ячейку, порядок правил и правила, которые размножаются.">
+<title>Conditional Formatting Based on Another Cell — Analyst Prep Kit</title>
+<meta name="description" content="One formula rule, one dollar sign, and a whole row lights up from a value in one column. Where the formula is written from, how to put the threshold in a cell, rule order, and rules that breed.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-conditional-formatting/">
-<meta property="og:title" content="Условное форматирование на основе другой ячейки">
-<meta property="og:description" content="Правило написано для верхней левой ячейки и применяется относительно, поэтому один знак доллара — это разница между четырьмя выделенными ячейками и четырьмя выделенными строками.">
+<meta property="og:title" content="Conditional Formatting Based on Another Cell">
+<meta property="og:description" content="The rule is written for the top-left cell and applied relatively, so one dollar sign is the difference between four highlighted cells and four highlighted rows.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/excel-conditional-formatting.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/excel-conditional-formatting/">
@@ -134,18 +134,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../excel/">Excel комплект</a> · <a href="../">Все руководства</a></p>
-  <h1>Условное форматирование на основе другой ячейки</h1>
-  <p class="meta">Одно правило формулы, один знак доллара, и за ним следует вся строка · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-08">8 августа 2026 г.</time></p>
+  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../excel/">Excel Kit</a> · <a href="../">All guides</a></p>
+  <h1>Conditional Formatting Based on Another Cell</h1>
+  <p class="meta">One formula rule, one dollar sign, and the whole row follows · Part of the <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-08">August 8, 2026</time></p>
 
-  <p>К концу этой страницы вы можете выделить всю строку на основе значения в одном из ее столбцов, установить границу по ячейке, которую кто-то может ввести, а не по числу, скрытому в диалоговом окне, контролировать, какое правило побеждает, когда применяются два, и точно знать, что условное форматирование влияет на ваши данные, а что нет. Это около двадцати пяти минут, и каждый приведенный ниже результат был получен путем построения правила в Excel и считывания того, что было закрашено.</p>
+  <p>By the end of this page you can highlight an entire row based on a value in one of its columns, drive the cut-off from a cell somebody can type into rather than from a number buried in a dialog, control which rule wins when two apply, and know exactly what conditional formatting does and does not change about your data. It is about twenty-five minutes, and every result below was produced by building the rule in Excel and reading back what got coloured.</p>
 
-  <p>Вот чем заняться сегодня. Выберите данные, начиная с первой ячейки данных, а не с заголовков. Главная, Условное форматирование, Новое правило,  <strong>Используйте формулу, чтобы определить, какие ячейки нужно форматировать.</strong>. Введите формулу так, как если бы вы писали ее для выбранной вами верхней левой ячейки, и поставьте знак доллара перед буквой проверяемого столбца:  <code>=$H2&gt;800</code>. Этот знак одного доллара представляет собой разницу между выделением четырех ячеек и выделением четырех строк.</p>
+  <p>Here is what to do today. Select your data starting at the first data cell, not the headings. Home, Conditional Formatting, New Rule, <strong>Use a formula to determine which cells to format</strong>. Type the formula as though you were writing it for the top-left cell you selected, and put a dollar sign in front of the column letter you are testing: <code>=$H2&gt;800</code>. That one dollar sign is the difference between highlighting four cells and highlighting four rows.</p>
 
-  <p>Краткая версия: правило формулы записывается один раз для верхней левой ячейки выделенного фрагмента, а затем копируется по всему диапазону так же, как заполняется формула. Все, что вы запираете знаком доллара, остается на месте; все, что вы оставляете в покое, движется.</p>
+  <p>The short version: a formula rule is written once, for the top-left cell of the selection, and then copied across the whole range the same way a formula fills. Whatever you lock with a dollar sign stays put; whatever you leave alone moves.</p>
 
-  <p>Именно на этой идее основана остальная часть страницы, поэтому она передает всю картину.</p>
+  <p>That is the idea the rest of the page rests on, so it gets the picture.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 268" role="img" aria-labelledby="cfTitle cfDesc" xmlns="http://www.w3.org/2000/svg">
@@ -185,158 +185,158 @@
         </g>
       </g>
     </svg>
-    <figcaption>Те же данные, те же квалификационные строки, в правиле отличается один символ. Без знака доллара тест сдвигается вбок вместе с ячейкой, к которой он применяется, поэтому только первый столбец всегда смотрит на столбец, который вы имели в виду.</figcaption>
+    <figcaption>Same data, same rows qualifying, one character different in the rule. Without the dollar sign the test slides sideways with the cell it is applied to, so only the first column ever looks at the column you meant.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>Что вы узнаете</strong>
+    <strong>What you'll learn</strong>
     <ol>
-      <li>Два вида правил и какое из них вам нужно</li>
-      <li>Откуда написана формула</li>
-      <li>Знак доллара, превращающий ячейку в строку</li>
-      <li>Поместите порог в ячейку, а не в диалоговое окно.</li>
-      <li>Применяется к и почему эта настройка неверна</li>
-      <li>Порядок правил и остановка, если истинно</li>
-      <li>Чего не делает условное форматирование</li>
-      <li>Правила, которые порождают</li>
-      <li>Полное до и после</li>
-      <li>Крайние случаи, которые незаметно нарушают правила</li>
-      <li>Почему это работает</li>
-      <li>Использование этого в вашем собственном проекте</li>
-      <li>Все на одном экране</li>
+      <li>The two kinds of rule, and which one you need</li>
+      <li>Where the formula is written from</li>
+      <li>The dollar sign that turns a cell into a row</li>
+      <li>Put the threshold in a cell, not in the dialog</li>
+      <li>Applies To, and why it is the setting that goes wrong</li>
+      <li>Rule order and Stop If True</li>
+      <li>What conditional formatting does not do</li>
+      <li>Rules that breed</li>
+      <li>The full before and after</li>
+      <li>Edge cases that break a rule quietly</li>
+      <li>Why this works</li>
+      <li>Using this on your own project</li>
+      <li>The whole thing on one screen</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Каждый результат на этой странице реален.</strong>  Правила, построенные в Excel на основе таблицы заказов из шестнадцати строк, используемой в этом наборе руководств, при этом полученные цвета читаются по ячейкам, а не на глаз.</div>
+  <div class="note"><strong>Every result on this page is real.</strong> Rules built in Excel on the sixteen-row orders table used across this set of guides, with the resulting colours read back cell by cell rather than eyeballed.</div>
 
   <div class="step">
-    <h2>1. Два вида правил и какое из них вам нужно</h2>
+    <h2>1. The two kinds of rule, and which one you need</h2>
 
-    <p>Меню условного форматирования предлагает кучу готовых правил: «Больше, чем», «Топ-10 элементов», «Повторяющиеся значения», цветовые шкалы, гистограммы, наборы значков. Все они имеют одно ограничение, и это причина, по которой большинство людей оказываются здесь. Встроенное правило может проверять только  <strong>ячейка, которую она раскрашивает</strong>.</p>
+    <p>Conditional Formatting's menu offers a pile of ready-made rules: Greater Than, Top 10 Items, Duplicate Values, colour scales, data bars, icon sets. All of them share one limitation, and it is the reason most people end up here. A built-in rule can only test <strong>the cell it is colouring</strong>.</p>
 
-    <p>Таким образом, «окрашивать доход в красный цвет, когда он меньше 500» — это встроенное правило, а «окрашивать всю строку заказа, когда его доход меньше 500» — нет, потому что окрашиваемые ячейки — это номер заказа, дата, представитель и все остальное, ни одна из которых ничего не знает о доходе.</p>
+    <p>So "colour the revenue red when it is under 500" is a built-in rule, and "colour the whole order row when its revenue is under 500" is not, because the cells being coloured are the order number, the date, the rep and the rest, none of which know anything about revenue.</p>
 
-    <p>Единственная запись, которая снимает ограничение, - это  <strong>Используйте формулу, чтобы определить, какие ячейки нужно форматировать.</strong>. Это позволяет тестовой и целевой ячейкам быть разными ячейками, и это вся тема этой страницы. Все остальное в меню — это ярлык для формулы, которую вы могли бы написать.</p>
+    <p>The one entry that removes the limit is <strong>Use a formula to determine which cells to format</strong>. It lets the test and the target be different cells, which is the entire subject of this page. Everything else in the menu is a shortcut for a formula you could have written.</p>
   </div>
 
   <div class="step">
-    <h2>2. Откуда написана формула</h2>
+    <h2>2. Where the formula is written from</h2>
 
-    <p>Перед пояснением: выбираете A2:H17 и вводите правило. Скажите, о какой ячейке, по вашему мнению, написана формула?</p>
+    <p>Before the explanation: you select A2:H17 and type a rule. Say which single cell you think that formula is being written about.</p>
 
-    <p>Левый верхний, А2. Excel оценивает вашу формулу так, как если бы она находилась в A2, а затем копирует ее в каждую вторую ячейку диапазона точно так же, как ее копирует перетаскивание формулы: ссылки смещаются на любое расстояние от верхнего левого угла ячейки.</p>
+    <p>The top-left one, A2. Excel evaluates your formula as if it lived in A2, then copies it to every other cell in the range exactly the way dragging a formula copies it: references shift by however far the cell is from the top-left corner.</p>
 
-    <p>Это единственное предложение объясняет каждый странный результат, который получают люди. Формула в правиле не является описанием диапазона; это одна формула, написанная один раз и пронизывающая все.</p>
+    <p>That single sentence explains every strange result people get. The formula in the rule is not a description of the range; it is one formula, written once, filled across everything.</p>
 
-    <p>Это дает надежный способ написать их, не догадываясь. Напишите тест в свободной ячейке в той же строке, что и первая строка данных, убедитесь, что он правильно возвращает ИСТИНА и ЛОЖЬ, а затем скопируйте текст этой формулы в диалоговое окно правила. Если это работает в клетке, то это работает и в правиле, потому что это тот же самый механизм.</p>
+    <p>Which gives a reliable way to write these without guessing. Write the test in a spare cell on the same row as your first data row, get it returning TRUE and FALSE correctly, then copy the text of that formula into the rule dialog. If it works in the cell, it works in the rule, because it is the same mechanism.</p>
 
-    <p>Одна практическая ловушка при наборе текста в диалоговом окне: клавиши со стрелками вставляют ссылки на ячейки вместо перемещения курсора. Нажмите F2, чтобы переключиться в режим редактирования, или щелкните там, где вы хотите находиться.</p>
+    <p>One practical trap while typing in the dialog: the arrow keys insert cell references instead of moving the cursor. Press F2 to switch to editing mode, or click where you want to be.</p>
   </div>
 
   <div class="step">
-    <h2>3. Знак доллара, превращающий ячейку в строку</h2>
+    <h2>3. The dollar sign that turns a cell into a row</h2>
 
-    <p>Вот одно и то же правило дважды, примененное к одному и тому же диапазону A2:H17, оба выполняются в Excel с последующим считыванием цветных ячеек.</p>
+    <p>Here is the same rule twice, applied to the same range A2:H17, both run in Excel with the coloured cells read back afterwards.</p>
 
-    <p>Без знака доллара:</p>
+    <p>Without the dollar sign:</p>
 
     <pre><code>=H2&gt;800
 
 cells coloured:  A2, A3, A11, A16</code></pre>
 
-    <p>Четыре одиночные ячейки, все в столбце A. Правило смещается в сторону вместе с диапазоном, поэтому копия, находящаяся в столбце B, проверяет I2, копия в столбце C проверяет J2 и так далее до пустого места. Только копия в столбце A всегда смотрит на столбец H.</p>
+    <p>Four single cells, all in column A. The rule shifted sideways with the range, so the copy sitting in column B tests I2, the copy in column C tests J2, and so on into empty space. Only the copy in column A ever looks at column H.</p>
 
-    <p>Со знаком доллара:</p>
+    <p>With the dollar sign:</p>
 
     <pre><code>=$H2&gt;800
 
 rows coloured:  1001, 1002, 1010, 1015     (four whole rows)</code></pre>
 
-    <p>The <code>$</code>  перед H столбец замораживается, поэтому каждая копия правила в каждом столбце по-прежнему проверяет столбец H. Номер строки не имеет знака доллара, поэтому он перемещается вниз по мере заполнения правила, а это именно то, что вам нужно: строка 3 проверяет H3, строка 4 проверяет H4.</p>
+    <p>The <code>$</code> in front of the H freezes the column, so every copy of the rule, in every column, still tests column H. The row number has no dollar sign, so it moves down as the rule fills down, which is exactly what you want: row 3 tests H3, row 4 tests H4.</p>
 
-    <p>Вот и все правило выделения всей строки, и его стоит произнести в виде предложения, которое можно повторять:  <strong>заблокировать столбец, оставить строку свободной</strong>. <code>$H2</code>. Четыре найденных заказа: 1001, 1002, 1010 и 1015 — это четыре с доходом более 800, которые вы можете проверить по данным: 880, 850, 1100 и 880.</p>
+    <p>That is the whole rule for whole-row highlighting, and it is worth saying as a sentence you can repeat: <strong>lock the column, leave the row free</strong>. <code>$H2</code>. The four orders it found, 1001, 1002, 1010 and 1015, are the four with revenue over 800, which you can check against the data: 880, 850, 1100 and 880.</p>
   </div>
 
   <div class="step">
-    <h2>4. Поместите порог в ячейку, а не в диалоговое окно.</h2>
+    <h2>4. Put the threshold in a cell, not in the dialog</h2>
 
-    <p>Typing <code>800</code>  в правило спрятано самое важное число во всем упражнении внутри диалогового окна, которое никто не откроет. Вместо этого поместите его в ячейку, полностью заблокируйте и наведите на него правило.</p>
+    <p>Typing <code>800</code> into the rule buries the most important number in the whole exercise inside a dialog nobody will open. Put it in a cell instead, lock it completely, and point the rule at it.</p>
 
     <pre><code>J1:  800                      a labelled cell somebody can type into
 
 rule:  =$H2 &gt; $J$1</code></pre>
 
-    <p>На этот раз оба знака доллара, потому что эта ячейка не должна ни для кого двигаться. Теперь граница видна, она фиксируется любой меткой, которую вы ставите рядом с ней, и ее можно регулировать, вообще не касаясь линейки. Было выполнено изменение ячейки с 800 на 500, а выделение изменилось с четырех строк на десять, при этом ничего не редактировалось.</p>
+    <p>Both dollar signs this time, because that cell must not move for anybody. Now the cut-off is visible, it is documented by whatever label you put beside it, and it is adjustable without touching the rule at all. Changing the cell from 800 to 500 was run, and the highlight went from four rows to ten, with nothing edited.</p>
 
     <pre><code>J1 = 800     4 rows highlighted
 J1 = 500    10 rows highlighted</code></pre>
 
-    <p>Это также превращает статический лист в нечто, что читатель может опрашивать. Кто-то, кто хочет знать, что означает «большой порядок», может посмотреть на ячейку, а тот, кто не согласен, может изменить ее и посмотреть, как страница ответит, что гораздо лучше, чем разговор о вашем форматировании.</p>
+    <p>This also turns a static sheet into something a reader can interrogate. Somebody who wants to know what "large order" means can look at the cell, and somebody who disagrees can change it and watch the page respond, which is a far better conversation than one about your formatting.</p>
 
-    <p>Стоит сказать, что сложнее всего выбрать номер, а не подключить его. Порог, выбранный потому, что он круглый, представляет собой решение, оформленное как наблюдение, и  <a href="../data-driven-thresholds/">выбор порогового значения из данных</a>  это отдельная страница.</p>
+    <p>It is worth saying that choosing the number is the hard part, not wiring it up. A threshold picked because it is round is a decision dressed as an observation, and <a href="../data-driven-thresholds/">picking a cut-off from the data</a> is a page of its own.</p>
   </div>
 
   <div class="step">
-    <h2>5. Применимо к и почему эта настройка неверна</h2>
+    <h2>5. Applies To, and why it is the setting that goes wrong</h2>
 
-    <p>Каждое правило имеет диапазон, показанный как  <strong>Применяется к</strong>  в разделе «Управление правилами». Он устанавливается из того, что вы выбрали при создании правила, и это наиболее распространенная причина, по которой правильно выглядящее правило окрашивает неправильные вещи.</p>
+    <p>Every rule owns a range, shown as <strong>Applies to</strong> in Manage Rules. It is set from whatever you had selected when you created the rule, and it is the most common reason a correct-looking rule colours the wrong things.</p>
 
-    <p>Три привычки, которые предотвращают почти все это.</p>
+    <p>Three habits that prevent nearly all of it.</p>
 
-    <p><strong>Прежде чем открыть диалоговое окно, выберите данные.</strong>, начиная с первой ячейки данных. Если ваш выбор включает строку заголовка, правило записывается для заголовка и все отклоняется на одну строку.</p>
+    <p><strong>Select the data before you open the dialog</strong>, starting at the first data cell. If your selection includes the header row, the rule is written for the header and everything is off by one row.</p>
 
-    <p><strong>Установите флажок Применить к последующему.</strong>  Главная, Условное форматирование, Управление правилами. Это поле доступно для редактирования, поэтому неправильный диапазон — это пятнадцатисекундное исправление, а не перестройка.</p>
+    <p><strong>Check Applies to afterwards.</strong> Home, Conditional Formatting, Manage Rules. The box is editable, so a wrong range is a fifteen-second fix rather than a rebuild.</p>
 
-    <p><strong>Используйте таблицу.</strong>  Правило, примененное к диапазону, останавливается на последней известной ему строке, поэтому строки, добавленные позже, не форматируются. Правило, применяемое внутри  <a href="../excel-tables/">настоящая таблица Excel</a>  расширяется по мере роста таблицы, что является тем же аргументом, что и для любой другой формулы в книге.</p>
+    <p><strong>Use a table.</strong> A rule applied to a range stops at the last row it knew about, so rows added later are unformatted. A rule applied inside <a href="../excel-tables/">a real Excel table</a> extends itself as the table grows, which is the same argument as for every other formula in the workbook.</p>
   </div>
 
   <div class="step">
-    <h2>6. Порядок правил и остановка, если верно</h2>
+    <h2>6. Rule order and Stop If True</h2>
 
-    <p>Перед пояснением: ячейка соответствует двум правилам: одно делает ее красной, а другое — жирным. Скажи, что происходит.</p>
+    <p>Before the explanation: a cell qualifies for two rules, one that makes it red and one that makes it bold. Say what happens.</p>
 
-    <p>Оба применяются, если они не противоречат друг другу. Excel просматривает список правил сверху и применяет каждое подходящее правило, поэтому красный и жирный шрифт удачно сочетаются. Там, где два правила устанавливают  <em>same</em>    свойство, побеждает тот, который находится выше в списке, и этот порядок — это то, что вы контролируете с помощью стрелок в «Управлении правилами», а не то, что решает Эксель.</p>
+    <p>Both apply, unless they conflict. Excel walks the rule list from the top and applies each rule that matches, so red and bold combine happily. Where two rules set the <em>same</em> property, the one higher in the list wins, and that ordering is something you control with the arrows in Manage Rules rather than something Excel decides.</p>
 
-    <p>Это дает стандартный образец для полосатости. Напишите правила в том порядке, в котором сначала самые крайние:</p>
+    <p>That gives the standard pattern for banding. Write the rules in the order most extreme first:</p>
 
     <pre><code>1.  =$H2&gt;=1000     dark
 2.  =$H2&gt;=800      medium
 3.  =$H2&gt;=500      light</code></pre>
 
-    <p>Ордер на сумму 1100 соответствует всем трем, и поскольку правило темного цвета стоит на первом месте, темное значение выигрывает при заполнении. Если бы вы написали их наоборот, все, что выше 500, было бы легким, а два других правила никогда бы не проявились.</p>
+    <p>An order worth 1,100 matches all three, and because the dark rule is first, dark wins the fill. If you had written them the other way round, everything above 500 would be light and the other two rules would never show.</p>
 
-    <p><strong>Стоп, если правда</strong>  — это флажок рядом с каждым правилом, в котором говорится: «Если это правило соответствует, не рассматривать никакие правила ниже него». Это необходимо, когда правило нижнего уровня добавляет что-то, что вы не хотите объединять, а классическое использование представляет собой исключение: поместите вверху правило, соответствующее строкам, которые вы хотите оставить в покое, вообще не форматируйте его и установите флажок «Стоп, если истинно». Все, что он ловит, теперь невосприимчиво к любому нижеприведенному правилу.</p>
+    <p><strong>Stop If True</strong> is the checkbox beside each rule that says "if this rule matches, do not consider any rule below it". You need it when a lower rule would add something you do not want combined, and the classic use is an exclusion: put a rule at the top that matches the rows you want left alone, give it no formatting at all, and tick Stop If True. Everything it catches is now immune to every rule underneath.</p>
   </div>
 
   <div class="step">
-    <h2>7. Чего не делает условное форматирование</h2>
+    <h2>7. What conditional formatting does not do</h2>
 
-    <p>Перед пояснением: правило закрасило четыре строки. Скажите, окрашены ли теперь ячейки в этих строках.</p>
+    <p>Before the explanation: a rule has coloured four rows. Say whether the cells in those rows are now coloured.</p>
 
-    <p>Это не так. Условное форматирование окрашивает отображение и оставляет ячейку в покое. Проверено в Excel в выделенной ячейке, у которой нет собственной заливки:</p>
+    <p>They are not. Conditional formatting paints the display and leaves the cell alone. Checked in Excel on a highlighted cell that had no fill of its own:</p>
 
     <pre><code>the cell's own fill        none
 what is on the screen      the rule's colour</code></pre>
 
-    <p>Далее следуют два последствия, и это два наиболее распространенных разочарования в этой функции.</p>
+    <p>Two consequences follow, and they are the two most common frustrations with the feature.</p>
 
-    <p><strong>Вы не можете посчитать цвет.</strong>  COUNTCOLOUR отсутствует, и обходные пути, считывающие заливку ячейки, видят собственную заливку ячейки, которая пуста. Вместо этого посчитайте условие, используя тот же тест, который использует правило:</p>
+    <p><strong>You cannot count the colour.</strong> There is no COUNTCOLOUR, and the workarounds that read a cell's fill see the cell's own fill, which is empty. Count the condition instead, with the same test the rule uses:</p>
 
     <pre><code>=COUNTIF(H2:H17, "&gt;800")      4</code></pre>
 
-    <p>Эта цифра 4 соответствует четырем строкам, окрашенным правилом, потому что это тот же вопрос, который задается в отношении данных, а не краски. Все, что вы хотите посчитать, суммировать или отфильтровать, должно где-то существовать в виде формулы. Цвет только для глаз.</p>
+    <p>That 4 matches the four rows the rule coloured, because it is the same question asked of the data rather than of the paint. Anything you want to count, total or filter needs to exist as a formula somewhere. The colour is for the eye only.</p>
 
-    <p><strong>Это не меняет ни одного числа.</strong>  Столбец доходов по-прежнему составляет 9890, что бы ни делало правило, что является скорее облегчением, чем ограничением: форматирование не может повредить данные. Это также причина, по которой выделение не является находкой. Раскрашивание четырех крупных ордеров в красный цвет не приводит к тому, что читатель может процитировать «четыре ордера выше 800», а информационной панели требуется не только краска, но и предложение.</p>
+    <p><strong>It does not change any number.</strong> The revenue column still totals 9,890 whatever the rule does, which is a relief rather than a limitation: formatting cannot corrupt data. It is also the reason a highlight is not a finding. Colouring the four big orders red does not put "four orders above 800" anywhere a reader can quote, and a dashboard needs the sentence as well as the paint.</p>
 
-    <p>Представьте на мгновение свой наиболее часто используемый лист. Если бы кто-нибудь напечатал его в черно-белом виде, какая часть того, что он сейчас сообщает, сохранилась бы? Все, что не будет, вам также следует записать в виде числа.</p>
+    <p>Picture your own most-used sheet for a moment. If somebody printed it in black and white, how much of what it currently communicates would survive? Everything that would not is something you should also be writing down as a number.</p>
   </div>
 
   <div class="step">
-    <h2>8. Правила, которые порождают</h2>
+    <h2>8. Rules that breed</h2>
 
-    <p>Это ошибка, которая превращает аккуратную рабочую тетрадь в медленную, и это происходит без каких-либо необычных действий.</p>
+    <p>This is the failure that turns a tidy workbook into a slow one, and it happens without anybody doing anything unusual.</p>
 
-    <p>Лист был настроен ровно с одним правилом, примененным к A1:A10. Были выполнены две обычные операции копирования и вставки отдельных ячеек в новые места. После этого Excel сообщил:</p>
+    <p>A sheet was set up with exactly one rule, applied to A1:A10. Two ordinary copy-and-pastes of single cells to new locations were performed. Afterwards, Excel reported:</p>
 
     <pre><code>rules before   1
 rules after    3
@@ -345,19 +345,19 @@ rule 1  applies to $E$6         =E6&gt;0
 rule 2  applies to $C$3         =C3&gt;0
 rule 3  applies to $A$1:$A$10   =A1&gt;0</code></pre>
 
-    <p>Копирование ячейки копирует ее условное форматирование, и копия не может присоединиться к исходному правилу, поэтому она становится новой со своим собственным диапазоном. Сделайте это на реальном листе несколько сотен раз в год (так выглядит обычное редактирование), и «Правила управления» заполнятся почти идентичными записями, охватывающими фрагменты диапазонов. Симптомы: файл открывается медленно, плохо прокручивается и нестабильно форматируется в тех местах, которые никто не может объяснить.</p>
+    <p>Copying a cell copies its conditional formatting, and the copy cannot join the original rule, so it becomes a new one with its own range. Do that on a real sheet a few hundred times over a year, which is what normal editing looks like, and Manage Rules fills with near-identical entries covering fragments of ranges. The symptoms are a file that opens slowly, scrolls badly, and formats inconsistently in places nobody can explain.</p>
 
-    <p>Два исправления. Чтобы предотвратить это, при перемещении данных внутри отформатированного листа вставляйте только значения: Ctrl+Альт+В, затем V. Чтобы исправить это, откройте «Управление правилами», установите раскрывающийся список «Этот рабочий лист», чтобы вы могли видеть их все, удалите фрагменты и перестройте одно правило в правильном диапазоне. Это пятиминутная работа, которую люди откладывают годами.</p>
+    <p>Two fixes. To prevent it, paste values only, Ctrl+Alt+V then V, when moving data around inside a formatted sheet. To repair it, open Manage Rules, set the scope dropdown to This Worksheet so you can see all of them, delete the fragments, and rebuild one rule over the correct range. It is a five-minute job that people put off for years.</p>
   </div>
 
-  <h2>Полное до и после</h2>
+  <h2>The full before and after</h2>
 
-  <p>Тот же стол, та же цель: сделать крупные заказы видимыми с первого взгляда.</p>
+  <p>Same table, same goal: make the large orders findable at a glance.</p>
 
   <h3>Before</h3>
   <pre><code>Rule:        Greater Than, 800, red fill
 Applies to:  $H$2:$H$17</code></pre>
-  <p>Только ячейка дохода становится красной, поэтому глазу приходится перемещаться по строке назад, чтобы узнать, чей это был заказ. Число 800 не существует нигде, кроме как внутри диалога. Строки, добавленные в следующем месяце, не покрываются. И нигде на листе нет цифры, указывающей, сколько заказов соответствует критериям.</p>
+  <p>Only the revenue cell turns red, so the eye has to travel back along the row to find out whose order it was. The number 800 exists nowhere except inside a dialog. Rows added next month are not covered. And there is no number anywhere on the sheet saying how many orders qualify.</p>
 
   <h3>After</h3>
   <pre><code>J1:          800            labelled "Large order threshold"
@@ -365,109 +365,109 @@ Rule:        =$H2 &gt; $J$1
 Applies to:  the whole table, so it grows with the data
 Beside it:   =COUNTIF(Orders[Revenue], "&gt;"&amp;J1)      4
              =SUMIF(Orders[Revenue], "&gt;"&amp;J1)     3710</code></pre>
-  <p>Целые ряды загораются, поэтому порядок и повтор идут с номером. Порог видим и настраивается, а его изменение с 800 на 500 увеличивает выделение с четырех строк до десяти без редактирования правила. А две формулы рядом с ним превращают цвет во что-то котируемое: четыре ордера выше порога, стоимость между ними составляет 3710.</p>
+  <p>Whole rows light up, so the order and the rep come with the number. The threshold is visible and adjustable, and changing it from 800 to 500 takes the highlight from four rows to ten without editing the rule. And the two formulas beside it turn the colour into something quotable: four orders above the threshold, worth 3,710 between them.</p>
 
-  <p>Заявление, и именно поэтому знак доллара получил отдельный раздел:  <strong>один символ в правиле — это разница между четырьмя цветными ячейками и четырьмя цветными строками, и ни одна из версий не выглядит неправильной, пока вы их не сравните.</strong></p>
+  <p>The claim, and it is why the dollar sign gets its own section: <strong>one character in the rule is the difference between four coloured cells and four coloured rows, and neither version looks wrong until you compare them.</strong></p>
 
   <div class="step">
-    <h2>Крайние случаи, которые незаметно нарушают правила</h2>
+    <h2>Edge cases that break a rule quietly</h2>
 
-    <p>Шесть, прошедшие первую сборку.</p>
+    <p>Six that get past a first build.</p>
 
-    <p><strong>Строка заголовка была в выделении.</strong>  Затем правило записывается для заголовка, поэтому каждый тест выделяется на одну строку, а выделение выглядит почти правильно. Выберите из первой строки данных.</p>
+    <p><strong>The header row was in the selection.</strong> The rule is then written for the header, so every test is one row out and the highlighting looks almost right. Select from the first data row.</p>
 
-    <p><strong>Пустые ячейки считаются за ноль.</strong>  Правило вроде  <code>=$H2&lt;500</code>  подсвечивается каждая пустая строка под вашими данными, поскольку пустое значение рассматривается как 0. Берегите его:  <code>=AND($H2&lt;&gt;"", $H2&lt;500)</code>.</p>
+    <p><strong>Blank cells count as zero.</strong> A rule like <code>=$H2&lt;500</code> lights up every empty row below your data, because blank is treated as 0. Guard it: <code>=AND($H2&lt;&gt;"", $H2&lt;500)</code>.</p>
 
-    <p><strong>Текст по сравнению с числом.</strong>  Если тестируемый столбец содержит числа, хранящиеся в виде текста, сравнение незаметно возвращает FALSE для этих строк, и они никогда не выделяются. Это тот же класс проблем, что и при недостаточном общем количестве, и стоит проверить тип столбца, прежде чем обвинять правило.</p>
+    <p><strong>Text compared with a number.</strong> If the tested column contains numbers stored as text, the comparison quietly returns FALSE for those rows, and they never highlight. This is the same class of problem as a total coming up short, and it is worth checking the column type before blaming the rule.</p>
 
-    <p><strong>Вставка строки разбивает диапазон.</strong>  Вставка внутри форматированного диапазона обычно расширяет его, а вставка по краям часто этого не делает, и новая строка просто оказывается снаружи. В разделе «Управление правилами» отображается правда в поле «Применяется к».</p>
+    <p><strong>Inserting a row splits the range.</strong> Inserting inside a formatted range usually extends it, but inserting at the edges often does not, and the new row is simply outside. Manage Rules shows the truth in the Applies to box.</p>
 
-    <p><strong>Цвет, который является единственным носителем сообщения.</strong>  Примерно один из двенадцати человек североевропейского происхождения имеет дефицит красно-зеленого цветового зрения, поэтому правило «красный против зеленого» ничего не говорит реальной части аудитории. Используйте разницу заливки плюс что-нибудь нецветное, жирное или добавленный символ, и это ничего не стоит.</p>
+    <p><strong>Colour that is the only carrier of the message.</strong> Roughly one man in twelve of northern European descent has a red-green colour vision deficiency, so a red-against-green rule communicates nothing to a real fraction of any audience. Use a fill difference plus something non-colour, bold or an added symbol, and it costs nothing.</p>
 
-    <p><strong>Неустойчивые формулы внутри правил.</strong>  Правила, содержащие функции, которые постоянно пересчитывают, или правила, применяемые к целым столбцам, замедляют каждую прокрутку и редактирование. Применять правила к используемому диапазону, а не к  <code>A:A</code>.</p>
+    <p><strong>Volatile formulas inside rules.</strong> Rules containing functions that recalculate constantly, or rules applied to whole columns, make every scroll and edit slow. Apply rules to the used range, not to <code>A:A</code>.</p>
   </div>
 
-  <h2>Почему это работает</h2>
+  <h2>Why this works</h2>
 
-  <p>Причина, по которой выделение вообще стоит создавать, заключается в том, что цвет можно найти без поиска. Ячейка, заливка которой отличается от ее соседей, находится примерно в одно и то же время, независимо от того, десять строк на экране или двести, поскольку небольшой набор визуальных свойств, цвет, размер и ориентация среди них обрабатываются параллельно по всему визуальному полю, а не поэлементно (Хили &amp; Энс, 2012,    <em>Транзакции IEEE по визуализации и компьютерной графике</em>, 18(7), 1170–1188). То есть условное форматирование конкретного задания работает хорошо, и оно также объясняет режим сбоя: эффект зависит от редкости выделенных ячеек. Правило, согласно которому раскрашивание половины листа ничем не выделяется, и оно стоило вам техники.</p>
+  <p>The reason a highlight is worth building at all is that colour is found without being searched for. A cell whose fill differs from its neighbours is located in roughly the same time whether there are ten rows on screen or two hundred, because a small set of visual properties, colour and size and orientation among them, are processed in parallel across the whole visual field rather than item by item (Healey &amp; Enns, 2012, <em>IEEE Transactions on Visualization and Computer Graphics</em>, 18(7), 1170–1188). That is the specific job conditional formatting does well, and it explains the failure mode too: the effect depends on the highlighted cells being rare. A rule that colours half the sheet has nothing to stand out against, and it has cost you the technique.</p>
 
-  <p>Он также говорит вам, чего не следует просить цвет делать. Когда люди оценивают, насколько точно читатели извлекают величины из различных визуальных кодировок, положение по общей шкале выходит далеко вперед, а цвет оказывается ближе к низу, поэтому цветовая шкала по таблице представляет собой грубое впечатление, а не чтение (Кливленд &amp; МакГилл, 1984,    <em>Журнал Американской статистической ассоциации</em>, 79(387), 531–554). Используйте цвет, чтобы сказать  <em>этот, посмотри сюда</em>, что он делает лучше, чем что-либо еще на странице, и используйте число или диаграмму, когда читателю нужно знать, сколько именно.</p>
+  <p>It also tells you what not to ask colour to do. When people rank how accurately readers extract quantities from different visual encodings, position along a common scale comes out well ahead, and colour comes out near the bottom, which is why a colour scale across a table is a rough impression rather than a reading (Cleveland &amp; McGill, 1984, <em>Journal of the American Statistical Association</em>, 79(387), 531–554). Use colour to say <em>this one, look here</em>, which it does better than anything else on the page, and use a number or a chart when the reader has to know how much.</p>
 
-  <p>Одно замечание в шпаргалке ниже. Он создан для того, чтобы его просматривали и вспоминали, а не читали, потому что проверка себя на перенос материала в новые ситуации лучше, чем его повторное изучение, что здесь важно, поскольку вы будете применять эти правила к листам, которые совсем не похожи на этот (Батлер, 2010,  <em>Журнал экспериментальной психологии: обучение, память и познание</em>, 36(5), 1118–1133).</p>
+  <p>One note on the cheat sheet below. It is built to be covered and recalled rather than read, because testing yourself on material transfers to new situations better than restudying it, which matters here since you will be applying these rules to sheets that look nothing like this one (Butler, 2010, <em>Journal of Experimental Psychology: Learning, Memory, and Cognition</em>, 36(5), 1118–1133).</p>
 
-  <h2>Использование этого в вашем собственном проекте</h2>
+  <h2>Using this on your own project</h2>
 
-  <p>Перестраивать каждое правило в унаследованной книге — занятие утомительное, и вы остановитесь на втором листе. Вместо этого сделайте это по порядку.</p>
+  <p>Rebuilding every rule in an inherited workbook is miserable and you will stop at the second sheet. Do this instead, in order.</p>
 
   <ol>
-    <li><strong>Откройте «Управление правилами» и установите область действия «Этот рабочий лист».</strong>  Посчитайте, что там. Если их больше, чем несколько, у вас есть фрагментация, и удаление — это работа, а не добавление.</li>
-    <li><strong>Сначала запишите тест в запасную ячейку</strong>  и заставить его правильно возвращать TRUE и FALSE, прежде чем открыть диалоговое окно.</li>
-    <li><strong>заблокировать столбец, оставить строку свободной</strong>, <code>=$H2&gt;...</code>, когда вы хотите, чтобы вся строка реагировала.</li>
-    <li><strong>Переместите каждый порог в помеченную ячейку</strong>  и укажите на него оба знака доллара. Это документация и контроль одновременно.</li>
-    <li><strong>Применение правил внутри таблицы</strong>  поэтому они покрывают ряды следующего месяца, и никто не вспоминает о их продлении.</li>
-    <li><strong>Поставьте число рядом с цветом.</strong> One <code>COUNTIF</code>  используя одно и то же условие, поэтому на листе указано, сколько, а не сколько.</li>
+    <li><strong>Open Manage Rules and set the scope to This Worksheet.</strong> Count what is there. If it is more than a handful, you have fragmentation, and deleting is the work rather than adding.</li>
+    <li><strong>Write the test in a spare cell first</strong> and get it returning TRUE and FALSE correctly before you open the dialog.</li>
+    <li><strong>Lock the column, leave the row free</strong>, <code>=$H2&gt;...</code>, whenever you want the whole row to react.</li>
+    <li><strong>Move every threshold into a labelled cell</strong> and reference it with both dollar signs. It is documentation and a control at the same time.</li>
+    <li><strong>Apply rules inside a table</strong> so they cover next month's rows without anybody remembering to extend them.</li>
+    <li><strong>Put a count beside the colour.</strong> One <code>COUNTIF</code> using the same condition, so the sheet says how many, not just which.</li>
   </ol>
 
-  <p>Если у вас под рукой есть бумага, один дополнительный эскиз стоит пяти минут. Нарисуйте таблицу в виде сетки, поставьте точку в ту ячейку, значение которой решает все, и проведите от этой точки горизонтальную линию через всю ее строку. Затем напишите ссылку, которая понадобится, чтобы точка оставалась в своем столбце, пока линия движется вниз. Вы напишете знак доллара перед буквой, и вам не придется искать его снова.</p>
+  <p>If you have paper nearby, one optional sketch is worth five minutes. Draw your table as a grid, put a dot in the one cell whose value decides everything, and draw a horizontal line from that dot across its whole row. Then write the reference you would need for the dot to stay in its column while the line moves down. You will write a dollar sign in front of the letter, and you will not need to look it up again.</p>
 
-  <div class="note"><strong>Подробнее об этом и еще что-нибудь подобное.</strong>  Все инструкции находятся в одном месте на  <a href="../">индекс направляющих</a>: Excel, SQL, Python и связанные с ними методы работы.</div>
+  <div class="note"><strong>More detail on this, and more like it.</strong> Every how-to sits in one place on the <a href="../">guides index</a>: Excel, SQL, Python, and the working habits around them.</div>
 
-  <h2>Все на одном экране</h2>
+  <h2>The whole thing on one screen</h2>
 
-  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
+  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
 
   <table>
-    <tr><th>Thing</th><th>Что он делает</th></tr>
-    <tr><td>Встроенные правила</td><td>Можно только проверить ячейку, которую они окрашивают.</td></tr>
-    <tr><td>Правило формулы</td><td>Главная страница, Условное форматирование, Новое правило, Использование формулы.</td></tr>
-    <tr><td>Откуда это написано</td><td>Верхняя левая ячейка выделенного фрагмента затем заполняется как формула.</td></tr>
-    <tr><td>Выделение целого ряда</td><td><code>=$H2&gt;800</code>. Зафиксируйте столбец, оставьте строку свободной.</td></tr>
-    <tr><td>Нет знака доллара</td><td>Тест откатывается в сторону. Только первый столбец смотрит на столбец H.</td></tr>
-    <tr><td>Порог в ячейке</td><td><code>=$H2&gt;$J$1</code>, оба знака, поэтому ячейка не может двигаться.</td></tr>
-    <tr><td>Применяется к</td><td>Диапазон действия правила. Проверьте это в разделе «Управление правилами»; его можно редактировать.</td></tr>
-    <tr><td>Заголовок в подборке</td><td>Все смещено на одну строку.</td></tr>
-    <tr><td>Порядок правил</td><td>Сверху вниз. Для групп сначала напишите самое радикальное правило.</td></tr>
-    <tr><td>Стоп, если правда</td><td>Соответствующие строки пропускают каждое приведенное ниже правило. Используйте его для исключений.</td></tr>
-    <tr><td>Что меняет CF</td><td>Только дисплей. Ячейка не имеет собственного заполнения.</td></tr>
-    <tr><td>Подсчет цвета</td><td>Невозможно. Вместо этого подсчитайте условие с помощью COUNTIF.</td></tr>
-    <tr><td>Пустые ячейки</td><td>Рассматривается как 0. Охранять с  <code>AND($H2&lt;&gt;"", ...)</code>.</td></tr>
-    <tr><td>Правила умножения</td><td>Копирование и вставка порождают их. Вставьте значения или очистите их в разделе «Управление правилами».</td></tr>
-    <tr><td>Правила в таблице</td><td>Распространяется на новые строки самостоятельно.</td></tr>
-    <tr><td>Только цвет</td><td>Недостаточно. Соедините его с жирным шрифтом или символом.</td></tr>
+    <tr><th>Thing</th><th>What it does</th></tr>
+    <tr><td>Built-in rules</td><td>Can only test the cell they colour.</td></tr>
+    <tr><td>Formula rule</td><td>Home, Conditional Formatting, New Rule, Use a formula.</td></tr>
+    <tr><td>Where it is written from</td><td>The top-left cell of the selection, then filled like a formula.</td></tr>
+    <tr><td>Whole-row highlight</td><td><code>=$H2&gt;800</code>. Lock the column, leave the row free.</td></tr>
+    <tr><td>No dollar sign</td><td>The test slides sideways. Only the first column looks at column H.</td></tr>
+    <tr><td>Threshold in a cell</td><td><code>=$H2&gt;$J$1</code>, both signs, so the cell cannot move.</td></tr>
+    <tr><td>Applies to</td><td>The rule's range. Check it in Manage Rules; it is editable.</td></tr>
+    <tr><td>Header in the selection</td><td>Everything is off by one row.</td></tr>
+    <tr><td>Rule order</td><td>Top down. For bands, write the most extreme rule first.</td></tr>
+    <tr><td>Stop If True</td><td>Matching rows skip every rule below. Use it for exclusions.</td></tr>
+    <tr><td>What CF changes</td><td>The display only. The cell has no fill of its own.</td></tr>
+    <tr><td>Counting the colour</td><td>Not possible. Count the condition with COUNTIF instead.</td></tr>
+    <tr><td>Blank cells</td><td>Treated as 0. Guard with <code>AND($H2&lt;&gt;"", ...)</code>.</td></tr>
+    <tr><td>Rules multiplying</td><td>Copy and paste breeds them. Paste values, or clean up in Manage Rules.</td></tr>
+    <tr><td>Rules in a table</td><td>Extend to new rows on their own.</td></tr>
+    <tr><td>Colour alone</td><td>Not enough. Pair it with bold or a symbol.</td></tr>
   </table>
 
-  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Рядом с каждым ярким моментом отображается номер, полученный по тому же условию. Цвет находит строки; количество — это то, что читатель может цитировать, спорить или вставлять в электронное письмо. Если правило работает не так, как описано на этой странице, существует общая причина.  <a href="../technical-tenacity/">шлейф диагностики на предмет застревания</a>, и  <a href="../excel-check-your-work/">проверка твоей работы</a>  охватывает место, где должны находиться проверочные формулы.</div>
+  <div class="note"><strong>The one habit to keep.</strong> Every highlight gets a number beside it, produced by the same condition. The colour finds the rows; the count is the thing a reader can quote, argue with, or paste into an email. If a rule misbehaves in a way this page does not cover, there is a general <a href="../technical-tenacity/">diagnosis loop for being stuck</a>, and <a href="../excel-check-your-work/">checking your work</a> covers where the check formulas should live.</div>
 
-  <p>Еще одна мысль, и мне бы искренне хотелось услышать ответы других людей. Худший набор правил, который я унаследовал, содержал более двухсот записей в «Управлении правилами», все это были фрагменты одних и тех же трех правил, а открытие файла занимало сорок секунд. Какую самую странную вещь вы нашли в чьем-то списке «Управление правилами»?</p>
+  <p>One last thought, and I would genuinely like other people's answers. The worst rule set I inherited had over two hundred entries in Manage Rules, all fragments of the same three rules, and the file took forty seconds to open. What is the strangest thing you have found in somebody's Manage Rules list?</p>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Хили, К.Г., и Эннс, Дж.Т. (2012). Внимание и зрительная память в визуализации и компьютерной графике.  <em>Транзакции IEEE по визуализации и компьютерной графике</em>, 18(7), 1170–1188.</li>
-    <li>Кливленд, У.С., и МакГилл, Р. (1984). Графическое восприятие: теория, эксперименты и применение к разработке графических методов.  <em>Журнал Американской статистической ассоциации</em>, 79(387), 531–554.</li>
-    <li>Батлер, AC (2010). Повторное тестирование обеспечивает лучшую передачу знаний по сравнению с повторным обучением.  <em>Журнал экспериментальной психологии: обучение, память и познание</em>, 36(5), 1118–1133.</li>
+    <li>Healey, C. G., &amp; Enns, J. T. (2012). Attention and visual memory in visualization and computer graphics. <em>IEEE Transactions on Visualization and Computer Graphics</em>, 18(7), 1170–1188.</li>
+    <li>Cleveland, W. S., &amp; McGill, R. (1984). Graphical perception: Theory, experimentation, and application to the development of graphical methods. <em>Journal of the American Statistical Association</em>, 79(387), 531–554.</li>
+    <li>Butler, A. C. (2010). Repeated testing produces superior transfer of learning relative to repeated studying. <em>Journal of Experimental Psychology: Learning, Memory, and Cognition</em>, 36(5), 1118–1133.</li>
   </ul>
 
   <div class="book">
-    <strong>Правило работает с одной ячейкой и разваливается в тот момент, когда вы его копируете.</strong>
-    <p><em>Excel для аналитиков</em>  состоит из 378 страниц, абсолютные и относительные ссылки читаются посимвольно, поэтому скопированное правило оказывается там, где вы имели в виду, с практическими вопросами, которые печатают ответ и причину, по которой оно правильное.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-conditional-formatting'})">Excel для аналитиков, 19 долларов США →</a>
+    <strong>The rule works on one cell and falls apart the moment you copy it down.</strong>
+    <p><em>Excel for Analysts</em> is 378 pages, absolute and relative references read symbol by symbol, so a copied rule lands where you meant, with practice questions that print the answer and the reason it is right.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/excel-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=excel-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-excel-conditional-formatting'})">Excel for Analysts, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>Практикуйте правила на столе, и вы увидите изменения.</strong>
-    <p style="margin:6px 0 0">The <a href="../../excel/">Excel комплект</a> gives you the repetitions: whole-row highlights, thresholds driven from cells, and rule-order puzzles where two rules fight, plus flash cards on exactly which references to lock. You now own the method; the kit is the practice. Nothing to install, no account needed.</p>
-    <a class="btn" href="../../excel/">Откройте набор Excel →</a>
+    <strong>Practice rules on a table you can see change.</strong>
+    <p style="margin:6px 0 0">The <a href="../../excel/">Excel Kit</a> gives you the repetitions: whole-row highlights, thresholds driven from cells, and rule-order puzzles where two rules fight, plus flash cards on exactly which references to lock. You now own the method; the kit is the practice. Nothing to install, no account needed.</p>
+    <a class="btn" href="../../excel/">Open the Excel Kit →</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../data-driven-thresholds/">Пороги, управляемые данными</a> · <a href="../excel-tables/">Таблицы Excel против диапазонов</a> · <a href="../excel-absolute-vs-relative-references/">Абсолютные и относительные ссылки</a> · <a href="../excel-chart-design-basics/">Основы проектирования диаграмм</a> · <a href="../excel-check-your-work/">Проверьте свою работу</a> · <a href="../excel-pivot-tables/">Создайте сводную таблицу</a> · <a href="../excel-remove-duplicates/">Удалить дубликаты</a> · <a href="../excel-dates/">Даты Excel</a> · <a href="../excel-index-match/">ИНДЕКСНОЕ СООТВЕТСТВИЕ против ВПР</a> · <a href="../excel-sumifs/">СУММИФЫ и СЧЁТЕЛИ</a> · <a href="../../excel/">Excel комплект</a> · <a href="../excel-kpi-row/">Ряд КПЭ</a> · <a href="../excel-dashboard-claim/">Напишите претензию на панели управления</a> · <a href="../excel-slicers/">Срезы Excel</a> · <a href="../choose-the-right-chart/">Выберите правильный график</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../../projects/">Портфельные проекты</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
+    <a href="../../">← Analyst Prep Kit</a> · <a href="../data-driven-thresholds/">Data-Driven Thresholds</a> · <a href="../excel-tables/">Excel Tables vs Ranges</a> · <a href="../excel-absolute-vs-relative-references/">Absolute vs Relative References</a> · <a href="../excel-chart-design-basics/">Chart Design Basics</a> · <a href="../excel-check-your-work/">Check Your Work</a> · <a href="../excel-pivot-tables/">Make a Pivot Table</a> · <a href="../excel-remove-duplicates/">Remove Duplicates</a> · <a href="../excel-dates/">Excel Dates</a> · <a href="../excel-index-match/">INDEX MATCH vs VLOOKUP</a> · <a href="../excel-sumifs/">SUMIFS and COUNTIFS</a> · <a href="../../excel/">Excel Kit</a> · <a href="../excel-kpi-row/">The KPI Row</a> · <a href="../excel-dashboard-claim/">Write the Dashboard's Claim</a> · <a href="../excel-slicers/">Excel Slicers</a> · <a href="../choose-the-right-chart/">Choose the Right Chart</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../../projects/">Portfolio Projects</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

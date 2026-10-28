@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>панды to_datetime: форматы, день по началу и группировка по месяцам — комплект для подготовки аналитика</title>
-<meta name="description" content="Одна и та же строка анализируется до двух разных дат в зависимости от одного аргумента, и ни одна из них не вызывает ошибки. Как явно анализировать, что на самом деле делает первый день, и методы доступа, которые группируют по месяцам в одну строку.">
+<title>pandas to_datetime: Formats, Day First, and Grouping by Month &mdash; Analyst Prep Kit</title>
+<meta name="description" content="The same string parses to two different dates depending on one argument, and neither raises an error. How to parse explicitly, what dayfirst really does, and the accessor methods that make grouping by month one line.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/pandas-datetime/">
-<meta property="og:title" content="Даты в pandas: один раз разобрать их правильно">
-<meta property="og:description" content="04.03.2026 разбирает на 4 марта или 3 апреля в зависимости от одного аргумента. Ни ошибок.">
+<meta property="og:title" content="Dates in pandas: Parsing Them Once, Properly">
+<meta property="og:description" content="03/04/2026 parses to 4 March or 3 April depending on one argument. Neither errors.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/pandas-datetime/">
 <meta name="twitter:card" content="summary_large_image">
@@ -164,44 +164,44 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> &middot; <a href="../../python/">Комплект Python</a></p>
-  <h1>Даты в pandas: один раз разобрать их правильно</h1>
-  <p class="meta">Майкл Носито · Обновлено в августе 2026 г. · Все числа на этой странице были обработаны до их публикации.</p>
+  <p class="crumb"><a href="../../">&larr; All Kits</a> &middot; <a href="../../python/">Python Kit</a></p>
+  <h1>Dates in pandas: Parsing Them Once, Properly</h1>
+  <p class="meta">Michael Nocito &middot; Updated August 2026 &middot; Every number on this page was worked before it was published</p>
 
-  <p>Даты — это столбец, который молча разрывает конвейер. Неправильный номер ошибочен или выглядит абсурдно. Неправильная дата выглядит как дата, находится в правом столбце, сортируется и неверна только в те дни, которые не могут быть месяцем.</p>
+  <p>Dates are the column that breaks a pipeline silently. A wrong number errors or looks absurd. A wrong date looks like a date, sits in the right column, sorts, and is only wrong on the days that could not be a month.</p>
 
-  <p>Что вы делаете: анализируете один раз, при загрузке, с явным форматом и подсчитываете, что не удалось.</p>
+  <p>What you do: parse once, at load, with an explicit format, and count what failed.</p>
 
-  <p><strong>Краткая версия.</strong>  Если вы не указали формат, синтаксический анализатор догадался и никогда не скажет вам, в какую сторону.</p>
+  <p><strong>The short version.</strong> If you did not state the format, the parser guessed, and it never tells you which way.</p>
 
-  <h2>Демонстрация</h2>
+  <h2>The demonstration</h2>
   <pre><code>import pandas as pd
 
 s = pd.Series(['03/04/2026', '11/12/2026'])
 
 pd.to_datetime(s)                          # 2026-03-04, 2026-11-12
 pd.to_datetime(s, format='%d/%m/%Y')       # 2026-04-03, 2026-12-11</code></pre>
-  <p>Те же две строки, два разных результата. Предоставленные сами себе, панды читают их в первый месяц. Согласно заявленному формату, они идут первым днем. Ни один из вызовов ничего не дал, и оба дали действительные даты.</p>
-  <p>В реальном файле это хуже, чем кажется. Дни выше 12 однозначны и в любом случае анализируются правильно, поэтому затрагиваются только первые двенадцать дней каждого месяца. Примерно треть ваших строк неверны, разбросаны, а столбец по-прежнему отлично сортируется и отображается в диаграммах.</p>
+  <p>The same two strings, two different results. Left to itself, pandas read them month first. With the format stated, they are day first. Neither call raised anything, and both produced valid dates.</p>
+  <p>On a real file this is worse than it looks. Days above 12 are unambiguous and parse correctly either way, so only the first twelve days of each month are affected. Roughly a third of your rows are wrong, scattered, and the column still sorts and charts perfectly.</p>
 
-  <div class="note"><strong>Расскажите.</strong>  Сгруппируйте по месяцам и посмотрите на распределение. Файл, проанализированный неправильно, имеет тенденцию создавать странную концентрацию в первые двенадцать дней каждого месяца или месяцев, которые заканчиваются на 12-м дне. И то, и другое видно через десять секунд и невидимо в необработанном столбце.</div>
+  <div class="note"><strong>The tell.</strong> Group by month and look at the distribution. A file parsed the wrong way round tends to produce a strange concentration in the first twelve days of every month, or months that stop at day 12. Both are visible in ten seconds and invisible in the raw column.</div>
 
-  <h2>Разбор при загрузке</h2>
+  <h2>Parsing at load</h2>
   <pre><code>df = pd.read_csv('orders.csv',
                  parse_dates=['order_date'],
                  date_format='%d/%m/%Y')</code></pre>
-  <p>Делаю это в  <code>read_csv</code>  «а не потом» означает, что каждый последующий шаг видит реальную дату и время, и он удаляет окно, в котором кто-то записывает сравнение со строкой, и получает сортировку, которая выполняется в алфавитном порядке.</p>
-  <p>Коды форматов, которые стоит знать:  <code>%Y</code>  четырехзначный год,  <code>%y</code>  двузначный,  <code>%m</code>  номер месяца,  <code>%b</code>  короткое название месяца,  <code>%B</code>  полное название месяца,  <code>%d</code>  день,  <code>%H:%M:%S</code>  время. строки ISO,  <code>2026-08-23</code>, вообще не нуждаются в формате и везде однозначны, поэтому на них стоит настаивать в любой системе, на которую вы можете повлиять.</p>
+  <p>Doing it in <code>read_csv</code> rather than afterwards means every later step sees a real datetime, and it removes the window in which somebody writes a comparison against a string and gets a sort that runs alphabetically.</p>
+  <p>The format codes worth knowing: <code>%Y</code> four-digit year, <code>%y</code> two-digit, <code>%m</code> month number, <code>%b</code> short month name, <code>%B</code> full month name, <code>%d</code> day, <code>%H:%M:%S</code> time. ISO strings, <code>2026-08-23</code>, need no format at all and are unambiguous everywhere, which is why they are worth insisting on from any system you can influence.</p>
 
-  <h2>Подсчет неудач</h2>
+  <h2>Counting the failures</h2>
   <pre><code>parsed = pd.to_datetime(df['order_date'], format='%d/%m/%Y', errors='coerce')
 bad = parsed.isna() &amp; df['order_date'].notna()
 print(bad.sum())
 print(df.loc[bad, 'order_date'].head(10))</code></pre>
-  <p><code>errors='coerce'</code>  превращает неудачи в  <code>NaT</code>  вместо того, чтобы останавливать скрипт, что правильно, только если вы потом на них посмотрите. Печать десяти ошибочных строк обычно мгновенно определяет проблему: второй формат в том же файле, строка нижнего колонтитула или заполнитель, например  <code>0000-00-00</code>.</p>
-  <p>Опасная закономерность заключается в том, что  <code>coerce</code>  за которым позже последовал  <code>dropna()</code>, который удаляет именно те строки, даты которых были необычными. Это одна из шести операций, которым предстоит бросить вызов.  <a href="../review-ai-data-cleaning/">просмотр сценария очистки</a>.</p>
+  <p><code>errors='coerce'</code> turns failures into <code>NaT</code> rather than stopping the script, which is right only if you then look at them. Printing the ten offending strings usually identifies the problem instantly: a second format in the same file, a footer row, or a placeholder such as <code>0000-00-00</code>.</p>
+  <p>The dangerous pattern is <code>coerce</code> followed later by <code>dropna()</code>, which deletes exactly the rows whose dates were unusual. That is one of the six operations to challenge in <a href="../review-ai-data-cleaning/">reviewing a cleaning script</a>.</p>
 
-  <h2>Аксессор, в котором находится значение</h2>
+  <h2>The accessor, which is where the value is</h2>
   <pre><code>d = df['order_date']
 
 d.dt.year          # 2026
@@ -211,17 +211,17 @@ d.dt.quarter       # 2
 d.dt.to_period('M')          # 2026-04
 d.dt.days_in_month
 (d.max() - d.min()).days     # span in days</code></pre>
-  <p><code>.dt</code>  существует только тогда, когда столбец является реальным датой и временем, что делает его полезным тестом: если  <code>.dt</code>  выдает ошибку атрибута, столбец по-прежнему является текстовым, хотя и выглядит как дата.</p>
+  <p><code>.dt</code> only exists once the column is a real datetime, which makes it a useful test: if <code>.dt</code> raises an attribute error, the column is still text however much it looks like a date.</p>
 
-  <h2>Группировка по месяцам, два способа</h2>
+  <h2>Grouping by month, two ways</h2>
   <pre><code># labels, only the months that occur
 df.groupby(df['order_date'].dt.to_period('M'))['amount'].sum()
 
 # a continuous axis, including months with no rows
 df.set_index('order_date').resample('MS')['amount'].sum()</code></pre>
-  <p>Разница имеет значение для отчетности.  <code>to_period</code>  возвращает только те месяцы, по которым есть данные, поэтому в результате отсутствует месяц без заказов, и диаграмма соединяется прямо через него.  <code>resample</code>  вставляет его как ноль, что обычно и требуется для временного ряда, и это именно тот разрыв, который обсуждался в  <a href="../up-and-to-the-right-chart/">чтение восходящей линии</a>.</p>
+  <p>The difference matters for reporting. <code>to_period</code> returns only months that have data, so a month with no orders is missing from the result and a chart joins straight across it. <code>resample</code> inserts it as zero, which is usually what a time series needs, and is exactly the gap discussed in <a href="../up-and-to-the-right-chart/">reading a rising line</a>.</p>
 
-  <h2>Арифметика дат</h2>
+  <h2>Date arithmetic</h2>
   <pre><code>df['days_to_ship'] = (df['shipped_date'] - df['order_date']).dt.days
 
 cutoff = pd.Timestamp('2026-01-01')
@@ -229,49 +229,49 @@ df[df['order_date'] &gt;= cutoff]
 
 df['order_date'] + pd.DateOffset(months=1)   # calendar-aware
 df['order_date'] + pd.Timedelta(days=30)     # exactly 30 days</code></pre>
-  <p>Последние два не одинаковы, и разница ощутима в конце месяца.  <code>DateOffset(months=1)</code>  с 31 января дает 28 февраля;  <code>Timedelta(days=30)</code>  дает 2 марта. Выбирайте осознанно и скажите, какое из них означает бизнес-правило.</p>
+  <p>The last two are not the same and the difference bites at month ends. <code>DateOffset(months=1)</code> from 31 January gives 28 February; <code>Timedelta(days=30)</code> gives 2 March. Choose deliberately and say which one the business rule means.</p>
 
-  <h2>Часовые пояса, кратко</h2>
-  <p>Наивная временная метка не имеет зоны, и сравнение ее со знакомой меткой повышает значение. Если какая-либо часть ваших данных зависит от зоны, сделайте это все и храните в формате UTC:</p>
+  <h2>Time zones, briefly</h2>
+  <p>A naive timestamp has no zone and comparing it with an aware one raises. If any part of your data is zone-aware, make all of it aware and store in UTC:</p>
   <pre><code>d.dt.tz_localize('Europe/London').dt.tz_convert('UTC')</code></pre>
-  <p>Последствия для отчетности, о которых следует знать: событие в 23:30 UTC принадлежит другому местному дню, поэтому дневные счетчики могут отличаться на количество строк за целый день в зависимости от того, какую зону использовала группировка. Скажите в отчете, в какой зоне находятся дни.</p>
+  <p>The reporting consequence to know about: an event at 23:30 UTC belongs to a different local day, so daily counts can differ by a whole day's worth of rows depending on which zone the grouping used. Say in the report which zone the days are in.</p>
 
-  <h2>Как применить это в своей работе</h2>
+  <h2>How to apply this to your own work</h2>
   <ol>
-    <li>Add <code>format=</code>  каждому  <code>to_datetime</code>  называть тебя своим. Это изменение одной строки для каждого вызова, которое устраняет целый класс скрытых ошибок.</li>
-    <li>После анализа выведите минимальное и максимальное значения, а также количество по месяцам. Две строки, и они обнаруживают неправильный анализ.</li>
-    <li>Подсчитайте вынужденные неудачи и посмотрите на десять из них, а не отбрасывайте их.</li>
-    <li>Спросите любую систему, которой вы управляете, о датах ISO. Это самое дешевое улучшение качества данных.</li>
-    <li>Решите, нужно ли отображать в ежемесячном отчете пустые месяцы, и выберите  <code>resample</code> or <code>to_period</code>  соответственно.</li>
+    <li>Add <code>format=</code> to every <code>to_datetime</code> call you own. It is a one-line change per call and it removes a whole class of silent error.</li>
+    <li>After parsing, print the min and max and the count by month. Two lines, and they catch a wrong-way parse.</li>
+    <li>Count the coerced failures and look at ten of them rather than dropping them.</li>
+    <li>Ask any system you control for ISO dates. It is the cheapest data quality improvement available.</li>
+    <li>Decide whether your monthly report needs empty months shown, and pick <code>resample</code> or <code>to_period</code> accordingly.</li>
   </ol>
 
-  <h2>Единственная привычка, которую нужно сохранить</h2>
-  <p>Проверьте проанализированные даты перед их использованием. Мин, макс и количество по месяцам. Десять секунд, и это единственный надежный способ поймать столбец даты, который был проанализирован успешно или ошибочно.</p>
+  <h2>The one habit to keep</h2>
+  <p>Check the parsed dates before using them. Min, max, and a count by month. Ten seconds, and it is the only reliable way to catch a date column that parsed successfully and wrongly.</p>
 
-  <p>Знаете ли вы, в каком порядке были прочитаны даты в вашем основном файле?</p>
+  <p>Do you know which way round the dates in your main file were read?</p>
 
-  <div class="note"><strong>Каждый результат здесь был просчитан до его публикации,</strong>  это панды 3.0.2.  <code>pd.to_datetime(pd.Series(["03/04/2026"]))</code>  возвращает 04.03.2026 и тот же вызов с  <code>format="%d/%m/%Y"</code>  возвращается 03 апреля 2026 г.</div>
+  <div class="note"><strong>Every result here was run before it was published,</strong> on pandas 3.0.2. <code>pd.to_datetime(pd.Series(["03/04/2026"]))</code> returns 2026-03-04, and the same call with <code>format="%d/%m/%Y"</code> returns 2026-04-03.</div>
 
   <div class="book">
-    <strong>Дата, проанализированная неправильно, неверна только в двух третях строк, поэтому никто этого не замечает.</strong>
-    <p><em>Python для аналитиков</em>  — это рабочая книга по аналитике панд: прочитайте файл, исправьте его типы, сгруппируйте его, присоединитесь к нему и проверьте ответ, прежде чем его увидит кто-либо еще.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/python-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=python-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-pandas-datetime'})">Python для аналитиков, 19 $ →</a>
+    <strong>A date parsed the wrong way is wrong on only two thirds of the rows, which is why nobody notices.</strong>
+    <p><em>Python for Analysts</em> is a working analyst pandas book: read a file, fix its types, group it, join it, and check the answer before anyone else sees it.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/python-for-analysts?utm_source=analyst-prep-kit&amp;utm_medium=guide&amp;utm_campaign=python-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-pandas-datetime'})">Python for Analysts, $19 &rarr;</a>
   </div>
 
   <div class="cta">
-    <strong>Исправляйте типы при загрузке, а не позже.</strong>
-    <p style="margin:6px 0 0"><a href="../pandas-read-csv/">read_csv</a>  охватывает шаг нагрузки,  <a href="../review-ai-data-cleaning/">просмотр сценария очистки</a>  охватывает решения и  <a href="../sql-dates/">даты в SQL</a>  это версия на стороне базы данных.</p>
-    <a class="btn" href="../pandas-read-csv/">Читать read_csv →</a>
+    <strong>Fix types at load, not later.</strong>
+    <p style="margin:6px 0 0"><a href="../pandas-read-csv/">read_csv</a> covers the load step, <a href="../review-ai-data-cleaning/">reviewing a cleaning script</a> covers the decisions, and <a href="../sql-dates/">dates in SQL</a> is the database-side version.</p>
+    <a class="btn" href="../pandas-read-csv/">Read read_csv &rarr;</a>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> &middot; <a href="../pandas-read-csv/">панорамирование read_csv</a> &middot; <a href="../sql-dates/">даты в SQL</a> &middot; <a href="../excel-dates/">Даты в Excel</a> &middot; <a href="../pandas-groupby/">панды группируются</a> &middot; <a href="../review-ai-data-cleaning/">Просмотр сценария очистки</a> &middot; <a href="../../python/">Комплект Python</a>
-    <p style="margin:12px 0 0">Если руководство здесь спасло вас днем:  <a href="https://buymeacoffee.com/michaelnocito">Купи мне кофе</a>.</p>
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
+    <a href="../../">&larr; Analyst Prep Kit</a> &middot; <a href="../pandas-read-csv/">pandas read_csv</a> &middot; <a href="../sql-dates/">Dates in SQL</a> &middot; <a href="../excel-dates/">Dates in Excel</a> &middot; <a href="../pandas-groupby/">pandas groupby</a> &middot; <a href="../review-ai-data-cleaning/">Review a Cleaning Script</a> &middot; <a href="../../python/">Python Kit</a>
+    <p style="margin:12px 0 0">If a guide here saved you an afternoon: <a href="https://buymeacoffee.com/michaelnocito">buy me a coffee</a>.</p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> &middot; <a href="../../contact.html">Contact</a> &middot; <a href="../../privacy.html">Privacy</a> &middot; <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>

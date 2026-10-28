@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="ru" data-static-ru="true">
-<head>
+<html lang="en">
+<head><script src="../../assets/ru-localization-boot.js"></script>
 <!-- GA owner opt-out: load any page with ?ga=off to stop being counted, ?ga=on to undo. -->
 <script>
   (function () {
@@ -31,11 +31,11 @@
      crossorigin="anonymous"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Аналитика операций, от начала до конца — комплект подготовки аналитика</title>
-<meta name="description" content="Каждая основная идея операционной аналитики в том порядке, в котором они основываются друг на друге: единица работы, пропускная способность, время цикла, закон Литтла, отставание, использование, доходность первого прохода, уровни обслуживания и процентили, а также отображение реальных изменений на фоне шума.">
+<title>Operations Analytics, Start to Finish — Analyst Prep Kit</title>
+<meta name="description" content="Every core operations analytics idea in the order they build on each other: the unit of work, throughput, cycle time, Little's Law, backlog, utilization, first pass yield, service levels and percentiles, and telling a real change from noise.">
 <link rel="canonical" href="https://michaelnocito.github.io/analyst-prep-kit/guides/operations-analytics-foundations/">
-<meta property="og:title" content="Аналитика операций, от начала до конца">
-<meta property="og:description" content="Числа, которые описывают, как работа проходит через процесс, в том порядке, в котором они дополняют друг друга. Написано для новичка в этой области.">
+<meta property="og:title" content="Operations Analytics, Start to Finish">
+<meta property="og:description" content="The numbers that describe how work moves through a process, in the order they build on each other. Written for someone new to the field.">
 <meta property="og:type" content="article">
 <meta property="og:image" content="https://michaelnocito.github.io/analyst-prep-kit/assets/social/operations-analytics-foundations.png">
 <meta property="og:url" content="https://michaelnocito.github.io/analyst-prep-kit/guides/operations-analytics-foundations/">
@@ -131,18 +131,18 @@
 </head>
 <body>
 <main>
-  <p class="crumb"><a href="../../">← Все комплекты</a> · <a href="../../stats/">Статистический комплект</a> · <a href="../">Все руководства</a></p>
-  <h1>Аналитика операций, от начала до конца</h1>
-  <p class="meta">Каждая основная операционная идея, в том порядке, в котором они дополняют друг друга · Написана для прослушивания · Часть  <a href="../../">Подготовительный комплект для аналитика</a></p>
-  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Майкл Носито</a>, аналитик данных · Опубликовано  <time datetime="2026-08-05">5 августа 2026 г.</time></p>
+  <p class="crumb"><a href="../../">← All Kits</a> · <a href="../../stats/">Statistics Kit</a> · <a href="../">All guides</a></p>
+  <h1>Operations Analytics, Start to Finish</h1>
+  <p class="meta">Every core operations idea, in the order they build on each other · Written to be listened to · Part of the <a href="../../">Analyst Prep Kit</a></p>
+  <p class="byline" style="color:#52525B;font-size:14px;margin:-2px 0 18px">By <a href="../../about.html" rel="author" style="color:#0E7490">Michael Nocito</a>, data analyst · Published <time datetime="2026-08-05">August 5, 2026</time></p>
 
-  <p>К концу этой страницы вы сможете сказать вслух и своими словами, что делает каждый номер основной операции. Что такое единица работы. Пропускная способность и почему подсчет сам по себе ничего не дает. Время цикла и правило, которое связывает его с объемом незавершенной работы. Отставание. Использование и почему стремление к 100 процентам делает все медленнее. Частота ошибок, доработка и выход с первого прохода. Уровни обслуживания и почему средние значения скрывают клиентов, которых вы терпите неудачу. Этот список — это большая часть того, что от вас потребует работа операционного аналитика, техническая проверка и первый реальный набор данных.</p>
+  <p>By the end of this page you can say, out loud and in your own words, what every core operations number does. What the unit of work is. Throughput, and why a count on its own answers nothing. Cycle time, and the rule that ties it to how much work is sitting open. Backlog. Utilization, and why aiming for 100 percent makes everything slower. Error rate, rework and first pass yield. Service levels, and why the average hides the customers you are failing. That list is most of what an operations analyst job, a technical screen, and a first real dataset will ask of you.</p>
 
-  <p>Вот что на самом деле с этим делать. Пройдите один раз от начала до конца, не останавливаясь, просто для формы. Затем вернитесь к листу для поиска внизу, закройте правый столбец и попытайтесь произнести каждый ответ, прежде чем прочитать его. На втором этапе происходит обучение, и на дальнейших этапах есть измеренные доказательства этого.</p>
+  <p>Here is what to actually do with it. Go through once end to end without stopping, just for the shape. Then come back to the retrieval sheet near the bottom, cover the right-hand column, and try to say each answer before you read it. That second pass is where the learning happens, and there is measured evidence for it further down.</p>
 
-  <p>Вкратце: операционная аналитика — это исследование того, как работа проходит через процесс. Каждое число в нем указывает либо на сколько, как быстро, сколько застряло или сколько ошиблось.</p>
+  <p>The short version: operations analytics is the study of how work moves through a process. Every number in it is either how much, how fast, how much is stuck, or how much was wrong.</p>
 
-  <p>Одна идея определяет большую часть вашей оперативной работы, чем любая другая, поэтому она дает представление о картине. Работа приходит, ждет, делает и уходит. То, сколько выполняется и сколько времени занимает каждый элемент, — это два разных промежутка одного и того же изображения, и они привязаны друг к другу.</p>
+  <p>One idea decides more of your operations work than any other, so it gets the picture. Work arrives, waits, gets done, and leaves. How much is in progress and how long each item takes are two different spans over that same picture, and they are locked to each other.</p>
 
   <figure class="figure">
     <svg viewBox="0 0 760 300" role="img" aria-labelledby="flowTitle flowDesc" xmlns="http://www.w3.org/2000/svg">
@@ -175,344 +175,344 @@
         <text x="300" y="256" font-size="14" font-weight="700" fill="#0E7490" text-anchor="middle">time in system</text>
       </g>
     </svg>
-    <figcaption>Ожидание — это часть времени, которое занимает предмет, и большая его часть.</figcaption>
+    <figcaption>Waiting is part of the time an item takes, and most of it.</figcaption>
   </figure>
 
   <div class="toc">
-    <strong>Что вы узнаете</strong>
+    <strong>What you'll learn</strong>
     <ol>
-      <li>Как называется это поле и что представляет собой процесс</li>
-      <li>Единица работы и одно слово, которое предотвращает большинство ошибок</li>
-      <li>Пропускная способность и почему подсчет сам по себе ничего не дает</li>
-      <li>Время цикла и три цифры, которые сцепляются вместе</li>
-      <li>Бэклог, который представляет собой только поступления минус завершенные работы.</li>
-      <li>Использование и почему 100 процентов — неправильная цель</li>
-      <li>Качество: частота ошибок, доработка и выход с первого прохода.</li>
-      <li>Уровень обслуживания и почему средний показатель скрывает ваших худших клиентов</li>
-      <li>Как отличить настоящий шум от шума</li>
-      <li>Один и тот же отчет, подсчеты и ставки рядом</li>
-      <li>Откуда берутся эти идеи</li>
-      <li>Как это изучить, чтобы это прижилось</li>
-      <li>Все на одном экране</li>
+      <li>What this field is called, and what a process is</li>
+      <li>The unit of work, and the one word that prevents most mistakes</li>
+      <li>Throughput, and why a count on its own answers nothing</li>
+      <li>Cycle time, and the three numbers that lock together</li>
+      <li>Backlog, which is just arrivals minus completions</li>
+      <li>Utilization, and why 100 percent is the wrong target</li>
+      <li>Quality: error rate, rework, and first pass yield</li>
+      <li>Service levels, and why the average hides your worst customers</li>
+      <li>Telling a real change from noise</li>
+      <li>The same report, counts and rates side by side</li>
+      <li>Where these ideas come from</li>
+      <li>How to study this so it sticks</li>
+      <li>The whole thing on one screen</li>
     </ol>
   </div>
 
-  <div class="note"><strong>Что это за страница, а что нет.</strong>  Это концептуальный уровень: что представляет собой каждое число и на какой вопрос оно отвечает. Это не курс по конкретному инструменту. Все вычисления здесь состоят из деления и вычитания, и они одинаково хорошо выполняются как в электронной таблице, так и в SQL.</div>
+  <div class="note"><strong>What this page is, and what it is not.</strong> This is the concept layer: what each number is and what question it answers. It is not a course in a particular tool. The calculations here are all division and subtraction, and they run in a spreadsheet or in SQL equally well.</div>
 
   <div class="step">
-    <h2>1. Как называется это поле и что представляет собой процесс</h2>
+    <h2>1. What this field is called, and what a process is</h2>
 
-    <p>Перед пояснением: кофейня, больничная палата, склад и почтовый ящик службы поддержки измеряются одними и теми же цифрами. Что общего между этими четырьмя вещами?</p>
+    <p>Before the explanation: a coffee shop, a hospital ward, a warehouse and a support inbox all get measured with the same handful of numbers. What do those four things have in common?</p>
 
-    <p>Название должности обычно  <strong>Операционный аналитик</strong>, <strong>аналитик операционных данных</strong>, или  <strong>аналитик бизнес-операций</strong>. Поле называется  <strong>Операционная аналитика</strong>, и вы также увидите  <strong>оперативная аналитика</strong> and <strong>аналитика процессов</strong>  за ту же работу. Все они подразумевают измерение того, как выполняется работа, и поиск того, где она застревает.</p>
+    <p>The job title is usually <strong>operations analyst</strong>, <strong>operations data analyst</strong>, or <strong>business operations analyst</strong>. The field is called <strong>operations analytics</strong>, and you will also see <strong>operational analytics</strong> and <strong>process analytics</strong> for the same work. All of them mean measuring how work gets done and finding where it gets stuck.</p>
 
-    <p>Есть одно старое имя, которое означает что-то другое, и его стоит знать, чтобы объявление о вакансии не сбивало вас с толку.  <strong>Исследование операций</strong>  — это математическая область, посвященная оптимизации решений, основанная на таких вещах, как линейное программирование. Он имеет общего предка с операционной аналитикой и является гораздо более сложной математической дисциплиной. Если в объявлении говорится об исследовании операций и предлагается степень по математике, это совсем другая работа, чем та, к которой вас готовит это руководство.</p>
+    <p>There is one older name that means something different, and it is worth knowing so a job posting does not confuse you. <strong>Operations research</strong> is a mathematical field about optimizing decisions, built on things like linear programming. It shares an ancestor with operations analytics and it is a much heavier maths discipline. If a posting says operations research and asks for a maths degree, that is a different job from the one this guide prepares you for.</p>
 
-    <p>Теперь то, что объединяет все четыре примера. А  <strong>process</strong>  Любая повторяющаяся последовательность шагов, которая превращает пришедшее в нечто законченное. Заказы на кофе поступают и становятся напитками. Больные приходят и становятся выписками. Поддоны прибывают и становятся отгрузками. Билеты приходят и становятся резолюциями.</p>
+    <p>Now the thing all four examples share. A <strong>process</strong> is any repeated sequence of steps that turns something arriving into something finished. Coffee orders arrive and become drinks. Patients arrive and become discharges. Pallets arrive and become shipments. Tickets arrive and become resolutions.</p>
 
-    <p>Каждый процесс состоит из четырех частей, и каждое число в этом руководстве измеряет одну из них:</p>
+    <p>Every process has the same four parts, and every number in this guide measures one of them:</p>
     <ul>
-      <li><strong>Прибытие.</strong>  Появление работы.</li>
-      <li><strong>Очередь.</strong>  Работа, которая пришла и ждет.</li>
-      <li><strong>Емкость.</strong>  Люди, машины или часы, доступные для этого.</li>
-      <li><strong>Завершения.</strong>  Работа уходит, закончена.</li>
+      <li><strong>Arrivals.</strong> Work showing up.</li>
+      <li><strong>A queue.</strong> Work that has arrived and is waiting.</li>
+      <li><strong>Capacity.</strong> The people, machines or hours available to do it.</li>
+      <li><strong>Completions.</strong> Work leaving, finished.</li>
     </ul>
-    <p>Вот и весь словарный запас. Как только вы сможете назвать эти четыре части бизнеса, с которыми никогда раньше не сталкивались, вы сможете его измерить.</p>
+    <p>That is the whole vocabulary. Once you can name those four parts in a business you have never seen before, you can measure it.</p>
   </div>
 
   <div class="step">
-    <h2>2. Единица работы и одно слово, которое предотвращает большинство ошибок</h2>
+    <h2>2. The unit of work, and the one word that prevents most mistakes</h2>
 
-    <p>Перед пояснением: склад сообщает, что в прошлом месяце отгрузил 4000 вещей. Знаешь, какой это был труд?</p>
+    <p>Before the explanation: a warehouse says it shipped 4,000 things last month. Do you know how much work that was?</p>
 
-    <p>Вы этого не делаете, и в этом вся суть. Четыре тысячи и что? Заказы, коробки, отдельные предметы или поддоны? Поддон может вместить 200 предметов. Заказ может состоять из одного или сорока позиций. Число 4000 бесполезно, пока кто-нибудь не скажет, что это за одно из них.</p>
+    <p>You do not, and that is the point. Four thousand what? Orders, boxes, individual items, or pallets? A pallet might hold 200 items. An order might be one item or forty. The number 4,000 is useless until somebody says what one of them is.</p>
 
-    <p>The <strong>единица работы</strong>  это то, что вы рассчитываете. Сначала выберите его, назовите его вслух и сохраняйте неизменным на протяжении всего анализа. В почтовом ящике службы поддержки обычно находится билет. На складе это может быть строка заказа. В клинике это визит.</p>
+    <p>The <strong>unit of work</strong> is the thing you are counting. Pick it first, name it out loud, and keep it the same all the way through the analysis. In a support inbox it is usually the ticket. In a warehouse it might be the order line. In a clinic it is the visit.</p>
 
-    <p>Связанная идея в самих данных:  <strong>grain</strong>, что означает, что представляет собой одна строка вашей таблицы. Скажите это как предложение, начинающееся с «одна строка на». Одна строка на заказ. Одна строка на строку заказа. Одна строка на отправку. Все эти три таблицы могут содержать 4000 строк и описывать совершенно разные объемы работы.</p>
+    <p>The related idea in the data itself is <strong>grain</strong>, which means what one row of your table represents. Say it as a sentence starting with "one row per". One row per order. One row per order line. One row per shipment. Those three tables can all have 4,000 rows and describe completely different amounts of work.</p>
 
-    <p>Это самый распространенный случай, когда число операций оказывается неверным. Кто-то подсчитывает строки в таблице, зернистостью которых являются строки заказов, и сообщает об этом как о заказах. Расчет правильный, а ответ неправильный. Зерно покрыто более глубоко.  <a href="../sql-foundations/">Руководство по основам SQL</a>, потому что это одна и та же идея носить разную одежду.</p>
+    <p>This is the single most common way an operations number comes out wrong. Somebody counts rows in a table whose grain is order lines and reports it as orders. The calculation is correct and the answer is wrong. Grain is covered in more depth in the <a href="../sql-foundations/">SQL foundations guide</a>, because it is the same idea wearing different clothes.</p>
 
-    <p>Прежде чем читать дальше, произнесите это вслух: в чем разница между подсчетом пациентов и подсчетом посещений в больнице?</p>
+    <p>Say this one out loud before you read on: in a hospital, what is the difference between counting patients and counting visits?</p>
   </div>
 
   <div class="step">
-    <h2>3. Пропускная способность и почему счетчик сам по себе ничего не дает</h2>
+    <h2>3. Throughput, and why a count on its own answers nothing</h2>
 
-    <p>Перед пояснением: в ночную смену обработано 900 заказов, в дневную — 500. Какая смена лучше?</p>
+    <p>Before the explanation: night shift processed 900 orders and day shift processed 500. Which shift is better?</p>
 
-    <p>Пока сказать нельзя, а причина – самая главная привычка во всем этом гайде.</p>
+    <p>You cannot say yet, and the reason is the most important habit in this whole guide.</p>
 
-    <p>A <strong>count</strong>  сколько всего произошло. 900 заказов. Он сообщает вам объем выполненных работ и ничего больше.</p>
+    <p>A <strong>count</strong> is how many things happened. 900 orders. It tells you the volume that got done and nothing else.</p>
 
-    <p>A <strong>rate</strong>  это количество делится на возможность, которую кто-то имел для его производства. Почти всегда часы. В операциях ставка имеет название:  <strong>throughput</strong>, что означает выполненную работу за единицу времени.</p>
+    <p>A <strong>rate</strong> is that count divided by the opportunity somebody had to produce it. Almost always hours. In operations the rate has a name: <strong>throughput</strong>, meaning completed work per unit of time.</p>
 
-    <p>Вернёмся к двум сменам. Ночью работал 160 часов, днем ​​работал 60.</p>
+    <p>Back to the two shifts. Night worked 160 hours, day worked 60.</p>
     <ul>
-      <li>Ночь: 900 ÷ 160 =  <strong>5,6 заказов в час</strong></li>
-      <li>День: 500 ÷ 60 =  <strong>8,3 заказа в час</strong></li>
+      <li>Night: 900 ÷ 160 = <strong>5.6 orders per hour</strong></li>
+      <li>Day: 500 ÷ 60 = <strong>8.3 orders per hour</strong></li>
     </ul>
-    <p>Дневная смена работает быстрее. Граф сказал обратное, потому что в ночную смену просто было больше часов для работы.</p>
+    <p>Day shift is faster. The count said the opposite, because night shift simply had more hours to work with.</p>
 
-    <p>Оба числа реальны, и оба имеют работу. Подсчет показывает, сколько было доставлено, и именно это испытывает клиент. Показатель показывает, насколько эффективно он был произведен, и это то, на что может повлиять менеджер. Сообщать только об одном из них — ошибка в любом направлении.</p>
+    <p>Both numbers are real and both have a job. The count tells you how much got delivered, which is what a customer experiences. The rate tells you how efficiently it was produced, which is what a manager can act on. Reporting only one of them is the mistake, in either direction.</p>
 
-    <p>Привычка держаться от этого раздела короткая. Прежде чем сравнивать два оперативных числа, поинтересуйтесь, на что было поделено каждое из них. Если ни то, ни другое ничем не разделено, вы сравниваете объемы и должны сказать это вслух.</p>
+    <p>The habit to keep from this section is short. Before you compare two operational numbers, ask what each one was divided by. If neither was divided by anything, you are comparing volumes and you should say so out loud.</p>
   </div>
 
   <div class="step">
-    <h2>4. Время цикла и три числа, которые сцепляются друг с другом</h2>
+    <h2>4. Cycle time, and the three numbers that lock together</h2>
 
-    <p>Перед пояснением: ваша команда хочет, чтобы заявки решались в два раза быстрее. Никому не разрешают работать быстрее и никого не берут на работу. Есть ли что-то, что можно изменить?</p>
+    <p>Before the explanation: your team wants tickets resolved twice as fast. Nobody is allowed to work faster and nobody is getting hired. Is there anything left to change?</p>
 
-    <p>Есть, и этот раздел является ответом. Во-первых, слова «время», потому что они постоянно путаются.</p>
+    <p>There is, and this section is the answer. First, the time words, because they get mixed up constantly.</p>
     <ul>
-      <li><strong>Время цикла.</strong>  Сколько времени занимает один предмет от начала работы над ним до его завершения.</li>
-      <li><strong>Время выполнения.</strong>  Сколько времени занимает один товар от прибытия до завершения, включая ожидание. Это то, что чувствует клиент.</li>
-      <li><strong>Время ожидания.</strong>  Разрыв между ними. Обычно это самая большая часть, и обычно ее никто не измеряет.</li>
+      <li><strong>Cycle time.</strong> How long one item takes from starting work on it to finishing it.</li>
+      <li><strong>Lead time.</strong> How long one item takes from arriving to finishing, waiting included. This is what the customer feels.</li>
+      <li><strong>Wait time.</strong> The gap between the two. Usually the biggest part, and usually the one nobody measures.</li>
     </ul>
-    <p>Люди говорят, что время цикла означает либо то, либо другое. На собеседовании скажите, что вы имеете в виду, и вы будете звучать так, будто выполнили свою работу.</p>
+    <p>People say cycle time loosely to mean either. In an interview, say which one you mean and you will sound like you have done the job.</p>
 
-    <p>Теперь правило, которое все связывает. В теории массового обслуживания есть формула, которая называется  <strong>Закон Литтла</strong>, и это одна строка:</p>
+    <p>Now the rule that connects everything. There is a formula in queueing theory called <strong>Little's Law</strong>, and it is one line:</p>
 
     <pre><code>work in progress = arrival rate × time in system</code></pre>
 
-    <p>Незавершенная работа – это количество элементов, открытых в данный момент, ожидающих или над которыми ведется работа. Коэффициент прибытия – это количество посетителей в день. Время в системе — это то, как долго в среднем занимает один элемент.</p>
+    <p>Work in progress is how many items are open right now, waiting or being worked on. Arrival rate is how many show up per day. Time in system is how long an average item takes end to end.</p>
 
-    <p>Рабочий пример. Билеты поступают по 20 в день, и в любой момент открыто 60 билетов. Переставьте формулу и время в системе будет 60 ÷ 20, что  <strong>3 дня</strong>. Вы только что измерили собственное время разрешения, не засекая ни одного билета.</p>
+    <p>A worked example. Tickets arrive at 20 a day, and at any moment 60 tickets are sitting open. Rearrange the formula and time in system is 60 ÷ 20, which is <strong>3 days</strong>. You just measured your own resolution time without timing a single ticket.</p>
 
-    <p>И вот ответ на вопрос. Чтобы сократить эти 3 дня до 1,5, вы измените одно из двух других чисел. Уменьшите количество открытых билетов вдвое до 30, а 30 ÷ 20 даёт 1,5 дня. Или удвойте пропускную способность, чтобы товары уходили быстрее. Никто не должен был печатать быстрее. Ограничение количества открытых одновременно работ — настоящий рычаг, и именно поэтому команды ограничивают столбец незавершенных работ.</p>
+    <p>And here is the answer to the prequestion. To cut that 3 days to 1.5, you change one of the two other numbers. Halve the open tickets to 30, and 30 ÷ 20 gives 1.5 days. Or double throughput so items leave faster. Nobody had to type faster. Limiting how much work is open at once is a real lever, and it is why teams cap their in-progress column.</p>
 
-    <p>Представьте себе свою работу прямо сейчас. Сколько дел лично у вас осталось открытыми и незавершенными на данный момент, и что произойдет с тем, насколько быстро каждое из них будет завершено, если вы сократите это число вдвое?</p>
+    <p>Picture your own work now. How many things do you personally have open and unfinished at this moment, and what would happen to how fast each one finishes if you cut that number in half?</p>
   </div>
 
   <div class="step">
-    <h2>5. Бэклог, который представляет собой только поступления минус завершенные работы.</h2>
+    <h2>5. Backlog, which is just arrivals minus completions</h2>
 
-    <p>Перед пояснением: каждую неделю команда в обязательном порядке закрывает 90 билетов. Эта команда держится?</p>
+    <p>Before the explanation: a team closes 90 tickets every single week without fail. Is that team keeping up?</p>
 
-    <p><strong>Backlog</strong>  это работа, которая прибыла и не закончена. Значение имеет не размер отставания, а то, в каком направлении оно движется.</p>
+    <p><strong>Backlog</strong> is the work that has arrived and is not finished. The number that matters is not the size of the backlog, it is which way it is moving.</p>
 
-    <p>Арифметика — одно вычитание. Прибытие минус завершение, за период.</p>
+    <p>The arithmetic is one subtraction. Arrivals minus completions, per period.</p>
     <ul>
-      <li>100 приезжают в неделю, 90 закрываются в неделю. Отставание увеличивается на 10 в неделю.</li>
-      <li>Всего десять недель, и отставание стало на 100 элементов глубже, чем было изначально.</li>
-      <li>В игре команды ничего не изменилось. Каждую неделю они закрывали 90 магазинов.</li>
+      <li>100 arrive a week, 90 close a week. Backlog grows by 10 a week.</li>
+      <li>Ten weeks of that and the backlog is 100 items deeper than it started.</li>
+      <li>Nothing about the team's performance changed. They closed 90 every week.</li>
     </ul>
-    <p>Это ответ на предварительный вопрос. Успевает ли 90 – это не факт о команде, это факт о том, сколько прибыло. Номер закрытия, указанный без номера прибытия рядом с ним, не может ответить на вопрос, который на самом деле кто-то задает.</p>
+    <p>That is the answer to the prequestion. Whether 90 is keeping up is not a fact about the team, it is a fact about how much arrived. A closure number reported without an arrival number next to it cannot answer the question anyone is actually asking.</p>
 
-    <p>Это открытие привлекает внимание аналитиков операций, поскольку оно превращает разговор о производительности в разговор о мощности. «Представитель Б медленнее» — это обвинение. «Очередь представителя Б получает 4 билета в час, а один человек может очистить 2» — это кадровое решение с прикрепленным номером.</p>
+    <p>This is the finding that gets an operations analyst noticed, because it reframes a performance conversation as a capacity conversation. "Rep B is slower" is an accusation. "Rep B's queue receives 4 tickets an hour and one person can clear 2" is a staffing decision with a number attached.</p>
 
-    <p>Еще один термин, который вы встретите.  <strong>Aging</strong>  это то, как долго находятся элементы в резервной очереди. Отставание в 100, где самому старшему 2 дня, является здоровым. Журнал из 100 задач, самый старый из которых создан 8 месяцев назад, содержит работу, которую никто никогда не собирается выполнять, и сказать об этом обычно полезнее, чем использовать еще одну панель мониторинга.</p>
+    <p>One more term you will meet. <strong>Aging</strong> is how long the items in the backlog have been sitting. A backlog of 100 where the oldest is 2 days old is healthy. A backlog of 100 where the oldest is 8 months old contains work nobody is ever going to do, and saying so is usually more useful than another dashboard.</p>
   </div>
 
   <div class="step">
-    <h2>6. Использование и почему 100 процентов — неправильная цель</h2>
+    <h2>6. Utilization, and why 100 percent is the wrong target</h2>
 
-    <p>Перед пояснением: ваша команда занята 95 процентов времени. Ваш менеджер хочет знать, почему все опаздывает. Что бы ты ему сказал?</p>
+    <p>Before the explanation: your team is busy 95 percent of the time. Your manager wants to know why everything is late. What would you tell him?</p>
 
-    <p><strong>Utilization</strong>  — это доля доступного времени, фактически потраченного на работу. Четыре часа работы в восьмичасовую смену — это 50-процентная загрузка. Такое ощущение, что число должно быть как можно большим. Не должно, и причина в самой противоречивой идее в операциях.</p>
+    <p><strong>Utilization</strong> is the share of available time that is actually spent working. Four hours of work in an eight hour shift is 50 percent utilization. It feels like the number should be as high as possible. It should not, and the reason is the most counterintuitive idea in operations.</p>
 
-    <p>Время ожидания не увеличивается постоянно по мере того, как команда становится более занятой. Он плавно поднимается, а затем взрывается. Часть математических вычислений, которая вызывает это, представляет собой одну дробь: загрузка, разделенная на единицу минус загрузка. Посмотрите, что он делает.</p>
+    <p>Waiting time does not rise steadily as a team gets busier. It rises gently, then explodes. The part of the maths that causes this is a single fraction: utilization divided by one minus utilization. Watch what it does.</p>
     <ul>
-      <li>При занятости 80 процентов: 0,8 ÷ 0,2 =  <strong>4</strong></li>
-      <li>При занятости 90 процентов: 0,9 ÷ 0,1 =  <strong>9</strong></li>
-      <li>При занятости 95 процентов: 0,95 ÷ 0,05 =  <strong>19</strong></li>
+      <li>At 80 percent busy: 0.8 ÷ 0.2 = <strong>4</strong></li>
+      <li>At 90 percent busy: 0.9 ÷ 0.1 = <strong>9</strong></li>
+      <li>At 95 percent busy: 0.95 ÷ 0.05 = <strong>19</strong></li>
     </ul>
-    <p>Увеличение занятости с 80 до 90 процентов увеличивает время ожидания более чем в два раза. Переход от 90 к 95 снова удваивает его. Команда каждый раз брала на себя немного больше работы, и очередь за ними росла гораздо быстрее, чем рабочая нагрузка.</p>
+    <p>Going from 80 percent busy to 90 percent busy more than doubles the waiting. Going from 90 to 95 doubles it again. The team took on a little more work each time and the queue behind them grew far faster than the workload did.</p>
 
-    <p>Это ответ на предварительный вопрос, и именно поэтому честным ответом на «все поздно» часто является «потому что мы заняты на 95 процентов, а последние 5 процентов возможностей поглощают плохой день». Непрекращающемуся процессу некуда преподнести сюрприз.</p>
+    <p>That is the answer to the prequestion, and it is why the honest response to "everything is late" is often "because we are 95 percent busy, and the last 5 percent of capacity is what absorbs a bad day". A process with no slack has nowhere to put a surprise.</p>
 
-    <p>Две вещи усугубляют ситуацию, и обе стоит упомянуть, потому что их можно измерить.  <strong>Вариативность прибытий</strong>Это означает, что работа проявляется порциями, а не равномерно. И  <strong>изменчивость в обслуживании</strong>, что означает, что некоторые элементы занимают гораздо больше времени, чем другие. Процесс с постоянными поступлениями и предсказуемой работой может работать гораздо ближе к полной нагрузке, чем процесс с резкими поступлениями. Вот почему завод может работать на 90 процентов, а отделение неотложной помощи – нет.</p>
+    <p>Two things make this worse, and both are worth naming because you can measure them. <strong>Variability in arrivals</strong>, meaning the work shows up in bursts rather than evenly. And <strong>variability in service</strong>, meaning some items take far longer than others. A process with steady arrivals and predictable work can run much closer to full than a process with spiky arrivals. That is why a factory can run at 90 percent and an emergency room cannot.</p>
   </div>
 
   <div class="step">
-    <h2>7. Качество: частота ошибок, доработка и выход с первого прохода.</h2>
+    <h2>7. Quality: error rate, rework, and first pass yield</h2>
 
-    <p>Перед пояснением: обе команды выполняют по 1000 изделий в неделю. Один из них делает заметно больше работы, чем другой. Как?</p>
+    <p>Before the explanation: two teams both complete 1,000 items a week. One of them is doing noticeably more work than the other. How?</p>
 
-    <p>Потому что некоторые из этих завершений были одним и тем же предметом дважды. Работа, которая возвращается,  <strong>rework</strong>, и это невидимо при подсчете завершений.</p>
+    <p>Because some of those completions were the same item twice. Work that comes back is <strong>rework</strong>, and it is invisible in a completion count.</p>
 
-    <p>Три цифры характеризуют качество, и все они представляют собой доли от общего числа.</p>
+    <p>Three numbers cover quality, and they are all shares of a total.</p>
     <table>
-      <tr><th>Number</th><th>Что он спрашивает</th></tr>
-      <tr><td><strong>Частота ошибок</strong></td><td>Из всего, что мы сделали, какая доля была неправильной? 30 ошибок из 1000 — это 3 процента.</td></tr>
-      <tr><td><strong>Скорость доработки</strong></td><td>Какую долю пришлось делать еще раз? Это тот, который съедает емкость.</td></tr>
-      <tr><td><strong>Выход с первого прохода</strong></td><td>Какая доля прошла корректно с первого раза, без переделок? 1000 стартовали, 940 чисты, то есть 94 процента.</td></tr>
+      <tr><th>Number</th><th>What it asks</th></tr>
+      <tr><td><strong>Error rate</strong></td><td>Of everything we did, what share was wrong? 30 wrong out of 1,000 is 3 percent.</td></tr>
+      <tr><td><strong>Rework rate</strong></td><td>What share had to be done again? This is the one that eats capacity.</td></tr>
+      <tr><td><strong>First pass yield</strong></td><td>What share went through correctly the first time, with no rework? 1,000 started, 940 clean, so 94 percent.</td></tr>
     </table>
 
-    <p>Доходность при первом проходе — это то, что стоит изучить по имени, потому что это число, которое связывает качество со скоростью. Каждый пункт доходности, который вы теряете, возвращается в виде дополнительного объема в результате того же процесса. Команда с 85-процентной производительностью с первого прохода выполняет примерно 15 процентов своей работы дважды, а это означает, что ее реальная мощность меньше, чем предполагает ее численность.</p>
+    <p>First pass yield is the one worth learning by name, because it is the number that connects quality to speed. Every point of yield you lose comes back as extra volume through the same process. A team at 85 percent first pass yield is doing roughly 15 percent of its work twice, which means its real capacity is smaller than its headcount suggests.</p>
 
-    <p>Это ответ на предварительный вопрос. Те же 1000 завершений, разные объемы фактически выполненной работы, потому что в число одной команды входят элементы, которые она уже однажды посчитала.</p>
+    <p>That is the answer to the prequestion. Same 1,000 completions, different amounts of actual work delivered, because one team's number includes items it had already counted once.</p>
 
-    <p>Прежде чем сообщить о чем-либо из этого, следует сделать одно предупреждение. Уровень ошибок настолько хорош, насколько хорошо определение ошибки, и это определение — это решение, которое кто-то должен принять намеренно. Что считается неправильным, кто решает и когда. Записать это перед измерением — это отдельный навык, и в нем есть пошаговое руководство.  <a href="../defining-metrics/">превращение нечетких вопросов в измеримые определения</a>.</p>
+    <p>One caution before you report any of these. An error rate is only as good as the definition of an error, and that definition is a decision somebody has to make on purpose. What counts as wrong, who decides, and when. Getting that written down before you measure is its own skill, and there is a walkthrough of it in <a href="../defining-metrics/">turning fuzzy questions into measurable definitions</a>.</p>
   </div>
 
   <div class="step">
-    <h2>8. Уровень обслуживания и почему средний показатель скрывает ваших худших клиентов</h2>
+    <h2>8. Service levels, and why the average hides your worst customers</h2>
 
-    <p>Перед объяснением: вы обещаете решить каждую заявку в течение 8 часов. Среднее время разрешения составляет 5,8 часов. Вы держите обещание?</p>
+    <p>Before the explanation: your promise is to resolve every ticket within 8 hours. Your average resolution time is 5.8 hours. Are you keeping the promise?</p>
 
-    <p>An <strong>SLA</strong>, соглашение об уровне обслуживания, представляет собой обещание относительно времени. Решение в течение 8 часов. Отправка в течение 2 дней. Ответ в течение 30 секунд.  <strong>Достижение соглашения об уровне обслуживания</strong>  — это доля товаров, выполнивших обещание.</p>
+    <p>An <strong>SLA</strong>, a service level agreement, is a promise about time. Resolve within 8 hours. Ship within 2 days. Answer within 30 seconds. <strong>SLA attainment</strong> is the share of items that met the promise.</p>
 
-    <p>Вот почему среднестатистический человек не может вам этого сказать. Сто билетов:</p>
+    <p>Here is why the average cannot tell you. One hundred tickets:</p>
     <ul>
-      <li>90 из них разрешились за 2 часа.</li>
-      <li>10 из них заняли 40 часов.</li>
+      <li>90 of them resolved in 2 hours.</li>
+      <li>10 of them took 40 hours.</li>
     </ul>
-    <p>Среднее значение равно (90 × 2 + 10 × 40) ÷ 100, что составляет (180 + 400) ÷ 100, что составляет  <strong>5,8 часов</strong>. Комфортно в рамках 8-часового обещания.</p>
+    <p>The mean is (90 × 2 + 10 × 40) ÷ 100, which is (180 + 400) ÷ 100, which is <strong>5.8 hours</strong>. Comfortably inside an 8 hour promise.</p>
 
-    <p>И все же 10 клиентов ждали 40 часов, что в пять раз превышает обещанное. Это те, кто жалуются, обостряют ситуацию и уходят. Среднее значение не лгало, оно отвечало на вопрос, который никто не задавал.</p>
+    <p>And yet 10 customers waited 40 hours, five times the promise. Those are the ones who complain, escalate, and leave. The average did not lie, it answered a question nobody asked.</p>
 
-    <p>Исправление представляет собой  <strong>percentile</strong>. 95-й процентиль — это значение, ниже которого оказались 95 процентов ваших товаров. В приведенном выше примере 95-й процентиль составляет 40 часов, что отражает истинную историю в одном числе. Именно по этой причине отчеты об операциях создаются на основе процентилей, и вы увидите их в виде стр50, стр90 и р95. Р50 является медианным.</p>
+    <p>The fix is a <strong>percentile</strong>. The 95th percentile is the value that 95 percent of your items came in under. In the example above the 95th percentile is 40 hours, which tells the true story in one number. Operations reporting runs on percentiles for exactly this reason, and you will see them written as p50, p90 and p95. The p50 is the median.</p>
 
-    <p>Правило, которое следует соблюдать при работе: среднее значение описывает типичный случай, а процентиль описывает плохой случай. Обещание касается плохого случая, поэтому измеряйте его процентилем. Это напрямую связано с  <a href="../data-driven-thresholds/">выбор ограничений, которые вы можете защитить</a>, потому что кто-то должен решить, будет ли обещание стр90 или стр.95, и это решение стоит больше, чем панель инструментов.</p>
+    <p>The rule to carry into a job: an average describes the typical case, and a percentile describes the bad case. A promise is about the bad case, so measure it with a percentile. This connects directly to <a href="../data-driven-thresholds/">picking cutoffs you can defend</a>, because somebody has to decide whether the promise is p90 or p95, and that decision is worth more than the dashboard.</p>
   </div>
 
   <div class="step">
-    <h2>9. Отличие от шума</h2>
+    <h2>9. Telling a real change from noise</h2>
 
-    <p>До пояснения: пропускная способность на этой неделе упала на 6 процентов. Стоит ли кому-нибудь рассказать?</p>
+    <p>Before the explanation: throughput dropped 6 percent this week. Should you tell anyone?</p>
 
-    <p>Еще нет. Каждый процесс меняется от недели к неделе, при этом ничего не меняется. Сообщать о нормальных вариациях как о выводе — это самый быстрый способ для аналитика потерять доверие, потому что на следующей неделе число снова вырастет, и тревога выглядит глупой.</p>
+    <p>Not yet. Every process varies week to week without anything having changed. Reporting normal variation as a finding is the fastest way for an analyst to lose credibility, because the number goes back up next week and the alarm looks silly.</p>
 
-    <p>У этого различия есть названия, и их стоит использовать.  <strong>Вариант общей причины</strong>  – это обычное колебание, всегда свойственное стабильному процессу.  <strong>Изменение особых причин</strong>  это настоящее изменение, имеющее реальную причину. Ваша задача — отличить их друг от друга, прежде чем вы что-нибудь скажете.</p>
+    <p>The distinction has names, and they are worth using. <strong>Common cause variation</strong> is the ordinary wobble a stable process always has. <strong>Special cause variation</strong> is a real change with a real reason behind it. The job is telling them apart before you say anything.</p>
 
-    <p>Самый дешевый честный тест не нуждается в статистике. Возьмите последние 20 периодов, посмотрите, насколько обычно колеблется число, и спросите, больше ли движение на этой неделе, чем движения, которые вы уже проигнорировали. Если число колебалось на 5 процентов каждую неделю в течение пяти месяцев, во вторник оно упадет на 6 процентов.</p>
+    <p>The cheapest honest test does not need statistics. Take the last 20 periods, look at how much the number normally bounces around, and ask whether this week's move is bigger than the moves you already ignored. If the number has swung 5 percent every week for five months, a 6 percent drop is Tuesday.</p>
 
-    <p>Три вопроса, которые выявляют большинство ложных тревог:</p>
+    <p>Three questions that catch most false alarms:</p>
     <ol>
-      <li><strong>На скольких предметах это основано?</strong>  Падение на 6 процентов на 2000 заказов является сигналом. В 30 заказах это два человека, которые берут выходной.</li>
-      <li><strong>Знаменатель стабилен?</strong>  Курс может измениться, потому что изменилась вершина или основание. В праздничной неделе меньше часов.</li>
-      <li><strong>Что-нибудь еще движется вместе с ним?</strong>  Реальные изменения обычно проявляются в двух местах. Если пропускная способность падала, а отставание увеличивалось, что-то происходило. Если пропускная способность упала и больше ничего не изменилось, просмотрите свои данные, прежде чем искать причину.</li>
+      <li><strong>How many items is this based on?</strong> A 6 percent drop on 2,000 orders is a signal. On 30 orders it is two people taking a day off.</li>
+      <li><strong>Is the denominator stable?</strong> A rate can move because the top changed or because the bottom did. A holiday week has fewer hours in it.</li>
+      <li><strong>Does anything else move with it?</strong> A real change usually shows up in two places. If throughput fell and backlog rose, something happened. If throughput fell and nothing else moved, look at your data before you look for a cause.</li>
     </ol>
 
-    <p>Умение сказать: «Это в пределах нашего нормального диапазона» — это профессиональный навык, а не уловка. Кроме того, этот раздел руководства, скорее всего, будет обсуждаться на собеседовании в качестве сценарного вопроса, поскольку он отделяет людей, которые сообщают цифры, от людей, которые их интерпретируют. Разница между этими двумя профессиями описана в  <a href="../report-vs-analysis/">разница между отчетом и анализом</a>.</p>
+    <p>Being able to say "that is inside our normal range" is a professional skill, not a dodge. It is also the section of this guide most likely to come up in an interview as a scenario question, because it separates people who report numbers from people who interpret them. The difference between those two jobs is covered in <a href="../report-vs-analysis/">the difference between a report and an analysis</a>.</p>
   </div>
 
-  <h2>10. Один и тот же отчет, подсчеты и ставки рядом.</h2>
+  <h2>10. The same report, counts and rates side by side</h2>
 
-  <p>Тот же склад, тот же месяц, те же основные данные. Слева: как выглядят большинство первых черновиков. Справа те же факты со знаменателем.</p>
+  <p>Same warehouse, same month, same underlying data. On the left, what most first drafts look like. On the right, the same facts with a denominator attached.</p>
 
   <table>
-    <tr><th>Учитывается только</th><th>В том же месяце, как ставки</th></tr>
+    <tr><th>Counts only</th><th>The same month, as rates</th></tr>
     <tr>
-      <td>Ночная смена отгрузила 900 заказов. Дневная смена отгрузила 500 штук.</td>
-      <td>Ночь выполняла 5,6 заказов в час в течение 160 часов. Дневной результат составил 8,3 из 60.</td>
+      <td>Night shift shipped 900 orders. Day shift shipped 500.</td>
+      <td>Night ran 5.6 orders per hour across 160 hours. Day ran 8.3 across 60.</td>
     </tr>
     <tr>
-      <td>Мы закрывали 90 билетов в неделю, каждую неделю.</td>
-      <td>В неделю прибывало 100 заказов и закрывалось 90, поэтому отставание росло на 10 в неделю.</td>
+      <td>We closed 90 tickets a week, every week.</td>
+      <td>100 arrived a week and 90 closed, so the backlog grew by 10 a week.</td>
     </tr>
     <tr>
-      <td>Среднее время решения проблемы составило 5,8 часов, что не превышает обещанных 8 часов.</td>
-      <td>Девяносто процентов решилось за 2 часа. Самым медленным 10 процентам потребовалось 40, поэтому достижение стр.95 не удалось.</td>
+      <td>Average resolution time was 5.8 hours, inside our 8 hour promise.</td>
+      <td>Ninety percent resolved in 2 hours. The slowest 10 percent took 40, so p95 attainment failed.</td>
     </tr>
     <tr>
-      <td>Команда выполнила 1000 работ.</td>
-      <td>940 прошли чисто, поэтому доходность первого прохода составила 94 процента, а 60 элементов были выполнены дважды.</td>
+      <td>The team completed 1,000 items.</td>
+      <td>940 went through clean, so first pass yield was 94 percent and 60 items were done twice.</td>
     </tr>
     <tr>
-      <td>Команда занята 95 процентов времени.</td>
-      <td>При 95-процентной загрузке срок очереди равен 19, против 4 при 80-процентном, поэтому ожидается задержка.</td>
+      <td>The team is busy 95 percent of the time.</td>
+      <td>At 95 percent utilization the queue term is 19, against 4 at 80 percent, so lateness is expected.</td>
     </tr>
   </table>
 
-  <p>Ничто справа не требовало новых данных. Каждый из них представляет собой одну и ту же фигуру с ответом на вопрос «по сравнению с чем».</p>
+  <p>Nothing on the right required new data. Every one of those is the same figure with the question "compared to what" answered.</p>
 
-  <h2>11. Откуда берутся эти идеи</h2>
+  <h2>11. Where these ideas come from</h2>
 
-  <p>Два правила в этом руководстве не являются соглашениями, о которых кто-то договорился. Это доказанные результаты, и знание этого стоит приговора в интервью.</p>
+  <p>Two of the rules in this guide are not conventions somebody agreed on. They are proved results, and knowing that is worth a sentence in an interview.</p>
 
-  <p>Формула в разделе 4:  <strong>Закон Литтла</strong>, доказанный Джоном Литтлом в 1961 г. (Маленький, 1961,    <em>Исследование операций</em>, 9(3), 383–387). Поразительно то, как мало предположений требуется. Ему неважно, в каком порядке выполняется работа, сколько человек работает и как распределяются прибывшие. Если процесс стабилен в течение измеряемого вами периода, незавершенная работа равна скорости поступления, умноженной на время в системе. Вот почему вы можете с одинаковой уверенностью применять его и в больнице, и в службе поддержки.</p>
+  <p>The formula in section 4 is <strong>Little's Law</strong>, proved by John Little in 1961 (Little, 1961, <em>Operations Research</em>, 9(3), 383–387). The striking part is how few assumptions it needs. It does not care what order the work is done in, how many people are working, or how the arrivals are distributed. If the process is stable over the period you measure, work in progress equals arrival rate times time in system. That is why you can apply it to a hospital and a helpdesk with the same confidence.</p>
 
-  <p>Взрыв в разделе 6 исходит из теории массового обслуживания, и конкретный результат таков:  <strong>Формула Кингмана</strong>  (Кингман, 1961,  <em>Математические труды Кембриджского философского общества</em>, 57(4), 902–904). Он показывает, что по мере того, как сервер приближается к полной загрузке, время ожидания увеличивается пропорционально этому использованию за вычетом доли использования, масштабируемой в зависимости от того, насколько изменчивы времена поступления и обслуживания. Арифметика в разделе 6 представляет собой эту дробь сама по себе. Именно поэтому снижение вариативности вместо того, чтобы работать быстрее, часто является самым дешевым способом ускорить процесс.</p>
+  <p>The explosion in section 6 comes from queueing theory, and the specific result is <strong>Kingman's formula</strong> (Kingman, 1961, <em>Mathematical Proceedings of the Cambridge Philosophical Society</em>, 57(4), 902–904). It shows that as a server approaches full utilization, waiting time grows in proportion to that utilization over one minus utilization fraction, scaled by how variable the arrivals and the service times are. The arithmetic in section 6 is that fraction on its own. It is also why reducing variability, rather than working faster, is often the cheapest way to make a process feel quicker.</p>
 
-  <p>Идея раздела 9 еще старше. Уолтер Шухарт отделил обычные изменения процессов от подлинных сигналов, работая в Белл Лаборатории в 1920-х годах, и опубликовал этот метод в 1931 году (Шюхарт, 1931,    <em>Экономический контроль качества выпускаемой продукции</em>, Ван Ностранд). Контрольная карта на стене фабрики и вопрос «Находится ли это в пределах нашего нормального диапазона» в разделе 9 — это одна и та же идея, с разницей в девяносто лет.</p>
+  <p>The idea in section 9 is older still. Walter Shewhart separated ordinary process variation from genuine signals while working at Bell Labs in the 1920s, and published the method in 1931 (Shewhart, 1931, <em>Economic Control of Quality of Manufactured Product</em>, Van Nostrand). The control chart on a factory wall and the "is this inside our normal range" question in section 9 are the same idea, ninety years apart.</p>
 
-  <h2>12. Как это изучить, чтобы это прижилось</h2>
+  <h2>12. How to study this so it sticks</h2>
 
-  <p>Повторное чтение этой страницы будет напоминать обучение, но в большинстве случаев таковым не будет. Три открытия меняют ценность часа обучения, и все три не требуют больших усилий.</p>
+  <p>Reading this page again will feel like learning and mostly will not be. Three findings change what an hour of study is worth, and all three are cheap to act on.</p>
 
-  <p>Во-первых, при извлечении чего-либо из памяти это сохраняется лучше, чем при просмотре. Студенты, которые читали отрывок один раз, а затем проходили тесты на запоминание, неделю спустя вспоминали гораздо больше, чем студенты, которые читали один и тот же отрывок четыре раза, хотя те, кто перечитывал, чувствовали себя более уверенно (Краснее &amp; выбирать карпа, 2006,    <em>Психологическая наука</em>, 17(3), 249–255). Применимо здесь: закройте правую колонку листа для поиска ниже и произнесите каждый ответ, прежде чем смотреть. Борьба — это механизм, а не признак того, что вы делаете это плохо.</p>
+  <p>The first is that retrieving something from memory stores it better than reviewing it does. Students who read a passage once and then took recall tests remembered far more a week later than students who read the same passage four times, even though the re-readers felt more confident (Roediger &amp; Karpicke, 2006, <em>Psychological Science</em>, 17(3), 249–255). Applied here: cover the right-hand column of the retrieval sheet below and say each answer before you look. The struggle is the mechanism, not a sign you are doing it badly.</p>
 
-  <p>Второе — это интервал. То же самое общее время исследования, распределенное по дням, а не упакованное в один присест, обеспечивает существенно лучшее запоминание, и эффект сохраняется в сотнях экспериментов (Сепеда, Пашлер, Вул, Викстед &amp; Рорер, 2006,    <em>Психологический вестник</em>, 132(3), 354–380). Три двадцатиминутных прохода за три дня превосходят один час сегодня вечером.</p>
+  <p>The second is spacing. The same total study time, spread across days rather than packed into one sitting, produces substantially better retention, and the effect holds across hundreds of experiments (Cepeda, Pashler, Vul, Wixted, &amp; Rohrer, 2006, <em>Psychological Bulletin</em>, 132(3), 354–380). Three twenty-minute passes on three days beats one hour tonight.</p>
 
-  <p>В-третьих, почему это руководство постоянно просит вас говорить что-то вслух. Учащиеся, которые объясняют себе проработанный пример по ходу дела, понимают его значительно лучше и лучше переносят его на новые задачи, чем учащиеся, которые читают тот же пример, не объясняя его (Чи, Басок, Льюис, Рейманн &amp; Глейзер, 1989,    <em>Когнитивная наука</em>, 13(2), 145–182). Операции – это то, где это окупается больше всего, потому что в арифметике почти никогда не бывает ошибок. Это то, на что, по вашему мнению, было разделено число.</p>
+  <p>The third is why this guide keeps asking you to say things out loud. Learners who explain a worked example to themselves as they go understand it substantially better, and transfer it to new problems better, than learners who read the same example without explaining it (Chi, Bassok, Lewis, Reimann, &amp; Glaser, 1989, <em>Cognitive Science</em>, 13(2), 145–182). Operations is where that pays off most, because the mistake is almost never in the arithmetic. It is in what you believe the number was divided by.</p>
 
-  <p>Если у вас под рукой есть бумага и свободные пять минут, стоит сделать один рисунок, и он не является обязательным. Нарисуйте по памяти картинку вверху: пришёл, ожидаю, работаю, готово, затем две скобки над ней. Отметьте, какой кронштейн находится в стадии разработки, а какой находится в системе. Заставить вторую скобку начинаться с прихода, а не с рабочего ящика - вот вся идея, а рисование ее по памяти - это и попытка извлечения, и проверка, есть ли она у вас на самом деле.</p>
+  <p>If you have paper nearby and a spare five minutes, there is one drawing worth doing, and it is optional. Draw the picture at the top from memory: arriving, waiting, working, done, then the two brackets over it. Label which bracket is work in progress and which is time in system. Getting the second bracket to start at the arrival rather than at the working box is the whole idea, and drawing it from memory is both a retrieval attempt and a check on whether you actually have it.</p>
 
-  <h2>13. Все на одном экране</h2>
+  <h2>13. The whole thing on one screen</h2>
 
-  <p>Это лист поиска. Закройте правую колонку, проработайте левую и произнесите каждый ответ вслух, прежде чем проверять его.</p>
+  <p>This is the retrieval sheet. Cover the right column, work down the left, and say each answer out loud before you check it.</p>
 
   <table>
-    <tr><th>Concept</th><th>Что он делает</th></tr>
-    <tr><td>Process</td><td>Повторяющаяся последовательность, превращающая прибытия в завершения.</td></tr>
-    <tr><td>Четыре части</td><td>Заезды, очередь, вместимость, пополнения. Каждое число измеряет единицу.</td></tr>
-    <tr><td>единица работы</td><td>То, что вы считаете. Назовите это, прежде чем что-либо считать.</td></tr>
-    <tr><td>Grain</td><td>Что означает одна строка вашей таблицы. Скажите это как «одна строка на что-то».</td></tr>
-    <tr><td>Count</td><td>Сколько всего произошло. Объем доставки, и ничего больше.</td></tr>
-    <tr><td>Rate</td><td>Количество, деленное на возможность его производства. Обычно часы.</td></tr>
-    <tr><td>Throughput</td><td>Выполненная работа за единицу времени. Версия тарифа счетчика.</td></tr>
-    <tr><td>Время цикла</td><td>Начало работы до завершения, за одну вещь.</td></tr>
-    <tr><td>Время выполнения</td><td>Прибытие до финиша, ожидание включено. Что чувствует клиент.</td></tr>
-    <tr><td>Время ожидания</td><td>Разрыв между ними. Обычно самая большая часть.</td></tr>
-    <tr><td>Закон Литтла</td><td>Незавершенная работа = скорость поступления × время в системе.</td></tr>
-    <tr><td>Использование закона Литтла</td><td>Сократите время работы системы за счет сокращения незавершенной работы, чтобы никто не работал быстрее.</td></tr>
-    <tr><td>Backlog</td><td>Пришёл и не закончил. Направление имеет большее значение, чем размер.</td></tr>
-    <tr><td>Рост отставания</td><td>Прибытие минус завершение, за период.</td></tr>
-    <tr><td>Aging</td><td>Как долго находятся элементы невыполненной работы. Старое отставание обычно представляет собой мертвую работу.</td></tr>
-    <tr><td>Utilization</td><td>Доля доступного времени, фактически потраченного на работу.</td></tr>
-    <tr><td>Почему 100 процентов терпит неудачу</td><td>Ожидание масштабируется с коэффициентом использования больше единицы минус коэффициент использования. 80% дают 4, 95% дают 19.</td></tr>
-    <tr><td>Variability</td><td>Периодические поступления или непредсказуемая продолжительность работ. Делает каждую очередь длиннее.</td></tr>
-    <tr><td>Частота ошибок</td><td>Доля выпуска, которая была ошибочной.</td></tr>
-    <tr><td>Скорость доработки</td><td>Поделитесь, что пришлось сделать еще раз. Кушает емкость незаметно.</td></tr>
-    <tr><td>Выход с первого прохода</td><td>Поделитесь тем, что прошло чисто с первого раза. Связывает качество со скоростью.</td></tr>
-    <tr><td>SLA</td><td>Обещание о времени. Решение в течение 8 часов, доставка в течение 2 дней.</td></tr>
-    <tr><td>Достижение соглашения об уровне обслуживания</td><td>Доля товаров, выполнивших обещание.</td></tr>
-    <tr><td>Percentile</td><td>Стоимость данной доли предметов оказалась ниже. стр.95 — плохой случай.</td></tr>
-    <tr><td>Среднее значение против процентиля</td><td>Среднее значение описывает типичный случай. Обещание – это про плохой случай.</td></tr>
-    <tr><td>Вариант общей причины</td><td>Обычное колебание всегда есть у стабильного процесса.</td></tr>
-    <tr><td>Изменение особых причин</td><td>Настоящее изменение с реальной причиной. Докажите это, прежде чем сообщать об этом.</td></tr>
-    <tr><td>Стоимость за единицу</td><td>Общая стоимость, разделенная на количество произведенных единиц. Где численность персонала попадает в отчетность.</td></tr>
+    <tr><th>Concept</th><th>What it does</th></tr>
+    <tr><td>Process</td><td>A repeated sequence turning arrivals into completions.</td></tr>
+    <tr><td>The four parts</td><td>Arrivals, queue, capacity, completions. Every number measures one.</td></tr>
+    <tr><td>Unit of work</td><td>The thing you are counting. Name it before you count anything.</td></tr>
+    <tr><td>Grain</td><td>What one row of your table means. Say it as "one row per something".</td></tr>
+    <tr><td>Count</td><td>How many happened. Volume delivered, and nothing else.</td></tr>
+    <tr><td>Rate</td><td>A count divided by the opportunity to produce it. Usually hours.</td></tr>
+    <tr><td>Throughput</td><td>Completed work per unit of time. The rate version of a count.</td></tr>
+    <tr><td>Cycle time</td><td>Start of work to finish, for one item.</td></tr>
+    <tr><td>Lead time</td><td>Arrival to finish, waiting included. What the customer feels.</td></tr>
+    <tr><td>Wait time</td><td>The gap between the two. Usually the biggest part.</td></tr>
+    <tr><td>Little's Law</td><td>Work in progress = arrival rate × time in system.</td></tr>
+    <tr><td>Using Little's Law</td><td>Cut time in system by cutting work in progress, without anyone working faster.</td></tr>
+    <tr><td>Backlog</td><td>Arrived and not finished. Direction matters more than size.</td></tr>
+    <tr><td>Backlog growth</td><td>Arrivals minus completions, per period.</td></tr>
+    <tr><td>Aging</td><td>How long backlog items have been sitting. Old backlog is usually dead work.</td></tr>
+    <tr><td>Utilization</td><td>Share of available time actually spent working.</td></tr>
+    <tr><td>Why 100 percent fails</td><td>Waiting scales with utilization over one minus utilization. 80% gives 4, 95% gives 19.</td></tr>
+    <tr><td>Variability</td><td>Bursty arrivals or unpredictable job lengths. Makes every queue longer.</td></tr>
+    <tr><td>Error rate</td><td>Share of output that was wrong.</td></tr>
+    <tr><td>Rework rate</td><td>Share that had to be done again. Eats capacity invisibly.</td></tr>
+    <tr><td>First pass yield</td><td>Share that went through clean the first time. Links quality to speed.</td></tr>
+    <tr><td>SLA</td><td>A promise about time. Resolve in 8 hours, ship in 2 days.</td></tr>
+    <tr><td>SLA attainment</td><td>Share of items that met the promise.</td></tr>
+    <tr><td>Percentile</td><td>The value a given share of items came in under. p95 is the bad case.</td></tr>
+    <tr><td>Average against percentile</td><td>An average describes the typical case. A promise is about the bad case.</td></tr>
+    <tr><td>Common cause variation</td><td>The ordinary wobble a stable process always has.</td></tr>
+    <tr><td>Special cause variation</td><td>A real change with a real reason. Prove it before you report it.</td></tr>
+    <tr><td>Cost per unit</td><td>Total cost divided by units produced. Where headcount enters the reporting.</td></tr>
   </table>
 
-  <div class="note"><strong>Единственная привычка, которую следует сохранить.</strong>  Прежде чем сообщить какое-либо число операций, произнесите вслух, на что оно было поделено. «Девятьсот заказов, разделенных ничем» — это объем. «Девятьсот заказов за 160 часов» — это открытие. Почти каждый неправильный вывод операции является правильным подсчетом по сравнению со знаменателем, отличным от того, который кто-то предположил, и это одно предложение улавливает его до того, как число покинет ваш стол.</div>
+  <div class="note"><strong>The one habit to keep.</strong> Before you report any operations number, say out loud what it was divided by. "Nine hundred orders, divided by nothing" is a volume. "Nine hundred orders across 160 hours" is a finding. Nearly every wrong operations conclusion is a correct count compared against a different denominator than the one somebody assumed, and that one sentence catches it before the number leaves your desk.</div>
 
-  <p>Один искренний вопрос, и мне бы хотелось получить ответы от других людей. Идея, которая заняла у меня больше всего времени, заключалась в использовании, потому что «чем занятее, тем лучше» очевидно верно до тех пор, пока вы не увидите, что это делает с очередью. Какую операционную идею вы понимали задом наперед дольше всего и что в конечном итоге ее исправило?</p>
+  <p>One genuine question, and I would like other people's answers. The idea that took me longest was utilization, because "busier is better" is so obviously true right up until you see what it does to a queue. Which operations idea did you understand backwards for the longest, and what finally fixed it?</p>
 
   <div class="book">
-    <strong>Вы можете прочитать панель мониторинга. Замораживание происходит, когда кто-то говорит, что пропускная способность упала, и спрашивает, почему.</strong>
-    <p><em>SQL для аналитиков</em>  состоит из 239 страниц, каждый запрос читается построчно повседневными словами, а также практические вопросы, которые печатают ответ и причину, по которой он правильный. Большинство отчетов об операциях представляют собой группировку по дате и знаменателю, о котором вам нужно подумать.</p>
-    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-operations-analytics-foundations'})">SQL для аналитиков, 19 $ →</a>
+    <strong>You can read a dashboard. The freeze comes when somebody says throughput is down and asks you why.</strong>
+    <p><em>SQL for Analysts</em> is 239 pages, every query read line by line in everyday words, and practice questions that print the answer and the reason it is right. Most operations reporting is a GROUP BY over a date and a denominator you had to think about.</p>
+    <a class="booklink" href="https://michaelnocito.gumroad.com/l/sql-for-analysts?utm_source=analyst-prep-kit&utm_medium=guide&utm_campaign=sql-for-analysts" target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','guide_book_click',{kit:'guide-operations-analytics-foundations'})">SQL for Analysts, $19 &rarr;</a>
   </div>
 
   <h2>References</h2>
   <ul class="refs">
-    <li>Литтл, JDC (1961). Доказательство формулы массового обслуживания: L = λW.  <em>Исследование операций</em>, 9(3), 383–387.</li>
-    <li>Кингман, JFC (1961). Очередь на один сервер при интенсивном трафике.  <em>Математические труды Кембриджского философского общества</em>, 57(4), 902–904.</li>
-    <li>Шухарт, Вашингтон (1931).  <em>Экономический контроль качества выпускаемой продукции</em>. Нью-Йорк: Компания Д. Ван Ностранда.</li>
-    <li>Рёдигер, Х.Л., и Карпике, Дж.Д. (2006). Улучшенное обучение с помощью тестов: прохождение тестов на память улучшает долгосрочное запоминание.  <em>Психологическая наука</em>, 17(3), 249–255.</li>
-    <li>Сепеда, Нью-Джерси, Пашлер, Х., Вул, Э., Викстед, Дж. Т., и Рорер, Д. (2006). Распределенная практика в задачах на вербальное запоминание: обзор и количественный синтез.  <em>Психологический вестник</em>, 132(3), 354–380.</li>
-    <li>Чи, М.Т.Х., Бассок, М., Льюис, М.В., Рейманн, П. и Глейзер, Р. (1989). Самообъяснения: как учащиеся изучают и используют примеры при обучении решению проблем.  <em>Когнитивная наука</em>, 13(2), 145–182.</li>
+    <li>Little, J. D. C. (1961). A proof for the queuing formula: L = λW. <em>Operations Research</em>, 9(3), 383–387.</li>
+    <li>Kingman, J. F. C. (1961). The single server queue in heavy traffic. <em>Mathematical Proceedings of the Cambridge Philosophical Society</em>, 57(4), 902–904.</li>
+    <li>Shewhart, W. A. (1931). <em>Economic Control of Quality of Manufactured Product</em>. New York: D. Van Nostrand Company.</li>
+    <li>Roediger, H. L., &amp; Karpicke, J. D. (2006). Test-enhanced learning: Taking memory tests improves long-term retention. <em>Psychological Science</em>, 17(3), 249–255.</li>
+    <li>Cepeda, N. J., Pashler, H., Vul, E., Wixted, J. T., &amp; Rohrer, D. (2006). Distributed practice in verbal recall tasks: A review and quantitative synthesis. <em>Psychological Bulletin</em>, 132(3), 354–380.</li>
+    <li>Chi, M. T. H., Bassok, M., Lewis, M. W., Reimann, P., &amp; Glaser, R. (1989). Self-explanations: How students study and use examples in learning to solve problems. <em>Cognitive Science</em>, 13(2), 145–182.</li>
   </ul>
 
   <div class="cta">
-    <strong>Хотите попрактиковаться в этом, а не просто читать?</strong>
-    <p style="margin:6px 0 0">The <a href="../../stats/">Статистический комплект</a>  превращает средние значения, процентили и вариации в рабочие примеры, обучающие карточки и пробный экзамен, который составляет половину этой страницы, посвященную математике. Ничего устанавливать и учетная запись не требуется.</p>
-    <a class="btn" href="../../stats/">Откройте набор статистики →</a>
-    <p style="margin:10px 0 0;font-size:15px">Или сразу начните вводить запросы, из которых получены эти цифры:  <a href="../../drill/">открыть SQL-детализация</a>, по одному выполняемому запросу за раз, каждый из которых добавляет что-то к последнему.</p>
+    <strong>Want to practise these instead of only reading them?</strong>
+    <p style="margin:6px 0 0">The <a href="../../stats/">Statistics Kit</a> turns averages, percentiles and variation into worked examples, flash cards and a mock exam, which is the half of this page that has maths in it. Nothing to install and no account needed.</p>
+    <a class="btn" href="../../stats/">Open the Statistics Kit →</a>
+    <p style="margin:10px 0 0;font-size:15px">Or get straight into typing the queries these numbers come from: <a href="../../drill/">open SQL Drill</a>, one runnable query at a time, each adding one thing to the last.</p>
   </div>
 
   <div data-apk-subscribe></div>
   <footer>
-    <a href="../../">← Подготовительный комплект для аналитика</a> · <a href="../defining-metrics/">Определение метрик</a> · <a href="../data-driven-thresholds/">Пороги, управляемые данными</a> · <a href="../report-vs-analysis/">Отчет против анализа</a> · <a href="../what-is-data-analysis/">Что такое анализ данных?</a> · <a href="../exploratory-data-analysis/">Исследовательский анализ данных</a> · <a href="../documenting-data-limitations/">Документирование ограничений</a> · <a href="../sql-foundations/">Основы SQL</a> · <a href="../sql-group-by-having/">ГРУППИРОВАТЬ ПО и ИМЕТЬ</a> · <a href="../sql-joins/">SQL-СОЕДИНЕНИЯ</a> · <a href="../sql-count-function/">СЧЕТ в SQL</a> · <a href="../sql-ctes/">SQL CTE</a> · <a href="../sql-window-functions/">Оконные функции</a> · <a href="../excel-dashboard-build-order/">Порядок построения панели мониторинга Excel</a> · <a href="../build-a-tableau-dashboard/">Создайте панель управления Tableau</a> · <a href="../tableau-concepts/">Концепции таблиц</a> · <a href="../choose-your-analyst-role/">Выберите роль аналитика</a> · <a href="../technical-tenacity/">Техническая стойкость</a> · <a href="../">Все руководства</a> · <a href="../../stats/">Статистический комплект</a> · <a href="../../projects/">Портфельные проекты</a>
-    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Купи мне кофе</a></p>
+    <a href="../../">← Analyst Prep Kit</a> · <a href="../defining-metrics/">Defining Metrics</a> · <a href="../data-driven-thresholds/">Data-Driven Thresholds</a> · <a href="../report-vs-analysis/">Report vs Analysis</a> · <a href="../what-is-data-analysis/">What Is Data Analysis?</a> · <a href="../exploratory-data-analysis/">Exploratory Data Analysis</a> · <a href="../documenting-data-limitations/">Documenting Limitations</a> · <a href="../sql-foundations/">SQL Foundations</a> · <a href="../sql-group-by-having/">GROUP BY and HAVING</a> · <a href="../sql-joins/">SQL JOINs</a> · <a href="../sql-count-function/">COUNT in SQL</a> · <a href="../sql-ctes/">SQL CTEs</a> · <a href="../sql-window-functions/">Window Functions</a> · <a href="../excel-dashboard-build-order/">Excel Dashboard Build Order</a> · <a href="../build-a-tableau-dashboard/">Build a Tableau Dashboard</a> · <a href="../tableau-concepts/">Tableau Concepts</a> · <a href="../choose-your-analyst-role/">Choose Your Analyst Role</a> · <a href="../technical-tenacity/">Technical Tenacity</a> · <a href="../">All Guides</a> · <a href="../../stats/">Statistics Kit</a> · <a href="../../projects/">Portfolio Projects</a>
+    <p style="margin:14px 0 0"><a href="https://buymeacoffee.com/michaelnocito" target="_blank" rel="noopener">Buy Me a Coffee</a></p>
   
-    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">Об авторе</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
+    <p class="trust" style="margin:14px 0 0;font-size:14px"><a href="../../about.html">About the author</a> · <a href="../../contact.html">Contact</a> · <a href="../../privacy.html">Privacy</a> · <a href="../../terms.html">Terms</a></p>
   </footer>
 </main>
   <script src="../../assets/apk-subscribe.js" defer></script>
-
+<script src="../../assets/ru-localization.js?v=20261027-1"></script>
 </body>
 </html>
