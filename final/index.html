@@ -270,11 +270,11 @@ function save(){ localStorage.setItem(STORE, JSON.stringify(state)); }
 const STUDY = [
   {key:'excel', color:'var(--c-excel)', label:'Excel', kitPath:'../excel/',
     must:[
-      `<strong>Абсолютные и относительные ссылки</strong>: <code>$A$1</code> остается на месте при копировании; <code>A1</code> сдвиги. Смешайте их, как <code>$А1</code> или <code>1 австралийский доллар</code>.`,
+      `<strong>Абсолютные и относительные ссылки</strong>: <code>$A$1</code> остается на месте при копировании; <code>A1</code> сдвиги. Смешайте их, как <code>$A1</code> или <code>A$1</code>.`,
       `<strong>Поиски</strong>: <code>VLOOKUP</code> (и чем новее, тем лучше <code>XLOOKUP</code>) позволяют получить значение из другой таблицы по ключу.`,
       `<strong>Условные агрегаты</strong>: <code>COUNTIF</code>, <code>SUMIF</code>, <code>AVERAGEIF</code> — подсчитывать/суммировать/усреднять только строки, соответствующие условию.`,
       `<strong>Сводные таблицы</strong>: перетащите поле в строки, столбцы, значения и фильтры — самый быстрый способ суммировать набор данных.`,
-      `<strong>Текстовая или цифровая ловушка</strong>: <code>"$50,000"</code> со знаком доллара — это текст, а не число. <code>НОМЕР()</code> ловит это.`,
+      `<strong>Текстовая или цифровая ловушка</strong>: <code>"$50,000"</code> со знаком доллара — это текст, а не число. <code>VALUE()</code> ловит это.`,
       `<strong>Помощники по уборке</strong>: <code>TRIM</code>, <code>UPPER</code>/<code>LOWER</code>, <code>SUBSTITUTE</code>, <code>VALUE</code> — первые, к которым вы обращаетесь при работе с беспорядочными данными.`
     ]},
   {key:'sql', color:'var(--c-sql)', label:'SQL', kitPath:'../sql/',
@@ -282,16 +282,16 @@ const STUDY = [
       `<strong>Порядок пунктов</strong>: <code>SELECT</code> → <code>FROM</code> → <code>JOIN</code> → <code>WHERE</code> → <code>GROUP BY</code> → <code>HAVING</code> → <code>ORDER BY</code> → <code>LIMIT</code>.`,
       `<strong>ГДЕ против ИМЕЮЩИХ</strong>: <code>WHERE</code> фильтрует строки перед группировкой; <code>HAVING</code> фильтрует группы после.`,
       `<strong>Типы соединений</strong>: <code>INNER</code> = только совпадения; <code>LEFT</code> = все слева + совпадение справа (нулевые значения, если совпадений нет).`,
-      `<strong>Агрегаты</strong>: <code>СЧИТАТЬ(*)</code> считает строки; <code>СЧЕТ(столбец)</code> игнорирует нули; <code>COUNT(ОТЛИЧНЫЙ столбец)</code> подсчитывает уникальные значения.`,
-      `<strong>НУЛЬ не равен 0</strong>: использовать <code>IS NULL</code>, нет <code>= НУЛЬ</code>. <code>СОЕДИНЕНИЕ (столбец, 0)</code> заменяет нули на значения по умолчанию.`,
-      `<strong>Фильтрация дат</strong>: <code>ГДЕ дата МЕЖДУ '2026-01-01' И '2026-03-31'</code> является инклюзивным на обоих концах.`
+      `<strong>Агрегаты</strong>: <code>COUNT(*)</code> считает строки; <code>COUNT(column)</code> игнорирует нули; <code>COUNT(DISTINCT column)</code> подсчитывает уникальные значения.`,
+      `<strong>НУЛЬ не равен 0</strong>: использовать <code>IS NULL</code>, нет <code>= NULL</code>. <code>COALESCE(column, 0)</code> заменяет нули на значения по умолчанию.`,
+      `<strong>Фильтрация дат</strong>: <code>WHERE order_date BETWEEN '2026-01-01' AND '2026-03-31'</code> является инклюзивным на обоих концах.`
     ]},
   {key:'python', color:'var(--c-python)', label:'Python', kitPath:'../python/',
     must:[
       `<strong>загрузить данные</strong>: <code>df = pd.read_csv('file.csv')</code>. Быстрый просмотр: <code>df.head()</code>, <code>df.info()</code>, <code>df.describe()</code>.`,
-      `<strong>Фильтровать строки</strong>: <code>df[df['Region'] == 'Запад']</code>. Использование нескольких условий <code>&amp;</code> и <code>|</code> в скобках.`,
+      `<strong>Фильтровать строки</strong>: <code>df[df['region'] == 'West']</code>. Использование нескольких условий <code>&amp;</code> и <code>|</code> в скобках.`,
       `<strong>.место против .iloc</strong>: <code>.loc</code> использует метки (имена столбцов); <code>.iloc</code> использует целочисленные позиции.`,
-      `<strong>Группа + совокупность</strong>: <code>df.groupby('регион')['доход'].sum()</code> это 80% того, что вы напишете.`,
+      `<strong>Группа + совокупность</strong>: <code>df.groupby('region')['revenue'].sum()</code> это 80% того, что вы напишете.`,
       `<strong>Нулевые значения</strong>: <code>df.isnull().sum()</code> для счетов; <code>df.fillna(0)</code> заменить; <code>df.dropna()</code> удалить.`,
       `<strong>Список против диктата</strong>:список = упорядоченный, индексированный целыми числами; диктовать = ключ → поиск значения. pandas серии представляет собой список; DataFrame является диктовкой серий.`
     ]},
@@ -318,7 +318,7 @@ const STUDY = [
       `<strong>Мощность запроса (M)</strong> загружает и преобразует данные ДО того, как они попадут в модель. DAX предназначен для показателей и вычисляемых столбцов ПОСЛЕ.`,
       `<strong>Схема звезды</strong>: одна таблица фактов (например, продажи) посередине, таблицы измерений (клиенты, продукты, даты) вокруг нее. Избегайте одного гигантского плоского стола.`,
       `<strong>Меры и вычисляемые столбцы</strong>: показатели рассчитываются во время запроса (эффективно); вычисляемые столбцы хранятся построчно (используйте экономно).`,
-      `<strong>СУММА против СУМХ</strong>: <code>СУММ(таблица[столбец])</code> агрегирует столбец напрямую; <code>SUMX</code> выполняет итерацию по строкам, оценивая выражение.`,
+      `<strong>СУММА против СУМХ</strong>: <code>SUM(table[column])</code> агрегирует столбец напрямую; <code>SUMX</code> выполняет итерацию по строкам, оценивая выражение.`,
       `<strong>Контекст фильтра</strong>: каждая мера выполняется внутри контекста активных фильтров. <code>CALCULATE</code> меняет этот контекст.`,
       `<strong>Временной интеллект</strong>: <code>TOTALYTD</code>, <code>SAMEPERIODLASTYEAR</code>, <code>DATEADD</code> — встроенные функции, для работы которых необходима помеченная таблица дат.`
     ]},
@@ -406,15 +406,15 @@ const QUESTIONS = [
       `<code>$A$1</code> форматирует значение как валюту.`,
       `Функциональной разницы нет.`
     ], correct:1,
-    explain:`Абсолютные ссылки (с <code>$</code>) заморозить строку и/или столбец при копировании формулы. Смешайте их — <code>$А1</code> замораживает столбец, но позволяет сдвигать строку, и наоборот.`},
+    explain:`Абсолютные ссылки (с <code>$</code>) заморозить строку и/или столбец при копировании формулы. Смешайте их — <code>$A1</code> замораживает столбец, но позволяет сдвигать строку, и наоборот.`},
   {id:'e2', section:'excel', type:'mc', q:`Вам необходимо извлечь регион клиента из другого листа, используя его идентификатор клиента. Правильный инструмент:`,
     choices:[`<code>SUMIF</code>`, `<code>COUNTIF</code>`, `<code>VLOOKUP</code> или <code>XLOOKUP</code>`, `Сводная таблица`],
     correct:2,
     explain:`<code>XLOOKUP</code> это современная, более гибкая замена <code>VLOOKUP</code>. Оба ищут ключ и возвращают значение из другой таблицы.`},
-  {id:'e3', section:'excel', type:'mc', q:`Какая формула считает ячейки <code>А2: А100</code> равен тексту <code>"США"</code>?`,
+  {id:'e3', section:'excel', type:'mc', q:`Какая формула считает ячейки <code>A2:A100</code> равен тексту <code>"США"</code>?`,
     choices:[`=COUNT(A2:A100,"USA")`, `=SUMIF(A2:A100,"USA")`, `=COUNTIF(A2:A100,"USA")`, `=COUNTIF("USA",A2:A100)`],
     correct:2,
-    explain:`<code>СЧЁТЕСЛИ(диапазон, критерий)</code> является наиболее распространенным условным агрегатом: сначала диапазон, затем критерии, а текстовые критерии в кавычках. <code>COUNT</code> не принимает никаких критериев и <code>SUMIF</code> суммы вместо подсчета.`},
+    explain:`<code>COUNTIF(range, criteria)</code> является наиболее распространенным условным агрегатом: сначала диапазон, затем критерии, а текстовые критерии в кавычках. <code>COUNT</code> не принимает никаких критериев и <code>SUMIF</code> суммы вместо подсчета.`},
   {id:'e4', section:'excel', type:'mc', q:`Сводная таблица — это подходящий инструмент, если вы хотите:`,
     choices:[`Очистите противоречивые текстовые значения`, `Обобщение и группировка набора данных в интерактивном режиме по измерениям`, `Напишите пользовательскую функцию`, `Применить условное форматирование`],
     correct:1,
@@ -447,18 +447,18 @@ GROUP BY product
 ________</pre>`,
     choices:[`ORDER BY total DESC LIMIT 5`, `ORDER BY total ASC LIMIT 5`, `LIMIT 5 ORDER BY total DESC`, `SORT BY total DESC TOP 5`],
     correct:0,
-    explain:`<code>СОРТИРОВАТЬ ПО УБЫТКУ</code> сначала сортирует самый большой, <code>ОГРАНИЧЕНИЕ 5</code> берет только пятерку лучших — и <code>LIMIT</code> должно прийти после <code>ORDER BY</code>. (Некоторые базы данных используют <code>ТОП 5</code> или <code>ВЫБРАТЬ ТОЛЬКО ПЕРВЫЕ 5 СТРОК</code> вместо <code>LIMIT</code>, но нет <code>SORT BY</code>.)`},
+    explain:`<code>ORDER BY total DESC</code> сначала сортирует самый большой, <code>LIMIT 5</code> берет только пятерку лучших — и <code>LIMIT</code> должно прийти после <code>ORDER BY</code>. (Некоторые базы данных используют <code>TOP 5</code> или <code>SELECT TOP 5</code> вместо <code>LIMIT</code>, но нет <code>SORT BY</code>.)`},
 
   // PYTHON
   {id:'p1', section:'python', type:'mc', q:`Метод pandas для загрузки CSV-файла:`,
     choices:[`<code>pd.load_csv()</code>`, `<code>pd.read_csv()</code>`, `<code>pd.open_csv()</code>`, `<code>pd.import_csv()</code>`],
     correct:1,
-    explain:`<code>pd.read_csv('file.csv')</code>. <code>читать_*</code> Семейство также охватывает Excel, JSON, паркет, запросы SQL и многое другое.`},
-  {id:'p2', section:'python', type:'mc', q:`Чтобы выбрать строки, в которых <code>region</code> столбец равен <code>«Запад»</code> в pandas DataFrame под названием <code>df</code>:`,
+    explain:`<code>pd.read_csv('file.csv')</code>. <code>read_*</code> Семейство также охватывает Excel, JSON, паркет, запросы SQL и многое другое.`},
+  {id:'p2', section:'python', type:'mc', q:`Чтобы выбрать строки, в которых значение столбца <code>region</code> равно <code>'West'</code> в pandas DataFrame под названием <code>df</code>:`,
     choices:[
-      `<code>df.select('регион == Запад')</code>`,`<code>df[df['region'] == 'West']</code>`,
-      `<code>df.где(Регион='Запад')</code>`,
-      `<code>df.find('регион', 'Запад')</code>`
+      `<code>df.select('region == West')</code>`,`<code>df[df['region'] == 'West']</code>`,
+      `<code>df.where(region='West')</code>`,
+      `<code>df.find('region', 'West')</code>`
     ], correct:1,
     explain:`Pandas использует логическое индексирование: логическая серия внутри <code>[]</code> фильтрует DataFrame по соответствующим строкам.`},
   {id:'p3', section:'python', type:'mc', q:`Разница между <code>.loc</code> и <code>.iloc</code>:`,
@@ -472,7 +472,7 @@ ________</pre>`,
   {id:'p4', section:'python', type:'mc', q:`Какие однострочные группы pandas <code>df</code>К<code>region</code> и суммы <code>revenue</code>?`,
     choices:[`df.groupby('revenue')['region'].sum()`, `df.groupby('region')['revenue'].sum()`, `df.sum('revenue').groupby('region')`, `df['region'].sum().groupby('revenue')`],
     correct:1,
-    explain:`тот<code>группировка → столбец → совокупность</code> Шаблон — это рабочая лошадка анализа pandas: группировка по РАЗМЕРУ (<code>region</code>), выберите МЕРУ (<code>revenue</code>), затем суммируйте. Первая группа вариантов по размеру — классический своп.`},
+    explain:`тот<code>groupby → column → aggregation</code> Шаблон — это рабочая лошадка анализа pandas: группировка по РАЗМЕРУ (<code>region</code>), выберите МЕРУ (<code>revenue</code>), затем суммируйте. Первая группа вариантов по размеру — классический своп.`},
 
   // TABLEAU
   {id:'t1', section:'tableau', type:'mc', q:`Лучшая диаграмма, показывающая, как метрика меняется с течением времени:`,
@@ -502,7 +502,7 @@ ________</pre>`,
       `Фильтр, примененный к показателю.`,
       `То же, что параметр.`
     ], correct:0,
-    explain:`Вычисляемые поля позволяют получать новые измерения или меры, например <code>[Доход] – [Стоимость]</code> ради прибыли или <code>ЕСЛИ [Регион] = «Запад» ТО...</code> для пользовательской группы.`},
+    explain:`Вычисляемые поля позволяют получать новые измерения или меры, например <code>[Доход] – [Стоимость]</code> ради прибыли или <code>IF [Region] = "West" THEN ... END</code> для пользовательской группы.`},
 
   // STATS
   {id:'st1', section:'stats', type:'mc', q:`Когда распределение асимметрично вправо (длинный хвост справа), среднее значение обычно равно:`,
@@ -511,7 +511,7 @@ ________</pre>`,
     explain:`Выбросы справа тянут среднее значение вверх. Медиана более устойчива к выбросам, поэтому доход обычно указывается как медианный, а не средний.`},
   {id:'st2', section:'stats', type:'mc', q:`P-значение <code>0.03</code> в А/Б-тесте означает:`,
     choices:[
-      `Вероятность того, что гипотеза верна, составляет 97%.`,`If there were no real effect, you'd see data this extreme about 3% of the time.`,
+      `Вероятность того, что гипотеза верна, составляет 97%.`,`Если бы реального эффекта не было, настолько экстремальные данные наблюдались бы примерно в 3% случаев.`,
       `Размер эффекта составляет 3%.`,
       `Уровень ошибок в тесте составил 3%.`
     ], correct:1,
@@ -548,16 +548,16 @@ ________</pre>`,
     explain:`Звездообразные схемы быстрее, их легче понять и хорошо сочетаются с временной аналитикой DAX. Таблица фактов содержит события (продажи, транзакции); таблицы измерений содержат контекст (клиенты, продукты, даты).`},
   {id:'b3', section:'powerbi', type:'mc', q:`<code>SUM</code>против<code>SUMX</code> в DAX:`,
     choices:[
-      `They are identical — <code>SUMX</code> is just shorter to type.`,
-      `<code>SUM(table[col])</code> aggregates a single column; <code>SUMX(table, expression)</code> iterates row-by-row, evaluates the expression, then sums.`,
-      `<code>SUM</code> works in DAX; <code>SUMX</code> works only in Power Query.`,
-      `<code>SUMX</code> is always faster.`
+      `Они идентичны — <code>SUMX</code> просто короче писать.`,
+      `<code>SUM(table[col])</code> агрегирует один столбец; <code>SUMX(table, expression)</code> перебирает строки, вычисляет выражение для каждой строки и затем суммирует результаты.`,
+      `<code>SUM</code> работает в DAX, а <code>SUMX</code> — только в Power Query.`,
+      `<code>SUMX</code> всегда работает быстрее.`
     ], correct:1,
-    explain:` Использовать <code>SUM</code> когда у вас есть столбец для агрегирования напрямую. Использовать <code>SUMX</code> когда вам сначала нужно вычислить уровень строки (например, <code>SUMX(Продажи, Продажи[Количество] * Продажи[Цена])</code>).`},
+    explain:` Использовать <code>SUM</code> когда у вас есть столбец для агрегирования напрямую. Использовать <code>SUMX</code> когда вам сначала нужно вычислить уровень строки (например, <code>SUMX(Sales, Sales[Quantity] * Sales[Price])</code>).`},
   {id:'b4', section:'powerbi', type:'mc', q:`Power Query (язык M) используется для:`,
     choices:[
       `Напишите меры.`,
-      `Загружайте, формируйте и преобразуйте данные ДО того, как они попадут в модель.`,`Create dashboards visually.`,
+      `Загружайте, формируйте и преобразуйте данные ДО того, как они попадут в модель.`,`Создавайте информационные панели визуально.`,
       `Запланируйте обновление набора данных.`
     ], correct:1,
     explain:`Power Query — это уровень ETL, обеспечивающий подключение к источникам, очистку, изменение формы и слияние. К тому времени, когда данные попадут в модель для работы с DAX, тяжелая работа уже должна быть выполнена в Мощность запроса.`},
@@ -588,9 +588,9 @@ ________</pre>`,
     ], correct:2,
     explain:`«Все данные» почти всегда скрывают конкретный вопрос. Выявление реальной потребности экономит время вам обоим и заставляет вас выглядеть старше — сопротивляйтесь конструктивно, а не просто сопротивляйтесь.`},
   {id:'i4', section:'interview', type:'mc', q:`Лучшее время для обсуждения зарплаты на собеседовании:`,
-    choices:[`In the first phone screen, to avoid wasting time.`,
+    choices:[`На первом телефонном собеседовании, чтобы не тратить время.`,
       `После того, как у вас есть предложение или сильный сигнал заинтересованности со стороны компании.`,
-      `Никогда — пусть они сначала поднимут этот вопрос, всегда.`,`In your application cover letter.`], correct:1,
+      `Никогда — пусть они сначала поднимут этот вопрос, всегда.`,`В сопроводительном письме к отклику.`], correct:1,
     explain:`Слишком раннее обсуждение зарплаты привязывает вас к цифре, прежде чем они решат, насколько вы им нужны. Как только они совершили сделку посредством предложения (или сигнала, близкого к предложению), ваше кредитное плечо становится максимальным. Рекрутеры, которые настаивают на вашем номере для первого звонка, делают свою работу — вы можете вежливо отложить разговор.`}
 ];
 
