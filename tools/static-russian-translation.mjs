@@ -137,7 +137,7 @@ function isCodeLike(text) {
   if (/^(?:[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*)\s*\([^;{}]*\)$/.test(value)) return true;
   if (/^[A-Za-z_$][\w$]*(?:\[[^\]]+\])+\s*(?:[=<>!]=?|[+*/-])/.test(value)) return true;
   if (value.length > 35 && /(?:=>|[{};])/.test(value) && /(?:\b(?:const|let|var|function|return|SELECT|FROM|WHERE|JOIN|GROUP BY|ORDER BY)\b)/i.test(value)) return true;
-  if (/^(?:#[\w-]+|\.?[a-z][\w-]*(?:\s*[>+~]\s*\.?[a-z][\w-]*)*)$/i.test(value) && !/\s{2,}/.test(value)) return true;
+  if (/^(?:#[\w-]+|\.[a-z][\w-]*(?:\s*[>+~]\s*\.?[a-z][\w-]*)*|[a-z][\w-]*\s*[>+~]\s*[.#]?[a-z][\w-]*)$/i.test(value) && !/\s{2,}/.test(value)) return true;
   return false;
 }
 function candidate(text, context = null, htmlText = false) {
@@ -146,10 +146,13 @@ function candidate(text, context = null, htmlText = false) {
   if (isTechnicalOnly(value)) return false;
   if (/^(?:javascript:|data:|mailto:|tel:|https?:\/\/)/i.test(value)) return false;
   if (/^[\w-]+\/[\w./-]+$/.test(value)) return false;
-  // Plain HTML text is user-facing, even when it is a short single word such as
+  // Protect executable expressions before the short-label rule. This also
+  // applies when a string sits in a human-readable property (formula, answer,
+  // textContent); context must never override code protection.
+  if (isCodeLike(value)) return false;
+  // Plain HTML text is user-facing, even when it is a short label such as
   // "Home", "Example" or "Lessons". Code blocks are excluded by the HTML walker.
   if (htmlText) return value.length >= 2;
-  if (isCodeLike(value)) return false;
   if (value.length < 2) return false;
   if (context) return true;
   return /\s/.test(value) && value.length > 8;
