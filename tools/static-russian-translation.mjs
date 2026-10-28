@@ -358,9 +358,7 @@ async function translateText(text) {
   return parts.join("");
 }
 
-async function translateMixedSegments(value) {
-  const source = String(value);
-  if (!/[А-Яа-яЁё]/.test(source) || !/[A-Za-z]/.test(source)) return translateText(source);
+async function translateMixedPlain(source) {
   const pattern = /[A-Za-z][A-Za-z0-9+#._/-]*(?:[ \t]+[A-Za-z][A-Za-z0-9+#._/-]*)*/g;
   const matches = [...source.matchAll(pattern)];
   if (!matches.length) return source;
@@ -380,6 +378,60 @@ async function translateMixedSegments(value) {
   }
   pieces.push(source.slice(cursor));
   return pieces.join("");
+}
+
+async function translateMixedLine(source) {
+  if (!/[А-Яа-яЁё]/.test(source) || !/[A-Za-z]/.test(source)) return source;
+  if (isCodeLike(source.trim())) return source;
+
+  const patterns = [
+    /\x60[^\x60\r\n]+\x60/g,
+    /\b(?:df|pd|np|plt|sns)\s*=\s*(?:df|pd|np|plt|sns)(?:(?:\.[A-Za-z_]\w*)|(?:\[[^\]\r\n]+\])|(?:\([^()\r\n]*(?:\([^()\r\n]*\)[^()\r\n]*)?\)))+/g,
+    /\b(?:df|pd|np|plt|sns)(?:(?:\.[A-Za-z_]\w*)|(?:\[[^\]\r\n]+\])|(?:\([^()\r\n]*(?:\([^()\r\n]*\)[^()\r\n]*)?\)))+(?:\s*(?:==|!=|>=|<=|=|>|<)\s*(?:'[^'\r\n]*'|"[^"\r\n]*"|[A-Za-z0-9_.]+))?/g,
+    /\bdf\[[^\r\n]{1,180}\]/g,
+    /@[A-Za-z_]\w*(?:\([^)\r\n]*\))?/g,
+    /(?:=\s*)?(?:SUM|SUMIFS|VLOOKUP|XLOOKUP|IFERROR|COUNTIF|COUNTIFS|LEFT|RIGHT|TRIM|PROPER|MATCH|INDEX|YEAR|MONTH|DAY|COUNT|COUNTA|AVERAGE|MAX|MIN)\s*\([^()\r\n]*\)/gi,
+    /\b[A-Z]{1,3}\d+(?::[A-Z]{1,3}\d+)?\b/g,
+    /\bSELECT\b[^\r\n]*\bFROM\b[^\r\n]*/gi
+  ];
+  const spans = [];
+  for (const regex of patterns) {
+    regex.lastIndex = 0;
+    let match;
+    while ((match = regex.exec(source))) {
+      spans.push({ start: match.index, end: match.index + match[0].length });
+      if (match[0].length === 0) regex.lastIndex++;
+    }
+  }
+  if (!spans.length) return translateMixedPlain(source);
+  spans.sort((a, b) => a.start - b.start || b.end - a.end);
+  const merged = [];
+  for (const span of spans) {
+    const last = merged[merged.length - 1];
+    if (last && span.start <= last.end) last.end = Math.max(last.end, span.end);
+    else merged.push({ ...span });
+  }
+  const output = [];
+  let cursor = 0;
+  for (const span of merged) {
+    if (span.start > cursor) output.push(await translateMixedPlain(source.slice(cursor, span.start)));
+    output.push(source.slice(Math.max(cursor, span.start), span.end));
+    cursor = span.end;
+  }
+  if (cursor < source.length) output.push(await translateMixedPlain(source.slice(cursor)));
+  return output.join("");
+}
+
+async function translateMixedSegments(value) {
+  const source = String(value);
+  if (!/[А-Яа-яЁё]/.test(source) || !/[A-Za-z]/.test(source)) return translateText(source);
+  const chunks = source.split(/(\r?\n)/);
+  const output = [];
+  for (const chunk of chunks) {
+    if (/^\r?\n$/.test(chunk)) output.push(chunk);
+    else output.push(await translateMixedLine(chunk));
+  }
+  return output.join("");
 }
 
 async function translateMarkup(value) {
