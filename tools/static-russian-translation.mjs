@@ -1,0 +1,485 @@
+#!/usr/bin/env node
+/**
+ * One-time/build-time static Russian localization.
+ *
+ * The published site contains the translated text itself. No language selector,
+ * browser translation API, or external translator is needed when a learner opens
+ * a page. Google Translate's free endpoint is used only by this build script.
+ */
+import fs from "node:fs/promises";
+import path from "node:path";
+import { parse } from "parse5";
+import * as acorn from "acorn";
+
+const ROOT = process.cwd();
+const CACHE_PATH = path.join(ROOT, "tools", "static-ru-cache.json");
+const OMIT_DIRS = new Set([".git", ".github", "node_modules", "tools", "tests"]);
+const OMIT_FILES = new Set(["assets/ru-localization.js", "assets/ru-localization-boot.js"]);
+const SKIP_TAGS = new Set(["script", "style", "pre", "code", "kbd", "samp", "svg", "canvas", "iframe"]);
+const HUMAN_KEYS = new Set([
+  "title", "subtitle", "description", "desc", "intro", "summary", "question",
+  "explanation", "hint", "feedback", "prompt", "text", "content", "body", "lesson",
+  "tip", "note", "callout", "objective", "goal", "instruction", "instructions",
+  "label", "buttonlabel", "ctalabel", "emptyMessage", "successMessage", "errorMessage",
+  "correctFeedback", "incorrectFeedback", "takeaway", "definition", "whyItMatters",
+  "commonMistake", "realWorldExample", "scenario", "task", "steps", "options",
+  "choices", "answers", "supportingText", "heading", "eyebrow", "detail", "caption",
+  "alt", "placeholder", "arialabel", "message", "buttonText", "help", "helpText",
+  "descriptionText", "instructionText", "success", "error", "warning", "recommendation",
+  "resultText", "empty", "emptyState", "statusText", "questionText", "answerText",
+  "correctAnswerText", "incorrectAnswerText", "why", "how", "when", "what", "purpose",
+  "businessQuestion", "businessContext", "deliverables", "metricDescription", "feedbackText"
+].map(x => x.toLowerCase()));
+const VISIBLE_PROPERTIES = new Set([
+  "textContent", "innerText", "innerHTML", "outerHTML", "placeholder", "title",
+  "alt", "ariaLabel", "value"
+]);
+const VISIBLE_CALLS = new Set([
+  "alert", "confirm", "prompt", "showToast", "showAuthError", "showAuthSuccess",
+  "showFeedback", "showMessage", "showNotice", "notify", "toast", "announce",
+  "setMessage", "setFeedback", "showResult", "showHint", "setStatus"
+]);
+const PRESERVED_TERMS = new Set([
+  "SQL", "DAX", "Excel", "Power BI", "Power Query", "Power Pivot", "Python",
+  "Tableau", "Git", "GitHub", "GitLab", "CSV", "JSON", "API", "HTML", "CSS",
+  "JavaScript", "TypeScript", "Node.js", "SQLite", "PostgreSQL", "MySQL",
+  "DuckDB", "Pandas", "NumPy", "Matplotlib", "KPI", "KPI", "ROI", "ROAS",
+  "CPA", "CTR", "A/B", "ARIMA", "BPMN", "UML", "URL", "HTTP", "HTTPS",
+  "ID", "UUID", "JSONL", "DOM", "SVG", "PDF", "PowerPoint", "GitHub Pages"
+]);
+const CODE_START = /^\s*(?:SELECT\b[\s\S]*\bFROM\b|INSERT\s+INTO\b|UPDATE\s+\w+\s+SET\b|DELETE\s+FROM\b|CREATE\s+(?:TABLE|VIEW|INDEX)\b|WITH\s+\w+\s+AS\s*\(|function\s*[\w$]*\s*\(|(?:const|let|var)\s+[\w$]+\s*=|return\s+[\w$.(\[{]|if\s*\([^)]*\)\s*\{|for\s*\([^)]*\)\s*\{|import\s+.+\s+from\s+|export\s+(?:default|const|function)\b)/i;
+const cache = new Map();
+const inflight = new Map();
+let active = 0;
+const waiters = [];
+const failures = [];
+let apiCalls = 0;
+let translatedStrings = 0;
+let unchangedStrings = 0;
+
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+const normalize = s => String(s ?? "").replace(/\s+/g, " ").trim().toLowerCase();
+const preserveWhitespace = (source, translated) => {
+  const left = (source.match(/^\s*/) || [""])[0];
+  const right = (source.match(/\s*$/) || [""])[0];
+  return left + translated + right;
+};
+
+function isTechnicalOnly(text) {
+  const value = text.trim();
+  if (!value) return true;
+  if (PRESERVED_TERMS.has(value)) return true;
+  if (/^(?:[A-Z][A-Z0-9_+#.-]*)(?:\s*(?:\/|&|\+|,)\s*[A-Z][A-Z0-9_+#.-]*)*$/.test(value)) return true;
+  if (/^(?:https?:\/\/|www\.|[\w.+-]+@[\w.-]+\.[A-Za-z]{2,})/i.test(value)) return true;
+  if (/^(?:[\d\s.,:%$€£¥+\-–—/()]+)$/.test(value)) return true;
+  return false;
+}
+function isCodeLike(text) {
+  const value = text.trim();
+  if (CODE_START.test(value)) return true;
+  if (value.length > 35 && /(?:=>|[{};])/.test(value) && /(?:\b(?:const|let|var|function|return|SELECT|FROM|WHERE|JOIN|GROUP BY|ORDER BY)\b)/i.test(value)) return true;
+  if (/^(?:#[\w-]+|\.?[a-z][\w-]*(?:\s*[>+~]\s*\.?[a-z][\w-]*)*)$/i.test(value) && !/\s{2,}/.test(value)) return true;
+  return false;
+}
+function candidate(text, context = null, htmlText = false) {
+  const value = String(text ?? "").trim();
+  if (!value || !/[A-Za-z]/.test(value) || /[А-Яа-яЁё]/.test(value)) return false;
+  if (isTechnicalOnly(value)) return false;
+  if (/^(?:javascript:|data:|mailto:|tel:|https?:\/\/)/i.test(value)) return false;
+  if (/^[\w-]+\/[\w./-]+$/.test(value)) return false;
+  if (isCodeLike(value)) return false;
+  if (value.length < 2) return false;
+  if (context) return true;
+  if (htmlText) return true;
+  return /\s/.test(value) && value.length > 8;
+}
+
+async function acquire() {
+  if (active >= 4) await new Promise(resolve => waiters.push(resolve));
+  active++;
+}
+function release() {
+  active = Math.max(0, active - 1);
+  const next = waiters.shift();
+  if (next) next();
+}
+
+async function translateRaw(text) {
+  const src = String(text);
+  const key = normalize(src);
+  if (!key) return src;
+  if (cache.has(key)) return cache.get(key);
+  if (inflight.has(key)) return inflight.get(key);
+  const job = (async () => {
+    await acquire();
+    try {
+      let translated = null;
+      for (let attempt = 0; attempt < 5; attempt++) {
+        try {
+          const url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ru&dt=t&q=" + encodeURIComponent(src);
+          const response = await fetch(url, { headers: { "User-Agent": "AnalystPrepKit-static-localizer/1.0" }, signal: AbortSignal.timeout(15000) });
+          if (response.status === 429 || response.status >= 500) throw new Error("HTTP " + response.status);
+          if (!response.ok) throw new Error("HTTP " + response.status);
+          const payload = await response.json();
+          if (Array.isArray(payload) && Array.isArray(payload[0])) {
+            const value = payload[0].map(part => Array.isArray(part) && typeof part[0] === "string" ? part[0] : "").join("");
+            if (value.trim()) translated = value;
+          }
+          if (translated) break;
+        } catch (error) {
+          if (attempt === 4) {
+            failures.push({ text: src.slice(0, 120), error: String(error) });
+          } else {
+            await sleep(500 * (2 ** attempt) + Math.floor(Math.random() * 250));
+          }
+        }
+      }
+      apiCalls++;
+      if (translated && translated.trim()) {
+        cache.set(key, translated);
+        translatedStrings++;
+        return translated;
+      }
+      unchangedStrings++;
+      return src;
+    } finally {
+      release();
+    }
+  })();
+  inflight.set(key, job);
+  try { return await job; }
+  finally { inflight.delete(key); }
+}
+
+async function translateText(text) {
+  const source = String(text);
+  if (!/[A-Za-z]/.test(source) || /[А-Яа-яЁё]/.test(source)) return source;
+  if (source.length <= 3800) return translateRaw(source);
+  const chunks = [];
+  let remainder = source;
+  while (remainder.length > 3800) {
+    let cut = remainder.lastIndexOf(" ", 3800);
+    if (cut < 1800) cut = remainder.lastIndexOf(". ", 3800);
+    if (cut < 1800) cut = 3800;
+    chunks.push(remainder.slice(0, cut));
+    remainder = remainder.slice(cut);
+  }
+  if (remainder) chunks.push(remainder);
+  const parts = [];
+  for (const chunk of chunks) parts.push(await translateRaw(chunk));
+  return parts.join("");
+}
+
+async function translateMarkup(value) {
+  const pieces = String(value).split(/(<\/?[A-Za-z][^>]*>)/g);
+  const result = [];
+  for (const piece of pieces) {
+    if (!piece) continue;
+    if (/^<\/?[A-Za-z][^>]*>$/.test(piece)) result.push(piece);
+    else if (candidate(piece, null, true)) result.push(await translateText(piece));
+    else result.push(piece);
+  }
+  return result.join("");
+}
+
+async function translateVisibleString(value, context = null, htmlText = false) {
+  if (!candidate(value, context, htmlText)) return value;
+  if (/<\/?[A-Za-z][^>]*>/.test(value)) return translateMarkup(value);
+  return translateText(value);
+}
+
+function escapeHtmlText(value) {
+  return String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+function escapeAttr(value, quote) {
+  let text = String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+  if (quote === '"') text = text.replace(/"/g, "&quot;");
+  else if (quote === "'") text = text.replace(/'/g, "&#39;");
+  return text;
+}
+
+function collectFiles(dir, out = []) {
+  return fs.readdir(dir, { withFileTypes: true }).then(async entries => {
+    for (const entry of entries) {
+      const full = path.join(dir, entry.name);
+      const relative = path.relative(ROOT, full).split(path.sep).join("/");
+      if (entry.isDirectory()) {
+        if (!OMIT_DIRS.has(entry.name)) await collectFiles(full, out);
+      } else if (/\.(?:html?|js|json)$/i.test(entry.name) && !OMIT_FILES.has(relative) && !relative.startsWith("tools/")) {
+        out.push(relative);
+      }
+    }
+    return out;
+  });
+}
+
+function keyName(node) {
+  if (!node) return "";
+  if (node.type === "Identifier") return node.name;
+  if (node.type === "Literal" && typeof node.value === "string") return node.value;
+  return "";
+}
+function memberName(node) {
+  if (!node || node.type !== "MemberExpression") return "";
+  if (!node.computed && node.property && node.property.type === "Identifier") return node.property.name;
+  if (node.computed && node.property && node.property.type === "Literal") return String(node.property.value);
+  return "";
+}
+function directVisibleLiteral(node, parent) {
+  if (!parent) return false;
+  if (parent.type === "AssignmentExpression" && parent.right === node && VISIBLE_PROPERTIES.has(memberName(parent.left))) return true;
+  if (parent.type === "CallExpression" && parent.arguments.includes(node)) {
+    const name = parent.callee?.type === "Identifier" ? parent.callee.name : memberName(parent.callee);
+    if (VISIBLE_CALLS.has(name) && parent.arguments[0] === node) return true;
+    if (name === "setAttribute" && parent.arguments[1] === node && parent.arguments[0]?.type === "Literal" && /^(?:title|alt|placeholder|aria-label|aria-description)$/i.test(parent.arguments[0].value)) return true;
+    if (name === "setAttribute" && parent.arguments[0] === node && parent.arguments[1]?.type === "Literal" && /^(?:title|alt|placeholder|aria-label|aria-description)$/i.test(parent.arguments[0].value)) return true;
+  }
+  return false;
+}
+
+async function translateJavaScript(source, filename) {
+  let ast;
+  try {
+    ast = acorn.parse(source, { ecmaVersion: "latest", sourceType: "module", allowAwaitOutsideFunction: true, allowReturnOutsideFunction: true });
+  } catch (moduleError) {
+    try { ast = acorn.parse(source, { ecmaVersion: "latest", sourceType: "script", allowAwaitOutsideFunction: true, allowReturnOutsideFunction: true }); }
+    catch (scriptError) {
+      console.warn("Пропущен JS-файл, который не удалось разобрать:", filename, String(scriptError).slice(0, 120));
+      return source;
+    }
+  }
+  const replacements = [];
+  async function visit(node, parent = null, context = null) {
+    if (!node || typeof node !== "object") return;
+    if (node.type === "Literal" && typeof node.value === "string") {
+      const isHuman = (context && HUMAN_KEYS.has(context.toLowerCase())) || directVisibleLiteral(node, parent);
+      if (isHuman) {
+        const original = node.value;
+        const translated = await translateVisibleString(original, context || "visible");
+        if (translated !== original) replacements.push({ start: node.start, end: node.end, value: JSON.stringify(translated) });
+      }
+      return;
+    }
+    if (node.type === "TemplateLiteral" && node.expressions.length === 0) {
+      const isHuman = (context && HUMAN_KEYS.has(context.toLowerCase())) || directVisibleLiteral(node, parent);
+      if (isHuman) {
+        const original = node.quasis.map(q => q.value.cooked ?? q.value.raw).join("");
+        const translated = await translateVisibleString(original, context || "visible");
+        if (translated !== original) replacements.push({ start: node.start, end: node.end, value: JSON.stringify(translated) });
+      }
+      return;
+    }
+    if (node.type === "Property" || node.type === "PropertyDefinition") {
+      if (node.computed) await visit(node.key, node, null);
+      const name = keyName(node.key);
+      const nextContext = HUMAN_KEYS.has(name.toLowerCase()) ? name : null;
+      await visit(node.value, node, nextContext);
+      return;
+    }
+    if (node.type === "MethodDefinition") {
+      await visit(node.key, node, null);
+      await visit(node.value, node, null);
+      return;
+    }
+    if (node.type === "ArrayExpression") {
+      for (const element of node.elements) await visit(element, node, context);
+      return;
+    }
+    for (const [key, value] of Object.entries(node)) {
+      if (key === "start" || key === "end" || key === "loc" || key === "range" || key === "comments" || key === "tokens") continue;
+      if (Array.isArray(value)) {
+        for (const child of value) if (child && typeof child.type === "string") await visit(child, node, null);
+      } else if (value && typeof value.type === "string") {
+        await visit(value, node, null);
+      }
+    }
+  }
+  await visit(ast);
+  if (!replacements.length) return source;
+  replacements.sort((a, b) => b.start - a.start);
+  let result = source;
+  let lastStart = Infinity;
+  for (const replacement of replacements) {
+    if (replacement.end > lastStart) continue;
+    result = result.slice(0, replacement.start) + replacement.value + result.slice(replacement.end);
+    lastStart = replacement.start;
+  }
+  return result;
+}
+
+function htmlEntitiesToText(value) {
+  return String(value)
+    .replace(/&nbsp;/gi, "\u00a0").replace(/&amp;/gi, "&").replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">").replace(/&quot;/gi, '"').replace(/&#39;/gi, "'");
+}
+
+async function processHtml(file, original) {
+  // The browser must never be offered a language toggle or a live translation script.
+  let source = original.replace(/<script\b(?=[^>]*\bsrc\s*=\s*["'][^"']*ru-localization(?:-boot)?\.js["'])[^>]*>\s*<\/script\s*>/gi, "");
+  const document = parse(source, { sourceCodeLocationInfo: true });
+  const replacements = [];
+
+  async function walk(node, inSkipped = false) {
+    const tag = (node.tagName || "").toLowerCase();
+    const skipHere = inSkipped || SKIP_TAGS.has(tag);
+    if (tag === "html" && node.sourceCodeLocation) {
+      const loc = node.sourceCodeLocation;
+      const raw = source.slice(loc.startOffset, loc.endOffset);
+      let opening = raw;
+      if (/\blang\s*=\s*(["'])[^"']*\1/i.test(opening)) opening = opening.replace(/\blang\s*=\s*(["'])[^"']*\1/i, 'lang="ru"');
+      else opening = opening.replace(/^<html\b/i, '<html lang="ru"');
+      if (!/\bdata-static-ru\s*=/i.test(opening)) opening = opening.replace(/>$/, ' data-static-ru="true">');
+      replacements.push({ start: loc.startOffset, end: loc.endOffset, value: opening });
+    }
+
+    if (tag === "script" && node.sourceCodeLocation && node.sourceCodeLocation.startTag && node.sourceCodeLocation.endTag && !node.attrs?.some(a => a.name === "src")) {
+      const start = node.sourceCodeLocation.startTag.endOffset;
+      const end = node.sourceCodeLocation.endTag.startOffset;
+      if (end >= start) {
+        const js = source.slice(start, end);
+        const translatedJs = await translateJavaScript(js, file + " (inline script)");
+        if (translatedJs !== js) replacements.push({ start, end, value: translatedJs });
+      }
+      return;
+    }
+
+    if (!skipHere && node.attrs && node.sourceCodeLocation?.attrs) {
+      const attrByName = new Map(node.attrs.map(a => [a.name, a.value]));
+      for (const [name, rawLoc] of Object.entries(node.sourceCodeLocation.attrs)) {
+        const normalizedName = name.toLowerCase();
+        const metaText = tag === "meta" && normalizedName === "content" &&
+          /^(?:description|og:title|og:description|twitter:title|twitter:description)$/i.test(attrByName.get("name") || attrByName.get("property") || "");
+        const visibleAttr = new Set(["title", "alt", "placeholder", "aria-label", "aria-description", "data-tooltip", "data-title", "aria-valuetext"]).has(normalizedName);
+        const inputButton = tag === "input" && normalizedName === "value" && /^(?:button|submit|reset)$/i.test(attrByName.get("type") || "");
+        if (!(visibleAttr || metaText || inputButton)) continue;
+        const current = attrByName.get(normalizedName);
+        if (!current || !candidate(current, "attribute")) continue;
+        const translated = await translateVisibleString(current, "attribute");
+        if (translated === current) continue;
+        const rawAttr = source.slice(rawLoc.startOffset, rawLoc.endOffset);
+        const match = rawAttr.match(/^(\s*[^=]+\s*=\s*)(["'])([\s\S]*?)\2\s*$/);
+        if (!match) continue;
+        const quote = match[2];
+        const replacement = match[1] + quote + escapeAttr(translated, quote) + quote;
+        replacements.push({ start: rawLoc.startOffset, end: rawLoc.endOffset, value: replacement });
+      }
+    }
+
+    if (!skipHere && node.nodeName === "#text" && node.sourceCodeLocation) {
+      const raw = source.slice(node.sourceCodeLocation.startOffset, node.sourceCodeLocation.endOffset);
+      const decoded = node.value || htmlEntitiesToText(raw);
+      if (candidate(decoded, null, true)) {
+        const translated = await translateVisibleString(decoded, null, true);
+        if (translated !== decoded) {
+          const preserved = preserveWhitespace(decoded, translated);
+          replacements.push({
+            start: node.sourceCodeLocation.startOffset,
+            end: node.sourceCodeLocation.endOffset,
+            value: escapeHtmlText(preserved)
+          });
+        }
+      }
+    }
+    if (node.childNodes) for (const child of node.childNodes) await walk(child, skipHere);
+    if (node.content) await walk(node.content, skipHere);
+  }
+  await walk(document);
+  if (!replacements.length) return source;
+  replacements.sort((a, b) => b.start - a.start);
+  let result = source;
+  let lastStart = Infinity;
+  for (const replacement of replacements) {
+    if (replacement.end > lastStart) continue;
+    result = result.slice(0, replacement.start) + replacement.value + result.slice(replacement.end);
+    lastStart = replacement.start;
+  }
+  return result;
+}
+
+async function processJson(file, original) {
+  let data;
+  try { data = JSON.parse(original); } catch { return original; }
+  async function visit(value, context = null) {
+    if (typeof value === "string") {
+      if (context && HUMAN_KEYS.has(context.toLowerCase())) return translateVisibleString(value, context);
+      return value;
+    }
+    if (Array.isArray(value)) return Promise.all(value.map(item => visit(item, context)));
+    if (value && typeof value === "object") {
+      const result = {};
+      for (const [key, child] of Object.entries(value)) {
+        result[key] = await visit(child, HUMAN_KEYS.has(key.toLowerCase()) ? key : null);
+      }
+      return result;
+    }
+    return value;
+  }
+  const translated = await visit(data);
+  return JSON.stringify(translated, null, 2) + "\n";
+}
+
+async function seedFromLegacyDictionary() {
+  try {
+    const old = await fs.readFile(path.join(ROOT, "assets/ru-localization.js"), "utf8");
+    const match = old.match(/var d\s*=\s*\{([\s\S]*?)\n\s*\};/);
+    if (!match) return;
+    try {
+      const dictionary = Function('"use strict"; return ({' + match[1] + "\n});")();
+      for (const [key, value] of Object.entries(dictionary)) {
+        if (typeof value === "string") cache.set(normalize(key), value);
+      }
+    } catch (error) {
+      console.warn("Не удалось импортировать прежний словарь русификации:", String(error));
+    }
+  } catch {}
+}
+
+async function main() {
+  await seedFromLegacyDictionary();
+  try {
+    const existing = JSON.parse(await fs.readFile(CACHE_PATH, "utf8"));
+    for (const [key, value] of Object.entries(existing)) if (typeof value === "string") cache.set(key, value);
+  } catch {}
+
+  const files = await collectFiles(ROOT);
+  let changedFiles = 0;
+  const failedAtStart = failures.length;
+  for (const file of files) {
+    const full = path.join(ROOT, file);
+    let original;
+    try { original = await fs.readFile(full, "utf8"); } catch { continue; }
+    let translated = original;
+    if (/\.html?$/i.test(file)) translated = await processHtml(file, original);
+    else if (/\.js$/i.test(file)) translated = await translateJavaScript(original, file);
+    else if (/\.json$/i.test(file) && /(?:search-index|guidebook-data)/i.test(file)) translated = await processJson(file, original);
+    if (translated !== original) {
+      await fs.writeFile(full, translated, "utf8");
+      changedFiles++;
+    }
+  }
+
+  await fs.writeFile(CACHE_PATH, JSON.stringify(Object.fromEntries([...cache.entries()].sort((a,b)=>a[0].localeCompare(b[0]))), null, 2) + "\n", "utf8");
+  // Remove the old live translator assets after their dictionary has been imported.
+  for (const file of ["assets/ru-localization.js", "assets/ru-localization-boot.js"]) {
+    try { await fs.rm(path.join(ROOT, file)); } catch {}
+  }
+
+  console.log(JSON.stringify({
+    filesScanned: files.length,
+    filesChanged: changedFiles,
+    cachedTranslations: cache.size,
+    newlyTranslatedStrings: translatedStrings,
+    apiCalls,
+    failures: failures.length - failedAtStart,
+    sampleFailures: failures.slice(0, 10)
+  }, null, 2));
+  if (failures.length) {
+    console.error("Не все фразы удалось перевести; остановка публикации, чтобы не выдавать частичную локализацию за готовую.");
+    process.exitCode = 1;
+  }
+}
+
+main().catch(error => {
+  console.error(error);
+  process.exitCode = 1;
+});
