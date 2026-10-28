@@ -48,14 +48,14 @@ for (const page of pages) {
     .replace(/<style\b[^>]*>[\s\S]*?<\/style\s*>/gi, " ")
     .replace(/<pre\b[^>]*>[\s\S]*?<\/pre\s*>/gi, " ")
     .replace(/<code\b[^>]*>[\s\S]*?<\/code\s*>/gi, " ");
-  const englishControl = /<(?:button|a|label)\b[^>]*>\s*(?:Home|Lessons|Practice|Workspace|Cards|Glossary|Line|Scatter|Clear|Example|Try again|Next lesson|Not quite|Sign In|Sign in|Sign Up|Continue with Google|Log out)\s*<\/(?:button|a|label)\s*>/i;
+  const englishControl = /<(?:button|a|label|option)\b[^>]*>\s*(?:Home|Lessons|Guides|Practice|Workspace|Cards|Glossary|Line|Scatter|Clear|Example|Try again|Next lesson|Previous lesson|Not quite|Sign In|Sign in|Sign Up|Continue with Google|Log out|Start Learning|Get Started|Show answer|Check answer|Save|Export|Download|Back|Next|Skip|Hint|Reset|Cancel|Retry|Finish|Search|Settings|Start|View all|Show more|Show less|Copy|Submit|Apply|Open lesson|Choose|Select|All courses|All lessons|No results|No data)\s*<\/(?:button|a|label|option)\s*>/i;
   if (englishControl.test(visibleMarkup)) {
     failures.push(page.file + ": an English control label remains visible in static markup");
   }
 
   // The lesson UIs generate many controls from JavaScript template literals.
   // Check those rendered fragments as well, not only the static HTML shell.
-  const dynamicEnglishControl = />\s*(?:Home|Lessons|Guides|Practice|Workspace|Cards|Glossary|Line|Scatter|Clear|Example|Try again|Next lesson|Previous lesson|Not quite|Sign In|Sign in|Sign Up|Continue with Google|Log out|Start Learning|Get Started|Show answer|Reset progress|Learn more|Orient|Build|Check|Close)\s*<\/(?:button|a|label|option)>/i;
+  const dynamicEnglishControl = />\s*(?:Home|Lessons|Guides|Practice|Workspace|Cards|Glossary|Line|Scatter|Clear|Example|Try again|Next lesson|Previous lesson|Not quite|Sign In|Sign in|Sign Up|Continue with Google|Log out|Start Learning|Get Started|Show answer|Check answer|Reset progress|Learn more|Orient|Build|Check|Close|Save|Export|Download|Back|Next|Skip|Hint|Reset|Cancel|Retry|Finish|Search|Settings|Start|View all|Show more|Show less|Copy|Submit|Apply|Open lesson|Choose|Select|All courses|All lessons|No results|No data)\s*<\/(?:button|a|label|option)>/i;
   if (dynamicEnglishControl.test(page.content)) {
     failures.push(page.file + ": an English control label remains in a rendered JavaScript template");
   }

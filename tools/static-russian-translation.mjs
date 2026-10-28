@@ -89,7 +89,23 @@ const MANUAL_TRANSLATIONS = new Map([
   ["Start Learning", "Начать обучение"], ["Get Started", "Начать"],
   ["Learn more", "Подробнее"], ["Your progress", "Ваш прогресс"],
   ["Try again later", "Попробуйте позже"], ["Reset progress", "Сбросить прогресс"],
-  ["Continue with Google", "Продолжить с Google"], ["Create Account", "Создать аккаунт"]
+  ["Continue with Google", "Продолжить с Google"], ["Create Account", "Создать аккаунт"],
+  ["Home", "Главная"], ["Lessons", "Уроки"], ["Guides", "Руководства"],
+  ["Practice", "Практика"], ["Workspace", "Рабочая область"], ["Cards", "Карточки"],
+  ["Glossary", "Глоссарий"], ["Line", "Линейная"], ["Scatter", "Точечная"],
+  ["Save", "Сохранить"], ["Export", "Экспортировать"], ["Download", "Скачать"],
+  ["Back", "Назад"], ["Next", "Далее"], ["Skip", "Пропустить"], ["Hint", "Подсказка"],
+  ["Show answer", "Показать ответ"], ["Check answer", "Проверить ответ"],
+  ["Reset", "Сбросить"], ["Cancel", "Отмена"], ["Retry", "Повторить"],
+  ["Finish", "Завершить"], ["Search", "Поиск"], ["Search...", "Поиск…"],
+  ["Search…", "Поиск…"], ["Settings", "Настройки"], ["Start", "Начать"],
+  ["View all", "Посмотреть все"], ["Show more", "Показать ещё"],
+  ["Show less", "Свернуть"], ["Copy", "Копировать"], ["Copied", "Скопировано"],
+  ["Submit", "Отправить"], ["Apply", "Применить"], ["Open", "Открыть"],
+  ["Open lesson", "Открыть урок"], ["Choose", "Выбрать"], ["Select", "Выбрать"],
+  ["All courses", "Все курсы"], ["All lessons", "Все уроки"],
+  ["No results", "Ничего не найдено"], ["No data", "Нет данных"],
+  ["Try another", "Попробуйте другой вариант"], ["Start over", "Начать заново"]
 ].map(([source, translation]) => [normalize(source), translation]));
 
 const preserveWhitespace = (source, translated) => {
