@@ -4,6 +4,7 @@ import { applyEditorialCorrections } from "../tools/russian-editorial-copy.mjs";
 
 test("repairs common mistranslations of product and database names", () => {
   assert.equal(applyEditorialCorrections("Мощность БИ ПЛ-300"), "Power BI PL-300");
+  assert.equal(applyEditorialCorrections("Мощность БИ"), "Power BI");
   assert.equal(applyEditorialCorrections("ПостгреSQL"), "PostgreSQL");
   assert.equal(applyEditorialCorrections("Массивы, ANY и пожалуйста"), "Массивы, ANY и ALL");
   assert.equal(
