@@ -72,7 +72,9 @@
       }
       return true;
     }).filter(function (root) {
-      return !candidates.some(function (other) { return other !== root && other.contains(root) && visibleLessonRoot(other); });
+      // Prefer the smallest visible lesson container. Otherwise a page-level #app can
+      // swallow #lessonContent and the copied context may include navigation and other lessons.
+      return !candidates.some(function (other) { return other !== root && root.contains(other) && visibleLessonRoot(other); });
     });
   }
 
