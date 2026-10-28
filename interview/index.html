@@ -900,8 +900,7 @@ function saveState(s){
   try{localStorage.setItem(STORE_KEY,JSON.stringify(s));}catch{}
 }
 
-let state = loadState();
-if(!state.lessonsComplete) state.lessonsComplete={};
+let state = loadState(); if(!state.lessonsComplete) state.lessonsComplete={}; if(!Number.isInteger(state.currentLesson)) state.currentLesson=null;
 if(!state.drillsAnswered) state.drillsAnswered=0;
 if(!state.cardsSeen) state.cardsSeen={};
 if(!state.builderDrafts) state.builderDrafts=[];
@@ -977,10 +976,7 @@ function renderLessons(){
   renderLessonContent();
 }
 
-function loadLesson(i){
-  currentLesson=i;
-  renderLessons();
-}
+function loadLesson(i){ currentLesson=i; state.currentLesson=i; saveState(state); renderLessons(); }
 
 function renderLessonContent(){
   const l=LESSONS[currentLesson];
@@ -1346,7 +1342,7 @@ function handleResetAll(btn){
 // ─── INIT ───────────────────────────────────────────────────────────────────
 renderHome();
 renderLessons();
-renderBuilder();
+renderBuilder(); const _legacyCompleted=Object.keys(state.lessonsComplete).filter(function(k){return state.lessonsComplete[k]===true;}).map(Number).filter(function(i){return Number.isInteger(i)&&i>=0&&i<LESSONS.length;}); const _resumeInterviewLesson=Number.isInteger(state.currentLesson)&&state.currentLesson>=0&&state.currentLesson<LESSONS.length?state.currentLesson:(_legacyCompleted.length?Math.max.apply(null,_legacyCompleted):null); if(_resumeInterviewLesson!==null){showView('lessons');loadLesson(_resumeInterviewLesson);}
 
 /* Sprint mode removed. */
 localStorage.removeItem('apk-sprint');
