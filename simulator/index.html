@@ -395,21 +395,21 @@ Client_ID | Название_компании | Контакт_электрон�
 
 Запишите обе функции И свою интерпретацию того, что будут означать результаты.`,
         hints:[
-          "=COUNTIF(A:A, A2)>1 flags duplicates — then filter for TRUE",
-          "=ISBLANK(B2) or =COUNTA(B:B) vs expected row count",
-          "=ISNUMBER(D2) returns FALSE on text like '$50,000'",
-          "=ISNUMBER(DATEVALUE(F2)) catches text-formatted dates — real dates return TRUE",
-          "Manager notes: lead with 'Found X issues' not 'I checked and...'"
+          "=COUNTIF(A:A, A2)>1 отмечает дубликаты — затем отфильтруйте значения TRUE",
+          "=ISBLANK(B2) или сравнение =COUNTA(B:B) с ожидаемым количеством строк",
+          "=ISNUMBER(D2) возвращает FALSE для текста вроде '$50,000'",
+          "=ISNUMBER(DATEVALUE(F2)) выявляет даты, сохранённые как текст; настоящие даты возвращают TRUE",
+          "Примечание менеджеру: начните с фразы «Найдено X проблем», а не «Я проверил и…»"
         ],
         rubric:["Правильный синтаксис функции","Объясняет, что делать с каждым обнаружением","Примечание менеджера профессиональное и лаконичное"],
         exemplar:`Подход: добавьте вспомогательный столбец для каждой проверки, а затем отфильтруйте проблемы.
 
 1. Дублирующиеся идентификаторы Client_ID
-   =COUNTIF($A:$A, A2) > 1  → filter TRUE in helper column.
+   =COUNTIF($A:$A, A2) > 1  → отфильтруйте строки со значением TRUE во вспомогательном столбце.
    Интерпретация результата: любая помеченная строка требует принятия решения «истинно» или «объединено».
 
 2. Пустые значения в любом столбце.
-   In a helper col: =COUNTBLANK(A2:F2)  → filter >0.
+   Во вспомогательном столбце: =COUNTBLANK(A2:F2) → отфильтруйте значения больше 0.
    Перекрестная проверка с помощью =COUNTA(B:B) против количества строк на наличие пробелов на уровне столбца.
 
 3. Годовой_доход имеет числовое значение.
@@ -418,7 +418,7 @@ Client_ID | Название_компании | Контакт_электрон�
 
 4. Дата последнего_контакта реальна.
    =ISNUMBER(DATEVALUE(F2))  → catches text-formatted dates.
-   If many FALSEs, the export pipeline is dropping date typing.
+   Если значений FALSE много, при экспорте теряется тип даты.
 
 Примечание по качеству данных для менеджера:
 • Обнаружено 14 проблем в 500 строках (2,8%) — необходимо принять меры, прежде чем мы воспользуемся этим списком.
@@ -451,12 +451,12 @@ Client_ID | Название_компании | Контакт_электрон�
 Написав все три, ответьте в 2–3 предложениях:
 Какой запрос было труднее всего написать и почему?`,
         hints:[
-          "Date filter: WHERE order_date >= CURRENT_DATE - INTERVAL '30 days'",
-          "JOIN orders to products on product_id for query 2",
-          "HAVING filters after grouping (unlike WHERE which filters rows before grouping)",
+          "Фильтр по дате: WHERE order_date >= CURRENT_DATE - INTERVAL '30 days'",
+          "Для второго запроса соедините orders и products по product_id",
+          "HAVING фильтрует после группировки, в отличие от WHERE, который отбирает строки до группировки",
           "ROUND(SUM(amount)::numeric / COUNT(*), 2) for clean avg_order_value"
         ],
-        rubric:["Все три запроса синтаксически корректны.","HAVING vs WHERE used correctly","Объединяет ссылки на правильные столбцы","Рефлексия Ответ конкретный"],
+        rubric:["Все три запроса синтаксически корректны.","HAVING и WHERE используются по назначению","Объединяет ссылки на правильные столбцы","Рефлексия Ответ конкретный"],
         exemplar:`-- Q1: Revenue by region, last 30 days
 SELECT
   c.region,
@@ -523,7 +523,7 @@ think about.`
           "set(required_cols).issubset(df.columns) to check column names",
           "df.isnull().any(axis=1).sum() counts rows with any null",
           "(df['amount'] < 0).sum() counts negatives",
-          "Build a list of failures and join them — cleaner than nested ifs"
+          "Соберите список ошибок и объедините его — это понятнее, чем вложенные if"
         ],
         rubric:["Скрипт работает без ошибок","Все 5 проверок реализованы","Вывод четко отформатирован","Блок комментариев присутствует и информативен."],
         exemplar:`"""
@@ -658,7 +658,7 @@ Q5 — Количество заказов со статусом = «отмен�
           "WHERE order_date IN ('2024-10-08', '2024-10-15') then GROUP BY order_date",
           "GROUP BY region, order_date for the regional breakdown",
           "COUNT(order_id) vs SUM(amount) tells you if it's volume or value",
-          "Slack reply: lead with the answer, then the evidence. Don't bury the finding."
+          "Ответ в Slack: сначала вывод, затем доказательства. Не прячьте главное в конце."
         ],
         rubric:["Все 5 запросов логичны и синтаксически корректны.","Запросы создают систематическую линию расследования.","Сообщение Слабый лаконично и приводит к выводу"],
         exemplar:`-- Q1 Headline
@@ -917,7 +917,7 @@ period / reference lines.
 Hero number: top-left, 64pt, with a 14pt delta vs prior quarter directly
 underneath.
 Title: "Sales — Week of [date]"
-Subtitle: "QTD revenue and momentum by region and customer cohort"
+Subtitle: "Выручка с начала квартала и её динамика по регионам и клиентским когортам"
 
 5. 10-second insight
 "We're tracking 6% above plan, with two-thirds of growth coming from
