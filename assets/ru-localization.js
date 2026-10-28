@@ -221,3 +221,15 @@
   }
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start,{once:true});else start();
 })();
+
+/* Shared lesson action: load the AI-context copy button on course pages. */
+(function bootstrapAIContextCopy() {
+  if (window.__apkAiContextCopyLoader || !document.head) return;
+  window.__apkAiContextCopyLoader = true;
+  var current = document.currentScript;
+  var script = document.createElement('script');
+  script.src = current && current.src ? new URL('ai-context-copy.js', current.src).href : 'assets/ai-context-copy.js';
+  script.defer = true;
+  script.dataset.apkAiContextCopyLoader = 'true';
+  document.head.appendChild(script);
+})();
