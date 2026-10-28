@@ -93,3 +93,32 @@ test("Tableau certification course keeps English calculation syntax", () => {
   assert.match(tableau, /T\|F/);
   assert.doesNotMatch(tableau, /\[Доход\] – \[Стоимость\]|ЕСЛИ \[Единицы\].*ТО|Т\|Ф/);
 });
+
+
+test("Excel learning module keeps English function syntax in inline examples", () => {
+  const excel = read("excel/index.html");
+  assert.match(excel, /SUMPRODUCT\(1\/COUNTIF\(range,range\)\)/);
+  assert.match(excel, /IF\(A2<100, \"Низкий\", IF\(A2<200, \"Средний\", \"Высокий\"\)\)/);
+  assert.doesNotMatch(excel, /=ЕСЛИ\(|СУММПРОИЗВ\(|СЧЁТЕСЛИ\(|=СЦЕП\(|=ТЕКСТ\(|#ДЕЛ\/0!/);
+});
+
+test("Power BI learning modules use English DAX functions and identifiers", () => {
+  const powerbi = read("powerbi/index.html");
+  const certificate = read("powerbi-cert/index.html");
+  assert.match(powerbi, /CALCULATE\(/);
+  assert.match(powerbi, /SUM\(Sales\[Amount\]\)/);
+  assert.match(certificate, /LOOKUPVALUE\(Sales\[Amount\], Sales\[Year\], 2025\)/);
+  assert.match(certificate, /CALCULATE\(\[Revenue\], SAMEPERIODLASTYEAR\('Date'\[Date\]\)\)/);
+  assert.doesNotMatch(powerbi, /РАССЧИТАТЬ\(|РАСЧЕТ\(|SUM\(Продажи\[|SUMX\(ВСЕ\(|ПРОСМОТРЗНАЧ\(/);
+  assert.doesNotMatch(certificate, /РАССЧИТАТЬ\(|РАСЧЕТ\(|SUM\(Продажи\[|SUMX\(ВСЕ\(|ПРОСМОТРЗНАЧ\(/);
+});
+
+test("Tableau learning modules keep English field calculations", () => {
+  const tableau = read("tableau/index.html");
+  const certificate = read("tableau-cert/index.html");
+  assert.match(tableau, /SUM\(Revenue\)/);
+  assert.match(certificate, /\[Revenue\] - \[Cost\]/);
+  assert.match(certificate, /IF \[Units\] > 100 THEN \"High\" END/);
+  assert.doesNotMatch(tableau, /СУММ\s*\(\s*(?:Доход|Единицы|Единицы измерения)|\[Доход\]\s*[–-]\s*\[Стоимость\]/);
+  assert.doesNotMatch(certificate, /СУММ\s*\(\s*(?:Доход|Единицы|Единицы измерения)|\[Доход\]\s*[–-]\s*\[Стоимость\]|ЕСЛИ \[Единицы\].*ТО/);
+});
