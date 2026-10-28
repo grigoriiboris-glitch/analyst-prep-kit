@@ -52,7 +52,7 @@ const PRESERVED_TERMS = new Set([
   "DuckDB", "Pandas", "NumPy", "Matplotlib", "KPI", "KPI", "ROI", "ROAS",
   "CPA", "CTR", "A/B", "ARIMA", "BPMN", "UML", "URL", "HTTP", "HTTPS",
   "ID", "UUID", "JSONL", "DOM", "SVG", "PDF", "PowerPoint", "GitHub Pages",
-  "Grain", "DataCraft", "Analyst Prep Kit", "AnalystPrepKit"
+  "DataCraft", "Analyst Prep Kit", "AnalystPrepKit"
 ]);
 const PRESERVED_TERMS_NORMALIZED = new Set([...PRESERVED_TERMS].map(term => term.toLowerCase()));
 const CODE_START = /^\s*(?:SELECT\b[\s\S]*\bFROM\b|INSERT\s+INTO\b|UPDATE\s+\w+\s+SET\b|DELETE\s+FROM\b|CREATE\s+(?:TABLE|VIEW|INDEX)\b|WITH\s+\w+\s+AS\s*\(|function\s*[\w$]*\s*\(|(?:const|let|var)\s+[\w$]+\s*=|return\s+[\w$.(\[{]|if\s*\([^)]*\)\s*\{|for\s*\([^)]*\)\s*\{|import\s+.+\s+from\s+|export\s+(?:default|const|function)\b)/i;
@@ -505,7 +505,9 @@ async function translateJavaScript(source, filename) {
     await Promise.all(children);
   }
   await visit(ast);
-  if (!replacements.length) return source;
+  if (!replacements.length) {
+    return file === "index.html" ? source.replaceAll(homeBrandToken, "Grain") : source;
+  }
   replacements.sort((a, b) => b.start - a.start);
   let result = source;
   let lastStart = Infinity;
@@ -528,6 +530,23 @@ async function processHtml(file, original) {
   // Remove versioned and unversioned runtime localization scripts, then enforce
   // Russian at the source tag itself (parse5 can omit the root's source location on BOM files).
   let source = original.replace(/<script\b(?=[^>]*\bsrc\s*=\s*["'][^"']*ru-localization(?:-boot)?\.js(?:\?[^"']*)?["'])[^>]*>\s*<\/script\s*>/gi, "");
+  source = source
+    .replace(/<класс\s+div\s*=\s*\\?["']викторина-обратная связь\\?["']/gi, '<div class="quiz-feedback"')
+    .replace(/<класс\s+div\s*=/gi, '<div class=')
+    .replace(/<\/класс\s*>/gi, '</div>');
+
+  const homeBrandToken = "APKBRANDGRAIN";
+  if (file === "index.html") {
+    source = source
+      .replace(/<title>\s*(?:зерно|Grain)\s*—\s*тренажёр аналитика данных<\/title>/i,
+        '<title>APKBRANDGRAIN — тренажёр аналитика данных</title>')
+      .replace(/<strong>\s*(?:зерно|Grain)\s*—\s*подготовительный комплект для аналитика<\/strong>/i,
+        '<strong>APKBRANDGRAIN — подготовительный комплект для аналитика</strong>')
+      .replace(/(?:зерно|Grain)\s*—\s*это бесплатный набор практических приложений/gi,
+        'APKBRANDGRAIN — это бесплатный набор практических приложений')
+      .replace(/\bGrain\b/g, homeBrandToken);
+  }
+
   source = source.replace(/<html\b[^>]*>/i, opening => {
     let root = opening;
     if (/\blang\s*=\s*(["'])[^"']*\1/i.test(root)) root = root.replace(/\blang\s*=\s*(["'])[^"']*\1/i, 'lang="ru"');
@@ -617,7 +636,7 @@ async function processHtml(file, original) {
     result = result.slice(0, replacement.start) + replacement.value + result.slice(replacement.end);
     lastStart = replacement.start;
   }
-  return result;
+  return file === "index.html" ? result.replaceAll(homeBrandToken, "Grain") : result;
 }
 
 async function processJson(file, original) {

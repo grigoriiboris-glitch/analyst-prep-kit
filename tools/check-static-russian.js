@@ -36,6 +36,9 @@ for (const page of pages) {
   if (/\b(?:id|class)\s*=\s*["'][^"']*(?:language-toggle|language-switcher|language-selector|lang-toggle)[^"']*["']/i.test(page.content)) {
     failures.push(page.file + ": language selector UI remains");
   }
+  if (/<класс\s+div\s*=/i.test(page.content)) {
+    failures.push(page.file + ": translated text corrupted a rendered HTML tag");
+  }
 }
 
 assert.deepEqual(failures, [], "Static Russian audit failed:\n" + failures.join("\n"));
