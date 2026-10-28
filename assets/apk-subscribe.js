@@ -49,13 +49,13 @@
     '.apk-sub p{margin:6px 0 0}' +
     '.apk-sub form{margin:12px 0 0;display:flex;flex-wrap:wrap;gap:8px}' +
     '.apk-sub input[type=email]{flex:1 1 220px;min-width:0;padding:9px 11px;font:inherit;' +
-    "размер шрифта: 14 пикселей; цвет: наследовать; фон: var (--bg, прозрачный);" +
-    "граница: 1 пиксель сплошной var(--line,var(--border,#e0d9d2));border-radius:8px}" +
+    "размер шрифта: 14 пикселей; цвет: наследовать; фон: наш (--бг, прозрачный);" +
+    "граница: 1 пиксель сплошной наш(--линия,наш(--граница,#e0d9d2));граница-радиус:8пикселей}" +
     '.apk-sub button{padding:9px 16px;font:inherit;font-size:14px;font-weight:600;' +
-    "курсор: указатель; цвет: #fff; фон: var (--accent, # C5511F); граница: 0; граница-радиус: 8 пикселей}" +
+    "курсор: указатель; цвет: #ффф; фон: наш (--акцент, # C5511F); граница: 0; граница-радиус: 8 пикселей}" +
     "Кнопка .апк суб: отключено {непрозрачность: .55; курсор: по умолчанию}" +
     '.apk-sub .apk-sub-consent{flex:1 1 100%;display:flex;gap:8px;align-items:flex-start;' +
-    "размер шрифта: 13 пикселей; цвет: var (--muted, # 888)}" +
+    "размер шрифта: 13 пикселей; цвет: наш (--приглушенный, # 888)}" +
     '.apk-sub .apk-sub-consent input{margin-top:3px;flex:0 0 auto}' +
     '.apk-sub a.apk-sub-link{display:inline-block;margin-top:10px;font-weight:600;' +
     "цвет:наш(--акцент,#C5511F)}" +
