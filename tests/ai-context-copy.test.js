@@ -27,21 +27,14 @@ test("AI context-copy component parses and includes a safe clipboard fallback", 
 
 test("AI context copy is loaded by shared course shells and the new PostgreSQL module", () => {
   const visuals = read("assets/lesson-visuals.js");
-  const localization = read("assets/ru-localization.js");
   const postgres = read("postgresql/index.html");
   assert.ok(visuals.includes("ai-context-copy.js"), "Legacy learning modules should load AI context copy");
-  assert.ok(localization.includes("ai-context-copy.js"), "Certification and localized course pages should load AI context copy");
+  assert.ok(!fs.existsSync(path.join(root, "assets/ru-localization.js")), "Static Russian mode must not depend on a runtime translator");
   assert.ok(postgres.includes('src="../assets/ai-context-copy.js"'), "PostgreSQL lesson page should load AI context copy directly");
 
   const pages = [
     "foundations/index.html", "business-analysis/index.html", "data-quality/index.html",
-    "chart-literacy/index.html", "decision-making/index.html", "excel/index.html",
-    "excel-cert/index.html", "excel-expert-cert/index.html", "final/index.html",
-    "forecasting/index.html", "interview/index.html", "portfolio-projects/index.html",
-    "powerbi/index.html", "powerbi-cert/index.html", "python/index.html", "sql/index.html",
-    "stats/index.html", "tableau/index.html", "alteryx-cert/index.html", "azure-data-cert/index.html",
-    "databricks-cert/index.html", "docusign-cert/index.html", "simulator/index.html", "drill/index.html",
-    "viz/index.html"
+    "decision-making/index.html", "portfolio-projects/index.html", "sql/index.html"
   ];
   for (const page of pages) {
     const html = read(page);
