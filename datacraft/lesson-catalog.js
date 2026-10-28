@@ -8,7 +8,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "2",
-      "title": "База, схема, таблица и search_path",
+      "title": "База, схема, таблица и путь_поиска",
       "unit": "0 · Старт"
     },
     {
@@ -43,7 +43,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "9",
-      "title": "DATE, timestamp и часовые пояса",
+      "title": "DATE, временная метка и часовые пояса",
       "unit": "2 · Типы и время"
     },
     {
@@ -103,7 +103,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "21",
-      "title": "UPSERT: INSERT ... ON CONFLICT",
+      "title": "УПСЕРТ: ВСТАВЬТЕ... О КОНФЛИКТЕ",
       "unit": "5 · Модель данных и изменения"
     },
     {
@@ -118,7 +118,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "24",
-      "title": "Массивы, ANY и unnest",
+      "title": "Массивы, ANY и пожалуйста",
       "unit": "6 · Возможности PostgreSQL"
     },
     {
@@ -128,7 +128,7 @@ window.DataCraftLessonCatalog = {
     },
     {
       "id": "26",
-      "title": "Индексы: B-tree, составные, частичные и GIN",
+      "title": "Индексы: B-дерево, составные, частичные и GIN",
       "unit": "6 · Возможности PostgreSQL"
     },
     {

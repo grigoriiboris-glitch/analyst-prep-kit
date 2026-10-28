@@ -1,5 +1,5 @@
 (function () {
-  'use strict';
+  "используйте строгий";
   if (window.__apkAiContextCopyLoaded) return;
   window.__apkAiContextCopyLoaded = true;
 
@@ -15,9 +15,9 @@
     style.id = 'apkAiContextCopyStyle';
     style.textContent = [
       '.apk-ai-context-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0;padding:10px 12px;border:1px solid rgba(102,190,139,.42);border-radius:11px;background:linear-gradient(120deg,rgba(36,67,48,.92),rgba(26,43,33,.92));color:var(--ink,#edf5f0);}',
-      '.apk-ai-context-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:36px;padding:8px 12px;border:1px solid #5ba979;border-radius:9px;background:#28523a;color:#effff3;font:700 12px/1.3 system-ui,-apple-system,"Segoe UI",sans-serif;cursor:pointer;transition:background .15s,border-color .15s,transform .15s;}',
+      ".apk-ai-context-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:36px;padding:8px 12px;border:1px Solid #5ba979;border-radius:9px;background:#28523a;цвет:#effff3;шрифт:700 12px/1.3 system-ui,-apple-system,\"Segoe UI\", без засечек;курсор:указатель;переход:фон .15с,цвет границы .15с,преобразование .15с;}",
       '.apk-ai-context-button:hover{background:#326847;border-color:#91e4b1;}',
-      '.apk-ai-context-button:focus-visible{outline:2px solid #a8f0c0;outline-offset:3px;}',
+      ".apk-ai-context-button:focus-visible{outline:2px Solid #a8f0c0;outline-offset:3px;}",
       '.apk-ai-context-button:active{transform:translateY(1px);}',
       '.apk-ai-context-status{font:12px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--muted,#b8cbbd);}',
       '.apk-ai-context-status[data-kind="success"]{color:#9be7b5;}',
@@ -30,7 +30,7 @@
 
   function visibleLessonRoot(root) {
     if (!root || root.nodeType !== 1) return false;
-    if (root.closest('nav, aside, header, footer, .lesson-nav, .sidebar, .lesson-list, .curriculum-course-list')) return false;
+    if (root.closest("nav, в сторону, заголовок, нижний колонтитул, .lesson-nav, .sidebar, .lesson-list, .curriculum-course-list")) return false;
     if (root.matches('[hidden],[aria-hidden="true"]')) return false;
     var heading = root.querySelector('h1,h2,h3,.lesson-title,[data-lesson-title]');
     if (!heading) return false;
@@ -104,7 +104,7 @@
     Array.prototype.forEach.call(clone.querySelectorAll(
       'script,style,button,input,select,option,textarea,nav,header,footer,aside,' +
       '.apk-ai-context-bar,.lesson-nav,.sidebar,.lesson-progress,.progressbar,' +
-      '.lesson-actions,.actions,.nav,.toolbar,.topbar,.modal,.toast,.feedback button'
+      ".lesson-actions,.actions,.nav,.toolbar,.topbar,.modal,.toast,.кнопка обратной связи"
     ), function (node) { if (node.parentNode) node.parentNode.removeChild(node); });
 
     // Keep important block boundaries so copied context remains readable.
@@ -138,7 +138,7 @@
     var content = cloneLessonText(root);
     var editors = editorContext(root);
     var instructions = [
-      'Ты — учебный ИИ-помощник по курсу Analyst Prep Kit.',
+      "Ты — учебный ИИ-помощник по курсу Подготовительный комплект для аналитика.",
       'Помоги ученику разобраться в уроке простым языком и на примерах.',
       'Сначала объясни принцип и ход рассуждения; не выдавай готовое решение без пояснения.',
       'Если ученик прислал ошибку или свой запрос, объясни причину, предложи исправление и способ проверить результат.',
@@ -205,7 +205,7 @@
       if (pieces.length) extra = pieces.join('\n\n');
     }
     var instructions = [
-      'Ты — учебный ИИ-помощник Analyst Prep Kit.',
+      "Ты — учебный ИИ-помощник Подготовительный комплект для аналитика.",
       'Объясняй тему простым языком, пошагово и на небольших примерах.',
       'Если ученик просит проверить решение, сначала разберись в его подходе, затем объясни ошибку и предложи способ проверить исправление.',
       'Не придумывай отсутствующие требования и не утверждай, что выполнял код или запрос, если это не подтверждено.',
@@ -242,7 +242,7 @@
         await copyText(curriculumContext(button));
         button.textContent = 'Контекст скопирован ✓';
         button.setAttribute('aria-live', 'polite');
-        button.title = 'Вставь контекст в ChatGPT или другого ИИ-помощника';
+        button.title = "Вставь контекст в ЧатGPT или другого ИИ-помощника";
       } catch (error) {
         button.textContent = 'Не удалось скопировать';
         button.title = error && error.message ? error.message : 'Проверь разрешение буфера обмена';
@@ -262,7 +262,7 @@
     var bar = document.createElement('div');
     bar.className = BAR_CLASS;
     bar.setAttribute('role', 'group');
-    bar.setAttribute('aria-label', 'Контекст урока для ИИ');
+    bar.setAttribute("aria-метка", 'Контекст урока для ИИ');
     var button = document.createElement('button');
     button.type = 'button';
     button.className = BUTTON_CLASS;
@@ -282,7 +282,7 @@
       try {
         await copyText(buildContext(root));
         if (label) label.textContent = 'Контекст скопирован ✓';
-        status.textContent = 'Вставь его в ChatGPT или другого ИИ-помощника.';
+        status.textContent = "Вставь его в ЧатGPT или другого ИИ-помощника.";
         status.dataset.kind = 'success';
       } catch (error) {
         if (label) label.textContent = 'Не удалось скопировать';
