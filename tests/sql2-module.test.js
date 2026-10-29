@@ -36,8 +36,9 @@ test('SQL 2 covers the required SQL topics and executes against the SQLite sandb
   for (const token of [
     'WHERE', 'IS NULL', 'DISTINCT', 'LIKE', 'BETWEEN', 'CASE', 'COALESCE',
     'COUNT(*)', 'GROUP BY', 'HAVING', 'INNER JOIN', 'LEFT JOIN',
-    'strftime(', 'WITH region_revenue AS', 'ROW_NUMBER()', 'LAG(',
-    'SUM(total_amount) OVER', 'payments', 'ABS('
+    'STRFTIME(', 'WITH region_revenue AS', 'ROW_NUMBER()', 'LAG(',
+    'SUM(total_amount) OVER', 'payments', 'ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW',
+    '(SELECT COUNT(*) FROM orders)'
   ]) assert.ok(html.includes(token), 'SQL 2 is missing topic or query feature: ' + token);
 
   assert.ok(html.includes('https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/sql-wasm.js'));
@@ -77,4 +78,41 @@ test('SQL 2 query execution blocks data-changing commands and multiple statement
   assert.ok(html.includes('if (!/^(SELECT|WITH)\\b/i.test(cleaned))'));
   assert.ok(html.includes('INSERT|UPDATE|DELETE|REPLACE|CREATE|ALTER|DROP|TRUNCATE|PRAGMA|ATTACH|DETACH'));
   assert.ok(html.includes('if (/;\\s*\\S/.test(cleaned))'));
+});
+
+
+test('Every SQL 2 lesson follows the beginner-friendly lesson structure', () => {
+  const html = read('sql2/index.html');
+  const match = html.match(/const LESSONS = (\[[\s\S]*?\n    \]);/);
+  assert.ok(match, 'The SQL 2 lesson list must be present');
+  const lessons = new Function('return ' + match[1])();
+  assert.equal(lessons.length, 24);
+
+  const requiredTextFields = [
+    'whatNew', 'prompt', 'hint', 'expected', 'explain',
+    'commonMistake', 'checkQuestion'
+  ];
+  for (const lesson of lessons) {
+    for (const field of requiredTextFields) {
+      assert.equal(typeof lesson[field], 'string', 'Lesson ' + lesson.id + ' is missing ' + field);
+      assert.ok(lesson[field].trim().length > 0, 'Lesson ' + lesson.id + ' has an empty ' + field);
+    }
+    assert.match(lesson.starter, /^(SELECT|WITH)\b/i, 'Lesson ' + lesson.id + ' starter must be SQL');
+    assert.match(lesson.solution, /^(SELECT|WITH)\b/i, 'Lesson ' + lesson.id + ' solution must be SQL');
+    assert.match(lesson.starter, /;\s*$/, 'Lesson ' + lesson.id + ' starter must end with a semicolon');
+    assert.match(lesson.solution, /;\s*$/, 'Lesson ' + lesson.id + ' solution must end with a semicolon');
+    assert.doesNotMatch(lesson.hint, /\b(?:SELECT|WITH)\b[\s\S]*;/i,
+      'Lesson ' + lesson.id + ' hint must not contain a complete SQL solution');
+    assert.doesNotMatch(lesson.solution, /\b(select|from|where|order by|group by|having|limit|with|join|on)\b/,
+      'Lesson ' + lesson.id + ' SQL keywords should be uppercase');
+  }
+
+  const lessonBlock = match[1];
+  assert.doesNotMatch(lessonBlock, /Важно:\s*объясняй решение по-русски|инструкц(?:ия|ии) для ИИ/i,
+    'Learner-facing lesson content must not contain AI service instructions');
+  assert.ok(html.includes('<strong>Что нового</strong>'));
+  assert.ok(html.includes('<strong>Ожидаемый результат</strong>'));
+  assert.ok(html.includes('<strong>Типичная ошибка новичка</strong>'));
+  assert.ok(html.includes('<strong>Проверь себя</strong>'));
+  assert.ok(html.includes('<strong>Разбор решения</strong>'));
 });
