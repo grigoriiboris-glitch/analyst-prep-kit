@@ -2356,15 +2356,72 @@ function lessonExplainHTML(l){
 // by scanning forward through it. A chunk that is not literally in the query —
 // an ellipsis like "app_id INTEGER, …", or a prompt like "why this order?" —
 // keeps its own row under the code rather than being dropped.
+function normalizeSqlSnippet(value){
+  const source = String(value ?? '');
+  const normalizeLine = line => {
+    if (!/[А-Яа-яЁё]/.test(line) || /^\s*--/.test(line)) return line;
+    if (!/^\s*(?:SELECT\b|FROM\b|WHERE\b|JOIN\b|INNER JOIN\b|LEFT JOIN\b|RIGHT JOIN\b|FULL(?: OUTER)? JOIN\b|CROSS JOIN\b|ON\b|GROUP BY\b|ORDER BY\b|HAVING\b|LIMIT\b|OFFSET\b|UNION\b|CASE\b|WHEN\b|THEN\b|ELSE\b|END\b|ВЫБРАТЬ|ИЗ\s|ОТ\s|ГДЕ\s|ВКЛ\s|ПРИСОЕДИНЯЙТЕСЬ|JOINСЬ|(?:ГРУППА|ПОРЯДОК)\s+ПО|ИМЕЯ\s|СУММА\s*\(|СЧЁТ\s*\(|СЧЕТ\s*\(|ПРАГМА\s)/i.test(line)) return line;
+    return line
+      .replace(/ПРИСОЕДИНЯЙТЕСЬ\s+к\s+заказам/gi, 'JOIN orders')
+      .replace(/ПРИСОЕДИНЯЙТЕСЬ\s+к\s+клиентам/gi, 'JOIN customers')
+      .replace(/JOINСЬ\s+к\s+клиентам/gi, 'JOIN customers')
+      .replace(/RIGHT JOIN\s+заказов/gi, 'RIGHT JOIN orders')
+      .replace(/LEFT JOIN\s+клиентов/gi, 'LEFT JOIN customers')
+      .replace(/(?:Приказы|ПРИКАЗЫ)\s+INNER\s+JOIN/gi, 'INNER JOIN orders')
+      .replace(/ВНУТРЕННЕЕ\s+СОЕДИНЕНИЕ/gi, 'INNER JOIN')
+      .replace(/ЛЕВОЕ\s+СОЕДИНЕНИЕ/gi, 'LEFT JOIN')
+      .replace(/ПРАВОЕ\s+СОЕДИНЕНИЕ/gi, 'RIGHT JOIN')
+      .replace(/ПОЛНОЕ\s+ВНЕШНЕЕ\s+СОЕДИНЕНИЕ/gi, 'FULL OUTER JOIN')
+      .replace(/ПЕРЕКРЕСТНОЕ\s+СОЕДИНЕНИЕ/gi, 'CROSS JOIN')
+      .replace(/ПРИСОЕДИНЯЙТЕСЬ/gi, 'JOIN')
+      .replace(/(^|\s)ВЫБРАТЬ(?=\s)/gi, '$1SELECT')
+      .replace(/(^|\s)(?:ОТ|ИЗ)(?=\s)/gi, '$1FROM')
+      .replace(/(^|\s)ГДЕ(?=\s)/gi, '$1WHERE')
+      .replace(/(^|\s)ВКЛ(?=\s)/gi, '$1ON')
+      .replace(/ГРУППА\s+ПО/gi, 'GROUP BY')
+      .replace(/ПОРЯДОК\s+ПО/gi, 'ORDER BY')
+      .replace(/(^|\s)ИМЕЯ(?=\s)/gi, '$1HAVING')
+      .replace(/(^|\s)КАК(?=\s)/gi, '$1AS')
+      .replace(/(^|\s)АС(?=\s)/gi, '$1AS')
+      .replace(/СУММА\s*\(/gi, 'SUM(')
+      .replace(/СЧЁТ\s*\(/gi, 'COUNT(')
+      .replace(/СЧЕТ\s*\(/gi, 'COUNT(')
+      .replace(/ПРАГМА/gi, 'PRAGMA')
+      .replace(/table_info\s*\(\s*продукты\s*\)/gi, 'table_info(products)')
+      .replace(/дату\s*\(\s*'сейчас'\s*\)/gi, "date('now')")
+      .replace(/\.имя(?=$|[\s,;.)])/gi, '.name')
+      .replace(/\.сумма(?=$|[\s,;.)])/gi, '.amount')
+      .replace(/\.доход(?=$|[\s,;.)])/gi, '.revenue')
+      .replace(/\.выручка(?=$|[\s,;.)])/gi, '.revenue')
+      .replace(/\.регион(?=$|[\s,;.)])/gi, '.region')
+      .replace(/\.статус(?=$|[\s,;.)])/gi, '.status')
+      .replace(/дата_заказа/gi, 'order_date')
+      .replace(/идентификатор_заказа/gi, 'order_id')
+      .replace(/адрес электронной почты|электронная_почта/gi, 'email')
+      .replace(/(^|[\s,])имя(?=[\s,;]|$)/gi, '$1name')
+      .replace(/(^|[\s,])сумма(?=[\s,;)]|$)/gi, '$1amount')
+      .replace(/(^|[\s,])доход(?=[\s,;)]|$)/gi, '$1revenue')
+      .replace(/(^|[\s,])выручка(?=[\s,;)]|$)/gi, '$1revenue')
+      .replace(/(^|[\s,])регион(?=[\s,;)]|$)/gi, '$1region')
+      .replace(/(^|[\s,])статус(?=[\s,;)]|$)/gi, '$1status');
+  };
+  let result = source.split('\n').map(normalizeLine).join('\n');
+  if (/\bFROM\s+customers\s+c\b/i.test(result) &&
+      !/\b(?:FROM|JOIN)\s+[A-Za-z_][\w$]*\s+b\b/i.test(result)) {
+    result = result.replace(/\bb\./g, 'c.');
+  }
+  return result;
+}
+
 function ralBlockHTML(ral){
   const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  const sql = String(ral.sql || '');
+  const sql = normalizeSqlSnippet(String(ral.sql || ''));
   const codeLines = sql.split('\n');
   const perLine = codeLines.map(()=>[]);
   const tail = [];
   let cursor = 0;
   (ral.lines || []).forEach(pair => {
-    const chunk = String(pair[0] ?? ''), desc = pair[1];
+    const chunk = normalizeSqlSnippet(String(pair[0] ?? '')), desc = pair[1];
     // Forward from the last match so a repeated token lands on the right one,
     // then from the start, because a few lessons list their pieces out of order.
     let at = chunk.trim() ? sql.indexOf(chunk, cursor) : -1;
@@ -2374,13 +2431,13 @@ function ralBlockHTML(ral){
     perLine[sql.slice(0, at).split('\n').length - 1].push([chunk, desc]);
   });
   const note = (c, d, cls) =>
-    `<div class="ral-note${cls||''}"><span class="ral-note-chunk">${esc(c)}</span><span class="ral-note-desc">${d}</span></div>`;
+    `<div class="ral-note${cls||''}"><span class="ral-note-chunk" translate="no" data-technical="sql">${esc(c)}</span><span class="ral-note-desc">${d}</span></div>`;
   const rows = codeLines.map((line, i) =>
-    `<div class="ral-code">${esc(line) || '&nbsp;'}</div>` + perLine[i].map(p => note(p[0], p[1])).join('')
+    `<div class="ral-code" translate="no" data-technical="sql">${esc(line) || '&nbsp;'}</div>` + perLine[i].map(p => note(p[0], p[1])).join('')
   ).join('');
   return `<div class="ral-block">
       <div class="ral-head"><i data-lucide="megaphone"></i>Прочитайте запрос вслух</div>
-      <div class="ral-sql">${ral.say ? `<div class="ral-say-inline">${ral.say}</div>` : ''}${rows}${tail.map(p => note(p[0], p[1], ' ral-note-tail')).join('')}</div>
+      <div class="ral-sql" translate="no" data-technical="sql">${ral.say ? `<div class="ral-say-inline">${ral.say}</div>` : ''}${rows}${tail.map(p => note(p[0], p[1], ' ral-note-tail')).join('')}</div>
     </div>`;
 }
 
@@ -6104,7 +6161,7 @@ function renderLabStub(key){
       </div>
       <div class="card card-sm" style="max-width:480px;margin:0 auto 24px;text-align:left">
         <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px">Попробуйте запрос предварительного просмотра в бесплатной лаборатории</div>
-        <div class="ral-sql" style="font-size:12px;line-height:1.6;margin-bottom:12px">${s.sample}</div>
+        <div class="ral-sql" translate="no" data-technical="sql" style="font-size:12px;line-height:1.6;margin-bottom:12px">${normalizeSqlSnippet(s.sample)}</div>
         <button class="btn btn-ghost btn-sm" onclick="tryLabSample('${key}')">▶ Открыть в бесплатной лаборатории</button>
       </div>
       <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;align-items:center">
