@@ -15,6 +15,9 @@ const SKIP_CLASSES = new Set([
 function isTechnicalSnippet(value) {
   const text = String(value == null ? "" : value).trim();
   if (!text) return false;
+  // A semicolon marks a technical lesson/exercise fragment. Preserve the entire
+  // string in English instead of translating code, answer choices, or examples.
+  if (text.includes(";")) return true;
   if (SQL_FRAGMENT_START.test(text) || TRANSLATED_SQL_START.test(text)) return true;
   // Expressions and statements can be isolated from the rest of a query.
   if (/^(?:=|@)\s*[A-Za-z_]/.test(text)) return true;
