@@ -2403,7 +2403,8 @@ function normalizeSqlSnippet(value){
       .replace(/(^|[\s,])доход(?=[\s,;)]|$)/gi, '$1revenue')
       .replace(/(^|[\s,])выручка(?=[\s,;)]|$)/gi, '$1revenue')
       .replace(/(^|[\s,])регион(?=[\s,;)]|$)/gi, '$1region')
-      .replace(/(^|[\s,])статус(?=[\s,;)]|$)/gi, '$1status');
+      .replace(/(^|[\s,])статус(?=[\s,)]|$)/gi, '$1status');
+      .replace(/\s+(?:IS\s+)?НУЛЬ(?=\s*;?$)/gi, ' IS NULL');
   };
   let result = source.split('\n').map(normalizeLine).join('\n');
   if (/\bFROM\s+customers\s+c\b/i.test(result) &&
@@ -3196,11 +3197,12 @@ const Ord = {
   // pool. Every chip carries its index into `lines`, which is what both
   // checkers compare against their answer array.
   html(key, lines, order){
-    const seq = order || lines.map((_, i) => i);
+    const safeLines = lines.map(line => normalizeSqlSnippet(line));
+    const seq = order || safeLines.map((_, i) => i);
     const chips = seq.map(i =>
       `<div class="ord-chip" draggable="true" data-line="${i}" onclick="Ord.tap('${key}',this)"
          ondragstart="Ord.dragStart(event)" ondragover="Ord.dragOver(event)"
-         ondrop="Ord.drop(event,'${key}','pool')"><span class="pars-txt">${lines[i]}</span></div>`).join('');
+         ondrop="Ord.drop(event,'${key}','pool')"><span class="pars-txt" translate="no" data-technical="sql">${safeLines[i]}</span></div>`).join('');
     return `<div class="parsons-wrap">
       <div class="parsons-col">
         <label>Коснитесь фигуры, чтобы переместить ее между пулом и вашим ответом.</label>
