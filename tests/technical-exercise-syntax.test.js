@@ -376,3 +376,48 @@ test("SQL query renderer marks code as non-translatable and repairs common trans
   assert.match(sql, /const safeLines = lines\.map\(line => normalizeSqlSnippet\(line\)\)/);
   assert.match(sql, /class="pars-txt" translate="no" data-technical="sql"/);
 });
+
+test("SQL snippets match the upstream English source and code tags stay untranslated", () => {
+  const sql = read("sql/index.html");
+
+  // These are executable fragments or deliberate syntax distractors from the
+  // original SQL lessons. They must not be localized with the surrounding copy.
+  for (const snippet of [
+    "SELECT region, revenue",
+    "WHERE region = 'West'",
+    "SELECT name, email",
+    "GET * FROM products;",
+    "FROM products SELECT *;",
+    "SHOW products;",
+    "SELECT name, customers;",
+    "WHERE amount > 100",
+    "GROUP BY status",
+    "CASE WHEN status='active' THEN 'Yes'",
+    "JOIN customers c",
+    "ON o.customer_id = c.id",
+    "RIGHT JOIN orders o ON c.id = o.customer_id",
+    "COUNT(DISTINCT CASE WHEN step IN ('signup','activate','pay') THEN user_id END) AS signed_up,",
+    "SUM(CASE WHEN line = 'Revenue' THEN amount ELSE 0 END) AS revenue",
+    "SELECT ROUND(SUM(cash_flow / POWER(1 + 0.10, year)), 0) AS npv"
+  ]) {
+    assert.ok(sql.includes(snippet), "SQL source fragment was changed: " + snippet);
+  }
+
+  for (const corrupted of [
+    "SELECT регион, доход",
+    "ГДЕ регион = «Запад»",
+    "SELECT имя, адрес электронной почты",
+    "СУММ (CASE, WHEN строка = «Доход»"
+  ]) {
+    assert.ok(!sql.includes(corrupted), "Localized SQL code remains in source: " + corrupted);
+  }
+
+  const codeBodies = [...sql.matchAll(/<code\\b[^>]*>([\\s\\S]*?)<\\/code>/gi)];
+  assert.ok(codeBodies.length > 0, "Expected SQL lessons to contain code elements");
+  for (const [, body] of codeBodies) {
+    const visible = body.replace(/<[^>]*>/g, "");
+    assert.doesNotMatch(visible, /[А-Яа-яЁё]/, "Text inside a <code> tag must remain English");
+  }
+
+  assert.equal(shouldSkipTechnicalElement("<code>"), true, "A bare code tag must opt out of translation");
+});
