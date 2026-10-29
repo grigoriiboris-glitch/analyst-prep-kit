@@ -125,3 +125,23 @@ test("PostgreSQL lesson page wires progress sync and keeps drafts and query hist
   assert.ok(app.includes("statement_timeout") || html.includes("изоля"), "Sandbox constraints must be documented");
   new Function(app);
 });
+
+test("PostgreSQL quiz answers retain valid HTML attributes and click handlers", () => {
+  const app = read("app.js");
+  const course = read("course-data.js");
+
+  // The answers are generated dynamically; the HTML attribute must stay English
+  // so querySelectorAll('[data-answer]') can attach the click handler.
+  assert.ok(app.includes("data-answer=\"'+i+'\""), "Quiz buttons must render data-answer attributes");
+  assert.ok(app.includes("document.querySelectorAll('[data-answer]')"), "Quiz click listeners must target generated answer buttons");
+  assert.ok(app.includes("answerQuiz(Number(btn.dataset.answer))"), "Clicking an answer must submit its selected index");
+  assert.ok(app.includes("state.quizPassed[String(l.id)]"), "A correct answer must be persisted in lesson progress");
+  assert.doesNotMatch(app, /данные-ответ|тип=["']кнопка|макс\. ширина|оператор_таймаут|семя\.sql/);
+
+  // SQL identifiers and syntax inside lesson explanations and examples must not
+  // be translated into Russian words.
+  assert.ok(course.includes("`coupon IS NULL`"), "SQL predicates must stay valid inside examples");
+  assert.ok(course.includes("PARTITION BY customer_id"), "Window-function syntax must stay valid");
+  assert.ok(course.includes('"title": "Массивы, ANY и unnest"'), "The unnest function name must not be translated");
+  assert.doesNotMatch(course, /путь_поиска|`купон НУЛЬ`|РАЗДЕЛЕНИЕ ПО customer_id/);
+});
