@@ -449,9 +449,8 @@ test("Legacy dark-green UI palette is removed from shared and learning component
   const postgresql = read("postgresql/index.html");
   const postgresqlApp = read("postgresql/app.js");
 
-  assert.doesNotMatch(
-    contextCopy,
-    /linear-gradient\\(120deg,rgba\\(36,67,48,.92\\),rgba\\(26,43,33,.92\\)\\)/,
+  assert.ok(
+    !contextCopy.includes("linear-gradient(120deg,rgba(36,67,48,.92),rgba(26,43,33,.92))"),
     "AI context toolbar must not use the old forest-green gradient"
   );
   for (const legacyColor of [
@@ -466,10 +465,10 @@ test("Legacy dark-green UI palette is removed from shared and learning component
     assert.ok(!learningOrder.includes(legacyColor), "Learning-order note still uses legacy green: " + legacyColor);
   }
 
-  assert.match(datacraft, /href="grain-theme\\.css"/, "DataCraft must use the shared Zinc and Sky UI skin");
-  assert.doesNotMatch(datacraft, /linear-gradient\\(160deg,rgba\\(31,51,43/);
-  assert.doesNotMatch(curriculumMap, /linear-gradient\\(145deg,rgba\\(29,49,39/);
-  assert.doesNotMatch(curriculumMap, /linear-gradient\\(150deg,#20372a,#14251c/);
+  assert.ok(datacraft.includes('href="grain-theme.css"'), "DataCraft must use the shared Zinc and Sky UI skin");
+  assert.ok(!datacraft.includes("linear-gradient(160deg,rgba(31,51,43"), "DataCraft panels must not use the legacy dark-green gradient");
+  assert.ok(!curriculumMap.includes("linear-gradient(145deg,rgba(29,49,39"), "Curriculum shell must not use the legacy dark-green gradient");
+  assert.ok(!curriculumMap.includes("linear-gradient(150deg,#20372a,#14251c"), "NPC dialog must not use the legacy dark-green gradient");
 
   for (const [name, source] of [
     ["decision-making", decisionMaking],
@@ -484,7 +483,9 @@ test("Legacy dark-green UI palette is removed from shared and learning component
     "PostgreSQL diagrams must use the neutral/cyan theme");
   for (const page of ["sql", "excel", "python", "tableau"]) {
     const source = read(page + "/index.html");
-    assert.doesNotMatch(source, /background:var\\(--surf,#152622\\)|background:var\\(--surf2,var\\(--surf,#1a302c\\)\\)/,
-      page + " sprint bar still has the dark-green fallback");
-  }
+    assert.ok(
+      !source.includes("background:var(--surf,#152622)") &&
+      !source.includes("background:var(--surf2,var(--surf,#1a302c))"),
+      page + " sprint bar still has the dark-green fallback"
+    );
 });
