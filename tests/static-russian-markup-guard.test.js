@@ -66,7 +66,9 @@ test("the static Russian build keeps authored game and visualization sources out
     "datacraft/index.html",
     "datacraft/quiet-valley.js",
     "datacraft/lesson-catalog.js",
-    "postgresql/index.html"
+    "postgresql/index.html",
+    "postgresql/app.js",
+    "postgresql/course-data.js"
   ]) {
     assert.ok(source.includes('"'+file+'"'), "Authored renderer/page must remain excluded from machine translation: "+file);
   }
