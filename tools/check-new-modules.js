@@ -104,7 +104,7 @@ for (const page of [
 }
 
 const sql2Page = fs.readFileSync(path.join(root, "sql2/index.html"), "utf8");
-assert.equal((sql2Page.match(/id:\\d+,unit:"[^"]+",title:"/g) || []).length, 24,
+assert.equal((sql2Page.match(/id:\d+,unit:"[^"]+",title:"/g) || []).length, 24,
   "SQL 2 must contain exactly 24 authored tasks");
 for (const feature of [
   'const STORAGE_KEY = "sql2kit-v1"', "initSqlJs", "sqlDb.exec(SEED_SQL)",
