@@ -1,5 +1,5 @@
 (function () {
-  "используйте строгий";
+  'use strict';
   var PROGRESS_KEY='apk-postgresql-progress-v1', DRAFTS_KEY='apk-postgresql-drafts-v1', HISTORY_KEY='apk-postgresql-history-v1';
   var PGLITE_URL='https://cdn.jsdelivr.net/npm/@electric-sql/pglite@0.5.12/dist/index.js';
   var MERMAID_URL='https://cdn.jsdelivr.net/npm/mermaid@11.17.2/dist/mermaid.min.js';
@@ -85,9 +85,9 @@
       '<section class="pg-task"><h3>Практическая задача</h3><p>'+inlineText(l.task)+'</p></section>'+
       '<section class="pg-workbench" aria-label="Редактор SQL"><div class="pg-workbench-head"><h3>SQL-песочница</h3><span class="pg-engine-state" id="engineState">'+(db?'PostgreSQL готов · данные изолированы':'Движок загрузится при первом запуске')+'</span></div>'+
       '<textarea id="sqlEditor" class="pg-editor" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Твой SQL-запрос"></textarea>'+
-      "<div class=\"pg-run-actions\"><button class=\"pg-button primary\" type=\"button\" id=\"runQueryBtn\">▶ Выполнить запрос</button><button class=\"pg-button\" type=\"button\" id=\"copyQueryBtn\">Копировать SQL</button><button class=\"pg-button\" type=\"button\" id=\"downloadCsvBtn\" disabled>Скачать результат CSV</button><span class=\"pg-muted\">Ctrl + Входить — выполнить · максимум 20 000 символов</span></div>"+
-      "<div class=\"pg-output\" id=\"queryOutput\" aria-live=\"polite\"><div class=\"pg-output-placeholder\">Выполни пример в изолированной учебной базе. Первый запуск загрузит движок PostgreSQL.</div></div></section>"+
-      '<section class="pg-quiz"><h3>Проверь понимание</h3><p class="pg-quiz-q">'+inlineText(quiz.q)+'</p><div class="pg-answers" id="quizAnswers">'+quiz.options.map(function(op,i){return '<button class="pg-answer'+(quizPassed&&i===quiz.correct?' correct':'')+"\" тип=\"кнопка\" данные-ответ=\""+i+'"'+(quizPassed?' disabled':'')+'>'+inlineText(op)+'</button>';}).join('')+'</div><p class="pg-quiz-feedback" id="quizFeedback" aria-live="polite">'+(quizPassed?'Верно. '+escapeHTML(quiz.why):'Ответь правильно, чтобы отметить урок завершённым.')+'</p></section>'+
+      '<div class="pg-run-actions"><button class="pg-button primary" type="button" id="runQueryBtn">▶ Выполнить запрос</button><button class="pg-button" type="button" id="copyQueryBtn">Копировать SQL</button><button class="pg-button" type="button" id="downloadCsvBtn" disabled>Скачать результат CSV</button><span class="pg-muted">Ctrl + Enter — выполнить · максимум 20 000 символов</span></div>'+
+      '<div class="pg-output" id="queryOutput" aria-live="polite"><div class="pg-output-placeholder">Выполни пример в изолированной учебной базе. Первый запуск загрузит движок PostgreSQL.</div></div></section>'+
+      '<section class="pg-quiz"><h3>Проверь понимание</h3><p class="pg-quiz-q">'+inlineText(quiz.q)+'</p><div class="pg-answers" id="quizAnswers">'+quiz.options.map(function(op,i){return '<button class="pg-answer'+(quizPassed&&i===quiz.correct?' correct':'')+'" type="button" data-answer="'+i+'"'+(quizPassed?' disabled':'')+'>'+inlineText(op)+'</button>';}).join('')+'</div><p class="pg-quiz-feedback" id="quizFeedback" aria-live="polite">'+(quizPassed?'Верно. '+escapeHTML(quiz.why):'Ответь правильно, чтобы отметить урок завершённым.')+'</p></section>'+
       '<div class="pg-lesson-actions"><button class="pg-button" type="button" id="prevLessonBtn"'+(Number(l.id)===Number(lessons[0].id)?' disabled':'')+'>← Предыдущий урок</button><button class="pg-button primary" type="button" id="completeLessonBtn"'+(!(runPassed&&quizPassed)||done?' disabled':'')+'>'+(done?'✓ Урок пройден':'Завершить урок')+'</button><button class="pg-button" type="button" id="nextLessonBtn">'+(Number(l.id)===Number(lessons[lessons.length-1].id)?'К началу курса ↻':'Следующий урок →')+'</button><span class="spacer"></span><span class="pg-muted">'+(runPassed?'Практика выполнена ✓':'Практика ещё не пройдена')+' · '+(quizPassed?'Ответ верный ✓':'Контрольный вопрос не пройден')+'</span></div>';
     view.innerHTML=html;
     var editor=document.getElementById('sqlEditor');editor.value=String(draft||'').slice(0,20000);
@@ -106,7 +106,7 @@
   function openLesson(id,shouldScroll){
     id=Number(id);if(!lessons.some(function(l){return Number(l.id)===id;}))return;
     activeId=id;state.currentLessonId=String(id);saveProgress();renderLesson();
-    if(shouldScroll&&window.matchMedia("(макс. ширина: 760 пикселей)").matches)view.scrollIntoView({behavior:'smooth',block:'start'});
+    if(shouldScroll&&window.matchMedia('(max-width: 760px)').matches)view.scrollIntoView({behavior:'smooth',block:'start'});
   }
   function goRelative(delta){var idx=lessons.findIndex(function(l){return Number(l.id)===Number(activeId);});if(idx<0)idx=0;var next=idx+delta;if(next<0)next=0;if(next>=lessons.length)next=0;openLesson(lessons[next].id,true);}
   function answerQuiz(chosen){
@@ -133,18 +133,18 @@
       var module=await import(PGLITE_URL);
       if(!module||typeof module.PGlite!=='function')throw new Error('Не удалось найти PGlite в загруженном модуле.');
       var response=await fetch('seed.sql',{cache:'no-store'});
-      if(!response.ok)throw new Error("Не удалось загрузить семя.sql ("+response.status+"). Открой курс через веб-сервер, а не как файл://.");
+      if(!response.ok)throw new Error('Не удалось загрузить seed.sql ('+response.status+'). Открой курс через веб-сервер, а не как file://.');
       var instance=new module.PGlite();await instance.exec(await response.text());
-      try{await instance.exec("SET оператор_таймаут = '4000 мс'; SET lock_timeout = '1000 мс';");}catch(_){}
+      try{await instance.exec("SET statement_timeout = '4000ms'; SET lock_timeout = '1000ms';");}catch(_){}
       db=instance;statusEngine('PostgreSQL готов · 7 таблиц с учебными данными');return db;
-    })().catch(function(error){enginePromise=null;statusEngine('Движок пока недоступен');showOutputMessage("Не удалось подготовить PostgreSQL. Проверь интернет и открой курс через веб-сервер. "+translateEngineError(error),'error');throw error;});
+    })().catch(function(error){enginePromise=null;statusEngine('Движок пока недоступен');showOutputMessage('Не удалось подготовить PostgreSQL. Проверь интернет и открой курс через веб-сервер. '+translateEngineError(error),'error');throw error;});
     return enginePromise;
   }
   function translateEngineError(error){var m=String(error&&error.message||error||'Неизвестная ошибка');if(/Failed to fetch|NetworkError|fetch/i.test(m))return 'Не удалось скачать движок или учебную схему.';return m;}
   function explainSQLError(message){
     var t=String(message||'');
     if(/syntax error/i.test(t))return 'Похоже, есть синтаксическая ошибка. Проверь скобки, запятые, кавычки и порядок ключевых слов.';
-    if(/relation .* does not exist/i.test(t))return "Таблица или представление не найдено. Проверь имя и схему. В учебной базе доступны Клиенты, Товары, Заказы, заказ_предметы, платежи, support_tickets и страница_события.";
+    if(/relation .* does not exist/i.test(t))return 'Таблица или представление не найдено. Проверь имя и схему. В учебной базе доступны customers, products, orders, order_items, payments, support_tickets и page_events.';
     if(/column .* does not exist/i.test(t))return 'Столбец не найден. Проверь имя поля и псевдоним таблицы.';
     if(/violates foreign key constraint/i.test(t))return 'Нарушена внешняя связь: ссылающаяся запись должна ссылаться на существующую строку.';
     if(/duplicate key value violates unique constraint/i.test(t))return 'Нарушен первичный или уникальный ключ. Используй новый ключ или ON CONFLICT.';
@@ -224,13 +224,13 @@
   function loadMermaid(){
     if(window.mermaid&&typeof window.mermaid.run==='function')return Promise.resolve(window.mermaid);
     if(mermaidPromise)return mermaidPromise;
-    mermaidPromise=new Promise(function(resolve,reject){var existing=document.querySelector('script[data-pg-mermaid]'),script=existing||document.createElement('script');script.src=MERMAID_URL;script.async=true;script.dataset.pgMermaid='true';script.onload=function(){if(window.mermaid&&typeof window.mermaid.run==='function')resolve(window.mermaid);else reject(new Error("Русалка API не найдена"));};script.onerror=function(){reject(new Error("CDN Русалки недоступен."));};if(!existing)document.head.appendChild(script);}).catch(function(error){mermaidPromise=null;throw error;});
+    mermaidPromise=new Promise(function(resolve,reject){var existing=document.querySelector('script[data-pg-mermaid]'),script=existing||document.createElement('script');script.src=MERMAID_URL;script.async=true;script.dataset.pgMermaid='true';script.onload=function(){if(window.mermaid&&typeof window.mermaid.run==='function')resolve(window.mermaid);else reject(new Error('Mermaid API not found'));};script.onerror=function(){reject(new Error('Mermaid CDN unavailable'));};if(!existing)document.head.appendChild(script);}).catch(function(error){mermaidPromise=null;throw error;});
     return mermaidPromise;
   }
   async function renderSchemaDiagram(){
     var node=document.getElementById('schemaDiagram');if(!node||node.dataset.processed==='true')return;var wrap=node.closest('.pg-mermaid-wrap');
-    try{var mermaid=await loadMermaid();mermaid.initialize({startOnLoad:false,securityLevel:'strict',theme:'base',themeVariables:{primaryColor:'#18181B',primaryTextColor:'#F5F7FA',primaryBorderColor:'#38BDF8',lineColor:'#A1A1AA',secondaryColor:'#27272A',tertiaryColor:'#0E7490',fontFamily:"системный интерфейс, без засечек",fontSize:'14px'},er:{useMaxWidth:true,diagramPadding:12}});await mermaid.run({nodes:[node]});}
-    catch(_){if(wrap)wrap.innerHTML="<p class=\"pg-schema-note\">Не удалось загрузить Русалка. Состав связей: Клиенты → Заказы → заказ_предметы → Товары; Заказы → платежи; Клиенты → support_tickets и страница_события.</p>";}
+    try{var mermaid=await loadMermaid();mermaid.initialize({startOnLoad:false,securityLevel:'strict',theme:'base',themeVariables:{primaryColor:'#18181B',primaryTextColor:'#F5F7FA',primaryBorderColor:'#38BDF8',lineColor:'#A1A1AA',secondaryColor:'#27272A',tertiaryColor:'#0E7490',fontFamily:'system-ui, sans-serif',fontSize:'14px'},er:{useMaxWidth:true,diagramPadding:12}});await mermaid.run({nodes:[node]});}
+    catch(_){if(wrap)wrap.innerHTML='<p class="pg-schema-note">Не удалось загрузить Mermaid. Состав связей: customers → orders → order_items → products; orders → payments; customers → support_tickets и page_events.</p>';}
   }
   search.addEventListener('input',renderNav);
   document.getElementById('resetProgressBtn').addEventListener('click',resetProgress);
@@ -238,6 +238,6 @@
   schemaPanel.addEventListener('toggle',function(){if(schemaPanel.open)renderSchemaDiagram();});
   window.addEventListener('storage',function(e){if(e.key===PROGRESS_KEY){state=normalizeProgress(readJSON(PROGRESS_KEY,defaultState));activeId=numberOr(state.currentLessonId,firstIncompleteId());renderLesson();}});
   window.addEventListener('apk:progress-restored',function(){state=normalizeProgress(readJSON(PROGRESS_KEY,defaultState));activeId=numberOr(state.currentLessonId,firstIncompleteId());renderLesson();});
-  if(!lessons.length){view.innerHTML="<h2>Не удалось загрузить программу</h2><p>Обнови страницу. Файл курс-данные.js не содержит уроков.</p>";return;}
+  if(!lessons.length){view.innerHTML='<h2>Не удалось загрузить программу</h2><p>Обнови страницу. Файл course-data.js не содержит уроков.</p>';return;}
   updateProgressHeader();renderNav();renderLesson();
 })();
