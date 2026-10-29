@@ -83,7 +83,7 @@ test('SQL 2 query execution blocks data-changing commands and multiple statement
 
 test('Every SQL 2 lesson follows the beginner-friendly lesson structure', () => {
   const html = read('sql2/index.html');
-  const match = html.match(/const LESSONS = (\\[[\\s\\S]*?\\n    \\]);/);
+  const match = html.match(/const LESSONS = (\[[\s\S]*?\n    \]);/);
   assert.ok(match, 'The SQL 2 lesson list must be present');
   const lessons = new Function('return ' + match[1])();
   assert.equal(lessons.length, 24);
@@ -97,18 +97,18 @@ test('Every SQL 2 lesson follows the beginner-friendly lesson structure', () => 
       assert.equal(typeof lesson[field], 'string', 'Lesson ' + lesson.id + ' is missing ' + field);
       assert.ok(lesson[field].trim().length > 0, 'Lesson ' + lesson.id + ' has an empty ' + field);
     }
-    assert.match(lesson.starter, /^(SELECT|WITH)\\b/i, 'Lesson ' + lesson.id + ' starter must be SQL');
-    assert.match(lesson.solution, /^(SELECT|WITH)\\b/i, 'Lesson ' + lesson.id + ' solution must be SQL');
-    assert.match(lesson.starter, /;\\s*$/, 'Lesson ' + lesson.id + ' starter must end with a semicolon');
-    assert.match(lesson.solution, /;\\s*$/, 'Lesson ' + lesson.id + ' solution must end with a semicolon');
-    assert.doesNotMatch(lesson.hint, /\\b(?:SELECT|WITH)\\b[\\s\\S]*;/i,
+    assert.match(lesson.starter, /^(SELECT|WITH)\b/i, 'Lesson ' + lesson.id + ' starter must be SQL');
+    assert.match(lesson.solution, /^(SELECT|WITH)\b/i, 'Lesson ' + lesson.id + ' solution must be SQL');
+    assert.match(lesson.starter, /;\s*$/, 'Lesson ' + lesson.id + ' starter must end with a semicolon');
+    assert.match(lesson.solution, /;\s*$/, 'Lesson ' + lesson.id + ' solution must end with a semicolon');
+    assert.doesNotMatch(lesson.hint, /\b(?:SELECT|WITH)\b[\s\S]*;/i,
       'Lesson ' + lesson.id + ' hint must not contain a complete SQL solution');
-    assert.doesNotMatch(lesson.solution, /\\b(select|from|where|order by|group by|having|limit|with|join|on)\\b/,
+    assert.doesNotMatch(lesson.solution, /\b(select|from|where|order by|group by|having|limit|with|join|on)\b/,
       'Lesson ' + lesson.id + ' SQL keywords should be uppercase');
   }
 
   const lessonBlock = match[1];
-  assert.doesNotMatch(lessonBlock, /Важно:\\s*объясняй решение по-русски|инструкц(?:ия|ии) для ИИ/i,
+  assert.doesNotMatch(lessonBlock, /Важно:\s*объясняй решение по-русски|инструкц(?:ия|ии) для ИИ/i,
     'Learner-facing lesson content must not contain AI service instructions');
   assert.ok(html.includes('<strong>Что нового</strong>'));
   assert.ok(html.includes('<strong>Ожидаемый результат</strong>'));
