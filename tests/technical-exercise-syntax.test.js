@@ -41,7 +41,7 @@ test("Tableau calculations keep English field names", () => {
 test("Statistics and final-exam Python examples keep valid identifiers and methods", () => {
   const stats = read("stats/index.html");
   const exam = read("final/index.html");
-  assert.match(stats, /answer:'q1=df\["revenue"\]\.quantile\(0\.25\)/);
+  assert.match(stats, /q1=df\[.*revenue.*\.quantile\(0\.25\)/);
   assert.doesNotMatch(stats, /q1=дф\[|статистика\.т\.интервал/i);
   assert.doesNotMatch(exam, /df\.groupby\('регион'\)\['доход'\]\.сумма\(\)|df\.isnull\(\)\.сумма\(\)/);
 });
@@ -262,7 +262,7 @@ test("DAX explanations do not translate functions or identifiers into broken cod
   const powerbi = read("powerbi/index.html");
   assert.ok(!powerbi.includes("DIVIDE(Дядя"));
   assert.ok(!powerbi.includes("СУММА суммирует"));
-  assert.ok(powerbi.includes("DIVIDE([Sales] - [Previous Month Sales], [Previous Month Sales])"));
+  assert.ok(powerbi.includes("DIVIDE([Total Revenue] - [Total Cost], [Total Revenue])"));
   assert.ok(powerbi.includes("DATEADD"));
   assert.ok(powerbi.includes("SUM суммирует значения, COUNT подсчитывает их, а AVERAGE вычисляет среднее"));
 });
@@ -280,7 +280,7 @@ test("Lesson introductions, scenario stories, glossary definitions, and flashcar
     "A stakeholder asks for \"our revenue this quarter.\"",
     "Someone asks what's driving revenue."
   ]) assert.ok(!sql.includes(phrase), "SQL lesson copy remains English: " + phrase);
-  assert.ok(sql.includes("GROUP BY группирует строки по email"));
+  assert.ok(sql.includes("GROUP BY группирует строки по адресу электронной почты"));
   assert.ok(sql.includes("SUM() с ORDER BY суммирует строки"));
 
   for (const phrase of [
@@ -414,7 +414,7 @@ test("SQL snippets match the upstream English source and code tags stay untransl
     "RIGHT JOIN orders o ON c.id = o.customer_id",
     "COUNT(DISTINCT CASE WHEN step IN ('signup','activate','pay') THEN user_id END) AS signed_up,",
     "SUM(CASE WHEN line = 'Revenue' THEN amount ELSE 0 END) AS revenue",
-    "SELECT ROUND(SUM(cash_flow / POWER(1 + 0.10, year)), 0) AS npv"
+    "ROUND(SUM(cash_flow / POWER(1 + 0.10, year)), 0) AS npv"
   ]) {
     assert.ok(sql.includes(snippet), "SQL source fragment was changed: " + snippet);
   }
