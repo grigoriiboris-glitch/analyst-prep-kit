@@ -498,10 +498,11 @@ test("Legacy dark-green UI palette is removed from shared and learning component
 
 
 
+
 test("Python Parsons exercises keep executable English snippets", () => {
   const python = read("python/index.html");
-  assert.ok(python.includes(\`lines:["import pandas as pd","df = pd.read_csv('sales.csv')","west = df[df['region'] == 'West']","print(west.shape)"]\`));
-  assert.ok(python.includes(\`lines:["import pandas as pd","df = pd.read_csv('sales.csv')","totals = df.groupby('region')['revenue'].sum()","print(totals)"]\`));
+  assert.ok(python.includes("lines:[\"import pandas as pd\",\"df = pd.read_csv('sales.csv')\",\"west = df[df['region'] == 'West']\",\"print(west.shape)\"]"));
+  assert.ok(python.includes("lines:[\"import pandas as pd\",\"df = pd.read_csv('sales.csv')\",\"totals = df.groupby('region')['revenue'].sum()\",\"print(totals)\"]"));
   assert.ok(python.includes("df.groupby('region')['revenue'].sum()"));
   assert.ok(python.includes(".reset_index()"));
   assert.ok(!python.includes("импортировать pandas как ПД"));
@@ -522,7 +523,7 @@ test("Analyst simulator schema and SQL date examples keep English identifiers", 
 test("SQL answer choices and examples preserve English SQL syntax", () => {
   const sql = read("sql/index.html");
   assert.ok(sql.includes('opts:["WHERE amount > 100","WHERE amount = 100","FILTER amount > 100","WHERE amount GREATER 100"]'));
-  assert.ok(sql.includes(\`a:"WHERE amount > 100 AND state = 'TX'"\`));
+  assert.ok(sql.includes("a:\"WHERE amount > 100 AND state = 'TX'\""));
   assert.ok(!sql.includes('"Количество ФИЛЬТРОВ > 100"'));
   assert.ok(!sql.includes('"ГДЕ сумма БОЛЬШЕ 100"'));
 });
