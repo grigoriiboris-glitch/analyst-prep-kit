@@ -372,4 +372,7 @@ test("SQL query renderer marks code as non-translatable and repairs common trans
     normalize("JOIN может повторить клиента, а GROUP BY складывает эти копии обратно в одну."),
     "JOIN может повторить клиента, а GROUP BY складывает эти копии обратно в одну."
   );
+  assert.equal(normalize("ГДЕ регион НУЛЬ;"), "WHERE region IS NULL;");
+  assert.match(sql, /const safeLines = lines\\.map\\(line => normalizeSqlSnippet\\(line\\)\\)/);
+  assert.match(sql, /class="pars-txt" translate="no" data-technical="sql"/);
 });
