@@ -89,6 +89,7 @@ test('Every SQL 2 lesson follows the beginner-friendly lesson structure', () => 
   assert.equal(lessons.length, 24);
   assert.match(lessons.find((lesson) => lesson.id === 11).expected, /Delivered — 10/);
   assert.match(lessons.find((lesson) => lesson.id === 12).expected, /Delivered — 10/);
+  assert.match(lessons.find((lesson) => lesson.id === 7).expected, /1013 — 110; 1001 — 120; 1009 — 150/);
 
   const requiredTextFields = [
     'whatNew', 'prompt', 'hint', 'expected', 'explain',
