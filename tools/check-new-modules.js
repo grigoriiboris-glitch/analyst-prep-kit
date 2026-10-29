@@ -11,7 +11,8 @@ const htmlFiles = [
   "decision-making/index.html",
   "business-analysis/index.html",
   "datacraft/index.html",
-  "postgresql/index.html"
+  "postgresql/index.html",
+  "sql2/index.html"
 ];
 const requiredRoutes = [
   "foundations/",
@@ -20,7 +21,8 @@ const requiredRoutes = [
   "decision-making/",
   "business-analysis/",
   "datacraft/",
-  "postgresql/"
+  "postgresql/",
+  "sql2/"
 ];
 
 for (const file of htmlFiles) {
@@ -100,6 +102,20 @@ for (const page of [
   const lastStyleAt = html.lastIndexOf("</style>", linkAt);
   assert.ok(lastStyleAt >= 0 && lastStyleAt < linkAt, "Shared theme must load after legacy inline CSS: " + page);
 }
+
+const sql2Page = fs.readFileSync(path.join(root, "sql2/index.html"), "utf8");
+assert.equal((sql2Page.match(/id:\d+,unit:"[^"]+",title:"/g) || []).length, 24,
+  "SQL 2 must contain exactly 24 authored tasks");
+for (const feature of [
+  'const STORAGE_KEY = "sql2kit-v1"', "initSqlJs", "sqlDb.exec(SEED_SQL)",
+  "function queryOnly(sql)", "function sameResults(actual, expected)",
+  "function runSQL()", "window.DataCraftEconomy.earn", "function copyTaskContext()"
+]) {
+  assert.ok(sql2Page.includes(feature), "SQL 2 module feature missing: " + feature);
+}
+assert.ok(sql2Page.includes('<html lang="ru" data-static-ru="true"'), "SQL 2 must use static Russian markup");
+assert.ok(sql2Page.includes("ROW_NUMBER()") && sql2Page.includes("LAG(") && sql2Page.includes("HAVING COUNT(*)"),
+  "SQL 2 advanced practice topics are incomplete");
 
 assert.ok(sharedThemeCss.includes('html[data-course-theme="tool"]'), "Shared theme token bridge for practice tools is missing");
 for (const page of [
@@ -284,7 +300,7 @@ console.log("OK: DataCraft catalog has the expected lesson counts for each core 
 const economy = fs.readFileSync(path.join(root, "assets/datacraft-economy.js"), "utf8");
 new Function(economy);
 for (const key of [
-  "datacraft-wallet-v1", "sqlkit-v1", "epk", "ppk", "pbikt-v1",
+  "datacraft-wallet-v1", "sqlkit-v1", "sql2kit-v1", "epk", "ppk", "pbikt-v1",
   "spk", "tpk", "clk-v1", "fmk-v1", "apk-foundations-progress-v1",
   "apk-quality-passed-v1", "apk-portfolio-", "sim2", "ipk", "apk-final"
 ]) {

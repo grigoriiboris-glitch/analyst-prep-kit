@@ -35,6 +35,13 @@ function loadBackupApi(storage) {
   return window.apkSync;
 }
 
+test('SQL 2 has an isolated key that participates in cloud progress sync', () => {
+  assert.equal(progress.getKitIdForKey('sql2kit-v1'), 'sql2-v1');
+  assert.equal(progress.getKitIdForKey('sql2-last-visit'), 'sql2-v1');
+  assert.equal(progress.isAllowedKey('sql2kit-v1'), true);
+  assert.equal(progress.getKitIdForKey('sqlkit-v1'), 'sqlkit-v1');
+});
+
 test('cloud restore merges lesson completion rather than replacing local progress', () => {
   const local = JSON.stringify({ doneLessons: [1, 3], doneFills: [5], theme: 'light' });
   const cloud = JSON.stringify({ doneLessons: [2, 3], doneFills: [6], badgeMarks: { early: true } });

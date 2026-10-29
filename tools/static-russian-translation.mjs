@@ -22,7 +22,7 @@ const OMIT_DIRS = new Set([".git", ".github", "node_modules", "tools", "tests"])
 // DataCraft canvas renderers and course pages are authored in Russian, but contain CSS and executable script literals.
 // Static translation corrupts alpha decimals, canvas fonts, CSS filters, and game interactions.
 // Keep native game sources and the PostgreSQL lesson page out of machine translation.
-const OMIT_FILES = new Set(["assets/ru-localization.js","assets/ru-localization-boot.js","assets/sql-mermaid.js","datacraft/curriculum-map.js","datacraft/index.html","datacraft/quiet-valley.js","datacraft/lesson-catalog.js","postgresql/index.html","postgresql/app.js","postgresql/course-data.js","sql/index.html","excel-cert/index.html","stats/index.html","final/index.html","tableau/index.html","python/index.html","simulator/index.html"]);
+const OMIT_FILES = new Set(["assets/ru-localization.js","assets/ru-localization-boot.js","assets/sql-mermaid.js","datacraft/curriculum-map.js","datacraft/index.html","datacraft/quiet-valley.js","datacraft/lesson-catalog.js","postgresql/index.html","postgresql/app.js","postgresql/course-data.js", "sql2/index.html","sql/index.html","excel-cert/index.html","stats/index.html","final/index.html","tableau/index.html","python/index.html","simulator/index.html"]);
 const SKIP_TAGS = new Set(["script", "style", "pre", "code", "kbd", "samp", "svg", "canvas", "iframe"]);
 const SKIP_CLASSES = new Set(["code-block", "code-sample", "code-snippet", "code-example", "formula-code", "ral-code", "ral-sql", "ral-note-chunk", "terminal-editor", "sql-code", "sql-query", "technical-code", "code-broken", "code-fixed", "fill-partial", "notranslate"]);
 // Treat technical values as source data, even when nested in a human-readable card.
