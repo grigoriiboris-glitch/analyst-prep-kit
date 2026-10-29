@@ -514,7 +514,7 @@ test("Python Parsons exercises keep executable English snippets", () => {
 test("Analyst simulator schema and SQL date examples keep English identifiers", () => {
   const simulator = read("simulator/index.html");
   assert.ok(simulator.includes("заказы → order_id, customer_id, product_id, order_date, amount, status"));
-  assert.ok(simulator.includes("WHERE order_date >= CURRENT_DATE - INTERVAL '30 days'"));
+  assert.ok(simulator.includes("WHERE o.order_date >= CURRENT_DATE - INTERVAL '30 days'"));
   assert.ok(simulator.includes("ROUND(SUM(amount)::numeric / COUNT(*), 2)"));
   assert.ok(!simulator.includes("Фильтр по дате: ГДЕ дата_заказа"));
   assert.ok(!simulator.includes("Подтверждает существование этих столбцов: идентификатор заказа"));
