@@ -454,7 +454,7 @@ Client_ID | Название_компании | Контакт_электрон�
           "Фильтр по дате: ГДЕ дата_заказа >= CURRENT_DATE - INTERVAL '30  дни'",
           "Для второго запроса соедините Заказы и Товары по Product_id",
           "HAVING фильтрует после группировки, в отличие от WHERE, который отбирает строки до группировки",
-          "ROUND(SUM(amount)::numeric / COUNT(*), 2) для чистого avg_order_value"
+          "ROUND(SUM(amount)::числовой / COUNT(*), 2) для чистого avg_order_value"
         ],
         rubric:["Все три запроса синтаксически корректны.","HAVING и WHERE используются по назначению","Объединяет ссылки на правильные столбцы","Рефлексия Ответ конкретный"],
         exemplar:`-- Q1: Revenue by region, last 30 days
@@ -520,7 +520,7 @@ think about.`
 Добавьте вверху блок комментариев: что делает скрипт, чего он ожидает, кто его написал.`,
         hints:[
           "pd.read_csv('daily_orders.csv') to load",
-          "set(required_cols).issubset(df.columns) для проверки имен столбцов",
+          "набор(требуемые_столбцы).issubset(df.columns) для проверки имен столбцов",
           "df.isnull().any(axis=1).sum() counts rows with any null",
           "(df['amount'] < 0).sum() подсчитывает отрицательные числа",
           "Соберите список ошибок и объедините его — это понятнее, чем вложенные если"
@@ -528,39 +528,39 @@ think about.`
         rubric:["Скрипт работает без ошибок","Все 5 проверок реализованы","Вывод четко отформатирован","Блок комментариев присутствует и информативен."],
         exemplar:`"""
 daily_orders_validation.py
-Purpose: validate daily_orders.csv before loading it into a reporting pipeline.
-Expected columns: order_id, customer_id, amount, order_date.
-Author: [you]
+Цель: проверить файл daily_orders.csv перед его загрузкой в конвейер отчетов.
+Ожидаемые столбцы: order_id, customer_id, sum, order_date.
+Автор: [вы]
 """
-import pandas as pd
+импортировать pandas как pd
 
-FILE = "daily_orders.csv"
-REQUIRED = {"order_id", "customer_id", "amount", "order_date"}
+ФАЙЛ = "daily_orders.csv"
+ОБЯЗАТЕЛЬНО = {"order_id", "customer_id", "сумма", "order_date"}
 
-df = pd.read_csv(FILE)
-errors = []
+df = pd.read_csv(ФАЙЛ)
+ошибки = []
 
-missing_cols = REQUIRED - set(df.columns)
-if missing_cols:
-    errors.append(f"Missing columns: {sorted(missing_cols)}")
+Missing_cols = ОБЯЗАТЕЛЬНО - set(df.columns)
+если отсутствуют_столбцы:
+    error.append(f"Отсутствуют столбцы: {sorted(missing_cols)}")
 
 null_rows = int(df.isnull().any(axis=1).sum())
-neg_amounts = int((df["amount"] < 0).sum()) if "amount" in df.columns else 0
+neg_amounts = int((df["amount"] < 0).sum()), если "сумма" в df.columns else 0
 
-if null_rows:
-    errors.append(f"Rows with missing values: {null_rows}")
-if neg_amounts:
-    errors.append(f"Rows with negative amounts: {neg_amounts}")
+если null_rows:
+    error.append(f"Строки с пропущенными значениями: {null_rows}")
+если neg_amounts:
+    error.append(f"Строки с отрицательными суммами: {neg_amounts}")
 
-status = "PASS ✓" if not errors else "FAIL ✗"
-print("=== Daily orders validation ===")
-print(f"File: {FILE}")
-print(f"Rows loaded: {len(df):,}")
-print(f"Rows containing missing values: {null_rows}")
-print(f"Negative amounts: {neg_amounts}")
-print(f"Status: {status}")
-for error in errors:
-    print(f" - {error}")`
+status = «PASS ✓», если нет ошибок, иначе «FAIL ✗»
+print("=== Ежедневная проверка заказов ===")
+print(f"Файл: {ФАЙЛ}")
+print(f"Загружено строк: {len(df):,}")
+print(f"Строки, содержащие пропущенные значения: {null_rows}")
+print(f"Отрицательные суммы: {neg_amounts}")
+print(f"Статус: {статус}")
+за ошибку в ошибках:
+    print(f" - {ошибка}")`
       }
     ]
   },
@@ -809,41 +809,41 @@ Recommended Next Steps
         ],
         rubric:["Сопоставление охватывает все варианты выборочных данных.","Четкая печать до/после с правильным количеством изменений.","Вывод сохранен правильно","Строка документации присутствует и информативна."],
         exemplar:`"""
-standardize_regions.py
-Purpose: normalize free-text region values in a customer export so reports group them consistently.
-Author: [you]
-Date: May 26, 2026
-Input: DataFrame with columns [customer_id, region]
-Output: customer_cleaned.csv with an added region_clean column.
+стандартизировать_регионы.py
+Цель: нормализовать значения областей произвольного текста в экспорте клиентов, чтобы отчеты группировали их последовательно.
+Автор: [вы]
+Дата: 26 мая 2026 г.
+Входные данные: DataFrame со столбцами [customer_id, регион]
+Вывод: customer_cleaned.csv с добавленным столбцом Region_clean.
 """
-import pandas as pd
+импортировать pandas как pd
 
-data = {
-    "customer_id": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-    "region": ["US", "United States", "USA", "United Kingdom", "UK", "uk", "CA", "Canada", "ca", "CAN"],
+данные = {
+    «customer_id»: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    «регион»: [«США», «Соединенные Штаты», «США», «Великобритания», «Великобритания», «Великобритания», «Калифорния», «Канада», «Калифорния», «КАН»],
 }
-df = pd.DataFrame(data)
+df = pd.DataFrame(данные)
 
-MAPPING = {
-    "US": "United States",
-    "USA": "United States",
-    "United States": "United States",
-    "UK": "United Kingdom",
-    "United Kingdom": "United Kingdom",
-    "uk": "United Kingdom",
-    "GB": "United Kingdom",
-    "CA": "Canada",
-    "Canada": "Canada",
-    "ca": "Canada",
-    "CAN": "Canada",
+КАРТОГРАФИЯ = {
+    «США»: «Соединенные Штаты»,
+    «США»: «Соединенные Штаты»,
+    «Соединенные Штаты»: «Соединенные Штаты»,
+    «Великобритания»: «Великобритания»,
+    «Великобритания»: «Великобритания»,
+    "uk": "Великобритания",
+    «ГБ»: «Великобритания»,
+    «КА»: «Канада»,
+    «Канада»: «Канада»,
+    "ок": "Канада",
+    «МОЖЕТ»: «Канада»,
 }
 
 df["region_clean"] = df["region"].map(MAPPING)
-changed = int((df["region"] != df["region_clean"]).sum())
+изменено = int((df["region"] != df["region_clean"]).sum())
 
-print("Original unique values:", sorted(df["region"].unique().tolist()))
-print("Cleaned unique values:", sorted(df["region_clean"].dropna().unique().tolist()))
-print(f"Rows changed: {changed} of {len(df)}")
+print("Исходные уникальные значения:", sorted(df["region"].unique().tolist()))
+print("Уникальные значения очищены:", sorted(df["region_clean"].dropna().unique().tolist()))
+print(f"Строки изменены: {изменено} из {len(df)}")
 
 df.to_csv("customers_cleaned.csv", index=False)`
       }
