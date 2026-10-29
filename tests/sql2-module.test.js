@@ -92,7 +92,7 @@ test('Every SQL 2 lesson follows the beginner-friendly lesson structure', () => 
   assert.match(lessons.find((lesson) => lesson.id === 7).expected, /1013 — 110; 1001 — 120; 1009 — 150/);
 
   const requiredTextFields = [
-    'whatNew', 'prompt', 'hint', 'expected', 'explain',
+    'whatNew', 'syntaxExample', 'prompt', 'hint', 'expected', 'explain',
     'commonMistake', 'checkQuestion'
   ];
   for (const lesson of lessons) {
@@ -103,6 +103,7 @@ test('Every SQL 2 lesson follows the beginner-friendly lesson structure', () => 
     assert.match(lesson.starter, /^(SELECT|WITH)\b/i, 'Lesson ' + lesson.id + ' starter must be SQL');
     assert.match(lesson.solution, /^(SELECT|WITH)\b/i, 'Lesson ' + lesson.id + ' solution must be SQL');
     assert.match(lesson.starter, /;\s*$/, 'Lesson ' + lesson.id + ' starter must end with a semicolon');
+    assert.match(lesson.syntaxExample, /;\s*$/, 'Lesson ' + lesson.id + ' syntax example must end with a semicolon');
     assert.match(lesson.solution, /;\s*$/, 'Lesson ' + lesson.id + ' solution must end with a semicolon');
     assert.doesNotMatch(lesson.hint, /\b(?:SELECT|WITH)\b[\s\S]*;/i,
       'Lesson ' + lesson.id + ' hint must not contain a complete SQL solution');
