@@ -21,7 +21,7 @@ test("Excel exercises keep English functions and Latin cell references", () => {
 
 test("Python exercises keep executable keywords, identifiers, and pandas calls", () => {
   const python = read("python/index.html");
-  assert.match(python, /formula:"def total\(values\):/);
+  assert.match(python, /formula:"def log_calls\(func\):/);
   assert.match(python, /import pandas as pd/);
   assert.doesNotMatch(python, /общая сумма определения|formula:"интервал\(|импортировать pandas как ПД/i);
 });
