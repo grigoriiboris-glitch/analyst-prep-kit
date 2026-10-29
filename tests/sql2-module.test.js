@@ -87,6 +87,8 @@ test('Every SQL 2 lesson follows the beginner-friendly lesson structure', () => 
   assert.ok(match, 'The SQL 2 lesson list must be present');
   const lessons = new Function('return ' + match[1])();
   assert.equal(lessons.length, 24);
+  assert.match(lessons.find((lesson) => lesson.id === 11).expected, /Delivered — 10/);
+  assert.match(lessons.find((lesson) => lesson.id === 12).expected, /Delivered — 10/);
 
   const requiredTextFields = [
     'whatNew', 'prompt', 'hint', 'expected', 'explain',
