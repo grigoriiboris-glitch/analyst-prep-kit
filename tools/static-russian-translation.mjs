@@ -11,6 +11,7 @@ import path from "node:path";
 import { parse } from "parse5";
 import * as acorn from "acorn";
 import markupGuard from "./static-russian-markup-guard.cjs";
+import { isTechnicalSnippet, shouldSkipTechnicalElement } from "./technical-syntax-guard.cjs";
 import { applyEditorialCorrections } from "./russian-editorial-copy.mjs";
 const { containsHtmlMarkup, shouldPreserveHtmlAttributeFragment } = markupGuard;
 
@@ -22,7 +23,9 @@ const OMIT_DIRS = new Set([".git", ".github", "node_modules", "tools", "tests"])
 // Keep native game sources and the PostgreSQL lesson page out of machine translation.
 const OMIT_FILES = new Set(["assets/ru-localization.js", "assets/ru-localization-boot.js", "assets/sql-mermaid.js", "datacraft/curriculum-map.js", "datacraft/index.html", "datacraft/quiet-valley.js", "datacraft/lesson-catalog.js", "postgresql/index.html"]);
 const SKIP_TAGS = new Set(["script", "style", "pre", "code", "kbd", "samp", "svg", "canvas", "iframe"]);
-const SKIP_CLASSES = new Set(["code-block", "code-sample", "code-snippet", "code-example", "formula-code", "ral-code", "ral-note-chunk", "terminal-editor"]);
+const SKIP_CLASSES = new Set(["code-block", "code-sample", "code-snippet", "code-example", "formula-code", "ral-code", "ral-sql", "ral-note-chunk", "terminal-editor", "sql-code", "sql-query", "technical-code", "code-broken", "code-fixed", "fill-partial", "notranslate"]);
+// Treat technical values as source data, even when nested in a human-readable card.
+const TECHNICAL_KEYS = new Set(["sql", "sqlcode", "sqlquery", "query", "statement", "code", "snippet", "syntax", "formula", "expression", "calculation", "dax", "pythoncode"]);
 const HUMAN_KEYS = new Set([
   "title", "subtitle", "description", "desc", "intro", "summary", "question",
   "explanation", "hint", "feedback", "prompt", "text", "content", "body", "lesson",
@@ -143,6 +146,8 @@ function isTechnicalOnly(text) {
 function isCodeLike(text) {
   const value = text.trim();
   if (!value) return false;
+  // Protect standalone SQL clauses and exercise fragments (SELECT, JOIN, GROUP BY, etc.).
+  if (isTechnicalSnippet(value)) return true;
   if (CODE_START.test(value)) return true;
   // Formulas and snippets are syntax, not UI prose. Preserve function names,
   // cell references, pandas calls, decorators, and generated expressions.
@@ -465,7 +470,7 @@ async function translateMarkup(value) {
       if (closing) {
         const ix = skipped.lastIndexOf(tag);
         if (ix >= 0) skipped.splice(ix, 1);
-      } else if (!/\/\s*>$/.test(piece) && SKIP_TAGS.has(tag)) {
+      } else if (!/\/\s*>$/.test(piece) && SKIP_TAGS.has(tag) || shouldSkipTechnicalElement(piece)) {
         skipped.push(tag);
       }
       result.push(piece);
@@ -532,7 +537,7 @@ async function translateHtmlTemplateFragment(fragment, state) {
             const classIndex = state.skipClassTags.lastIndexOf(tag);
             if (classIndex >= 0) state.skipClassTags.splice(classIndex, 1);
           } else if (!/\/\s*>$/.test(state.tagBuffer)) {
-            if (SKIP_TAGS.has(tag)) state.skipTags.push(tag);
+            if (SKIP_TAGS.has(tag) || shouldSkipTechnicalElement(state.tagBuffer)) state.skipTags.push(tag);
             if (classes.some(name => SKIP_CLASSES.has(name))) state.skipClassTags.push(tag);
           }
         }
@@ -691,6 +696,7 @@ async function translateJavaScript(source, filename) {
     if (node.type === "Property" || node.type === "PropertyDefinition") {
       if (node.computed) await visit(node.key, node, null);
       const name = keyName(node.key);
+      if (TECHNICAL_KEYS.has(name.toLowerCase())) return;
       const nextContext = HUMAN_KEYS.has(name.toLowerCase()) ? name : context;
       await visit(node.value, node, nextContext);
       return;
@@ -862,7 +868,7 @@ async function processJson(file, original) {
     if (Array.isArray(value)) return Promise.all(value.map(item => visit(item, context)));
     if (value && typeof value === "object") {
       const pairs = await Promise.all(Object.entries(value).map(async ([key, child]) => [
-        key, await visit(child, HUMAN_KEYS.has(key.toLowerCase()) ? key : null)
+        key, TECHNICAL_KEYS.has(key.toLowerCase()) ? child : await visit(child, HUMAN_KEYS.has(key.toLowerCase()) ? key : null)
       ]));
       return Object.fromEntries(pairs);
     }
