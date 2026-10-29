@@ -19,7 +19,7 @@ def extract_json_strings(source: str) -> list[str]:
 
 
 seed_match = re.search(
-    r'const SEED_SQL = \[(.*?)\]\.join\("\\\\n"\);',
+    r'const SEED_SQL = \[(.*?)\]\.join\("\\n"\);',
     HTML,
     flags=re.DOTALL,
 )
