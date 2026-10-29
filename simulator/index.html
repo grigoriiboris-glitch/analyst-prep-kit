@@ -336,9 +336,9 @@ const DAYS = [
         objective:"Поймите, как данные структурированы в реляционной базе данных и какие бизнес-объекты они представляют.",
         assignment:`У вас есть доступ к базе данных продаж DataBridge со следующими таблицами:
 
-клиенты → customer_id, имя, электронная почта, дата_подписки, план_тип, Регион
-заказы → идентификатор заказа, customer_id, Product_id, дата_заказа, Количество, статус
-продукты → Product_id, имя, категория, Цена, создано_в
+клиенты → customer_id, name, email, signup_date, plan_type, region
+заказы → order_id, customer_id, product_id, order_date, amount, status
+продукты → product_id, name, category, price, created_at
 билеты → Ticket_id, customer_id, создано_в, решено_в, категория, приоритет
 
 ВАШИ ЗАДАЧИ:
@@ -529,38 +529,38 @@ think about.`
         exemplar:`"""
 daily_orders_validation.py
 Цель: проверить файл daily_orders.csv перед его загрузкой в конвейер отчетов.
-Ожидаемые столбцы: идентификатор заказа, customer_id, сумма, дата_заказа.
+Ожидаемые столбцы: order_id, customer_id, amount, order_date.
 Автор: [вы]
 """
-импортировать pandas как ПД
+import pandas as pd
 
-ФАЙЛ = "daily_orders.csv"
-ОБЯЗАТЕЛЬНО = {"идентификатор заказа", "customer_id", "сумма", "дата_заказа"}
+FILE = "daily_orders.csv"
+REQUIRED = {"order_id", "customer_id", "amount", "order_date"}
 
-df = pd.read_csv(ФАЙЛ)
-ошибки = []
+df = pd.read_csv(FILE)
+errors = []
 
-Missing_cols = ОБЯЗАТЕЛЬНО - набор(df.columns)
-если отсутствуют_столбцы:
-    ошибка.добавить(ж"Отсутствуют столбцы: {отсортированный(Missing_cols)}")
+missing_cols = REQUIRED - set(df.columns)
+if missing_cols:
+    errors.append(f"Missing columns: {sorted(missing_cols)}")
 
 null_rows = int(df.isnull().any(axis=1).sum())
-neg_amounts = int((df["amount"] < 0).sum()), если "сумма" в df.columns else 0
+neg_amounts = int((df["amount"] < 0).sum()) if "amount" in df.columns else 0
 
-если null_rows:
-    ошибка.добавить(ж"Строки с пропущенными значениями: {null_rows}")
-если neg_amounts:
-    ошибка.добавить(ж"Строки с отрицательными суммами: {neg_amounts}")
+if null_rows:
+    errors.append(f"Rows with missing values: {null_rows}")
+if neg_amounts:
+    errors.append(f"Rows with negative amounts: {neg_amounts}")
 
 статус = «PASS ✓», если нет ошибок, иначе «FAIL ✗»
 print("=== Ежедневная проверка заказов ===")
-распечатать(ж"Файл: {ФАЙЛ}")
-распечатать(ж"Загружено строк: {Лен(дф):,}")
-распечатать(ж"Строки, содержащие пропущенные значения: {null_rows}")
-распечатать(ж"Отрицательные суммы: {neg_amounts}")
-распечатать(ж"Статус: {статус}")
-за ошибку в ошибках:
-    распечатать(ж" - {ошибка}")`
+print(f"File: {FILE}")
+print(f"Rows loaded: {len(df):,}")
+print(f"Rows with missing values: {null_rows}")
+print(f"Negative amounts: {neg_amounts}")
+print(f"Status: {status}")
+for error in errors:
+    print(f" - {error}")`
       }
     ]
   },
@@ -816,7 +816,7 @@ Recommended Next Steps
 Входные данные: DataFrame со столбцами [customer_id, регион]
 Вывод: customer_cleaned.csv с добавленным столбцом Регион_чистый.
 """
-импортировать pandas как ПД
+import pandas as pd
 
 данные = {
     «customer_id»: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
