@@ -497,27 +497,32 @@ test("Legacy dark-green UI palette is removed from shared and learning component
 });
 
 
+
 test("Python Parsons exercises keep executable English snippets", () => {
   const python = read("python/index.html");
-  assert.match(python, /lines:\["import pandas as pd","df = pd\\.read_csv\\('sales\\.csv'\\)","west = df\\[df\\['region'\\] == 'West'\\]","print\\(west\\.shape\\)"\]/);
-  assert.match(python, /lines:\["import pandas as pd","df = pd\\.read_csv\\('sales\\.csv'\\)","totals = df\\.groupby\\('region'\\)\\['revenue'\\]\\.sum\\(\\)","print\\(totals\\)"\]/);
-  assert.match(python, /df\\.groupby\\('region'\\)\\['revenue'\\]\\.sum\\(\\)/);
-  assert.match(python, /\\.reset_index\\(\\)/);
-  assert.doesNotMatch(python, /импортировать pandas как ПД|запад = df\\[df\\['регион'\\]|итоги = df\\.groupby\\('регион'\\)/);
-  assert.doesNotMatch(python, /\\.перезагрузить_index\\(/);
+  assert.ok(python.includes(\`lines:["import pandas as pd","df = pd.read_csv('sales.csv')","west = df[df['region'] == 'West']","print(west.shape)"]\`));
+  assert.ok(python.includes(\`lines:["import pandas as pd","df = pd.read_csv('sales.csv')","totals = df.groupby('region')['revenue'].sum()","print(totals)"]\`));
+  assert.ok(python.includes("df.groupby('region')['revenue'].sum()"));
+  assert.ok(python.includes(".reset_index()"));
+  assert.ok(!python.includes("импортировать pandas как ПД"));
+  assert.ok(!python.includes("запад = df[df['регион']"));
+  assert.ok(!python.includes("итоги = df.groupby('регион'"));
+  assert.ok(!python.includes(".перезагрузить_index("));
 });
 
 test("Analyst simulator schema and SQL date examples keep English identifiers", () => {
   const simulator = read("simulator/index.html");
-  assert.match(simulator, /заказы → order_id, customer_id, product_id, order_date, amount, status/);
-  assert.match(simulator, /WHERE order_date >= CURRENT_DATE - INTERVAL '30 days'/);
-  assert.match(simulator, /ROUND\\(SUM\\(amount\\)::numeric \/ COUNT\\(\\*\\), 2\\)/);
-  assert.doesNotMatch(simulator, /Фильтр по дате: ГДЕ дата_заказа|Подтверждает существование этих столбцов: идентификатор заказа/);
+  assert.ok(simulator.includes("заказы → order_id, customer_id, product_id, order_date, amount, status"));
+  assert.ok(simulator.includes("WHERE order_date >= CURRENT_DATE - INTERVAL '30 days'"));
+  assert.ok(simulator.includes("ROUND(SUM(amount)::numeric / COUNT(*), 2)"));
+  assert.ok(!simulator.includes("Фильтр по дате: ГДЕ дата_заказа"));
+  assert.ok(!simulator.includes("Подтверждает существование этих столбцов: идентификатор заказа"));
 });
 
 test("SQL answer choices and examples preserve English SQL syntax", () => {
   const sql = read("sql/index.html");
-  assert.match(sql, /opts:\["WHERE amount > 100","WHERE amount = 100","FILTER amount > 100","WHERE amount GREATER 100"\]/);
-  assert.match(sql, /a:"WHERE amount > 100 AND state = 'TX'"/);
-  assert.doesNotMatch(sql, /opts:\[[^\]]*"Количество ФИЛЬТРОВ > 100"|opts:\[[^\]]*"ГДЕ сумма БОЛЬШЕ 100"/);
+  assert.ok(sql.includes('opts:["WHERE amount > 100","WHERE amount = 100","FILTER amount > 100","WHERE amount GREATER 100"]'));
+  assert.ok(sql.includes(\`a:"WHERE amount > 100 AND state = 'TX'"\`));
+  assert.ok(!sql.includes('"Количество ФИЛЬТРОВ > 100"'));
+  assert.ok(!sql.includes('"ГДЕ сумма БОЛЬШЕ 100"'));
 });
