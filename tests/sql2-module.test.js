@@ -90,6 +90,7 @@ test('Every SQL 2 lesson follows the beginner-friendly lesson structure', () => 
   assert.match(lessons.find((lesson) => lesson.id === 11).expected, /Delivered — 10/);
   assert.match(lessons.find((lesson) => lesson.id === 12).expected, /Delivered — 10/);
   assert.match(lessons.find((lesson) => lesson.id === 7).expected, /1013 — 110; 1001 — 120; 1009 — 150/);
+  assert.match(lessons.find((lesson) => lesson.id === 23).solution, /WHERE o\\.total_amount <> COALESCE\\(p\\.paid_total, 0\\)/);
 
   const requiredTextFields = [
     'whatNew', 'syntaxExample', 'prompt', 'hint', 'expected', 'explain',
