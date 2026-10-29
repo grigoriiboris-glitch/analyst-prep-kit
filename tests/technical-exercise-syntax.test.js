@@ -488,4 +488,5 @@ test("Legacy dark-green UI palette is removed from shared and learning component
       !source.includes("background:var(--surf2,var(--surf,#1a302c))"),
       page + " sprint bar still has the dark-green fallback"
     );
+  }
 });
