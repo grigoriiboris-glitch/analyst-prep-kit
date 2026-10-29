@@ -18,6 +18,12 @@ function isTechnicalSnippet(value) {
   // A semicolon marks a technical lesson/exercise fragment. Preserve the entire
   // string in English instead of translating code, answer choices, or examples.
   if (text.includes(";")) return true;
+  // Lesson data stores executable fragments in arrays such as lines/options.
+  // Recognize code before the static localizer considers the parent field human-facing.
+  if (/^\\s*(?:SELECT|FROM|WHERE|JOIN|GROUP\\s+BY|ORDER\\s+BY|HAVING|LIMIT|OFFSET|FILTER|CASE|WHEN|THEN|ELSE|END|WITH)\\b/i.test(text)) return true;
+  if (/^(?:import\\s+[A-Za-z_][\\w.]*(?:\\s+as\\s+[A-Za-z_]\\w*)?|from\\s+[A-Za-z_][\\w.]*\\s+import\\b)/i.test(text)) return true;
+  if (/^(?:async\\s+)?def\\s+[A-Za-z_]\\w*\\s*\\(/i.test(text)) return true;
+  if (/^[A-Za-z_$][\\w$]*\\s*=\\s*[A-Za-z_$][\\w$]*(?:\\.|\\[|\\s*\\()/i.test(text)) return true;
   if (SQL_FRAGMENT_START.test(text) || TRANSLATED_SQL_START.test(text)) return true;
   // Expressions and statements can be isolated from the rest of a query.
   if (/^(?:=|@)\s*[A-Za-z_]/.test(text)) return true;

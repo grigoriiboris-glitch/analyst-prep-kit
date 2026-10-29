@@ -527,3 +527,18 @@ test("SQL answer choices and examples preserve English SQL syntax", () => {
   assert.ok(!sql.includes('"Количество ФИЛЬТРОВ > 100"'));
   assert.ok(!sql.includes('"ГДЕ сумма БОЛЬШЕ 100"'));
 });
+
+
+test("The translation guard recognizes executable Python lines and SQL answer fragments", () => {
+  for (const snippet of [
+    "import pandas as pd",
+    "from datetime import date",
+    "def log_calls(func):",
+    "west = df[df['region'] == 'West']",
+    "totals = df.groupby('region')['revenue'].sum()",
+    "WHERE amount GREATER 100",
+    "FILTER amount > 100"
+  ]) {
+    assert.equal(isTechnicalSnippet(snippet), true, "Must remain untranslated: " + snippet);
+  }
+});

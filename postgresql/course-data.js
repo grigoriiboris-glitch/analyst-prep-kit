@@ -4,7 +4,7 @@ window.PostgreSQLLessons = [
     "unit": "0 · Старт",
     "title": "Что такое PostgreSQL и чем он отличается от SQL",
     "goal": "Различать СУБД, язык SQL, клиент и сервер.",
-    "explain": "SQL — язык запросов. PostgreSQL — система управления базами данных, которая понимает SQL и расширяет его собственными возможностями. Клиент (psql, pgAdmin или приложение) отправляет запрос серверу и получает результат. В этом курсе PostgreSQL запускается прямо в браузере через WebAssembly (PGlite) (PGlite) (PGlite) (PGlite) (PGlite) (PGlite) (PGlite). К реальным базам данных курс не подключается.",
+    "explain": "SQL — язык запросов. PostgreSQL — система управления базами данных, которая понимает SQL и расширяет его собственными возможностями. Клиент (psql, pgAdmin или приложение) отправляет запрос серверу и получает результат. В этом курсе PostgreSQL запускается прямо в браузере через WebAssembly (PGlite) (PGlite) (PGlite) (PGlite). К реальным базам данных курс не подключается.",
     "gotcha": "Синтаксис и функции зависят от СУБД. Не переноси функции между СУБД вслепую: синтаксис MySQL, SQL Server, SQLite и PostgreSQL различается. Перед использованием проверь документацию нужной СУБД.",
     "exampleSql": "SELECT version() AS postgres_version, current_database() AS database_name, current_user AS current_role;",
     "starterSql": "SELECT version() AS postgres_version, current_database() AS database_name;",
