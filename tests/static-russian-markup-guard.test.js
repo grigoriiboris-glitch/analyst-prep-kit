@@ -58,7 +58,7 @@ test("identifies attribute fragments inside a JavaScript HTML concatenation", ()
   assert.equal(shouldPreserveHtmlAttributeFragment('" height="', false), false);
 });
 
-test("the static Russian build keeps authored game and visualization sources out of translation", () => {
+test("static Russian build protects runtime and technical exercise sources from machine translation", () => {
   const source = fs.readFileSync(path.join(__dirname, "../tools/static-russian-translation.mjs"), "utf8");
   for (const file of [
     "assets/sql-mermaid.js",
@@ -68,9 +68,16 @@ test("the static Russian build keeps authored game and visualization sources out
     "datacraft/lesson-catalog.js",
     "postgresql/index.html",
     "postgresql/app.js",
-    "postgresql/course-data.js"
+    "postgresql/course-data.js",
+    "sql/index.html",
+    "excel-cert/index.html",
+    "stats/index.html",
+    "final/index.html",
+    "tableau/index.html",
+    "python/index.html",
+    "simulator/index.html"
   ]) {
-    assert.ok(source.includes('"'+file+'"'), "Authored renderer/page must remain excluded from machine translation: "+file);
+    assert.ok(source.includes('"'+file+'"'), "Runtime, technical exercise, or authored page must remain excluded from machine translation: "+file);
   }
 });
 
