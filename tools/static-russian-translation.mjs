@@ -11,9 +11,10 @@ import path from "node:path";
 import { parse } from "parse5";
 import * as acorn from "acorn";
 import markupGuard from "./static-russian-markup-guard.cjs";
-import { isTechnicalSnippet, shouldSkipTechnicalElement } from "./technical-syntax-guard.cjs";
+import technicalSyntaxGuard from "./technical-syntax-guard.cjs";
 import { applyEditorialCorrections } from "./russian-editorial-copy.mjs";
 const { containsHtmlMarkup, shouldPreserveHtmlAttributeFragment } = markupGuard;
+const { isTechnicalSnippet, shouldSkipTechnicalElement } = technicalSyntaxGuard;
 
 const ROOT = process.cwd();
 const CACHE_PATH = path.join(ROOT, "tools", "static-ru-cache.json");
