@@ -13,6 +13,37 @@ test("SQL exercises keep SQL keywords and condition syntax in English", () => {
   assert.match(sql, /WHERE region IS NULL/);
 });
 
+test("SQL fill-in answers and walkthrough snippets keep English syntax", () => {
+  const sql = read("sql/index.html");
+  const fillsMatch = sql.match(/FILLS:\s*\[([\s\S]*?)\n\],/);
+  assert.ok(fillsMatch, "SQL fill-in exercises must be present");
+  const fills = fillsMatch[1];
+
+  assert.match(fills, /partial:"SELECT name, ___\\nFROM customers;", ans:"email", choices:\["email","address","phone","id"\]/);
+  assert.doesNotMatch(fills, /ans:"[^"]*[А-Яа-яЁё]/, "SQL answer fragments must not be translated");
+  assert.doesNotMatch(fills, /partial:"[^"]*[А-Яа-яЁё]/, "SQL code snippets must keep English syntax");
+  assert.doesNotMatch(fills, /choices:\[[^\]]*"[А-Яа-яЁё]/, "SQL syntax answer choices must not be translated");
+
+  for (const fragment of [
+    "SELECT имя",
+    "ГДЕ регион",
+    "ОТ устаревших_клиентов",
+    "СУММ (CASE",
+    "ROUND(общий_долг",
+    "ПРАГМА table_info",
+    "ИМЕЯ COUNT(*)",
+    "TRIM(имя) Имя AS",
+    "UPPER(состояние) состояние AS",
+    "GROUP BY СЧЕТУ(*)",
+    "ПОРЯДОК ПО СЧЕТУ(*)",
+    "ИЗ фактических данных a ОБЪЕДИНИТЬ бюджет b"
+  ]) {
+    assert.ok(!sql.includes(fragment), "SQL lesson still contains translated syntax: " + fragment);
+  }
+  assert.match(sql, /PRAGMA table_info\(/);
+  assert.match(sql, /SELECT DATE_FORMAT\(order_date,'%Y-%m'\) AS month, SUM\(revenue\) AS month_revenue/);
+});
+
 test("Excel exercises keep English functions and Latin cell references", () => {
   const excel = read("excel/index.html");
   assert.doesNotMatch(excel, /=СУММА\(/);
