@@ -24,7 +24,7 @@ function isTechnicalSnippet(value) {
   if (/^(?:import\s+[A-Za-z_][\w.]*(?:\s+as\s+[A-Za-z_]\w*)?|from\s+[A-Za-z_][\w.]*\s+import\b)/i.test(text)) return true;
   if (/^(?:async\s+)?def\s+[A-Za-z_]\w*\s*\(/i.test(text)) return true;
   if (/^[A-Za-z_$][\w$]*\s*=\s*[A-Za-z_$][\w$]*(?:\.|\[|\s*\()/i.test(text)) return true;
-  if (/^[A-Za-z_$][\\w$]*\\s*=\\s*[A-Za-z_$][\\w$]*(?:\\.|\\[|\\s*\\()/i.test(text)) return true;
+  if (/^[A-Za-z_$][\w$]*\s*=\s*[A-Za-z_$][\w$]*(?:\.|\[|\s*\()/i.test(text)) return true;
   if (SQL_FRAGMENT_START.test(text) || TRANSLATED_SQL_START.test(text)) return true;
   // Expressions and statements can be isolated from the rest of a query.
   if (/^(?:=|@)\s*[A-Za-z_]/.test(text)) return true;
