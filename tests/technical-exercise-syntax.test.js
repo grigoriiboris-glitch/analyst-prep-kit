@@ -412,7 +412,7 @@ test("SQL snippets match the upstream English source and code tags stay untransl
     assert.ok(!sql.includes(corrupted), "Localized SQL code remains in source: " + corrupted);
   }
 
-  const codeBodies = [...sql.matchAll(/<code\\b[^>]*>([\\s\\S]*?)<\\/code>/gi)];
+  const codeBodies = [...sql.matchAll(/<code\b[^>]*>([\s\S]*?)<\/code>/gi)];
   assert.ok(codeBodies.length > 0, "Expected SQL lessons to contain code elements");
   for (const [, body] of codeBodies) {
     const visible = body.replace(/<[^>]*>/g, "");
