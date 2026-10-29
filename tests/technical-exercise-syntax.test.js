@@ -2,6 +2,8 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
+const vm = require("node:vm");
+const { isTechnicalSnippet, shouldSkipTechnicalElement } = require("../tools/technical-syntax-guard.cjs");
 const read = (file) => fs.readFileSync(path.join(__dirname, "..", file), "utf8");
 
 test("SQL exercises keep SQL keywords and condition syntax in English", () => {
@@ -314,4 +316,60 @@ test("Lesson introductions, scenario stories, glossary definitions, and flashcar
   ]) assert.ok(!tableau.includes(phrase), "Tableau lesson copy remains English: " + phrase);
   assert.ok(tableau.includes("СИНИМ"));
   assert.ok(tableau.includes("Story (историю)"));
+});
+
+
+test("SQL lesson code fragments are protected without freezing Russian explanations", () => {
+  const corrupted = "SELECT b.имя, СУММА(o.сумма) FROM customers c ПРИСОЕДИНЯЙТЕСЬ к заказам o ВКЛ o.customer_id = c.id GROUP BY b.имя;";
+  for (const snippet of [
+    corrupted,
+    "SELECT name, email",
+    "JOIN orders o ON o.customer_id = c.id",
+    "GROUP BY region",
+    "COUNT(*) AS total_rows",
+    "WHERE status IS NULL",
+    "ПРИСОЕДИНЯЙТЕСЬ к заказам o ВКЛ o.customer_id = c.id"
+  ]) assert.equal(isTechnicalSnippet(snippet), true, "Expected a technical snippet to be protected: " + snippet);
+
+  for (const prose of [
+    "JOIN может повторить клиента, а GROUP BY складывает эти копии обратно в одну.",
+    "Объединение таблиц может увеличить количество строк.",
+    "Объясните, почему GROUP BY нужен после WHERE."
+  ]) assert.equal(isTechnicalSnippet(prose), false, "Russian teaching copy must remain translatable: " + prose);
+});
+
+test("technical markup attributes and classes opt out of machine translation", () => {
+  for (const tag of [
+    '<div class="ral-sql">',
+    '<div class="ral-code" translate="no">',
+    '<code data-technical="sql">',
+    '<span class="notranslate">'
+  ]) assert.equal(shouldSkipTechnicalElement(tag), true, "Expected protected markup: " + tag);
+
+  assert.equal(shouldSkipTechnicalElement('<p class="lesson-copy">'), false);
+});
+
+test("SQL query renderer marks code as non-translatable and repairs common translated SQL tokens", () => {
+  const sql = read("sql/index.html");
+  const translator = read("tools/static-russian-translation.mjs");
+  assert.match(sql, /function normalizeSqlSnippet\(value\)/);
+  assert.match(sql, /class="ral-sql" translate="no" data-technical="sql"/);
+  assert.match(sql, /class="ral-code" translate="no" data-technical="sql"/);
+  assert.match(sql, /class="ral-note-chunk" translate="no" data-technical="sql"/);
+  assert.match(sql, /normalizeSqlSnippet\(String\(ral\.sql \|\| ''\)\)/);
+  assert.match(translator, /TECHNICAL_KEYS/);
+  assert.match(translator, /isTechnicalSnippet\(value\)/);
+
+  const definition = sql.match(/function normalizeSqlSnippet\(value\)\{[\s\S]*?\n\}\n\nfunction ralBlockHTML\(ral\)\{/);
+  assert.ok(definition, "Could not locate the query normalizer definition");
+  const normalize = vm.runInNewContext(definition[0].replace(/\n\nfunction ralBlockHTML\(ral\)\{$/, "") + "\nnormalizeSqlSnippet");
+  const corrupted = "SELECT b.имя, СУММА(o.сумма) FROM customers c ПРИСОЕДИНЯЙТЕСЬ к заказам o ВКЛ o.customer_id = c.id GROUP BY b.имя;";
+  assert.equal(
+    normalize(corrupted),
+    "SELECT c.name, SUM(o.amount) FROM customers c JOIN orders o ON o.customer_id = c.id GROUP BY c.name;"
+  );
+  assert.equal(
+    normalize("JOIN может повторить клиента, а GROUP BY складывает эти копии обратно в одну."),
+    "JOIN может повторить клиента, а GROUP BY складывает эти копии обратно в одну."
+  );
 });
