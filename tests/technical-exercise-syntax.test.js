@@ -437,3 +437,54 @@ test("SQL snippets match the upstream English source and code tags stay untransl
 
   assert.equal(shouldSkipTechnicalElement("<code>"), true, "A bare code tag must opt out of translation");
 });
+
+test("Legacy dark-green UI palette is removed from shared and learning components", () => {
+  const contextCopy = read("assets/ai-context-copy.js");
+  const learningOrder = read("assets/learning-order.js");
+  const datacraft = read("datacraft/index.html");
+  const curriculumMap = read("datacraft/curriculum-map.css");
+  const decisionMaking = read("decision-making/index.html");
+  const foundations = read("foundations/index.html");
+  const projects = read("portfolio-projects/index.html");
+  const postgresql = read("postgresql/index.html");
+  const postgresqlApp = read("postgresql/app.js");
+
+  assert.doesNotMatch(
+    contextCopy,
+    /linear-gradient\\(120deg,rgba\\(36,67,48,.92\\),rgba\\(26,43,33,.92\\)\\)/,
+    "AI context toolbar must not use the old forest-green gradient"
+  );
+  for (const legacyColor of [
+    "rgba(102,190,139,.42)",
+    "#326847",
+    "#91e4b1"
+  ]) {
+    assert.ok(!contextCopy.includes(legacyColor), "AI context toolbar still contains legacy green: " + legacyColor);
+  }
+
+  for (const legacyColor of ["#34443a", "#17211b", "#9be7b5"]) {
+    assert.ok(!learningOrder.includes(legacyColor), "Learning-order note still uses legacy green: " + legacyColor);
+  }
+
+  assert.match(datacraft, /href="grain-theme\\.css"/, "DataCraft must use the shared Zinc and Sky UI skin");
+  assert.doesNotMatch(datacraft, /linear-gradient\\(160deg,rgba\\(31,51,43/);
+  assert.doesNotMatch(curriculumMap, /linear-gradient\\(145deg,rgba\\(29,49,39/);
+  assert.doesNotMatch(curriculumMap, /linear-gradient\\(150deg,#20372a,#14251c/);
+
+  for (const [name, source] of [
+    ["decision-making", decisionMaking],
+    ["foundations", foundations],
+    ["portfolio projects", projects],
+    ["PostgreSQL", postgresql]
+  ]) {
+    assert.doesNotMatch(source, /#203c30|#20372c|#17211d|#22362b|#18211d|#101714|#19231f|#35453c/i,
+      name + " still contains the legacy dark-green theme");
+  }
+  assert.match(postgresqlApp, /primaryColor:'#18181B',primaryTextColor:'#F5F7FA',primaryBorderColor:'#38BDF8'/,
+    "PostgreSQL diagrams must use the neutral/cyan theme");
+  for (const page of ["sql", "excel", "python", "tableau"]) {
+    const source = read(page + "/index.html");
+    assert.doesNotMatch(source, /background:var\\(--surf,#152622\\)|background:var\\(--surf2,var\\(--surf,#1a302c\\)\\)/,
+      page + " sprint bar still has the dark-green fallback");
+  }
+});
