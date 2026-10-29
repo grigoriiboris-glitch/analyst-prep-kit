@@ -338,6 +338,22 @@ test("SQL lesson code fragments are protected without freezing Russian explanati
   ]) assert.equal(isTechnicalSnippet(prose), false, "Russian teaching copy must remain translatable: " + prose);
 });
 
+test("Semicolons mark the entire lesson string as non-translatable", () => {
+  for (const value of [
+    "Select the active customers; then sort them by name.",
+    "SELECT name FROM customers; -- return the customer names",
+    "ГДЕ регион = «Запад»; следующий фрагмент"
+  ]) {
+    assert.equal(isTechnicalSnippet(value), true, "A semicolon must protect the whole string: " + value);
+  }
+
+  assert.equal(
+    isTechnicalSnippet("Select the active customers and sort them by name."),
+    false,
+    "Ordinary text without a semicolon should still be eligible for Russian localization"
+  );
+});
+
 test("technical markup attributes and classes opt out of machine translation", () => {
   for (const tag of [
     '<div class="ral-sql">',
