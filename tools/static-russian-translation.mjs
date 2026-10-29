@@ -470,7 +470,7 @@ async function translateMarkup(value) {
       if (closing) {
         const ix = skipped.lastIndexOf(tag);
         if (ix >= 0) skipped.splice(ix, 1);
-      } else if (!/\/\s*>$/.test(piece) && SKIP_TAGS.has(tag) || shouldSkipTechnicalElement(piece)) {
+      } else if (!/\/\s*>$/.test(piece) && (SKIP_TAGS.has(tag) || shouldSkipTechnicalElement(piece))) {
         skipped.push(tag);
       }
       result.push(piece);
