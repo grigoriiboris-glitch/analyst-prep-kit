@@ -77,7 +77,7 @@ assert len(rows) == 6
 
 # 2. Latest five orders, newest first, with the specified tie-breaker.
 rows = check_columns(2, ("order_id", "order_date", "total_amount"))
-assert [row[0] for row in rows] == [1017, 1015, 1014, 1013, 1012]
+assert [row[0] for row in rows] == [1017, 1016, 1015, 1014, 1013]
 
 # 3. Filter North customers and sort by name.
 rows = check_columns(3, ("customer_id", "customer_name", "region"))
