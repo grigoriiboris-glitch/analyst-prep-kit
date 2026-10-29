@@ -229,7 +229,7 @@
   }
   async function renderSchemaDiagram(){
     var node=document.getElementById('schemaDiagram');if(!node||node.dataset.processed==='true')return;var wrap=node.closest('.pg-mermaid-wrap');
-    try{var mermaid=await loadMermaid();mermaid.initialize({startOnLoad:false,securityLevel:'strict',theme:'base',themeVariables:{primaryColor:'#203329',primaryTextColor:'#edf5f0',primaryBorderColor:'#8dd8b1',lineColor:'#a6b6ac',secondaryColor:'#243b2e',tertiaryColor:'#2e704b',fontFamily:"системный интерфейс, без засечек",fontSize:'14px'},er:{useMaxWidth:true,diagramPadding:12}});await mermaid.run({nodes:[node]});}
+    try{var mermaid=await loadMermaid();mermaid.initialize({startOnLoad:false,securityLevel:'strict',theme:'base',themeVariables:{primaryColor:'#18181B',primaryTextColor:'#F5F7FA',primaryBorderColor:'#38BDF8',lineColor:'#A1A1AA',secondaryColor:'#27272A',tertiaryColor:'#0E7490',fontFamily:"системный интерфейс, без засечек",fontSize:'14px'},er:{useMaxWidth:true,diagramPadding:12}});await mermaid.run({nodes:[node]});}
     catch(_){if(wrap)wrap.innerHTML="<p class=\"pg-schema-note\">Не удалось загрузить Русалка. Состав связей: Клиенты → Заказы → заказ_предметы → Товары; Заказы → платежи; Клиенты → support_tickets и страница_события.</p>";}
   }
   search.addEventListener('input',renderNav);

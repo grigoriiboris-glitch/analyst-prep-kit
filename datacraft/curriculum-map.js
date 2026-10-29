@@ -825,7 +825,7 @@
     var currencyNote = '<div class="curriculum-wallet-line"><span>🪙 В кошельке: <strong>' + wallet.balance + '</strong></span><span>Цена постройки: <strong>' + (st.built ? 'оплачено' : (course.cost || 0) + ' 🪙') + '</strong></span><span>Всего заработано: ' + wallet.totalEarned + ' 🪙</span></div>';
     detail.innerHTML =
       '<div class="curriculum-detail-eyebrow">' + safeText(stageLabel) + '</div>' +
-'<h3>' + safeText(course.icon || '🏗️') + ' ' + (recommendedStep(course) ? '<span class="curriculum-order-badge" style="display:inline-block;margin:0 7px 0 2px;padding:3px 8px;border:1px solid #59846a;border-radius:999px;background:#244331;color:#c7f6d8;font-size:11px;vertical-align:middle">ШАГ ' + formattedStep(course) + '</span>' : '') + safeText(course.title) + '</h3>' +
+'<h3>' + safeText(course.icon || '🏗️') + ' ' + (recommendedStep(course) ? '<span class="curriculum-order-badge" style="display:inline-block;margin:0 7px 0 2px;padding:3px 8px;border:1px solid var(--color-primary-border,#C7EDF4);border-radius:999px;background:var(--color-primary-soft,#E0F5F9);color:var(--color-primary-hover,#0E7490);font-size:11px;vertical-align:middle">ШАГ ' + formattedStep(course) + '</span>' : '') + safeText(course.title) + '</h3>' +
       '<span class="curriculum-status ' + st.state + '">' + (st.built ? '✓ ' : st.courseComplete ? '🔨 ' : st.unlocked ? '🏗️ ' : '🔒 ') + safeText(statusText(st)) + '</span>' +
       '<p>' + safeText(course.desc || 'Дополнительный учебный маршрут.') + '</p>' +
       '<div class="curriculum-progress"><i style="width:' + p.percent + '%"></i></div>' +
@@ -1298,8 +1298,8 @@ var h = document.createElement('h4'); h.textContent = (recommendedStep(c) ? form
     /* 4. Soft drifting cloud shadows across terrain */
     animState.clouds.forEach(function(c) {
       var grad = ctx.createRadialGradient(c.x, c.y, c.rx * 0.1, c.x, c.y, c.rx);
-      grad.addColorStop(0, "rgba(12, 24, 18, 0.10)");
-      grad.addColorStop(1, 'rgba(12, 24, 18, 0)');
+      grad.addColorStop(0, "rgba(9, 9, 11, 0.10)");
+      grad.addColorStop(1, 'rgba(9, 9, 11, 0)');
       ctx.fillStyle = grad;
       ctx.beginPath();
       ctx.ellipse(c.x, c.y, c.rx, c.ry, 0, 0, Math.PI * 2);

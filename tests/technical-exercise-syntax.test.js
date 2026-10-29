@@ -2,6 +2,8 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
+const vm = require("node:vm");
+const { isTechnicalSnippet, shouldSkipTechnicalElement } = require("../tools/technical-syntax-guard.cjs");
 const read = (file) => fs.readFileSync(path.join(__dirname, "..", file), "utf8");
 
 test("SQL exercises keep SQL keywords and condition syntax in English", () => {
@@ -19,7 +21,7 @@ test("Excel exercises keep English functions and Latin cell references", () => {
 
 test("Python exercises keep executable keywords, identifiers, and pandas calls", () => {
   const python = read("python/index.html");
-  assert.match(python, /formula:"def total\(values\):/);
+  assert.match(python, /formula:"def log_calls\(func\):/);
   assert.match(python, /import pandas as pd/);
   assert.doesNotMatch(python, /общая сумма определения|formula:"интервал\(|импортировать pandas как ПД/i);
 });
@@ -314,4 +316,182 @@ test("Lesson introductions, scenario stories, glossary definitions, and flashcar
   ]) assert.ok(!tableau.includes(phrase), "Tableau lesson copy remains English: " + phrase);
   assert.ok(tableau.includes("СИНИМ"));
   assert.ok(tableau.includes("Story (историю)"));
+});
+
+
+test("SQL lesson code fragments are protected without freezing Russian explanations", () => {
+  const corrupted = "SELECT b.имя, СУММА(o.сумма) FROM customers c ПРИСОЕДИНЯЙТЕСЬ к заказам o ВКЛ o.customer_id = c.id GROUP BY b.имя;";
+  for (const snippet of [
+    corrupted,
+    "SELECT name, email",
+    "JOIN orders o ON o.customer_id = c.id",
+    "GROUP BY region",
+    "COUNT(*) AS total_rows",
+    "WHERE status IS NULL",
+    "ПРИСОЕДИНЯЙТЕСЬ к заказам o ВКЛ o.customer_id = c.id"
+  ]) assert.equal(isTechnicalSnippet(snippet), true, "Expected a technical snippet to be protected: " + snippet);
+
+  for (const prose of [
+    "JOIN может повторить клиента, а GROUP BY складывает эти копии обратно в одну.",
+    "Объединение таблиц может увеличить количество строк.",
+    "Объясните, почему GROUP BY нужен после WHERE."
+  ]) assert.equal(isTechnicalSnippet(prose), false, "Russian teaching copy must remain translatable: " + prose);
+});
+
+test("Semicolons mark the entire lesson string as non-translatable", () => {
+  for (const value of [
+    "Select the active customers; then sort them by name.",
+    "SELECT name FROM customers; -- return the customer names",
+    "ГДЕ регион = «Запад»; следующий фрагмент"
+  ]) {
+    assert.equal(isTechnicalSnippet(value), true, "A semicolon must protect the whole string: " + value);
+  }
+
+  assert.equal(
+    isTechnicalSnippet("Select the active customers and sort them by name."),
+    false,
+    "Ordinary text without a semicolon should still be eligible for Russian localization"
+  );
+});
+
+test("technical markup attributes and classes opt out of machine translation", () => {
+  for (const tag of [
+    '<div class="ral-sql">',
+    '<div class="ral-code" translate="no">',
+    '<code data-technical="sql">',
+    '<span class="notranslate">'
+  ]) assert.equal(shouldSkipTechnicalElement(tag), true, "Expected protected markup: " + tag);
+
+  assert.equal(shouldSkipTechnicalElement('<p class="lesson-copy">'), false);
+});
+
+test("SQL query renderer marks code as non-translatable and repairs common translated SQL tokens", () => {
+  const sql = read("sql/index.html");
+  const translator = read("tools/static-russian-translation.mjs");
+  assert.match(sql, /function normalizeSqlSnippet\(value\)/);
+  assert.match(sql, /class="ral-sql" translate="no" data-technical="sql"/);
+  assert.match(sql, /class="ral-code" translate="no" data-technical="sql"/);
+  assert.match(sql, /class="ral-note-chunk" translate="no" data-technical="sql"/);
+  assert.match(sql, /normalizeSqlSnippet\(String\(ral\.sql \|\| ''\)\)/);
+  assert.match(translator, /TECHNICAL_KEYS/);
+  assert.match(translator, /isTechnicalSnippet\(value\)/);
+
+  const definition = sql.match(/function normalizeSqlSnippet\(value\)\{[\s\S]*?\n\}\n\nfunction ralBlockHTML\(ral\)\{/);
+  assert.ok(definition, "Could not locate the query normalizer definition");
+  const normalize = vm.runInNewContext(definition[0].replace(/\n\nfunction ralBlockHTML\(ral\)\{$/, "") + "\nnormalizeSqlSnippet");
+  const corrupted = "SELECT b.имя, СУММА(o.сумма) FROM customers c ПРИСОЕДИНЯЙТЕСЬ к заказам o ВКЛ o.customer_id = c.id GROUP BY b.имя;";
+  assert.equal(
+    normalize(corrupted),
+    "SELECT c.name, SUM(o.amount) FROM customers c JOIN orders o ON o.customer_id = c.id GROUP BY c.name;"
+  );
+  assert.equal(
+    normalize("JOIN может повторить клиента, а GROUP BY складывает эти копии обратно в одну."),
+    "JOIN может повторить клиента, а GROUP BY складывает эти копии обратно в одну."
+  );
+  assert.equal(normalize("ГДЕ регион НУЛЬ;"), "WHERE region IS NULL;");
+  assert.match(sql, /const safeLines = lines\.map\(line => normalizeSqlSnippet\(line\)\)/);
+  assert.match(sql, /class="pars-txt" translate="no" data-technical="sql"/);
+});
+
+test("SQL snippets match the upstream English source and code tags stay untranslated", () => {
+  const sql = read("sql/index.html");
+
+  // These are executable fragments or deliberate syntax distractors from the
+  // original SQL lessons. They must not be localized with the surrounding copy.
+  for (const snippet of [
+    "SELECT region, revenue",
+    "WHERE region = 'West'",
+    "SELECT name, email",
+    "GET * FROM products;",
+    "FROM products SELECT *;",
+    "SHOW products;",
+    "SELECT name, customers;",
+    "WHERE amount > 100",
+    "GROUP BY status",
+    "CASE WHEN status='active' THEN 'Yes'",
+    "JOIN customers c",
+    "ON o.customer_id = c.id",
+    "RIGHT JOIN orders o ON c.id = o.customer_id",
+    "COUNT(DISTINCT CASE WHEN step IN ('signup','activate','pay') THEN user_id END) AS signed_up,",
+    "SUM(CASE WHEN line = 'Revenue' THEN amount ELSE 0 END) AS revenue",
+    "SELECT ROUND(SUM(cash_flow / POWER(1 + 0.10, year)), 0) AS npv"
+  ]) {
+    assert.ok(sql.includes(snippet), "SQL source fragment was changed: " + snippet);
+  }
+
+  for (const corrupted of [
+    "SELECT регион, доход",
+    "ГДЕ регион = «Запад»",
+    "SELECT имя, адрес электронной почты",
+    "СУММ (CASE, WHEN строка = «Доход»"
+  ]) {
+    assert.ok(!sql.includes(corrupted), "Localized SQL code remains in source: " + corrupted);
+  }
+
+  const codeBodies = [...sql.matchAll(/<code\b[^>]*>([\s\S]*?)<\/code>/gi)];
+  assert.ok(codeBodies.length > 0, "Expected SQL lessons to contain code elements");
+  for (const [, body] of codeBodies) {
+    const visible = body.replace(/<[^>]*>/g, "");
+    assert.doesNotMatch(visible, /[А-Яа-яЁё]/, "Text inside a <code> tag must remain English");
+  }
+
+  assert.equal(shouldSkipTechnicalElement("<code>"), true, "A bare code tag must opt out of translation");
+});
+
+test("Legacy dark-green UI palette is removed from shared and learning components", () => {
+  const contextCopy = read("assets/ai-context-copy.js");
+  const learningOrder = read("assets/learning-order.js");
+  const datacraft = read("datacraft/index.html");
+  const curriculumMap = read("datacraft/curriculum-map.css");
+  const decisionMaking = read("decision-making/index.html");
+  const foundations = read("foundations/index.html");
+  const projects = read("portfolio-projects/index.html");
+  const postgresql = read("postgresql/index.html");
+  const postgresqlApp = read("postgresql/app.js");
+
+  const oldGreenGradient = [
+    "linear-gradient(120deg",
+    "rgba(36,67,48,.92)",
+    "rgba(26,43,33,.92))"
+  ].join(",");
+  assert.ok(
+    !contextCopy.includes(oldGreenGradient),
+    "AI context toolbar must not use the old forest-green gradient"
+  );
+  for (const legacyColor of [
+    "rgba(102,190,139,.42)",
+    "#326847",
+    "#91e4b1"
+  ]) {
+    assert.ok(!contextCopy.includes(legacyColor), "AI context toolbar still contains legacy green: " + legacyColor);
+  }
+
+  for (const legacyColor of ["#34443a", "#17211b", "#9be7b5"]) {
+    assert.ok(!learningOrder.includes(legacyColor), "Learning-order note still uses legacy green: " + legacyColor);
+  }
+
+  assert.ok(datacraft.includes('href="grain-theme.css"'), "DataCraft must use the shared Zinc and Sky UI skin");
+  assert.ok(!datacraft.includes("linear-gradient(160deg,rgba(31,51,43"), "DataCraft panels must not use the legacy dark-green gradient");
+  assert.ok(!curriculumMap.includes("linear-gradient(145deg,rgba(29,49,39"), "Curriculum shell must not use the legacy dark-green gradient");
+  assert.ok(!curriculumMap.includes("linear-gradient(150deg,#20372a,#14251c"), "NPC dialog must not use the legacy dark-green gradient");
+
+  for (const [name, source] of [
+    ["decision-making", decisionMaking],
+    ["foundations", foundations],
+    ["portfolio projects", projects],
+    ["PostgreSQL", postgresql]
+  ]) {
+    assert.doesNotMatch(source, /#203c30|#20372c|#17211d|#22362b|#18211d|#101714|#19231f|#35453c/i,
+      name + " still contains the legacy dark-green theme");
+  }
+  assert.match(postgresqlApp, /primaryColor:'#18181B',primaryTextColor:'#F5F7FA',primaryBorderColor:'#38BDF8'/,
+    "PostgreSQL diagrams must use the neutral/cyan theme");
+  for (const page of ["sql", "excel", "python", "tableau"]) {
+    const source = read(page + "/index.html");
+    assert.ok(
+      !source.includes("background:var(--surf,#152622)") &&
+      !source.includes("background:var(--surf2,var(--surf,#1a302c))"),
+      page + " sprint bar still has the dark-green fallback"
+    );
+  }
 });
