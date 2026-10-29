@@ -14,9 +14,9 @@
     var style = document.createElement('style');
     style.id = 'apkAiContextCopyStyle';
     style.textContent = [
-      '.apk-ai-context-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0;padding:10px 12px;border:1px solid rgba(102,190,139,.42);border-radius:11px;background:linear-gradient(120deg,rgba(36,67,48,.92),rgba(26,43,33,.92));color:var(--ink,#edf5f0);}',
+      '.apk-ai-context-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0;padding:10px 12px;border:1px solid var(--color-border,var(--border,var(--line,#E4E7EA)));border-radius:11px;background:var(--color-surface,var(--surf,var(--panel,#F5F7F8)));color:var(--color-text,var(--text,var(--ink,#18181B)));}',
       ".апк-ты-контекстная кнопка{отображать:встроенный гибкий;выравнивание элементов:центр;оправдание-содержание:центр;зазор:8пикселей;минимальная высота:36пикселей;прокладка:8пикселей 12пикселей;граница:1пикселей сплошной #5ba979;граница-радиус:9пикселей;фон:#28523а;цвет:#effff3;шрифт:700 12пикселей/1,3 системный интерфейс,-Яблоко-система,\"Следуйте пользовательскому интерфейсу\", без засечек;курсор:указатель;переход:фон .15с,цвет границы .15с,преобразование .15с;}",
-      '.apk-ai-context-button:hover{background:#326847;border-color:#91e4b1;}',
+      '.apk-ai-context-button:hover{background:var(--color-primary,var(--accent,#0E7490));border-color:var(--color-primary-border,var(--border,#38BDF8));color:var(--color-text-on-primary,#fff);}',
       ".apk-ai-context-button:focus-visible{outline:2px Solid #a8f0c0;outline-offset:3px;}",
       '.apk-ai-context-button:active{transform:translateY(1px);}',
       '.apk-ai-context-status{font:12px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--muted,#b8cbbd);}',
