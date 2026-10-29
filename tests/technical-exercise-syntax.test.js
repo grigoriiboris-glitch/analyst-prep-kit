@@ -449,8 +449,13 @@ test("Legacy dark-green UI palette is removed from shared and learning component
   const postgresql = read("postgresql/index.html");
   const postgresqlApp = read("postgresql/app.js");
 
+  const oldGreenGradient = [
+    "linear-gradient(120deg",
+    "rgba(36,67,48,.92)",
+    "rgba(26,43,33,.92))"
+  ].join(",");
   assert.ok(
-    !contextCopy.includes("linear-gradient(120deg,rgba(36,67,48,.92),rgba(26,43,33,.92))"),
+    !contextCopy.includes(oldGreenGradient),
     "AI context toolbar must not use the old forest-green gradient"
   );
   for (const legacyColor of [
