@@ -451,7 +451,7 @@ Client_ID | Название_компании | Контакт_электрон�
 Написав все три, ответьте в 2–3 предложениях:
 Какой запрос было труднее всего написать и почему?`,
         hints:[
-          "Фильтр по дате: WHERE order_date >= CURRENT_DATE - INTERVAL '30 days'",
+          "Фильтр по дате: ГДЕ дата_заказа >= CURRENT_DATE - INTERVAL '30  дни'",
           "Для второго запроса соедините Заказы и Товары по Product_id",
           "HAVING фильтрует после группировки, в отличие от WHERE, который отбирает строки до группировки",
           "ROUND(SUM(amount)::numeric / COUNT(*), 2) для чистого avg_order_value"
@@ -519,7 +519,7 @@ think about.`
 
 Добавьте вверху блок комментариев: что делает скрипт, чего он ожидает, кто его написал.`,
         hints:[
-          "Загрузить файл: pd.read_csv('daily_orders.csv')",
+          "pd.read_csv('daily_orders.csv') to load",
           "set(required_cols).issubset(df.columns) для проверки имен столбцов",
           "df.isnull().any(axis=1).sum() counts rows with any null",
           "(df['amount'] < 0).sum() подсчитывает отрицательные числа",
@@ -528,39 +528,37 @@ think about.`
         rubric:["Скрипт работает без ошибок","Все 5 проверок реализованы","Вывод четко отформатирован","Блок комментариев присутствует и информативен."],
         exemplar:`"""
 daily_orders_validation.py
-Цель: проверить файл daily_orders.csv перед загрузкой.
-Ожидаемые столбцы: order_id, customer_id, amount, order_date.
+Цель: проверить сброс поставщика daily_orders.csv перед последующей загрузкой.
+Ожидается: столбцы order_id, customer_id, sum, order_date. Числовая сумма.
 Автор: [вы]
 """
-import pandas as pd
+импортировать pandas как pd
 
-FILE = "daily_orders.csv"
-REQUIRED = {"order_id", "customer_id", "amount", "order_date"}
+ФАЙЛ = "daily_orders.csv"
+ОБЯЗАТЕЛЬНО = {"order_id", "customer_id", "сумма", "order_date"}
 
-df = pd.read_csv(FILE)
-errors = []
+df = pd.read_csv(ФАЙЛ)
+неудачи = []
 
-missing_cols = REQUIRED - set(df.columns)
-if missing_cols:
-    errors.append(f"Отсутствуют столбцы: {sorted(missing_cols)}")
+Missing_cols = ОБЯЗАТЕЛЬНО - set(df.columns)
+если отсутствуют_столбцы:
+    errors.append(f"отсутствующие столбцы: {sorted(missing_cols)}")
 
 null_rows = int(df.isnull().any(axis=1).sum())
-neg_amounts = int((df["amount"] < 0).sum()) if "amount" in df.columns else 0
+neg_amounts = int((df["amount"] < 0).sum()), если "сумма" в df.columns else 0
 
-if null_rows:
-    errors.append(f"Строк с пропусками: {null_rows}")
-if neg_amounts:
-    errors.append(f"Строк с отрицательной суммой: {neg_amounts}")
+если null_rows: отказы.append(f"{null_rows} строки с нулевыми значениями")
+if neg_amounts: errors.append(f"{neg_amounts} строки с отрицательной суммой")
 
-status = "PASS ✓" if not errors else "FAIL ✗"
+status = «PASS ✓», если нет ошибок, иначе «FAIL ✗»
 print("=== Проверка ежедневных заказов ===")
-print(f"Файл: {FILE}")
+print(f"Файл: {ФАЙЛ}")
 print(f"Загружено строк: {len(df):,}")
-print(f"Пропуски: затронуто {null_rows} строк")
-print(f"Отрицательные суммы: {neg_amounts}")
-print(f"Статус: {status}")
-for error in errors:
-    print(f" - {error}")`
+print(f"Отсутствующие значения: затронуто {null_rows} строк")
+print(f"Обнаружено отрицательные суммы: {neg_amounts}")
+print(f"Статус: {статус}")
+для f в отказах:
+    печать(f" - {f}")`
       }
     ]
   },
@@ -809,34 +807,41 @@ Recommended Next Steps
         ],
         rubric:["Сопоставление охватывает все варианты выборочных данных.","Четкая печать до/после с правильным количеством изменений.","Вывод сохранен правильно","Строка документации присутствует и информативна."],
         exemplar:`"""
-стандартизировать_регионы.py
-Цель: нормализовать значения области произвольного текста в экспорте клиентов, чтобы
-         последующие отчеты группируют их правильно.
-Автор: [вы]
-Дата: 26 мая 2026 г.
-Ввод: DataFrame со столбцами [customer_id, регион]
-Вывод: customer_cleaned.csv с добавленным столбцом Region_clean.
+standardize_regions.py
+Purpose: normalize free-text region values in a customer export so reports group them consistently.
+Author: [you]
+Date: May 26, 2026
+Input: DataFrame with columns [customer_id, region]
+Output: customer_cleaned.csv with an added region_clean column.
 """
-импортировать pandas как pd
+import pandas as pd
 
-данные = {
-    'customer_id': [1,2,3,4,5,6,7,8,9,10],
-    'регион': ['США','Соединенные Штаты','США','Великобритания','Великобритания','uk','CA','Canada','CA','CAN']
+data = {
+    "customer_id": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "region": ["US", "United States", "USA", "United Kingdom", "UK", "uk", "CA", "Canada", "ca", "CAN"],
 }
-df = pd.DataFrame(данные)
+df = pd.DataFrame(data)
 
-КАРТОГРАФИЯ = {
-    'США':'Соединенные Штаты','Соединенные Штаты':'Соединенные Штаты','США':'Соединенные Штаты Штаты», «США»: «Соединенные Штаты»,
-    'UK':'Великобритания','Великобритания':'Великобритания','uk':'Великобритания','GB':'Великобритания',
-    'CA':'Канада','Канада':'Канада','ca':'Канада','CAN':'Канада'
+MAPPING = {
+    "US": "United States",
+    "USA": "United States",
+    "United States": "United States",
+    "UK": "United Kingdom",
+    "United Kingdom": "United Kingdom",
+    "uk": "United Kingdom",
+    "GB": "United Kingdom",
+    "CA": "Canada",
+    "Canada": "Canada",
+    "ca": "Canada",
+    "CAN": "Canada",
 }
 
-df['region_clean'] = df['region'].map(MAPPING)
-изменено = int((df['region'] != df['region_clean']).sum())
+df["region_clean"] = df["region"].map(MAPPING)
+changed = int((df["region"] != df["region_clean"]).sum())
 
-print("Исходные уникальные значения:", sorted(df['region'].unique().tolist()))
-print("Уникальные значения очищены: ", sorted(df['region_clean'].dropna().unique().tolist()))
-print(f"Строки изменены: {изменено} из {len(df)}")
+print("Original unique values:", sorted(df["region"].unique().tolist()))
+print("Cleaned unique values:", sorted(df["region_clean"].dropna().unique().tolist()))
+print(f"Rows changed: {changed} of {len(df)}")
 
 df.to_csv("customers_cleaned.csv", index=False)`
       }
