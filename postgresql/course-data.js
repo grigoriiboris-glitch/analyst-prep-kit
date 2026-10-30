@@ -806,6 +806,7 @@ window.PostgreSQLLessons = [
       "FROM order_items",
       "GROUP BY order_id",
       ")",
+      "SELECT order_id,",
       "total",
       "FROM order_totals",
       "ORDER BY total DESC;",
@@ -866,6 +867,7 @@ window.PostgreSQLLessons = [
       "WHERE level < 5",
       ")",
       "SELECT level",
+      "FROM levels",
       "ORDER BY level;",
       "SELECT level - 1",
       "WHERE level < 10"
