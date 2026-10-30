@@ -128,6 +128,11 @@ test('Every SQL 2 lesson follows the beginner-friendly lesson structure', () => 
   const lessonRenderer = html.slice(html.indexOf('function renderLesson()'), html.indexOf('function selectLesson(id)'));
   assert.ok(lessonRenderer.indexOf('blocksHtml + taskRunHtml') < lessonRenderer.indexOf("'<div class=\"editor-head\""),
     'The run button must appear immediately after the task/block builder and before the SQL editor');
+  assert.ok(lessonRenderer.includes(`'<div class="editor-head"><strong>' + (isInteractive ? 'Собранный SQL-запрос' : 'Твой SQL-запрос') + '</strong><div class="editor-actions">' +
+        '<button class="btn" type="button" onclick="showHint()">Подсказка</button>' +`),
+    'The editor HTML fragments must be joined with + so sqlEditor is rendered');
+  assert.ok(lessonRenderer.includes('if (!editor)') && lessonRenderer.includes('Не удалось создать SQL-редактор'),
+    'Missing editor markup must fail gracefully instead of calling addEventListener on null');
   assert.equal((lessonRenderer.match(/onclick="runSQL\(\)"/g) || []).length, 1,
     'There should be one visible run button, positioned directly below the task');
   assert.ok(html.includes('function moveBlockToAssembled(index)'));

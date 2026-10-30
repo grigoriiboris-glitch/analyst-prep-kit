@@ -345,7 +345,7 @@
         '<button id="taskRunButton" class="btn btn-primary" type="button" onclick="runSQL()">▶ Выполнить запрос</button>' +
         '<span class="task-run-note">' + (isInteractive ? 'Сначала собери запрос из блоков выше.' : 'Запрос выполнится в учебной базе SQLite.') + '</span></div>';
       document.getElementById("lessonPane").innerHTML = lessonResultIntro(lesson) + blocksHtml + taskRunHtml +
-        '<div class="editor-head"><strong>' + (isInteractive ? 'Собранный SQL-запрос' : 'Твой SQL-запрос') + '</strong><div class="editor-actions">'
+        '<div class="editor-head"><strong>' + (isInteractive ? 'Собранный SQL-запрос' : 'Твой SQL-запрос') + '</strong><div class="editor-actions">' +
         '<button class="btn" type="button" onclick="showHint()">Подсказка</button>' +
         '<button class="btn" type="button" onclick="showSolution()">Показать разбор решения</button>' +
         '<button class="btn" type="button" onclick="resetDraft()">Сбросить</button></div></div>' +
@@ -364,6 +364,10 @@
         '<button class="btn" type="button" onclick="previousLesson()" ' + (lesson.id === LESSONS[0].id ? 'disabled' : '') + '>← Предыдущий урок</button>' +
         '<button class="btn btn-primary" type="button" onclick="nextLesson()">' + (lesson.id === LESSONS[LESSONS.length - 1].id ? 'К началу практикума' : 'Следующий урок →') + '</button></div></div>';
       const editor = document.getElementById("sqlEditor");
+      if (!editor) {
+        showToast("Не удалось создать SQL-редактор. Обнови страницу и попробуй ещё раз.");
+        return;
+      }
       if (!isInteractive) {
         editor.addEventListener("input", function () {
           state.drafts[String(lesson.id)] = editor.value;
