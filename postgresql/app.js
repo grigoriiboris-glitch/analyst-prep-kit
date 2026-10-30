@@ -172,8 +172,8 @@
   }
   function comparableValue(value){
     var text=toPlainValue(value);
-    if(/^-?\\d+(?:\\.\\d+)?$/.test(text)){
-      return text.replace(/(\\.\\d*?[1-9])0+$/,'$1').replace(/\\.0+$/,'');
+    if(/^-?\d+(?:\.\d+)?$/.test(text)){
+      return text.replace(/(\.\d*?[1-9])0+$/,'$1').replace(/\.0+$/,'');
     }
     return text;
   }
