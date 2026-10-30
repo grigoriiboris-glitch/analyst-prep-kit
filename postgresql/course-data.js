@@ -823,7 +823,7 @@ window.PostgreSQLLessons = [
         "contype"
       ],
       "columnOrder": true,
-      "exactRows": 4,
+      "exactRows": 9,
       "sqlIncludes": [
         "from pg_constraint",
         "where conrelid = 'orders'::regclass"
@@ -845,7 +845,7 @@ window.PostgreSQLLessons = [
       "why": "В системном каталоге PostgreSQL тип f обозначает внешнее ограничение — FOREIGN KEY."
     },
     "hint": "Какие два поля каталога нужно выбрать, чтобы увидеть имя ограничения и его тип? Как указать, что интересует только таблица orders?",
-    "expected": "Столбцы: conname, contype. Для orders ожидаются 4 ограничения: первичный ключ (p), внешний ключ (f) и два CHECK (c).",
+    "expected": "Столбцы: conname, contype. В текущей учебной версии PostgreSQL/PGlite ожидается 9 записей: первичный ключ (p), внешний ключ (f), два CHECK (c) и пять NOT NULL (n).",
     "solutionSql": "SELECT conname,\n       contype\nFROM pg_constraint\nWHERE conrelid = 'orders'::REGCLASS\nORDER BY conname;",
     "solutionExplain": "pg_constraint хранит метаданные ограничений. Приведение 'orders'::REGCLASS позволяет указать конкретную таблицу, после чего WHERE оставляет только её ограничения."
   },
