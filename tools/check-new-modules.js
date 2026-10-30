@@ -107,7 +107,7 @@ const sql2Page = fs.readFileSync(path.join(root, "sql2/index.html"), "utf8");
 assert.equal((sql2Page.match(/id:\d+,unit:"[^"]+",title:"/g) || []).length, 24,
   "SQL 2 must contain exactly 24 authored tasks");
 for (const feature of [
-  'const STORAGE_KEY = "sql2kit-v1"', "initSqlJs", "sqlDb.exec(SEED_SQL)",
+  'const STORAGE_KEY = "sql2kit-v2"', "initSqlJs", "sqlDb.exec(SEED_SQL)",
   "function queryOnly(sql)", "function sameResults(actual, expected)",
   "function runSQL()", "window.DataCraftEconomy.earn", "function copyTaskContext()"
 ]) {
@@ -300,7 +300,7 @@ console.log("OK: DataCraft catalog has the expected lesson counts for each core 
 const economy = fs.readFileSync(path.join(root, "assets/datacraft-economy.js"), "utf8");
 new Function(economy);
 for (const key of [
-  "datacraft-wallet-v1", "sqlkit-v1", "sql2kit-v1", "epk", "ppk", "pbikt-v1",
+  "datacraft-wallet-v1", "sqlkit-v1", "sql2kit-v2", "epk", "ppk", "pbikt-v1",
   "spk", "tpk", "clk-v1", "fmk-v1", "apk-foundations-progress-v1",
   "apk-quality-passed-v1", "apk-portfolio-", "sim2", "ipk", "apk-final"
 ]) {

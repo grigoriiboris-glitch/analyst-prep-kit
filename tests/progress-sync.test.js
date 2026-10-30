@@ -36,9 +36,9 @@ function loadBackupApi(storage) {
 }
 
 test('SQL 2 has an isolated key that participates in cloud progress sync', () => {
-  assert.equal(progress.getKitIdForKey('sql2kit-v1'), 'sql2-v1');
-  assert.equal(progress.getKitIdForKey('sql2-last-visit'), 'sql2-v1');
-  assert.equal(progress.isAllowedKey('sql2kit-v1'), true);
+  assert.equal(progress.getKitIdForKey('sql2kit-v2'), 'sql2-v2');
+  assert.equal(progress.getKitIdForKey('sql2-last-visit-v2'), 'sql2-v2');
+  assert.equal(progress.isAllowedKey('sql2kit-v2'), true);
   assert.equal(progress.getKitIdForKey('sqlkit-v1'), 'sqlkit-v1');
 });
 

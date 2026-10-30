@@ -7,7 +7,7 @@
     'business-analysis': {key:'apk-business-analysis-progress-v1',prop:'map',rate:2,total:9,bonus:5},
     quality: {key:'apk-quality-score',prop:'quality',rate:1,total:5,bonus:5},
     sql: {key:'sqlkit-v1',prop:'doneLessons',rate:1,total:48,bonus:8},
-    sql2: {key:'sql2kit-v1',prop:'doneLessons',rate:1,total:24,bonus:5},
+    sql2: {key:'sql2kit-v2',prop:'doneLessons',rate:1,total:24,bonus:5},
     postgresql: {key:'apk-postgresql-progress-v1',prop:'doneLessons',rate:1,total:30,bonus:8},
     excel: {key:'epk',prop:'lessonsDone',rate:1,total:51,bonus:8},
     python: {key:'ppk',prop:'lessonsDone',rate:1,total:42,bonus:7},
