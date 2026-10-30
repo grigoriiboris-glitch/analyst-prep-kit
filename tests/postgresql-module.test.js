@@ -21,6 +21,12 @@ function plain(value) {
   try { return JSON.stringify(value); } catch (_) { return String(value); }
 }
 function resultSets(value) { return Array.isArray(value) ? value : (value ? [value] : []); }
+function comparableValue(value) {
+  const text = plain(value);
+  if (/^-?\\d+(?:\\.\\d+)?$/.test(text)) return text.replace(/(\\.\\d*?[1-9])0+$/, "$1").replace(/\\.0+$/, "");
+  return text;
+}
+
 function columnsOf(result) {
   if (Array.isArray(result.fields) && result.fields.length) return result.fields.map((field) => String(field.name || field));
   if (Array.isArray(result.rows) && result.rows.length) return Object.keys(result.rows[0]);
@@ -49,7 +55,7 @@ function validateOutput(results, check, sql) {
   if (expected.firstRow) {
     const mismatch = Object.keys(expected.firstRow).find((name) => {
       const key = Object.keys(chosen.rows[0] || {}).find((k) => k.toLowerCase() === name.toLowerCase());
-      return key === undefined || plain(chosen.rows[0][key]) !== String(expected.firstRow[name]);
+      return key === undefined || comparableValue(chosen.rows[0][key]) !== comparableValue(expected.firstRow[name]);
     });
     if (mismatch) return { ok: false, why: "первая строка: ожидалось " + mismatch + "=" + expected.firstRow[mismatch] };
   }
