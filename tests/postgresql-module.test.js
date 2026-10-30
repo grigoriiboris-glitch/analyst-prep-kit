@@ -23,7 +23,7 @@ function plain(value) {
 function resultSets(value) { return Array.isArray(value) ? value : (value ? [value] : []); }
 function comparableValue(value) {
   const text = plain(value);
-  if (/^-?\\d+(?:\\.\\d+)?$/.test(text)) return text.replace(/(\\.\\d*?[1-9])0+$/, "$1").replace(/\\.0+$/, "");
+  if (/^-?\d+(?:\.\d+)?$/.test(text)) return text.replace(/(\.\d*?[1-9])0+$/, "$1").replace(/\.0+$/, "");
   return text;
 }
 
