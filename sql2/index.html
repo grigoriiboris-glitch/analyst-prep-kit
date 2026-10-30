@@ -109,6 +109,9 @@
     .sql-block{padding:7px 11px;background:var(--s2-panel2);border:1px solid var(--s2-line);border-radius:8px;cursor:pointer;font:12px/1.5 var(--font-mono,monospace);user-select:none;color:var(--s2-ink);box-shadow:0 2px 0 var(--s2-line);transition:transform .15s ease,border-color .15s ease}
     .sql-block:hover{border-color:var(--s2-accent);color:var(--s2-accent);transform:translateY(-1px)}
     .sql-block:active{transform:translateY(0)}
+    .sql-block.is-dragging{opacity:.38;transform:scale(.97);cursor:grabbing}
+    .blocks-area.is-drop-target,.available-blocks.is-drop-target{outline:2px dashed var(--s2-accent);outline-offset:3px;background:color-mix(in srgb,var(--s2-accent) 9%,var(--s2-panel))}
+    .sql-block[draggable="true"]{cursor:grab;touch-action:none}
     .blocks-area .sql-block{background:var(--s2-accent);border-color:var(--s2-accent);color:#fff}
     .block-help{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:0 0 9px;color:var(--s2-dim);font-size:11px}
     .task-run-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:-5px 0 18px;padding:12px 14px;border:1px solid color-mix(in srgb,var(--s2-accent) 35%,var(--s2-line));border-radius:11px;background:var(--s2-panel)}
@@ -215,32 +218,155 @@
     window.currentAvailableBlocks = [];
     window.currentAssembledBlocks = [];
     window.currentLessonBlocksId = null;
+    let blockDragState = null;
+    let pointerBlockDragState = null;
+    let suppressNextBlockClick = false;
 
+    function blockArray(zone) {
+      return zone === "assembled" ? window.currentAssembledBlocks : window.currentAvailableBlocks;
+    }
     function renderBlocksUI() {
       const availableArea = document.getElementById("availableArea");
       const assembledArea = document.getElementById("assembledArea");
       const editor = document.getElementById("sqlEditor");
       if (!availableArea || !assembledArea || !editor) return;
       availableArea.innerHTML = window.currentAvailableBlocks.map((block,index) =>
-        '<button type="button" class="sql-block" onclick="moveBlockToAssembled('+index+')">'+escapeHtml(block)+'</button>'
+        '<button type="button" class="sql-block" draggable="true" data-block-zone="available" data-block-index="'+index+'" ' +
+        'onclick="handleBlockClick(this)" onpointerdown="startBlockPointerDrag(event,this)" ' +
+        'ondragstart="startBlockDrag(event,this)" ondragend="endBlockDrag()">'+escapeHtml(block)+'</button>'
       ).join("");
       assembledArea.innerHTML = window.currentAssembledBlocks.map((block,index) =>
-        '<button type="button" class="sql-block" onclick="moveBlockToAvailable('+index+')" title="Нажми, чтобы убрать блок">'+escapeHtml(block)+'</button>'
+        '<button type="button" class="sql-block" draggable="true" data-block-zone="assembled" data-block-index="'+index+'" ' +
+        'onclick="handleBlockClick(this)" onpointerdown="startBlockPointerDrag(event,this)" ' +
+        'ondragstart="startBlockDrag(event,this)" ondragend="endBlockDrag()" title="Перетащи для изменения порядка или нажми, чтобы вернуть">'+escapeHtml(block)+'</button>'
       ).join("");
       editor.value = window.currentAssembledBlocks.join("\n");
       editor.dispatchEvent(new Event("input",{bubbles:true}));
     }
-    function moveBlockToAssembled(index) {
-      if (!Number.isInteger(index) || index < 0 || index >= window.currentAvailableBlocks.length) return;
-      window.currentAssembledBlocks.push(window.currentAvailableBlocks[index]);
-      window.currentAvailableBlocks.splice(index,1);
+    function moveBlockItem(sourceZone, sourceIndex, targetZone, targetIndex) {
+      const source = blockArray(sourceZone);
+      const target = blockArray(targetZone);
+      if (!Number.isInteger(sourceIndex) || sourceIndex < 0 || sourceIndex >= source.length) return;
+      const item = source.splice(sourceIndex, 1)[0];
+      let insertAt = Number.isInteger(targetIndex) ? targetIndex : target.length;
+      if (source === target && sourceIndex < insertAt) insertAt -= 1;
+      insertAt = Math.max(0, Math.min(insertAt, target.length));
+      target.splice(insertAt, 0, item);
       renderBlocksUI();
     }
+    function moveBlockToAssembled(index) {
+      moveBlockItem("available", index, "assembled", window.currentAssembledBlocks.length);
+    }
     function moveBlockToAvailable(index) {
-      if (!Number.isInteger(index) || index < 0 || index >= window.currentAssembledBlocks.length) return;
-      window.currentAvailableBlocks.push(window.currentAssembledBlocks[index]);
-      window.currentAssembledBlocks.splice(index,1);
-      renderBlocksUI();
+      moveBlockItem("assembled", index, "available", window.currentAvailableBlocks.length);
+    }
+    function handleBlockClick(element) {
+      if (suppressNextBlockClick) {
+        suppressNextBlockClick = false;
+        return;
+      }
+      const zone = element.dataset.blockZone;
+      const index = Number(element.dataset.blockIndex);
+      if (zone === "available") moveBlockToAssembled(index);
+      else moveBlockToAvailable(index);
+    }
+    function startBlockDrag(event, element) {
+      blockDragState = {zone:element.dataset.blockZone,index:Number(element.dataset.blockIndex)};
+      if (event.dataTransfer) {
+        event.dataTransfer.effectAllowed = "move";
+        event.dataTransfer.setData("text/plain", blockDragState.zone + ":" + blockDragState.index);
+      }
+      element.classList.add("is-dragging");
+    }
+    function clearBlockDropTargets() {
+      document.querySelectorAll(".blocks-area.is-drop-target,.available-blocks.is-drop-target").forEach(function (area) {
+        area.classList.remove("is-drop-target");
+      });
+    }
+    function endBlockDrag() {
+      blockDragState = null;
+      clearBlockDropTargets();
+      document.querySelectorAll(".sql-block.is-dragging").forEach(function (block) {
+        block.classList.remove("is-dragging");
+      });
+    }
+    function handleBlocksDragOver(event) {
+      event.preventDefault();
+      if (event.dataTransfer) event.dataTransfer.dropEffect = "move";
+      event.currentTarget.classList.add("is-drop-target");
+    }
+    function getBlockDropIndex(area, event, dropTarget) {
+      const blocks = Array.from(area.querySelectorAll(".sql-block"));
+      const hit = dropTarget || event.target;
+      const target = hit && hit.closest ? hit.closest(".sql-block") : null;
+      if (target && target.parentElement === area) {
+        const rect = target.getBoundingClientRect();
+        const after = event.clientY > rect.top + rect.height / 2 ||
+          (event.clientY >= rect.top && event.clientY <= rect.bottom && event.clientX > rect.left + rect.width / 2);
+        return blocks.indexOf(target) + (after ? 1 : 0);
+      }
+      return blocks.length;
+    }
+    function handleBlocksDrop(event) {
+      event.preventDefault();
+      const drag = blockDragState;
+      const targetArea = event.currentTarget;
+      if (drag) {
+        const targetZone = targetArea.id === "assembledArea" ? "assembled" : "available";
+        moveBlockItem(drag.zone, drag.index, targetZone, getBlockDropIndex(targetArea, event));
+      }
+      endBlockDrag();
+    }
+    function startBlockPointerDrag(event, element) {
+      if (event.pointerType !== "touch" && event.pointerType !== "pen") return;
+      pointerBlockDragState = {
+        zone:element.dataset.blockZone,index:Number(element.dataset.blockIndex),pointerId:event.pointerId,
+        startX:event.clientX,startY:event.clientY,element:element,started:false
+      };
+      if (element.setPointerCapture) {
+        try { element.setPointerCapture(event.pointerId); } catch (e) {}
+      }
+      window.addEventListener("pointermove", moveBlockPointerDrag);
+      window.addEventListener("pointerup", finishBlockPointerDrag);
+      window.addEventListener("pointercancel", cancelBlockPointerDrag);
+    }
+    function moveBlockPointerDrag(event) {
+      const drag = pointerBlockDragState;
+      if (!drag || event.pointerId !== drag.pointerId) return;
+      if (!drag.started && Math.hypot(event.clientX - drag.startX, event.clientY - drag.startY) < 8) return;
+      drag.started = true;
+      event.preventDefault();
+      drag.element.classList.add("is-dragging");
+      clearBlockDropTargets();
+      const underPointer = document.elementFromPoint(event.clientX, event.clientY);
+      const area = underPointer && underPointer.closest ? underPointer.closest("#assembledArea,#availableArea") : null;
+      if (area) area.classList.add("is-drop-target");
+    }
+    function finishBlockPointerDrag(event) {
+      const drag = pointerBlockDragState;
+      if (!drag || event.pointerId !== drag.pointerId) return;
+      if (drag.started) {
+        const underPointer = document.elementFromPoint(event.clientX, event.clientY);
+        const targetArea = underPointer && underPointer.closest ? underPointer.closest("#assembledArea,#availableArea") : null;
+        if (targetArea) {
+          const targetZone = targetArea.id === "assembledArea" ? "assembled" : "available";
+          moveBlockItem(drag.zone, drag.index, targetZone, getBlockDropIndex(targetArea, event, underPointer));
+        }
+        suppressNextBlockClick = true;
+        setTimeout(function () { suppressNextBlockClick = false; }, 500);
+      }
+      cleanupBlockPointerDrag();
+    }
+    function cancelBlockPointerDrag(event) {
+      if (pointerBlockDragState && event.pointerId === pointerBlockDragState.pointerId) cleanupBlockPointerDrag();
+    }
+    function cleanupBlockPointerDrag() {
+      if (pointerBlockDragState && pointerBlockDragState.element) pointerBlockDragState.element.classList.remove("is-dragging");
+      pointerBlockDragState = null;
+      clearBlockDropTargets();
+      window.removeEventListener("pointermove", moveBlockPointerDrag);
+      window.removeEventListener("pointerup", finishBlockPointerDrag);
+      window.removeEventListener("pointercancel", cancelBlockPointerDrag);
     }
 
     function loadState() {
@@ -336,10 +462,10 @@
           window.currentAssembledBlocks = [];
         }
         blocksHtml = '<section class="interactive-blocks"><strong>Интерактивное задание: собери SQL-запрос</strong>' +
-          '<p>Нажимай на блоки в правильном порядке. Лишние блоки можно не выбирать. Чтобы убрать уже выбранный блок, нажми на него в верхней области.</p>' +
+          '<p>Нажимай на блоки или перетаскивай их между областями. В верхней области можно менять порядок блоков перетаскиванием. Лишние блоки можно не выбирать.</p>' +
           '<div class="block-help"><span>1. Собери запрос сверху</span><span>2. Нажми «Выполнить запрос»</span></div>' +
-          '<div class="blocks-area" id="assembledArea" aria-label="Собранный SQL-запрос"></div>' +
-          '<div class="available-blocks" id="availableArea" aria-label="Доступные SQL-блоки"></div></section>';
+          '<div class="blocks-area" id="assembledArea" aria-label="Собранный SQL-запрос" ondragover="handleBlocksDragOver(event)" ondrop="handleBlocksDrop(event)"></div>' +
+          '<div class="available-blocks" id="availableArea" aria-label="Доступные SQL-блоки" ondragover="handleBlocksDragOver(event)" ondrop="handleBlocksDrop(event)"></div></section>';
       }
       const taskRunHtml = '<div class="task-run-bar" role="group" aria-label="Запуск задания">' +
         '<button id="taskRunButton" class="btn btn-primary" type="button" onclick="runSQL()">▶ Выполнить запрос</button>' +
