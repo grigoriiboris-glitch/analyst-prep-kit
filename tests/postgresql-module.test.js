@@ -80,7 +80,7 @@ test("PostgreSQL course is a complete Russian-first 30-lesson curriculum", () =>
     assert.ok(lesson.hint && lesson.expected && lesson.solutionSql && lesson.solutionExplain, "Lesson " + lesson.id + " needs a hint, expected output and explained solution");
     assert.ok(lesson.exampleSql === lesson.solutionSql, "Lesson " + lesson.id + " example must match the explained solution");
     assert.ok(Array.isArray(lesson.blocks), "Lesson " + lesson.id + " needs interactive SQL blocks");
-    const solutionBlocks = lesson.solutionSql.split(/\\r?\\n/).map((line) => line.trim()).filter(Boolean);
+    const solutionBlocks = lesson.solutionSql.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
     assert.ok(solutionBlocks.every((block) => lesson.blocks.includes(block)), "Lesson " + lesson.id + " must provide every correct solution fragment");
     assert.ok(lesson.blocks.length >= solutionBlocks.length + 2, "Lesson " + lesson.id + " needs at least two distractor blocks");
     assert.ok(Array.isArray(lesson.visual) && lesson.visual.length >= 2, "Lesson " + lesson.id + " needs a visual explanation");
@@ -183,7 +183,7 @@ test("PostgreSQL lessons render drag-and-drop SQL assembly with inline query fee
     "pg-interactive-blocks",
     "pgAvailableBlocks",
     "pgAssembledBlocks",
-    "draggable=\\"true\\"",
+    "draggable=\"true\"",
     "dragstart",
     "dragover",
     "drop",
@@ -192,7 +192,7 @@ test("PostgreSQL lessons render drag-and-drop SQL assembly with inline query fee
     "movePgBlockItem",
     "resetPgBlockAssembly"
   ]) assert.ok(app.includes(token), "PostgreSQL drag-and-drop implementation is missing: " + token);
-  assert.ok(app.includes("onclick") === false, "PostgreSQL block interaction should use bound event handlers, not inline click code");
+  assert.ok(!app.includes("onclick="), "PostgreSQL block interaction should use bound event handlers");
   const renderStart = app.indexOf("function renderLesson(){");
   const renderEnd = app.indexOf("function openLesson(", renderStart);
   const render = app.slice(renderStart, renderEnd);
