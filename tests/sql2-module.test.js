@@ -102,10 +102,9 @@ test('Every SQL 2 lesson follows the beginner-friendly lesson structure', () => 
     }
     assert.equal(lesson.starter, '', 'Lesson ' + lesson.id + ' should start with an empty block-built query');
     assert.ok(Array.isArray(lesson.blocks) && lesson.blocks.length > 0, 'Lesson ' + lesson.id + ' must provide interactive SQL blocks');
-    assert.ok(lesson.solution.split('\\n').every((line) => lesson.blocks.includes(line)), 'Lesson ' + lesson.id + ' must contain every solution line as a selectable block');
-    assert.ok(lesson.blocks.length > lesson.solution.split('\\n').length, 'Lesson ' + lesson.id + ' must include distractor blocks');
+    assert.ok(lesson.solution.split('\n').every((line) => lesson.blocks.includes(line)), 'Lesson ' + lesson.id + ' must contain every solution line as a selectable block');
+    assert.ok(lesson.blocks.length > lesson.solution.split('\n').length, 'Lesson ' + lesson.id + ' must include distractor blocks');
     assert.match(lesson.solution, /^(SELECT|WITH)\b/i, 'Lesson ' + lesson.id + ' solution must be SQL');
-    assert.match(lesson.starter, /;\s*$/, 'Lesson ' + lesson.id + ' starter must end with a semicolon');
     assert.match(lesson.syntaxExample, /;\s*$/, 'Lesson ' + lesson.id + ' syntax example must end with a semicolon');
     assert.match(lesson.solution, /;\s*$/, 'Lesson ' + lesson.id + ' solution must end with a semicolon');
     assert.doesNotMatch(lesson.hint, /\b(?:SELECT|WITH)\b[\s\S]*;/i,
