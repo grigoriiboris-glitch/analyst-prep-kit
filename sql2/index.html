@@ -111,6 +111,10 @@
     .sql-block:active{transform:translateY(0)}
     .blocks-area .sql-block{background:var(--s2-accent);border-color:var(--s2-accent);color:#fff}
     .block-help{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:0 0 9px;color:var(--s2-dim);font-size:11px}
+    .task-run-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:-5px 0 18px;padding:12px 14px;border:1px solid color-mix(in srgb,var(--s2-accent) 35%,var(--s2-line));border-radius:11px;background:var(--s2-panel)}
+    .task-run-bar .btn-primary{min-height:42px;padding:10px 18px;font-size:14px;font-weight:800;box-shadow:0 2px 0 color-mix(in srgb,var(--s2-accent) 65%,#000)}
+    .task-run-note{font-size:12px;color:var(--s2-dim)}
+    @media(max-width:680px){.task-run-bar{align-items:stretch}.task-run-bar .btn-primary{width:100%}.task-run-note{text-align:center}}
   </style>
 </head>
 <body>
@@ -337,8 +341,11 @@
           '<div class="blocks-area" id="assembledArea" aria-label="Собранный SQL-запрос"></div>' +
           '<div class="available-blocks" id="availableArea" aria-label="Доступные SQL-блоки"></div></section>';
       }
-      document.getElementById("lessonPane").innerHTML = lessonResultIntro(lesson) + blocksHtml +
-        '<div class="editor-head"><strong>' + (isInteractive ? 'Собранный SQL-запрос' : 'Твой SQL-запрос') + '</strong><div class="editor-actions">' +
+      const taskRunHtml = '<div class="task-run-bar" role="group" aria-label="Запуск задания">' +
+        '<button id="taskRunButton" class="btn btn-primary" type="button" onclick="runSQL()">▶ Выполнить запрос</button>' +
+        '<span class="task-run-note">' + (isInteractive ? 'Сначала собери запрос из блоков выше.' : 'Запрос выполнится в учебной базе SQLite.') + '</span></div>';
+      document.getElementById("lessonPane").innerHTML = lessonResultIntro(lesson) + blocksHtml + taskRunHtml +
+        '<div class="editor-head"><strong>' + (isInteractive ? 'Собранный SQL-запрос' : 'Твой SQL-запрос') + '</strong><div class="editor-actions">'
         '<button class="btn" type="button" onclick="showHint()">Подсказка</button>' +
         '<button class="btn" type="button" onclick="showSolution()">Показать разбор решения</button>' +
         '<button class="btn" type="button" onclick="resetDraft()">Сбросить</button></div></div>' +
@@ -350,7 +357,7 @@
         '<div id="solutionBox" class="solution-box" hidden><strong>Разбор решения</strong><pre>' + escapeHtml(lesson.solution) + '</pre><p style="margin:8px 0 0;color:var(--s2-dim)">' + escapeHtml(lesson.explain) + '</p></div>' +
         '<section class="concept"><strong>Типичная ошибка новичка</strong><p>' + escapeHtml(lesson.commonMistake) + '</p></section>' +
         '<section class="concept"><strong>Проверь себя</strong><p>' + escapeHtml(lesson.checkQuestion) + '</p></section>' +
-        '<div class="editor-actions" style="margin-top:12px"><button class="btn btn-primary" type="button" onclick="runSQL()">Выполнить запрос</button><button class="btn" type="button" onclick="copyTaskContext()">Скопировать контекст для ИИ</button></div>' +
+        '<div class="editor-actions" style="margin-top:12px"><button class="btn" type="button" onclick="copyTaskContext()">Скопировать контекст для ИИ</button></div>' +
         '<section class="result-card"><div class="result-head"><strong>Результат выполнения</strong><span id="resultStatus" class="result-status">Ожидает запроса</span></div><div class="result-body" id="resultBody"><p class="result-note">' + (isInteractive ? 'Собери запрос из блоков и запусти его, чтобы увидеть результат.' : 'Запусти запрос, чтобы увидеть настоящую таблицу результата.') + '</p></div></section>' +
         '<div id="feedback" class="feedback" role="status" aria-live="polite"></div>' +
         '<div class="lesson-footer"><span class="footer-note">' + (done ? 'Задание уже отмечено выполненным.' : 'Прогресс сохранится в этом браузере.') + '</span><div class="editor-actions">' +
