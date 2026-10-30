@@ -136,7 +136,7 @@ window.PostgreSQLLessons = [
     "goal": "Оставить в результате только строки, которые подходят под условие.",
     "explain": "WHERE проверяет каждую строку до того, как она попадёт в результат. После WHERE указывают условие, которое должно быть истинным. Для логического поля active значение TRUE означает, что клиент активен.",
     "gotcha": "Не записывай логическое условие как active = 'true': в одинарных кавычках находится текст. Для boolean используй TRUE или FALSE без кавычек.",
-    "exampleSql": "SELECT id,\n       full_name,\n       city\nFROM customers\nWHERE active IS TRUE;",
+    "exampleSql": "SELECT id,\n       full_name,\n       city\nFROM customers\nWHERE active IS TRUE\nORDER BY id;",
     "starterSql": "SELECT id,\n       full_name,\n       city\nFROM customers\nORDER BY id;",
     "task": "Выведи только активных клиентов, сохранив идентификатор, имя и город.",
     "checks": {
@@ -172,7 +172,7 @@ window.PostgreSQLLessons = [
     },
     "hint": "Какое поле показывает активность клиента и какое значение должно быть у него, чтобы строка осталась в результате?",
     "expected": "Столбцы: id, full_name, city. Ожидается 12 активных клиентов. Первые примеры: 1 | Анна Кузнецова | Москва; 2 | Борис Смирнов | Казань; 4 | Глеб Иванов | Санкт-Петербург.",
-    "solutionSql": "SELECT id,\n       full_name,\n       city\nFROM customers\nWHERE active IS TRUE;",
+    "solutionSql": "SELECT id,\n       full_name,\n       city\nFROM customers\nWHERE active IS TRUE\nORDER BY id;",
     "solutionExplain": "WHERE отбрасывает клиентов, у которых active не равно TRUE. В учебных данных неактивен клиент с id = 3, поэтому в результате остаются 12 строк."
   },
   {
