@@ -295,9 +295,10 @@
       if (event.dataTransfer) event.dataTransfer.dropEffect = "move";
       event.currentTarget.classList.add("is-drop-target");
     }
-    function getBlockDropIndex(area, event) {
+    function getBlockDropIndex(area, event, dropTarget) {
       const blocks = Array.from(area.querySelectorAll(".sql-block"));
-      const target = event.target && event.target.closest ? event.target.closest(".sql-block") : null;
+      const hit = dropTarget || event.target;
+      const target = hit && hit.closest ? hit.closest(".sql-block") : null;
       if (target && target.parentElement === area) {
         const rect = target.getBoundingClientRect();
         const after = event.clientY > rect.top + rect.height / 2 ||
@@ -349,7 +350,7 @@
         const targetArea = underPointer && underPointer.closest ? underPointer.closest("#assembledArea,#availableArea") : null;
         if (targetArea) {
           const targetZone = targetArea.id === "assembledArea" ? "assembled" : "available";
-          moveBlockItem(drag.zone, drag.index, targetZone, getBlockDropIndex(targetArea, event));
+          moveBlockItem(drag.zone, drag.index, targetZone, getBlockDropIndex(targetArea, event, underPointer));
         }
         suppressNextBlockClick = true;
         setTimeout(function () { suppressNextBlockClick = false; }, 500);
