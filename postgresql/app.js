@@ -82,6 +82,7 @@
     pgBlocksLessonId=id;
     pgAvailableBlocks=shufflePgBlocks(lesson.blocks||[]);
     pgAssembledBlocks=[];
+    lastResultSets=[];
     pgBlockDragState=null;
     pgPointerDragState=null;
     suppressPgBlockClick=false;
@@ -116,6 +117,8 @@
     editor.value=pgAssembledBlocks.join('\n');
     editor.dispatchEvent(new Event('input',{bubbles:true}));
     clearTaskFeedback();
+  }
+  function clearPgQueryResultOutput(){
     lastResultSets=[];
     var output=document.getElementById('queryOutput');if(output)output.innerHTML='<div class="pg-output-placeholder">Сборка изменилась. Запусти запрос, чтобы проверить результат.</div>';
     var csvButton=document.getElementById('downloadCsvBtn');if(csvButton)csvButton.disabled=true;
@@ -129,6 +132,7 @@
     insertAt=Math.max(0,Math.min(insertAt,target.length));
     target.splice(insertAt,0,item);
     renderPgBlocksUI();
+    clearPgQueryResultOutput();
   }
   function pgClearDropTargets(){
     Array.prototype.forEach.call(document.querySelectorAll('.pg-blocks-area.is-drop-target'),function(area){area.classList.remove('is-drop-target');});
@@ -248,6 +252,7 @@
     pgAssembledBlocks=solutionLines;
     pgAvailableBlocks=shufflePgBlocks(remaining);
     renderPgBlocksUI();
+    clearPgQueryResultOutput();
     showTaskFeedback('Готовая последовательность блоков перенесена в редактор. Теперь выполни запрос и изучи результат.','warn');
   }
   function renderPgBlocksSection(lesson){
