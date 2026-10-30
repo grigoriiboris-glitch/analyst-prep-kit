@@ -2,7 +2,7 @@
 
 Бесплатный интерактивный набор для подготовки к первой работе в аналитике данных. Работает в браузере: сборка, регистрация, Node.js и Docker не требуются.
 
-**Онлайн-версия форка с русификатором:** https://grigoriiboris-glitch.github.io/analyst-prep-kit/ (если включён GitHub Pages). Оригинал на английском: https://michaelnocito.github.io/analyst-prep-kit/  
+**Онлайн-версия форка с русификатором:** https://grigoriiboris-glitch.github.io/analyst-prep-kit/ (если включён GitHub Pages). Оригинал на английском: https://analytikos.duckdns.org/  
 **Запуск на Windows и Ubuntu:** [RUN_RU.md](RUN_RU.md)
 
 ## Разделы
