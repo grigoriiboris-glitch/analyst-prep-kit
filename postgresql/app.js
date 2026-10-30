@@ -78,16 +78,18 @@
     var draft=Object.prototype.hasOwnProperty.call(drafts,String(l.id))?drafts[String(l.id)]:l.starterSql;
     var quiz=l.quiz||{q:'Что важно помнить?',options:['Проверить результат'],correct:0,why:''};
     var html='<div class="pg-lesson-top"><span class="pg-badge">'+escapeHTML(l.unit)+'</span><span class="pg-muted">Урок '+l.id+' из '+lessons.length+'</span>'+(done?'<span class="pg-badge">✓ Пройдено</span>':'')+'</div>'+
-      '<h2 class="pg-lesson-title">'+escapeHTML(l.title)+'</h2><p class="pg-goal">'+inlineText(l.goal)+'</p>'+
-      '<section class="pg-block"><h3>Что нужно понять</h3><p>'+inlineText(l.explain)+'</p></section>'+renderVisual(l.visual)+
-      '<section class="pg-code-card"><div class="pg-code-head"><span>Разобранный пример</span><button class="pg-button" type="button" id="useExampleBtn">Перенести в редактор</button></div><pre class="pg-code"><code>'+escapeHTML(l.exampleSql||'')+'</code></pre></section>'+
-      '<section class="pg-block gotcha"><h3>Частая ошибка</h3><p>'+inlineText(l.gotcha)+'</p></section>'+
-      '<section class="pg-task"><h3>Практическая задача</h3><p>'+inlineText(l.task)+'</p></section>'+
-      '<section class="pg-workbench" aria-label="Редактор SQL"><div class="pg-workbench-head"><h3>SQL-песочница</h3><span class="pg-engine-state" id="engineState">'+(db?'PostgreSQL готов · данные изолированы':'Движок загрузится при первом запуске')+'</span></div>'+
-      '<textarea id="sqlEditor" class="pg-editor" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Твой SQL-запрос"></textarea>'+
+      '<h2 class="pg-lesson-title">Практикум SQL '+Number(l.id)+'. '+escapeHTML(l.title)+'</h2><p class="pg-goal">'+inlineText(l.goal)+'</p>'+
+      '<section class="pg-block"><h3>Что нового</h3><p>'+inlineText(l.explain)+'</p></section>'+renderVisual(l.visual)+
+      '<section class="pg-task"><h3>Задание</h3><p>'+inlineText(l.task)+'</p></section>'+
+      '<section class="pg-block pg-hint"><h3>Подсказка</h3><p>'+inlineText(l.hint||'Подумай, какой оператор PostgreSQL решает эту задачу.')+'</p></section>'+
+      '<section class="pg-block pg-expected"><h3>Ожидаемый результат</h3><p>'+inlineText(l.expected||'Сверь названия и порядок столбцов с условием задачи.')+'</p></section>'+
+      '<section class="pg-code-card"><div class="pg-code-head"><span>Разбор решения</span><button class="pg-button" type="button" id="useExampleBtn">Перенести решение в редактор</button></div><pre class="pg-code"><code>'+escapeHTML(l.solutionSql||l.exampleSql||'')+'</code></pre><div class="pg-solution-note">'+inlineText(l.solutionExplain||'')+'</div></section>'+
+      '<section class="pg-block gotcha"><h3>Типичная ошибка</h3><p>'+inlineText(l.gotcha)+'</p></section>'+
+      '<section class="pg-workbench" aria-label="Редактор SQL"><div class="pg-workbench-head"><h3>Заготовка кода · PostgreSQL</h3><span class="pg-engine-state" id="engineState">'+(db?'PostgreSQL готов · данные изолированы':'Движок загрузится при первом запуске')+'</span></div>'+
+      '<textarea id="sqlEditor" class="pg-editor" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Заготовка SQL-кода для PostgreSQL"></textarea>'+
       '<div class="pg-run-actions"><button class="pg-button primary" type="button" id="runQueryBtn">▶ Выполнить запрос</button><button class="pg-button" type="button" id="copyQueryBtn">Копировать SQL</button><button class="pg-button" type="button" id="downloadCsvBtn" disabled>Скачать результат CSV</button><span class="pg-muted">Ctrl + Enter — выполнить · максимум 20 000 символов</span></div>'+
       '<div class="pg-output" id="queryOutput" aria-live="polite"><div class="pg-output-placeholder">Выполни пример в изолированной учебной базе. Первый запуск загрузит движок PostgreSQL.</div></div></section>'+
-      '<section class="pg-quiz"><h3>Проверь понимание</h3><p class="pg-quiz-q">'+inlineText(quiz.q)+'</p><div class="pg-answers" id="quizAnswers">'+quiz.options.map(function(op,i){return '<button class="pg-answer'+(quizPassed&&i===quiz.correct?' correct':'')+'" type="button" data-answer="'+i+'"'+(quizPassed?' disabled':'')+'>'+inlineText(op)+'</button>';}).join('')+'</div><p class="pg-quiz-feedback" id="quizFeedback" aria-live="polite">'+(quizPassed?'Верно. '+escapeHTML(quiz.why):'Ответь правильно, чтобы отметить урок завершённым.')+'</p></section>'+
+      '<section class="pg-quiz"><h3>Проверь себя</h3><p class="pg-quiz-q">'+inlineText(quiz.q)+'</p><div class="pg-answers" id="quizAnswers">'+quiz.options.map(function(op,i){return '<button class="pg-answer'+(quizPassed&&i===quiz.correct?' correct':'')+'" type="button" data-answer="'+i+'"'+(quizPassed?' disabled':'')+'>'+inlineText(op)+'</button>';}).join('')+'</div><p class="pg-quiz-feedback" id="quizFeedback" aria-live="polite">'+(quizPassed?'Верно. '+escapeHTML(quiz.why):'Ответь правильно, чтобы отметить урок завершённым.')+'</p></section>'+
       '<div class="pg-lesson-actions"><button class="pg-button" type="button" id="prevLessonBtn"'+(Number(l.id)===Number(lessons[0].id)?' disabled':'')+'>← Предыдущий урок</button><button class="pg-button primary" type="button" id="completeLessonBtn"'+(!(runPassed&&quizPassed)||done?' disabled':'')+'>'+(done?'✓ Урок пройден':'Завершить урок')+'</button><button class="pg-button" type="button" id="nextLessonBtn">'+(Number(l.id)===Number(lessons[lessons.length-1].id)?'К началу курса ↻':'Следующий урок →')+'</button><span class="spacer"></span><span class="pg-muted">'+(runPassed?'Практика выполнена ✓':'Практика ещё не пройдена')+' · '+(quizPassed?'Ответ верный ✓':'Контрольный вопрос не пройден')+'</span></div>';
     view.innerHTML=html;
     var editor=document.getElementById('sqlEditor');editor.value=String(draft||'').slice(0,20000);
@@ -165,14 +167,32 @@
   function toPlainValue(value){if(value===null||typeof value==='undefined')return 'NULL';if(typeof value==='string'||typeof value==='number'||typeof value==='boolean'||typeof value==='bigint')return String(value);if(value instanceof Date)return value.toISOString();try{return JSON.stringify(value);}catch(_){return String(value);}}
   function fieldsOf(result){if(Array.isArray(result&&result.fields)&&result.fields.length)return result.fields.map(function(field){return String(field.name||field);});if(Array.isArray(result&&result.rows)&&result.rows.length)return Object.keys(result.rows[0]);return [];}
   function resultsOf(result){return Array.isArray(result)?result:(result?[result]:[]);}
-  function checkOutput(resultSets,check){
-    check=check||{};var candidate=null,candidateColumns=[];
+  function normalizeSqlForCheck(sql){
+    return String(sql||'').replace(/--[^\\n]*/g,' ').replace(/\\s+/g,' ').trim().toLowerCase();
+  }
+  function checkOutput(resultSets,check,sql){
+    check=check||{};var candidate=null,candidateColumns=[],normalizedSql=normalizeSqlForCheck(sql);
+    if(Array.isArray(check.sqlIncludes)){
+      var missing=check.sqlIncludes.filter(function(part){return normalizedSql.indexOf(String(part).replace(/\\s+/g,' ').trim().toLowerCase())===-1;});
+      if(missing.length)return{ok:false,message:'В запросе пока не использована нужная конструкция PostgreSQL: '+missing.join(', ')+'. Проверь тему урока и подсказку.'};
+    }
     for(var i=0;i<resultSets.length;i++){var result=resultSets[i],cols=fieldsOf(result);var all=(check.columns||[]).every(function(required){return cols.some(function(c){return c.toLowerCase()===String(required).toLowerCase();});});if(all&&Array.isArray(result.rows)){candidate=result;candidateColumns=cols;break;}}
     if(!candidate){if(check.columns&&check.columns.length)return{ok:false,message:'Нужны выходные столбцы: '+check.columns.join(', ')+'. Проверь SELECT и псевдонимы.'};return{ok:false,message:'Запрос выполнен, но результат для этой практики не распознан. Посмотри задание и верни табличный результат.'};}
+    if(check.columnOrder&&Array.isArray(check.columns)){
+      var orderMatches=candidateColumns.length===check.columns.length&&check.columns.every(function(name,index){return candidateColumns[index].toLowerCase()===String(name).toLowerCase();});
+      if(!orderMatches)return{ok:false,message:'Проверь порядок столбцов. Ожидается: '+check.columns.join(', ')+'.'};
+    }
     if(Number.isFinite(check.exactRows)&&candidate.rows.length!==check.exactRows)return{ok:false,message:'В результате ожидается '+check.exactRows+' строк, сейчас: '+candidate.rows.length+'.'};
     if(Number.isFinite(check.minRows)&&candidate.rows.length<check.minRows)return{ok:false,message:'Получено '+candidate.rows.length+' строк, а для проверки нужно не меньше '+check.minRows+'. Проверь фильтр и соединения.'};
+    if(check.firstRow&&candidate.rows.length){
+      var firstMismatch=Object.keys(check.firstRow).find(function(name){
+        var key=Object.keys(candidate.rows[0]||{}).find(function(k){return k.toLowerCase()===name.toLowerCase();});
+        return key===undefined||toPlainValue(candidate.rows[0][key])!==String(check.firstRow[name]);
+      });
+      if(firstMismatch)return{ok:false,message:'Проверь первую строку результата: в столбце '+firstMismatch+' ожидается «'+check.firstRow[firstMismatch]+'».'};
+    }
     if(check.contains){var index=candidateColumns.findIndex(function(c){return c.toLowerCase()===String(check.contains.column).toLowerCase();});var found=index>=0&&candidate.rows.some(function(row){var key=Object.keys(row||{}).find(function(k){return k.toLowerCase()===String(check.contains.column).toLowerCase();});return key!==undefined&&toPlainValue(row[key]).indexOf(String(check.contains.value))!==-1;});if(!found)return{ok:false,message:'В столбце '+check.contains.column+' не найден ожидаемый признак. Проверь фильтр или выражение.'};}
-    return{ok:true,message:'Условия практики выполнены: выходные столбцы и объём результата соответствуют задаче.'};
+    return{ok:true,message:'Условия практики выполнены: структура, порядок столбцов и содержание результата соответствуют задаче.'};
   }
   async function runQuery(){
     if(queryRunning)return;var editor=document.getElementById('sqlEditor'),button=document.getElementById('runQueryBtn'),sql=editor?editor.value:'',guard=guardedSQL(sql);
@@ -180,7 +200,7 @@
     queryRunning=true;if(button){button.disabled=true;button.textContent='Выполняем…';}
     try{
       var database=await ensureDatabase(),result=await database.exec(sql);lastResultSets=resultsOf(result);renderResultSets(lastResultSets);saveHistory(sql,lastResultSets);
-      var l=currentLesson(),validation=checkOutput(lastResultSets,l.checks);
+      var l=currentLesson(),validation=checkOutput(lastResultSets,l.checks,sql);
       if(validation.ok)state.runPassed[String(l.id)]=Math.max(Date.now(),Number(state.resetAt)+1);
       else if(!hasPassedRun(l.id))state.runPassed[String(l.id)]=Number(state.resetAt)||0;
       saveProgress();renderLesson();renderResultSets(lastResultSets);
