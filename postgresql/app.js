@@ -168,12 +168,12 @@
   function fieldsOf(result){if(Array.isArray(result&&result.fields)&&result.fields.length)return result.fields.map(function(field){return String(field.name||field);});if(Array.isArray(result&&result.rows)&&result.rows.length)return Object.keys(result.rows[0]);return [];}
   function resultsOf(result){return Array.isArray(result)?result:(result?[result]:[]);}
   function normalizeSqlForCheck(sql){
-    return String(sql||'').replace(/--[^\\n]*/g,' ').replace(/\\s+/g,' ').trim().toLowerCase();
+    return String(sql||'').replace(/--[^\n]*/g,' ').replace(/\s+/g,' ').trim().toLowerCase();
   }
   function checkOutput(resultSets,check,sql){
     check=check||{};var candidate=null,candidateColumns=[],normalizedSql=normalizeSqlForCheck(sql);
     if(Array.isArray(check.sqlIncludes)){
-      var missing=check.sqlIncludes.filter(function(part){return normalizedSql.indexOf(String(part).replace(/\\s+/g,' ').trim().toLowerCase())===-1;});
+      var missing=check.sqlIncludes.filter(function(part){return normalizedSql.indexOf(String(part).replace(/\s+/g,' ').trim().toLowerCase())===-1;});
       if(missing.length)return{ok:false,message:'В запросе пока не использована нужная конструкция PostgreSQL: '+missing.join(', ')+'. Проверь тему урока и подсказку.'};
     }
     for(var i=0;i<resultSets.length;i++){var result=resultSets[i],cols=fieldsOf(result);var all=(check.columns||[]).every(function(required){return cols.some(function(c){return c.toLowerCase()===String(required).toLowerCase();});});if(all&&Array.isArray(result.rows)){candidate=result;candidateColumns=cols;break;}}
