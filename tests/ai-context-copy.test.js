@@ -17,12 +17,14 @@ test("AI context-copy component parses and includes a safe clipboard fallback", 
     "КОНТЕКСТ УРОКА",
     "MAX_CONTEXT_CHARS",
     "MutationObserver",
+    "root.querySelector('.' + BAR_CLASS)",
     ".study-section",
     "#lessonContent",
     "#lessonView",
     "#app"
   ]) assert.ok(source.includes(token), "AI context-copy feature missing: " + token);
   assert.ok(!source.includes("localStorage.setItem('apk-sync-queue"), "Context copy must not transmit or queue private lesson text");
+  assert.ok(!source.includes("Array.prototype.some.call(root.children"), "The context bar must be checked anywhere inside a lesson root, not only among direct children");
 });
 
 test("AI context copy is loaded by shared course shells and the new PostgreSQL module", () => {

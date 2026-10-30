@@ -312,6 +312,7 @@
     return parts.length ? parts[parts.length - 1].toLowerCase() : 'home';
   }
   function textOf(el) { return el ? String(el.innerText || el.textContent || '').replace(/\s+/g, ' ').trim() : ''; }
+  var pageCourse = courseName();
   function cleanTitle(value) { return String(value || '').replace(/^\s*(урок|lesson)\s*\d+\s*[·.:-]?\s*/i, '').trim(); }
   function findRuleVisual(course, haystack, includeGlobal) {
     var found = null;
@@ -475,7 +476,7 @@
   function processStandalone(course) {
     if (course === 'data-quality') {
       var hero = document.querySelector('.hero');
-      if (hero && !hero.querySelector('[data-apk-visual]')) {
+      if (hero && !document.querySelector('[data-apk-visual]')) {
         var def = matchingVisual(course, 'Практикум по качеству данных', textOf(hero));
         insertAfter(hero, renderVisual(def, course));
       }
@@ -483,7 +484,7 @@
     }
     if (course === 'portfolio-projects') {
       var intro = document.querySelector('.hero');
-      if (intro && !intro.querySelector('[data-apk-visual]')) {
+      if (intro && !document.querySelector('[data-apk-visual]')) {
         var def2 = flow('От учебного кейса к проекту в портфолио', 'Каждый проект должен показать не только инструмент, но и то, как ты пришёл к обоснованному бизнес-выводу.',
           [['Бизнес-вопрос', 'Что хочет узнать компания?'], ['Данные', 'Словарь, CSV и уровень детализации.'], ['Качество', 'Проверки, очистка и исключения.'], ['Анализ и дашборд', 'Воспроизводимые расчёты и понятные показатели.'], ['Рекомендация', 'Вывод, ограничения и следующий шаг.']],
           'В портфолио укажи свои реальные расчёты, результаты и ограничения. Не оставляй учебный шаблон как будто он уже выполнен.');
@@ -492,7 +493,7 @@
     }
   }
   function run() {
-    var course = courseName();
+    var course = pageCourse;
     if (STATIC_COURSES.indexOf(course) >= 0) staticLessons(course);
     else {
       processStandalone(course);
@@ -509,7 +510,7 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', schedule);
   else schedule();
-  if (window.MutationObserver) {
+  if (window.MutationObserver && pageCourse !== 'data-quality' && pageCourse !== 'portfolio-projects') {
     var observer = new MutationObserver(function (records) {
       for (var i = 0; i < records.length; i++) {
         var r = records[i];

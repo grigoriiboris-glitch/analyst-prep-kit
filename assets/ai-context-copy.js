@@ -255,7 +255,7 @@
   }
 
   function attachButton(root) {
-    if (!root || Array.prototype.some.call(root.children, function (child) { return child.classList && child.classList.contains(BAR_CLASS); })) return;
+    if (!root || root.matches('.' + BAR_CLASS) || root.querySelector('.' + BAR_CLASS)) return;
     if (!visibleLessonRoot(root)) return;
     root.setAttribute('data-apk-ai-context-root', 'true');
 
