@@ -79,6 +79,10 @@ test("PostgreSQL course is a complete Russian-first 30-lesson curriculum", () =>
     assert.ok(lesson.exampleSql && lesson.starterSql && lesson.task && lesson.gotcha, "Lesson " + lesson.id + " needs example SQL, starter SQL, task and a gotcha");
     assert.ok(lesson.hint && lesson.expected && lesson.solutionSql && lesson.solutionExplain, "Lesson " + lesson.id + " needs a hint, expected output and explained solution");
     assert.ok(lesson.exampleSql === lesson.solutionSql, "Lesson " + lesson.id + " example must match the explained solution");
+    assert.ok(Array.isArray(lesson.blocks), "Lesson " + lesson.id + " needs interactive SQL blocks");
+    const solutionBlocks = lesson.solutionSql.split(/\\r?\\n/).map((line) => line.trim()).filter(Boolean);
+    assert.ok(solutionBlocks.every((block) => lesson.blocks.includes(block)), "Lesson " + lesson.id + " must provide every correct solution fragment");
+    assert.ok(lesson.blocks.length >= solutionBlocks.length + 2, "Lesson " + lesson.id + " needs at least two distractor blocks");
     assert.ok(Array.isArray(lesson.visual) && lesson.visual.length >= 2, "Lesson " + lesson.id + " needs a visual explanation");
     assert.ok(lesson.quiz && Array.isArray(lesson.quiz.options) && lesson.quiz.options.length >= 3, "Lesson " + lesson.id + " needs a multiple-choice quiz");
     assert.ok(Number.isInteger(lesson.quiz.correct) && lesson.quiz.correct >= 0 && lesson.quiz.correct < lesson.quiz.options.length, "Lesson " + lesson.id + " has an invalid quiz answer");
@@ -166,6 +170,43 @@ test("PostgreSQL lesson page wires progress sync and keeps drafts and query hist
   assert.ok(dataCraft.includes('"postgresql": ['), "DataCraft needs the PostgreSQL lesson catalog");
   assert.ok(app.includes("statement_timeout") || html.includes("изоля"), "Sandbox constraints must be documented");
   new Function(app);
+});
+
+test("PostgreSQL lessons render drag-and-drop SQL assembly with inline query feedback", () => {
+  const app = read("app.js");
+  const html = read("index.html");
+  const lessons = readLessons();
+  assert.equal(lessons.length, 30);
+  assert.ok(lessons.every((lesson) => Array.isArray(lesson.blocks) && lesson.blocks.length >= 3),
+    "All PostgreSQL lessons must include selectable SQL fragments and distractors");
+  for (const token of [
+    "pg-interactive-blocks",
+    "pgAvailableBlocks",
+    "pgAssembledBlocks",
+    "draggable=\\"true\\"",
+    "dragstart",
+    "dragover",
+    "drop",
+    "pointerdown",
+    "pgMovePointerBlock",
+    "movePgBlockItem",
+    "resetPgBlockAssembly"
+  ]) assert.ok(app.includes(token), "PostgreSQL drag-and-drop implementation is missing: " + token);
+  assert.ok(app.includes("onclick") === false, "PostgreSQL block interaction should use bound event handlers, not inline click code");
+  const renderStart = app.indexOf("function renderLesson(){");
+  const renderEnd = app.indexOf("function openLesson(", renderStart);
+  const render = app.slice(renderStart, renderEnd);
+  const editorPosition = render.indexOf('<textarea id="sqlEditor"');
+  const feedbackPosition = render.indexOf('id="taskFeedback"');
+  const outputPosition = render.indexOf('id="queryOutput"');
+  assert.ok(editorPosition >= 0 && feedbackPosition > editorPosition && outputPosition > feedbackPosition,
+    "SQL feedback must appear immediately below the assembled query and before the result table");
+  assert.ok(app.includes("showTaskFeedback(explainSQLError(technical)") && app.includes("'error')"),
+    "SQL execution errors must be shown directly below the query");
+  assert.ok(app.includes("showTaskFeedback('Верно!") && app.includes("showTaskFeedback('Запрос выполнился"),
+    "Successful and incorrect SQL results must have inline feedback");
+  assert.ok(html.includes(".pg-sql-block") && html.includes(".pg-task-feedback.error") && html.includes(".pg-blocks-area.is-drop-target"),
+    "Drag blocks and inline query feedback need visible styles");
 });
 
 test("PostgreSQL quiz answers retain valid HTML attributes and click handlers", () => {
