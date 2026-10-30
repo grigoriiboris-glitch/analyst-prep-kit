@@ -36,9 +36,9 @@ test('SQL 2 covers the required SQL topics and executes against the SQLite sandb
   for (const token of [
     'WHERE', 'IS NULL', 'DISTINCT', 'LIKE', 'BETWEEN', 'CASE', 'COALESCE',
     'COUNT(*)', 'GROUP BY', 'HAVING', 'INNER JOIN', 'LEFT JOIN',
-    'STRFTIME(', 'WITH region_revenue AS', 'ROW_NUMBER()', 'LAG(',
-    'SUM(total_amount) OVER', 'payments', 'ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW',
-    '(SELECT COUNT(*) FROM orders)'
+    'STRFTIME(', 'WITH category_prices AS', 'WITH paid_by_order AS', 'ROW_NUMBER()', 'LAG(payment_count)',
+    'SUM(paid_amount) OVER', 'payments', 'ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW',
+    '(SELECT COUNT(*) FROM customers)'
   ]) assert.ok(html.includes(token), 'SQL 2 is missing topic or query feature: ' + token);
 
   assert.ok(html.includes('https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/sql-wasm.js'));
@@ -63,9 +63,9 @@ test('SQL 2 uses separate progress, cloud sync, and once-only DataCraft rewards'
   const homepage = read('index.html');
   const translator = read('tools/static-russian-translation.mjs');
 
-  assert.ok(html.includes('const STORAGE_KEY = "sql2kit-v1"'));
+  assert.ok(html.includes('const STORAGE_KEY = "sql2kit-v2"'));
   assert.ok(html.includes('sql2-last-visit'));
-  assert.ok(html.includes('window.DataCraftEconomy.earn("sql2:lesson:"'));
+  assert.ok(html.includes('window.DataCraftEconomy.earn("sql2:v2:lesson:"'));
   assert.ok(progress.includes("sql2: { id: 'sql2-v1'"));
   assert.ok(economy.includes("sql2: {key:'sql2kit-v1',prop:'doneLessons',rate:1,total:24,bonus:5}"));
   assert.ok(homepage.includes('href="sql2/" data-kit="sql2"'));
@@ -87,10 +87,9 @@ test('Every SQL 2 lesson follows the beginner-friendly lesson structure', () => 
   assert.ok(match, 'The SQL 2 lesson list must be present');
   const lessons = new Function('return ' + match[1])();
   assert.equal(lessons.length, 24);
-  assert.match(lessons.find((lesson) => lesson.id === 11).expected, /Delivered — 10/);
-  assert.match(lessons.find((lesson) => lesson.id === 12).expected, /Delivered — 10/);
-  assert.match(lessons.find((lesson) => lesson.id === 7).expected, /1013 — 110; 1001 — 120; 1009 — 150/);
-  assert.match(lessons.find((lesson) => lesson.id === 23).solution, /WHERE o\.total_amount <> COALESCE\(p\.paid_total, 0\)/);
+  assert.match(lessons.find((lesson) => lesson.id === 11).expected, /1 — 3; 2 — 2; 3 — 2; 6 — 2/);
+  assert.match(lessons.find((lesson) => lesson.id === 12).expected, /Четыре строки/);
+  assert.match(lessons.find((lesson) => lesson.id === 23).solution, /COALESCE\(p\.paid_total, 0\) AS paid_total/);
 
   const requiredTextFields = [
     'whatNew', 'syntaxExample', 'prompt', 'hint', 'expected', 'explain',
@@ -101,7 +100,10 @@ test('Every SQL 2 lesson follows the beginner-friendly lesson structure', () => 
       assert.equal(typeof lesson[field], 'string', 'Lesson ' + lesson.id + ' is missing ' + field);
       assert.ok(lesson[field].trim().length > 0, 'Lesson ' + lesson.id + ' has an empty ' + field);
     }
-    assert.match(lesson.starter, /^(SELECT|WITH)\b/i, 'Lesson ' + lesson.id + ' starter must be SQL');
+    assert.equal(lesson.starter, '', 'Lesson ' + lesson.id + ' should start with an empty block-built query');
+    assert.ok(Array.isArray(lesson.blocks) && lesson.blocks.length > 0, 'Lesson ' + lesson.id + ' must provide interactive SQL blocks');
+    assert.ok(lesson.solution.split('\\n').every((line) => lesson.blocks.includes(line)), 'Lesson ' + lesson.id + ' must contain every solution line as a selectable block');
+    assert.ok(lesson.blocks.length > lesson.solution.split('\\n').length, 'Lesson ' + lesson.id + ' must include distractor blocks');
     assert.match(lesson.solution, /^(SELECT|WITH)\b/i, 'Lesson ' + lesson.id + ' solution must be SQL');
     assert.match(lesson.starter, /;\s*$/, 'Lesson ' + lesson.id + ' starter must end with a semicolon');
     assert.match(lesson.syntaxExample, /;\s*$/, 'Lesson ' + lesson.id + ' syntax example must end with a semicolon');
@@ -120,4 +122,9 @@ test('Every SQL 2 lesson follows the beginner-friendly lesson structure', () => 
   assert.ok(html.includes('<strong>Типичная ошибка новичка</strong>'));
   assert.ok(html.includes('<strong>Проверь себя</strong>'));
   assert.ok(html.includes('<strong>Разбор решения</strong>'));
+  assert.ok(html.includes('function renderBlocksUI()'));
+  assert.ok(html.includes('function moveBlockToAssembled(index)'));
+  assert.ok(html.includes('function moveBlockToAvailable(index)'));
+  assert.ok(html.includes('readonly placeholder=') || html.includes("readonly placeholder=\\\""));
+  assert.ok(html.includes('window.currentAssembledBlocks.join("\\n")'));
 });
