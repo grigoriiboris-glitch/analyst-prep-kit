@@ -170,6 +170,13 @@
   function normalizeSqlForCheck(sql){
     return String(sql||'').replace(/--[^\n]*/g,' ').replace(/\s+/g,' ').trim().toLowerCase();
   }
+  function comparableValue(value){
+    var text=toPlainValue(value);
+    if(/^-?\\d+(?:\\.\\d+)?$/.test(text)){
+      return text.replace(/(\\.\\d*?[1-9])0+$/,'$1').replace(/\\.0+$/,'');
+    }
+    return text;
+  }
   function checkOutput(resultSets,check,sql){
     check=check||{};var candidate=null,candidateColumns=[],normalizedSql=normalizeSqlForCheck(sql);
     if(Array.isArray(check.sqlIncludes)){
@@ -187,7 +194,7 @@
     if(check.firstRow&&candidate.rows.length){
       var firstMismatch=Object.keys(check.firstRow).find(function(name){
         var key=Object.keys(candidate.rows[0]||{}).find(function(k){return k.toLowerCase()===name.toLowerCase();});
-        return key===undefined||toPlainValue(candidate.rows[0][key])!==String(check.firstRow[name]);
+        return key===undefined||comparableValue(candidate.rows[0][key])!==comparableValue(check.firstRow[name]);
       });
       if(firstMismatch)return{ok:false,message:'Проверь первую строку результата: в столбце '+firstMismatch+' ожидается «'+check.firstRow[firstMismatch]+'».'};
     }
