@@ -26,8 +26,13 @@ function columnsOf(result) {
   if (Array.isArray(result.rows) && result.rows.length) return Object.keys(result.rows[0]);
   return [];
 }
-function validateOutput(results, check) {
+function validateOutput(results, check, sql) {
   const expected = check || {};
+  const normalizedSql = String(sql || "").replace(/--[^\n]*/g, " ").replace(/\s+/g, " ").trim().toLowerCase();
+  if (Array.isArray(expected.sqlIncludes)) {
+    const missing = expected.sqlIncludes.filter((part) => !normalizedSql.includes(String(part).replace(/\s+/g, " ").trim().toLowerCase()));
+    if (missing.length) return { ok: false, why: "missing SQL construction: " + missing.join(", ") };
+  }
   let chosen = null, columns = [];
   for (const result of results) {
     const actual = columnsOf(result);
@@ -36,8 +41,18 @@ function validateOutput(results, check) {
     }
   }
   if (!chosen) return { ok: false, why: "Не найдена выборка с колонками " + ((expected.columns || []).join(", ")) };
+  if (expected.columnOrder && (columns.length !== expected.columns.length || !expected.columns.every((name, index) => columns[index].toLowerCase() === String(name).toLowerCase()))) {
+    return { ok: false, why: "Неверный порядок выходных столбцов: " + columns.join(", ") };
+  }
   if (Number.isFinite(expected.exactRows) && chosen.rows.length !== expected.exactRows) return { ok: false, why: "ожидалось ровно " + expected.exactRows + " строк, получено " + chosen.rows.length };
   if (Number.isFinite(expected.minRows) && chosen.rows.length < expected.minRows) return { ok: false, why: "ожидалось не меньше " + expected.minRows + " строк, получено " + chosen.rows.length };
+  if (expected.firstRow) {
+    const mismatch = Object.keys(expected.firstRow).find((name) => {
+      const key = Object.keys(chosen.rows[0] || {}).find((k) => k.toLowerCase() === name.toLowerCase());
+      return key === undefined || plain(chosen.rows[0][key]) !== String(expected.firstRow[name]);
+    });
+    if (mismatch) return { ok: false, why: "первая строка: ожидалось " + mismatch + "=" + expected.firstRow[mismatch] };
+  }
   if (expected.contains) {
     const key = columns.find((c) => c.toLowerCase() === String(expected.contains.column).toLowerCase());
     const found = key !== undefined && chosen.rows.some((row) => {
@@ -56,6 +71,8 @@ test("PostgreSQL course is a complete Russian-first 30-lesson curriculum", () =>
   for (const lesson of lessons) {
     assert.ok(lesson.title && lesson.unit && lesson.goal && lesson.explain, "Lesson " + lesson.id + " needs a title, unit, goal and explanation");
     assert.ok(lesson.exampleSql && lesson.starterSql && lesson.task && lesson.gotcha, "Lesson " + lesson.id + " needs example SQL, starter SQL, task and a gotcha");
+    assert.ok(lesson.hint && lesson.expected && lesson.solutionSql && lesson.solutionExplain, "Lesson " + lesson.id + " needs a hint, expected output and explained solution");
+    assert.ok(lesson.exampleSql === lesson.solutionSql, "Lesson " + lesson.id + " example must match the explained solution");
     assert.ok(Array.isArray(lesson.visual) && lesson.visual.length >= 2, "Lesson " + lesson.id + " needs a visual explanation");
     assert.ok(lesson.quiz && Array.isArray(lesson.quiz.options) && lesson.quiz.options.length >= 3, "Lesson " + lesson.id + " needs a multiple-choice quiz");
     assert.ok(Number.isInteger(lesson.quiz.correct) && lesson.quiz.correct >= 0 && lesson.quiz.correct < lesson.quiz.options.length, "Lesson " + lesson.id + " has an invalid quiz answer");
@@ -88,20 +105,42 @@ test("seed schema includes relational integrity, realistic edge cases and sample
   } finally { await db.close(); }
 });
 
-test("every lesson starter SQL executes and satisfies its output contract on PostgreSQL", async () => {
+test("every lesson starter is valid SQL and every solution satisfies its PostgreSQL output contract", async () => {
   const lessons = readLessons(), db = new PGlite();
   try {
     await db.exec(read("seed.sql"));
     for (const lesson of lessons) {
-      let results;
-      try { results = resultSets(await db.exec(lesson.starterSql)); }
+      try { await db.exec(lesson.starterSql); }
       catch (error) { assert.fail("Starter SQL failed in lesson " + lesson.id + " («" + lesson.title + "»): " + (error && error.message || error)); }
-      const validation = validateOutput(results, lesson.checks);
-      assert.ok(validation.ok, "Starter SQL output failed for lesson " + lesson.id + " («" + lesson.title + "»): " + validation.why);
+    }
+    for (const lesson of lessons) {
+      let results;
+      try { results = resultSets(await db.exec(lesson.solutionSql)); }
+      catch (error) { assert.fail("Solution SQL failed in lesson " + lesson.id + " («" + lesson.title + "»): " + (error && error.message || error)); }
+      const validation = validateOutput(results, lesson.checks, lesson.solutionSql);
+      assert.ok(validation.ok, "Solution output failed for lesson " + lesson.id + " («" + lesson.title + "»): " + validation.why);
     }
     const order = await db.query("SELECT status FROM orders WHERE id = 101");
     assert.equal(order.rows[0].status, "paid", "Transaction lesson must roll back its sample change");
   } finally { await db.close(); }
+});
+
+test("PostgreSQL lesson examples use uppercase SQL keywords and terminated statements", () => {
+  const lessons = readLessons();
+  const keywords = ["select","from","where","order by","group by","having","as","inner join","cross join","on","ilike","is null","is true","limit","distinct on","union all","with recursive","with","insert into","values","on conflict","do update","do nothing","returning","begin","rollback","commit","create index","explain","analyze","and","or","not"];
+  for (const lesson of lessons) {
+    for (const [label, sql] of [["starter", lesson.starterSql], ["solution", lesson.solutionSql]]) {
+      assert.match(sql, /;\\s*$/, "Lesson " + lesson.id + " " + label + " must end with a semicolon");
+      const withoutStrings = sql.replace(/'(?:''|[^'])*'/g, "''");
+      for (const keyword of keywords) {
+        const pattern = new RegExp("\\b" + keyword.split(" ").map((part) => part.replace(/[.*+?^\${}()|[\\]\\]/g, "\\\\$&")).join("\\\\s+") + "\\b", "gi");
+        for (const match of withoutStrings.matchAll(pattern)) {
+          assert.equal(match[0], match[0].toUpperCase(), "Keyword case in lesson " + lesson.id + ": " + match[0]);
+        }
+      }
+      assert.doesNotMatch(sql, /\\b(TOP|GETDATE|NVL|IFNULL|DATEADD)\\b/i, "Lesson SQL must use PostgreSQL syntax");
+    }
+  }
 });
 
 test("PostgreSQL lesson page wires progress sync and keeps drafts and query history local-only", () => {
@@ -140,8 +179,8 @@ test("PostgreSQL quiz answers retain valid HTML attributes and click handlers", 
 
   // SQL identifiers and syntax inside lesson explanations and examples must not
   // be translated into Russian words.
-  assert.ok(course.includes("`coupon IS NULL`"), "SQL predicates must stay valid inside examples");
+  assert.ok(course.includes("coupon IS NULL"), "SQL predicates must stay valid inside examples");
   assert.ok(course.includes("PARTITION BY customer_id"), "Window-function syntax must stay valid");
-  assert.ok(course.includes('"title": "Массивы, ANY и unnest"'), "The unnest function name must not be translated");
+  assert.ok(course.includes('"title": "Массивы PostgreSQL: оператор @> проверяет наличие элемента"'), "The PostgreSQL array operator topic must stay intact");
   assert.doesNotMatch(course, /путь_поиска|`купон НУЛЬ`|РАЗДЕЛЕНИЕ ПО customer_id/);
 });
