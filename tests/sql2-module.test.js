@@ -66,10 +66,10 @@ test('SQL 2 uses separate progress, cloud sync, and once-only DataCraft rewards'
   assert.ok(html.includes('const STORAGE_KEY = "sql2kit-v2"'));
   assert.ok(html.includes('sql2-last-visit'));
   assert.ok(html.includes('window.DataCraftEconomy.earn("sql2:v2:lesson:"'));
-  assert.ok(progress.includes("sql2: { id: 'sql2-v1'"));
-  assert.ok(economy.includes("sql2: {key:'sql2kit-v1',prop:'doneLessons',rate:1,total:24,bonus:5}"));
+  assert.ok(progress.includes("sql2: { id: 'sql2-v2'"));
+  assert.ok(economy.includes("sql2: {key:'sql2kit-v2',prop:'doneLessons',rate:1,total:24,bonus:5}"));
   assert.ok(homepage.includes('href="sql2/" data-kit="sql2"'));
-  assert.ok(homepage.includes("localStorage.getItem('sql2kit-v1')"));
+  assert.ok(homepage.includes("localStorage.getItem('sql2kit-v2')"));
   assert.ok(translator.includes('"sql2/index.html"'), 'Build-time translation must not modify SQL identifiers or executable query examples');
 });
 
