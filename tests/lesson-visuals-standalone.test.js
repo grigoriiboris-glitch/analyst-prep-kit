@@ -30,3 +30,11 @@ test("standalone lesson visuals use a page-level guard to prevent observer loops
     "checking only inside the hero misses a visual inserted next to it"
   );
 });
+
+
+test("static Data Quality and portfolio pages do not start a DOM observer", () => {
+  assert.ok(source.includes("var pageCourse = courseName();"));
+  assert.ok(/pageCourse !== .data-quality./.test(source));
+  assert.ok(/pageCourse !== .portfolio-projects./.test(source));
+  assert.ok(/if \(window\.MutationObserver && pageCourse !==/.test(source));
+});
