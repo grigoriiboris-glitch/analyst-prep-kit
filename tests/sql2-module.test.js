@@ -128,7 +128,7 @@ test('Every SQL 2 lesson follows the beginner-friendly lesson structure', () => 
   assert.ok(html.includes('function startBlockPointerDrag(event, element)'), 'Touch and pen users must be able to drag blocks');
   assert.ok(html.includes('function getBlockDropIndex(area, event)'), 'Dropping over another block must support reordering');
   assert.ok(html.includes('touch-action:none'), 'Touch dragging must be supported on mobile');
-  assert.ok(html.includes('ondrop="handleBlocksDrop(event)"') && (html.match(/ondrop="handleBlocksDrop\\(event\\)"/g) || []).length === 2,
+  assert.ok(html.includes('ondrop="handleBlocksDrop(event)"') && (html.split('ondrop="handleBlocksDrop(event)"').length - 1) === 2,
     'Both block areas must accept drops');
   assert.ok(html.includes('.task-run-bar{'), 'The run action must be visually distinct below the task');
   assert.ok(html.includes('id="taskRunButton"') && html.includes('▶ Выполнить запрос'));
