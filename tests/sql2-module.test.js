@@ -122,6 +122,14 @@ test('Every SQL 2 lesson follows the beginner-friendly lesson structure', () => 
   assert.ok(html.includes('<strong>Проверь себя</strong>'));
   assert.ok(html.includes('<strong>Разбор решения</strong>'));
   assert.ok(html.includes('function renderBlocksUI()'));
+  assert.ok(html.includes('.task-run-bar{'), 'The run action must be visually distinct below the task');
+  assert.ok(html.includes('id="taskRunButton"') && html.includes('▶ Выполнить запрос'));
+  assert.ok(html.includes('const taskRunHtml ='), 'The run button must be rendered as part of every lesson');
+  const lessonRenderer = html.slice(html.indexOf('function renderLesson()'), html.indexOf('function selectLesson(id)'));
+  assert.ok(lessonRenderer.indexOf('blocksHtml + taskRunHtml') < lessonRenderer.indexOf("'<div class=\"editor-head\""),
+    'The run button must appear immediately after the task/block builder and before the SQL editor');
+  assert.equal((lessonRenderer.match(/onclick="runSQL\(\)"/g) || []).length, 1,
+    'There should be one visible run button, positioned directly below the task');
   assert.ok(html.includes('function moveBlockToAssembled(index)'));
   assert.ok(html.includes('function moveBlockToAvailable(index)'));
   assert.ok(html.includes('readonly placeholder=') || html.includes("readonly placeholder=\\\""));
