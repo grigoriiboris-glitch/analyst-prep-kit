@@ -81,7 +81,12 @@ test("PostgreSQL course is a complete Russian-first 30-lesson curriculum", () =>
     assert.ok(lesson.exampleSql === lesson.solutionSql, "Lesson " + lesson.id + " example must match the explained solution");
     assert.ok(Array.isArray(lesson.blocks), "Lesson " + lesson.id + " needs interactive SQL blocks");
     const solutionBlocks = lesson.solutionSql.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
-    assert.ok(solutionBlocks.every((block) => lesson.blocks.includes(block)), "Lesson " + lesson.id + " must provide every correct solution fragment");
+    const requiredBlockCounts = new Map();
+    solutionBlocks.forEach((block) => requiredBlockCounts.set(block, (requiredBlockCounts.get(block) || 0) + 1));
+    for (const [block, count] of requiredBlockCounts) {
+      assert.ok(lesson.blocks.filter((candidate) => candidate === block).length >= count,
+        "Lesson " + lesson.id + " must retain repeated solution fragments: " + block);
+    }
     assert.ok(lesson.blocks.length >= solutionBlocks.length + 2, "Lesson " + lesson.id + " needs at least two distractor blocks");
     assert.ok(Array.isArray(lesson.visual) && lesson.visual.length >= 2, "Lesson " + lesson.id + " needs a visual explanation");
     assert.ok(lesson.quiz && Array.isArray(lesson.quiz.options) && lesson.quiz.options.length >= 3, "Lesson " + lesson.id + " needs a multiple-choice quiz");
