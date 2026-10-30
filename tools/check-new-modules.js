@@ -345,7 +345,11 @@ assert.ok(postgresqlApp.includes("import(PGLITE_URL)") && postgresqlApp.includes
   "PostgreSQL sandbox lazy loading or SQL command guard missing");
 new Function(postgresqlApp);
 new Function(postgresqlData);
-assert.ok(postgresqlData.includes("window.PostgreSQLLessons") && (postgresqlData.match(/"id":/g) || []).length === 30,
+const postgresqlLessonsAssignment = "window.PostgreSQLLessons =";
+assert.ok(postgresqlData.startsWith(postgresqlLessonsAssignment), "PostgreSQL lesson data assignment is missing");
+const postgresqlLessonsSource = postgresqlData.slice(postgresqlLessonsAssignment.length).trim().replace(/;$/, "");
+const postgresqlLessons = JSON.parse(postgresqlLessonsSource);
+assert.ok(Array.isArray(postgresqlLessons) && postgresqlLessons.length === 30,
   "PostgreSQL must have 30 structured lessons");
 const sqlMermaid = fs.readFileSync(path.join(root, "assets/sql-mermaid.js"), "utf8");
 new Function(sqlMermaid);

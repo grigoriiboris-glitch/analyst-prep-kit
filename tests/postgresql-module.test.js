@@ -21,13 +21,24 @@ function plain(value) {
   try { return JSON.stringify(value); } catch (_) { return String(value); }
 }
 function resultSets(value) { return Array.isArray(value) ? value : (value ? [value] : []); }
+function comparableValue(value) {
+  const text = plain(value);
+  if (/^-?\d+(?:\.\d+)?$/.test(text)) return text.replace(/(\.\d*?[1-9])0+$/, "$1").replace(/\.0+$/, "");
+  return text;
+}
+
 function columnsOf(result) {
   if (Array.isArray(result.fields) && result.fields.length) return result.fields.map((field) => String(field.name || field));
   if (Array.isArray(result.rows) && result.rows.length) return Object.keys(result.rows[0]);
   return [];
 }
-function validateOutput(results, check) {
+function validateOutput(results, check, sql) {
   const expected = check || {};
+  const normalizedSql = String(sql || "").replace(/--[^\n]*/g, " ").replace(/\s+/g, " ").trim().toLowerCase();
+  if (Array.isArray(expected.sqlIncludes)) {
+    const missing = expected.sqlIncludes.filter((part) => !normalizedSql.includes(String(part).replace(/\s+/g, " ").trim().toLowerCase()));
+    if (missing.length) return { ok: false, why: "missing SQL construction: " + missing.join(", ") };
+  }
   let chosen = null, columns = [];
   for (const result of results) {
     const actual = columnsOf(result);
@@ -36,8 +47,18 @@ function validateOutput(results, check) {
     }
   }
   if (!chosen) return { ok: false, why: "Не найдена выборка с колонками " + ((expected.columns || []).join(", ")) };
+  if (expected.columnOrder && (columns.length !== expected.columns.length || !expected.columns.every((name, index) => columns[index].toLowerCase() === String(name).toLowerCase()))) {
+    return { ok: false, why: "Неверный порядок выходных столбцов: " + columns.join(", ") };
+  }
   if (Number.isFinite(expected.exactRows) && chosen.rows.length !== expected.exactRows) return { ok: false, why: "ожидалось ровно " + expected.exactRows + " строк, получено " + chosen.rows.length };
   if (Number.isFinite(expected.minRows) && chosen.rows.length < expected.minRows) return { ok: false, why: "ожидалось не меньше " + expected.minRows + " строк, получено " + chosen.rows.length };
+  if (expected.firstRow) {
+    const mismatch = Object.keys(expected.firstRow).find((name) => {
+      const key = Object.keys(chosen.rows[0] || {}).find((k) => k.toLowerCase() === name.toLowerCase());
+      return key === undefined || comparableValue(chosen.rows[0][key]) !== comparableValue(expected.firstRow[name]);
+    });
+    if (mismatch) return { ok: false, why: "первая строка: ожидалось " + mismatch + "=" + expected.firstRow[mismatch] };
+  }
   if (expected.contains) {
     const key = columns.find((c) => c.toLowerCase() === String(expected.contains.column).toLowerCase());
     const found = key !== undefined && chosen.rows.some((row) => {
@@ -56,6 +77,17 @@ test("PostgreSQL course is a complete Russian-first 30-lesson curriculum", () =>
   for (const lesson of lessons) {
     assert.ok(lesson.title && lesson.unit && lesson.goal && lesson.explain, "Lesson " + lesson.id + " needs a title, unit, goal and explanation");
     assert.ok(lesson.exampleSql && lesson.starterSql && lesson.task && lesson.gotcha, "Lesson " + lesson.id + " needs example SQL, starter SQL, task and a gotcha");
+    assert.ok(lesson.hint && lesson.expected && lesson.solutionSql && lesson.solutionExplain, "Lesson " + lesson.id + " needs a hint, expected output and explained solution");
+    assert.ok(lesson.exampleSql === lesson.solutionSql, "Lesson " + lesson.id + " example must match the explained solution");
+    assert.ok(Array.isArray(lesson.blocks), "Lesson " + lesson.id + " needs interactive SQL blocks");
+    const solutionBlocks = lesson.solutionSql.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+    const requiredBlockCounts = new Map();
+    solutionBlocks.forEach((block) => requiredBlockCounts.set(block, (requiredBlockCounts.get(block) || 0) + 1));
+    for (const [block, count] of requiredBlockCounts) {
+      assert.ok(lesson.blocks.filter((candidate) => candidate === block).length >= count,
+        "Lesson " + lesson.id + " must retain repeated solution fragments: " + block);
+    }
+    assert.ok(lesson.blocks.length >= solutionBlocks.length + 2, "Lesson " + lesson.id + " needs at least two distractor blocks");
     assert.ok(Array.isArray(lesson.visual) && lesson.visual.length >= 2, "Lesson " + lesson.id + " needs a visual explanation");
     assert.ok(lesson.quiz && Array.isArray(lesson.quiz.options) && lesson.quiz.options.length >= 3, "Lesson " + lesson.id + " needs a multiple-choice quiz");
     assert.ok(Number.isInteger(lesson.quiz.correct) && lesson.quiz.correct >= 0 && lesson.quiz.correct < lesson.quiz.options.length, "Lesson " + lesson.id + " has an invalid quiz answer");
@@ -88,20 +120,39 @@ test("seed schema includes relational integrity, realistic edge cases and sample
   } finally { await db.close(); }
 });
 
-test("every lesson starter SQL executes and satisfies its output contract on PostgreSQL", async () => {
+test("every lesson starter is valid SQL and every solution satisfies its PostgreSQL output contract", async () => {
   const lessons = readLessons(), db = new PGlite();
   try {
     await db.exec(read("seed.sql"));
     for (const lesson of lessons) {
-      let results;
-      try { results = resultSets(await db.exec(lesson.starterSql)); }
+      try { await db.exec(lesson.starterSql); }
       catch (error) { assert.fail("Starter SQL failed in lesson " + lesson.id + " («" + lesson.title + "»): " + (error && error.message || error)); }
-      const validation = validateOutput(results, lesson.checks);
-      assert.ok(validation.ok, "Starter SQL output failed for lesson " + lesson.id + " («" + lesson.title + "»): " + validation.why);
+    }
+    for (const lesson of lessons) {
+      let results;
+      try { results = resultSets(await db.exec(lesson.solutionSql)); }
+      catch (error) { assert.fail("Solution SQL failed in lesson " + lesson.id + " («" + lesson.title + "»): " + (error && error.message || error)); }
+      const validation = validateOutput(results, lesson.checks, lesson.solutionSql);
+      assert.ok(validation.ok, "Solution output failed for lesson " + lesson.id + " («" + lesson.title + "»): " + validation.why);
     }
     const order = await db.query("SELECT status FROM orders WHERE id = 101");
     assert.equal(order.rows[0].status, "paid", "Transaction lesson must roll back its sample change");
   } finally { await db.close(); }
+});
+
+test("PostgreSQL lesson examples use uppercase SQL keywords and terminated statements", () => {
+  const lessons = readLessons();
+  const keywordPattern = /\b(SELECT|FROM|WHERE|ORDER|BY|GROUP|HAVING|AS|INNER|JOIN|ON|ILIKE|IS|NULL|TRUE|LIMIT|OFFSET|DISTINCT|UNION|ALL|WITH|RECURSIVE|INSERT|INTO|VALUES|CONFLICT|DO|UPDATE|RETURNING|BEGIN|ROLLBACK|COMMIT|CREATE|INDEX|EXPLAIN|ANALYZE|AND|OR|NOT|SET|DESC|ASC|DELETE|ALTER|TABLE|PRIMARY|KEY|FOREIGN|REFERENCES|CHECK|UNIQUE|DEFAULT|COUNT|SUM|AVG|MIN|MAX|FILTER|PARTITION|OVER|EXTRACT|DATE|INTERVAL|CURRENT_DATE|NOW)\b/gi;
+  for (const lesson of lessons) {
+    for (const [label, sql] of [["starter", lesson.starterSql], ["solution", lesson.solutionSql]]) {
+      assert.match(sql, /;\s*$/, "Lesson " + lesson.id + " " + label + " must end with a semicolon");
+      const withoutStrings = sql.replace(/'(?:''|[^'])*'/g, "''").replace(/--[^\n]*/g, " ");
+      for (const match of withoutStrings.matchAll(keywordPattern)) {
+        assert.equal(match[0], match[0].toUpperCase(), "Keyword case in lesson " + lesson.id + ": " + match[0]);
+      }
+      assert.doesNotMatch(sql, /\b(TOP|GETDATE|NVL|IFNULL|DATEADD)\b/i, "Lesson SQL must use PostgreSQL syntax");
+    }
+  }
 });
 
 test("PostgreSQL lesson page wires progress sync and keeps drafts and query history local-only", () => {
@@ -126,6 +177,43 @@ test("PostgreSQL lesson page wires progress sync and keeps drafts and query hist
   new Function(app);
 });
 
+test("PostgreSQL lessons render drag-and-drop SQL assembly with inline query feedback", () => {
+  const app = read("app.js");
+  const html = read("index.html");
+  const lessons = readLessons();
+  assert.equal(lessons.length, 30);
+  assert.ok(lessons.every((lesson) => Array.isArray(lesson.blocks) && lesson.blocks.length >= 3),
+    "All PostgreSQL lessons must include selectable SQL fragments and distractors");
+  for (const token of [
+    "pg-interactive-blocks",
+    "pgAvailableBlocks",
+    "pgAssembledBlocks",
+    "draggable=\"true\"",
+    "dragstart",
+    "dragover",
+    "drop",
+    "pointerdown",
+    "pgMovePointerBlock",
+    "movePgBlockItem",
+    "resetPgBlockAssembly"
+  ]) assert.ok(app.includes(token), "PostgreSQL drag-and-drop implementation is missing: " + token);
+  assert.ok(!app.includes("onclick="), "PostgreSQL block interaction should use bound event handlers");
+  const renderStart = app.indexOf("function renderLesson(){");
+  const renderEnd = app.indexOf("function openLesson(", renderStart);
+  const render = app.slice(renderStart, renderEnd);
+  const editorPosition = render.indexOf('<textarea id="sqlEditor"');
+  const feedbackPosition = render.indexOf('id="taskFeedback"');
+  const outputPosition = render.indexOf('id="queryOutput"');
+  assert.ok(editorPosition >= 0 && feedbackPosition > editorPosition && outputPosition > feedbackPosition,
+    "SQL feedback must appear immediately below the assembled query and before the result table");
+  assert.ok(app.includes("showTaskFeedback(explainSQLError(technical)") && app.includes("'error')"),
+    "SQL execution errors must be shown directly below the query");
+  assert.ok(app.includes("showTaskFeedback('Верно!") && app.includes("showTaskFeedback('Запрос выполнился"),
+    "Successful and incorrect SQL results must have inline feedback");
+  assert.ok(html.includes(".pg-sql-block") && html.includes(".pg-task-feedback.error") && html.includes(".pg-blocks-area.is-drop-target"),
+    "Drag blocks and inline query feedback need visible styles");
+});
+
 test("PostgreSQL quiz answers retain valid HTML attributes and click handlers", () => {
   const app = read("app.js");
   const course = read("course-data.js");
@@ -140,8 +228,8 @@ test("PostgreSQL quiz answers retain valid HTML attributes and click handlers", 
 
   // SQL identifiers and syntax inside lesson explanations and examples must not
   // be translated into Russian words.
-  assert.ok(course.includes("`coupon IS NULL`"), "SQL predicates must stay valid inside examples");
+  assert.ok(course.includes("coupon IS NULL"), "SQL predicates must stay valid inside examples");
   assert.ok(course.includes("PARTITION BY customer_id"), "Window-function syntax must stay valid");
-  assert.ok(course.includes('"title": "Массивы, ANY и unnest"'), "The unnest function name must not be translated");
+  assert.ok(course.includes('"title": "Массивы PostgreSQL: оператор @> проверяет наличие элемента"'), "The PostgreSQL array operator topic must stay intact");
   assert.doesNotMatch(course, /путь_поиска|`купон НУЛЬ`|РАЗДЕЛЕНИЕ ПО customer_id/);
 });
