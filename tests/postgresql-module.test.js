@@ -162,6 +162,10 @@ test("PostgreSQL lesson page wires progress sync and keeps drafts and query hist
   const economy = fs.readFileSync(path.join(root, "assets/datacraft-economy.js"), "utf8");
   const dataCraft = fs.readFileSync(path.join(root, "datacraft/lesson-catalog.js"), "utf8");
   assert.match(html, /<html lang="ru"/);
+  assert.match(html, /data-theme="light"/, "PostgreSQL module must use the shared light Grain theme");
+  assert.match(html, /<meta name="theme-color" content="#FAF6EF">/, "Browser chrome should match the light page surface");
+  assert.doesNotMatch(html, /zinc-sky\.css/, "PostgreSQL should use the same base Grain palette as SQL2");
+  assert.ok(html.includes(".pg-editor{background:#171b26;color:#e6eaf2}"), "SQL editor should retain a high-contrast dark code surface");
   assert.ok(html.includes('src="../assets/progress-state.js"'));
   assert.ok(html.includes('src="../assets/supabase_auth_sync.js?v=3"'));
   assert.ok(html.includes('src="../assets/datacraft-economy.js"'));
