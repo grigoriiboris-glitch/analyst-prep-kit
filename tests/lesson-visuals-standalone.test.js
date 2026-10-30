@@ -37,5 +37,4 @@ test("static Data Quality and portfolio pages do not start a DOM observer", () =
   assert.ok(/pageCourse !== .data-quality./.test(source));
   assert.ok(/pageCourse !== .portfolio-projects./.test(source));
   assert.ok(/if \(window\.MutationObserver && pageCourse !==/.test(source));
-  assert.ok(source.includes("standalone pages should render once") === false || true);
 });
