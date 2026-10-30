@@ -4,7 +4,8 @@
   var PGLITE_URL='https://cdn.jsdelivr.net/npm/@electric-sql/pglite@0.5.12/dist/index.js';
   var MERMAID_URL='https://cdn.jsdelivr.net/npm/mermaid@11.17.2/dist/mermaid.min.js';
   var lessons=Array.isArray(window.PostgreSQLLessons)?window.PostgreSQLLessons:[];
-  var db=null, enginePromise=null, mermaidPromise=null, activeId=1, lastResultSets=[], queryRunning=false;\n  var pgBlocksLessonId=null, pgAvailableBlocks=[], pgAssembledBlocks=[], pgBlockDragState=null, pgPointerDragState=null, suppressPgBlockClick=false;
+  var db=null, enginePromise=null, mermaidPromise=null, activeId=1, lastResultSets=[], queryRunning=false;
+  var pgBlocksLessonId=null, pgAvailableBlocks=[], pgAssembledBlocks=[], pgBlockDragState=null, pgPointerDragState=null, suppressPgBlockClick=false;
   var defaultState={version:1,doneLessons:[],completedAt:{},resetAt:0,currentLessonId:'1',quizPassed:{},runPassed:{},updatedAt:0};
   var state=readJSON(PROGRESS_KEY,defaultState), drafts=readJSON(DRAFTS_KEY,{}), history=readJSON(HISTORY_KEY,[]);
   if(!drafts||typeof drafts!=='object'||Array.isArray(drafts))drafts={};
@@ -115,6 +116,9 @@
     editor.value=pgAssembledBlocks.join('\n');
     editor.dispatchEvent(new Event('input',{bubbles:true}));
     clearTaskFeedback();
+    lastResultSets=[];
+    var output=document.getElementById('queryOutput');if(output)output.innerHTML='<div class="pg-output-placeholder">Сборка изменилась. Запусти запрос, чтобы проверить результат.</div>';
+    var csvButton=document.getElementById('downloadCsvBtn');if(csvButton)csvButton.disabled=true;
   }
   function movePgBlockItem(sourceZone,sourceIndex,targetZone,targetIndex){
     var source=pgBlockArray(sourceZone),target=pgBlockArray(targetZone);
@@ -390,20 +394,37 @@
     return{ok:true,message:'Условия практики выполнены: структура, порядок столбцов и содержание результата соответствуют задаче.'};
   }
   async function runQuery(){
-    if(queryRunning)return;var editor=document.getElementById('sqlEditor'),button=document.getElementById('runQueryBtn'),sql=editor?editor.value:'',guard=guardedSQL(sql);
-    if(guard){showOutputMessage(guard,'error');return;}
+    if(queryRunning)return;
+    var editor=document.getElementById('sqlEditor'),button=document.getElementById('runQueryBtn'),sql=editor?editor.value:'',guard=guardedSQL(sql);
+    clearTaskFeedback();
+    if(guard){showTaskFeedback(guard,'error');return;}
     queryRunning=true;if(button){button.disabled=true;button.textContent='Выполняем…';}
     try{
-      var database=await ensureDatabase(),result=await database.exec(sql);lastResultSets=resultsOf(result);renderResultSets(lastResultSets);saveHistory(sql,lastResultSets);
+      var database=await ensureDatabase(),result=await database.exec(sql);
+      lastResultSets=resultsOf(result);
+      saveHistory(sql,lastResultSets);
       var l=currentLesson(),validation=checkOutput(lastResultSets,l.checks,sql);
       if(validation.ok)state.runPassed[String(l.id)]=Math.max(Date.now(),Number(state.resetAt)+1);
       else if(!hasPassedRun(l.id))state.runPassed[String(l.id)]=Number(state.resetAt)||0;
-      saveProgress();renderLesson();renderResultSets(lastResultSets);
-      showOutputMessage(validation.ok?'Практика выполнена ✓ '+validation.message:'Запрос выполнен, но задача пока не подтверждена. '+validation.message,validation.ok?'success':'warn',true);
+      saveProgress();
+      renderLesson();
+      renderResultSets(lastResultSets);
+      if(validation.ok){
+        showTaskFeedback('Верно! '+validation.message,'success');
+        showOutputMessage('Практика выполнена ✓','success');
+      }else{
+        showTaskFeedback('Запрос выполнился, но задание пока не принято. '+validation.message,'warn');
+        showOutputMessage('Сравни результат с ожидаемыми столбцами и значениями.','warn');
+      }
       var csvBtn=document.getElementById('downloadCsvBtn');if(csvBtn)csvBtn.disabled=!hasAnyRows(lastResultSets);
     }catch(error){
-      lastResultSets=[];var l2=currentLesson();if(!hasPassedRun(l2.id))state.runPassed[String(l2.id)]=Number(state.resetAt)||0;
-      saveProgress();renderLesson();showOutputMessage(explainSQLError(error&&error.message)+'\n\nТехническое сообщение:\n'+String(error&&error.message||error),'error');
+      lastResultSets=[];
+      var l2=currentLesson();if(!hasPassedRun(l2.id))state.runPassed[String(l2.id)]=Number(state.resetAt)||0;
+      saveProgress();
+      renderLesson();
+      var technical=String(error&&error.message||error);
+      showTaskFeedback(explainSQLError(technical)+'\n\nТехническая ошибка PostgreSQL:\n'+technical,'error');
+      showOutputMessage('Исправь запрос и запусти его ещё раз. Подробная ошибка показана под собранным SQL.','error');
     }finally{queryRunning=false;var b=document.getElementById('runQueryBtn');if(b){b.disabled=false;b.textContent='▶ Выполнить запрос';}statusEngine(db?'PostgreSQL готов · данные изолированы в браузере':'Движок не запущен');}
   }
   function renderResultSets(resultSets){
