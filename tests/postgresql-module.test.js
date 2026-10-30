@@ -127,16 +127,13 @@ test("every lesson starter is valid SQL and every solution satisfies its Postgre
 
 test("PostgreSQL lesson examples use uppercase SQL keywords and terminated statements", () => {
   const lessons = readLessons();
-  const keywords = ["select","from","where","order by","group by","having","as","inner join","cross join","on","ilike","is null","is true","limit","distinct on","union all","with recursive","with","insert into","values","on conflict","do update","do nothing","returning","begin","rollback","commit","create index","explain","analyze","and","or","not"];
+  const keywordPattern = /\\b(SELECT|FROM|WHERE|ORDER|BY|GROUP|HAVING|AS|INNER|JOIN|ON|ILIKE|IS|NULL|TRUE|LIMIT|OFFSET|DISTINCT|UNION|ALL|WITH|RECURSIVE|INSERT|INTO|VALUES|CONFLICT|DO|UPDATE|RETURNING|BEGIN|ROLLBACK|COMMIT|CREATE|INDEX|EXPLAIN|ANALYZE|AND|OR|NOT|SET|DESC|ASC|DELETE|ALTER|TABLE|PRIMARY|KEY|FOREIGN|REFERENCES|CHECK|UNIQUE|DEFAULT|COUNT|SUM|AVG|MIN|MAX|FILTER|PARTITION|OVER|EXTRACT|MONTH|DATE|INTERVAL|CURRENT_DATE|NOW)\\b/gi;
   for (const lesson of lessons) {
     for (const [label, sql] of [["starter", lesson.starterSql], ["solution", lesson.solutionSql]]) {
       assert.match(sql, /;\\s*$/, "Lesson " + lesson.id + " " + label + " must end with a semicolon");
-      const withoutStrings = sql.replace(/'(?:''|[^'])*'/g, "''");
-      for (const keyword of keywords) {
-        const pattern = new RegExp("\\b" + keyword.split(" ").map((part) => part.replace(/[.*+?^\${}()|[\\]\\]/g, "\\\\$&")).join("\\\\s+") + "\\b", "gi");
-        for (const match of withoutStrings.matchAll(pattern)) {
-          assert.equal(match[0], match[0].toUpperCase(), "Keyword case in lesson " + lesson.id + ": " + match[0]);
-        }
+      const withoutStrings = sql.replace(/'(?:''|[^'])*'/g, "''").replace(/--[^\\n]*/g, " ");
+      for (const match of withoutStrings.matchAll(keywordPattern)) {
+        assert.equal(match[0], match[0].toUpperCase(), "Keyword case in lesson " + lesson.id + ": " + match[0]);
       }
       assert.doesNotMatch(sql, /\\b(TOP|GETDATE|NVL|IFNULL|DATEADD)\\b/i, "Lesson SQL must use PostgreSQL syntax");
     }
