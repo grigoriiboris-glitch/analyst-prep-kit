@@ -126,7 +126,16 @@ test('Every SQL 2 lesson follows the beginner-friendly lesson structure', () => 
   assert.ok(html.includes('id="taskRunButton"') && html.includes('▶ Выполнить запрос'));
   assert.ok(html.includes('const taskRunHtml ='), 'The run button must be rendered as part of every lesson');
   const lessonRenderer = html.slice(html.indexOf('function renderLesson()'), html.indexOf('function selectLesson(id)'));
-  assert.ok(lessonRenderer.indexOf('blocksHtml + taskRunHtml') < lessonRenderer.indexOf("'<div class=\"editor-head\""),
+    const runButtonAt = lessonRenderer.indexOf('blocksHtml + taskRunHtml');
+  const feedbackAt = lessonRenderer.indexOf('id="feedback"');
+  const editorAt = lessonRenderer.indexOf("'<div class=\"editor-head\"");
+  const resultCardAt = lessonRenderer.indexOf("'<section class=\"result-card\"");
+  assert.ok(runButtonAt >= 0 && feedbackAt > runButtonAt && feedbackAt < editorAt,
+    'SQL errors and feedback must render immediately below the run button, before the editor');
+  assert.ok(resultCardAt > feedbackAt, 'The result table must remain below the error feedback');
+  assert.equal((lessonRenderer.match(/id="feedback"/g) || []).length, 1,
+    'There must be one feedback area directly below the run button');
+assert.ok(lessonRenderer.indexOf('blocksHtml + taskRunHtml') < lessonRenderer.indexOf("'<div class=\"editor-head\""),
     'The run button must appear immediately after the task/block builder and before the SQL editor');
   assert.ok(lessonRenderer.includes(`'<div class="editor-head"><strong>' + (isInteractive ? 'Собранный SQL-запрос' : 'Твой SQL-запрос') + '</strong><div class="editor-actions">' +
         '<button class="btn" type="button" onclick="showHint()">Подсказка</button>' +`),
