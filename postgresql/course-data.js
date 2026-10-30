@@ -91,8 +91,8 @@ window.PostgreSQLLessons = [
     "goal": "Переименовать столбец только в результате запроса.",
     "explain": "Псевдоним задаёт столбцу результата новое, более понятное имя. В PostgreSQL для этого используют AS: выражение AS alias. Псевдоним не меняет название поля в исходной таблице.",
     "gotcha": "Не заключай псевдоним в одинарные кавычки: 'customer_name' — строковое значение, а не имя столбца. Для обычных псевдонимов кавычки вообще не нужны.",
-    "exampleSql": "SELECT full_name AS customer_name,\n       city\nFROM customers;",
-    "starterSql": "SELECT full_name,\n       city\nFROM customers;",
+    "exampleSql": "SELECT full_name AS customer_name,\n       city\nFROM customers\nORDER BY id;",
+    "starterSql": "SELECT full_name,\n       city\nFROM customers\nORDER BY id;",
     "task": "Покажи имя клиента под названием customer_name, оставив рядом его город.",
     "checks": {
       "columns": [
@@ -126,7 +126,7 @@ window.PostgreSQLLessons = [
     },
     "hint": "Какое ключевое слово нужно поставить после full_name, чтобы назвать этот столбец customer_name только в результате?",
     "expected": "Столбцы в таком порядке: customer_name, city. Например: Анна Кузнецова | Москва; Борис Смирнов | Казань; Вера Орлова | Москва.",
-    "solutionSql": "SELECT full_name AS customer_name,\n       city\nFROM customers;",
+    "solutionSql": "SELECT full_name AS customer_name,\n       city\nFROM customers\nORDER BY id;",
     "solutionExplain": "SELECT выбирает имя и город из customers. AS customer_name меняет только подпись первого столбца в выдаче; исходное поле по-прежнему называется full_name."
   },
   {
@@ -137,7 +137,7 @@ window.PostgreSQLLessons = [
     "explain": "WHERE проверяет каждую строку до того, как она попадёт в результат. После WHERE указывают условие, которое должно быть истинным. Для логического поля active значение TRUE означает, что клиент активен.",
     "gotcha": "Не записывай логическое условие как active = 'true': в одинарных кавычках находится текст. Для boolean используй TRUE или FALSE без кавычек.",
     "exampleSql": "SELECT id,\n       full_name,\n       city\nFROM customers\nWHERE active IS TRUE;",
-    "starterSql": "SELECT id,\n       full_name,\n       city\nFROM customers;",
+    "starterSql": "SELECT id,\n       full_name,\n       city\nFROM customers\nORDER BY id;",
     "task": "Выведи только активных клиентов, сохранив идентификатор, имя и город.",
     "checks": {
       "columns": [
