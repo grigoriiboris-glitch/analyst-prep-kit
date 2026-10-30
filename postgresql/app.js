@@ -4,7 +4,7 @@
   var PGLITE_URL='https://cdn.jsdelivr.net/npm/@electric-sql/pglite@0.5.12/dist/index.js';
   var MERMAID_URL='https://cdn.jsdelivr.net/npm/mermaid@11.17.2/dist/mermaid.min.js';
   var lessons=Array.isArray(window.PostgreSQLLessons)?window.PostgreSQLLessons:[];
-  var db=null, enginePromise=null, mermaidPromise=null, activeId=1, lastResultSets=[], queryRunning=false;
+  var db=null, enginePromise=null, mermaidPromise=null, activeId=1, lastResultSets=[], queryRunning=false;\n  var pgBlocksLessonId=null, pgAvailableBlocks=[], pgAssembledBlocks=[], pgBlockDragState=null, pgPointerDragState=null, suppressPgBlockClick=false;
   var defaultState={version:1,doneLessons:[],completedAt:{},resetAt:0,currentLessonId:'1',quizPassed:{},runPassed:{},updatedAt:0};
   var state=readJSON(PROGRESS_KEY,defaultState), drafts=readJSON(DRAFTS_KEY,{}), history=readJSON(HISTORY_KEY,[]);
   if(!drafts||typeof drafts!=='object'||Array.isArray(drafts))drafts={};
@@ -70,32 +70,220 @@
     nav.innerHTML=markup||'<p class="pg-muted" style="padding:12px">Ничего не найдено. Попробуй другой запрос.</p>';
     Array.prototype.forEach.call(nav.querySelectorAll('[data-lesson]'),function(btn){btn.addEventListener('click',function(){openLesson(Number(btn.dataset.lesson),true);});});
   }
+  function shufflePgBlocks(blocks){
+    var items=(blocks||[]).slice();
+    for(var i=items.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var temp=items[i];items[i]=items[j];items[j]=temp;}
+    return items;
+  }
+  function preparePgBlocks(lesson){
+    var id=Number(lesson.id);
+    if(pgBlocksLessonId===id)return;
+    pgBlocksLessonId=id;
+    pgAvailableBlocks=shufflePgBlocks(lesson.blocks||[]);
+    pgAssembledBlocks=[];
+    pgBlockDragState=null;
+    pgPointerDragState=null;
+    suppressPgBlockClick=false;
+  }
+  function pgBlockArray(zone){return zone==='assembled'?pgAssembledBlocks:pgAvailableBlocks;}
+  function clearTaskFeedback(){
+    var feedback=document.getElementById('taskFeedback');
+    if(!feedback)return;
+    feedback.hidden=true;
+    feedback.className='pg-task-feedback';
+    feedback.textContent='';
+  }
+  function showTaskFeedback(message,kind){
+    var feedback=document.getElementById('taskFeedback');
+    if(!feedback)return;
+    feedback.hidden=false;
+    feedback.className='pg-task-feedback '+(kind||'warn');
+    feedback.textContent=String(message||'');
+    feedback.setAttribute('role',kind==='error'?'alert':'status');
+  }
+  function renderPgBlocksUI(){
+    var available=document.getElementById('pgAvailableBlocks');
+    var assembled=document.getElementById('pgAssembledBlocks');
+    var editor=document.getElementById('sqlEditor');
+    if(!available||!assembled||!editor)return;
+    available.innerHTML=pgAvailableBlocks.map(function(block,index){
+      return '<button type="button" class="pg-sql-block" draggable="true" data-block-zone="available" data-block-index="'+index+'" title="Перетащи в верхнюю область или нажми, чтобы добавить">'+escapeHTML(block)+'</button>';
+    }).join('')||'<p class="pg-block-empty">Все доступные фрагменты выбраны.</p>';
+    assembled.innerHTML=pgAssembledBlocks.map(function(block,index){
+      return '<button type="button" class="pg-sql-block assembled" draggable="true" data-block-zone="assembled" data-block-index="'+index+'" title="Перетащи для изменения порядка или нажми, чтобы вернуть">'+escapeHTML(block)+'</button>';
+    }).join('')||'<p class="pg-block-empty">Перетащи SQL-фрагменты сюда. Или нажми на блок внизу.</p>';
+    editor.value=pgAssembledBlocks.join('\n');
+    editor.dispatchEvent(new Event('input',{bubbles:true}));
+    clearTaskFeedback();
+  }
+  function movePgBlockItem(sourceZone,sourceIndex,targetZone,targetIndex){
+    var source=pgBlockArray(sourceZone),target=pgBlockArray(targetZone);
+    if(!Number.isInteger(sourceIndex)||sourceIndex<0||sourceIndex>=source.length)return;
+    var item=source.splice(sourceIndex,1)[0];
+    var insertAt=Number.isInteger(targetIndex)?targetIndex:target.length;
+    if(source===target&&sourceIndex<insertAt)insertAt-=1;
+    insertAt=Math.max(0,Math.min(insertAt,target.length));
+    target.splice(insertAt,0,item);
+    renderPgBlocksUI();
+  }
+  function pgClearDropTargets(){
+    Array.prototype.forEach.call(document.querySelectorAll('.pg-blocks-area.is-drop-target'),function(area){area.classList.remove('is-drop-target');});
+  }
+  function pgBlockDropIndex(area,event,dropTarget){
+    var blocks=Array.prototype.slice.call(area.querySelectorAll('.pg-sql-block'));
+    var hit=dropTarget||event.target,target=hit&&hit.closest?hit.closest('.pg-sql-block'):null;
+    if(target&&target.parentElement===area){
+      var rect=target.getBoundingClientRect();
+      var after=event.clientY>rect.top+rect.height/2||(event.clientY>=rect.top&&event.clientY<=rect.bottom&&event.clientX>rect.left+rect.width/2);
+      return blocks.indexOf(target)+(after?1:0);
+    }
+    return blocks.length;
+  }
+  function pgEndBlockDrag(){
+    pgBlockDragState=null;
+    pgClearDropTargets();
+    Array.prototype.forEach.call(document.querySelectorAll('.pg-sql-block.is-dragging'),function(block){block.classList.remove('is-dragging');});
+    suppressPgBlockClick=true;
+    setTimeout(function(){suppressPgBlockClick=false;},500);
+  }
+  function pgBindBlockEvents(){
+    ['pgAvailableBlocks','pgAssembledBlocks'].forEach(function(id){
+      var area=document.getElementById(id);
+      if(!area)return;
+      area.addEventListener('click',function(event){
+        if(suppressPgBlockClick){suppressPgBlockClick=false;return;}
+        var block=event.target&&event.target.closest?event.target.closest('.pg-sql-block'):null;
+        if(!block||block.parentElement!==area)return;
+        var zone=block.dataset.blockZone,index=Number(block.dataset.blockIndex);
+        if(zone==='available')movePgBlockItem('available',index,'assembled',pgAssembledBlocks.length);
+        else movePgBlockItem('assembled',index,'available',pgAvailableBlocks.length);
+      });
+      area.addEventListener('dragstart',function(event){
+        var block=event.target&&event.target.closest?event.target.closest('.pg-sql-block'):null;
+        if(!block)return;
+        pgBlockDragState={zone:block.dataset.blockZone,index:Number(block.dataset.blockIndex)};
+        if(event.dataTransfer){event.dataTransfer.effectAllowed='move';event.dataTransfer.setData('text/plain',pgBlockDragState.zone+':'+pgBlockDragState.index);}
+        block.classList.add('is-dragging');
+      });
+      area.addEventListener('dragend',pgEndBlockDrag);
+      area.addEventListener('dragover',function(event){
+        event.preventDefault();
+        if(event.dataTransfer)event.dataTransfer.dropEffect='move';
+        area.classList.add('is-drop-target');
+      });
+      area.addEventListener('dragleave',function(event){
+        if(!area.contains(event.relatedTarget))area.classList.remove('is-drop-target');
+      });
+      area.addEventListener('drop',function(event){
+        event.preventDefault();
+        var drag=pgBlockDragState;
+        if(drag){
+          var targetZone=id==='pgAssembledBlocks'?'assembled':'available';
+          movePgBlockItem(drag.zone,drag.index,targetZone,pgBlockDropIndex(area,event));
+        }
+        pgEndBlockDrag();
+      });
+      area.addEventListener('pointerdown',function(event){
+        if(event.pointerType!=='touch'&&event.pointerType!=='pen')return;
+        var block=event.target&&event.target.closest?event.target.closest('.pg-sql-block'):null;
+        if(!block)return;
+        pgPointerDragState={zone:block.dataset.blockZone,index:Number(block.dataset.blockIndex),pointerId:event.pointerId,startX:event.clientX,startY:event.clientY,element:block,started:false};
+        if(block.setPointerCapture){try{block.setPointerCapture(event.pointerId);}catch(_){}}
+        window.addEventListener('pointermove',pgMovePointerBlock);
+        window.addEventListener('pointerup',pgFinishPointerBlock);
+        window.addEventListener('pointercancel',pgCancelPointerBlock);
+      });
+    });
+    var reset=document.getElementById('resetPgBlocksBtn');
+    if(reset)reset.addEventListener('click',resetPgBlockAssembly);
+  }
+  function pgMovePointerBlock(event){
+    var drag=pgPointerDragState;
+    if(!drag||event.pointerId!==drag.pointerId)return;
+    if(!drag.started&&Math.hypot(event.clientX-drag.startX,event.clientY-drag.startY)<8)return;
+    drag.started=true;event.preventDefault();drag.element.classList.add('is-dragging');pgClearDropTargets();
+    var under=document.elementFromPoint(event.clientX,event.clientY),area=under&&under.closest?under.closest('#pgAssembledBlocks,#pgAvailableBlocks'):null;
+    if(area)area.classList.add('is-drop-target');
+  }
+  function pgFinishPointerBlock(event){
+    var drag=pgPointerDragState;
+    if(!drag||event.pointerId!==drag.pointerId)return;
+    if(drag.started){
+      var under=document.elementFromPoint(event.clientX,event.clientY),area=under&&under.closest?under.closest('#pgAssembledBlocks,#pgAvailableBlocks'):null;
+      if(area){
+        var targetZone=area.id==='pgAssembledBlocks'?'assembled':'available';
+        movePgBlockItem(drag.zone,drag.index,targetZone,pgBlockDropIndex(area,event,under));
+      }
+      suppressPgBlockClick=true;setTimeout(function(){suppressPgBlockClick=false;},500);
+    }
+    pgCleanupPointerBlock();
+  }
+  function pgCancelPointerBlock(event){if(pgPointerDragState&&event.pointerId===pgPointerDragState.pointerId)pgCleanupPointerBlock();}
+  function pgCleanupPointerBlock(){
+    if(pgPointerDragState&&pgPointerDragState.element)pgPointerDragState.element.classList.remove('is-dragging');
+    pgPointerDragState=null;pgClearDropTargets();
+    window.removeEventListener('pointermove',pgMovePointerBlock);
+    window.removeEventListener('pointerup',pgFinishPointerBlock);
+    window.removeEventListener('pointercancel',pgCancelPointerBlock);
+  }
+  function resetPgBlockAssembly(){
+    var lesson=currentLesson();
+    pgAvailableBlocks=shufflePgBlocks(lesson&&lesson.blocks||[]);
+    pgAssembledBlocks=[];
+    renderPgBlocksUI();
+    clearTaskFeedback();
+    lastResultSets=[];
+    renderResultSets([]);
+    var csv=document.getElementById('downloadCsvBtn');if(csv)csv.disabled=true;
+  }
+  function usePgSolution(){
+    var lesson=currentLesson();
+    var solutionLines=String(lesson.solutionSql||'').split(/\r?\n/).map(function(line){return line.trim();}).filter(Boolean);
+    var remaining=(lesson.blocks||[]).slice();
+    solutionLines.forEach(function(line){var index=remaining.indexOf(line);if(index>=0)remaining.splice(index,1);});
+    pgAssembledBlocks=solutionLines;
+    pgAvailableBlocks=shufflePgBlocks(remaining);
+    renderPgBlocksUI();
+    showTaskFeedback('Готовая последовательность блоков перенесена в редактор. Теперь выполни запрос и изучи результат.','warn');
+  }
+  function renderPgBlocksSection(lesson){
+    return '<section class="pg-interactive-blocks" aria-label="Интерактивная сборка SQL">'+
+      '<div class="pg-blocks-heading"><div><h3>Собери SQL-запрос из блоков</h3><p>Перетащи правильные фрагменты в верхнюю область и расставь их по порядку. Лишние блоки оставь внизу. Также можно нажимать на блоки, чтобы переносить их между областями.</p></div><button type="button" class="pg-button" id="resetPgBlocksBtn">↻ Сбросить сборку</button></div>'+
+      '<div class="pg-block-help"><span>1. Собери запрос сверху</span><span>2. Нажми «Выполнить запрос»</span></div>'+
+      '<div class="pg-block-zone-label">Собранный SQL-запрос</div><div class="pg-blocks-area assembled" id="pgAssembledBlocks" aria-label="Собранные SQL-блоки" data-drop-zone="assembled"></div>'+
+      '<div class="pg-block-zone-label">Доступные блоки · выбери нужные, лишние пропусти</div><div class="pg-blocks-area available" id="pgAvailableBlocks" aria-label="Доступные SQL-блоки" data-drop-zone="available"></div>'+
+    '</section>';
+  }
   function renderVisual(steps){return '<section class="pg-visual"><h3>Схема: как связаны шаги</h3><div class="pg-flow">'+(steps||[]).map(function(s){return '<div class="pg-flow-step">'+inlineText(s)+'</div>';}).join('')+'</div></section>';}
   function renderLesson(){
     var l=currentLesson();
     if(!l){view.innerHTML='<h2>Не удалось загрузить программу</h2><p>Обнови страницу и попробуй снова.</p>';return;}
+    preparePgBlocks(l);
     var done=isDone(l.id),runPassed=hasPassedRun(l.id),quizPassed=hasPassedQuiz(l.id);
-    var draft=Object.prototype.hasOwnProperty.call(drafts,String(l.id))?drafts[String(l.id)]:l.starterSql;
+    var draft=pgAssembledBlocks.join('\n');
     var quiz=l.quiz||{q:'Что важно помнить?',options:['Проверить результат'],correct:0,why:''};
     var html='<div class="pg-lesson-top"><span class="pg-badge">'+escapeHTML(l.unit)+'</span><span class="pg-muted">Урок '+l.id+' из '+lessons.length+'</span>'+(done?'<span class="pg-badge">✓ Пройдено</span>':'')+'</div>'+
       '<h2 class="pg-lesson-title">Практикум SQL '+Number(l.id)+'. '+escapeHTML(l.title)+'</h2><p class="pg-goal">'+inlineText(l.goal)+'</p>'+
       '<section class="pg-block"><h3>Что нового</h3><p>'+inlineText(l.explain)+'</p></section>'+renderVisual(l.visual)+
-      '<section class="pg-task"><h3>Задание</h3><p>'+inlineText(l.task)+'</p></section>'+
+      '<section class="pg-task"><h3>Задание</h3><p>'+inlineText(l.task)+'</p></section>'+renderPgBlocksSection(l)+
       '<section class="pg-block pg-hint"><h3>Подсказка</h3><p>'+inlineText(l.hint||'Подумай, какой оператор PostgreSQL решает эту задачу.')+'</p></section>'+
       '<section class="pg-block pg-expected"><h3>Ожидаемый результат</h3><p>'+inlineText(l.expected||'Сверь названия и порядок столбцов с условием задачи.')+'</p></section>'+
-      '<details class="pg-code-card pg-solution"><summary class="pg-code-head">Разбор решения · открой после собственной попытки</summary><div class="pg-solution-body"><div class="pg-code-head"><span>Готовый запрос PostgreSQL</span><button class="pg-button" type="button" id="useExampleBtn">Перенести решение в редактор</button></div><pre class="pg-code"><code>'+escapeHTML(l.solutionSql||l.exampleSql||'')+'</code></pre><div class="pg-solution-note">'+inlineText(l.solutionExplain||'')+'</div></div></details>'+
+      '<details class="pg-code-card pg-solution"><summary class="pg-code-head">Разбор решения · открой после собственной попытки</summary><div class="pg-solution-body"><div class="pg-code-head"><span>Готовый запрос PostgreSQL</span><button class="pg-button" type="button" id="useExampleBtn">Перенести решение в сборку</button></div><pre class="pg-code"><code>'+escapeHTML(l.solutionSql||l.exampleSql||'')+'</code></pre><div class="pg-solution-note">'+inlineText(l.solutionExplain||'')+'</div></div></details>'+
       '<section class="pg-block gotcha"><h3>Типичная ошибка</h3><p>'+inlineText(l.gotcha)+'</p></section>'+
-      '<section class="pg-workbench" aria-label="Редактор SQL"><div class="pg-workbench-head"><h3>Заготовка кода · PostgreSQL</h3><span class="pg-engine-state" id="engineState">'+(db?'PostgreSQL готов · данные изолированы':'Движок загрузится при первом запуске')+'</span></div>'+
-      '<textarea id="sqlEditor" class="pg-editor" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Заготовка SQL-кода для PostgreSQL"></textarea>'+
-      '<div class="pg-run-actions"><button class="pg-button primary" type="button" id="runQueryBtn">▶ Выполнить запрос</button><button class="pg-button" type="button" id="copyQueryBtn">Копировать SQL</button><button class="pg-button" type="button" id="downloadCsvBtn" disabled>Скачать результат CSV</button><span class="pg-muted">Ctrl + Enter — выполнить · максимум 20 000 символов</span></div>'+
-      '<div class="pg-output" id="queryOutput" aria-live="polite"><div class="pg-output-placeholder">Выполни пример в изолированной учебной базе. Первый запуск загрузит движок PostgreSQL.</div></div></section>'+
+      '<section class="pg-workbench" aria-label="Редактор SQL"><div class="pg-workbench-head"><h3>Собранный запрос · PostgreSQL</h3><span class="pg-engine-state" id="engineState">'+(db?'PostgreSQL готов · данные изолированы':'Движок загрузится при первом запуске')+'</span></div>'+
+      '<textarea id="sqlEditor" class="pg-editor" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" readonly placeholder="Перетащи правильные SQL-блоки в верхнюю область…" aria-label="Собранный SQL-запрос"></textarea>'+
+      '<div class="pg-run-actions"><button class="pg-button primary" type="button" id="runQueryBtn">▶ Выполнить запрос</button><button class="pg-button" type="button" id="copyQueryBtn">Копировать SQL</button><button class="pg-button" type="button" id="downloadCsvBtn" disabled>Скачать результат CSV</button><span class="pg-muted">Ctrl + Enter — выполнить · редактор заполняется блоками</span></div>'+
+      '<div id="taskFeedback" class="pg-task-feedback" role="status" aria-live="polite" hidden></div>'+
+      '<div class="pg-output" id="queryOutput" aria-live="polite"><div class="pg-output-placeholder">Собери запрос из блоков выше и нажми «Выполнить запрос».</div></div></section>'+
       '<section class="pg-quiz"><h3>Проверь себя</h3><p class="pg-quiz-q">'+inlineText(quiz.q)+'</p><div class="pg-answers" id="quizAnswers">'+quiz.options.map(function(op,i){return '<button class="pg-answer'+(quizPassed&&i===quiz.correct?' correct':'')+'" type="button" data-answer="'+i+'"'+(quizPassed?' disabled':'')+'>'+inlineText(op)+'</button>';}).join('')+'</div><p class="pg-quiz-feedback" id="quizFeedback" aria-live="polite">'+(quizPassed?'Верно. '+escapeHTML(quiz.why):'Ответь правильно, чтобы отметить урок завершённым.')+'</p></section>'+
       '<div class="pg-lesson-actions"><button class="pg-button" type="button" id="prevLessonBtn"'+(Number(l.id)===Number(lessons[0].id)?' disabled':'')+'>← Предыдущий урок</button><button class="pg-button primary" type="button" id="completeLessonBtn"'+(!(runPassed&&quizPassed)||done?' disabled':'')+'>'+(done?'✓ Урок пройден':'Завершить урок')+'</button><button class="pg-button" type="button" id="nextLessonBtn">'+(Number(l.id)===Number(lessons[lessons.length-1].id)?'К началу курса ↻':'Следующий урок →')+'</button><span class="spacer"></span><span class="pg-muted">'+(runPassed?'Практика выполнена ✓':'Практика ещё не пройдена')+' · '+(quizPassed?'Ответ верный ✓':'Контрольный вопрос не пройден')+'</span></div>';
     view.innerHTML=html;
     var editor=document.getElementById('sqlEditor');editor.value=String(draft||'').slice(0,20000);
     editor.addEventListener('input',function(){saveDraft(l.id,editor.value);});
     editor.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();runQuery();}});
-    document.getElementById('useExampleBtn').addEventListener('click',function(){editor.value=String(l.exampleSql||'');saveDraft(l.id,editor.value);editor.focus();});
+    pgBindBlockEvents();
+    renderPgBlocksUI();
+    document.getElementById('useExampleBtn').addEventListener('click',usePgSolution);
     document.getElementById('runQueryBtn').addEventListener('click',runQuery);
     document.getElementById('copyQueryBtn').addEventListener('click',function(){copyQuery(editor.value);});
     document.getElementById('downloadCsvBtn').addEventListener('click',downloadCSV);
