@@ -191,7 +191,7 @@ window.PostgreSQLLessons = [
         "coupon"
       ],
       "columnOrder": true,
-      "exactRows": 9,
+      "exactRows": 10,
       "firstRow": {
         "id": 102
       },
@@ -215,7 +215,7 @@ window.PostgreSQLLessons = [
       "why": "IS NULL проверяет отсутствие значения. Пустая строка и NULL не означают одно и то же."
     },
     "hint": "Какое специальное условие проверяет отсутствие значения, а не сравнивает coupon с пустым текстом?",
-    "expected": "Столбцы: id, coupon. Ожидается 9 строк; во всех coupon отображается как NULL. Первые номера заказов: 102, 104 и 106.",
+    "expected": "Столбцы: id, coupon. Ожидается 10 строк; во всех coupon отображается как NULL. Первые номера заказов: 102, 104 и 106.",
     "solutionSql": "SELECT id,\n       coupon\nFROM orders\nWHERE coupon IS NULL\nORDER BY id;",
     "solutionExplain": "IS NULL оставляет только заказы без значения coupon. ORDER BY id упорядочивает найденные заказы по номеру."
   },
