@@ -112,13 +112,65 @@
     document.head.appendChild(style);
   }
   function makeBlock(item,isOpen){
-    var details=document.createElement("details");details.className="edited-source-block";if(isOpen)details.open=true;
+    var details=document.createElement("details");details.className="edited-source-block";
+    details.setAttribute("data-edited-source-key","lesson-"+item.number);
+    if(isOpen)details.open=true;
     var summary=document.createElement("summary");
     summary.textContent=(item.number?"Урок "+item.number+". ":"")+item.title;
     var content=document.createElement("div");content.className="edited-source-rendered";
     content.innerHTML=markdownToHtml(item.body);
     details.appendChild(summary);details.appendChild(content);return details;
   }
+  function attachLiveMaterials(lessons){
+    var stop={ "урок":1,"модуль":1,"часть":1,"глава":1,"что":1,"как":1,"это":1,"для":1,"в":1,"на":1,"по":1,"из":1,"с":1,"и":1,"your":1,"first":1,"the":1,"and":1,"for":1,"with":1 };
+    function words(value){
+      return String(value||"").toLocaleLowerCase("ru").replace(/ё/g,"е")
+        .replace(/[^a-zа-я0-9]+/gi," ").trim().split(/\s+/)
+        .filter(function(word){return word.length>2&&!stop[word];});
+    }
+    function score(a,b){
+      var A=new Set(words(a)),B=new Set(words(b)),common=0;
+      A.forEach(function(word){if(B.has(word))common++;});
+      if(!A.size||!B.size)return 0;
+      return (2*common)/(A.size+B.size);
+    }
+    function target(){
+      var selectors=["#lessonPane","#lessonContent .lesson.active",".lesson.active","#main","main"];
+      for(var i=0;i<selectors.length;i++){
+        var node=document.querySelector(selectors[i]);
+        if(node&&node.offsetParent!==null&&node.querySelector("h1,h2"))return node;
+      }
+      return null;
+    }
+    function render(){
+      var host=target();if(!host)return;
+      var headings=host.querySelectorAll("h1,h2"),title="";
+      for(var i=0;i<headings.length;i++){
+        var value=headings[i].textContent.trim();
+        if(value.length>3&&!/^(урок|программа курса|обновлённые учебные материалы)$/i.test(value)){title=value;break;}
+      }
+      if(!title)return;
+      var best=null,bestScore=0;
+      lessons.forEach(function(item){var value=score(title,item.title);if(value>bestScore){best=item;bestScore=value;}});
+      if(!best||bestScore<0.24)return;
+      var old=host.querySelector('[data-edited-live="1"]');
+      if(old&&old.getAttribute("data-edited-source-key")==="lesson-"+best.number)return;
+      if(old)old.remove();
+      var block=makeBlock(best,true);
+      block.setAttribute("data-edited-live","1");
+      block.setAttribute("data-edited-source-key","lesson-"+best.number);
+      var heading=host.querySelector("h1,h2");
+      if(heading)heading.insertAdjacentElement("afterend",block);else host.insertBefore(block,host.firstChild);
+    }
+    var timer=null;
+    function schedule(){if(timer)clearTimeout(timer);timer=setTimeout(render,100);}
+    schedule();
+    var observer=new MutationObserver(schedule);
+    observer.observe(document.body,{childList:true,subtree:true,characterData:true});
+    document.addEventListener("click",function(){setTimeout(schedule,140);},true);
+    window.addEventListener("hashchange",schedule);
+  }
+
   function mount(raw){
     var lessons=parseSource(raw);if(!lessons.length)return;addStyles();
     if(moduleKey==="business-analysis"||moduleKey==="decision-making"){
@@ -141,6 +193,7 @@
     lessons.forEach(function(item,index){library.appendChild(makeBlock(item,index===0));});
     var hero=main.querySelector(".hero");
     if(hero&&hero.parentNode)hero.insertAdjacentElement("afterend",library);else main.insertBefore(library,main.firstChild);
+    attachLiveMaterials(lessons);
   }
   fetch("../learns/edited-lesson-source.json",{cache:"no-store"})
     .then(function(response){if(!response.ok)throw new Error("HTTP "+response.status);return response.json();})
