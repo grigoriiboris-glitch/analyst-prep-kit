@@ -33,8 +33,9 @@ test("homepage renders an accessible visual roadmap using the existing 18-step l
 
   for (const id of expected) {
     assert.ok(home.includes('data-kit="' + id + '"'), "Homepage is missing the course link: " + id);
-    const configPattern = new RegExp("['\\"]?" + id + "['\\"]?\\s*:");
-    assert.ok(configPattern.test(order), "The roadmap is missing course metadata or progress mapping: " + id);
+    const quotedKey = order.includes("'" + id + "': {");
+    const plainKey = order.includes(id + ": {");
+    assert.ok(quotedKey || plainKey, "The roadmap is missing course metadata or progress mapping: " + id);
   }
 });
 
