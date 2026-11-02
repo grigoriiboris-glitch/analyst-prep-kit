@@ -2,7 +2,7 @@
  * Interactive exercises and their answer-checking code are intentionally preserved.
  */
 (function () {
-  "use strict";
+  "используйте строгий";
   var current = document.currentScript;
   var moduleKey = current && current.getAttribute("data-module");
   if (!moduleKey) return;
@@ -174,7 +174,7 @@
   function mount(raw){
     var lessons=parseSource(raw);if(!lessons.length)return;addStyles();
     if(moduleKey==="business-analysis"||moduleKey==="decision-making"){
-      var nodes=document.querySelectorAll("article.lesson, section.lesson");
+      var nodes=document.querySelectorAll("статья.урок, раздел.урок");
       if(nodes.length>=lessons.length){
         lessons.forEach(function(item,index){
           var node=nodes[index];if(!node||node.querySelector(".edited-source-block"))return;
@@ -188,7 +188,7 @@
     var library=document.createElement("section");
     library.className="edited-source-library";library.id="edited-source-library";
     var title=document.createElement("h2");title.textContent="Обновлённые учебные материалы";
-    var note=document.createElement("p");note.textContent="Тексты сверены с редакцией исходных документов _edited. Интерактивные задания и технический синтаксис курса сохранены.";
+    var note=document.createElement("p");note.textContent="Тексты сверены с редакцией исходных документов _отредактировано. Интерактивные задания и технический синтаксис курса сохранены.";
     library.appendChild(title);library.appendChild(note);
     lessons.forEach(function(item,index){library.appendChild(makeBlock(item,index===0));});
     var hero=main.querySelector(".hero");
@@ -205,7 +205,7 @@
       if(typeof TextDecoder!=="undefined")decoded=new TextDecoder("utf-8").decode(bytes);
       else decoded=decodeURIComponent(Array.prototype.map.call(bytes,function(b){return "%"+b.toString(16).padStart(2,"0");}).join(""));
       mount(JSON.parse(decoded));
-    }catch(error){console.error("[edited-source] Некорректный встроенный текст:",error);}
+    }catch(error){console.error("[отредактированный исходный код] Некорректный встроенный текст:",error);}
     return;
   }
   fetch("../learns/edited-lesson-source.json",{cache:"no-store"})
@@ -214,5 +214,5 @@
       if(!payload||!payload.modules||!payload.modules[moduleKey])throw new Error("Источник не найден: "+moduleKey);
       mount(payload.modules[moduleKey]);
     })
-    .catch(function(error){console.error("[edited-source] Не удалось показать обновлённые материалы:",error);});
+    .catch(function(error){console.error("[отредактированный исходный код] Не удалось показать обновлённые материалы:",error);});
 })();
