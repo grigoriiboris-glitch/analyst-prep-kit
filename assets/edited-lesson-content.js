@@ -198,7 +198,8 @@
   var embedded=document.getElementById("edited-source-data");
   if(embedded&&embedded.getAttribute("data-module")===moduleKey){
     try{
-      var binary=atob(embedded.textContent.trim()),bytes=new Uint8Array(binary.length);
+      var encoded=embedded.content?embedded.content.textContent:embedded.textContent;
+      var binary=atob(encoded.trim()),bytes=new Uint8Array(binary.length);
       for(var i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
       var decoded;
       if(typeof TextDecoder!=="undefined")decoded=new TextDecoder("utf-8").decode(bytes);
