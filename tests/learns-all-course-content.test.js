@@ -295,5 +295,5 @@ test("в README перечислены все 16 модулей с полным 
     "sql.md", "sql2.md", "statistics.md", "tableau.md"
   ];
   expected.forEach(file => assert.ok(readme.includes("./" + file), "README: не указан " + file));
-  assert.match(readme, /351 единиц[ауы]? учебного контента/i);
+  assert.match(readme, /351 учебная единица/i);
 });
