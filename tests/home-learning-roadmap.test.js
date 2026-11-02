@@ -33,7 +33,8 @@ test("homepage renders an accessible visual roadmap using the existing 18-step l
 
   for (const id of expected) {
     assert.ok(home.includes('data-kit="' + id + '"'), "Homepage is missing the course link: " + id);
-    assert.ok(order.includes(id + ":"), "The roadmap is missing course metadata or progress mapping: " + id);
+    const configPattern = new RegExp("['\\"]?" + id + "['\\"]?\\s*:");
+    assert.ok(configPattern.test(order), "The roadmap is missing course metadata or progress mapping: " + id);
   }
 });
 
@@ -44,7 +45,7 @@ test("roadmap reads progress from existing course saves without adding a second 
     "apk-quality-passed-v1", "epk", "sqlkit-v1", "clk-v1",
     "apk-postgresql-progress-v1", "ppk", "spk", "fmk-v1",
     "pbikt-v1", "tpk", "apk-decision-thinking-progress-v1",
-    "apk-portfolio-sales-checks", "apk-projects-v1", "sim2", "ipk", "apk-final"
+    "apk-portfolio-' + project + '-checks", "apk-projects-v1", "sim2", "ipk", "apk-final"
   ];
 
   assert.ok(order.includes("function readProgress(id)"));
