@@ -22,13 +22,91 @@
     }
     return [{number:1,title:moduleKey==="data-quality"?"Регламент проверки качества данных":"Материалы модуля",body:text}];
   }
+  function escapeHtml(value){
+    return String(value).replace(/[&<>"]/g,function(ch){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[ch];
+    });
+  }
+  function inlineMarkdown(value){
+    var s=escapeHtml(value);
+    s=s.replace(/`([^`]+)`/g,"<code>$1</code>");
+    s=s.replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>");
+    s=s.replace(/(^|[^*])\*([^*]+)\*/g,"$1<em>$2</em>");
+    s=s.replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,
+      '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+    return s;
+  }
+  function markdownToHtml(markdown){
+    var text=String(markdown||"").replace(/\\([*_#])/g,"$1").replace(/\r\n?/g,"\n").trim();
+    if(!text)return "";
+    var lines=text.split("\n"),html=[],paragraph=[],listType="",inCode=false,code=[],tableRows=[];
+    function flushParagraph(){
+      if(paragraph.length){html.push("<p>"+inlineMarkdown(paragraph.join(" "))+"</p>");paragraph=[];}
+    }
+    function closeList(){if(listType){html.push("</"+listType+">");listType="";}}
+    function flushTable(){
+      if(!tableRows.length)return;
+      var rows=tableRows.filter(function(row){return !/^\s*\|?\s*:?-{2,}/.test(row);});
+      if(rows.length){
+        html.push('<div class="edited-table-wrap"><table class="edited-table"><tbody>');
+        rows.forEach(function(row,index){
+          var cells=row.trim().replace(/^\||\|$/g,"").split("|");
+          html.push("<tr>"+cells.map(function(cell){
+            var name=index===0?"th":"td";
+            return "<"+name+">"+inlineMarkdown(cell.trim())+"</"+name+">";
+          }).join("")+"</tr>");
+        });
+        html.push("</tbody></table></div>");
+      }
+      tableRows=[];
+    }
+    lines.forEach(function(line){
+      var value=line.trim();
+      if(/^\x60\x60\x60/.test(value)){
+        flushParagraph();closeList();flushTable();
+        if(inCode){html.push("<pre><code>"+escapeHtml(code.join("\n"))+"</code></pre>");code=[];inCode=false;}
+        else inCode=true;
+        return;
+      }
+      if(inCode){code.push(line);return;}
+      if(!value){flushParagraph();closeList();flushTable();return;}
+      if(/^\|.*\|$/.test(value)){flushParagraph();closeList();tableRows.push(value);return;}
+      flushTable();
+      var heading=value.match(/^(#{1,4})\s+(.+)$/);
+      if(heading){
+        flushParagraph();closeList();
+        var level=Math.min(4,heading[1].length+1);
+        html.push("<h"+level+">"+inlineMarkdown(heading[2])+"</h"+level+">");
+        return;
+      }
+      if(/^>\s?/.test(value)){
+        flushParagraph();closeList();
+        html.push("<blockquote>"+inlineMarkdown(value.replace(/^>\s?/,""))+"</blockquote>");
+        return;
+      }
+      var bullet=value.match(/^(?:[-*+] )(.+)$/);
+      var numbered=value.match(/^\d+[.)]\s+(.+)$/);
+      if(bullet||numbered){
+        flushParagraph();
+        var needed=numbered?"ol":"ul";
+        if(listType!==needed){closeList();html.push("<"+needed+">");listType=needed;}
+        html.push("<li>"+inlineMarkdown((bullet||numbered)[1])+"</li>");
+        return;
+      }
+      closeList();paragraph.push(value);
+    });
+    flushParagraph();closeList();flushTable();
+    if(inCode)html.push("<pre><code>"+escapeHtml(code.join("\n"))+"</code></pre>");
+    return html.join("\n");
+  }
+
   function addStyles(){
     if(document.getElementById("edited-source-style")) return;
     var style=document.createElement("style");
     style.id="edited-source-style";
     style.textContent=".edited-source-block{margin:14px 0;padding:14px 16px;border:1px solid var(--border,#d8dce3);border-left:4px solid var(--accent,#527a68);border-radius:10px;background:var(--surface,#fff)}"+
       ".edited-source-block>summary{cursor:pointer;font-weight:700;line-height:1.45}"+
-      ".edited-source-block pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:65vh;overflow:auto;margin:12px 0 0;padding:14px;border-radius:8px;background:var(--code-bg,rgba(120,130,145,.08));font:inherit;font-size:14px;line-height:1.65}"+
+      ".edited-source-rendered{margin-top:12px;line-height:1.65}.edited-source-rendered p{margin:8px 0}.edited-source-rendered ul,.edited-source-rendered ol{padding-left:22px}.edited-source-rendered li{margin:4px 0}.edited-source-rendered pre{white-space:pre;overflow:auto;max-height:65vh;padding:14px;border-radius:8px;background:var(--code-bg,rgba(120,130,145,.08));font-size:13px;line-height:1.6}.edited-source-rendered code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.edited-source-rendered blockquote{margin:10px 0;padding:8px 12px;border-left:3px solid var(--accent,#527a68);background:rgba(120,130,145,.08)}.edited-table-wrap{overflow:auto}.edited-table{border-collapse:collapse;width:100%}.edited-table td,.edited-table th{padding:7px 9px;border:1px solid var(--border,#d8dce3);text-align:left}"+
       ".edited-source-library{margin:18px 0;padding:14px;border:1px solid var(--border,#d8dce3);border-radius:12px;background:var(--surface,#fff)}"+
       ".edited-source-library>h2{margin:0 0 8px;font-size:1.1rem}.edited-source-library>p{margin:0 0 12px;opacity:.8;font-size:.92rem}";
     document.head.appendChild(style);
@@ -37,8 +115,9 @@
     var details=document.createElement("details");details.className="edited-source-block";if(isOpen)details.open=true;
     var summary=document.createElement("summary");
     summary.textContent=(item.number?"Урок "+item.number+". ":"")+item.title;
-    var pre=document.createElement("pre");pre.textContent=item.body;
-    details.appendChild(summary);details.appendChild(pre);return details;
+    var content=document.createElement("div");content.className="edited-source-rendered";
+    content.innerHTML=markdownToHtml(item.body);
+    details.appendChild(summary);details.appendChild(content);return details;
   }
   function mount(raw){
     var lessons=parseSource(raw);if(!lessons.length)return;addStyles();
