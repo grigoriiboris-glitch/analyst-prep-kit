@@ -15,7 +15,7 @@ const modules = [
 ];
 
 function extractArray(source, file) {
-  const marker = source.match(/LESSONS\\s*:/);
+  const marker = source.match(/LESSONS\s*:/);
   assert.ok(marker, file + ": не найден массив LESSONS");
   const open = source.indexOf("[", marker.index + marker[0].length - 1);
   assert.ok(open >= 0, file + ": не найдена открывающая скобка массива");
@@ -31,7 +31,7 @@ function extractArray(source, file) {
     const next = source[index + 1];
 
     if (lineComment) {
-      if (char === "\\n") lineComment = false;
+      if (char === "\n") lineComment = false;
       continue;
     }
     if (blockComment) {
@@ -46,7 +46,7 @@ function extractArray(source, file) {
         escaped = false;
         continue;
       }
-      if (char === "\\\\") {
+      if (char === "\\") {
         escaped = true;
         continue;
       }
@@ -63,7 +63,7 @@ function extractArray(source, file) {
       index += 1;
       continue;
     }
-    if (char === "'" || char === '"' || char === "`") {
+    if (char === "'" || char === '"' || char.charCodeAt(0) === 96) {
       quote = char;
       continue;
     }
@@ -82,7 +82,7 @@ function readLessons(module) {
   if (module.json) {
     const marker = "window.PostgreSQLLessons = ";
     assert.ok(source.startsWith(marker), "PostgreSQL должен экспортировать window.PostgreSQLLessons");
-    return JSON.parse(source.slice(marker.length).trim().replace(/;\\s*$/, ""));
+    return JSON.parse(source.slice(marker.length).trim().replace(/;\s*$/, ""));
   }
   const literal = extractArray(source, module.page);
   return vm.runInNewContext("(" + literal + ")", {}, { timeout: 1000 });
@@ -92,7 +92,7 @@ test("архив learns содержит каждый урок из прилож
   for (const module of modules) {
     const lessons = readLessons(module);
     const markdown = fs.readFileSync(path.join(root, module.archive), "utf8");
-    const headings = [...markdown.matchAll(/^### Материал урока приложения №(\\d+) — (.+)$/gm)];
+    const headings = [...markdown.matchAll(/^### Материал урока приложения №(\d+) — (.+)$/gm)];
 
     assert.equal(lessons.length, module.count, module.name + ": изменилось число уроков приложения");
     assert.equal(headings.length, lessons.length, module.name + ": не все уроки попали в архив");
