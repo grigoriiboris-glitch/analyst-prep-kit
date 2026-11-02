@@ -195,6 +195,12 @@
     if(hero&&hero.parentNode)hero.insertAdjacentElement("afterend",library);else main.insertBefore(library,main.firstChild);
     attachLiveMaterials(lessons);
   }
+  var embedded=document.getElementById("edited-source-data");
+  if(embedded&&embedded.getAttribute("data-module")===moduleKey){
+    try{mount(JSON.parse(embedded.textContent));}
+    catch(error){console.error("[edited-source] Некорректный встроенный текст:",error);}
+    return;
+  }
   fetch("../learns/edited-lesson-source.json",{cache:"no-store"})
     .then(function(response){if(!response.ok)throw new Error("HTTP "+response.status);return response.json();})
     .then(function(payload){
