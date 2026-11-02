@@ -119,3 +119,37 @@ test("счётчик SQL на главной странице совпадает
   const card = home.slice(start, end);
   assert.match(card, new RegExp(lessons.length + " урок"));
 });
+
+test("каждый исходный конспект learns встроен в соответствующую страницу приложения без изменений", () => {
+  const source = JSON.parse(fs.readFileSync(path.join(root, "learns/edited-lesson-source.json"), "utf8"));
+  const pages = {
+    "business-analysis": "business-analysis/index.html",
+    "chart-literacy": "chart-literacy/index.html",
+    "data-quality": "data-quality/index.html",
+    "decision-making": "decision-making/index.html",
+    "excel": "excel/index.html",
+    "forecasting": "forecasting/index.html",
+    "interview": "interview/index.html",
+    "portfolio-projects": "portfolio-projects/index.html",
+    "postgresql": "postgresql/index.html",
+    "powerbi": "powerbi/index.html",
+    "python": "python/index.html",
+    "sql": "sql/index.html",
+    "sql2": "sql2/index.html",
+    "statistics": "stats/index.html",
+    "tableau": "tableau/index.html"
+  };
+
+  assert.deepEqual(Object.keys(source.modules).sort(), Object.keys(pages).sort(), "Для каждого исходника должен быть назначен HTML-модуль");
+
+  for (const [module, page] of Object.entries(pages)) {
+    const html = fs.readFileSync(path.join(root, page), "utf8");
+    const escapedModule = module.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const pattern = new RegExp('<template id="edited-source-data" data-module="' + escapedModule + '">([\\s\\S]*?)</template>');
+    const match = html.match(pattern);
+
+    assert.ok(match, module + ": исходный материал не встроен в " + page);
+    const embedded = JSON.parse(Buffer.from(match[1].trim(), "base64").toString("utf8"));
+    assert.equal(embedded, source.modules[module], module + ": встроенный материал отличается от learns/edited-lesson-source.json");
+  }
+});
