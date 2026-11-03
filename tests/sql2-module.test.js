@@ -88,7 +88,7 @@ test('Every SQL 2 lesson follows the beginner-friendly lesson structure', () => 
   const lessons = new Function('return ' + match[1])();
   assert.equal(lessons.length, 24);
   assert.match(lessons.find((lesson) => lesson.id === 11).expected, /1 — 3; 2 — 2; 3 — 2; 6 — 2/);
-  assert.match(lessons.find((lesson) => lesson.id === 12).expected, /Четыре строки/);
+  assert.match(lessons.find((lesson) => lesson.id === 12).expected, /(?:Четыре|4) строки/);
   assert.match(lessons.find((lesson) => lesson.id === 23).solution, /COALESCE\(p\.paid_total, 0\) AS paid_total/);
 
   const requiredTextFields = [
