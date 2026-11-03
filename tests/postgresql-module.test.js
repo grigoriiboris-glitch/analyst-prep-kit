@@ -234,6 +234,8 @@ test("PostgreSQL quiz answers retain valid HTML attributes and click handlers", 
   // be translated into Russian words.
   assert.ok(course.includes("coupon IS NULL"), "SQL predicates must stay valid inside examples");
   assert.ok(course.includes("PARTITION BY customer_id"), "Window-function syntax must stay valid");
-  assert.ok(course.includes('"title": "Массивы PostgreSQL: оператор @> проверяет наличие элемента"'), "The PostgreSQL array operator topic must stay intact");
+  const courseData = JSON.parse(course.slice("window.PostgreSQLLessons = ".length).trim().replace(/;$/, ""));
+  assert.ok(courseData.some((lesson) => lesson.title === "Массивы PostgreSQL: оператор @> проверяет наличие элемента"),
+    "The PostgreSQL array operator topic must stay intact");
   assert.doesNotMatch(course, /путь_поиска|`купон НУЛЬ`|РАЗДЕЛЕНИЕ ПО customer_id/);
 });

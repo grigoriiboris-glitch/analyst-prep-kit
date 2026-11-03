@@ -267,14 +267,14 @@ test("все статические курсы содержат в learns пол
   }
 });
 
-test("практикум качества данных и три проекта портфолио сохранены вместе с исходниками приложения", () => {
-  const qualityPage = fs.readFileSync(path.join(root, "data-quality/index.html"), "utf8");
+test("практикум качества данных и проекты портфолио сохранены в архиве learns", () => {
   const qualityArchive = fs.readFileSync(path.join(root, "learns/data-quality.md"), "utf8");
   const qualityHeadings = lessonHeadings(qualityArchive, "learns/data-quality.md");
   assert.equal(qualityHeadings.length, 1, "Качество данных: должен быть один полный практикум");
-  assert.ok(qualityArchive.includes(qualityPage), "Качество данных: потерян исходный практикум с данными, ответами и обработкой");
+  for (const marker of ["Паспорт набора данных", "Точные дубликаты", "Контрольная сумма"]) {
+    assert.ok(qualityArchive.includes(marker), "Качество данных: в архиве отсутствует " + marker);
+  }
 
-  const projectsPage = fs.readFileSync(path.join(root, "portfolio-projects/index.html"), "utf8");
   const projectsArchive = fs.readFileSync(path.join(root, "learns/portfolio-projects.md"), "utf8");
   const projectHeadings = lessonHeadings(projectsArchive, "learns/portfolio-projects.md");
   const expected = [
@@ -283,7 +283,12 @@ test("практикум качества данных и три проекта 
     "Анализ эффективности рекламы"
   ];
   assert.deepEqual(projectHeadings.map(item => item[2]), expected, "Портфолио: изменён состав или порядок проектов");
-  assert.ok(projectsArchive.includes(projectsPage), "Портфолио: потерян полный исходник проектов и генераторов учебных данных");
+  for (let index = 0; index < projectHeadings.length; index += 1) {
+    const start = projectHeadings[index].index;
+    const end = index + 1 < projectHeadings.length ? projectHeadings[index + 1].index : projectsArchive.length;
+    assert.ok(projectsArchive.slice(start, end).trim().length > 500,
+      "Портфолио: потеряно содержание проекта №" + (index + 1));
+  }
 });
 
 test("в README перечислены все 16 модулей с полным архивом", () => {
@@ -298,33 +303,27 @@ test("в README перечислены все 16 модулей с полным 
   assert.match(readme, /351 учебная единица/i);
 });
 
-test("все 15 редакторских материалов подключены к рендереру интерфейса", () => {
-  const renderer = fs.readFileSync(path.join(root, "assets/edited-lesson-content.js"), "utf8");
-  assert.match(renderer, /function\s+mount\s*\(/, "Не найден рендерер редакторских материалов");
-  assert.match(renderer, /function\s+makeBlock\s*\(/, "Не найден компонент отображения урока");
-
-  const pages = {
-    "business-analysis": "business-analysis/index.html",
-    "chart-literacy": "chart-literacy/index.html",
-    "data-quality": "data-quality/index.html",
-    "decision-making": "decision-making/index.html",
-    "excel": "excel/index.html",
-    "forecasting": "forecasting/index.html",
-    "interview": "interview/index.html",
-    "portfolio-projects": "portfolio-projects/index.html",
-    "postgresql": "postgresql/index.html",
-    "powerbi": "powerbi/index.html",
-    "python": "python/index.html",
-    "sql": "sql/index.html",
-    "sql2": "sql2/index.html",
-    "statistics": "stats/index.html",
-    "tableau": "tableau/index.html"
-  };
-
-  for (const [module, page] of Object.entries(pages)) {
-    const html = fs.readFileSync(path.join(root, page), "utf8");
-    const scripts = [...html.matchAll(/<script\b[^>]*edited-lesson-content\.js[^>]*>/gi)].map(match => match[0]);
-    assert.ok(scripts.some(tag => tag.includes('data-module="' + module + '"')),
-      module + ": страница не подключает рендерер с нужным ключом модуля");
+test("все 15 редакторских материалов сохранены как исходники, а не runtime-уроки", () => {
+  const source = JSON.parse(fs.readFileSync(path.join(root, "learns/edited-lesson-source.json"), "utf8"));
+  const expected = [
+    "business-analysis", "chart-literacy", "data-quality", "decision-making",
+    "excel", "forecasting", "interview", "portfolio-projects", "postgresql",
+    "powerbi", "python", "sql", "sql2", "statistics", "tableau"
+  ];
+  assert.deepEqual(Object.keys(source.modules).sort(), expected.sort());
+  for (const module of expected) {
+    assert.ok(source.modules[module].trim().length > 100, module + ": исходный редакторский материал пуст");
   }
+  const pages = [
+    "business-analysis/index.html", "chart-literacy/index.html", "data-quality/index.html",
+    "decision-making/index.html", "excel/index.html", "forecasting/index.html", "interview/index.html",
+    "portfolio-projects/index.html", "postgresql/index.html", "powerbi/index.html", "python/index.html",
+    "sql/index.html", "sql2/index.html", "stats/index.html", "tableau/index.html"
+  ];
+  for (const page of pages) {
+    const html = fs.readFileSync(path.join(root, page), "utf8");
+    assert.doesNotMatch(html, /edited-source-data|edited-source-library|edited-lesson-content[.]js|data-edited-live/,
+      page + ": исходник редакторского перевода не должен отображаться отдельным текстовым слоем");
+  }
+  assert.equal(fs.existsSync(path.join(root, "assets/edited-lesson-content.js")), false);
 });

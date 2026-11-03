@@ -120,36 +120,17 @@ test("счётчик SQL на главной странице совпадает
   assert.match(card, new RegExp(lessons.length + " урок"));
 });
 
-test("каждый исходный конспект learns встроен в соответствующую страницу приложения без изменений", () => {
+test("15 редакторских исходников остаются в архиве learns", () => {
   const source = JSON.parse(fs.readFileSync(path.join(root, "learns/edited-lesson-source.json"), "utf8"));
-  const pages = {
-    "business-analysis": "business-analysis/index.html",
-    "chart-literacy": "chart-literacy/index.html",
-    "data-quality": "data-quality/index.html",
-    "decision-making": "decision-making/index.html",
-    "excel": "excel/index.html",
-    "forecasting": "forecasting/index.html",
-    "interview": "interview/index.html",
-    "portfolio-projects": "portfolio-projects/index.html",
-    "postgresql": "postgresql/index.html",
-    "powerbi": "powerbi/index.html",
-    "python": "python/index.html",
-    "sql": "sql/index.html",
-    "sql2": "sql2/index.html",
-    "statistics": "stats/index.html",
-    "tableau": "tableau/index.html"
-  };
-
-  assert.deepEqual(Object.keys(source.modules).sort(), Object.keys(pages).sort(), "Для каждого исходника должен быть назначен HTML-модуль");
-
-  for (const [module, page] of Object.entries(pages)) {
-    const html = fs.readFileSync(path.join(root, page), "utf8");
-    const escapedModule = module.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const pattern = new RegExp('<template id="edited-source-data" data-module="' + escapedModule + '">([\\s\\S]*?)</template>');
-    const match = html.match(pattern);
-
-    assert.ok(match, module + ": исходный материал не встроен в " + page);
-    const embedded = JSON.parse(Buffer.from(match[1].trim(), "base64").toString("utf8"));
-    assert.equal(embedded, source.modules[module], module + ": встроенный материал отличается от learns/edited-lesson-source.json");
+  const expected = [
+    "business-analysis", "chart-literacy", "data-quality", "decision-making",
+    "excel", "forecasting", "interview", "portfolio-projects", "postgresql",
+    "powerbi", "python", "sql", "sql2", "statistics", "tableau"
+  ];
+  assert.deepEqual(Object.keys(source.modules).sort(), expected.sort(),
+    "Все 15 исходных редакторских материалов должны оставаться доступными в архиве");
+  for (const module of expected) {
+    assert.ok(typeof source.modules[module] === "string" && source.modules[module].trim().length > 100,
+      module + ": редакторский исходник пуст или потерян");
   }
 });

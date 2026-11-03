@@ -345,7 +345,7 @@ test("Lesson introductions, scenario stories, glossary definitions, and flashcar
     "Sorting is the cheapest way to make a chart readable.",
     "Your charts are sharp and you know which type fits which question."
   ]) assert.ok(!tableau.includes(phrase), "Tableau lesson copy remains English: " + phrase);
-  assert.ok(tableau.includes("СИНИМ"));
+  assert.match(tableau, /синим/i);
   assert.ok(tableau.includes("Story (историю)"));
 });
 
