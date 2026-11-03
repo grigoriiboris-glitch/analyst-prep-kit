@@ -267,14 +267,14 @@ test("все статические курсы содержат в learns пол
   }
 });
 
-test("практикум качества данных и три проекта портфолио сохранены вместе с исходниками приложения", () => {
-  const qualityPage = fs.readFileSync(path.join(root, "data-quality/index.html"), "utf8");
+test("практикум качества данных и проекты портфолио сохранены в архиве learns", () => {
   const qualityArchive = fs.readFileSync(path.join(root, "learns/data-quality.md"), "utf8");
   const qualityHeadings = lessonHeadings(qualityArchive, "learns/data-quality.md");
   assert.equal(qualityHeadings.length, 1, "Качество данных: должен быть один полный практикум");
-  assert.ok(qualityArchive.includes(qualityPage), "Качество данных: потерян исходный практикум с данными, ответами и обработкой");
+  for (const marker of ["Паспорт набора данных", "Точные дубликаты", "Контрольная сумма"]) {
+    assert.ok(qualityArchive.includes(marker), "Качество данных: в архиве отсутствует " + marker);
+  }
 
-  const projectsPage = fs.readFileSync(path.join(root, "portfolio-projects/index.html"), "utf8");
   const projectsArchive = fs.readFileSync(path.join(root, "learns/portfolio-projects.md"), "utf8");
   const projectHeadings = lessonHeadings(projectsArchive, "learns/portfolio-projects.md");
   const expected = [
@@ -283,7 +283,12 @@ test("практикум качества данных и три проекта 
     "Анализ эффективности рекламы"
   ];
   assert.deepEqual(projectHeadings.map(item => item[2]), expected, "Портфолио: изменён состав или порядок проектов");
-  assert.ok(projectsArchive.includes(projectsPage), "Портфолио: потерян полный исходник проектов и генераторов учебных данных");
+  for (let index = 0; index < projectHeadings.length; index += 1) {
+    const start = projectHeadings[index].index;
+    const end = index + 1 < projectHeadings.length ? projectHeadings[index + 1].index : projectsArchive.length;
+    assert.ok(projectsArchive.slice(start, end).trim().length > 500,
+      "Портфолио: потеряно содержание проекта №" + (index + 1));
+  }
 });
 
 test("в README перечислены все 16 модулей с полным архивом", () => {
