@@ -1,5 +1,5 @@
 (function () {
-  "use strict";
+  "используйте строгий";
 
   var STEPS = [
     ['foundations',1,'Основы аналитики данных'],
