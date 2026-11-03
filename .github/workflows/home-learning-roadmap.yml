@@ -1,0 +1,39 @@
+name: Homepage learning roadmap
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "assets/learning-order.js"
+      - "tests/home-learning-roadmap.test.js"
+      - ".github/workflows/home-learning-roadmap.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "assets/learning-order.js"
+      - "tests/home-learning-roadmap.test.js"
+      - "index.html"
+      - ".github/workflows/home-learning-roadmap.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: homepage-learning-roadmap-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  roadmap:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check roadmap script syntax
+        run: node --check assets/learning-order.js
+      - name: Test homepage roadmap and existing learning order
+        run: node --test tests/home-learning-roadmap.test.js tests/ai-context-and-learning-order.test.js
